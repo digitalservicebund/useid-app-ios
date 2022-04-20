@@ -115,3 +115,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Application specific files to ignore
+BundID/OpenECard/OpenEcard.framework/

@@ -11,7 +11,23 @@
 		E5CEB280281041330076B9FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CEB27F281041330076B9FE /* ContentView.swift */; };
 		E5CEB282281041340076B9FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5CEB281281041340076B9FE /* Assets.xcassets */; };
 		E5CEB285281041340076B9FE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5CEB284281041340076B9FE /* Preview Assets.xcassets */; };
+		E5CEB29128104A190076B9FE /* OpenEcard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5CEB28C281046850076B9FE /* OpenEcard.framework */; };
+		E5CEB29228104A190076B9FE /* OpenEcard.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E5CEB28C281046850076B9FE /* OpenEcard.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E5CEB29328104A190076B9FE /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E5CEB29228104A190076B9FE /* OpenEcard.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		E5CEB27A281041330076B9FE /* BundID.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BundID.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -19,6 +35,9 @@
 		E5CEB27F281041330076B9FE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E5CEB281281041340076B9FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E5CEB284281041340076B9FE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		E5CEB28C281046850076B9FE /* OpenEcard.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenEcard.framework; sourceTree = "<group>"; };
+		E5CEB29428104F920076B9FE /* BundID.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BundID.entitlements; sourceTree = "<group>"; };
+		E5CEB295281050BE0076B9FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5CEB29128104A190076B9FE /* OpenEcard.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,6 +71,9 @@
 		E5CEB27C281041330076B9FE /* BundID */ = {
 			isa = PBXGroup;
 			children = (
+				E5CEB295281050BE0076B9FE /* Info.plist */,
+				E5CEB29428104F920076B9FE /* BundID.entitlements */,
+				E5CEB28B2810466C0076B9FE /* OpenECard */,
 				E5CEB27D281041330076B9FE /* BundIDApp.swift */,
 				E5CEB27F281041330076B9FE /* ContentView.swift */,
 				E5CEB281281041340076B9FE /* Assets.xcassets */,
@@ -67,6 +90,14 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		E5CEB28B2810466C0076B9FE /* OpenECard */ = {
+			isa = PBXGroup;
+			children = (
+				E5CEB28C281046850076B9FE /* OpenEcard.framework */,
+			);
+			path = OpenECard;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -77,6 +108,7 @@
 				E5CEB276281041330076B9FE /* Sources */,
 				E5CEB277281041330076B9FE /* Frameworks */,
 				E5CEB278281041330076B9FE /* Resources */,
+				E5CEB29328104A190076B9FE /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -202,6 +234,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Debug;
 		};
@@ -256,6 +289,7 @@
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Release;
 		};
@@ -264,15 +298,23 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BundID/BundID.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"BundID/Preview Content\"";
 				DEVELOPMENT_TEAM = 6YK3KTLWQR;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/BundID/OpenECard",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BundID/Info.plist;
+				INFOPLIST_KEY_NFCReaderUsageDescription = "NFC Scan Usage Description";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -284,7 +326,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -293,15 +335,23 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BundID/BundID.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"BundID/Preview Content\"";
 				DEVELOPMENT_TEAM = 6YK3KTLWQR;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/BundID/OpenECard",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BundID/Info.plist;
+				INFOPLIST_KEY_NFCReaderUsageDescription = "NFC Scan Usage Description";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -313,7 +363,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
