@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E59097B5281153A100CDA144 /* NFCMessageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59097B4281153A100CDA144 /* NFCMessageProvider.swift */; };
+		E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */; };
 		E5CEB27E281041330076B9FE /* BundIDApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CEB27D281041330076B9FE /* BundIDApp.swift */; };
 		E5CEB280281041330076B9FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CEB27F281041330076B9FE /* ContentView.swift */; };
 		E5CEB282281041340076B9FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5CEB281281041340076B9FE /* Assets.xcassets */; };
@@ -30,6 +32,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E59097B4281153A100CDA144 /* NFCMessageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFCMessageProvider.swift; sourceTree = "<group>"; };
+		E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenEcardExtensions.swift; sourceTree = "<group>"; };
 		E5CEB27A281041330076B9FE /* BundID.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BundID.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5CEB27D281041330076B9FE /* BundIDApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundIDApp.swift; sourceTree = "<group>"; };
 		E5CEB27F281041330076B9FE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -94,6 +98,8 @@
 			isa = PBXGroup;
 			children = (
 				E5CEB28C281046850076B9FE /* OpenEcard.framework */,
+				E59097B4281153A100CDA144 /* NFCMessageProvider.swift */,
+				E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */,
 			);
 			path = OpenECard;
 			sourceTree = "<group>";
@@ -169,6 +175,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E59097B5281153A100CDA144 /* NFCMessageProvider.swift in Sources */,
+				E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */,
 				E5CEB280281041330076B9FE /* ContentView.swift in Sources */,
 				E5CEB27E281041330076B9FE /* BundIDApp.swift in Sources */,
 			);
