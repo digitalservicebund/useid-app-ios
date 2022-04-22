@@ -53,7 +53,6 @@ class ContentViewViewModel: ObservableObject {
             case .processCompletedSuccessfully: print("Process completed successfully.")
             
             case .authenticationStarted: print("Authentication started.")
-            // TODO: Use another typealias or even concrete type for [IDCardAttribute: Bool]
             case .requestAuthenticationRequestConfirmation(let request, let confirmationCallback):
                 print("Confirm request.")
                 confirmationCallback([:])
@@ -115,8 +114,7 @@ enum EIDInteractionEvent {
     case processCompletedSuccessfully
     
     case authenticationStarted
-    // TODO: Use another typealias or even concrete type for [IDCardAttribute: Bool]
-    case requestAuthenticationRequestConfirmation(EIDAuthenticationRequest, ([IDCardAttribute: Bool]) -> Void)
+    case requestAuthenticationRequestConfirmation(EIDAuthenticationRequest, (FlaggedAttributes) -> Void)
     case authenticationSuccessful
     
     case pinManagementStarted
@@ -167,21 +165,20 @@ struct EIDAuthenticationRequest {
     let subjectURL: String
     let validity: String
     let terms: AuthenticationTerms
-    let readAttributes: [IDCardAttribute: Bool]
+    let readAttributes: FlaggedAttributes
 }
 
 typealias EIDInteractionPublisher = AnyPublisher<EIDInteractionEvent, IDCardInteractionError>
 
-// TODO: Use typealias for [IDCardAttribute: Bool]
 extension Array where Element == NSObjectProtocol & SelectableItemProtocol {
-    func mapToAttributeRequirements() throws -> [IDCardAttribute: Bool] {
+    func mapToAttributeRequirements() throws -> FlaggedAttributes {
         let keyValuePairs: [(IDCardAttribute, Bool)] = try map { item in
             guard let attribute = IDCardAttribute(rawValue: item.getName()) else {
                 throw IDCardInteractionError.unexpectedReadAttribute(item.getName())
             }
             return (attribute, item.isRequired())
         }
-        return [IDCardAttribute: Bool](uniqueKeysWithValues: keyValuePairs)
+        return FlaggedAttributes(uniqueKeysWithValues: keyValuePairs)
     }
 }
 
@@ -201,255 +198,252 @@ class SelectableItem: NSObject, SelectableItemProtocol {
     func isRequired() -> Bool { false }
 }
 
-// TODO: Refactor as this is not safe. Value (Bool) might apply for 'requested' as well as for 'checked'
+typealias FlaggedAttributes = [IDCardAttribute: Bool]
+
 extension Dictionary where Key == IDCardAttribute, Value == Bool {
-    var selectableItems: [NSObjectProtocol & SelectableItemProtocol] {
+    var selectableItemsSettingChecked: [NSObjectProtocol & SelectableItemProtocol] {
         map { SelectableItem(attribute: $0.key.rawValue, checked: $0.value) }
     }
 }
 
 class NFCManager {
-    let openEcard = OpenEcardImp()!
+    private let context: ContextManagerProtocol
+    
+    init() {
+        let openEcard = OpenEcardImp()!
+        context = openEcard.context(NFSMessageProvider())!
+    }
     
     func identify(tokenURL: String) -> EIDInteractionPublisher {
-        IDCardTaskExecutor(task: .eac(tokenURL: tokenURL), openEcard: openEcard).eraseToAnyPublisher()
+        IDCardTaskPublisher(task: .eac(tokenURL: tokenURL), context: context).eraseToAnyPublisher()
     }
     
     func changePIN() -> EIDInteractionPublisher {
-        IDCardTaskExecutor(task: .pinManagement, openEcard: openEcard).eraseToAnyPublisher()
+        IDCardTaskPublisher(task: .pinManagement, context: context).eraseToAnyPublisher()
     }
     
-    private class IDCardTaskExecutor: Publisher {
+    private struct IDCardTaskPublisher: Publisher {
         typealias Output = EIDInteractionEvent
         typealias Failure = IDCardInteractionError
         
-        private let task: IDTask
-        private let openEcard: OpenEcardProtocol
-        private var context: ContextManagerProtocol? = nil
-        
-        init(task: IDTask, openEcard: OpenEcardProtocol) {
-            self.task = task
-            self.openEcard = openEcard
-        }
+        let task: IDTask
+        let context: ContextManagerProtocol
         
         func receive<S>(subscriber: S) where S : Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
-            
-            context = openEcard.context(NFSMessageProvider())!
-            context?.initializeContext(StartServiceHandler(task: task, subscriber: subscriber))
+            let delegate = OpenECardHandlerDelegate(subscriber: subscriber, context: context)
+            context.initializeContext(StartServiceHandler(task: task, delegate: delegate))
         }
-        
-        // TODO: Terminate context on success or failure
     }
 }
 
-// TODO: Eliminate generic constraints
-// TODO: Simplify initialization (inheritance?)
-class StartServiceHandler<S>: NSObject, StartServiceHandlerProtocol where S : Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
+class OpenECardHandlerDelegate<S>: NSObject where S : Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
+    private let subscriber: S
+    private let context: ContextManagerProtocol
+    private var activationController: ActivationControllerProtocol?
+    
+    init(subscriber: S, context: ContextManagerProtocol) {
+        self.subscriber = subscriber
+        self.context = context
+    }
+    
+    func send(event: EIDInteractionEvent) {
+        _ = subscriber.receive(event)
+    }
+    
+    func finish() {
+        teardown()
+        subscriber.receive(completion: .finished)
+    }
+    
+    func fail(error: IDCardInteractionError) {
+        teardown()
+        subscriber.receive(completion: .failure(error))
+    }
+    
+    private func teardown() {
+        activationController?.cancelOngoingAuthentication()
+        context.terminateContext(StopServiceHandler())
+    }
+}
+
+class OpenECardHandlerBase<S>: NSObject where S : Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
+    let delegate: OpenECardHandlerDelegate<S>
+    
+    init(delegate: OpenECardHandlerDelegate<S>) {
+        self.delegate = delegate
+    }
+}
+
+class StopServiceHandler: NSObject, StopServiceHandlerProtocol {
+    func onSuccess() {
+        print("Service stopped successfully.")
+    }
+    
+    func onFailure(_ response: (NSObjectProtocol & ServiceErrorResponseProtocol)!) {
+        print("Failed to stop service.")
+    }
+}
+
+class StartServiceHandler<S>: OpenECardHandlerBase<S>, StartServiceHandlerProtocol where S : Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
     
     private let task: IDTask
-    private let subscriber: S
     private var activationController: ActivationControllerProtocol? = nil
     
-    init(task: IDTask, subscriber: S) {
+    init(task: IDTask, delegate: OpenECardHandlerDelegate<S>) {
         self.task = task
-        self.subscriber = subscriber
+        super.init(delegate: delegate)
     }
     
     func onSuccess(_ source: (NSObjectProtocol & ActivationSourceProtocol)!) {
-        let controllerCallback = ControllerCallback(subscriber: subscriber)
+        let controllerCallback = ControllerCallback(delegate: delegate)
         switch task {
-        case .eac(let tokenURL): activationController = source.eacFactory().create(tokenURL, withActivation: controllerCallback, with: EACInteraction(subscriber: subscriber))
-        case .pinManagement: activationController = source.pinManagementFactory().create(controllerCallback, with: PinManagementInteraction(subscriber: subscriber))
+        case .eac(let tokenURL): activationController = source.eacFactory().create(tokenURL, withActivation: controllerCallback, with: EACInteraction(delegate: delegate))
+        case .pinManagement: activationController = source.pinManagementFactory().create(controllerCallback, with: PinManagementInteraction(delegate: delegate))
         }
     }
     
     func onFailure(_ response: (NSObjectProtocol & ServiceErrorResponseProtocol)!) {
         print("Failure: \(response.errorDescription)")
-        subscriber.receive(completion: .failure(IDCardInteractionError.frameworkError(message: response.errorDescription)))
+        delegate.fail(error: IDCardInteractionError.frameworkError(message: response.errorDescription))
+        activationController?.cancelOngoingAuthentication()
     }
 }
 
-class ControllerCallback<S>: NSObject, ControllerCallbackProtocol where S : Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
-    private let subscriber: S
-    
-    init(subscriber: S) {
-        self.subscriber = subscriber
-    }
-    
+class ControllerCallback<S>: OpenECardHandlerBase<S>, ControllerCallbackProtocol where S : Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
     func onStarted() {
-        print("Started process.")
-        _ = subscriber.receive(.authenticationStarted)
+        delegate.send(event: .authenticationStarted)
     }
     
     func onAuthenticationCompletion(_ result: (NSObjectProtocol & ActivationResultProtocol)!) {
-        print("Process completed.")
-        
         switch result.getCode() {
         case .OK, .REDIRECT:
-            _ = subscriber.receive(.processCompletedSuccessfully)
-            subscriber.receive(completion: .finished)
+            delegate.send(event: .processCompletedSuccessfully)
+            delegate.finish()
         default:
-            subscriber.receive(completion: .failure(.processFailed(resultCode: result.getCode())))
+            delegate.fail(error: .processFailed(resultCode: result.getCode()))
         }
     }
 }
 
-class EACInteraction<S>: NSObject, EacInteractionProtocol where S : Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
-    private let subscriber: S
-    
-    init(subscriber: S) {
-        self.subscriber = subscriber
-    }
-    
+class EACInteraction<S>: OpenECardHandlerBase<S>, EacInteractionProtocol where S : Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
     func onCanRequest(_ enterCan: (NSObjectProtocol & ConfirmPasswordOperationProtocol)!) {
-        print("Requesting CAN.")
-        _ = subscriber.receive(.requestCAN(enterCan.confirmPassword))
+        delegate.send(event: .requestCAN(enterCan.confirmPassword))
     }
     
     func onPinRequest(_ enterPin: (NSObjectProtocol & ConfirmPasswordOperationProtocol)!) {
-        print("Requesting PIN without attempts.")
         onGeneralPINRequest(attempts: nil, enterPin: enterPin)
     }
     
     func onPinRequest(_ attempt: Int32, withEnterPin enterPin: (NSObjectProtocol & ConfirmPasswordOperationProtocol)!) {
-        print("Requesting PIN with attempts.")
         onGeneralPINRequest(attempts: Int(attempt), enterPin: enterPin)
     }
     
     private func onGeneralPINRequest(attempts: Int?, enterPin: ConfirmPasswordOperationProtocol) {
-        _ = subscriber.receive(.requestPIN(attempts: attempts, pinCallback: enterPin.confirmPassword))
+        delegate.send(event: .requestPIN(attempts: attempts, pinCallback: enterPin.confirmPassword))
     }
     
     func onPinCanRequest(_ enterPinCan: (NSObjectProtocol & ConfirmPinCanOperationProtocol)!) {
-        print("Requesting PIN and CAN.")
-        _ = subscriber.receive(.requestPINAndCAN(enterPinCan.confirmPassword))
+        delegate.send(event: .requestPINAndCAN(enterPinCan.confirmPassword))
     }
     
     func onCardBlocked() {
-        print("Card blocked.")
-        subscriber.receive(completion: .failure(.cardBlocked))
+        delegate.fail(error: .cardBlocked)
     }
     
     func onCardDeactivated() {
-        print("Card deactivated.")
-        subscriber.receive(completion: .failure(.cardDeactivated))
+        delegate.fail(error: .cardDeactivated)
     }
     
     func onServerData(_ data: (NSObjectProtocol & ServerDataProtocol)!, withTransactionData transactionData: String!, withSelectReadWrite selectReadWrite: (NSObjectProtocol & ConfirmAttributeSelectionOperationProtocol)!) {
-        print("Requesting to confirm server data.")
-        
-        let readAttributes: [IDCardAttribute: Bool]
+        let readAttributes: FlaggedAttributes
         do {
             readAttributes = try data.getReadAccessAttributes()!.mapToAttributeRequirements()
         } catch IDCardInteractionError.unexpectedReadAttribute(let attribute) {
-            subscriber.receive(completion: .failure(IDCardInteractionError.unexpectedReadAttribute(attribute)))
+            delegate.fail(error: IDCardInteractionError.unexpectedReadAttribute(attribute))
             return
         } catch {
-            subscriber.receive(completion: .failure(.frameworkError(message: nil)))
+            delegate.fail(error: .frameworkError(message: nil))
             return
         }
         
         let eidServerData = EIDAuthenticationRequest(issuer: data.getIssuer(), issuerURL: data.getIssuerUrl(), subject: data.getSubject(), subjectURL: data.getSubjectUrl(), validity: data.getValidity(), terms: .text(data.getTermsOfUsage().getDataString()), readAttributes: readAttributes)
         
-        let confirmationCallback: ([IDCardAttribute: Bool]) -> Void = { selectReadWrite.enterAttributeSelection($0.selectableItems, withWrite: []) }
+        let confirmationCallback: (FlaggedAttributes) -> Void = { selectReadWrite.enterAttributeSelection($0.selectableItemsSettingChecked, withWrite: []) }
         
-        _ = subscriber.receive(.requestAuthenticationRequestConfirmation(eidServerData, confirmationCallback))
+        delegate.send(event: .requestAuthenticationRequestConfirmation(eidServerData, confirmationCallback))
     }
     
     func onCardAuthenticationSuccessful() {
-        print("Card authentication successful.")
-        _ = subscriber.receive(.authenticationSuccessful)
+        delegate.send(event: .authenticationSuccessful)
     }
     
     func requestCardInsertion() {
-        print("Requesting card insertion without overlay message handler not implemented.")
-        subscriber.receive(completion: .failure(.frameworkError(message: nil)))
+        delegate.fail(error: .frameworkError(message: nil))
     }
     
     func requestCardInsertion(_ msgHandler: (NSObjectProtocol & NFCOverlayMessageHandlerProtocol)!) {
-        print("Requesting card insertion with overlay message handler.")
-        _ = subscriber.receive(.requestCardInsertion(msgHandler.setText))
+        delegate.send(event: .requestCardInsertion(msgHandler.setText))
     }
     
     func onCardInteractionComplete() {
-        print("Card interaction complete.")
-        _ = subscriber.receive(.cardInteractionComplete)
+        delegate.send(event: .cardInteractionComplete)
     }
     
     func onCardRecognized() {
-        print("Card recognized.")
-        _ = subscriber.receive(.cardRecognized)
+        delegate.send(event: .cardRecognized)
     }
     
     func onCardRemoved() {
-        print("Card removed")
-        _ = subscriber.receive(.cardRemoved)
+        delegate.send(event: .cardRemoved)
     }
 }
 
-class PinManagementInteraction<S>: NSObject, PinManagementInteractionProtocol where S : Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
-    private let subscriber: S
-    
-    init(subscriber: S) {
-        self.subscriber = subscriber
-    }
-    
+class PinManagementInteraction<S>: OpenECardHandlerBase<S>, PinManagementInteractionProtocol where S : Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
     func onPinChangeable(_ enterOldNewPins: (NSObjectProtocol & ConfirmOldSetNewPasswordOperationProtocol)!) {
-        print("Request old and new PIN without attempts.")
         onGeneralPINChangeable(attempts: nil, enterOldAndNewPIN: enterOldNewPins)
     }
     
     func onPinChangeable(_ attempts: Int32, withEnterOldNewPins enterOldNewPins: (NSObjectProtocol & ConfirmOldSetNewPasswordOperationProtocol)!) {
-        print("Request old and new PIN with \(attempts) attempts.")
         onGeneralPINChangeable(attempts: Int(attempts), enterOldAndNewPIN: enterOldNewPins)
     }
     
     private func onGeneralPINChangeable(attempts: Int?, enterOldAndNewPIN: ConfirmOldSetNewPasswordOperationProtocol) {
-        _ = subscriber.receive(.requestChangedPIN(attempts: attempts, pinCallback: enterOldAndNewPIN.confirmPassword))
+        delegate.send(event: .requestChangedPIN(attempts: attempts, pinCallback: enterOldAndNewPIN.confirmPassword))
     }
     
     func onPinCanNewPinRequired(_ enterPinCanNewPin: (NSObjectProtocol & ConfirmPinCanNewPinOperationProtocol)!) {
-        print("Request CAN and old and new PIN.")
-        _ = subscriber.receive(.requestCANAndChangedPIN(pinCallback: enterPinCanNewPin.confirmChangePassword))
+        delegate.send(event: .requestCANAndChangedPIN(pinCallback: enterPinCanNewPin.confirmChangePassword))
     }
     
     func onPinBlocked(_ unblockWithPuk: (NSObjectProtocol & ConfirmPasswordOperationProtocol)!) {
-        print("Request PUK.")
-        _ = subscriber.receive(.requestPUK(unblockWithPuk.confirmPassword))
+        delegate.send(event: .requestPUK(unblockWithPuk.confirmPassword))
     }
     
     func onCardPukBlocked() {
-        print("Card blocked.")
-        subscriber.receive(completion: .failure(.cardBlocked))
+        delegate.fail(error: .cardBlocked)
     }
     
     func onCardDeactivated() {
-        print("Card deactivated.")
-        subscriber.receive(completion: .failure(.cardDeactivated))
+        delegate.fail(error: .cardDeactivated)
     }
     
     func requestCardInsertion() {
-        print("Requesting card insertion without overlay message handler not implemented.")
-        subscriber.receive(completion: .failure(.frameworkError(message: nil)))
+        delegate.fail(error: .frameworkError(message: nil))
     }
     
     func requestCardInsertion(_ msgHandler: (NSObjectProtocol & NFCOverlayMessageHandlerProtocol)!) {
-        print("Requesting card insertion with overlay message handler.")
-        _ = subscriber.receive(.requestCardInsertion(msgHandler.setText))
+        delegate.send(event: .requestCardInsertion(msgHandler.setText))
     }
     
     func onCardInteractionComplete() {
-        print("Card interaction complete.")
-        _ = subscriber.receive(.cardInteractionComplete)
+        delegate.send(event: .cardInteractionComplete)
     }
     
     func onCardRecognized() {
-        print("Card recognized.")
-        _ = subscriber.receive(.cardRecognized)
+        delegate.send(event: .cardRecognized)
     }
     
     func onCardRemoved() {
-        print("Card removed")
-        _ = subscriber.receive(.cardRemoved)
+        delegate.send(event: .cardRemoved)
     }
 }
