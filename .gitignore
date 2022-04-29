@@ -118,3 +118,4 @@ Temporary Items
 
 # Application specific files to ignore
 BundID/OpenECard/OpenEcard.framework/
+BundID/OpenECard/OpenEcard.xcframework

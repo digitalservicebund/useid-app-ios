@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E110400A281C2D2F004BA03E /* OpenEcard.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1104008281C2D1C004BA03E /* OpenEcard.xcframework */; };
+		E110400B281C2D2F004BA03E /* OpenEcard.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E1104008281C2D1C004BA03E /* OpenEcard.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E59097B5281153A100CDA144 /* NFCMessageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59097B4281153A100CDA144 /* NFCMessageProvider.swift */; };
 		E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */; };
 		E593E2662816845C00154EB0 /* AuthenticationTerms.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E2652816845C00154EB0 /* AuthenticationTerms.swift */; };
@@ -23,8 +25,6 @@
 		E5CEB280281041330076B9FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CEB27F281041330076B9FE /* ContentView.swift */; };
 		E5CEB282281041340076B9FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5CEB281281041340076B9FE /* Assets.xcassets */; };
 		E5CEB285281041340076B9FE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5CEB284281041340076B9FE /* Preview Assets.xcassets */; };
-		E5CEB29128104A190076B9FE /* OpenEcard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5CEB28C281046850076B9FE /* OpenEcard.framework */; };
-		E5CEB29228104A190076B9FE /* OpenEcard.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E5CEB28C281046850076B9FE /* OpenEcard.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E5E69D832812FB4500A3B66A /* EIDInteractionEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D822812FB4500A3B66A /* EIDInteractionEvent.swift */; };
 		E5E69D852812FB6100A3B66A /* IDCardInteractionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D842812FB6100A3B66A /* IDCardInteractionError.swift */; };
 		E5E69D872812FB7A00A3B66A /* IDTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D862812FB7A00A3B66A /* IDTask.swift */; };
@@ -38,7 +38,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E5CEB29228104A190076B9FE /* OpenEcard.framework in Embed Frameworks */,
+				E110400B281C2D2F004BA03E /* OpenEcard.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -46,6 +46,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E1104008281C2D1C004BA03E /* OpenEcard.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = OpenEcard.xcframework; sourceTree = "<group>"; };
 		E59097B4281153A100CDA144 /* NFCMessageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFCMessageProvider.swift; sourceTree = "<group>"; };
 		E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenEcardExtensions.swift; sourceTree = "<group>"; };
 		E593E2652816845C00154EB0 /* AuthenticationTerms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationTerms.swift; sourceTree = "<group>"; };
@@ -63,7 +64,6 @@
 		E5CEB27F281041330076B9FE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E5CEB281281041340076B9FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E5CEB284281041340076B9FE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		E5CEB28C281046850076B9FE /* OpenEcard.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenEcard.framework; sourceTree = "<group>"; };
 		E5CEB29428104F920076B9FE /* BundID.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BundID.entitlements; sourceTree = "<group>"; };
 		E5CEB295281050BE0076B9FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E5E69D822812FB4500A3B66A /* EIDInteractionEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIDInteractionEvent.swift; sourceTree = "<group>"; };
@@ -77,7 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5CEB29128104A190076B9FE /* OpenEcard.framework in Frameworks */,
+				E110400A281C2D2F004BA03E /* OpenEcard.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,7 +134,7 @@
 		E5CEB28B2810466C0076B9FE /* OpenECard */ = {
 			isa = PBXGroup;
 			children = (
-				E5CEB28C281046850076B9FE /* OpenEcard.framework */,
+				E1104008281C2D1C004BA03E /* OpenEcard.xcframework */,
 				E59097B4281153A100CDA144 /* NFCMessageProvider.swift */,
 				E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */,
 				E5E69D822812FB4500A3B66A /* EIDInteractionEvent.swift */,
