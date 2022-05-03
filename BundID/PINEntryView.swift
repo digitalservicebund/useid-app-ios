@@ -65,7 +65,7 @@ public struct PINEntryView: View {
             .keyboardType(.numberPad)
             .introspectTextField { textField in
                 // Hack to show the keyboard after transitioning to this screen because of rearranging buttons.
-                DispatchQueue.main.asyncAfter(wallDeadline: .now() + .milliseconds(300)) {
+                DispatchQueue.main.asyncAfter(wallDeadline: .now() + .milliseconds(500)) {
                     textField.becomeFirstResponder()
                 }
             }

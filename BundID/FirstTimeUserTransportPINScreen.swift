@@ -9,17 +9,12 @@ import SwiftUI
 
 struct FirstTimeUserTransportPINScreen: View {
     
-    enum ResponderFields: Int {
-            case pin
-        }
-    
-    @State private var firstResponder: ResponderFields? = nil
     @State var text: String = ""
     
     var body: some View {
         VStack(alignment: .leading) {
             ScrollView {
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 24) {
                     Text("Geben Sie Ihre 5-stellige Transport-PIN aus dem PIN-Brief ein")
                         .font(.bundLargeTitle)
                     ZStack {
