@@ -27,7 +27,6 @@ struct FirstTimeUserCheckScreen: View {
                 }
             }
             VStack {
-                
                 Button {
                     
                 } label: {
@@ -43,7 +42,7 @@ struct FirstTimeUserCheckScreen: View {
                 
             }
             .padding()
-            .background(.white)
+            .background(Color.white)
             .ignoresSafeArea(.keyboard)
         }
         .navigationBarTitleDisplayMode(.inline)
