@@ -1,5 +1,5 @@
 //
-//  FirstTimeUserCheckScreen.swift
+//  FirstTimeUserPINLetterScreen.swift
 //  BundID
 //
 //  Created by Andreas Ganske on 29.04.22.
@@ -7,19 +7,19 @@
 
 import SwiftUI
 
-struct FirstTimeUserCheckScreen: View {
+struct FirstTimeUserPINLetterScreen: View {
     var body: some View {
         VStack(alignment: .leading) {
             ScrollView {
                 VStack(alignment: .leading) {
                     VStack(alignment: .leading, spacing: 24) {
-                        Text("Haben Sie Ihren Online-Ausweis bereits benutzt?")
+                        Text("Haben Sie noch Ihren PIN-Brief?")
                             .font(.bundLargeTitle)
-                        Text("Folgende Dokumente bieten die Funktion an:\nDeutscher Personalausweis, Elektronischer Aufenthaltstitel, eID-Karte für Unionsbürger")
+                        Text("Der PIN-Brief wurde Ihnen nach der Beantragung des Ausweises zugesandt.")
                             .font(.bundBody)
                     }
                     .padding(.horizontal)
-                    Image("eIDs")
+                    Image("PIN-Brief")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(maxWidth: .infinity)
@@ -32,13 +32,13 @@ struct FirstTimeUserCheckScreen: View {
                     Button {
                         
                     } label: {
-                        Text("Ja, ich habe es bereits genutzt")
+                        Text("Ja, PIN-Brief vorhanden")
                     }
                     .buttonStyle(BundButtonStyle(isPrimary: false))
                     NavigationLink {
-                        FirstTimeUserPINLetterScreen()
+//                        FirstTimeUserPINLetter()
                     } label: {
-                        Text("Nein, jetzt Online-Ausweis einrichten")
+                        Text("Nein, neuen PIN-Brief bestellen")
                     }
                     .buttonStyle(BundButtonStyle(isPrimary: true))
                     
@@ -51,15 +51,15 @@ struct FirstTimeUserCheckScreen: View {
     }
 }
 
-struct FirstTimeUserCheckScreen_Previews: PreviewProvider {
+struct FirstTimeUserPINLetterScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            FirstTimeUserCheckScreen()
+            FirstTimeUserPINLetterScreen()
         }
-            .previewDevice("iPhone SE (2nd generation)")
+        .previewDevice("iPhone SE (2nd generation)")
         NavigationView {
-            FirstTimeUserCheckScreen()
+            FirstTimeUserPINLetterScreen()
         }
-            .previewDevice("iPhone 12")
+        .previewDevice("iPhone 12")
     }
 }
