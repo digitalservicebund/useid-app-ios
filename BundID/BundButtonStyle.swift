@@ -37,17 +37,9 @@ struct BundButtonStyle: ButtonStyle {
         
         if isPrimary {
             if isOnDark {
-                if configuration.isPressed {
-                    return .blue800
-                } else {
-                    return .blue800
-                }
+                return .blue800
             } else {
-                if configuration.isPressed {
-                    return .blue900
-                } else {
-                    return .white
-                }
+                return .white
             }
         } else {
             if isOnDark {
