@@ -26,26 +26,23 @@ struct FirstTimeUserPINLetterScreen: View {
                         .padding(.vertical, 10)
                 }
             }
-            .safeAreaInset(edge: .bottom) {
-                VStack {
-                    
-                    Button {
-                        
-                    } label: {
-                        Text("Ja, PIN-Brief vorhanden")
-                    }
-                    .buttonStyle(BundButtonStyle(isPrimary: false))
-                    NavigationLink {
-//                        FirstTimeUserPINLetter()
-                    } label: {
-                        Text("Nein, neuen PIN-Brief bestellen")
-                    }
-                    .buttonStyle(BundButtonStyle(isPrimary: true))
-                    
+            VStack {
+                NavigationLink {
+                    FirstTimeUserTransportPINScreen()
+                } label: {
+                    Text("Ja, PIN-Brief vorhanden")
                 }
-                .padding()
-                .background(.white)
+                .buttonStyle(BundButtonStyle(isPrimary: false))
+                NavigationLink {
+                    
+                } label: {
+                    Text("Nein, neuen PIN-Brief bestellen")
+                }
+                .buttonStyle(BundButtonStyle(isPrimary: true))
+                
             }
+            .padding()
+            .background(.white)
         }
         .navigationBarTitleDisplayMode(.inline)
     }

@@ -15,6 +15,9 @@
 		E1CD8E8D281FFCC1008ADA2A /* BundesSans-DTP-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E1CD8E8B281FFCC1008ADA2A /* BundesSans-DTP-Bold.otf */; };
 		E1CD8E8F2820395F008ADA2A /* BundButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E8E2820395F008ADA2A /* BundButtonStyle.swift */; };
 		E1CD8E9128214FDB008ADA2A /* FirstTimeUserPINLetterScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E9028214FDB008ADA2A /* FirstTimeUserPINLetterScreen.swift */; };
+		E1CD8E93282156F2008ADA2A /* FirstTimeUserTransportPINScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E92282156F2008ADA2A /* FirstTimeUserTransportPINScreen.swift */; };
+		E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E9428215971008ADA2A /* PINEntryView.swift */; };
+		E1CD8E9828215E97008ADA2A /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = E1CD8E9728215E97008ADA2A /* Introspect */; };
 		E59097B5281153A100CDA144 /* NFCMessageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59097B4281153A100CDA144 /* NFCMessageProvider.swift */; };
 		E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */; };
 		E593E2662816845C00154EB0 /* AuthenticationTerms.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E2652816845C00154EB0 /* AuthenticationTerms.swift */; };
@@ -59,6 +62,8 @@
 		E1CD8E8B281FFCC1008ADA2A /* BundesSans-DTP-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BundesSans-DTP-Bold.otf"; sourceTree = "<group>"; };
 		E1CD8E8E2820395F008ADA2A /* BundButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundButtonStyle.swift; sourceTree = "<group>"; };
 		E1CD8E9028214FDB008ADA2A /* FirstTimeUserPINLetterScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeUserPINLetterScreen.swift; sourceTree = "<group>"; };
+		E1CD8E92282156F2008ADA2A /* FirstTimeUserTransportPINScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeUserTransportPINScreen.swift; sourceTree = "<group>"; };
+		E1CD8E9428215971008ADA2A /* PINEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINEntryView.swift; sourceTree = "<group>"; };
 		E59097B4281153A100CDA144 /* NFCMessageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFCMessageProvider.swift; sourceTree = "<group>"; };
 		E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenEcardExtensions.swift; sourceTree = "<group>"; };
 		E593E2652816845C00154EB0 /* AuthenticationTerms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationTerms.swift; sourceTree = "<group>"; };
@@ -90,6 +95,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E110400A281C2D2F004BA03E /* OpenEcard.xcframework in Frameworks */,
+				E1CD8E9828215E97008ADA2A /* Introspect in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,12 +145,14 @@
 				E5CEB27D281041330076B9FE /* BundIDApp.swift */,
 				E5CEB27F281041330076B9FE /* ContentView.swift */,
 				E110400C281C389C004BA03E /* FirstTimeUserCheckScreen.swift */,
+				E1CD8E9028214FDB008ADA2A /* FirstTimeUserPINLetterScreen.swift */,
+				E1CD8E92282156F2008ADA2A /* FirstTimeUserTransportPINScreen.swift */,
+				E1CD8E9428215971008ADA2A /* PINEntryView.swift */,
 				E1CD8E8E2820395F008ADA2A /* BundButtonStyle.swift */,
 				E1CD8E87281FF62F008ADA2A /* Theme.swift */,
 				E5CEB281281041340076B9FE /* Assets.xcassets */,
 				E1CD8E89281FFCA0008ADA2A /* Resources */,
 				E5CEB283281041340076B9FE /* Preview Content */,
-				E1CD8E9028214FDB008ADA2A /* FirstTimeUserPINLetterScreen.swift */,
 			);
 			path = BundID;
 			sourceTree = "<group>";
@@ -197,6 +205,9 @@
 			dependencies = (
 			);
 			name = BundID;
+			packageProductDependencies = (
+				E1CD8E9728215E97008ADA2A /* Introspect */,
+			);
 			productName = BundID;
 			productReference = E5CEB27A281041330076B9FE /* BundID.app */;
 			productType = "com.apple.product-type.application";
@@ -225,6 +236,9 @@
 				Base,
 			);
 			mainGroup = E5CEB271281041330076B9FE;
+			packageReferences = (
+				E1CD8E9628215E97008ADA2A /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
+			);
 			productRefGroup = E5CEB27B281041330076B9FE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -265,10 +279,12 @@
 				E5E69D852812FB6100A3B66A /* IDCardInteractionError.swift in Sources */,
 				E593E2682816847900154EB0 /* EIDAuthenticationRequest.swift in Sources */,
 				E593E2742816866200154EB0 /* EACInteraction.swift in Sources */,
+				E1CD8E93282156F2008ADA2A /* FirstTimeUserTransportPINScreen.swift in Sources */,
 				E5E69D892812FB8D00A3B66A /* IDCardAttribute.swift in Sources */,
 				E593E2762816868100154EB0 /* PINManagementInteraction.swift in Sources */,
 				E593E26C2816851C00154EB0 /* OpenECardHandlerBase.swift in Sources */,
 				E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */,
+				E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */,
 				E5CEB280281041330076B9FE /* ContentView.swift in Sources */,
 				E593E2722816864800154EB0 /* ControllerCallback.swift in Sources */,
 				E1CD8E88281FF62F008ADA2A /* Theme.swift in Sources */,
@@ -493,6 +509,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E1CD8E9628215E97008ADA2A /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E1CD8E9728215E97008ADA2A /* Introspect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E1CD8E9628215E97008ADA2A /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			productName = Introspect;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E5CEB272281041330076B9FE /* Project object */;
 }
