@@ -11,7 +11,7 @@ import SwiftUI
 struct BundIDApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            FirstTimeUserCheckScreen()
         }
     }
 }

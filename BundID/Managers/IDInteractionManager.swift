@@ -9,6 +9,11 @@ import Foundation
 import Combine
 import OpenEcard
 
+protocol IDInteractionManagerType {
+    func identify(tokenURL: String) -> EIDInteractionPublisher
+    func changePIN() -> EIDInteractionPublisher
+}
+
 class IDInteractionManager {
     private let context: ContextManagerProtocol
     

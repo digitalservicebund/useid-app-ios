@@ -13,11 +13,15 @@ struct ContentView: View {
     @ObservedObject var viewModel = ContentViewViewModel()
     
     var body: some View {
-        Button("Identify") {
+        Button {
             viewModel.identify()
+        } label: {
+            Text("Identify")
         }
-        Button("Change PIN") {
+        Button {
             viewModel.changePIN()
+        } label: {
+            Text("Change PIN")
         }
     }
 }
