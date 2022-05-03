@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FirstTimeUserPINLetterScreen: View {
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading) {
                     VStack(alignment: .leading, spacing: 24) {
@@ -41,7 +41,7 @@ struct FirstTimeUserPINLetterScreen: View {
                 .buttonStyle(BundButtonStyle(isPrimary: true))
                 
             }
-            .padding()
+            .padding([.leading, .bottom, .trailing])
             .background(Color.white)
         }
         .ignoresSafeArea(.keyboard)
@@ -54,6 +54,7 @@ struct FirstTimeUserPINLetterScreen_Previews: PreviewProvider {
         NavigationView {
             FirstTimeUserPINLetterScreen()
         }
+        .environment(\.sizeCategory, .extraExtraExtraLarge)
         .previewDevice("iPhone SE (2nd generation)")
         NavigationView {
             FirstTimeUserPINLetterScreen()

@@ -38,6 +38,7 @@ struct FirstTimeUserTransportPINScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             FirstTimeUserTransportPINScreen()
+                .environment(\.sizeCategory, .extraExtraExtraLarge)
         }
         .previewDevice("iPhone SE (2nd generation)")
         NavigationView {

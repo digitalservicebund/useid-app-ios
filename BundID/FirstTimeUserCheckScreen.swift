@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FirstTimeUserCheckScreen: View {
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading) {
                     VStack(alignment: .leading, spacing: 24) {
@@ -41,10 +41,10 @@ struct FirstTimeUserCheckScreen: View {
                 .buttonStyle(BundButtonStyle(isPrimary: true))
                 
             }
-            .padding()
+            .padding([.leading, .bottom, .trailing])
             .background(Color.white)
-            .ignoresSafeArea(.keyboard)
         }
+        .ignoresSafeArea(.keyboard)
         .navigationBarTitleDisplayMode(.inline)
     }
 }
