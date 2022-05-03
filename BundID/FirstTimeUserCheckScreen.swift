@@ -26,26 +26,25 @@ struct FirstTimeUserCheckScreen: View {
                         .padding(.vertical, 10)
                 }
             }
-            .safeAreaInset(edge: .bottom) {
-                VStack {
+            VStack {
+                
+                Button {
                     
-                    Button {
-                        
-                    } label: {
-                        Text("Ja, ich habe es bereits genutzt")
-                    }
-                    .buttonStyle(BundButtonStyle(isPrimary: false))
-                    NavigationLink {
-                        FirstTimeUserPINLetterScreen()
-                    } label: {
-                        Text("Nein, jetzt Online-Ausweis einrichten")
-                    }
-                    .buttonStyle(BundButtonStyle(isPrimary: true))
-                    
+                } label: {
+                    Text("Ja, ich habe es bereits genutzt")
                 }
-                .padding()
-                .background(.white)
+                .buttonStyle(BundButtonStyle(isPrimary: false))
+                NavigationLink {
+                    FirstTimeUserPINLetterScreen()
+                } label: {
+                    Text("Nein, jetzt Online-Ausweis einrichten")
+                }
+                .buttonStyle(BundButtonStyle(isPrimary: true))
+                
             }
+            .padding()
+            .background(.white)
+            .ignoresSafeArea(.keyboard)
         }
         .navigationBarTitleDisplayMode(.inline)
     }

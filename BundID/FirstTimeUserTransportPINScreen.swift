@@ -35,6 +35,7 @@ struct FirstTimeUserTransportPINScreen: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .ignoresSafeArea(.keyboard)
     }
 }
 

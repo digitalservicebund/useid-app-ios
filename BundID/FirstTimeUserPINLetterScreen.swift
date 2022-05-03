@@ -44,6 +44,7 @@ struct FirstTimeUserPINLetterScreen: View {
             .padding()
             .background(.white)
         }
+        .ignoresSafeArea(.keyboard)
         .navigationBarTitleDisplayMode(.inline)
     }
 }
