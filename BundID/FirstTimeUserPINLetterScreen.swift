@@ -11,20 +11,9 @@ struct FirstTimeUserPINLetterScreen: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
-                VStack(alignment: .leading) {
-                    VStack(alignment: .leading, spacing: 24) {
-                        Text("Haben Sie noch Ihren PIN-Brief?")
-                            .font(.bundLargeTitle)
-                        Text("Der PIN-Brief wurde Ihnen nach der Beantragung des Ausweises zugesandt.")
-                            .font(.bundBody)
-                    }
-                    .padding(.horizontal)
-                    Image("PIN-Brief")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 10)
-                }
+                HeaderView(title: "Haben Sie noch Ihren PIN-Brief?",
+                           text: "Der PIN-Brief wurde Ihnen nach der Beantragung des Ausweises zugesandt.",
+                           imageName: "PIN-Brief")
             }
             VStack {
                 NavigationLink {
