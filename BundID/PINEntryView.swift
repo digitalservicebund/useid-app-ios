@@ -12,7 +12,7 @@ public struct PINEntryView: View {
     
     var maxDigits: Int = 5
     
-    @State var pin: String = ""
+    @Binding var pin: String
     @State var showPin = true
     
     var handler: (String) -> Void
