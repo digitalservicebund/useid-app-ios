@@ -20,6 +20,7 @@ struct FirstTimeUserTransportPINScreen: View {
                 VStack(alignment: .leading, spacing: 24) {
                     Text("Geben Sie Ihre 5-stellige Transport-PIN aus dem PIN-Brief ein")
                         .font(.bundLargeTitle)
+                        .foregroundColor(.blackish)
                     ZStack {
                         Image("Transport-PIN")
                             .resizable()
@@ -52,7 +53,6 @@ struct FirstTimeUserTransportPINScreen: View {
                             } label: {
                                 Text("Klicken Sie hier, wenn Ihre PIN 6-stellig ist")
                                     .font(.bundBodyBold)
-                                    .foregroundColor(.blue800)
                             }
                         }
                         .frame(maxWidth: .infinity)

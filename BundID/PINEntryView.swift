@@ -34,11 +34,13 @@ public struct PINEntryView: View {
                     if showPin {
                         Text(self.pinCharacter(at: index))
                             .font(.custom("BundesSans", size: 26).bold())
+                            .foregroundColor(.blackish)
                     } else {
                         Image(systemName: "circle.fill")
                             .resizable()
                             .frame(width: 16, height: 16)
                             .padding(EdgeInsets(top: 4, leading: 0, bottom: 8, trailing: 0))
+                            .foregroundColor(.blackish)
                             .opacity(index >= self.pin.count ? 0.0 : 1.0)
                     }
                     Rectangle()

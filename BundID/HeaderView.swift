@@ -18,9 +18,11 @@ struct HeaderView: View {
             VStack(alignment: .leading, spacing: 24) {
                 Text(title)
                     .font(.bundLargeTitle)
+                    .foregroundColor(.blackish)
                 if let text = text {
                     Text(text)
                         .font(.bundBody)
+                        .foregroundColor(.blackish)
                 }
             }
             .padding(.horizontal)
