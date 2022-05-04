@@ -26,12 +26,12 @@ struct FirstTimeUserTransportPINScreen: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                         PINEntryView(pin: $enteredPin) { _ in
-//                            isFinished = true
-                            withAnimation {
-                                remainingAttempts -= 1
-                                showError = true
-                                enteredPin = ""
-                            }
+                            isFinished = true
+//                            withAnimation {
+//                                remainingAttempts -= 1
+//                                showError = true
+//                                enteredPin = ""
+//                            }
                         }
                         .font(.bundTitle)
                         .padding(40)
