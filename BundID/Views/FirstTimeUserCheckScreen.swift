@@ -12,7 +12,7 @@ struct FirstTimeUserCheckScreen: View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
                 HeaderView(title: "Haben Sie Ihren Online-Ausweis bereits benutzt?",
-                           text: "Folgende Dokumente bieten die Funktion an:\nDeutscher Personalausweis, Elektronischer Aufenthaltstitel, eID-Karte für Unionsbürger",
+                           text: "Folgende Dokumente bieten die Funktion an: Deutscher Personalausweis, Elektronischer Aufenthaltstitel, eID-Karte für Unionsbürger",
                            imageName: "eIDs")
             }
             VStack {
