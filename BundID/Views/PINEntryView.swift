@@ -55,17 +55,20 @@ public struct PINEntryView: View {
         )
     }
     
+    @ViewBuilder
     private var textField: some View {
         let boundPin = Binding<String>(get: { self.pin }, set: { newValue in
             self.pin = newValue
             self.submitPin()
         })
         
-        return TextField("", text: boundPin, onCommit: submitPin)
+        TextField("", text: boundPin, onCommit: submitPin)
             .accentColor(.clear)
             .foregroundColor(.clear)
             .keyboardType(.numberPad)
             .introspectTextField { textField in
+                textField.returnKeyType = .done
+                textField.isSecureTextEntry = true
                 // Hack to show the keyboard after transitioning to this screen because of rearranging buttons.
                 DispatchQueue.main.asyncAfter(wallDeadline: .now() + .milliseconds(500)) {
                     textField.becomeFirstResponder()
