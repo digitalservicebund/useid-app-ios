@@ -11,7 +11,7 @@ struct FirstTimeUserTransportPINScreen: View {
     
     @State var enteredPin: String = ""
     @State var isFinished: Bool = false
-    @State var showError: Bool = false
+    @State var previouslyUnsuccessful: Bool = false
     @State var remainingAttempts: Int = 3
     
     var body: some View {
@@ -25,24 +25,32 @@ struct FirstTimeUserTransportPINScreen: View {
                         Image("Transport-PIN")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                        PINEntryView(pin: $enteredPin) { _ in
-                            isFinished = true
-//                            withAnimation {
-//                                remainingAttempts -= 1
-//                                showError = true
-//                                enteredPin = ""
-//                            }
+                        PINEntryView(pin: $enteredPin, doneEnabled: enteredPin.count == 5) { _ in
+                            withAnimation {
+                                remainingAttempts -= 1
+                                previouslyUnsuccessful = true
+                                enteredPin = ""
+                            }
                         }
                         .font(.bundTitle)
                         .padding(40)
+                        // Focus: iOS 15 only
+                        // Done button above keyboard: iOS 15 only
                     }
-                    if showError {
+                    if previouslyUnsuccessful {
                         VStack(spacing: 24) {
                             VStack {
-                                Text("Inkorrekte Transport-PIN")
-                                    .font(.bundBodyBold)
-                                    .foregroundColor(.red900)
-                                Text("Versuchen Sie es erneut. Sie haben noch \(remainingAttempts) Versuche.")
+                                if enteredPin == "" {
+                                    Text("Inkorrekte Transport-PIN")
+                                        .font(.bundBodyBold)
+                                        .foregroundColor(.red900)
+                                    Text("Versuchen Sie es erneut.")
+                                        .font(.bundBody)
+                                        .foregroundColor(.blackish)
+                                        .multilineTextAlignment(.center)
+                                        .lineLimit(nil)
+                                }
+                                Text("Sie haben noch \(remainingAttempts) Versuche.")
                                     .font(.bundBody)
                                     .foregroundColor(.blackish)
                                     .multilineTextAlignment(.center)
@@ -57,8 +65,11 @@ struct FirstTimeUserTransportPINScreen: View {
                         }
                         .frame(maxWidth: .infinity)
                     }
-                    NavigationLink("Weiter", isActive: $isFinished) {
+                    
+                    NavigationLink(isActive: $isFinished) {
                         FirstTimeUserCheckScreen()
+                    } label: {
+                        Text("Weiter")
                     }
                     .frame(width: 0, height: 0)
                     .hidden()
@@ -73,8 +84,17 @@ struct FirstTimeUserTransportPINScreen: View {
 struct FirstTimeUserTransportPINScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            FirstTimeUserTransportPINScreen(showError: true)
-                .environment(\.sizeCategory, .extraExtraExtraLarge)
+            FirstTimeUserTransportPINScreen(previouslyUnsuccessful: true)
+        }
+        .previewDevice("iPhone SE (2nd generation)")
+        NavigationView {
+            FirstTimeUserTransportPINScreen(enteredPin: "1234",
+                                            previouslyUnsuccessful: true)
+        }
+        .previewDevice("iPhone SE (2nd generation)")
+        NavigationView {
+            FirstTimeUserTransportPINScreen(enteredPin: "12345",
+                                            previouslyUnsuccessful: true)
         }
         .previewDevice("iPhone SE (2nd generation)")
         NavigationView {
@@ -83,4 +103,3 @@ struct FirstTimeUserTransportPINScreen_Previews: PreviewProvider {
         .previewDevice("iPhone 12")
     }
 }
-

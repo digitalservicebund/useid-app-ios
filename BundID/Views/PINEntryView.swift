@@ -13,6 +13,8 @@ public struct PINEntryView: View {
     var maxDigits: Int = 5
     
     @Binding var pin: String
+    var doneEnabled: Bool = true
+    
     @State var showPin = true
     
     var handler: (String) -> Void
@@ -20,8 +22,8 @@ public struct PINEntryView: View {
     public var body: some View {
         VStack(spacing: 10) {
             ZStack {
-                pinCharacter
                 textField
+                pinCharacter
             }
         }
     }
@@ -32,7 +34,7 @@ public struct PINEntryView: View {
             ForEach(0..<maxDigits, id: \.self) { index in
                 VStack(spacing: 0) {
                     if showPin {
-                        Text(self.pinCharacter(at: index))
+                        Text(pinCharacter(at: index))
                             .font(.custom("BundesSans", size: 26).bold())
                             .foregroundColor(.blackish)
                     } else {
@@ -41,7 +43,7 @@ public struct PINEntryView: View {
                             .frame(width: 16, height: 16)
                             .padding(EdgeInsets(top: 4, leading: 0, bottom: 8, trailing: 0))
                             .foregroundColor(.blackish)
-                            .opacity(index >= self.pin.count ? 0.0 : 1.0)
+                            .opacity(index >= pin.count ? 0.0 : 1.0)
                     }
                     Rectangle()
                         .foregroundColor(.blackish)
@@ -57,33 +59,13 @@ public struct PINEntryView: View {
     
     @ViewBuilder
     private var textField: some View {
-        let boundPin = Binding<String>(get: { self.pin }, set: { newValue in
-            self.pin = newValue
-            self.submitPin()
-        })
-        
-        TextField("", text: boundPin, onCommit: submitPin)
+        PINTextField(text: $pin,
+                     maxLength: maxDigits,
+                     doneEnabled: doneEnabled,
+                     handler: handler)
             .accentColor(.clear)
             .foregroundColor(.clear)
             .keyboardType(.numberPad)
-            .introspectTextField { textField in
-                textField.returnKeyType = .done
-                textField.isSecureTextEntry = true
-                // Hack to show the keyboard after transitioning to this screen because of rearranging buttons.
-                DispatchQueue.main.asyncAfter(wallDeadline: .now() + .milliseconds(500)) {
-                    textField.becomeFirstResponder()
-                }
-            }
-    }
-    
-    private func submitPin() {
-        if pin.count > maxDigits {
-            pin = String(pin.prefix(maxDigits))
-        }
-        
-        if pin.count == maxDigits {
-            handler(pin)
-        }
     }
     
     private func pinCharacter(at index: Int) -> String {
