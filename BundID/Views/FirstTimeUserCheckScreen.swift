@@ -7,25 +7,32 @@
 
 import SwiftUI
 
+extension Text {
+    init(localized: String) {
+        self.init(LocalizedStringKey(localized))
+    }
+}
+
 struct FirstTimeUserCheckScreen: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
-                HeaderView(title: "Haben Sie Ihren Online-Ausweis bereits benutzt?",
-                           text: "Folgende Dokumente bieten die Funktion an: Deutscher Personalausweis, Elektronischer Aufenthaltstitel, eID-Karte für Unionsbürger",
-                           imageName: "eIDs")
+                HeaderView(titleKey: "FirstTimeUser.Intro.Title",
+                           bodyKey: "FirstTimeUser.Intro.Body",
+                           imageMeta: ImageMeta(name: "eIDs",
+                                                labelKey: "FirstTimeUser.Intro.ImageAlt"))
             }
             VStack {
                 Button {
                     
                 } label: {
-                    Text("Ja, ich habe es bereits genutzt")
+                    Text("FirstTimeUser.Intro.Yes")
                 }
                 .buttonStyle(BundButtonStyle(isPrimary: false))
                 NavigationLink {
                     FirstTimeUserPINLetterScreen()
                 } label: {
-                    Text("Nein, jetzt Online-Ausweis einrichten")
+                    Text("FirstTimeUser.Intro.No")
                 }
                 .buttonStyle(BundButtonStyle(isPrimary: true))
                 

@@ -11,21 +11,21 @@ struct FirstTimeUserPINLetterScreen: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
-                HeaderView(title: "Haben Sie noch Ihren PIN-Brief?",
-                           text: "Der PIN-Brief wurde Ihnen nach der Beantragung des Ausweises zugesandt.",
-                           imageName: "PIN-Brief")
+                HeaderView(titleKey: "FirstTimeUser.PinLetter.Title",
+                           bodyKey: "FirstTimeUser.PinLetter.Body",
+                           imageMeta: ImageMeta(name: "PIN-Brief", labelKey: "FirstTimeUser.PinLetter.ImageAlt"))
             }
             VStack {
                 NavigationLink {
                     FirstTimeUserTransportPINScreen()
                 } label: {
-                    Text("Ja, PIN-Brief vorhanden")
+                    Text("FirstTimeUser.PinLetter.Yes")
                 }
                 .buttonStyle(BundButtonStyle(isPrimary: false))
                 NavigationLink {
                     
                 } label: {
-                    Text("Nein, neuen PIN-Brief bestellen")
+                    Text("FirstTimeUser.PinLetter.No")
                 }
                 .buttonStyle(BundButtonStyle(isPrimary: true))
                 

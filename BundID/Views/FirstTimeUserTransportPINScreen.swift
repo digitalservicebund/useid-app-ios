@@ -18,14 +18,16 @@ struct FirstTimeUserTransportPINScreen: View {
         VStack(alignment: .leading) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
-                    Text("Geben Sie Ihre 5-stellige Transport-PIN aus dem PIN-Brief ein")
+                    Text(localized: "FirstTimeUser.TransportPIN.Title")
                         .font(.bundLargeTitle)
                         .foregroundColor(.blackish)
                     ZStack {
-                        Image("Transport-PIN")
+                        Image(decorative: "Transport-PIN")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                        PINEntryView(pin: $enteredPin, doneEnabled: enteredPin.count == 5) { _ in
+                        PINEntryView(pin: $enteredPin,
+                                     doneEnabled: enteredPin.count == 5,
+                                     doneText: NSLocalizedString("FirstTimeUser.TransportPIN.Continue", comment: "")) { _ in
                             withAnimation {
                                 remainingAttempts -= 1
                                 previouslyUnsuccessful = true
@@ -41,10 +43,10 @@ struct FirstTimeUserTransportPINScreen: View {
                         VStack(spacing: 24) {
                             VStack {
                                 if enteredPin == "" {
-                                    Text("Inkorrekte Transport-PIN")
+                                    Text(localized: "FirstTimeUser.TransportPIN.Error.IncorrectPIN")
                                         .font(.bundBodyBold)
                                         .foregroundColor(.red900)
-                                    Text("Versuchen Sie es erneut.")
+                                    Text(localized: "FirstTimeUser.TransportPIN.Error.TryAgain")
                                         .font(.bundBody)
                                         .foregroundColor(.blackish)
                                         .multilineTextAlignment(.center)
@@ -59,7 +61,7 @@ struct FirstTimeUserTransportPINScreen: View {
                             Button {
                                 
                             } label: {
-                                Text("Klicken Sie hier, wenn Ihre PIN 6-stellig ist")
+                                Text("FirstTimeUser.TransportPIN.SwitchToPersonalPIN")
                                     .font(.bundBodyBold)
                             }
                         }
@@ -67,9 +69,9 @@ struct FirstTimeUserTransportPINScreen: View {
                     }
                     
                     NavigationLink(isActive: $isFinished) {
-                        FirstTimeUserCheckScreen()
+                        EmptyView()
                     } label: {
-                        Text("Weiter")
+                        Text(localized: "FirstTimeUser.TransportPIN.Continue")
                     }
                     .frame(width: 0, height: 0)
                     .hidden()

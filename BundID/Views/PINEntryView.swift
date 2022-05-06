@@ -14,6 +14,7 @@ public struct PINEntryView: View {
     
     @Binding var pin: String
     var doneEnabled: Bool = true
+    var doneText: String
     
     @State var showPin = true
     
@@ -62,6 +63,7 @@ public struct PINEntryView: View {
         PINTextField(text: $pin,
                      maxLength: maxDigits,
                      doneEnabled: doneEnabled,
+                     doneText: doneText,
                      handler: handler)
             .accentColor(.clear)
             .foregroundColor(.clear)

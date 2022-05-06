@@ -7,27 +7,33 @@
 
 import SwiftUI
 
+struct ImageMeta {
+    let name: String
+    let labelKey: String
+}
+
 struct HeaderView: View {
     
-    var title: String
-    var text: String?
-    var imageName: String?
+    var titleKey: String
+    var bodyKey: String?
+    var imageMeta: ImageMeta?
     
     var body: some View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading, spacing: 24) {
-                Text(title)
+                Text(localized: titleKey)
                     .font(.bundLargeTitle)
                     .foregroundColor(.blackish)
-                if let text = text {
-                    Text(text)
+                if let body = bodyKey {
+                    Text(localized: body)
                         .font(.bundBody)
                         .foregroundColor(.blackish)
                 }
             }
             .padding(.horizontal)
-            if let imageName = imageName {
-                Image(imageName)
+            if let imageMeta = imageMeta {
+                Image(imageMeta.name,
+                      label: Text(localized: imageMeta.labelKey))
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: .infinity)
@@ -39,9 +45,9 @@ struct HeaderView: View {
 
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        HeaderView(title: "Haben Sie noch Ihren PIN-Brief?",
-                   text: "Der PIN-Brief wurde Ihnen nach der Beantragung des Ausweises zugesandt.",
-                   imageName: "PIN-Brief")
+        HeaderView(titleKey: "FirstTimeUser.Intro.Title",
+                   bodyKey: "FirstTimeUser.Intro.Body",
+                   imageMeta: ImageMeta(name: "PIN-Brief", labelKey: "Alt Text"))
         .previewLayout(.sizeThatFits)
     }
 }

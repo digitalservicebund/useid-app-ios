@@ -20,12 +20,14 @@ struct PINTextField: UIViewRepresentable {
     @Binding private var text: String
     var maxLength: Int
     var doneEnabled: Bool
+    var doneText: String
     var handler: (String) -> Void
     
-    init(text: Binding<String>, maxLength: Int = 5, doneEnabled: Bool = true, handler: @escaping (String) -> Void) {
+    init(text: Binding<String>, maxLength: Int = 5, doneEnabled: Bool = true, doneText: String, handler: @escaping (String) -> Void) {
         self._text = text
         self.maxLength = maxLength
         self.doneEnabled = doneEnabled
+        self.doneText = doneText
         self.handler = handler
     }
     
@@ -41,7 +43,7 @@ struct PINTextField: UIViewRepresentable {
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
                                      target: nil,
                                      action: nil)
-        let doneButton = UIBarButtonItem(title: "Weiter",
+        let doneButton = UIBarButtonItem(title: doneText,
                                          image: nil,
                                          primaryAction: UIAction { _ in
             handler(text)
