@@ -10,6 +10,7 @@
 		E110400A281C2D2F004BA03E /* OpenEcard.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1104008281C2D1C004BA03E /* OpenEcard.xcframework */; };
 		E110400B281C2D2F004BA03E /* OpenEcard.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E1104008281C2D1C004BA03E /* OpenEcard.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E110400D281C389C004BA03E /* FirstTimeUserCheckScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E110400C281C389C004BA03E /* FirstTimeUserCheckScreen.swift */; };
+		E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
 		E1AB879A282281C400C7FC94 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB8799282281C400C7FC94 /* HeaderView.swift */; };
 		E1AB879E282283AB00C7FC94 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB879D282283AB00C7FC94 /* Fonts.swift */; };
 		E1AB87A4282413A700C7FC94 /* PINTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB87A3282413A700C7FC94 /* PINTextField.swift */; };
@@ -61,6 +62,7 @@
 /* Begin PBXFileReference section */
 		E1104008281C2D1C004BA03E /* OpenEcard.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = OpenEcard.xcframework; sourceTree = "<group>"; };
 		E110400C281C389C004BA03E /* FirstTimeUserCheckScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeUserCheckScreen.swift; sourceTree = "<group>"; };
+		E19D26B0282557B00005B111 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E1AB8799282281C400C7FC94 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		E1AB879D282283AB00C7FC94 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		E1AB87A3282413A700C7FC94 /* PINTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINTextField.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				E1AB87AA2825238D00C7FC94 /* Localizable.strings */,
+				E19D26B1282557B00005B111 /* Localizable.stringsdict */,
 				E1CD8E8B281FFCC1008ADA2A /* BundesSans-DTP-Bold.otf */,
 				E1CD8E8A281FFCC1008ADA2A /* BundesSans-DTP-Regular.otf */,
 			);
@@ -261,7 +264,6 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
 				de,
 			);
 			mainGroup = E5CEB271281041330076B9FE;
@@ -287,6 +289,7 @@
 				E5CEB285281041340076B9FE /* Preview Assets.xcassets in Resources */,
 				E5CEB282281041340076B9FE /* Assets.xcassets in Resources */,
 				E1CD8E8D281FFCC1008ADA2A /* BundesSans-DTP-Bold.otf in Resources */,
+				E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,6 +333,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		E19D26B1282557B00005B111 /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E19D26B0282557B00005B111 /* de */,
+			);
+			name = Localizable.stringsdict;
+			sourceTree = "<group>";
+		};
 		E1AB87AA2825238D00C7FC94 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (

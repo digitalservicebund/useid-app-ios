@@ -52,7 +52,7 @@ struct FirstTimeUserTransportPINScreen: View {
                                         .multilineTextAlignment(.center)
                                         .lineLimit(nil)
                                 }
-                                Text("Sie haben noch \(remainingAttempts) Versuche.")
+                                Text("FirstTimeUser.TransportPIN.RemainingAttempts\(remainingAttempts)")
                                     .font(.bundBody)
                                     .foregroundColor(.blackish)
                                     .multilineTextAlignment(.center)
