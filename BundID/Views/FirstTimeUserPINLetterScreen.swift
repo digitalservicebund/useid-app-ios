@@ -11,21 +11,21 @@ struct FirstTimeUserPINLetterScreen: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
-                HeaderView(titleKey: "FirstTimeUser.PinLetter.Title",
-                           bodyKey: "FirstTimeUser.PinLetter.Body",
-                           imageMeta: ImageMeta(name: "PIN-Brief", labelKey: "FirstTimeUser.PinLetter.ImageAlt"))
+                HeaderView(titleKey: "FirstTimeUser.PINLetter.Title",
+                           bodyKey: "FirstTimeUser.PINLetter.Body",
+                           imageMeta: ImageMeta(name: "PIN-Brief", labelKey: "FirstTimeUser.PINLetter.ImageAlt"))
             }
             VStack {
                 NavigationLink {
                     FirstTimeUserTransportPINScreen()
                 } label: {
-                    Text("FirstTimeUser.PinLetter.Yes")
+                    Text("FirstTimeUser.PINLetter.Yes")
                 }
                 .buttonStyle(BundButtonStyle(isPrimary: false))
                 NavigationLink {
                     
                 } label: {
-                    Text("FirstTimeUser.PinLetter.No")
+                    Text("FirstTimeUser.PINLetter.No")
                 }
                 .buttonStyle(BundButtonStyle(isPrimary: true))
                 

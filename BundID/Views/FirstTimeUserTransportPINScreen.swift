@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FirstTimeUserTransportPINScreen: View {
     
-    @State var enteredPin: String = ""
+    @State var enteredPIN: String = ""
     @State var isFinished: Bool = false
     @State var previouslyUnsuccessful: Bool = false
     @State var remainingAttempts: Int = 3
@@ -25,13 +25,13 @@ struct FirstTimeUserTransportPINScreen: View {
                         Image(decorative: "Transport-PIN")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                        PINEntryView(pin: $enteredPin,
-                                     doneEnabled: enteredPin.count == 5,
+                        PINEntryView(pin: $enteredPIN,
+                                     doneEnabled: enteredPIN.count == 5,
                                      doneText: NSLocalizedString("FirstTimeUser.TransportPIN.Continue", comment: "")) { _ in
                             withAnimation {
                                 remainingAttempts -= 1
                                 previouslyUnsuccessful = true
-                                enteredPin = ""
+                                enteredPIN = ""
                             }
                         }
                         .font(.bundTitle)
@@ -42,7 +42,7 @@ struct FirstTimeUserTransportPINScreen: View {
                     if previouslyUnsuccessful {
                         VStack(spacing: 24) {
                             VStack {
-                                if enteredPin == "" {
+                                if enteredPIN == "" {
                                     Text(localized: "FirstTimeUser.TransportPIN.Error.IncorrectPIN")
                                         .font(.bundBodyBold)
                                         .foregroundColor(.red900)
@@ -90,12 +90,12 @@ struct FirstTimeUserTransportPINScreen_Previews: PreviewProvider {
         }
         .previewDevice("iPhone SE (2nd generation)")
         NavigationView {
-            FirstTimeUserTransportPINScreen(enteredPin: "1234",
+            FirstTimeUserTransportPINScreen(enteredPIN: "1234",
                                             previouslyUnsuccessful: true)
         }
         .previewDevice("iPhone SE (2nd generation)")
         NavigationView {
-            FirstTimeUserTransportPINScreen(enteredPin: "12345",
+            FirstTimeUserTransportPINScreen(enteredPIN: "12345",
                                             previouslyUnsuccessful: true)
         }
         .previewDevice("iPhone SE (2nd generation)")

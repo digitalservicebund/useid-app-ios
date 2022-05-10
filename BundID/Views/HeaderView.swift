@@ -32,8 +32,7 @@ struct HeaderView: View {
             }
             .padding(.horizontal)
             if let imageMeta = imageMeta {
-                Image(imageMeta.name,
-                      label: Text(localized: imageMeta.labelKey))
+                Image(decorative: imageMeta.name)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: .infinity)

@@ -12,14 +12,15 @@
 "FirstTimeUser.Intro.Yes" = "Ja, ich habe es bereits genutzt";
 "FirstTimeUser.Intro.No" = "Nein, jetzt Online-Ausweis einrichten";
 
-"FirstTimeUser.PinLetter.Title" = "Haben Sie noch Ihren PIN-Brief?";
-"FirstTimeUser.PinLetter.Body" = "Der PIN-Brief wurde Ihnen nach der Beantragung des Ausweises zugesandt.";
-"FirstTimeUser.PinLetter.ImageAlt" = "Haben Sie noch Ihren PIN-Brief?";
-"FirstTimeUser.PinLetter.Yes" = "Ja, PIN-Brief vorhanden";
-"FirstTimeUser.PinLetter.No" = "Nein, neuen PIN-Brief bestellen";
+"FirstTimeUser.PINLetter.Title" = "Haben Sie noch Ihren PIN-Brief?";
+"FirstTimeUser.PINLetter.Body" = "Der PIN-Brief wurde Ihnen nach der Beantragung des Ausweises zugesandt.";
+"FirstTimeUser.PINLetter.ImageAlt" = "Haben Sie noch Ihren PIN-Brief?";
+"FirstTimeUser.PINLetter.Yes" = "Ja, PIN-Brief vorhanden";
+"FirstTimeUser.PINLetter.No" = "Nein, neuen PIN-Brief bestellen";
 
 "FirstTimeUser.TransportPIN.Title" = "Geben Sie Ihre 5-stellige Transport-PIN aus dem PIN-Brief ein";
 "FirstTimeUser.TransportPIN.Error.IncorrectPIN" = "Inkorrekte Transport-PIN";
 "FirstTimeUser.TransportPIN.Error.TryAgain" = "Versuchen Sie es erneut.";
 "FirstTimeUser.TransportPIN.SwitchToPersonalPIN" = "Klicken Sie hier, wenn Ihre PIN 6-stellig ist";
 "FirstTimeUser.TransportPIN.Continue" = "Weiter";
+"FirstTimeUser.TransportPIN.TextFieldLabel" = "Transport-PIN, fünfstellig";

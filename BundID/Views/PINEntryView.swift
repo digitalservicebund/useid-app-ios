@@ -16,7 +16,7 @@ public struct PINEntryView: View {
     var doneEnabled: Bool = true
     var doneText: String
     
-    @State var showPin = true
+    @State var showPIN = true
     
     var handler: (String) -> Void
     
@@ -25,6 +25,7 @@ public struct PINEntryView: View {
             ZStack {
                 textField
                 pinCharacter
+                    .accessibilityHidden(true)
             }
         }
     }
@@ -34,7 +35,7 @@ public struct PINEntryView: View {
         HStack(spacing: 20) {
             ForEach(0..<maxDigits, id: \.self) { index in
                 VStack(spacing: 0) {
-                    if showPin {
+                    if showPIN {
                         Text(pinCharacter(at: index))
                             .font(.custom("BundesSans", size: 26).bold())
                             .foregroundColor(.blackish)
@@ -56,6 +57,8 @@ public struct PINEntryView: View {
         .background(
             Color.white.cornerRadius(10)
         )
+        .accessibilityHidden(true)
+        .accessibilityElement(children: .ignore)
     }
     
     @ViewBuilder
@@ -64,10 +67,13 @@ public struct PINEntryView: View {
                      maxLength: maxDigits,
                      doneEnabled: doneEnabled,
                      doneText: doneText,
+                     showPIN: showPIN,
                      handler: handler)
             .accentColor(.clear)
             .foregroundColor(.clear)
             .keyboardType(.numberPad)
+            .accessibilityLabel(LocalizedStringKey("FirstTimeUser.TransportPIN.TextFieldLabel"))
+            .accessibilityValue(pin.map(String.init).joined(separator: " "))
     }
     
     private func pinCharacter(at index: Int) -> String {

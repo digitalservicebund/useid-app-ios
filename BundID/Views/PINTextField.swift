@@ -21,13 +21,15 @@ struct PINTextField: UIViewRepresentable {
     var maxLength: Int
     var doneEnabled: Bool
     var doneText: String
+    var showPIN: Bool
     var handler: (String) -> Void
     
-    init(text: Binding<String>, maxLength: Int = 5, doneEnabled: Bool = true, doneText: String, handler: @escaping (String) -> Void) {
+    init(text: Binding<String>, maxLength: Int = 5, doneEnabled: Bool = true, doneText: String, showPIN: Bool = true, handler: @escaping (String) -> Void) {
         self._text = text
         self.maxLength = maxLength
         self.doneEnabled = doneEnabled
         self.doneText = doneText
+        self.showPIN = showPIN
         self.handler = handler
     }
     
@@ -35,7 +37,7 @@ struct PINTextField: UIViewRepresentable {
         let textfield = CarretAtEndTextField()
         textfield.delegate = context.coordinator
         textfield.keyboardType = .numberPad
-        textfield.isSecureTextEntry = true
+        textfield.isSecureTextEntry = !showPIN
         textfield.textColor = .clear
         textfield.backgroundColor = .clear
         let frame = CGRect(x: 0, y: 0, width: textfield.frame.size.width, height: 44)
