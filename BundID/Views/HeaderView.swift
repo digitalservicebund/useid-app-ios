@@ -44,8 +44,8 @@ struct HeaderView: View {
 
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        HeaderView(titleKey: "FirstTimeUser.Intro.Title",
-                   bodyKey: "FirstTimeUser.Intro.Body",
+        HeaderView(titleKey: "firstTimeUser_intro_title",
+                   bodyKey: "firstTimeUser_intro_body",
                    imageMeta: ImageMeta(name: "PIN-Brief", labelKey: "Alt Text"))
         .previewLayout(.sizeThatFits)
     }

@@ -72,7 +72,7 @@ public struct PINEntryView: View {
             .accentColor(.clear)
             .foregroundColor(.clear)
             .keyboardType(.numberPad)
-            .accessibilityLabel(LocalizedStringKey("FirstTimeUser.TransportPIN.TextFieldLabel"))
+            .accessibilityLabel(LocalizedStringKey("firstTimeUser_transportPIN_textFieldLabel"))
             .accessibilityValue(pin.map(String.init).joined(separator: " "))
     }
     

@@ -18,7 +18,7 @@ struct FirstTimeUserTransportPINScreen: View {
         VStack(alignment: .leading) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
-                    Text(localized: "FirstTimeUser.TransportPIN.Title")
+                    Text(localized: "firstTimeUser_transportPIN_title")
                         .font(.bundLargeTitle)
                         .foregroundColor(.blackish)
                     ZStack {
@@ -27,7 +27,7 @@ struct FirstTimeUserTransportPINScreen: View {
                             .aspectRatio(contentMode: .fit)
                         PINEntryView(pin: $enteredPIN,
                                      doneEnabled: enteredPIN.count == 5,
-                                     doneText: NSLocalizedString("FirstTimeUser.TransportPIN.Continue", comment: "")) { _ in
+                                     doneText: NSLocalizedString("firstTimeUser_transportPIN_continue", comment: "")) { _ in
                             withAnimation {
                                 remainingAttempts -= 1
                                 previouslyUnsuccessful = true
@@ -43,16 +43,16 @@ struct FirstTimeUserTransportPINScreen: View {
                         VStack(spacing: 24) {
                             VStack {
                                 if enteredPIN == "" {
-                                    Text(localized: "FirstTimeUser.TransportPIN.Error.IncorrectPIN")
+                                    Text(localized: "firstTimeUser_transportPIN_error_incorrectPIN")
                                         .font(.bundBodyBold)
                                         .foregroundColor(.red900)
-                                    Text(localized: "FirstTimeUser.TransportPIN.Error.TryAgain")
+                                    Text(localized: "firstTimeUser_transportPIN_error_tryAgain")
                                         .font(.bundBody)
                                         .foregroundColor(.blackish)
                                         .multilineTextAlignment(.center)
                                         .lineLimit(nil)
                                 }
-                                Text("FirstTimeUser.TransportPIN.RemainingAttempts\(remainingAttempts)")
+                                Text("firstTimeUser_transportPIN_remainingAttempts\(remainingAttempts)")
                                     .font(.bundBody)
                                     .foregroundColor(.blackish)
                                     .multilineTextAlignment(.center)
@@ -61,7 +61,7 @@ struct FirstTimeUserTransportPINScreen: View {
                             Button {
                                 
                             } label: {
-                                Text("FirstTimeUser.TransportPIN.SwitchToPersonalPIN")
+                                Text("firstTimeUser_transportPIN_switchToPersonalPIN")
                                     .font(.bundBodyBold)
                             }
                         }
@@ -71,7 +71,7 @@ struct FirstTimeUserTransportPINScreen: View {
                     NavigationLink(isActive: $isFinished) {
                         EmptyView()
                     } label: {
-                        Text(localized: "FirstTimeUser.TransportPIN.Continue")
+                        Text(localized: "firstTimeUser_transportPIN_continue")
                     }
                     .frame(width: 0, height: 0)
                     .hidden()

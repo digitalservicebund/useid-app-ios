@@ -17,22 +17,22 @@ struct FirstTimeUserCheckScreen: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
-                HeaderView(titleKey: "FirstTimeUser.Intro.Title",
-                           bodyKey: "FirstTimeUser.Intro.Body",
+                HeaderView(titleKey: "firstTimeUser_intro_title",
+                           bodyKey: "firstTimeUser_intro_body",
                            imageMeta: ImageMeta(name: "eIDs",
-                                                labelKey: "FirstTimeUser.Intro.ImageAlt"))
+                                                labelKey: "firstTimeUser_intro_imageAlt"))
             }
             VStack {
                 Button {
                     
                 } label: {
-                    Text("FirstTimeUser.Intro.Yes")
+                    Text("firstTimeUser_intro_yes")
                 }
                 .buttonStyle(BundButtonStyle(isPrimary: false))
                 NavigationLink {
                     FirstTimeUserPINLetterScreen()
                 } label: {
-                    Text("FirstTimeUser.Intro.No")
+                    Text("firstTimeUser_intro_no")
                 }
                 .buttonStyle(BundButtonStyle(isPrimary: true))
                 
