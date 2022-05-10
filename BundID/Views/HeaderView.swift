@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ImageMeta {
     let name: String
-    let labelKey: String
+    let labelKey: String?
 }
 
 struct HeaderView: View {
@@ -32,12 +32,22 @@ struct HeaderView: View {
             }
             .padding(.horizontal)
             if let imageMeta = imageMeta {
-                Image(decorative: imageMeta.name)
+                imageMeta.image
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
             }
+        }
+    }
+}
+
+extension ImageMeta {
+    var image: Image {
+        if let labelKey = labelKey {
+            return Image(name, label: Text(localized: labelKey))
+        } else {
+            return Image(decorative: name)
         }
     }
 }
