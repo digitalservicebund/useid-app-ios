@@ -13,7 +13,7 @@ struct FirstTimeUserPINLetterScreen: View {
             ScrollView {
                 HeaderView(titleKey: "firstTimeUser_pinLetter_title",
                            bodyKey: "firstTimeUser_pinLetter_body",
-                           imageMeta: ImageMeta(name: "PIN-Brief", labelKey: "firstTimeUser_pinLetter_imageAlt"))
+                           imageMeta: ImageMeta(name: "PIN-Brief"))
             }
             VStack {
                 NavigationLink {

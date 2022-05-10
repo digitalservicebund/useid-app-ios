@@ -19,8 +19,7 @@ struct FirstTimeUserCheckScreen: View {
             ScrollView {
                 HeaderView(titleKey: "firstTimeUser_intro_title",
                            bodyKey: "firstTimeUser_intro_body",
-                           imageMeta: ImageMeta(name: "eIDs",
-                                                labelKey: "firstTimeUser_intro_imageAlt"))
+                           imageMeta: ImageMeta(name: "eIDs"))
             }
             VStack {
                 Button {

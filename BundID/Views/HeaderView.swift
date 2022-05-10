@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ImageMeta {
     let name: String
-    let labelKey: String?
+    let labelKey: String? = nil
 }
 
 struct HeaderView: View {
@@ -56,7 +56,7 @@ struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
         HeaderView(titleKey: "firstTimeUser_intro_title",
                    bodyKey: "firstTimeUser_intro_body",
-                   imageMeta: ImageMeta(name: "PIN-Brief", labelKey: "Alt Text"))
+                   imageMeta: ImageMeta(name: "PIN-Brief"))
         .previewLayout(.sizeThatFits)
     }
 }
