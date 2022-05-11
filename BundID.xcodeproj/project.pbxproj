@@ -22,7 +22,6 @@
 		E1CD8E9128214FDB008ADA2A /* FirstTimeUserPINLetterScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E9028214FDB008ADA2A /* FirstTimeUserPINLetterScreen.swift */; };
 		E1CD8E93282156F2008ADA2A /* FirstTimeUserTransportPINScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E92282156F2008ADA2A /* FirstTimeUserTransportPINScreen.swift */; };
 		E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E9428215971008ADA2A /* PINEntryView.swift */; };
-		E1CD8E9828215E97008ADA2A /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = E1CD8E9728215E97008ADA2A /* Introspect */; };
 		E59097B5281153A100CDA144 /* NFCMessageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59097B4281153A100CDA144 /* NFCMessageProvider.swift */; };
 		E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */; };
 		E593E2662816845C00154EB0 /* AuthenticationTerms.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E2652816845C00154EB0 /* AuthenticationTerms.swift */; };
@@ -105,7 +104,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E110400A281C2D2F004BA03E /* OpenEcard.xcframework in Frameworks */,
-				E1CD8E9828215E97008ADA2A /* Introspect in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,7 +235,6 @@
 			);
 			name = BundID;
 			packageProductDependencies = (
-				E1CD8E9728215E97008ADA2A /* Introspect */,
 			);
 			productName = BundID;
 			productReference = E5CEB27A281041330076B9FE /* BundID.app */;
@@ -268,7 +265,6 @@
 			);
 			mainGroup = E5CEB271281041330076B9FE;
 			packageReferences = (
-				E1CD8E9628215E97008ADA2A /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 			);
 			productRefGroup = E5CEB27B281041330076B9FE /* Products */;
 			projectDirPath = "";
@@ -564,25 +560,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		E1CD8E9628215E97008ADA2A /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.4;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		E1CD8E9728215E97008ADA2A /* Introspect */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E1CD8E9628215E97008ADA2A /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
-			productName = Introspect;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E5CEB272281041330076B9FE /* Project object */;
 }
