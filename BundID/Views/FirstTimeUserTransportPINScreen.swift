@@ -29,9 +29,7 @@ struct FirstTimeUserTransportPINScreen: View {
                                      doneEnabled: enteredPIN.count == 5,
                                      doneText: NSLocalizedString("firstTimeUser_transportPIN_continue", comment: "")) { _ in
                             withAnimation {
-                                remainingAttempts -= 1
-                                previouslyUnsuccessful = true
-                                enteredPIN = ""
+                                isFinished = true
                             }
                         }
                         .font(.bundTitle)
