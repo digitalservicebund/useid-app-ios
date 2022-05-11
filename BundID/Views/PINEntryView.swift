@@ -26,6 +26,7 @@ public struct PINEntryView: View {
                 textField
                 pinCharacter
                     .accessibilityHidden(true)
+                    .allowsHitTesting(false)
             }
         }
     }
