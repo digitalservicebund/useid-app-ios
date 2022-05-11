@@ -21,11 +21,11 @@ struct HeaderView: View {
     var body: some View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading, spacing: 24) {
-                Text(localized: titleKey)
+                Text(titleKey)
                     .font(.bundLargeTitle)
                     .foregroundColor(.blackish)
                 if let body = bodyKey {
-                    Text(localized: body)
+                    Text(body)
                         .font(.bundBody)
                         .foregroundColor(.blackish)
                 }
@@ -45,7 +45,7 @@ struct HeaderView: View {
 extension ImageMeta {
     var image: Image {
         if let labelKey = labelKey {
-            return Image(name, label: Text(localized: labelKey))
+            return Image(name, label: Text(labelKey))
         } else {
             return Image(decorative: name)
         }
@@ -54,8 +54,8 @@ extension ImageMeta {
 
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        HeaderView(titleKey: "firstTimeUser_intro_title",
-                   bodyKey: "firstTimeUser_intro_body",
+        HeaderView(titleKey: L10n.FirstTimeUser.Intro.title,
+                   bodyKey: L10n.FirstTimeUser.Intro.body,
                    imageMeta: ImageMeta(name: "PIN-Brief"))
         .previewLayout(.sizeThatFits)
     }

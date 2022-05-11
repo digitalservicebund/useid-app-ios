@@ -7,31 +7,25 @@
 
 import SwiftUI
 
-extension Text {
-    init(localized: String) {
-        self.init(LocalizedStringKey(localized))
-    }
-}
-
 struct FirstTimeUserCheckScreen: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
-                HeaderView(titleKey: "firstTimeUser_intro_title",
-                           bodyKey: "firstTimeUser_intro_body",
+                HeaderView(titleKey: L10n.FirstTimeUser.Intro.title,
+                           bodyKey: L10n.FirstTimeUser.Intro.body,
                            imageMeta: ImageMeta(name: "eIDs"))
             }
             VStack {
                 Button {
                     
                 } label: {
-                    Text("firstTimeUser_intro_yes")
+                    Text(L10n.FirstTimeUser.Intro.yes)
                 }
                 .buttonStyle(BundButtonStyle(isPrimary: false))
                 NavigationLink {
                     FirstTimeUserPINLetterScreen()
                 } label: {
-                    Text("firstTimeUser_intro_no")
+                    Text(L10n.FirstTimeUser.Intro.no)
                 }
                 .buttonStyle(BundButtonStyle(isPrimary: true))
                 

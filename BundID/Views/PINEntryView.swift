@@ -14,8 +14,8 @@ public struct PINEntryView: View {
     @Binding var pin: String
     var doneEnabled: Bool = true
     var doneText: String
-    
     @State var showPIN = true
+    var label: String = ""
     
     var handler: (String) -> Void
     
@@ -72,7 +72,7 @@ public struct PINEntryView: View {
             .accentColor(.clear)
             .foregroundColor(.clear)
             .keyboardType(.numberPad)
-            .accessibilityLabel(LocalizedStringKey("firstTimeUser_transportPIN_textFieldLabel"))
+            .accessibilityLabel(label)
             .accessibilityValue(pin.map(String.init).joined(separator: " "))
     }
     
