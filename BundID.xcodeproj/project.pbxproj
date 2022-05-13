@@ -14,6 +14,7 @@
 		E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
 		E1AB879A282281C400C7FC94 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB8799282281C400C7FC94 /* HeaderView.swift */; };
 		E1AB879E282283AB00C7FC94 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB879D282283AB00C7FC94 /* Fonts.swift */; };
+		E1AB87A02822972A00C7FC94 /* FirstTimeUserChoosePINIntroScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB879F2822972A00C7FC94 /* FirstTimeUserChoosePINIntroScreen.swift */; };
 		E1AB87A4282413A700C7FC94 /* PINTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB87A3282413A700C7FC94 /* PINTextField.swift */; };
 		E1AB87AC2825238D00C7FC94 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1AB87AA2825238D00C7FC94 /* Localizable.strings */; };
 		E1CD8E88281FF62F008ADA2A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E87281FF62F008ADA2A /* Colors.swift */; };
@@ -66,6 +67,7 @@
 		E19D26B0282557B00005B111 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E1AB8799282281C400C7FC94 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		E1AB879D282283AB00C7FC94 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
+		E1AB879F2822972A00C7FC94 /* FirstTimeUserChoosePINIntroScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeUserChoosePINIntroScreen.swift; sourceTree = "<group>"; };
 		E1AB87A3282413A700C7FC94 /* PINTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINTextField.swift; sourceTree = "<group>"; };
 		E1AB87AB2825238D00C7FC94 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E1CD8E87281FF62F008ADA2A /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				E110400C281C389C004BA03E /* FirstTimeUserCheckScreen.swift */,
 				E1CD8E9028214FDB008ADA2A /* FirstTimeUserPINLetterScreen.swift */,
 				E1CD8E92282156F2008ADA2A /* FirstTimeUserTransportPINScreen.swift */,
+				E1AB879F2822972A00C7FC94 /* FirstTimeUserChoosePINIntroScreen.swift */,
 				E1CD8E9428215971008ADA2A /* PINEntryView.swift */,
 				E1AB87A3282413A700C7FC94 /* PINTextField.swift */,
 			);
@@ -349,6 +352,7 @@
 				E593E2742816866200154EB0 /* EACInteraction.swift in Sources */,
 				E1CD8E93282156F2008ADA2A /* FirstTimeUserTransportPINScreen.swift in Sources */,
 				E5E69D892812FB8D00A3B66A /* IDCardAttribute.swift in Sources */,
+				E1AB87A02822972A00C7FC94 /* FirstTimeUserChoosePINIntroScreen.swift in Sources */,
 				E593E2762816868100154EB0 /* PINManagementInteraction.swift in Sources */,
 				E1AB879A282281C400C7FC94 /* HeaderView.swift in Sources */,
 				E593E26C2816851C00154EB0 /* OpenECardHandlerBase.swift in Sources */,

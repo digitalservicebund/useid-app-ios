@@ -24,3 +24,7 @@
 "firstTimeUser_transportPIN_switchToPersonalPIN" = "Klicken Sie hier, wenn Ihre PIN 6-stellig ist";
 "firstTimeUser_transportPIN_continue" = "Weiter";
 "firstTimeUser_transportPIN_textFieldLabel" = "Transport-PIN, fünfstellig";
+
+"firstTimeUser_personalPINIntro_title" = "Wählen Sie Ihre persönliche PIN für Ihren Ausweis";
+"firstTimeUser_personalPINIntro_body" = "Diese 6-stellige persönliche PIN geben Sie jedes Mal ein, wenn Sie Ihren Ausweis online benutzen.";
+"firstTimeUser_personalPINIntro_continue" = "Persönliche PIN wählen";

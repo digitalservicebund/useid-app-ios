@@ -68,7 +68,7 @@ struct FirstTimeUserTransportPINScreen: View {
                     }
                     
                     NavigationLink(isActive: $isFinished) {
-                        EmptyView()
+                        FirstTimeUserChoosePINIntroScreen()
                     } label: {
                         Text(L10n.FirstTimeUser.TransportPIN.continue)
                     }
