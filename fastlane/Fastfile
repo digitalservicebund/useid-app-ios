@@ -1,0 +1,80 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+default_platform(:ios)
+
+PROJECT_FILENAME = "BundID"
+
+platform :ios do
+
+  desc 'Get App Version'
+  lane :getAppVersion do |options|
+    rel_path = options[:rel_path] || '../'
+    project = Xcodeproj::Project.open("#{rel_path}#{PROJECT_FILENAME}.xcodeproj")
+    version = project.build_settings('Release')['MARKETING_VERSION']
+    puts "Current version: #{version}"
+    version
+  end
+
+  desc 'Trigger Release'
+  lane :release do |options|
+    buildRelease(options)
+    deliverRelease(options)
+  end
+
+  desc 'Build Release'
+  lane :buildRelease do |_options|
+    skip_docs
+    ensure_git_status_clean
+
+    build_app(
+      project: "#{PROJECT_FILENAME}.xcodeproj",
+      configuration: 'Release',
+      clean: true,
+      scheme: 'BundID',
+      cloned_source_packages_path: '.swift-packages',
+      export_method: 'app-store'
+    )
+
+    version = getAppVersion
+    build_number = get_build_number
+
+    add_git_tag(tag: "#{version}-#{build_number}")
+    push_to_git_remote
+  end
+
+  desc 'Deliver Release'
+  lane :deliverRelease do |options|
+    make_screenshots = options[:screenshots] == true
+    deliver(
+      force: true,
+      submission_information: {
+        add_id_info_uses_idfa: false
+      },
+      skip_screenshots: !make_screenshots,
+      precheck_include_in_app_purchases: false
+    )
+  end
+
+  desc 'Bump version'
+  lane :bumpVersion do
+    skip_docs
+
+    increment_build_number
+
+    version = getAppVersion
+    build_number = get_build_number
+
+    commit_version_bump(xcodeproj: "./#{PROJECT_FILENAME}.xcodeproj")
+    add_git_tag(tag: "#{version}-#{build_number}")
+  end
+end
