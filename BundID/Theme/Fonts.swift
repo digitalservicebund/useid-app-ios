@@ -1,10 +1,3 @@
-//
-//  Fonts.swift
-//  BundID
-//
-//  Created by Andreas Ganske on 04.05.22.
-//
-
 import SwiftUI
 
 extension Font {

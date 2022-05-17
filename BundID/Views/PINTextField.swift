@@ -1,10 +1,3 @@
-//
-//  PINTextField.swift
-//  BundID
-//
-//  Created by Andreas Ganske on 05.05.22.
-//
-
 import SwiftUI
 
 class CarretAtEndTextField: UITextField {

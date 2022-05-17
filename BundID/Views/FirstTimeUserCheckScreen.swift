@@ -1,10 +1,3 @@
-//
-//  FirstTimeUserCheckScreen.swift
-//  BundID
-//
-//  Created by Andreas Ganske on 29.04.22.
-//
-
 import SwiftUI
 
 struct FirstTimeUserCheckScreen: View {

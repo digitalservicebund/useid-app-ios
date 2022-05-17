@@ -1,10 +1,3 @@
-//
-//  PINEntryView.swift
-//  BundID
-//
-//  Created by Andreas Ganske on 03.05.22.
-//
-
 import SwiftUI
 
 public struct PINEntryView: View {

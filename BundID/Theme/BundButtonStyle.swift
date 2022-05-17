@@ -1,10 +1,3 @@
-//
-//  BundButtonStyle.swift
-//  BundID
-//
-//  Created by Andreas Ganske on 02.05.22.
-//
-
 import SwiftUI
 
 struct BundButtonStyle: ButtonStyle {

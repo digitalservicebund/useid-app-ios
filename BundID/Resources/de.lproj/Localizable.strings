@@ -1,11 +1,3 @@
-/* 
-  Localizable.strings
-  BundID
-
-  Created by Andreas Ganske on 06.05.22.
-  
-*/
-
 "firstTimeUser_intro_title" = "Haben Sie Ihren Online-Ausweis bereits benutzt?";
 "firstTimeUser_intro_body" = "Folgende Dokumente bieten die Funktion an: Deutscher Personalausweis, Elektronischer Aufenthaltstitel, eID-Karte für Unionsbürger";
 "firstTimeUser_intro_imageAlt" = "";

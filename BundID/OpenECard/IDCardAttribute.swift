@@ -1,10 +1,3 @@
-//
-//  IDCardAttribute.swift
-//  BundID
-//
-//  Created by Fabio Tacke on 22.04.22.
-//
-
 import Foundation
 
 // TR-03110 (Part 4), Section 2.2.3
