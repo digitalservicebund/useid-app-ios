@@ -4,6 +4,7 @@ public struct PINEntryView: View {
     
     @Binding var pin: String
     var maxDigits: Int
+    var groupEvery: Int?
     var showPIN = true
     var label: String = ""
     @Binding var shouldBeFocused: Bool
@@ -24,6 +25,7 @@ public struct PINEntryView: View {
     @ViewBuilder
     private var pinCharacter: some View {
         HStack(spacing: 20) {
+            Spacer()
             ForEach(0..<maxDigits, id: \.self) { index in
                 VStack(spacing: 0) {
                     if showPIN {
@@ -43,7 +45,11 @@ public struct PINEntryView: View {
                         .foregroundColor(.blackish)
                         .frame(height: 1)
                 }
+                if let groupEvery = groupEvery, (index + 1) % groupEvery == 0, (index + 1) < maxDigits {
+                    Spacer(minLength: 8)
+                }
             }
+            Spacer()
         }
         .padding()
         .accessibilityHidden(true)

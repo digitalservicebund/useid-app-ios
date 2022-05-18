@@ -25,6 +25,7 @@ struct FirstTimeUserPersonalPINScreen: View {
                         Spacer()
                         PINEntryView(pin: $enteredPIN1,
                                      maxDigits: 6,
+                                     groupEvery: 3,
                                      showPIN: false,
                                      label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.first,
                                      shouldBeFocused: $focusPIN1,
@@ -42,6 +43,7 @@ struct FirstTimeUserPersonalPINScreen: View {
                                     .foregroundColor(.blackish)
                                 PINEntryView(pin: $enteredPIN2,
                                              maxDigits: 6,
+                                             groupEvery: 3,
                                              showPIN: false,
                                              label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.second,
                                              shouldBeFocused: $focusPIN2,

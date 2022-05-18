@@ -5,7 +5,7 @@ struct BundIDApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                FirstTimeUserChoosePINIntroScreen()
+                FirstTimeUserCheckScreen()
             }
         }
     }
