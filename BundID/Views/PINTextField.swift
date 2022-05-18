@@ -19,27 +19,29 @@ struct PINTextField: UIViewRepresentable {
     @Binding private var text: String
     var maxLength: Int
     var showPIN: Bool
+    @Binding var shouldBeFocused: Bool
     var doneConfiguration: DoneConfiguration?
     var textChangeHandler: ((String) -> Void)?
     
-    init(text: Binding<String>, maxLength: Int = 5, showPIN: Bool = true, doneConfiguration: DoneConfiguration?, textChangeHandler: ((String) -> Void)?) {
+    init(text: Binding<String>, maxLength: Int = 5, showPIN: Bool = true, shouldBeFocused: Binding<Bool>, doneConfiguration: DoneConfiguration?, textChangeHandler: ((String) -> Void)?) {
         self._text = text
         self.maxLength = maxLength
         self.showPIN = showPIN
+        self._shouldBeFocused = shouldBeFocused
         self.doneConfiguration = doneConfiguration
         self.textChangeHandler = textChangeHandler
     }
     
     func makeUIView(context: Context) -> UITextField {
-        let textfield = CarretAtEndTextField()
-        textfield.delegate = context.coordinator
-        textfield.keyboardType = .numberPad
-        textfield.isSecureTextEntry = !showPIN
-        textfield.textColor = .clear
-        textfield.backgroundColor = .clear
+        let textField = CarretAtEndTextField()
+        textField.delegate = context.coordinator
+        textField.keyboardType = .numberPad
+        textField.isSecureTextEntry = !showPIN
+        textField.textColor = .clear
+        textField.backgroundColor = .clear
         
         if let doneConfiguration = doneConfiguration {
-            let frame = CGRect(x: 0, y: 0, width: textfield.frame.size.width, height: 44)
+            let frame = CGRect(x: 0, y: 0, width: textField.frame.size.width, height: 44)
             let toolBar = UIToolbar(frame: frame)
             let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
                                          target: nil,
@@ -51,13 +53,13 @@ struct PINTextField: UIViewRepresentable {
             })
             doneButton.isEnabled = doneConfiguration.enabled
             toolBar.setItems([spacer, doneButton], animated: false)
-            textfield.inputAccessoryView = toolBar
+            textField.inputAccessoryView = toolBar
         }
         
         let editingChanged = UIAction { action in
             let newText = (action.sender as! UITextField).text ?? ""
             let oldText = text
-            withAnimation {
+            withAnimation(.linear(duration: 0.05)) {
                 text = newText
             }
             if newText != oldText {
@@ -65,15 +67,26 @@ struct PINTextField: UIViewRepresentable {
             }
         }
         
-        textfield.addAction(editingChanged, for: .editingChanged)
-        textfield.becomeFirstResponder()
-        return textfield
+        textField.addAction(editingChanged, for: .editingChanged)
+        
+        if shouldBeFocused {
+            DispatchQueue.main.async {
+                textField.becomeFirstResponder()
+            }
+        }
+        
+        return textField
     }
     
     func updateUIView(_ textField: UITextField, context: Context) {
         textField.text = text
         if let doneConfiguration = doneConfiguration, let doneButton = findDoneButton(textField) {
             doneButton.isEnabled = doneConfiguration.enabled
+        }
+        if shouldBeFocused {
+            DispatchQueue.main.async {
+                textField.becomeFirstResponder()
+            }
         }
     }
     

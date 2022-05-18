@@ -6,6 +6,7 @@ public struct PINEntryView: View {
     var maxDigits: Int
     var showPIN = true
     var label: String = ""
+    @Binding var shouldBeFocused: Bool
     var doneConfiguration: DoneConfiguration?
     var textChangeHandler: ((String) -> Void)?
     
@@ -37,7 +38,6 @@ public struct PINEntryView: View {
                             .padding(EdgeInsets(top: 4, leading: 0, bottom: 8, trailing: 0))
                             .foregroundColor(.blackish)
                             .opacity(index >= pin.count ? 0.0 : 1.0)
-                            .animation(.none)
                     }
                     Rectangle()
                         .foregroundColor(.blackish)
@@ -46,9 +46,6 @@ public struct PINEntryView: View {
             }
         }
         .padding()
-        .background(
-            Color.white.cornerRadius(10)
-        )
         .accessibilityHidden(true)
         .accessibilityElement(children: .ignore)
     }
@@ -58,6 +55,7 @@ public struct PINEntryView: View {
         PINTextField(text: $pin,
                      maxLength: maxDigits,
                      showPIN: showPIN,
+                     shouldBeFocused: $shouldBeFocused,
                      doneConfiguration: doneConfiguration,
                      textChangeHandler: textChangeHandler)
             .accentColor(.clear)

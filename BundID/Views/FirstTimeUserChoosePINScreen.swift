@@ -8,14 +8,17 @@ struct FirstTimeUserPersonalPINScreen: View {
     
     @State var enteredPIN1: String = ""
     @State var enteredPIN2: String = ""
+    @State var showPIN2: Bool = false
+    @State var focusPIN1: Bool = true
+    @State var focusPIN2: Bool = false
     @State var isFinished: Bool = false
     @State var error: Error?
+    @State var attempts: Int = 0
     
     var body: some View {
-        VStack(alignment: .leading) {
-            ScrollView {
+        ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
-                    Text(L10n.FirstTimeUser.TransportPIN.title)
+                    Text(L10n.FirstTimeUser.PersonalPIN.title)
                         .font(.bundLargeTitle)
                         .foregroundColor(.blackish)
                     VStack {
@@ -24,26 +27,31 @@ struct FirstTimeUserPersonalPINScreen: View {
                                      maxDigits: 6,
                                      showPIN: false,
                                      label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.first,
+                                     shouldBeFocused: $focusPIN1,
                                      doneConfiguration: nil,
-                        textChangeHandler: handlePIN1Change)
+                                     textChangeHandler: handlePIN1Change)
                         .font(.bundTitle)
-                        Spacer()
+                        .modifier(Shake(animatableData: CGFloat(attempts)))
                         // Focus: iOS 15 only
                         // Done button above keyboard: iOS 15 only
-                        if enteredPIN1.count >= 6 || enteredPIN2.count > 0 {
-                            Text(L10n.FirstTimeUser.PersonalPIN.confirmation)
-                                .font(.bundBody)
-                                .foregroundColor(.blackish)
-                            PINEntryView(pin: $enteredPIN2,
-                                         maxDigits: 6,
-                                         showPIN: false,
-                                         label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.second,
-                                         doneConfiguration: nil,
-                                         textChangeHandler: handlePIN2Change)
-                            .font(.bundTitle)
-                            .animation(.easeInOut)
-                            .transition(.move(edge: .bottom))
-                            Spacer()
+                        if showPIN2 {
+                            VStack {
+                                Spacer(minLength: 40)
+                                Text(L10n.FirstTimeUser.PersonalPIN.confirmation)
+                                    .font(.bundBody)
+                                    .foregroundColor(.blackish)
+                                PINEntryView(pin: $enteredPIN2,
+                                             maxDigits: 6,
+                                             showPIN: false,
+                                             label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.second,
+                                             shouldBeFocused: $focusPIN2,
+                                             doneConfiguration: nil,
+                                             textChangeHandler: handlePIN2Change)
+                                .font(.bundTitle)
+                                .modifier(Shake(animatableData: CGFloat(attempts)))
+                                Spacer()
+                            }
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
                         }
                     }
                     if case .mismatch = error {
@@ -61,18 +69,19 @@ struct FirstTimeUserPersonalPINScreen: View {
                             }
                         }
                         .frame(maxWidth: .infinity)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
                     }
                     
                     NavigationLink(isActive: $isFinished) {
                         EmptyView()
                     } label: {
-                        Text(L10n.FirstTimeUser.TransportPIN.continue)
+                        Text("")
                     }
                     .frame(width: 0, height: 0)
                     .hidden()
                 }
                 .padding(.horizontal)
-            }
+//            }
         }
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
@@ -82,22 +91,55 @@ struct FirstTimeUserPersonalPINScreen: View {
     
     func handlePIN1Change(_: String) {
         if !enteredPIN1.isEmpty {
-            error = nil
+            withAnimation {
+                error = nil
+            }
+        }
+
+        withAnimation {
+            showPIN2 = enteredPIN1.count >= 6 || enteredPIN2.count > 0
+        }
+        
+        if enteredPIN1.count == 6 {
+            focusPIN1 = false
+            focusPIN2 = true
         }
     }
     
     func handlePIN2Change(_: String) {
+        withAnimation {
+            showPIN2 = enteredPIN1.count >= 6 || enteredPIN2.count > 0
+        }
+        
         if enteredPIN2.count == 6 {
             if enteredPIN1 != enteredPIN2 {
                 withAnimation {
+                    attempts += 1
+                }
+                withAnimation(.default.delay(0.2)) {
                     error = .mismatch
-                    enteredPIN1 = ""
+                    showPIN2 = false
                     enteredPIN2 = ""
+                    enteredPIN1 = ""
+                    focusPIN2 = false
+                    focusPIN1 = true
                 }
             } else {
                 isFinished = true
             }
         }
+    }
+}
+
+struct Shake: GeometryEffect {
+    var amount: CGFloat = 10
+    var shakesPerUnit = 3
+    var animatableData: CGFloat
+
+    func effectValue(size: CGSize) -> ProjectionTransform {
+        ProjectionTransform(CGAffineTransform(translationX:
+            amount * sin(animatableData * .pi * CGFloat(shakesPerUnit)),
+            y: 0))
     }
 }
 

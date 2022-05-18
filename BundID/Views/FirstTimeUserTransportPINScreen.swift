@@ -6,6 +6,7 @@ struct FirstTimeUserTransportPINScreen: View {
     @State var isFinished: Bool = false
     @State var previouslyUnsuccessful: Bool = false
     @State var remainingAttempts: Int = 3
+    @State var focusTextField: Bool = true
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -21,11 +22,15 @@ struct FirstTimeUserTransportPINScreen: View {
                         PINEntryView(pin: $enteredPIN,
                                      maxDigits: 5,
                                      label: L10n.FirstTimeUser.TransportPIN.textFieldLabel,
+                                     shouldBeFocused: $focusTextField,
                                      doneConfiguration: DoneConfiguration(enabled: enteredPIN.count == 5,
                                                                           title: L10n.FirstTimeUser.TransportPIN.continue,
                                                                           handler: handleDone),
                                      textChangeHandler: handleTextChange)
                         .font(.bundTitle)
+                        .background(
+                            Color.white.cornerRadius(10)
+                        )
                         .padding(40)
                         // Focus: iOS 15 only
                         // Done button above keyboard: iOS 15 only

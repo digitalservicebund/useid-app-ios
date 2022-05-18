@@ -26,5 +26,5 @@
 "firstTimeUser_personalPIN_textFieldLabel_first" = "Persönliche PIN, sechsstellig";
 "firstTimeUser_personalPIN_textFieldLabel_second" = "Persönliche PIN bestätigen, sechsstellig";
 "firstTimeUser_personalPIN_confirmation" = "Geben Sie Ihre persönliche PIN zur Bestätigung noch einmal ein.";
-"firstTimeUser_personalPIN_error_mismatch_title" = "Die beiden PINs stimmen nicht überein";
-"firstTimeUser_personalPIN_error_mismatch_body" = "Bitte geben Sie Ihre persönliche PIN ein";
+"firstTimeUser_personalPIN_error_mismatch_title" = "PINs stimmen nicht überein";
+"firstTimeUser_personalPIN_error_mismatch_body" = "Versuchen Sie es erneut.";
