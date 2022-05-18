@@ -20,3 +20,11 @@
 "firstTimeUser_personalPINIntro_title" = "Wählen Sie Ihre persönliche PIN für Ihren Ausweis";
 "firstTimeUser_personalPINIntro_body" = "Diese 6-stellige persönliche PIN geben Sie jedes Mal ein, wenn Sie Ihren Ausweis online benutzen.";
 "firstTimeUser_personalPINIntro_continue" = "Persönliche PIN wählen";
+
+"firstTimeUser_personalPIN_title" = "Wählen Sie Ihre persönliche PIN für Ihren Ausweis";
+"firstTimeUser_personalPIN_body" = "Diese PIN geben Sie jedes Mal ein, wenn Sie Ihren Ausweis online benutzen.";
+"firstTimeUser_personalPIN_textFieldLabel_first" = "Persönliche PIN, sechsstellig";
+"firstTimeUser_personalPIN_textFieldLabel_second" = "Persönliche PIN bestätigen, sechsstellig";
+"firstTimeUser_personalPIN_confirmation" = "Geben Sie Ihre persönliche PIN zur Bestätigung noch einmal ein.";
+"firstTimeUser_personalPIN_error_mismatch_title" = "Die beiden PINs stimmen nicht überein";
+"firstTimeUser_personalPIN_error_mismatch_body" = "Bitte geben Sie Ihre persönliche PIN ein";

@@ -19,13 +19,12 @@ struct FirstTimeUserTransportPINScreen: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                         PINEntryView(pin: $enteredPIN,
-                                     doneEnabled: enteredPIN.count == 5,
-                                     doneText: L10n.FirstTimeUser.TransportPIN.continue,
-                                     label: L10n.FirstTimeUser.TransportPIN.textFieldLabel) { _ in
-                            withAnimation {
-                                isFinished = true
-                            }
-                        }
+                                     maxDigits: 5,
+                                     label: L10n.FirstTimeUser.TransportPIN.textFieldLabel,
+                                     doneConfiguration: DoneConfiguration(enabled: enteredPIN.count == 5,
+                                                                          title: L10n.FirstTimeUser.TransportPIN.continue,
+                                                                          handler: handleDone),
+                                     textChangeHandler: handleTextChange)
                         .font(.bundTitle)
                         .padding(40)
                         // Focus: iOS 15 only
@@ -72,6 +71,16 @@ struct FirstTimeUserTransportPINScreen: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    func handleDone(_: String) {
+        withAnimation {
+            isFinished = true
+        }
+    }
+    
+    func handleTextChange(_: String) {
+        
     }
 }
 

@@ -2,15 +2,12 @@ import SwiftUI
 
 public struct PINEntryView: View {
     
-    var maxDigits: Int = 5
-    
     @Binding var pin: String
-    var doneEnabled: Bool = true
-    var doneText: String
-    @State var showPIN = true
+    var maxDigits: Int
+    var showPIN = true
     var label: String = ""
-    
-    var handler: (String) -> Void
+    var doneConfiguration: DoneConfiguration?
+    var textChangeHandler: ((String) -> Void)?
     
     public var body: some View {
         VStack(spacing: 10) {
@@ -32,6 +29,7 @@ public struct PINEntryView: View {
                         Text(pinCharacter(at: index))
                             .font(.custom("BundesSans", size: 26).bold())
                             .foregroundColor(.blackish)
+                            .animation(.none)
                     } else {
                         Image(systemName: "circle.fill")
                             .resizable()
@@ -39,6 +37,7 @@ public struct PINEntryView: View {
                             .padding(EdgeInsets(top: 4, leading: 0, bottom: 8, trailing: 0))
                             .foregroundColor(.blackish)
                             .opacity(index >= pin.count ? 0.0 : 1.0)
+                            .animation(.none)
                     }
                     Rectangle()
                         .foregroundColor(.blackish)
@@ -58,10 +57,9 @@ public struct PINEntryView: View {
     private var textField: some View {
         PINTextField(text: $pin,
                      maxLength: maxDigits,
-                     doneEnabled: doneEnabled,
-                     doneText: doneText,
                      showPIN: showPIN,
-                     handler: handler)
+                     doneConfiguration: doneConfiguration,
+                     textChangeHandler: textChangeHandler)
             .accentColor(.clear)
             .foregroundColor(.clear)
             .keyboardType(.numberPad)

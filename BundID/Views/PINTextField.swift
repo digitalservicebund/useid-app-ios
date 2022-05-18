@@ -8,22 +8,26 @@ class CarretAtEndTextField: UITextField {
     }
 }
 
+struct DoneConfiguration {
+    var enabled: Bool
+    var title: String
+    var handler: (String) -> Void
+}
+
 struct PINTextField: UIViewRepresentable {
     
     @Binding private var text: String
     var maxLength: Int
-    var doneEnabled: Bool
-    var doneText: String
     var showPIN: Bool
-    var handler: (String) -> Void
+    var doneConfiguration: DoneConfiguration?
+    var textChangeHandler: ((String) -> Void)?
     
-    init(text: Binding<String>, maxLength: Int = 5, doneEnabled: Bool = true, doneText: String, showPIN: Bool = true, handler: @escaping (String) -> Void) {
+    init(text: Binding<String>, maxLength: Int = 5, showPIN: Bool = true, doneConfiguration: DoneConfiguration?, textChangeHandler: ((String) -> Void)?) {
         self._text = text
         self.maxLength = maxLength
-        self.doneEnabled = doneEnabled
-        self.doneText = doneText
         self.showPIN = showPIN
-        self.handler = handler
+        self.doneConfiguration = doneConfiguration
+        self.textChangeHandler = textChangeHandler
     }
     
     func makeUIView(context: Context) -> UITextField {
@@ -33,31 +37,48 @@ struct PINTextField: UIViewRepresentable {
         textfield.isSecureTextEntry = !showPIN
         textfield.textColor = .clear
         textfield.backgroundColor = .clear
-        let frame = CGRect(x: 0, y: 0, width: textfield.frame.size.width, height: 44)
-        let toolBar = UIToolbar(frame: frame)
-        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
-                                     target: nil,
-                                     action: nil)
-        let doneButton = UIBarButtonItem(title: doneText,
-                                         image: nil,
-                                         primaryAction: UIAction { _ in
-            handler(text)
-        })
-        doneButton.isEnabled = doneEnabled
-        let editingChanged = UIAction { action in
-            text = (action.sender as! UITextField).text ?? ""
+        
+        if let doneConfiguration = doneConfiguration {
+            let frame = CGRect(x: 0, y: 0, width: textfield.frame.size.width, height: 44)
+            let toolBar = UIToolbar(frame: frame)
+            let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
+                                         target: nil,
+                                         action: nil)
+            let doneButton = UIBarButtonItem(title: doneConfiguration.title,
+                                             image: nil,
+                                             primaryAction: UIAction { _ in
+                doneConfiguration.handler(text)
+            })
+            doneButton.isEnabled = doneConfiguration.enabled
+            toolBar.setItems([spacer, doneButton], animated: false)
+            textfield.inputAccessoryView = toolBar
         }
+        
+        let editingChanged = UIAction { action in
+            let newText = (action.sender as! UITextField).text ?? ""
+            let oldText = text
+            withAnimation {
+                text = newText
+            }
+            if newText != oldText {
+                textChangeHandler?(text)
+            }
+        }
+        
         textfield.addAction(editingChanged, for: .editingChanged)
-        toolBar.setItems([spacer, doneButton], animated: false)
-        textfield.inputAccessoryView = toolBar
         textfield.becomeFirstResponder()
         return textfield
     }
     
-    func updateUIView(_ uiView: UITextField, context: Context) {
-        uiView.text = text
-        let doneButton = (uiView.inputAccessoryView as! UIToolbar).items![1]
-        doneButton.isEnabled = doneEnabled
+    func updateUIView(_ textField: UITextField, context: Context) {
+        textField.text = text
+        if let doneConfiguration = doneConfiguration, let doneButton = findDoneButton(textField) {
+            doneButton.isEnabled = doneConfiguration.enabled
+        }
+    }
+    
+    func findDoneButton(_ textField: UITextField) -> UIBarButtonItem? {
+        return (textField.inputAccessoryView as? UIToolbar)?.items?[safe: 1]
     }
     
     func makeCoordinator() -> Coordinator {
