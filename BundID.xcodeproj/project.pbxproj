@@ -247,7 +247,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E5CEB288281041340076B9FE /* Build configuration list for PBXNativeTarget "BundID" */;
 			buildPhases = (
-				E15FCE3F282BFCEA00CD7AD6 /* ShellScript */,
+				E15FCE3F282BFCEA00CD7AD6 /* Localize via SwiftGen */,
 				E5CEB276281041330076B9FE /* Sources */,
 				E5CEB277281041330076B9FE /* Frameworks */,
 				E5CEB278281041330076B9FE /* Resources */,
@@ -289,7 +289,6 @@
 			);
 			mainGroup = E5CEB271281041330076B9FE;
 			packageReferences = (
-				E15FCE3C282BFC5000CD7AD6 /* XCRemoteSwiftPackageReference "SwiftGen" */,
 			);
 			productRefGroup = E5CEB27B281041330076B9FE /* Products */;
 			projectDirPath = "";
@@ -317,7 +316,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		E15FCE3F282BFCEA00CD7AD6 /* ShellScript */ = {
+		E15FCE3F282BFCEA00CD7AD6 /* Localize via SwiftGen */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -328,6 +327,7 @@
 				"$(SRCROOT)/BundID/Resources/de.lproj/Localizable.strings",
 				"$(SRCROOT)/BundID/Resources/de.lproj/Localizable.stringsdict",
 			);
+			name = "Localize via SwiftGen";
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -335,7 +335,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Build Phase - Begin SwiftGen\"\n./runSwiftGen.sh\necho \"Build Phase - End SwiftGen\"\n";
+			shellScript = "PATH=$PATH:/opt/homebrew/bin\nswiftgen\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -613,17 +613,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		E15FCE3C282BFC5000CD7AD6 /* XCRemoteSwiftPackageReference "SwiftGen" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SwiftGen/SwiftGen";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = E5CEB272281041330076B9FE /* Project object */;
 }
