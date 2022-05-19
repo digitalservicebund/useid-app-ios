@@ -10,8 +10,12 @@ jobs:
   dependencies:
     runs-on: self-hosted
     steps:
-      - name: Setup ruby
-        uses: ruby/setup-ruby@v1
+      - name: Print info
+        run: |
+          echo $PATH
+          echo $GITHUB_PATH
+          echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+          echo $GITHUB_PATH
       - name: Check out repository code
         uses: actions/checkout@v2
       - name: Restore Dependencies
