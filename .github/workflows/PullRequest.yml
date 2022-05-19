@@ -10,8 +10,8 @@ jobs:
   dependencies:
     runs-on: self-hosted
     steps:
-      - name: Print info
-        run: rbenv version && which bundle
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
       - name: Check out repository code
         uses: actions/checkout@v2
       - name: Restore Dependencies
