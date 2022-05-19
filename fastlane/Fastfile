@@ -25,6 +25,20 @@ platform :ios do
     version
   end
 
+  desc "Lint code"
+  lane :lint do
+    swiftlint(
+      executable: "swiftlint",
+      mode: :lint,
+      output_file: "swiftlint.html",
+      config_file: ".swiftlint.yml",
+      strict: true,
+      quiet: true,
+      no_cache: false,
+      reporter: "html"
+    )
+  end
+
   desc 'Trigger Release'
   lane :release do |options|
     buildRelease(options)

@@ -1,0 +1,62 @@
+name: Checks on Pullrequests
+on:
+  pull_request
+      
+concurrency: 
+  group: ${{ github.head_ref || github.ref }} # Cancel old runs if they have not finished yet
+  cancel-in-progress: true
+
+jobs:
+  dependencies:
+    runs-on: self-hosted
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Restore Dependencies
+        uses: actions/cache@v2
+        id: cache-dependencies
+        env:
+          cache-name: cache-dependencies
+        with:
+          path: |
+            vendor
+            .bundle
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}        
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: bundle install --path=vendor
+      - name: Save Dependencies
+        uses: actions/cache@v2
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        env:
+          cache-name: cache-dependencies
+        with:
+          path: |
+            vendor
+            .bundle
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
+
+  swiftLint:
+    runs-on: self-hosted
+    needs: dependencies
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2       
+      - name: Restore Dependencies
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-dependencies
+        with:
+          path: |
+            vendor
+            .bundle
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
+      - name: swift Lint
+        run: |
+          bundle exec fastlane lint
+      - name: Archive swiftlint report
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: swiftlint-${{ github.sha }}
+          path: swiftlint.html

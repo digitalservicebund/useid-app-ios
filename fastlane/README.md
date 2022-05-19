@@ -23,6 +23,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Get App Version
 
+### ios lint
+
+```sh
+[bundle exec] fastlane ios lint
+```
+
+Lint code
+
 ### ios release
 
 ```sh

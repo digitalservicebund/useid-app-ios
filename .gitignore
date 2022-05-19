@@ -121,3 +121,4 @@ BundID/OpenECard/OpenEcard.framework/
 BundID/OpenECard/OpenEcard.xcframework
 BundID/Helpers/LocalizedStrings+Generated.swift
 .swift-packages
+swiftlint.html
