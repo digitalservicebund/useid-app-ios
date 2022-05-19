@@ -38,5 +38,6 @@ trailing_whitespace:
 excluded:
   - .swift-packages
   - fastlane
+  - vendor
 
 allow_zero_lintable_files: true
