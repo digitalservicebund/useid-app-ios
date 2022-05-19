@@ -98,7 +98,7 @@ struct FirstTimeUserPersonalPINScreen: View {
         }
 
         withAnimation {
-            showPIN2 = enteredPIN1.count >= 6 || enteredPIN2.count > 0
+            showPIN2 = enteredPIN1.count >= 6 || !enteredPIN2.isEmpty
         }
         
         if enteredPIN1.count == 6 {
@@ -109,7 +109,7 @@ struct FirstTimeUserPersonalPINScreen: View {
     
     func handlePIN2Change(_: String) {
         withAnimation {
-            showPIN2 = enteredPIN1.count >= 6 || enteredPIN2.count > 0
+            showPIN2 = enteredPIN1.count >= 6 || !enteredPIN2.isEmpty
         }
         
         if enteredPIN2.count == 6 {

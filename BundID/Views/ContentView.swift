@@ -23,7 +23,7 @@ class ContentViewViewModel: ObservableObject {
     let nfcManager = IDInteractionManager()
     @Published var testValue = ""
     
-    var cancellable: AnyCancellable? = nil
+    var cancellable: AnyCancellable?
     
     func identify() {
         let tokenURL = "http://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Ftest.governikus-eid.de%2FAutent-DemoApplication%2FRequestServlet%3Fprovider%3Ddemo_epa_20%26redirect%3Dtrue"

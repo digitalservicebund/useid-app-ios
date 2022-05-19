@@ -2,7 +2,7 @@ import Foundation
 import Combine
 import OpenEcard
 
-class OpenECardHandlerDelegate<S>: NSObject where S : Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
+class OpenECardHandlerDelegate<S>: NSObject where S: Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
     private let subscriber: S
     private let context: ContextManagerProtocol
     private var activationController: ActivationControllerProtocol?

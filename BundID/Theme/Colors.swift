@@ -24,17 +24,20 @@ extension Color {
     static let blue800: Color = Color(0x004B76)
     static let blue900: Color = Color(0x003350)
     
-    // static let white: Color   = Color(0xFFFFFF)
     static let gray100: Color = Color(0xF6F7F8)
     static let gray300: Color = Color(0xEDEEF0)
     static let gray600: Color = Color(0xB8BDC3)
     static let gray900: Color = Color(0x4E596A)
-    static let blackish: Color   = Color(0x0B0C0C)
     
-    static let green100: Color  = Color(0xE8F7F0)
-    static let green800: Color  = Color(0x006538)
+//  static let white: Color    = Color(0xFFFFFF)
+    static let blackish: Color = Color(0x0B0C0C)
+    
+    static let green100: Color = Color(0xE8F7F0)
+    static let green800: Color = Color(0x006538)
+    
     static let yellow300: Color = Color(0xF9EC9E)
     static let yellow600: Color = Color(0xF2DC5D)
-    static let red200: Color    = Color(0xF9E5EC)
-    static let red900: Color    = Color(0x8E001B)
+    
+    static let red200: Color = Color(0xF9E5EC)
+    static let red900: Color = Color(0x8E001B)
 }

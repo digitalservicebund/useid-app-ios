@@ -2,10 +2,10 @@ import Foundation
 import Combine
 import OpenEcard
 
-class StartServiceHandler<S>: OpenECardHandlerBase<S>, StartServiceHandlerProtocol where S : Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
+class StartServiceHandler<S>: OpenECardHandlerBase<S>, StartServiceHandlerProtocol where S: Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
     
     private let task: IDTask
-    private var activationController: ActivationControllerProtocol? = nil
+    private var activationController: ActivationControllerProtocol?
     
     init(task: IDTask, delegate: OpenECardHandlerDelegate<S>) {
         self.task = task

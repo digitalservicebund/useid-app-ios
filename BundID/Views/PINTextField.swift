@@ -48,16 +48,14 @@ struct PINTextField: UIViewRepresentable {
                                          action: nil)
             let doneButton = UIBarButtonItem(title: doneConfiguration.title,
                                              image: nil,
-                                             primaryAction: UIAction { _ in
-                doneConfiguration.handler(text)
-            })
+                                             primaryAction: UIAction(handler: { _ in doneConfiguration.handler(text) }))
             doneButton.isEnabled = doneConfiguration.enabled
             toolBar.setItems([spacer, doneButton], animated: false)
             textField.inputAccessoryView = toolBar
         }
         
         let editingChanged = UIAction { action in
-            let newText = (action.sender as! UITextField).text ?? ""
+            let newText = (action.sender as? UITextField)?.text ?? ""
             let oldText = text
             withAnimation(.linear(duration: 0.05)) {
                 text = newText

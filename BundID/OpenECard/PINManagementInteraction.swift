@@ -2,7 +2,7 @@ import Foundation
 import Combine
 import OpenEcard
 
-class PINManagementInteraction<S>: OpenECardHandlerBase<S>, PinManagementInteractionProtocol where S : Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
+class PINManagementInteraction<S>: OpenECardHandlerBase<S>, PinManagementInteractionProtocol where S: Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
     func onPinChangeable(_ enterOldNewPins: (NSObjectProtocol & ConfirmOldSetNewPasswordOperationProtocol)!) {
         onGeneralPINChangeable(attempts: nil, enterOldAndNewPIN: enterOldNewPins)
     }

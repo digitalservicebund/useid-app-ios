@@ -30,7 +30,7 @@ class IDInteractionManager {
         let task: IDTask
         let context: ContextManagerProtocol
         
-        func receive<S>(subscriber: S) where S : Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
+        func receive<S>(subscriber: S) where S: Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
             let delegate = OpenECardHandlerDelegate(subscriber: subscriber, context: context)
             context.initializeContext(StartServiceHandler(task: task, delegate: delegate))
         }
