@@ -17,73 +17,72 @@ struct FirstTimeUserPersonalPINScreen: View {
     
     var body: some View {
         ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                    Text(L10n.FirstTimeUser.PersonalPIN.title)
-                        .font(.bundLargeTitle)
-                        .foregroundColor(.blackish)
-                    VStack {
-                        Spacer()
-                        PINEntryView(pin: $enteredPIN1,
-                                     maxDigits: 6,
-                                     groupEvery: 3,
-                                     showPIN: false,
-                                     label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.first,
-                                     shouldBeFocused: $focusPIN1,
-                                     doneConfiguration: nil,
-                                     textChangeHandler: handlePIN1Change)
-                        .font(.bundTitle)
-                        .modifier(Shake(animatableData: CGFloat(attempts)))
-                        // Focus: iOS 15 only
-                        // Done button above keyboard: iOS 15 only
-                        if showPIN2 {
-                            VStack {
-                                Spacer(minLength: 40)
-                                Text(L10n.FirstTimeUser.PersonalPIN.confirmation)
-                                    .font(.bundBody)
-                                    .foregroundColor(.blackish)
-                                PINEntryView(pin: $enteredPIN2,
-                                             maxDigits: 6,
-                                             groupEvery: 3,
-                                             showPIN: false,
-                                             label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.second,
-                                             shouldBeFocused: $focusPIN2,
-                                             doneConfiguration: nil,
-                                             textChangeHandler: handlePIN2Change)
-                                .font(.bundTitle)
-                                .modifier(Shake(animatableData: CGFloat(attempts)))
-                                Spacer()
-                            }
-                            .transition(.move(edge: .bottom).combined(with: .opacity))
+            VStack(alignment: .leading, spacing: 24) {
+                Text(L10n.FirstTimeUser.PersonalPIN.title)
+                    .font(.bundLargeTitle)
+                    .foregroundColor(.blackish)
+                VStack {
+                    Spacer()
+                    PINEntryView(pin: $enteredPIN1,
+                                 maxDigits: 6,
+                                 groupEvery: 3,
+                                 showPIN: false,
+                                 label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.first,
+                                 shouldBeFocused: $focusPIN1,
+                                 doneConfiguration: nil,
+                                 textChangeHandler: handlePIN1Change)
+                    .font(.bundTitle)
+                    .modifier(Shake(animatableData: CGFloat(attempts)))
+                    // Focus: iOS 15 only
+                    // Done button above keyboard: iOS 15 only
+                    if showPIN2 {
+                        VStack {
+                            Spacer(minLength: 40)
+                            Text(L10n.FirstTimeUser.PersonalPIN.confirmation)
+                                .font(.bundBody)
+                                .foregroundColor(.blackish)
+                            PINEntryView(pin: $enteredPIN2,
+                                         maxDigits: 6,
+                                         groupEvery: 3,
+                                         showPIN: false,
+                                         label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.second,
+                                         shouldBeFocused: $focusPIN2,
+                                         doneConfiguration: nil,
+                                         textChangeHandler: handlePIN2Change)
+                            .font(.bundTitle)
+                            .modifier(Shake(animatableData: CGFloat(attempts)))
+                            Spacer()
                         }
-                    }
-                    if case .mismatch = error {
-                        VStack(spacing: 24) {
-                            VStack {
-                                Text(L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.title)
-                                    .font(.bundBodyBold)
-                                    .multilineTextAlignment(.center)
-                                    .foregroundColor(.red900)
-                                Text(L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.body)
-                                    .font(.bundBody)
-                                    .foregroundColor(.blackish)
-                                    .multilineTextAlignment(.center)
-                                    .lineLimit(nil)
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                     }
-                    
-                    NavigationLink(isActive: $isFinished) {
-                        EmptyView()
-                    } label: {
-                        Text("")
-                    }
-                    .frame(width: 0, height: 0)
-                    .hidden()
                 }
-                .padding(.horizontal)
-//            }
+                if case .mismatch = error {
+                    VStack(spacing: 24) {
+                        VStack {
+                            Text(L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.title)
+                                .font(.bundBodyBold)
+                                .multilineTextAlignment(.center)
+                                .foregroundColor(.red900)
+                            Text(L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.body)
+                                .font(.bundBody)
+                                .foregroundColor(.blackish)
+                                .multilineTextAlignment(.center)
+                                .lineLimit(nil)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+                
+                NavigationLink(isActive: $isFinished) {
+                    EmptyView()
+                } label: {
+                    Text("")
+                }
+                .frame(width: 0, height: 0)
+                .hidden()
+            }
+            .padding(.horizontal)
         }
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
@@ -130,18 +129,6 @@ struct FirstTimeUserPersonalPINScreen: View {
                 isFinished = true
             }
         }
-    }
-}
-
-struct Shake: GeometryEffect {
-    var amount: CGFloat = 10
-    var shakesPerUnit = 3
-    var animatableData: CGFloat
-
-    func effectValue(size: CGSize) -> ProjectionTransform {
-        ProjectionTransform(CGAffineTransform(translationX:
-            amount * sin(animatableData * .pi * CGFloat(shakesPerUnit)),
-            y: 0))
     }
 }
 
