@@ -68,6 +68,8 @@ jobs:
     runs-on: self-hosted
     needs: dependencies
     steps:
+      - name: Use rbenv shims
+        run: echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
       - name: Check out repository code
         uses: actions/checkout@v2            
       - name: Restore Dependencies
@@ -86,6 +88,8 @@ jobs:
     runs-on: self-hosted
     needs: build
     steps:
+      - name: Use rbenv shims
+        run: echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
       - name: Check out repository code
         uses: actions/checkout@v2          
       - name: Restore Dependencies
