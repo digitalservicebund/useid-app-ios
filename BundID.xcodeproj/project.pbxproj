@@ -14,6 +14,8 @@
 		E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
 		E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACE728350FD500A51183 /* Array+Safe.swift */; };
 		E1AAACEB2836668200A51183 /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACEA2836668200A51183 /* ShakeEffect.swift */; };
+		E1AAACF328378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACF228378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift */; };
+		E1AAACFB2837B9A200A51183 /* FirstTimeUserChoosePINScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACFA2837B9A200A51183 /* FirstTimeUserChoosePINScreenViewModel.swift */; };
 		E1AB879A282281C400C7FC94 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB8799282281C400C7FC94 /* HeaderView.swift */; };
 		E1AB879E282283AB00C7FC94 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB879D282283AB00C7FC94 /* Fonts.swift */; };
 		E1AB87A02822972A00C7FC94 /* FirstTimeUserChoosePINIntroScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB879F2822972A00C7FC94 /* FirstTimeUserChoosePINIntroScreen.swift */; };
@@ -49,6 +51,16 @@
 		E5E69D892812FB8D00A3B66A /* IDCardAttribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D882812FB8D00A3B66A /* IDCardAttribute.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		E1AAACF428378C0E00A51183 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E5CEB272281041330076B9FE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E5CEB279281041330076B9FE;
+			remoteInfo = BundID;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		E5CEB29328104A190076B9FE /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -70,6 +82,10 @@
 		E19D26B0282557B00005B111 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E1AAACE728350FD500A51183 /* Array+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Safe.swift"; sourceTree = "<group>"; };
 		E1AAACEA2836668200A51183 /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
+		E1AAACF028378C0E00A51183 /* BundIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BundIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1AAACF228378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeUserPersonalPINScreenViewModelTests.swift; sourceTree = "<group>"; };
+		E1AAACFA2837B9A200A51183 /* FirstTimeUserChoosePINScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeUserChoosePINScreenViewModel.swift; sourceTree = "<group>"; };
+		E1AAACFD2837C41700A51183 /* AllTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = AllTests.xctestplan; path = BundID/AllTests.xctestplan; sourceTree = SOURCE_ROOT; };
 		E1AB8799282281C400C7FC94 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		E1AB879D282283AB00C7FC94 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		E1AB879F2822972A00C7FC94 /* FirstTimeUserChoosePINIntroScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeUserChoosePINIntroScreen.swift; sourceTree = "<group>"; };
@@ -109,6 +125,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		E1AAACED28378C0E00A51183 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E5CEB277281041330076B9FE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -130,6 +153,23 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		E1AAACF128378C0E00A51183 /* BundIDTests */ = {
+			isa = PBXGroup;
+			children = (
+				E1AAACF228378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift */,
+			);
+			path = BundIDTests;
+			sourceTree = "<group>";
+		};
+		E1AAACF92837B98100A51183 /* FirstTimeUserChoosePINScreen */ = {
+			isa = PBXGroup;
+			children = (
+				E1D307AF2833A2500088DAFF /* FirstTimeUserChoosePINScreen.swift */,
+				E1AAACFA2837B9A200A51183 /* FirstTimeUserChoosePINScreenViewModel.swift */,
+			);
+			path = FirstTimeUserChoosePINScreen;
+			sourceTree = "<group>";
+		};
 		E1AB879B2822835E00C7FC94 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -139,7 +179,7 @@
 				E1CD8E9028214FDB008ADA2A /* FirstTimeUserPINLetterScreen.swift */,
 				E1CD8E92282156F2008ADA2A /* FirstTimeUserTransportPINScreen.swift */,
 				E1AB879F2822972A00C7FC94 /* FirstTimeUserChoosePINIntroScreen.swift */,
-				E1D307AF2833A2500088DAFF /* FirstTimeUserChoosePINScreen.swift */,
+				E1AAACF92837B98100A51183 /* FirstTimeUserChoosePINScreen */,
 				E1CD8E9428215971008ADA2A /* PINEntryView.swift */,
 				E1AB87A3282413A700C7FC94 /* PINTextField.swift */,
 			);
@@ -179,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				E5CEB27C281041330076B9FE /* BundID */,
+				E1AAACF128378C0E00A51183 /* BundIDTests */,
 				E5CEB27B281041330076B9FE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -187,6 +228,7 @@
 			isa = PBXGroup;
 			children = (
 				E5CEB27A281041330076B9FE /* BundID.app */,
+				E1AAACF028378C0E00A51183 /* BundIDTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -201,6 +243,7 @@
 				E1AB879C2822839500C7FC94 /* Theme */,
 				E5CEB295281050BE0076B9FE /* Info.plist */,
 				E5CEB29428104F920076B9FE /* BundID.entitlements */,
+				E1AAACFD2837C41700A51183 /* AllTests.xctestplan */,
 				E5CEB27D281041330076B9FE /* BundIDApp.swift */,
 				E5CEB281281041340076B9FE /* Assets.xcassets */,
 				E1CD8E89281FFCA0008ADA2A /* Resources */,
@@ -243,6 +286,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		E1AAACEF28378C0E00A51183 /* BundIDTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E1AAACF628378C0E00A51183 /* Build configuration list for PBXNativeTarget "BundIDTests" */;
+			buildPhases = (
+				E1AAACEC28378C0E00A51183 /* Sources */,
+				E1AAACED28378C0E00A51183 /* Frameworks */,
+				E1AAACEE28378C0E00A51183 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E1AAACF528378C0E00A51183 /* PBXTargetDependency */,
+			);
+			name = BundIDTests;
+			productName = BundIDTests;
+			productReference = E1AAACF028378C0E00A51183 /* BundIDTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		E5CEB279281041330076B9FE /* BundID */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E5CEB288281041340076B9FE /* Build configuration list for PBXNativeTarget "BundID" */;
@@ -271,9 +332,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1330;
+				LastSwiftUpdateCheck = 1340;
 				LastUpgradeCheck = 1330;
 				TargetAttributes = {
+					E1AAACEF28378C0E00A51183 = {
+						CreatedOnToolsVersion = 13.4;
+						TestTargetID = E5CEB279281041330076B9FE;
+					};
 					E5CEB279281041330076B9FE = {
 						CreatedOnToolsVersion = 13.3.1;
 					};
@@ -295,11 +360,19 @@
 			projectRoot = "";
 			targets = (
 				E5CEB279281041330076B9FE /* BundID */,
+				E1AAACEF28378C0E00A51183 /* BundIDTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		E1AAACEE28378C0E00A51183 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E5CEB278281041330076B9FE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -340,6 +413,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		E1AAACEC28378C0E00A51183 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1AAACF328378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E5CEB276281041330076B9FE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -360,6 +441,7 @@
 				E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */,
 				E1AB87A4282413A700C7FC94 /* PINTextField.swift in Sources */,
 				E593E2742816866200154EB0 /* EACInteraction.swift in Sources */,
+				E1AAACFB2837B9A200A51183 /* FirstTimeUserChoosePINScreenViewModel.swift in Sources */,
 				E1CD8E93282156F2008ADA2A /* FirstTimeUserTransportPINScreen.swift in Sources */,
 				E5E69D892812FB8D00A3B66A /* IDCardAttribute.swift in Sources */,
 				E1AB87A02822972A00C7FC94 /* FirstTimeUserChoosePINIntroScreen.swift in Sources */,
@@ -381,6 +463,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		E1AAACF528378C0E00A51183 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E5CEB279281041330076B9FE /* BundID */;
+			targetProxy = E1AAACF428378C0E00A51183 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		E19D26B1282557B00005B111 /* Localizable.stringsdict */ = {
 			isa = PBXVariantGroup;
@@ -401,6 +491,42 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		E1AAACF728378C0E00A51183 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6YK3KTLWQR;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.BundIDTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BundID.app/BundID";
+			};
+			name = Debug;
+		};
+		E1AAACF828378C0E00A51183 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6YK3KTLWQR;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.BundIDTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BundID.app/BundID";
+			};
+			name = Release;
+		};
 		E5CEB286281041340076B9FE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -594,6 +720,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		E1AAACF628378C0E00A51183 /* Build configuration list for PBXNativeTarget "BundIDTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E1AAACF728378C0E00A51183 /* Debug */,
+				E1AAACF828378C0E00A51183 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E5CEB275281041330076B9FE /* Build configuration list for PBXProject "BundID" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -23,6 +23,30 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Get App Version
 
+### ios build
+
+```sh
+[bundle exec] fastlane ios build
+```
+
+Build
+
+### ios test_without_building
+
+```sh
+[bundle exec] fastlane ios test_without_building
+```
+
+Runs unit tests without building
+
+### ios test
+
+```sh
+[bundle exec] fastlane ios test
+```
+
+Test
+
 ### ios lint
 
 ```sh

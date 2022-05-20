@@ -1,0 +1,30 @@
+{
+  "configurations" : [
+    {
+      "id" : "6BDD15A2-E170-4D81-B064-11523825E6BC",
+      "name" : "Configuration",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:BundID.xcodeproj",
+      "identifier" : "E5CEB279281041330076B9FE",
+      "name" : "BundID"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:BundID.xcodeproj",
+        "identifier" : "E1AAACEF28378C0E00A51183",
+        "name" : "BundIDTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -9,7 +9,6 @@ public struct PINEntryView: View {
     var label: String = ""
     @Binding var shouldBeFocused: Bool
     var doneConfiguration: DoneConfiguration?
-    var textChangeHandler: ((String) -> Void)?
     
     public var body: some View {
         VStack(spacing: 10) {
@@ -62,8 +61,7 @@ public struct PINEntryView: View {
                      maxLength: maxDigits,
                      showPIN: showPIN,
                      shouldBeFocused: $shouldBeFocused,
-                     doneConfiguration: doneConfiguration,
-                     textChangeHandler: textChangeHandler)
+                     doneConfiguration: doneConfiguration)
             .accentColor(.clear)
             .foregroundColor(.clear)
             .keyboardType(.numberPad)

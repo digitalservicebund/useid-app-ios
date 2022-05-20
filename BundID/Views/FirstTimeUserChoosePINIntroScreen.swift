@@ -10,7 +10,7 @@ struct FirstTimeUserChoosePINIntroScreen: View {
             }
             VStack {
                 NavigationLink {
-                    FirstTimeUserPersonalPINScreen()
+                    FirstTimeUserPersonalPINScreen(viewModel: FirstTimeUserPersonalPINScreenViewModel())
                 } label: {
                     Text(L10n.FirstTimeUser.PersonalPINIntro.continue)
                 }

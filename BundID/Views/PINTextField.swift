@@ -21,15 +21,13 @@ struct PINTextField: UIViewRepresentable {
     var showPIN: Bool
     @Binding var shouldBeFocused: Bool
     var doneConfiguration: DoneConfiguration?
-    var textChangeHandler: ((String) -> Void)?
     
-    init(text: Binding<String>, maxLength: Int = 5, showPIN: Bool = true, shouldBeFocused: Binding<Bool>, doneConfiguration: DoneConfiguration?, textChangeHandler: ((String) -> Void)?) {
+    init(text: Binding<String>, maxLength: Int = 5, showPIN: Bool = true, shouldBeFocused: Binding<Bool>, doneConfiguration: DoneConfiguration?) {
         self._text = text
         self.maxLength = maxLength
         self.showPIN = showPIN
         self._shouldBeFocused = shouldBeFocused
         self.doneConfiguration = doneConfiguration
-        self.textChangeHandler = textChangeHandler
     }
     
     func makeUIView(context: Context) -> UITextField {
@@ -59,9 +57,6 @@ struct PINTextField: UIViewRepresentable {
             let oldText = text
             withAnimation(.linear(duration: 0.05)) {
                 text = newText
-            }
-            if newText != oldText {
-                textChangeHandler?(text)
             }
         }
         

@@ -10,6 +10,11 @@
 #     https://docs.fastlane.tools/plugins/available-plugins
 #
 
+ENV["LC_ALL"] = "de_DE.UTF-8"
+ENV["LANG"] = "de_DE.UTF-8"
+
+ENV["FASTLANE_SKIP_UPDATE_CHECK"] = "true"
+
 default_platform(:ios)
 
 PROJECT_FILENAME = "BundID"
@@ -25,7 +30,66 @@ platform :ios do
     version
   end
 
-  desc "Lint code"
+  desc "Build"
+  lane :build do
+    scan(
+      project: "#{PROJECT_FILENAME}.xcodeproj",
+      scheme: 'BundID',
+      cloned_source_packages_path: '.swift-packages',
+      xcpretty_args: '--color',
+      build_for_testing: true,
+      clean: true
+    )
+  end
+
+  desc "Runs unit tests without building"
+  lane :test_without_building do | options |
+    begin
+      testPlan = options[:testplan] || "AllTests"
+      run_tests(
+        scheme: "BundID",
+        cloned_source_packages_path: '.swift-packages',
+        test_without_building: true,
+        testplan: testPlan,
+        devices: ["iPhone 13"],
+        skip_detect_devices: true,
+        prelaunch_simulator: false,
+        skip_package_dependencies_resolution: true,
+        disable_package_automatic_updates: true,
+        result_bundle: true,
+        code_coverage: true,
+        reset_simulator: true,
+        app_identifier: 'com.example.BundID',
+        concurrent_workers: 7,
+        output_style: "raw",
+        output_types: "",
+        number_of_retries: 0
+      )
+    rescue
+      UI.user_error!("Tests did fail, please check logs above or BundID.xcresult.zip")
+    ensure
+      trainer(
+        output_directory: "fastlane/test_output/",
+        path: "fastlane/test_output/",
+        extension: ".junit",
+        fail_build: false
+      )
+
+      zip(
+        path: "fastlane/test_output/BundID.xcresult",
+        output_path: "fastlane/test_output/BundID.xcresult.zip",
+        verbose: false
+      )
+    end
+  end
+
+  desc 'Test'
+  lane :test do |options|
+    build(options)
+    test_without_building(options)
+  end
+
+  desc 'Lint code'
   lane :lint do
     swiftlint(
       executable: "swiftlint",
@@ -47,7 +111,6 @@ platform :ios do
 
   desc 'Build Release'
   lane :buildRelease do |_options|
-    skip_docs
     ensure_git_status_clean
 
     build_app(
@@ -81,14 +144,12 @@ platform :ios do
 
   desc 'Bump version'
   lane :bumpVersion do
-    skip_docs
-
     increment_build_number
 
     version = getAppVersion
     build_number = get_build_number
 
-    commit_version_bump(xcodeproj: "./#{PROJECT_FILENAME}.xcodeproj")
+    commit_version_bump(xcodeproj: "#{PROJECT_FILENAME}.xcodeproj")
     add_git_tag(tag: "#{version}-#{build_number}")
   end
 end

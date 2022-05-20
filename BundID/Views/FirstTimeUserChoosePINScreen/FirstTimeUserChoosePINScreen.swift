@@ -1,19 +1,13 @@
 import SwiftUI
+import Combine
+
+enum FirstTimeUserPersonalPINScreenError {
+    case mismatch
+}
 
 struct FirstTimeUserPersonalPINScreen: View {
     
-    enum Error {
-        case mismatch
-    }
-    
-    @State var enteredPIN1: String = ""
-    @State var enteredPIN2: String = ""
-    @State var showPIN2: Bool = false
-    @State var focusPIN1: Bool = true
-    @State var focusPIN2: Bool = false
-    @State var isFinished: Bool = false
-    @State var error: Error?
-    @State var attempts: Int = 0
+    @ObservedObject var viewModel: FirstTimeUserPersonalPINScreenViewModel
     
     var body: some View {
         ScrollView {
@@ -23,40 +17,36 @@ struct FirstTimeUserPersonalPINScreen: View {
                     .foregroundColor(.blackish)
                 VStack {
                     Spacer()
-                    PINEntryView(pin: $enteredPIN1,
+                    PINEntryView(pin: $viewModel.enteredPIN1,
                                  maxDigits: 6,
                                  groupEvery: 3,
                                  showPIN: false,
                                  label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.first,
-                                 shouldBeFocused: $focusPIN1,
-                                 doneConfiguration: nil,
-                                 textChangeHandler: handlePIN1Change)
+                                 shouldBeFocused: $viewModel.focusPIN1,
+                                 doneConfiguration: nil)
                     .font(.bundTitle)
-                    .modifier(Shake(animatableData: CGFloat(attempts)))
-                    // Focus: iOS 15 only
-                    // Done button above keyboard: iOS 15 only
-                    if showPIN2 {
+                    .modifier(Shake(animatableData: CGFloat(viewModel.attempts)))
+                    if viewModel.showPIN2 {
                         VStack {
                             Spacer(minLength: 40)
                             Text(L10n.FirstTimeUser.PersonalPIN.confirmation)
                                 .font(.bundBody)
                                 .foregroundColor(.blackish)
-                            PINEntryView(pin: $enteredPIN2,
+                            PINEntryView(pin: $viewModel.enteredPIN2,
                                          maxDigits: 6,
                                          groupEvery: 3,
                                          showPIN: false,
                                          label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.second,
-                                         shouldBeFocused: $focusPIN2,
-                                         doneConfiguration: nil,
-                                         textChangeHandler: handlePIN2Change)
+                                         shouldBeFocused: $viewModel.focusPIN2,
+                                         doneConfiguration: nil)
                             .font(.bundTitle)
-                            .modifier(Shake(animatableData: CGFloat(attempts)))
+                            .modifier(Shake(animatableData: CGFloat(viewModel.attempts)))
                             Spacer()
                         }
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                     }
                 }
-                if case .mismatch = error {
+                if case .mismatch = viewModel.error {
                     VStack(spacing: 24) {
                         VStack {
                             Text(L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.title)
@@ -74,7 +64,7 @@ struct FirstTimeUserPersonalPINScreen: View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
                 
-                NavigationLink(isActive: $isFinished) {
+                NavigationLink(isActive: $viewModel.isFinished) {
                     EmptyView()
                 } label: {
                     Text("")
@@ -86,48 +76,7 @@ struct FirstTimeUserPersonalPINScreen: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            isFinished = false
-        }
-    }
-    
-    func handlePIN1Change(_: String) {
-        if !enteredPIN1.isEmpty {
-            withAnimation {
-                error = nil
-            }
-        }
-
-        withAnimation {
-            showPIN2 = enteredPIN1.count >= 6 || !enteredPIN2.isEmpty
-        }
-        
-        if enteredPIN1.count == 6 {
-            focusPIN1 = false
-            focusPIN2 = true
-        }
-    }
-    
-    func handlePIN2Change(_: String) {
-        withAnimation {
-            showPIN2 = enteredPIN1.count >= 6 || !enteredPIN2.isEmpty
-        }
-        
-        if enteredPIN2.count == 6 {
-            if enteredPIN1 != enteredPIN2 {
-                withAnimation {
-                    attempts += 1
-                }
-                withAnimation(.default.delay(0.2)) {
-                    error = .mismatch
-                    showPIN2 = false
-                    enteredPIN2 = ""
-                    enteredPIN1 = ""
-                    focusPIN2 = false
-                    focusPIN1 = true
-                }
-            } else {
-                isFinished = true
-            }
+            viewModel.isFinished = false
         }
     }
 }
@@ -135,19 +84,19 @@ struct FirstTimeUserPersonalPINScreen: View {
 struct FirstTimeUserPersonalPINScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            FirstTimeUserPersonalPINScreen()
+            FirstTimeUserPersonalPINScreen(viewModel: FirstTimeUserPersonalPINScreenViewModel())
         }
         .previewDevice("iPhone SE (2nd generation)")
         NavigationView {
-            FirstTimeUserPersonalPINScreen(enteredPIN1: "123456", enteredPIN2: "12", isFinished: false, error: nil)
+            FirstTimeUserPersonalPINScreen(viewModel: FirstTimeUserPersonalPINScreenViewModel(enteredPIN1: "123456", enteredPIN2: "12", isFinished: false, error: nil))
         }
         .previewDevice("iPhone SE (2nd generation)")
         NavigationView {
-            FirstTimeUserPersonalPINScreen(enteredPIN1: "123456", enteredPIN2: "987654", isFinished: false, error: .mismatch)
+            FirstTimeUserPersonalPINScreen(viewModel: FirstTimeUserPersonalPINScreenViewModel(enteredPIN1: "123456", enteredPIN2: "987654", isFinished: false, error: .mismatch))
         }
         .previewDevice("iPhone SE (2nd generation)")
         NavigationView {
-            FirstTimeUserPersonalPINScreen(enteredPIN1: "123456")
+            FirstTimeUserPersonalPINScreen(viewModel: FirstTimeUserPersonalPINScreenViewModel(enteredPIN1: "123456"))
         }
         .previewDevice("iPhone 12")
     }

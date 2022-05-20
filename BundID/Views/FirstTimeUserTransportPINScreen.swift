@@ -25,8 +25,7 @@ struct FirstTimeUserTransportPINScreen: View {
                                      shouldBeFocused: $focusTextField,
                                      doneConfiguration: DoneConfiguration(enabled: enteredPIN.count == 5,
                                                                           title: L10n.FirstTimeUser.TransportPIN.continue,
-                                                                          handler: handleDone),
-                                     textChangeHandler: handleTextChange)
+                                                                          handler: handleDone))
                         .font(.bundTitle)
                         .background(
                             Color.white.cornerRadius(10)
@@ -82,10 +81,6 @@ struct FirstTimeUserTransportPINScreen: View {
         withAnimation {
             isFinished = true
         }
-    }
-    
-    func handleTextChange(_: String) {
-        
     }
 }
 
