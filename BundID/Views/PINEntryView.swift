@@ -60,7 +60,7 @@ public struct PINEntryView: View {
         PINTextField(text: $pin,
                      maxLength: maxDigits,
                      showPIN: showPIN,
-                     shouldBeFocused: $shouldBeFocused,
+                     isFirstResponder: $shouldBeFocused,
                      doneConfiguration: doneConfiguration)
             .accentColor(.clear)
             .foregroundColor(.clear)

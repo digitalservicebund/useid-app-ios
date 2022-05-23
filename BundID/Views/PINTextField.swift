@@ -16,17 +16,17 @@ struct DoneConfiguration {
 
 struct PINTextField: UIViewRepresentable {
     
-    @Binding private var text: String
+    @Binding var text: String
     var maxLength: Int
     var showPIN: Bool
-    @Binding var shouldBeFocused: Bool
+    @Binding var isFirstResponder: Bool
     var doneConfiguration: DoneConfiguration?
     
-    init(text: Binding<String>, maxLength: Int = 5, showPIN: Bool = true, shouldBeFocused: Binding<Bool>, doneConfiguration: DoneConfiguration?) {
+    init(text: Binding<String>, maxLength: Int = 5, showPIN: Bool = true, isFirstResponder: Binding<Bool>, doneConfiguration: DoneConfiguration?) {
         self._text = text
         self.maxLength = maxLength
         self.showPIN = showPIN
-        self._shouldBeFocused = shouldBeFocused
+        self._isFirstResponder = isFirstResponder
         self.doneConfiguration = doneConfiguration
     }
     
@@ -61,24 +61,18 @@ struct PINTextField: UIViewRepresentable {
         
         textField.addAction(editingChanged, for: .editingChanged)
         
-        if shouldBeFocused {
-            DispatchQueue.main.async {
-                textField.becomeFirstResponder()
-            }
-        }
-        
         return textField
     }
     
-    func updateUIView(_ textField: UITextField, context: Context) {
-        textField.text = text
-        if let doneConfiguration = doneConfiguration, let doneButton = findDoneButton(textField) {
+    func updateUIView(_ uiView: UITextField, context: Context) {
+        uiView.text = text
+        if let doneConfiguration = doneConfiguration, let doneButton = findDoneButton(uiView) {
             doneButton.isEnabled = doneConfiguration.enabled
         }
-        if shouldBeFocused {
-            DispatchQueue.main.async {
-                textField.becomeFirstResponder()
-            }
+        
+        switch isFirstResponder {
+        case true: uiView.becomeFirstResponder()
+        case false: uiView.resignFirstResponder()
         }
     }
     
@@ -87,14 +81,19 @@ struct PINTextField: UIViewRepresentable {
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(self)
+        Coordinator($text, isFirstResponder: $isFirstResponder, maxLength: maxLength)
     }
     
     class Coordinator: NSObject, UITextFieldDelegate {
-        var parent: PINTextField
         
-        init(_ textField: PINTextField) {
-            self.parent = textField
+        var text: Binding<String>
+        var isFirstResponder: Binding<Bool>
+        var maxLength: Int
+        
+        init(_ text: Binding<String>, isFirstResponder: Binding<Bool>, maxLength: Int) {
+            self.text = text
+            self.isFirstResponder = isFirstResponder
+            self.maxLength = maxLength
         }
         
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -102,7 +101,7 @@ struct PINTextField: UIViewRepresentable {
             
             return self.textLimit(existingText: textField.text,
                                   newText: string,
-                                  limit: parent.maxLength)
+                                  limit: maxLength)
         }
         
         private func textLimit(existingText: String?,
@@ -111,6 +110,14 @@ struct PINTextField: UIViewRepresentable {
             let text = existingText ?? ""
             let isAtLimit = text.count + newText.count <= limit
             return isAtLimit
+        }
+        
+        public func textFieldDidBeginEditing(_ textField: UITextField) {
+            self.isFirstResponder.wrappedValue = true
+        }
+        
+        public func textFieldDidEndEditing(_ textField: UITextField) {
+            self.isFirstResponder.wrappedValue = false
         }
     }
 }

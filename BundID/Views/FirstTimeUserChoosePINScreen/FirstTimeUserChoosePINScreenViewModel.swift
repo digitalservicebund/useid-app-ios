@@ -54,7 +54,6 @@ class FirstTimeUserPersonalPINScreenViewModel: ObservableObject {
         }
         
         if enteredPIN1.count == 6 {
-            focusPIN1 = false
             focusPIN2 = true
         }
     }
@@ -74,7 +73,6 @@ class FirstTimeUserPersonalPINScreenViewModel: ObservableObject {
                     self.showPIN2 = false
                     self.enteredPIN2 = ""
                     self.enteredPIN1 = ""
-                    self.focusPIN2 = false
                     self.focusPIN1 = true
                 }
             } else {
