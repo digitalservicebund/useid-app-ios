@@ -32,10 +32,12 @@ class FirstTimeUserPersonalPINScreenViewModel: ObservableObject {
         self.attempts = attempts
         
         $enteredPIN1
+            .receive(on: DispatchQueue.main)
             .sink(receiveValue: handlePIN1Change)
             .store(in: &cancellables)
         
         $enteredPIN2
+            .receive(on: DispatchQueue.main)
             .sink(receiveValue: handlePIN2Change)
             .store(in: &cancellables)
     }
