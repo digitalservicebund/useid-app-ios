@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct FirstTimeUserCheckScreen: View {
+struct SetupIntro: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
@@ -21,7 +21,6 @@ struct FirstTimeUserCheckScreen: View {
                     Text(L10n.FirstTimeUser.Intro.no)
                 }
                 .buttonStyle(BundButtonStyle(isPrimary: true))
-                
             }
             .padding([.leading, .bottom, .trailing])
             .background(Color.white)
@@ -31,14 +30,14 @@ struct FirstTimeUserCheckScreen: View {
     }
 }
 
-struct FirstTimeUserCheckScreen_Previews: PreviewProvider {
+struct SetupIntro_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            FirstTimeUserCheckScreen()
+            SetupIntro()
         }
             .previewDevice("iPhone SE (2nd generation)")
         NavigationView {
-            FirstTimeUserCheckScreen()
+            SetupIntro()
         }
             .previewDevice("iPhone 12")
     }

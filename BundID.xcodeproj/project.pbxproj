@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		E110400A281C2D2F004BA03E /* OpenEcard.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1104008281C2D1C004BA03E /* OpenEcard.xcframework */; };
 		E110400B281C2D2F004BA03E /* OpenEcard.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E1104008281C2D1C004BA03E /* OpenEcard.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E110400D281C389C004BA03E /* FirstTimeUserCheckScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E110400C281C389C004BA03E /* FirstTimeUserCheckScreen.swift */; };
+		E110400D281C389C004BA03E /* SetupIntro.swift in Sources */ = {isa = PBXBuildFile; fileRef = E110400C281C389C004BA03E /* SetupIntro.swift */; };
 		E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */; };
 		E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
 		E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACE728350FD500A51183 /* Array+Safe.swift */; };
@@ -77,7 +77,7 @@
 
 /* Begin PBXFileReference section */
 		E1104008281C2D1C004BA03E /* OpenEcard.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = OpenEcard.xcframework; sourceTree = "<group>"; };
-		E110400C281C389C004BA03E /* FirstTimeUserCheckScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeUserCheckScreen.swift; sourceTree = "<group>"; };
+		E110400C281C389C004BA03E /* SetupIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntro.swift; sourceTree = "<group>"; };
 		E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LocalizedStrings+Generated.swift"; sourceTree = "<group>"; };
 		E19D26B0282557B00005B111 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E1AAACE728350FD500A51183 /* Array+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Safe.swift"; sourceTree = "<group>"; };
@@ -175,7 +175,7 @@
 			children = (
 				E5CEB27F281041330076B9FE /* ContentView.swift */,
 				E1AB8799282281C400C7FC94 /* HeaderView.swift */,
-				E110400C281C389C004BA03E /* FirstTimeUserCheckScreen.swift */,
+				E110400C281C389C004BA03E /* SetupIntro.swift */,
 				E1CD8E9028214FDB008ADA2A /* FirstTimeUserPINLetterScreen.swift */,
 				E1CD8E92282156F2008ADA2A /* FirstTimeUserTransportPINScreen.swift */,
 				E1AB879F2822972A00C7FC94 /* FirstTimeUserChoosePINIntroScreen.swift */,
@@ -426,7 +426,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5E69D832812FB4500A3B66A /* EIDInteractionEvent.swift in Sources */,
-				E110400D281C389C004BA03E /* FirstTimeUserCheckScreen.swift in Sources */,
+				E110400D281C389C004BA03E /* SetupIntro.swift in Sources */,
 				E1AB879E282283AB00C7FC94 /* Fonts.swift in Sources */,
 				E593E26E2816853A00154EB0 /* StopServiceHandler.swift in Sources */,
 				E593E26A281684E600154EB0 /* OpenECardHandlerDelegate.swift in Sources */,
