@@ -42,7 +42,7 @@ class FirstTimeUserPersonalPINScreenViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    private func handlePIN1Change(_ enteredPIN1: String) {
+    func handlePIN1Change(_ enteredPIN1: String) {
         if !enteredPIN1.isEmpty {
             withAnimation {
                 error = nil
@@ -58,7 +58,7 @@ class FirstTimeUserPersonalPINScreenViewModel: ObservableObject {
         }
     }
     
-    private func handlePIN2Change(_ enteredPIN2: String) {
+    func handlePIN2Change(_ enteredPIN2: String) {
         withAnimation {
             showPIN2 = enteredPIN1.count >= 6 || !enteredPIN2.isEmpty
         }
