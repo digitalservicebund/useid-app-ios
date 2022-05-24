@@ -54,7 +54,7 @@ struct PINTextField: UIViewRepresentable {
         
         let editingChanged = UIAction { action in
             let newText = (action.sender as? UITextField)?.text ?? ""
-            withAnimation(.linear(duration: 0.05)) {
+            withAnimation(.linear(duration: 0.2)) {
                 text = newText
             }
         }

@@ -1,10 +1,3 @@
-//
-//  SetupPersonalPINErrorView.swift
-//  BundID
-//
-//  Created by Andreas Ganske on 24.05.22.
-//
-
 import SwiftUI
 
 struct SetupPersonalPINErrorView: View {

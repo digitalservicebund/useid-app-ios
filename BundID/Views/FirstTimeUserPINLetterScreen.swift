@@ -1,46 +1,41 @@
 import SwiftUI
+import ComposableArchitecture
+
+enum FirstTimeUserPINLetterAction: Equatable {
+    case chooseHasPINLetter
+    case chooseHasNoPINLetter
+}
 
 struct FirstTimeUserPINLetterScreen: View {
+    
+    var store: Store<Void, FirstTimeUserPINLetterAction>
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            ScrollView {
-                HeaderView(titleKey: L10n.FirstTimeUser.PinLetter.title,
-                           bodyKey: L10n.FirstTimeUser.PinLetter.body,
-                           imageMeta: ImageMeta(name: "PIN-Brief"))
-            }
-            VStack {
-                NavigationLink {
-                    FirstTimeUserTransportPINScreen()
-                } label: {
-                    Text(L10n.FirstTimeUser.PinLetter.yes)
-                }
-                .buttonStyle(BundButtonStyle(isPrimary: false))
-                NavigationLink {
-                    
-                } label: {
-                    Text(L10n.FirstTimeUser.PinLetter.no)
-                }
-                .buttonStyle(BundButtonStyle(isPrimary: true))
-                
-            }
-            .padding([.leading, .bottom, .trailing])
-            .background(Color.white)
-        }
-        .ignoresSafeArea(.keyboard)
-        .navigationBarTitleDisplayMode(.inline)
+        DialogView(store: store,
+                   titleKey: L10n.FirstTimeUser.PinLetter.title,
+                   bodyKey: L10n.FirstTimeUser.PinLetter.body,
+                   imageMeta: ImageMeta(name: "PIN-Brief"),
+                   secondaryButton: .init(title: L10n.FirstTimeUser.PinLetter.yes, action: .chooseHasPINLetter),
+                   primaryButton: .init(title: L10n.FirstTimeUser.PinLetter.no, action: .chooseHasNoPINLetter))
     }
 }
 
 struct FirstTimeUserPINLetterScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            FirstTimeUserPINLetterScreen()
+            FirstTimeUserPINLetterScreen(store: .empty)
         }
         .environment(\.sizeCategory, .extraExtraExtraLarge)
         .previewDevice("iPhone SE (2nd generation)")
         NavigationView {
-            FirstTimeUserPINLetterScreen()
+            FirstTimeUserPINLetterScreen(store: .empty)
         }
         .previewDevice("iPhone 12")
+    }
+}
+
+extension Store where State == Void {
+    static var empty: Store {
+        Store<State, Action>.init(initialState: (), reducer: .empty, environment: AppEnvironment.preview)
     }
 }

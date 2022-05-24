@@ -39,6 +39,7 @@ public struct PINEntryView: View {
                             .padding(EdgeInsets(top: 4, leading: 0, bottom: 8, trailing: 0))
                             .foregroundColor(.blackish)
                             .opacity(index >= pin.count ? 0.0 : 1.0)
+                            .animation(.linear(duration: 0.05))
                     }
                     Rectangle()
                         .foregroundColor(.blackish)

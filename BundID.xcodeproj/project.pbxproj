@@ -12,11 +12,20 @@
 		E110400D281C389C004BA03E /* SetupIntro.swift in Sources */ = {isa = PBXBuildFile; fileRef = E110400C281C389C004BA03E /* SetupIntro.swift */; };
 		E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */; };
 		E16708A7283CD483001A1637 /* SetupPersonalPINErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708A6283CD483001A1637 /* SetupPersonalPINErrorView.swift */; };
+		E16708AA283D1076001A1637 /* TCACoordinators in Frameworks */ = {isa = PBXBuildFile; productRef = E16708A9283D1076001A1637 /* TCACoordinators */; };
+		E16708AC283D26A2001A1637 /* CoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708AB283D26A2001A1637 /* CoordinatorView.swift */; };
+		E16708AE283D4224001A1637 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708AD283D4224001A1637 /* HomeView.swift */; };
+		E16708B1283D4EAC001A1637 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708B0283D4EAC001A1637 /* AppEnvironment.swift */; };
+		E16708B3283D4ED2001A1637 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708B2283D4ED2001A1637 /* Coordinator.swift */; };
+		E16708B5283D4F25001A1637 /* Screens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708B4283D4F25001A1637 /* Screens.swift */; };
+		E16708B7283D7C2B001A1637 /* DialogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708B6283D7C2B001A1637 /* DialogView.swift */; };
+		E16708BA283D7CA1001A1637 /* DialogButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708B9283D7CA1001A1637 /* DialogButtons.swift */; };
+		E16708BC283D824D001A1637 /* Scheduler+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708BB283D824D001A1637 /* Scheduler+Animation.swift */; };
 		E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
 		E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACE728350FD500A51183 /* Array+Safe.swift */; };
 		E1AAACEB2836668200A51183 /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACEA2836668200A51183 /* ShakeEffect.swift */; };
 		E1AAACF328378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACF228378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift */; };
-		E1AAACFB2837B9A200A51183 /* FirstTimeUserChoosePINScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACFA2837B9A200A51183 /* FirstTimeUserChoosePINScreenViewModel.swift */; };
+		E1AAACFB2837B9A200A51183 /* FirstTimeUserPersonalPINState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACFA2837B9A200A51183 /* FirstTimeUserPersonalPINState.swift */; };
 		E1AB879A282281C400C7FC94 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB8799282281C400C7FC94 /* HeaderView.swift */; };
 		E1AB879E282283AB00C7FC94 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB879D282283AB00C7FC94 /* Fonts.swift */; };
 		E1AB87A02822972A00C7FC94 /* FirstTimeUserChoosePINIntroScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB879F2822972A00C7FC94 /* FirstTimeUserChoosePINIntroScreen.swift */; };
@@ -81,12 +90,20 @@
 		E110400C281C389C004BA03E /* SetupIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntro.swift; sourceTree = "<group>"; };
 		E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LocalizedStrings+Generated.swift"; sourceTree = "<group>"; };
 		E16708A6283CD483001A1637 /* SetupPersonalPINErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPersonalPINErrorView.swift; sourceTree = "<group>"; };
+		E16708AB283D26A2001A1637 /* CoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorView.swift; sourceTree = "<group>"; };
+		E16708AD283D4224001A1637 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		E16708B0283D4EAC001A1637 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		E16708B2283D4ED2001A1637 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		E16708B4283D4F25001A1637 /* Screens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screens.swift; sourceTree = "<group>"; };
+		E16708B6283D7C2B001A1637 /* DialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogView.swift; sourceTree = "<group>"; };
+		E16708B9283D7CA1001A1637 /* DialogButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogButtons.swift; sourceTree = "<group>"; };
+		E16708BB283D824D001A1637 /* Scheduler+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Scheduler+Animation.swift"; sourceTree = "<group>"; };
 		E19D26B0282557B00005B111 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E1AAACE728350FD500A51183 /* Array+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Safe.swift"; sourceTree = "<group>"; };
 		E1AAACEA2836668200A51183 /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
 		E1AAACF028378C0E00A51183 /* BundIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BundIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1AAACF228378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeUserPersonalPINScreenViewModelTests.swift; sourceTree = "<group>"; };
-		E1AAACFA2837B9A200A51183 /* FirstTimeUserChoosePINScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeUserChoosePINScreenViewModel.swift; sourceTree = "<group>"; };
+		E1AAACFA2837B9A200A51183 /* FirstTimeUserPersonalPINState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeUserPersonalPINState.swift; sourceTree = "<group>"; };
 		E1AAACFD2837C41700A51183 /* AllTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = AllTests.xctestplan; path = BundID/AllTests.xctestplan; sourceTree = SOURCE_ROOT; };
 		E1AB8799282281C400C7FC94 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		E1AB879D282283AB00C7FC94 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
@@ -138,6 +155,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E16708AA283D1076001A1637 /* TCACoordinators in Frameworks */,
 				E110400A281C2D2F004BA03E /* OpenEcard.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -151,8 +169,29 @@
 				E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */,
 				E1AAACE728350FD500A51183 /* Array+Safe.swift */,
 				E1AAACEA2836668200A51183 /* ShakeEffect.swift */,
+				E16708BB283D824D001A1637 /* Scheduler+Animation.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		E16708AF283D4E9E001A1637 /* TCA */ = {
+			isa = PBXGroup;
+			children = (
+				E16708B0283D4EAC001A1637 /* AppEnvironment.swift */,
+				E16708B4283D4F25001A1637 /* Screens.swift */,
+				E16708B2283D4ED2001A1637 /* Coordinator.swift */,
+			);
+			path = TCA;
+			sourceTree = "<group>";
+		};
+		E16708B8283D7C47001A1637 /* SupplementaryViews */ = {
+			isa = PBXGroup;
+			children = (
+				E16708B6283D7C2B001A1637 /* DialogView.swift */,
+				E16708B9283D7CA1001A1637 /* DialogButtons.swift */,
+				E1AB8799282281C400C7FC94 /* HeaderView.swift */,
+			);
+			path = SupplementaryViews;
 			sourceTree = "<group>";
 		};
 		E1AAACF128378C0E00A51183 /* BundIDTests */ = {
@@ -167,7 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				E1D307AF2833A2500088DAFF /* FirstTimeUserChoosePINScreen.swift */,
-				E1AAACFA2837B9A200A51183 /* FirstTimeUserChoosePINScreenViewModel.swift */,
+				E1AAACFA2837B9A200A51183 /* FirstTimeUserPersonalPINState.swift */,
 				E16708A6283CD483001A1637 /* SetupPersonalPINErrorView.swift */,
 			);
 			path = FirstTimeUserChoosePINScreen;
@@ -176,8 +215,10 @@
 		E1AB879B2822835E00C7FC94 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E16708B8283D7C47001A1637 /* SupplementaryViews */,
 				E5CEB27F281041330076B9FE /* ContentView.swift */,
-				E1AB8799282281C400C7FC94 /* HeaderView.swift */,
+				E16708AB283D26A2001A1637 /* CoordinatorView.swift */,
+				E16708AD283D4224001A1637 /* HomeView.swift */,
 				E110400C281C389C004BA03E /* SetupIntro.swift */,
 				E1CD8E9028214FDB008ADA2A /* FirstTimeUserPINLetterScreen.swift */,
 				E1CD8E92282156F2008ADA2A /* FirstTimeUserTransportPINScreen.swift */,
@@ -243,6 +284,7 @@
 				E593E277281686D000154EB0 /* Managers */,
 				E5CEB28B2810466C0076B9FE /* OpenECard */,
 				E1AB879B2822835E00C7FC94 /* Views */,
+				E16708AF283D4E9E001A1637 /* TCA */,
 				E1AB879C2822839500C7FC94 /* Theme */,
 				E5CEB295281050BE0076B9FE /* Info.plist */,
 				E5CEB29428104F920076B9FE /* BundID.entitlements */,
@@ -323,6 +365,7 @@
 			);
 			name = BundID;
 			packageProductDependencies = (
+				E16708A9283D1076001A1637 /* TCACoordinators */,
 			);
 			productName = BundID;
 			productReference = E5CEB27A281041330076B9FE /* BundID.app */;
@@ -357,6 +400,7 @@
 			);
 			mainGroup = E5CEB271281041330076B9FE;
 			packageReferences = (
+				E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
 			);
 			productRefGroup = E5CEB27B281041330076B9FE /* Products */;
 			projectDirPath = "";
@@ -429,24 +473,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5E69D832812FB4500A3B66A /* EIDInteractionEvent.swift in Sources */,
+				E16708AC283D26A2001A1637 /* CoordinatorView.swift in Sources */,
 				E110400D281C389C004BA03E /* SetupIntro.swift in Sources */,
 				E1AB879E282283AB00C7FC94 /* Fonts.swift in Sources */,
+				E16708BC283D824D001A1637 /* Scheduler+Animation.swift in Sources */,
 				E593E26E2816853A00154EB0 /* StopServiceHandler.swift in Sources */,
 				E593E26A281684E600154EB0 /* OpenECardHandlerDelegate.swift in Sources */,
+				E16708B3283D4ED2001A1637 /* Coordinator.swift in Sources */,
 				E1AAACEB2836668200A51183 /* ShakeEffect.swift in Sources */,
 				E593E279281686DC00154EB0 /* IDInteractionManager.swift in Sources */,
 				E59097B5281153A100CDA144 /* NFCMessageProvider.swift in Sources */,
+				E16708AE283D4224001A1637 /* HomeView.swift in Sources */,
 				E593E2662816845C00154EB0 /* AuthenticationTerms.swift in Sources */,
 				E593E2702816856200154EB0 /* StartServiceHandler.swift in Sources */,
 				E1CD8E9128214FDB008ADA2A /* FirstTimeUserPINLetterScreen.swift in Sources */,
 				E5E69D852812FB6100A3B66A /* IDCardInteractionError.swift in Sources */,
 				E593E2682816847900154EB0 /* EIDAuthenticationRequest.swift in Sources */,
+				E16708BA283D7CA1001A1637 /* DialogButtons.swift in Sources */,
 				E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */,
 				E1AB87A4282413A700C7FC94 /* PINTextField.swift in Sources */,
 				E593E2742816866200154EB0 /* EACInteraction.swift in Sources */,
-				E1AAACFB2837B9A200A51183 /* FirstTimeUserChoosePINScreenViewModel.swift in Sources */,
+				E1AAACFB2837B9A200A51183 /* FirstTimeUserPersonalPINState.swift in Sources */,
 				E1CD8E93282156F2008ADA2A /* FirstTimeUserTransportPINScreen.swift in Sources */,
 				E5E69D892812FB8D00A3B66A /* IDCardAttribute.swift in Sources */,
+				E16708B7283D7C2B001A1637 /* DialogView.swift in Sources */,
 				E16708A7283CD483001A1637 /* SetupPersonalPINErrorView.swift in Sources */,
 				E1AB87A02822972A00C7FC94 /* FirstTimeUserChoosePINIntroScreen.swift in Sources */,
 				E593E2762816868100154EB0 /* PINManagementInteraction.swift in Sources */,
@@ -454,12 +504,14 @@
 				E593E26C2816851C00154EB0 /* OpenECardHandlerBase.swift in Sources */,
 				E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */,
 				E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */,
+				E16708B1283D4EAC001A1637 /* AppEnvironment.swift in Sources */,
 				E5CEB280281041330076B9FE /* ContentView.swift in Sources */,
 				E593E2722816864800154EB0 /* ControllerCallback.swift in Sources */,
 				E1CD8E88281FF62F008ADA2A /* Colors.swift in Sources */,
 				E5E69D872812FB7A00A3B66A /* IDTask.swift in Sources */,
 				E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */,
 				E1D307B02833A2500088DAFF /* FirstTimeUserChoosePINScreen.swift in Sources */,
+				E16708B5283D4F25001A1637 /* Screens.swift in Sources */,
 				E5CEB27E281041330076B9FE /* BundIDApp.swift in Sources */,
 				E1CD8E8F2820395F008ADA2A /* BundButtonStyle.swift in Sources */,
 			);
@@ -752,6 +804,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/johnpatrickmorgan/TCACoordinators.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E16708A9283D1076001A1637 /* TCACoordinators */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators" */;
+			productName = TCACoordinators;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E5CEB272281041330076B9FE /* Project object */;
 }

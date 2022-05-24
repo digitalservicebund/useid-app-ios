@@ -1,5 +1,6 @@
 import SwiftUI
 import Combine
+import ComposableArchitecture
 
 enum FirstTimeUserPersonalPINScreenError {
     case mismatch
@@ -7,63 +8,59 @@ enum FirstTimeUserPersonalPINScreenError {
 
 struct FirstTimeUserPersonalPINScreen: View {
     
-    @ObservedObject var viewModel: FirstTimeUserPersonalPINScreenViewModel
+    var store: Store<FirstTimeUserPersonalPINState, FirstTimeUserPersonalPINAction>
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                Text(L10n.FirstTimeUser.PersonalPIN.title)
-                    .font(.bundLargeTitle)
-                    .foregroundColor(.blackish)
-                VStack {
-                    Spacer()
-                    PINEntryView(pin: $viewModel.enteredPIN1,
-                                 maxDigits: 6,
-                                 groupEvery: 3,
-                                 showPIN: false,
-                                 label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.first,
-                                 shouldBeFocused: $viewModel.focusPIN1,
-                                 doneConfiguration: nil)
-                    .font(.bundTitle)
-                    .modifier(Shake(animatableData: CGFloat(viewModel.attempts)))
-                    if viewModel.showPIN2 {
-                        VStack {
-                            Spacer(minLength: 40)
-                            Text(L10n.FirstTimeUser.PersonalPIN.confirmation)
-                                .font(.bundBody)
-                                .foregroundColor(.blackish)
-                            PINEntryView(pin: $viewModel.enteredPIN2,
-                                         maxDigits: 6,
-                                         groupEvery: 3,
-                                         showPIN: false,
-                                         label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.second,
-                                         shouldBeFocused: $viewModel.focusPIN2,
-                                         doneConfiguration: nil)
-                            .font(.bundTitle)
-                            .modifier(Shake(animatableData: CGFloat(viewModel.attempts)))
-                            Spacer()
+            WithViewStore(store) { viewStore in
+                VStack(alignment: .leading, spacing: 24) {
+                    Text(L10n.FirstTimeUser.PersonalPIN.title)
+                        .font(.bundLargeTitle)
+                        .foregroundColor(.blackish)
+                    VStack {
+                        Spacer()
+                        PINEntryView(pin: viewStore.binding(\.$enteredPIN1),
+                                     maxDigits: 6,
+                                     groupEvery: 3,
+                                     showPIN: false,
+                                     label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.first,
+                                     shouldBeFocused: viewStore.binding(\.$focusPIN1),
+                                     doneConfiguration: nil)
+                        .font(.bundTitle)
+                        .modifier(Shake(animatableData: CGFloat(viewStore.attempts)))
+                        if viewStore.showPIN2 {
+                            VStack {
+                                Spacer(minLength: 40)
+                                Text(L10n.FirstTimeUser.PersonalPIN.confirmation)
+                                    .font(.bundBody)
+                                    .foregroundColor(.blackish)
+                                PINEntryView(pin: viewStore.binding(\.$enteredPIN2),
+                                             maxDigits: 6,
+                                             groupEvery: 3,
+                                             showPIN: false,
+                                             label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.second,
+                                             shouldBeFocused: viewStore.binding(\.$focusPIN2),
+                                             doneConfiguration: nil)
+                                .font(.bundTitle)
+                                .modifier(Shake(animatableData: CGFloat(viewStore.attempts)))
+                                Spacer()
+                            }
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
                         }
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
                     }
+                    
+                    if case .mismatch = viewStore.error {
+                        SetupPersonalPINErrorView(title: L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.title,
+                                                  message: L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.body)
+                    }
+                    Spacer()
                 }
-                if case .mismatch = viewModel.error {
-                    SetupPersonalPINErrorView(title: L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.title,
-                                              message: L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.body)
+                .navigationBarTitleDisplayMode(.inline)
+                .onAppear {
+                    viewStore.send(.onAppear)
                 }
-                
-                NavigationLink(isActive: $viewModel.isFinished) {
-                    EmptyView()
-                } label: {
-                    Text("")
-                }
-                .frame(width: 0, height: 0)
-                .hidden()
             }
             .padding(.horizontal)
-        }
-        .navigationBarTitleDisplayMode(.inline)
-        .onAppear {
-            viewModel.isFinished = false
         }
     }
 }
@@ -71,19 +68,7 @@ struct FirstTimeUserPersonalPINScreen: View {
 struct FirstTimeUserPersonalPINScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            FirstTimeUserPersonalPINScreen(viewModel: FirstTimeUserPersonalPINScreenViewModel())
-        }
-        .previewDevice("iPhone SE (2nd generation)")
-        NavigationView {
-            FirstTimeUserPersonalPINScreen(viewModel: FirstTimeUserPersonalPINScreenViewModel(enteredPIN1: "123456", enteredPIN2: "12", isFinished: false, error: nil))
-        }
-        .previewDevice("iPhone SE (2nd generation)")
-        NavigationView {
-            FirstTimeUserPersonalPINScreen(viewModel: FirstTimeUserPersonalPINScreenViewModel(enteredPIN1: "123456", enteredPIN2: "987654", isFinished: false, error: .mismatch))
-        }
-        .previewDevice("iPhone SE (2nd generation)")
-        NavigationView {
-            FirstTimeUserPersonalPINScreen(viewModel: FirstTimeUserPersonalPINScreenViewModel(enteredPIN1: "123456"))
+            FirstTimeUserPersonalPINScreen(store: Store(initialState: FirstTimeUserPersonalPINState(enteredPIN1: "12345"), reducer: .empty, environment: AppEnvironment.preview))
         }
         .previewDevice("iPhone 12")
     }
