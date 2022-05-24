@@ -47,21 +47,8 @@ struct FirstTimeUserPersonalPINScreen: View {
                     }
                 }
                 if case .mismatch = viewModel.error {
-                    VStack(spacing: 24) {
-                        VStack {
-                            Text(L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.title)
-                                .font(.bundBodyBold)
-                                .multilineTextAlignment(.center)
-                                .foregroundColor(.red900)
-                            Text(L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.body)
-                                .font(.bundBody)
-                                .foregroundColor(.blackish)
-                                .multilineTextAlignment(.center)
-                                .lineLimit(nil)
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    SetupPersonalPINErrorView(title: L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.title,
+                                              message: L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.body)
                 }
                 
                 NavigationLink(isActive: $viewModel.isFinished) {
