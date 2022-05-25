@@ -21,6 +21,7 @@
 		E16708B7283D7C2B001A1637 /* DialogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708B6283D7C2B001A1637 /* DialogView.swift */; };
 		E16708BA283D7CA1001A1637 /* DialogButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708B9283D7CA1001A1637 /* DialogButtons.swift */; };
 		E16708BC283D824D001A1637 /* Scheduler+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708BB283D824D001A1637 /* Scheduler+Animation.swift */; };
+		E16708BE283E666A001A1637 /* Store+Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708BD283E666A001A1637 /* Store+Empty.swift */; };
 		E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
 		E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACE728350FD500A51183 /* Array+Safe.swift */; };
 		E1AAACEB2836668200A51183 /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACEA2836668200A51183 /* ShakeEffect.swift */; };
@@ -98,6 +99,7 @@
 		E16708B6283D7C2B001A1637 /* DialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogView.swift; sourceTree = "<group>"; };
 		E16708B9283D7CA1001A1637 /* DialogButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogButtons.swift; sourceTree = "<group>"; };
 		E16708BB283D824D001A1637 /* Scheduler+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Scheduler+Animation.swift"; sourceTree = "<group>"; };
+		E16708BD283E666A001A1637 /* Store+Empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Store+Empty.swift"; sourceTree = "<group>"; };
 		E19D26B0282557B00005B111 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E1AAACE728350FD500A51183 /* Array+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Safe.swift"; sourceTree = "<group>"; };
 		E1AAACEA2836668200A51183 /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 				E1AAACE728350FD500A51183 /* Array+Safe.swift */,
 				E1AAACEA2836668200A51183 /* ShakeEffect.swift */,
 				E16708BB283D824D001A1637 /* Scheduler+Animation.swift */,
+				E16708BD283E666A001A1637 /* Store+Empty.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -486,6 +489,7 @@
 				E16708AE283D4224001A1637 /* HomeView.swift in Sources */,
 				E593E2662816845C00154EB0 /* AuthenticationTerms.swift in Sources */,
 				E593E2702816856200154EB0 /* StartServiceHandler.swift in Sources */,
+				E16708BE283E666A001A1637 /* Store+Empty.swift in Sources */,
 				E1CD8E9128214FDB008ADA2A /* FirstTimeUserPINLetterScreen.swift in Sources */,
 				E5E69D852812FB6100A3B66A /* IDCardInteractionError.swift in Sources */,
 				E593E2682816847900154EB0 /* EIDAuthenticationRequest.swift in Sources */,
