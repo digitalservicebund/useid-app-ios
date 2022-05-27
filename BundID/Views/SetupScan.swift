@@ -1,6 +1,7 @@
 import SwiftUI
 import ComposableArchitecture
 import Combine
+import Lottie
 
 enum SetupScanError: Equatable {
     case idCardInteraction(IDCardInteractionError)
@@ -41,8 +42,7 @@ struct SetupScan: View {
     var body: some View {
         WithViewStore(store.stateless) { viewStore in
             VStack {
-                Image("eIDs")
-                    .resizable()
+                LottieView(name: "38076-id-scan")
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)

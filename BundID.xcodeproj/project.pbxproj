@@ -14,6 +14,9 @@
 		E13925C2284110FD00161F5C /* Cuckoo in Frameworks */ = {isa = PBXBuildFile; productRef = E13925C1284110FD00161F5C /* Cuckoo */; };
 		E13925C42841111100161F5C /* GeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925C32841111100161F5C /* GeneratedMocks.swift */; };
 		E13925C72841119400161F5C /* MockIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925C62841119400161F5C /* MockIDInteractionManager.swift */; };
+		E13925CA28411D4C00161F5C /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = E13925C928411D4C00161F5C /* Lottie */; };
+		E13925CD28411DA600161F5C /* 38076-id-scan.json in Resources */ = {isa = PBXBuildFile; fileRef = E13925CC28411DA600161F5C /* 38076-id-scan.json */; };
+		E13925CF28411E2400161F5C /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925CE28411E2300161F5C /* LottieView.swift */; };
 		E149B15C2840F636002C1139 /* SetupScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E149B15B2840F636002C1139 /* SetupScanTests.swift */; };
 		E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */; };
 		E16708A7283CD483001A1637 /* SetupPersonalPINErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708A6283CD483001A1637 /* SetupPersonalPINErrorView.swift */; };
@@ -98,6 +101,8 @@
 		E13925B72840FB7700161F5C /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		E13925C32841111100161F5C /* GeneratedMocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
 		E13925C62841119400161F5C /* MockIDInteractionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockIDInteractionManager.swift; sourceTree = "<group>"; };
+		E13925CC28411DA600161F5C /* 38076-id-scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "38076-id-scan.json"; sourceTree = "<group>"; };
+		E13925CE28411E2300161F5C /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
 		E149B15B2840F636002C1139 /* SetupScanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScanTests.swift; sourceTree = "<group>"; };
 		E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LocalizedStrings+Generated.swift"; sourceTree = "<group>"; };
 		E16708A6283CD483001A1637 /* SetupPersonalPINErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPersonalPINErrorView.swift; sourceTree = "<group>"; };
@@ -171,6 +176,7 @@
 			files = (
 				E16708AA283D1076001A1637 /* TCACoordinators in Frameworks */,
 				E110400A281C2D2F004BA03E /* OpenEcard.xcframework in Frameworks */,
+				E13925CA28411D4C00161F5C /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,6 +214,14 @@
 			path = Mocks;
 			sourceTree = "<group>";
 		};
+		E13925CB28411D9D00161F5C /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				E13925CC28411DA600161F5C /* 38076-id-scan.json */,
+			);
+			path = Animations;
+			sourceTree = "<group>";
+		};
 		E15FCE40282BFD4A00CD7AD6 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -236,6 +250,7 @@
 				E16708B6283D7C2B001A1637 /* DialogView.swift */,
 				E16708B9283D7CA1001A1637 /* DialogButtons.swift */,
 				E1AB8799282281C400C7FC94 /* HeaderView.swift */,
+				E13925CE28411E2300161F5C /* LottieView.swift */,
 			);
 			path = SupplementaryViews;
 			sourceTree = "<group>";
@@ -292,6 +307,7 @@
 		E1CD8E89281FFCA0008ADA2A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E13925CB28411D9D00161F5C /* Animations */,
 				E1AB87AA2825238D00C7FC94 /* Localizable.strings */,
 				E19D26B1282557B00005B111 /* Localizable.stringsdict */,
 				E1CD8E8B281FFCC1008ADA2A /* BundesSans-DTP-Bold.otf */,
@@ -422,6 +438,7 @@
 			name = BundID;
 			packageProductDependencies = (
 				E16708A9283D1076001A1637 /* TCACoordinators */,
+				E13925C928411D4C00161F5C /* Lottie */,
 			);
 			productName = BundID;
 			productReference = E5CEB27A281041330076B9FE /* BundID.app */;
@@ -458,6 +475,7 @@
 			packageReferences = (
 				E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
 				E13925B928410F3F00161F5C /* XCRemoteSwiftPackageReference "Cuckoo" */,
+				E13925C828411D4C00161F5C /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = E5CEB27B281041330076B9FE /* Products */;
 			projectDirPath = "";
@@ -482,6 +500,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E1AB87AC2825238D00C7FC94 /* Localizable.strings in Resources */,
+				E13925CD28411DA600161F5C /* 38076-id-scan.json in Resources */,
 				E1CD8E8C281FFCC1008ADA2A /* BundesSans-DTP-Regular.otf in Resources */,
 				E5CEB285281041340076B9FE /* Preview Assets.xcassets in Resources */,
 				E5CEB282281041340076B9FE /* Assets.xcassets in Resources */,
@@ -561,6 +580,7 @@
 				E16708B3283D4ED2001A1637 /* Coordinator.swift in Sources */,
 				E16708C0283E6A07001A1637 /* SetupScan.swift in Sources */,
 				E1AAACEB2836668200A51183 /* ShakeEffect.swift in Sources */,
+				E13925CF28411E2400161F5C /* LottieView.swift in Sources */,
 				E593E279281686DC00154EB0 /* IDInteractionManager.swift in Sources */,
 				E59097B5281153A100CDA144 /* NFCMessageProvider.swift in Sources */,
 				E16708AE283D4224001A1637 /* HomeView.swift in Sources */,
@@ -899,6 +919,14 @@
 				minimumVersion = 1.7.1;
 			};
 		};
+		E13925C828411D4C00161F5C /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 		E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/johnpatrickmorgan/TCACoordinators.git";
@@ -914,6 +942,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E13925B928410F3F00161F5C /* XCRemoteSwiftPackageReference "Cuckoo" */;
 			productName = Cuckoo;
+		};
+		E13925C928411D4C00161F5C /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E13925C828411D4C00161F5C /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 		E16708A9283D1076001A1637 /* TCACoordinators */ = {
 			isa = XCSwiftPackageProductDependency;
