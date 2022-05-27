@@ -2,14 +2,17 @@ import SwiftUI
 import ComposableArchitecture
 import Combine
 
+enum SetupScanError: Equatable {
+    case idCardInteraction(IDCardInteractionError)
+}
+
 struct SetupScanState: Equatable {
-    
+    var error: SetupScanError?
 }
 
 enum SetupScanAction: Equatable {
     case onAppear
     case startScan
-    case scanee(EIDInteractionEvent)
     case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
 }
 
@@ -19,15 +22,14 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
     switch action {
     case .onAppear:
         return Effect(value: .startScan)
-    case .scanee(let event):
-        print(event)
-        return .none
     case .startScan:
         return environment.idInteractionManager.changePIN()
             .receive(on: environment.mainQueue)
             .catchToEffect(SetupScanAction.scanEvent)
-    case .scanEvent(let result):
-        print(result)
+    case .scanEvent(.failure(let error)):
+        state.error = .idCardInteraction(error)
+        return .none
+    case .scanEvent(.success(let event)):
         return .none
     }
 }

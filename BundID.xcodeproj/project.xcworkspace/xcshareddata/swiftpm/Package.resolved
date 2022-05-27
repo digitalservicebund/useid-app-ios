@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "cuckoo",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Brightify/Cuckoo",
+      "state" : {
+        "revision" : "69c1c9aee64ec08a14461deb20878bd7ebeb9459",
+        "version" : "1.7.1"
+      }
+    },
+    {
       "identity" : "flowstacks",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/johnpatrickmorgan/FlowStacks",
