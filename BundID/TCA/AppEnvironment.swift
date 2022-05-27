@@ -1,8 +1,13 @@
 import Foundation
 import CombineSchedulers
+import Combine
 
 struct AppEnvironment {
     let mainQueue: AnySchedulerOf<DispatchQueue>
-    
-    static let preview: AppEnvironment = AppEnvironment(mainQueue: DispatchQueue.main.eraseToAnyScheduler())
+    let idInteractionManager: IDInteractionManagerType
+
+    static let preview: AppEnvironment = AppEnvironment(
+        mainQueue: DispatchQueue.main.eraseToAnyScheduler(),
+        idInteractionManager: MockIDInteractionManager(queue: DispatchQueue.main.eraseToAnyScheduler())
+    )
 }

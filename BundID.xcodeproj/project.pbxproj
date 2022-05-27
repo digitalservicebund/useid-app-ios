@@ -10,6 +10,9 @@
 		E110400A281C2D2F004BA03E /* OpenEcard.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1104008281C2D1C004BA03E /* OpenEcard.xcframework */; };
 		E110400B281C2D2F004BA03E /* OpenEcard.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E1104008281C2D1C004BA03E /* OpenEcard.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E110400D281C389C004BA03E /* SetupIntro.swift in Sources */ = {isa = PBXBuildFile; fileRef = E110400C281C389C004BA03E /* SetupIntro.swift */; };
+		E13925B62840FB4C00161F5C /* MockIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925B52840FB4C00161F5C /* MockIDInteractionManager.swift */; };
+		E13925B82840FB7700161F5C /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925B72840FB7700161F5C /* Types.swift */; };
+		E149B15C2840F636002C1139 /* SetupScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E149B15B2840F636002C1139 /* SetupScanTests.swift */; };
 		E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */; };
 		E16708A7283CD483001A1637 /* SetupPersonalPINErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708A6283CD483001A1637 /* SetupPersonalPINErrorView.swift */; };
 		E16708AA283D1076001A1637 /* TCACoordinators in Frameworks */ = {isa = PBXBuildFile; productRef = E16708A9283D1076001A1637 /* TCACoordinators */; };
@@ -22,6 +25,7 @@
 		E16708BA283D7CA1001A1637 /* DialogButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708B9283D7CA1001A1637 /* DialogButtons.swift */; };
 		E16708BC283D824D001A1637 /* Scheduler+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708BB283D824D001A1637 /* Scheduler+Animation.swift */; };
 		E16708BE283E666A001A1637 /* Store+Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708BD283E666A001A1637 /* Store+Empty.swift */; };
+		E16708C0283E6A07001A1637 /* SetupScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708BF283E6A07001A1637 /* SetupScan.swift */; };
 		E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
 		E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACE728350FD500A51183 /* Array+Safe.swift */; };
 		E1AAACEB2836668200A51183 /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACEA2836668200A51183 /* ShakeEffect.swift */; };
@@ -89,6 +93,9 @@
 /* Begin PBXFileReference section */
 		E1104008281C2D1C004BA03E /* OpenEcard.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = OpenEcard.xcframework; sourceTree = "<group>"; };
 		E110400C281C389C004BA03E /* SetupIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntro.swift; sourceTree = "<group>"; };
+		E13925B52840FB4C00161F5C /* MockIDInteractionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockIDInteractionManager.swift; sourceTree = "<group>"; };
+		E13925B72840FB7700161F5C /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
+		E149B15B2840F636002C1139 /* SetupScanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScanTests.swift; sourceTree = "<group>"; };
 		E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LocalizedStrings+Generated.swift"; sourceTree = "<group>"; };
 		E16708A6283CD483001A1637 /* SetupPersonalPINErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPersonalPINErrorView.swift; sourceTree = "<group>"; };
 		E16708AB283D26A2001A1637 /* CoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorView.swift; sourceTree = "<group>"; };
@@ -100,6 +107,7 @@
 		E16708B9283D7CA1001A1637 /* DialogButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogButtons.swift; sourceTree = "<group>"; };
 		E16708BB283D824D001A1637 /* Scheduler+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Scheduler+Animation.swift"; sourceTree = "<group>"; };
 		E16708BD283E666A001A1637 /* Store+Empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Store+Empty.swift"; sourceTree = "<group>"; };
+		E16708BF283E6A07001A1637 /* SetupScan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScan.swift; sourceTree = "<group>"; };
 		E19D26B0282557B00005B111 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E1AAACE728350FD500A51183 /* Array+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Safe.swift"; sourceTree = "<group>"; };
 		E1AAACEA2836668200A51183 /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
@@ -165,6 +173,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E13925B42840FB3F00161F5C /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				E13925B52840FB4C00161F5C /* MockIDInteractionManager.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
 		E15FCE40282BFD4A00CD7AD6 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -201,6 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				E1AAACF228378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift */,
+				E149B15B2840F636002C1139 /* SetupScanTests.swift */,
 			);
 			path = BundIDTests;
 			sourceTree = "<group>";
@@ -227,6 +244,7 @@
 				E1CD8E92282156F2008ADA2A /* FirstTimeUserTransportPINScreen.swift */,
 				E1AB879F2822972A00C7FC94 /* FirstTimeUserChoosePINIntroScreen.swift */,
 				E1AAACF92837B98100A51183 /* FirstTimeUserChoosePINScreen */,
+				E16708BF283E6A07001A1637 /* SetupScan.swift */,
 				E1CD8E9428215971008ADA2A /* PINEntryView.swift */,
 				E1AB87A3282413A700C7FC94 /* PINTextField.swift */,
 			);
@@ -257,6 +275,8 @@
 		E593E277281686D000154EB0 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				E13925B72840FB7700161F5C /* Types.swift */,
+				E13925B42840FB3F00161F5C /* Mocks */,
 				E593E278281686DC00154EB0 /* IDInteractionManager.swift */,
 			);
 			path = Managers;
@@ -467,6 +487,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E149B15C2840F636002C1139 /* SetupScanTests.swift in Sources */,
 				E1AAACF328378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -483,6 +504,8 @@
 				E593E26E2816853A00154EB0 /* StopServiceHandler.swift in Sources */,
 				E593E26A281684E600154EB0 /* OpenECardHandlerDelegate.swift in Sources */,
 				E16708B3283D4ED2001A1637 /* Coordinator.swift in Sources */,
+				E13925B62840FB4C00161F5C /* MockIDInteractionManager.swift in Sources */,
+				E16708C0283E6A07001A1637 /* SetupScan.swift in Sources */,
 				E1AAACEB2836668200A51183 /* ShakeEffect.swift in Sources */,
 				E593E279281686DC00154EB0 /* IDInteractionManager.swift in Sources */,
 				E59097B5281153A100CDA144 /* NFCMessageProvider.swift in Sources */,
@@ -508,6 +531,7 @@
 				E593E26C2816851C00154EB0 /* OpenECardHandlerBase.swift in Sources */,
 				E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */,
 				E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */,
+				E13925B82840FB7700161F5C /* Types.swift in Sources */,
 				E16708B1283D4EAC001A1637 /* AppEnvironment.swift in Sources */,
 				E5CEB280281041330076B9FE /* ContentView.swift in Sources */,
 				E593E2722816864800154EB0 /* ControllerCallback.swift in Sources */,

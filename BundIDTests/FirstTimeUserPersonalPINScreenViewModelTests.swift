@@ -10,7 +10,8 @@ class FirstTimeUserPersonalPINScreenViewModelTests: XCTestCase {
     
     override func setUp() {
         scheduler = DispatchQueue.test
-        environment = AppEnvironment(mainQueue: scheduler.eraseToAnyScheduler())
+        environment = AppEnvironment(mainQueue: scheduler.eraseToAnyScheduler(),
+                                     idInteractionManager: MockIDInteractionManager(queue: scheduler.eraseToAnyScheduler()))
     }
     
     func testCompletePIN1() throws {

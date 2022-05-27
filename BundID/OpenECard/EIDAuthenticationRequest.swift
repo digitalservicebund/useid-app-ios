@@ -1,6 +1,6 @@
 import Foundation
 
-struct EIDAuthenticationRequest {
+struct EIDAuthenticationRequest: Equatable {
     let issuer: String
     let issuerURL: String
     let subject: String

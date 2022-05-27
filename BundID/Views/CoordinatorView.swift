@@ -26,6 +26,9 @@ struct CoordinatorView: View {
                 CaseLet(state: /ScreenState.firstTimeUserChoosePIN,
                         action: ScreenAction.firstTimeUserChoosePIN,
                         then: FirstTimeUserPersonalPINScreen.init)
+                CaseLet(state: /ScreenState.setupScan,
+                        action: ScreenAction.setupScan,
+                        then: SetupScan.init)
             }
         }
     }

@@ -1,5 +1,5 @@
 import Foundation
 
-enum AuthenticationTerms {
+enum AuthenticationTerms: Equatable {
     case text(String)
 }

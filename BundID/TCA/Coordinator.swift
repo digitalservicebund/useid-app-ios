@@ -31,6 +31,8 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                 state.routes.push(.firstTimeUserChoosePINIntro)
             case .routeAction(_, ScreenAction.firstTimeUserChoosePINIntro(.continue)):
                 state.routes.push(.firstTimeUserChoosePIN(FirstTimeUserPersonalPINState()))
+            case .routeAction(_, action: ScreenAction.firstTimeUserChoosePIN(FirstTimeUserPersonalPINAction.done(pin: let pin))):
+                state.routes.push(.setupScan(SetupScanState()))
             default:
                 break
             }

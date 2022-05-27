@@ -2,12 +2,8 @@ import Foundation
 import Combine
 import OpenEcard
 
-protocol IDInteractionManagerType {
-    func identify(tokenURL: String) -> EIDInteractionPublisher
-    func changePIN() -> EIDInteractionPublisher
-}
-
-class IDInteractionManager {
+class IDInteractionManager: IDInteractionManagerType {
+    
     private let context: ContextManagerProtocol
     
     init() {
@@ -20,7 +16,8 @@ class IDInteractionManager {
     }
     
     func changePIN() -> EIDInteractionPublisher {
-        IDCardTaskPublisher(task: .pinManagement, context: context).eraseToAnyPublisher()
+        IDCardTaskPublisher(task: .pinManagement, context: context)
+            .eraseToAnyPublisher()
     }
     
     private struct IDCardTaskPublisher: Publisher {

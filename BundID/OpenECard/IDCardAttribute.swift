@@ -1,7 +1,7 @@
 import Foundation
 
 // TR-03110 (Part 4), Section 2.2.3
-enum IDCardAttribute: String {
+enum IDCardAttribute: String, Equatable {
     case DG01
     case DG02
     case DG03

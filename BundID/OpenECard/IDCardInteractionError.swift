@@ -1,7 +1,7 @@
 import Foundation
 import OpenEcard
 
-enum IDCardInteractionError: Error {
+enum IDCardInteractionError: Error, Equatable {
     case frameworkError(message: String?)
     case unexpectedReadAttribute(String)
     case cardBlocked
