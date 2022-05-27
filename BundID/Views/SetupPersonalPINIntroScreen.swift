@@ -1,13 +1,13 @@
 import SwiftUI
 import ComposableArchitecture
 
-enum FirstTimeUserChoosePINIntroAction: Equatable {
+enum SetupPersonalPINIntroAction: Equatable {
     case `continue`
 }
 
-struct FirstTimeUserChoosePINIntroScreen: View {
+struct SetupPersonalPINIntro: View {
     
-    var store: Store<Void, FirstTimeUserChoosePINIntroAction>
+    var store: Store<Void, SetupPersonalPINIntroAction>
     
     var body: some View {
         DialogView(store: store,

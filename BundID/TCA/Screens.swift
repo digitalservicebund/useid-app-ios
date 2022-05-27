@@ -3,34 +3,34 @@ import ComposableArchitecture
 enum ScreenState: Equatable {
     case home
     case setupIntro
-    case firstTimeUserPINLetter
-    case firstTimeUserTransportPIN(FirstTimeUserTransportPINState)
-    case firstTimeUserChoosePINIntro
-    case firstTimeUserChoosePIN(FirstTimeUserPersonalPINState)
+    case setupTransportPINIntro
+    case setupTransportPIN(SetupTransportPINState)
+    case setupPersonalPINIntro
+    case setupPersonalPIN(SetupPersonalPINState)
     case setupScan(SetupScanState)
 }
 
 enum ScreenAction: Equatable {
     case home(HomeAction)
     case setupIntro(SetupIntroAction)
-    case firstTimeUserPINLetter(FirstTimeUserPINLetterAction)
-    case firstTimeUserTransportPIN(FirstTimeUserTransportPINAction)
-    case firstTimeUserChoosePINIntro(FirstTimeUserChoosePINIntroAction)
-    case firstTimeUserChoosePIN(FirstTimeUserPersonalPINAction)
+    case setupTransportPINIntro(SetupTransportPINIntroAction)
+    case setupTransportPIN(SetupTransportPINAction)
+    case setupPersonalPINIntro(SetupPersonalPINIntroAction)
+    case setupPersonalPIN(SetupPersonalPINAction)
     case setupScan(SetupScanAction)
 }
 
 let screenReducer = Reducer<ScreenState, ScreenAction, AppEnvironment>.combine(
-    firstTimeUserTransportPINReducer
+    setupTransportPINReducer
         .pullback(
-            state: /ScreenState.firstTimeUserTransportPIN,
-            action: /ScreenAction.firstTimeUserTransportPIN,
+            state: /ScreenState.setupTransportPIN,
+            action: /ScreenAction.setupTransportPIN,
             environment: { $0 }
         ),
-    firstTimeUserPersonalPINReducer
+    setupPersonalPINReducer
         .pullback(
-            state: /ScreenState.firstTimeUserChoosePIN,
-            action: /ScreenAction.firstTimeUserChoosePIN,
+            state: /ScreenState.setupPersonalPIN,
+            action: /ScreenAction.setupPersonalPIN,
             environment: { $0 }
         ),
     setupScanReducer

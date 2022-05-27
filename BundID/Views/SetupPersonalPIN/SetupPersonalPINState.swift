@@ -2,16 +2,16 @@ import SwiftUI
 import Combine
 import ComposableArchitecture
 
-struct FirstTimeUserPersonalPINState: Equatable {
+struct SetupPersonalPINState: Equatable {
     @BindableState var enteredPIN1: String = ""
     @BindableState var enteredPIN2: String = ""
     var showPIN2: Bool = false
     @BindableState var focusPIN1: Bool = true
     @BindableState var focusPIN2: Bool = false
-    var error: FirstTimeUserPersonalPINScreenError?
+    var error: SetupPersonalPINError?
     var attempts: Int = 0
     
-    mutating func handlePIN1Change(_ enteredPIN1: String) -> Effect<FirstTimeUserPersonalPINAction, Never> {
+    mutating func handlePIN1Change(_ enteredPIN1: String) -> Effect<SetupPersonalPINAction, Never> {
         if !enteredPIN1.isEmpty {
             withAnimation {
                 error = nil
@@ -29,7 +29,7 @@ struct FirstTimeUserPersonalPINState: Equatable {
         return .none
     }
     
-    mutating func handlePIN2Change(_ enteredPIN2: String, environment: AppEnvironment) -> Effect<FirstTimeUserPersonalPINAction, Never> {
+    mutating func handlePIN2Change(_ enteredPIN2: String, environment: AppEnvironment) -> Effect<SetupPersonalPINAction, Never> {
         withAnimation {
             showPIN2 = enteredPIN1.count >= 6 || !enteredPIN2.isEmpty
         }
@@ -48,14 +48,14 @@ struct FirstTimeUserPersonalPINState: Equatable {
     }
 }
 
-enum FirstTimeUserPersonalPINAction: BindableAction, Equatable {
+enum SetupPersonalPINAction: BindableAction, Equatable {
     case onAppear
     case done(pin: String)
     case reset
-    case binding(BindingAction<FirstTimeUserPersonalPINState>)
+    case binding(BindingAction<SetupPersonalPINState>)
 }
 
-let firstTimeUserPersonalPINReducer = Reducer<FirstTimeUserPersonalPINState, FirstTimeUserPersonalPINAction, AppEnvironment> { state, action, environment in
+let setupPersonalPINReducer = Reducer<SetupPersonalPINState, SetupPersonalPINAction, AppEnvironment> { state, action, environment in
     switch action {
     case .onAppear:
         return .none

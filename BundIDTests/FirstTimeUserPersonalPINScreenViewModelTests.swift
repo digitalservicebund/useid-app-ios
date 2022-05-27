@@ -3,7 +3,7 @@ import ComposableArchitecture
 
 @testable import BundID
 
-class FirstTimeUserPersonalPINScreenViewModelTests: XCTestCase {
+class SetupPersonalPINViewModelTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var environment: AppEnvironment!
@@ -15,8 +15,8 @@ class FirstTimeUserPersonalPINScreenViewModelTests: XCTestCase {
     }
     
     func testCompletePIN1() throws {
-        let store = TestStore(initialState: FirstTimeUserPersonalPINState(enteredPIN1: "12345"),
-                              reducer: firstTimeUserPersonalPINReducer,
+        let store = TestStore(initialState: SetupPersonalPINState(enteredPIN1: "12345"),
+                              reducer: setupPersonalPINReducer,
                               environment: environment)
         
         store.send(.binding(.set(\.$enteredPIN1, "123456"))) { state in
@@ -27,10 +27,10 @@ class FirstTimeUserPersonalPINScreenViewModelTests: XCTestCase {
     }
     
     func testCorrectPIN2() throws {
-        let store = TestStore(initialState: FirstTimeUserPersonalPINState(enteredPIN1: "123456",
+        let store = TestStore(initialState: SetupPersonalPINState(enteredPIN1: "123456",
                                                                           enteredPIN2: "12345",
                                                                           showPIN2: true),
-                              reducer: firstTimeUserPersonalPINReducer,
+                              reducer: setupPersonalPINReducer,
                               environment: environment)
         store.send(.binding(.set(\.$enteredPIN2, "123456"))) { state in
             state.enteredPIN2 = "123456"
@@ -39,10 +39,10 @@ class FirstTimeUserPersonalPINScreenViewModelTests: XCTestCase {
     }
 
     func testMismatchingPIN2() throws {
-        let store = TestStore(initialState: FirstTimeUserPersonalPINState(enteredPIN1: "123456",
+        let store = TestStore(initialState: SetupPersonalPINState(enteredPIN1: "123456",
                                                                           enteredPIN2: "98765",
                                                                           showPIN2: true),
-                              reducer: firstTimeUserPersonalPINReducer,
+                              reducer: setupPersonalPINReducer,
                               environment: environment)
         store.send(.binding(.set(\.$enteredPIN2, "987654"))) { state in
             state.enteredPIN2 = "987654"
@@ -61,9 +61,9 @@ class FirstTimeUserPersonalPINScreenViewModelTests: XCTestCase {
     }
     
     func testTypingWhileShowingError() throws {
-        let store = TestStore(initialState: FirstTimeUserPersonalPINState(enteredPIN1: "",
+        let store = TestStore(initialState: SetupPersonalPINState(enteredPIN1: "",
                                                                           error: .mismatch),
-                              reducer: firstTimeUserPersonalPINReducer,
+                              reducer: setupPersonalPINReducer,
                               environment: environment)
         store.send(.binding(.set(\.$enteredPIN1, "1"))) { state in
             state.enteredPIN1 = "1"

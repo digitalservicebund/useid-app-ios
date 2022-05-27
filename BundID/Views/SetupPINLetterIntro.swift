@@ -1,14 +1,14 @@
 import SwiftUI
 import ComposableArchitecture
 
-enum FirstTimeUserPINLetterAction: Equatable {
+enum SetupTransportPINIntroAction: Equatable {
     case chooseHasPINLetter
     case chooseHasNoPINLetter
 }
 
-struct FirstTimeUserPINLetterScreen: View {
+struct SetupTransportPINIntro: View {
     
-    var store: Store<Void, FirstTimeUserPINLetterAction>
+    var store: Store<Void, SetupTransportPINIntroAction>
     
     var body: some View {
         DialogView(store: store,
@@ -20,15 +20,15 @@ struct FirstTimeUserPINLetterScreen: View {
     }
 }
 
-struct FirstTimeUserPINLetterScreen_Previews: PreviewProvider {
+struct SetupTransportPINIntro_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            FirstTimeUserPINLetterScreen(store: .empty)
+            SetupTransportPINIntro(store: .empty)
         }
         .environment(\.sizeCategory, .extraExtraExtraLarge)
         .previewDevice("iPhone SE (2nd generation)")
         NavigationView {
-            FirstTimeUserPINLetterScreen(store: .empty)
+            SetupTransportPINIntro(store: .empty)
         }
         .previewDevice("iPhone 12")
     }

@@ -2,13 +2,13 @@ import SwiftUI
 import Combine
 import ComposableArchitecture
 
-enum FirstTimeUserPersonalPINScreenError {
+enum SetupPersonalPINError {
     case mismatch
 }
 
-struct FirstTimeUserPersonalPINScreen: View {
+struct SetupPersonalPIN: View {
     
-    var store: Store<FirstTimeUserPersonalPINState, FirstTimeUserPersonalPINAction>
+    var store: Store<SetupPersonalPINState, SetupPersonalPINAction>
     
     var body: some View {
         ScrollView {
@@ -65,10 +65,10 @@ struct FirstTimeUserPersonalPINScreen: View {
     }
 }
 
-struct FirstTimeUserPersonalPINScreen_Previews: PreviewProvider {
+struct SetupPersonalPIN_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            FirstTimeUserPersonalPINScreen(store: Store(initialState: FirstTimeUserPersonalPINState(enteredPIN1: "12345"), reducer: .empty, environment: AppEnvironment.preview))
+            SetupPersonalPIN(store: Store(initialState: SetupPersonalPINState(enteredPIN1: "12345"), reducer: .empty, environment: AppEnvironment.preview))
         }
         .previewDevice("iPhone 12")
     }

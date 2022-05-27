@@ -4,7 +4,7 @@ import FlowStacks
 import TCACoordinators
 import IdentifiedCollections
 
-struct FirstTimeUserTransportPINState: Equatable {
+struct SetupTransportPINState: Equatable {
     @BindableState var enteredPIN: String = ""
     var remainingAttempts: Int = 3
     var previouslyUnsuccessful: Bool = false
@@ -12,18 +12,18 @@ struct FirstTimeUserTransportPINState: Equatable {
     @BindableState var focusTextField: Bool = true
 }
 
-enum FirstTimeUserTransportPINAction: BindableAction, Equatable {
+enum SetupTransportPINAction: BindableAction, Equatable {
     case done
-    case binding(BindingAction<FirstTimeUserTransportPINState>)
+    case binding(BindingAction<SetupTransportPINState>)
 }
 
-let firstTimeUserTransportPINReducer = Reducer<FirstTimeUserTransportPINState, FirstTimeUserTransportPINAction, AppEnvironment> { _, _, _ in
+let setupTransportPINReducer = Reducer<SetupTransportPINState, SetupTransportPINAction, AppEnvironment> { _, _, _ in
     return .none
 }.binding()
 
-struct FirstTimeUserTransportPINScreen: View {
+struct SetupTransportPIN: View {
     
-    var store: Store<FirstTimeUserTransportPINState, FirstTimeUserTransportPINAction>
+    var store: Store<SetupTransportPINState, SetupTransportPINAction>
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -91,30 +91,30 @@ struct FirstTimeUserTransportPINScreen: View {
     }
 }
 
-struct FirstTimeUserTransportPINScreen_Previews: PreviewProvider {
+struct SetupTransportPIN_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            FirstTimeUserTransportPINScreen(store: Store(initialState: FirstTimeUserTransportPINState(previouslyUnsuccessful: true),
+            SetupTransportPIN(store: Store(initialState: SetupTransportPINState(previouslyUnsuccessful: true),
                                                          reducer: .empty,
                                                          environment: AppEnvironment.preview))
         }
         .previewDevice("iPhone SE (2nd generation)")
         NavigationView {
-            FirstTimeUserTransportPINScreen(store: Store(initialState: FirstTimeUserTransportPINState(enteredPIN: "1234",
+            SetupTransportPIN(store: Store(initialState: SetupTransportPINState(enteredPIN: "1234",
                                                                                                       previouslyUnsuccessful: true),
                                                          reducer: .empty,
                                                          environment: AppEnvironment.preview))
         }
         .previewDevice("iPhone SE (2nd generation)")
         NavigationView {
-            FirstTimeUserTransportPINScreen(store: Store(initialState: FirstTimeUserTransportPINState(enteredPIN: "1234",
+            SetupTransportPIN(store: Store(initialState: SetupTransportPINState(enteredPIN: "1234",
                                                                                                       previouslyUnsuccessful: true),
                                                          reducer: .empty,
                                                          environment: AppEnvironment.preview))
         }
         .previewDevice("iPhone SE (2nd generation)")
         NavigationView {
-            FirstTimeUserTransportPINScreen(store: Store(initialState: FirstTimeUserTransportPINState(),
+            SetupTransportPIN(store: Store(initialState: SetupTransportPINState(),
                                                          reducer: .empty,
                                                          environment: AppEnvironment.preview))
         }

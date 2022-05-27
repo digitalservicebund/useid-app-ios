@@ -20,18 +20,18 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
             case .routeAction(_, ScreenAction.home(.triggerSetup)):
                 state.routes.presentSheet(.setupIntro, embedInNavigationView: true)
             case .routeAction(_, ScreenAction.setupIntro(.chooseNo)):
-                state.routes.push(.firstTimeUserPINLetter)
-            case .routeAction(_, .firstTimeUserPINLetter(.chooseHasPINLetter)):
-                state.routes.push(.firstTimeUserTransportPIN(FirstTimeUserTransportPINState()))
-            case .routeAction(_, .firstTimeUserPINLetter(.chooseHasNoPINLetter)):
+                state.routes.push(.setupTransportPINIntro)
+            case .routeAction(_, .setupTransportPINIntro(.chooseHasPINLetter)):
+                state.routes.push(.setupTransportPIN(SetupTransportPINState()))
+            case .routeAction(_, .setupTransportPINIntro(.chooseHasNoPINLetter)):
                 print("Not implemented")
             case .routeAction(_, ScreenAction.setupIntro(.chooseYes)):
                 print("Not implemented")
-            case .routeAction(_, ScreenAction.firstTimeUserTransportPIN(FirstTimeUserTransportPINAction.done)):
-                state.routes.push(.firstTimeUserChoosePINIntro)
-            case .routeAction(_, ScreenAction.firstTimeUserChoosePINIntro(.continue)):
-                state.routes.push(.firstTimeUserChoosePIN(FirstTimeUserPersonalPINState()))
-            case .routeAction(_, action: ScreenAction.firstTimeUserChoosePIN(FirstTimeUserPersonalPINAction.done(pin: let pin))):
+            case .routeAction(_, ScreenAction.setupTransportPIN(SetupTransportPINAction.done)):
+                state.routes.push(.setupPersonalPINIntro)
+            case .routeAction(_, ScreenAction.setupPersonalPINIntro(.continue)):
+                state.routes.push(.setupPersonalPIN(SetupPersonalPINState()))
+            case .routeAction(_, action: ScreenAction.setupPersonalPIN(SetupPersonalPINAction.done(pin: let pin))):
                 state.routes.push(.setupScan(SetupScanState()))
             default:
                 break

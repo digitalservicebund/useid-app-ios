@@ -14,18 +14,18 @@ struct CoordinatorView: View {
                 CaseLet(state: /ScreenState.setupIntro,
                         action: ScreenAction.setupIntro,
                         then: SetupIntro.init)
-                CaseLet(state: /ScreenState.firstTimeUserPINLetter,
-                        action: ScreenAction.firstTimeUserPINLetter,
-                        then: FirstTimeUserPINLetterScreen.init)
-                CaseLet(state: /ScreenState.firstTimeUserTransportPIN,
-                        action: ScreenAction.firstTimeUserTransportPIN,
-                        then: FirstTimeUserTransportPINScreen.init)
-                CaseLet(state: /ScreenState.firstTimeUserChoosePINIntro,
-                        action: ScreenAction.firstTimeUserChoosePINIntro,
-                        then: FirstTimeUserChoosePINIntroScreen.init)
-                CaseLet(state: /ScreenState.firstTimeUserChoosePIN,
-                        action: ScreenAction.firstTimeUserChoosePIN,
-                        then: FirstTimeUserPersonalPINScreen.init)
+                CaseLet(state: /ScreenState.setupTransportPINIntro,
+                        action: ScreenAction.setupTransportPINIntro,
+                        then: SetupTransportPINIntro.init)
+                CaseLet(state: /ScreenState.setupTransportPIN,
+                        action: ScreenAction.setupTransportPIN,
+                        then: SetupTransportPIN.init)
+                CaseLet(state: /ScreenState.setupPersonalPINIntro,
+                        action: ScreenAction.setupPersonalPINIntro,
+                        then: SetupPersonalPINIntro.init)
+                CaseLet(state: /ScreenState.setupPersonalPIN,
+                        action: ScreenAction.setupPersonalPIN,
+                        then: SetupPersonalPIN.init)
                 CaseLet(state: /ScreenState.setupScan,
                         action: ScreenAction.setupScan,
                         then: SetupScan.init)
