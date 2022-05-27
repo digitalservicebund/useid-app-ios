@@ -28,3 +28,7 @@
 "firstTimeUser_personalPIN_confirmation" = "Geben Sie Ihre persönliche PIN zur Bestätigung noch einmal ein.";
 "firstTimeUser_personalPIN_error_mismatch_title" = "PINs stimmen nicht überein";
 "firstTimeUser_personalPIN_error_mismatch_body" = "Versuchen Sie es erneut.";
+
+"firstTimeUser_scan_title" = "Legen Sie Ihren Ausweis dicht an die Rückseite Ihres Smartphones – fast geschafft!";
+"firstTimeUser_scan_body" = "So wird Ihre persönliche PIN Ihrem Ausweis zugeordnet.";
+"firstTimeUser_scan_help" = "Mein Ausweis wird nicht erkannt";
