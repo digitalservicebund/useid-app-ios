@@ -2,10 +2,10 @@ import Foundation
 import Combine
 import OpenEcard
 
-class OpenECardHandlerBase<S>: NSObject where S: Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
-    let delegate: OpenECardHandlerDelegate<S>
+class OpenECardHandlerBase: NSObject {
+    let delegate: OpenECardHandlerDelegate
     
-    init(delegate: OpenECardHandlerDelegate<S>) {
+    init(delegate: OpenECardHandlerDelegate) {
         self.delegate = delegate
     }
 }

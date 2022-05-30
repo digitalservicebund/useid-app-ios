@@ -2,28 +2,28 @@ import Foundation
 import Combine
 import OpenEcard
 
-class OpenECardHandlerDelegate<S>: NSObject where S: Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
-    private let subscriber: S
+class OpenECardHandlerDelegate: NSObject {
+    private let subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>
     private let context: ContextManagerProtocol
     private var activationController: ActivationControllerProtocol?
     
-    init(subscriber: S, context: ContextManagerProtocol) {
-        self.subscriber = subscriber
+    init(subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>, context: ContextManagerProtocol) {
+        self.subject = subject
         self.context = context
     }
     
     func send(event: EIDInteractionEvent) {
-        _ = subscriber.receive(event)
+        subject.send(event)
     }
     
     func finish() {
         teardown()
-        subscriber.receive(completion: .finished)
+        subject.send(completion: .finished)
     }
     
     func fail(error: IDCardInteractionError) {
         teardown()
-        subscriber.receive(completion: .failure(error))
+        subject.send(completion: .failure(error))
     }
     
     private func teardown() {

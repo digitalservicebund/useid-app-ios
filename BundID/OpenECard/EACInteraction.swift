@@ -2,7 +2,7 @@ import Foundation
 import Combine
 import OpenEcard
 
-class EACInteraction<S>: OpenECardHandlerBase<S>, EacInteractionProtocol where S: Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
+class EACInteraction: OpenECardHandlerBase, EacInteractionProtocol {
     func onCanRequest(_ enterCan: (NSObjectProtocol & ConfirmPasswordOperationProtocol)!) {
         delegate.send(event: .requestCAN(enterCan.confirmPassword))
     }

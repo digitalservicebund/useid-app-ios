@@ -12,24 +12,16 @@ class IDInteractionManager: IDInteractionManagerType {
     }
     
     func identify(tokenURL: String) -> EIDInteractionPublisher {
-        IDCardTaskPublisher(task: .eac(tokenURL: tokenURL), context: context).eraseToAnyPublisher()
+        let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+        let delegate: OpenECardHandlerDelegate = OpenECardHandlerDelegate(subject: subject, context: context)
+        context.initializeContext(StartServiceHandler(task: .eac(tokenURL: tokenURL), delegate: delegate))
+        return subject.eraseToAnyPublisher()
     }
     
     func changePIN() -> EIDInteractionPublisher {
-        IDCardTaskPublisher(task: .pinManagement, context: context)
-            .eraseToAnyPublisher()
-    }
-    
-    private struct IDCardTaskPublisher: Publisher {
-        typealias Output = EIDInteractionEvent
-        typealias Failure = IDCardInteractionError
-        
-        let task: IDTask
-        let context: ContextManagerProtocol
-        
-        func receive<S>(subscriber: S) where S: Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
-            let delegate = OpenECardHandlerDelegate(subscriber: subscriber, context: context)
-            context.initializeContext(StartServiceHandler(task: task, delegate: delegate))
-        }
+        let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+        let delegate: OpenECardHandlerDelegate = OpenECardHandlerDelegate(subject: subject, context: context)
+        context.initializeContext(StartServiceHandler(task: .pinManagement, delegate: delegate))
+        return subject.eraseToAnyPublisher()
     }
 }

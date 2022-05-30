@@ -2,7 +2,7 @@ import Foundation
 import Combine
 import OpenEcard
 
-class ControllerCallback<S>: OpenECardHandlerBase<S>, ControllerCallbackProtocol where S: Subscriber, IDCardInteractionError == S.Failure, EIDInteractionEvent == S.Input {
+class ControllerCallback: OpenECardHandlerBase, ControllerCallbackProtocol {
     func onStarted() {
         delegate.send(event: .authenticationStarted)
     }
