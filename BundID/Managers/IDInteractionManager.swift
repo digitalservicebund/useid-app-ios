@@ -4,24 +4,27 @@ import OpenEcard
 
 class IDInteractionManager: IDInteractionManagerType {
     
-    private let context: ContextManagerProtocol
-    
-    init() {
-        let openEcard = OpenEcardImp()!
-        context = openEcard.context(NFSMessageProvider())!
-    }
-    
     func identify(tokenURL: String) -> EIDInteractionPublisher {
-        let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
-        let delegate: OpenECardHandlerDelegate = OpenECardHandlerDelegate(subject: subject, context: context)
+        let openEcard = OpenEcardImp()!
+        guard let context = openEcard.context(NFSMessageProvider()) else {
+            return Result.Publisher(.failure(.frameworkError(message: "Could not open context"))).eraseToAnyPublisher()
+        }
+        
+        let delegate: OpenECardHandlerDelegate = OpenECardHandlerDelegate(context: context)
         context.initializeContext(StartServiceHandler(task: .eac(tokenURL: tokenURL), delegate: delegate))
-        return subject.eraseToAnyPublisher()
+        
+        return delegate.publisher.eraseToAnyPublisher()
     }
     
     func changePIN() -> EIDInteractionPublisher {
-        let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
-        let delegate: OpenECardHandlerDelegate = OpenECardHandlerDelegate(subject: subject, context: context)
-        context.initializeContext(StartServiceHandler(task: .pinManagement, delegate: delegate))
-        return subject.eraseToAnyPublisher()
+        let openEcard = OpenEcardImp()!
+        guard let context = openEcard.context(NFSMessageProvider()) else {
+            return Result.Publisher(.failure(.frameworkError(message: "Could not open context"))).eraseToAnyPublisher()
+        }
+        let delegate: OpenECardHandlerDelegate = OpenECardHandlerDelegate(context: context)
+        let handler = StartServiceHandler(task: .pinManagement, delegate: delegate)
+        context.initializeContext(handler)
+        
+        return delegate.publisher.eraseToAnyPublisher()
     }
 }

@@ -5,11 +5,14 @@ import OpenEcard
 class OpenECardHandlerDelegate: NSObject {
     private let subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>
     private let context: ContextManagerProtocol
-    private var activationController: ActivationControllerProtocol?
     
-    init(subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>, context: ContextManagerProtocol) {
-        self.subject = subject
+    init(context: ContextManagerProtocol) {
+        self.subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
         self.context = context
+    }
+    
+    var publisher: EIDInteractionPublisher {
+        subject.eraseToAnyPublisher()
     }
     
     func send(event: EIDInteractionEvent) {
@@ -27,7 +30,6 @@ class OpenECardHandlerDelegate: NSObject {
     }
     
     private func teardown() {
-        activationController?.cancelOngoingAuthentication()
         context.terminateContext(StopServiceHandler())
     }
 }
