@@ -29,6 +29,8 @@ class SetupScanTests: XCTestCase {
                 let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
                 queue.schedule {
                     subject.send(.authenticationStarted)
+                }
+                queue.schedule(after: queue.now.advanced(by: .seconds(1))) {
                     subject.send(.authenticationSuccessful)
                     subject.send(completion: .finished)
                 }
@@ -37,9 +39,13 @@ class SetupScanTests: XCTestCase {
         }
         
         store.send(.startScan)
+        
         scheduler.advance()
         
         store.receive(.scanEvent(.success(.authenticationStarted)))
+        
+        scheduler.advance(by: .seconds(1))
+        
         store.receive(.scanEvent(.success(.authenticationSuccessful)))
     }
     
