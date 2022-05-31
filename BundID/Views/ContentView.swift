@@ -3,7 +3,7 @@ import Combine
 import OpenEcard
 
 struct ContentView: View {
-    @ObservedObject var viewModel = ContentViewViewModel()
+    @StateObject var viewModel = ContentViewViewModel()
     
     var body: some View {
         Button {
