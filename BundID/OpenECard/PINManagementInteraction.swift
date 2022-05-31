@@ -2,7 +2,12 @@ import Foundation
 import Combine
 import OpenEcard
 
-class PINManagementInteraction: OpenECardHandlerBase, PinManagementInteractionProtocol {
+class PINManagementInteraction: NSObject, PinManagementInteractionProtocol {
+    
+    private let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+    
+    var publisher: EIDInteractionPublisher { subject.eraseToAnyPublisher() }
+    
     func onPinChangeable(_ enterOldNewPins: (NSObjectProtocol & ConfirmOldSetNewPasswordOperationProtocol)!) {
         onGeneralPINChangeable(attempts: nil, enterOldAndNewPIN: enterOldNewPins)
     }
@@ -12,42 +17,42 @@ class PINManagementInteraction: OpenECardHandlerBase, PinManagementInteractionPr
     }
     
     private func onGeneralPINChangeable(attempts: Int?, enterOldAndNewPIN: ConfirmOldSetNewPasswordOperationProtocol) {
-        delegate.send(event: .requestChangedPIN(attempts: attempts, pinCallback: enterOldAndNewPIN.confirmPassword))
+        subject.send(.requestChangedPIN(attempts: attempts, pinCallback: enterOldAndNewPIN.confirmPassword))
     }
     
     func onPinCanNewPinRequired(_ enterPinCanNewPin: (NSObjectProtocol & ConfirmPinCanNewPinOperationProtocol)!) {
-        delegate.send(event: .requestCANAndChangedPIN(pinCallback: enterPinCanNewPin.confirmChangePassword))
+        subject.send(.requestCANAndChangedPIN(pinCallback: enterPinCanNewPin.confirmChangePassword))
     }
     
     func onPinBlocked(_ unblockWithPuk: (NSObjectProtocol & ConfirmPasswordOperationProtocol)!) {
-        delegate.send(event: .requestPUK(unblockWithPuk.confirmPassword))
+        subject.send(.requestPUK(unblockWithPuk.confirmPassword))
     }
     
     func onCardPukBlocked() {
-        delegate.fail(error: .cardBlocked)
+        subject.send(completion: .failure(.cardBlocked))
     }
     
     func onCardDeactivated() {
-        delegate.fail(error: .cardDeactivated)
+        subject.send(completion: .failure(.cardDeactivated))
     }
     
     func requestCardInsertion() {
-        delegate.fail(error: .frameworkError(message: nil))
+        subject.send(completion: .failure(.frameworkError(message: nil)))
     }
     
     func requestCardInsertion(_ msgHandler: (NSObjectProtocol & NFCOverlayMessageHandlerProtocol)!) {
-        delegate.send(event: .requestCardInsertion(msgHandler.setText))
+        subject.send(.requestCardInsertion(msgHandler.setText))
     }
     
     func onCardInteractionComplete() {
-        delegate.send(event: .cardInteractionComplete)
+        subject.send(.cardInteractionComplete)
     }
     
     func onCardRecognized() {
-        delegate.send(event: .cardRecognized)
+        subject.send(.cardRecognized)
     }
     
     func onCardRemoved() {
-        delegate.send(event: .cardRemoved)
+        subject.send(.cardRemoved)
     }
 }

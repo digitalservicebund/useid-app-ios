@@ -2,18 +2,25 @@ import Foundation
 import Combine
 import OpenEcard
 
-class ControllerCallback: OpenECardHandlerBase, ControllerCallbackProtocol {
+class ControllerCallback: NSObject, ControllerCallbackProtocol {
+    
+    private let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+    
+    var publisher: EIDInteractionPublisher { subject.eraseToAnyPublisher() }
+    
     func onStarted() {
-        delegate.send(event: .authenticationStarted)
+        subject.send(.authenticationStarted)
     }
     
     func onAuthenticationCompletion(_ result: (NSObjectProtocol & ActivationResultProtocol)!) {
         switch result.getCode() {
         case .OK, .REDIRECT:
-            delegate.send(event: .processCompletedSuccessfully)
-            delegate.finish()
+            subject.send(.processCompletedSuccessfully)
+            subject.send(completion: .finished)
+        case .INTERRUPTED:
+            break
         default:
-            delegate.fail(error: .processFailed(resultCode: result.getCode()))
+            subject.send(completion: .failure(.processFailed(resultCode: result.getCode())))
         }
     }
 }

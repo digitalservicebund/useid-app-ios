@@ -4,27 +4,32 @@ import OpenEcard
 
 class IDInteractionManager: IDInteractionManagerType {
     
+    let openEcard: OpenEcardImp
+    let context: ContextManagerProtocol
+    
+    init() {
+        openEcard = OpenEcardImp()!
+        context = openEcard.context(NFCMessageProvider())!
+    }
+    
     func identify(tokenURL: String) -> EIDInteractionPublisher {
-        let openEcard = OpenEcardImp()!
-        guard let context = openEcard.context(NFCMessageProvider()) else {
-            return Result.Publisher(.failure(.frameworkError(message: "Could not open context"))).eraseToAnyPublisher()
-        }
-        
-        let delegate: OpenECardHandlerDelegate = OpenECardHandlerDelegate(context: context)
-        context.initializeContext(StartServiceHandler(task: .eac(tokenURL: tokenURL), delegate: delegate))
-        
-        return delegate.publisher.eraseToAnyPublisher()
+        start(startServiceHandler: StartServiceHandler(task: .eac(tokenURL: tokenURL)))
     }
     
     func changePIN() -> EIDInteractionPublisher {
-        let openEcard = OpenEcardImp()!
-        guard let context = openEcard.context(NFCMessageProvider()) else {
-            return Result.Publisher(.failure(.frameworkError(message: "Could not open context"))).eraseToAnyPublisher()
-        }
-        let delegate: OpenECardHandlerDelegate = OpenECardHandlerDelegate(context: context)
-        let handler = StartServiceHandler(task: .pinManagement, delegate: delegate)
-        context.initializeContext(handler)
-        
-        return delegate.publisher.eraseToAnyPublisher()
+        start(startServiceHandler: StartServiceHandler(task: .pinManagement))
+    }
+    
+    private func start(startServiceHandler: StartServiceHandler) -> EIDInteractionPublisher {
+        context.initializeContext(startServiceHandler)
+        return startServiceHandler.publisher
+            .receive(on: DispatchQueue.main)
+            .handleEvents(receiveCompletion: { [weak self] _ in
+                startServiceHandler.cancel()
+                self?.context.terminateContext(StopServiceHandler())
+            }, receiveCancel: { [weak self] in
+                startServiceHandler.cancel()
+                self?.context.terminateContext(StopServiceHandler())
+            }).eraseToAnyPublisher()
     }
 }

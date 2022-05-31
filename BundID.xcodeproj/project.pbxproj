@@ -53,8 +53,6 @@
 		E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */; };
 		E593E2662816845C00154EB0 /* AuthenticationTerms.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E2652816845C00154EB0 /* AuthenticationTerms.swift */; };
 		E593E2682816847900154EB0 /* EIDAuthenticationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E2672816847900154EB0 /* EIDAuthenticationRequest.swift */; };
-		E593E26A281684E600154EB0 /* OpenECardHandlerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E269281684E600154EB0 /* OpenECardHandlerDelegate.swift */; };
-		E593E26C2816851C00154EB0 /* OpenECardHandlerBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E26B2816851C00154EB0 /* OpenECardHandlerBase.swift */; };
 		E593E26E2816853A00154EB0 /* StopServiceHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E26D2816853A00154EB0 /* StopServiceHandler.swift */; };
 		E593E2702816856200154EB0 /* StartServiceHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E26F2816856200154EB0 /* StartServiceHandler.swift */; };
 		E593E2722816864800154EB0 /* ControllerCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E2712816864800154EB0 /* ControllerCallback.swift */; };
@@ -140,8 +138,6 @@
 		E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenEcardExtensions.swift; sourceTree = "<group>"; };
 		E593E2652816845C00154EB0 /* AuthenticationTerms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationTerms.swift; sourceTree = "<group>"; };
 		E593E2672816847900154EB0 /* EIDAuthenticationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIDAuthenticationRequest.swift; sourceTree = "<group>"; };
-		E593E269281684E600154EB0 /* OpenECardHandlerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenECardHandlerDelegate.swift; sourceTree = "<group>"; };
-		E593E26B2816851C00154EB0 /* OpenECardHandlerBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenECardHandlerBase.swift; sourceTree = "<group>"; };
 		E593E26D2816853A00154EB0 /* StopServiceHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopServiceHandler.swift; sourceTree = "<group>"; };
 		E593E26F2816856200154EB0 /* StartServiceHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartServiceHandler.swift; sourceTree = "<group>"; };
 		E593E2712816864800154EB0 /* ControllerCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerCallback.swift; sourceTree = "<group>"; };
@@ -385,8 +381,6 @@
 				E5E69D882812FB8D00A3B66A /* IDCardAttribute.swift */,
 				E593E2652816845C00154EB0 /* AuthenticationTerms.swift */,
 				E593E2672816847900154EB0 /* EIDAuthenticationRequest.swift */,
-				E593E269281684E600154EB0 /* OpenECardHandlerDelegate.swift */,
-				E593E26B2816851C00154EB0 /* OpenECardHandlerBase.swift */,
 				E593E26D2816853A00154EB0 /* StopServiceHandler.swift */,
 				E593E26F2816856200154EB0 /* StartServiceHandler.swift */,
 				E593E2712816864800154EB0 /* ControllerCallback.swift */,
@@ -576,7 +570,6 @@
 				E1AB879E282283AB00C7FC94 /* Fonts.swift in Sources */,
 				E16708BC283D824D001A1637 /* Scheduler+Animation.swift in Sources */,
 				E593E26E2816853A00154EB0 /* StopServiceHandler.swift in Sources */,
-				E593E26A281684E600154EB0 /* OpenECardHandlerDelegate.swift in Sources */,
 				E16708B3283D4ED2001A1637 /* Coordinator.swift in Sources */,
 				E16708C0283E6A07001A1637 /* SetupScan.swift in Sources */,
 				E1AAACEB2836668200A51183 /* ShakeEffect.swift in Sources */,
@@ -602,7 +595,6 @@
 				E1AB87A02822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift in Sources */,
 				E593E2762816868100154EB0 /* PINManagementInteraction.swift in Sources */,
 				E1AB879A282281C400C7FC94 /* HeaderView.swift in Sources */,
-				E593E26C2816851C00154EB0 /* OpenECardHandlerBase.swift in Sources */,
 				E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */,
 				E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */,
 				E13925B82840FB7700161F5C /* Types.swift in Sources */,

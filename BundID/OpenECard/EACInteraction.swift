@@ -2,9 +2,14 @@ import Foundation
 import Combine
 import OpenEcard
 
-class EACInteraction: OpenECardHandlerBase, EacInteractionProtocol {
+class EACInteraction: NSObject, EacInteractionProtocol {
+    
+    private let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+    
+    var publisher: EIDInteractionPublisher { subject.eraseToAnyPublisher() }
+    
     func onCanRequest(_ enterCan: (NSObjectProtocol & ConfirmPasswordOperationProtocol)!) {
-        delegate.send(event: .requestCAN(enterCan.confirmPassword))
+        subject.send(.requestCAN(enterCan.confirmPassword))
     }
     
     func onPinRequest(_ enterPin: (NSObjectProtocol & ConfirmPasswordOperationProtocol)!) {
@@ -16,19 +21,19 @@ class EACInteraction: OpenECardHandlerBase, EacInteractionProtocol {
     }
     
     private func onGeneralPINRequest(attempts: Int?, enterPin: ConfirmPasswordOperationProtocol) {
-        delegate.send(event: .requestPIN(attempts: attempts, pinCallback: enterPin.confirmPassword))
+        subject.send(.requestPIN(attempts: attempts, pinCallback: enterPin.confirmPassword))
     }
     
     func onPinCanRequest(_ enterPinCan: (NSObjectProtocol & ConfirmPinCanOperationProtocol)!) {
-        delegate.send(event: .requestPINAndCAN(enterPinCan.confirmPassword))
+        subject.send(.requestPINAndCAN(enterPinCan.confirmPassword))
     }
     
     func onCardBlocked() {
-        delegate.fail(error: .cardBlocked)
+        subject.send(completion: .failure(.cardBlocked))
     }
     
     func onCardDeactivated() {
-        delegate.fail(error: .cardDeactivated)
+        subject.send(completion: .failure(.cardDeactivated))
     }
     
     func onServerData(_ data: (NSObjectProtocol & ServerDataProtocol)!, withTransactionData transactionData: String!, withSelectReadWrite selectReadWrite: (NSObjectProtocol & ConfirmAttributeSelectionOperationProtocol)!) {
@@ -36,10 +41,10 @@ class EACInteraction: OpenECardHandlerBase, EacInteractionProtocol {
         do {
             readAttributes = try data.getReadAccessAttributes()!.mapToAttributeRequirements()
         } catch IDCardInteractionError.unexpectedReadAttribute(let attribute) {
-            delegate.fail(error: IDCardInteractionError.unexpectedReadAttribute(attribute))
+            subject.send(completion: .failure(.unexpectedReadAttribute(attribute)))
             return
         } catch {
-            delegate.fail(error: .frameworkError(message: nil))
+            subject.send(completion: .failure(.frameworkError(message: nil)))
             return
         }
         
@@ -47,30 +52,30 @@ class EACInteraction: OpenECardHandlerBase, EacInteractionProtocol {
         
         let confirmationCallback: (FlaggedAttributes) -> Void = { selectReadWrite.enterAttributeSelection($0.selectableItemsSettingChecked, withWrite: []) }
         
-        delegate.send(event: .requestAuthenticationRequestConfirmation(eidServerData, confirmationCallback))
+        subject.send(.requestAuthenticationRequestConfirmation(eidServerData, confirmationCallback))
     }
     
     func onCardAuthenticationSuccessful() {
-        delegate.send(event: .authenticationSuccessful)
+        subject.send(.authenticationSuccessful)
     }
     
     func requestCardInsertion() {
-        delegate.fail(error: .frameworkError(message: nil))
+        subject.send(completion: .failure(.frameworkError(message: nil)))
     }
     
     func requestCardInsertion(_ msgHandler: (NSObjectProtocol & NFCOverlayMessageHandlerProtocol)!) {
-        delegate.send(event: .requestCardInsertion(msgHandler.setText))
+        subject.send(.requestCardInsertion(msgHandler.setText))
     }
     
     func onCardInteractionComplete() {
-        delegate.send(event: .cardInteractionComplete)
+        subject.send(.cardInteractionComplete)
     }
     
     func onCardRecognized() {
-        delegate.send(event: .cardRecognized)
+        subject.send(.cardRecognized)
     }
     
     func onCardRemoved() {
-        delegate.send(event: .cardRemoved)
+        subject.send(.cardRemoved)
     }
 }
