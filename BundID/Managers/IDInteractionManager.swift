@@ -6,7 +6,7 @@ class IDInteractionManager: IDInteractionManagerType {
     
     func identify(tokenURL: String) -> EIDInteractionPublisher {
         let openEcard = OpenEcardImp()!
-        guard let context = openEcard.context(NFSMessageProvider()) else {
+        guard let context = openEcard.context(NFCMessageProvider()) else {
             return Result.Publisher(.failure(.frameworkError(message: "Could not open context"))).eraseToAnyPublisher()
         }
         
@@ -18,7 +18,7 @@ class IDInteractionManager: IDInteractionManagerType {
     
     func changePIN() -> EIDInteractionPublisher {
         let openEcard = OpenEcardImp()!
-        guard let context = openEcard.context(NFSMessageProvider()) else {
+        guard let context = openEcard.context(NFCMessageProvider()) else {
             return Result.Publisher(.failure(.frameworkError(message: "Could not open context"))).eraseToAnyPublisher()
         }
         let delegate: OpenECardHandlerDelegate = OpenECardHandlerDelegate(context: context)

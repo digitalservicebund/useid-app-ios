@@ -1,7 +1,7 @@
 import Foundation
 import OpenEcard
 
-class NFSMessageProvider: NSObject, NFCConfigProtocol {
+class NFCMessageProvider: NSObject, NFCConfigProtocol {
     func getProvideCardMessage() -> String! {
         "getProvideCardMessage()"
     }
