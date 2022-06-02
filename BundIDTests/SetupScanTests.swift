@@ -102,12 +102,15 @@ class SetupScanTests: XCTestCase {
             }
         }
         
-        store.send(.startScan)
+        store.send(.startScan) {
+            $0.scanAvailable = false
+        }
         
         scheduler.advance()
         
         store.receive(.scanEvent(.failure(.frameworkError(message: "Fail")))) {
             $0.error = .idCardInteraction(.frameworkError(message: "Fail"))
+            $0.scanAvailable = true
         }
     }
 }
