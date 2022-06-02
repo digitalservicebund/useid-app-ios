@@ -9,14 +9,19 @@ enum SetupScanError: Equatable {
 
 struct SetupScanState: Equatable {
     var scanAvailable: Bool = true
+    var transportPIN: String
+    var newPIN: String
     var error: SetupScanError?
+    var attempts: Int?
 }
 
 enum SetupScanAction: Equatable {
     case onAppear
     case startScan
     case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
+    case wrongTransportPIN(attempts: Int)
     case cancelScan
+    case scannedSuccessfully
 }
 
 let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> { state, action, environment in
@@ -32,9 +37,10 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         state.error = .idCardInteraction(error)
         state.scanAvailable = true
         return .none
-    case .scanEvent(.success(let value)):
-        switch value {
-        case .authenticationStarted: print("Authentication started")
+    case .scanEvent(.success(let event)):
+        switch event {
+        case .authenticationStarted:
+            print("Authentication started")
         case .requestCardInsertion(let messageCallback):
             print("Request card insertion.")
             messageCallback("Request card insertion.")
@@ -45,17 +51,27 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         case .requestPIN(let attempts, let pinCallback): print("PIN callback not implemented.")
         case .requestPINAndCAN(let pinCANCallback): print("PIN CAN callback not implemented.")
         case .requestPUK(let pukCallback): print("PUK callback not implemented.")
-        case .processCompletedSuccessfully: print("Process completed successfully.")
+        case .processCompletedSuccessfully:
+            return Effect(value: .scannedSuccessfully)
         case .pinManagementStarted: print("PIN Management started.")
         case .requestChangedPIN(let attempts, let pinCallback):
             print("Providing changed PIN with \(attempts ?? 3) attempts.")
             
             // This is our signal that the user canceled (for now)
-            guard attempts != nil else {
+            guard let attempts = attempts else {
                 return Effect(value: .cancelScan)
             }
             
-            pinCallback("123456", "000000")
+            if state.attempts == nil {
+                state.attempts = attempts
+            }
+            
+            // Wrong transport/personal PIN provided
+            if state.attempts != attempts {
+                return Effect(value: .wrongTransportPIN(attempts: attempts))
+            }
+            
+            pinCallback(state.transportPIN, state.newPIN)
         case .requestCANAndChangedPIN(let pinCallback): print("Providing CAN and changed PIN not implemented.")
         default: print("Received unexpected event.")
         }
@@ -63,6 +79,10 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
     case .cancelScan:
         state.scanAvailable = true
         return .cancel(id: "ChangePIN")
+    case .wrongTransportPIN:
+        return .cancel(id: "ChangePIN")
+    case .scannedSuccessfully:
+        return .none
     }
 }
 
@@ -92,6 +112,6 @@ struct SetupScan: View {
 
 struct SetupScan_Previews: PreviewProvider {
     static var previews: some View {
-        SetupScan(store: Store(initialState: SetupScanState(), reducer: .empty, environment: AppEnvironment.preview))
+        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
     }
 }

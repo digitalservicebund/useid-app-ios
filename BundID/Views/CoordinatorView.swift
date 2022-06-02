@@ -29,6 +29,9 @@ struct CoordinatorView: View {
                 CaseLet(state: /ScreenState.setupScan,
                         action: ScreenAction.setupScan,
                         then: SetupScan.init)
+                CaseLet(state: /ScreenState.setupDone,
+                        action: ScreenAction.setupDone,
+                        then: SetupDone.init)
             }
         }
     }

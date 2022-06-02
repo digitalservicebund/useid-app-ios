@@ -13,7 +13,7 @@ struct SetupTransportPINState: Equatable {
 }
 
 enum SetupTransportPINAction: BindableAction, Equatable {
-    case done
+    case done(transportPIN: String)
     case binding(BindingAction<SetupTransportPINState>)
 }
 
@@ -43,8 +43,8 @@ struct SetupTransportPIN: View {
                                          shouldBeFocused: viewStore.binding(\.$focusTextField),
                                          doneConfiguration: DoneConfiguration(enabled: viewStore.enteredPIN.count == 5,
                                                                               title: L10n.FirstTimeUser.TransportPIN.continue,
-                                                                              handler: { _ in
-                                    viewStore.send(.done)
+                                                                              handler: { pin in
+                                    viewStore.send(.done(transportPIN: pin))
                             }))
                             .font(.bundTitle)
                             .background(

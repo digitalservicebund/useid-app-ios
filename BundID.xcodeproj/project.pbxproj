@@ -41,6 +41,7 @@
 		E1AB87A02822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB879F2822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift */; };
 		E1AB87A4282413A700C7FC94 /* PINTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB87A3282413A700C7FC94 /* PINTextField.swift */; };
 		E1AB87AC2825238D00C7FC94 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1AB87AA2825238D00C7FC94 /* Localizable.strings */; };
+		E1BD6C792847A2E5003048E4 /* SetupDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BD6C782847A2E5003048E4 /* SetupDone.swift */; };
 		E1CD8E88281FF62F008ADA2A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E87281FF62F008ADA2A /* Colors.swift */; };
 		E1CD8E8C281FFCC1008ADA2A /* BundesSans-DTP-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E1CD8E8A281FFCC1008ADA2A /* BundesSans-DTP-Regular.otf */; };
 		E1CD8E8D281FFCC1008ADA2A /* BundesSans-DTP-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E1CD8E8B281FFCC1008ADA2A /* BundesSans-DTP-Bold.otf */; };
@@ -126,6 +127,7 @@
 		E1AB879F2822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPersonalPINIntroScreen.swift; sourceTree = "<group>"; };
 		E1AB87A3282413A700C7FC94 /* PINTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINTextField.swift; sourceTree = "<group>"; };
 		E1AB87AB2825238D00C7FC94 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E1BD6C782847A2E5003048E4 /* SetupDone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupDone.swift; sourceTree = "<group>"; };
 		E1CD8E87281FF62F008ADA2A /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		E1CD8E8A281FFCC1008ADA2A /* BundesSans-DTP-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BundesSans-DTP-Regular.otf"; sourceTree = "<group>"; };
 		E1CD8E8B281FFCC1008ADA2A /* BundesSans-DTP-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BundesSans-DTP-Bold.otf"; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 				E1AB879F2822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift */,
 				E1AAACF92837B98100A51183 /* SetupPersonalPIN */,
 				E16708BF283E6A07001A1637 /* SetupScan.swift */,
+				E1BD6C782847A2E5003048E4 /* SetupDone.swift */,
 				E1CD8E9428215971008ADA2A /* PINEntryView.swift */,
 				E1AB87A3282413A700C7FC94 /* PINTextField.swift */,
 			);
@@ -595,6 +598,7 @@
 				E1AB87A02822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift in Sources */,
 				E593E2762816868100154EB0 /* PINManagementInteraction.swift in Sources */,
 				E1AB879A282281C400C7FC94 /* HeaderView.swift in Sources */,
+				E1BD6C792847A2E5003048E4 /* SetupDone.swift in Sources */,
 				E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */,
 				E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */,
 				E13925B82840FB7700161F5C /* Types.swift in Sources */,

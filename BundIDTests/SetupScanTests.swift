@@ -18,10 +18,26 @@ class SetupScanTests: XCTestCase {
                                      idInteractionManager: mockIDInteractionManager)
     }
     
-    func testStartScan() throws {
-        let store = TestStore(initialState: SetupScanState(),
+    func testChangePINSuccess() throws {
+        let oldPIN = "12345"
+        let newPIN = "123456"
+        let store = TestStore(initialState: SetupScanState(transportPIN: oldPIN, newPIN: newPIN),
                               reducer: setupScanReducer,
                               environment: environment)
+        
+        let cardInsertionExpectation = self.expectation(description: "requestCardInsertion callback")
+        cardInsertionExpectation.expectedFulfillmentCount = 2
+        
+        let cardInsertionCallback: (String) -> Void = { message in
+            cardInsertionExpectation.fulfill()
+        }
+        
+        let requestChangedPINExpectation = self.expectation(description: "requestCardInsertion callback")
+        let pinCallback: (String, String) -> Void = { actualOldPIN, actualNewPIN in
+            XCTAssertEqual(oldPIN, actualOldPIN)
+            XCTAssertEqual(newPIN, actualNewPIN)
+            requestChangedPINExpectation.fulfill()
+        }
         
         let queue = scheduler!
         stub(mockIDInteractionManager) { mock in
@@ -29,28 +45,49 @@ class SetupScanTests: XCTestCase {
                 let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
                 queue.schedule {
                     subject.send(.authenticationStarted)
-                }
-                queue.schedule(after: queue.now.advanced(by: .seconds(1))) {
-                    subject.send(.authenticationSuccessful)
+                    subject.send(.requestCardInsertion(cardInsertionCallback))
+                    subject.send(.cardRecognized)
+                    subject.send(.cardInteractionComplete)
+                    subject.send(.requestChangedPIN(attempts: 3, pinCallback: pinCallback))
+                    subject.send(.cardRemoved)
+                    subject.send(.requestCardInsertion(cardInsertionCallback))
+                    subject.send(.cardRecognized)
+                    subject.send(.cardInteractionComplete)
+                    subject.send(.processCompletedSuccessfully)
                     subject.send(completion: .finished)
                 }
                 return subject.eraseToAnyPublisher()
             }
         }
         
-        store.send(.startScan)
+        store.send(.startScan) {
+            $0.scanAvailable = false
+        }
         
         scheduler.advance()
         
         store.receive(.scanEvent(.success(.authenticationStarted)))
+        store.receive(.scanEvent(.success(.requestCardInsertion(cardInsertionCallback))))
         
-        scheduler.advance(by: .seconds(1))
+        store.receive(.scanEvent(.success(.cardRecognized)))
+        store.receive(.scanEvent(.success(.cardInteractionComplete)))
+        store.receive(.scanEvent(.success(.requestChangedPIN(attempts: 3, pinCallback: pinCallback)))) {
+            $0.attempts = 3
+        }
         
-        store.receive(.scanEvent(.success(.authenticationSuccessful)))
+        store.receive(.scanEvent(.success(.cardRemoved)))
+        store.receive(.scanEvent(.success(.requestCardInsertion(cardInsertionCallback))))
+        store.receive(.scanEvent(.success(.cardRecognized)))
+        store.receive(.scanEvent(.success(.cardInteractionComplete)))
+        store.receive(.scanEvent(.success(.processCompletedSuccessfully)))
+        
+        store.receive(.scannedSuccessfully)
+        
+        self.wait(for: [cardInsertionExpectation, requestChangedPINExpectation], timeout: 0.0)
     }
     
     func testScanFail() throws {
-        let store = TestStore(initialState: SetupScanState(),
+        let store = TestStore(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"),
                               reducer: setupScanReducer,
                               environment: environment)
         

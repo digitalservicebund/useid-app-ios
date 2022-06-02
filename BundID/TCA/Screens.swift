@@ -8,6 +8,7 @@ enum ScreenState: Equatable {
     case setupPersonalPINIntro
     case setupPersonalPIN(SetupPersonalPINState)
     case setupScan(SetupScanState)
+    case setupDone
 }
 
 enum ScreenAction: Equatable {
@@ -18,6 +19,7 @@ enum ScreenAction: Equatable {
     case setupPersonalPINIntro(SetupPersonalPINIntroAction)
     case setupPersonalPIN(SetupPersonalPINAction)
     case setupScan(SetupScanAction)
+    case setupDone(SetupDoneAction)
 }
 
 let screenReducer = Reducer<ScreenState, ScreenAction, AppEnvironment>.combine(
