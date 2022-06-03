@@ -1,8 +1,0 @@
-disabled_rules:
-  - force_cast
-  - force_try
-
-excluded:
-  - Generated
-
-parent_config: 

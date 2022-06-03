@@ -44,7 +44,6 @@ excluded:
   - .swift-packages
   - fastlane
   - vendor
+  - BundIDTests
 
 allow_zero_lintable_files: true
-
-child_config: BundIDTests/.swiftlint_tests.yml
