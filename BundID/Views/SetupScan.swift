@@ -31,6 +31,7 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
     case .startScan:
         state.scanAvailable = false
         return environment.idInteractionManager.changePIN()
+            .receive(on: environment.mainQueue)
             .catchToEffect(SetupScanAction.scanEvent)
             .cancellable(id: "ChangePIN", cancelInFlight: true)
     case .scanEvent(.failure(let error)):
