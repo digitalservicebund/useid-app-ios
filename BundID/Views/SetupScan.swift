@@ -120,7 +120,6 @@ struct SetupScan: View {
 #if DEBUG
                 VStack {
                     HStack {
-                        Spacer()
                         Button("NFC Error", action: {
                             viewStore.send(.runDebugSequence(.runNFCError))
                         }).padding(5).background(Color.red).cornerRadius(8)
@@ -132,9 +131,11 @@ struct SetupScan: View {
                         }).padding(5).background(Color.green).cornerRadius(8)
                     }.padding()
                     Spacer()
-                }
+                }.opacity(viewStore.scanAvailable ? 0 : 1)
 #endif
-            }
+            }.onChange(of: viewStore.state.transportPIN, perform: { _ in
+                viewStore.send(.startScan)
+            })
         }
     }
 }

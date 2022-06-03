@@ -5,7 +5,25 @@ import IdentifiedCollections
 
 struct CoordinatorState: Equatable, IndexedRouterState {
     var transportPIN: String = ""
-    var routes: [Route<ScreenState>]
+    var routes: [Route<ScreenState>] {
+        get {
+            states.map {
+                $0.map { screenState in
+                    switch screenState {
+                    case .setupScan(var setupScanState):
+                        setupScanState.transportPIN = transportPIN
+                        return .setupScan(setupScanState)
+                    default:
+                        return screenState
+                    }
+                }
+            }
+        }
+        set {
+            states = newValue
+        }
+    }
+    var states: [Route<ScreenState>]
 }
 
 enum CoordinatorAction: IndexedRouterAction {
@@ -38,7 +56,7 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
             case .routeAction(_, action: .setupScan(.scannedSuccessfully)):
                 state.routes.push(.setupDone)
             case .routeAction(_, action: .setupScan(.wrongTransportPIN(attempts: let attempts))):
-                state.routes.presentSheet(.setupIncorrectTransportPIN(SetupIncorrectTransportPINState(remainingAttempts: attempts)), embedInNavigationView: true)
+                state.routes.presentSheet(.setupIncorrectTransportPIN(SetupIncorrectTransportPINState(remainingAttempts: attempts)))
             case .routeAction(_, action: .setupDone(.done)):
                 state.routes.dismiss()
             case .routeAction(_, action: .setupIncorrectTransportPIN(.done(let transportPIN))):
