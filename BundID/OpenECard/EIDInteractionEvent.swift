@@ -17,7 +17,7 @@ enum EIDInteractionEvent: Equatable {
     case requestChangedPIN(attempts: Int?, pinCallback: (String, String) -> Void)
     case requestCANAndChangedPIN(pinCallback: (String, String, String) -> Void)
     
-    static func ==(lhs: Self, rhs: Self) -> Bool {
+    static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs) {
         case (.requestCardInsertion, .requestCardInsertion): return true
         case (.cardInteractionComplete, .cardInteractionComplete): return true

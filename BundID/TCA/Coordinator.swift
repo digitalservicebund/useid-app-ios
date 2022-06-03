@@ -4,7 +4,7 @@ import TCACoordinators
 import IdentifiedCollections
 
 struct CoordinatorState: Equatable, IndexedRouterState {
-    var transportPIN: String?
+    var transportPIN: String = ""
     var routes: [Route<ScreenState>]
 }
 
@@ -29,17 +29,12 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
             case .routeAction(_, ScreenAction.setupIntro(.chooseYes)):
                 print("Not implemented")
             case .routeAction(_, ScreenAction.setupTransportPIN(SetupTransportPINAction.done(let transportPIN))):
-                // TODO: We either come from the normal flow or we are shown after a wrong pin attempt while scanning
                 state.transportPIN = transportPIN
                 state.routes.push(.setupPersonalPINIntro)
             case .routeAction(_, ScreenAction.setupPersonalPINIntro(.continue)):
                 state.routes.push(.setupPersonalPIN(SetupPersonalPINState()))
             case .routeAction(_, action: ScreenAction.setupPersonalPIN(SetupPersonalPINAction.done(pin: let pin))):
-                guard let transportPIN = state.transportPIN else {
-                    // TODO: What happened here?
-                    break
-                }
-                state.routes.push(.setupScan(SetupScanState(transportPIN: transportPIN, newPIN: pin)))
+                state.routes.push(.setupScan(SetupScanState(transportPIN: state.transportPIN, newPIN: pin)))
             case .routeAction(_, action: ScreenAction.setupScan(.scannedSuccessfully)):
                 state.routes.push(.setupDone)
             case .routeAction(_, action: ScreenAction.setupScan(.wrongTransportPIN(attempts: let attempts))):

@@ -28,7 +28,7 @@ class SetupScanTests: XCTestCase {
         let cardInsertionExpectation = self.expectation(description: "requestCardInsertion callback")
         cardInsertionExpectation.expectedFulfillmentCount = 2
         
-        let cardInsertionCallback: (String) -> Void = { message in
+        let cardInsertionCallback: (String) -> Void = { _ in
             cardInsertionExpectation.fulfill()
         }
         
