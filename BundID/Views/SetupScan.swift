@@ -13,6 +13,7 @@ struct SetupScanState: Equatable {
     var newPIN: String
     var error: SetupScanError?
     var remainingAttempts: Int?
+    var attempt = 0
 }
 
 enum SetupScanAction: Equatable {
@@ -133,7 +134,7 @@ struct SetupScan: View {
                     Spacer()
                 }.opacity(viewStore.scanAvailable ? 0 : 1)
 #endif
-            }.onChange(of: viewStore.state.transportPIN, perform: { _ in
+            }.onChange(of: viewStore.state.attempt, perform: { _ in
                 viewStore.send(.startScan)
             })
         }

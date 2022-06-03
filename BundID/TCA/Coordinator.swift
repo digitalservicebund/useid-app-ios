@@ -5,6 +5,7 @@ import IdentifiedCollections
 
 struct CoordinatorState: Equatable, IndexedRouterState {
     var transportPIN: String = ""
+    var attempt: Int = 0
     var routes: [Route<ScreenState>] {
         get {
             states.map {
@@ -12,6 +13,7 @@ struct CoordinatorState: Equatable, IndexedRouterState {
                     switch screenState {
                     case .setupScan(var setupScanState):
                         setupScanState.transportPIN = transportPIN
+                        setupScanState.attempt = attempt
                         return .setupScan(setupScanState)
                     default:
                         return screenState
@@ -61,6 +63,7 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                 state.routes.dismiss()
             case .routeAction(_, action: .setupIncorrectTransportPIN(.done(let transportPIN))):
                 state.transportPIN = transportPIN
+                state.attempt += 1
                 state.routes.dismiss()
             case .routeAction(_, action: .setupIncorrectTransportPIN(.confirmEnd)):
                 return Effect.routeWithDelaysIfUnsupported(state.routes) {
