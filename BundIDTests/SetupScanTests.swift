@@ -48,7 +48,7 @@ class SetupScanTests: XCTestCase {
                     subject.send(.requestCardInsertion(cardInsertionCallback))
                     subject.send(.cardRecognized)
                     subject.send(.cardInteractionComplete)
-                    subject.send(.requestChangedPIN(attempts: 3, pinCallback: pinCallback))
+                    subject.send(.requestChangedPIN(remainingAttempts: 3, pinCallback: pinCallback))
                     subject.send(.cardRemoved)
                     subject.send(.requestCardInsertion(cardInsertionCallback))
                     subject.send(.cardRecognized)
@@ -71,8 +71,8 @@ class SetupScanTests: XCTestCase {
         
         store.receive(.scanEvent(.success(.cardRecognized)))
         store.receive(.scanEvent(.success(.cardInteractionComplete)))
-        store.receive(.scanEvent(.success(.requestChangedPIN(attempts: 3, pinCallback: pinCallback)))) {
-            $0.attempts = 3
+        store.receive(.scanEvent(.success(.requestChangedPIN(remainingAttempts: 3, pinCallback: pinCallback)))) {
+            $0.remainingAttempts = 3
         }
         
         store.receive(.scanEvent(.success(.cardRemoved)))

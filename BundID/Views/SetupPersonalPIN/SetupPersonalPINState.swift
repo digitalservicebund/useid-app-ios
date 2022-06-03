@@ -9,7 +9,7 @@ struct SetupPersonalPINState: Equatable {
     @BindableState var focusPIN1: Bool = true
     @BindableState var focusPIN2: Bool = false
     var error: SetupPersonalPINError?
-    var attempts: Int = 0
+    var remainingAttempts: Int = 0
     
     mutating func handlePIN1Change(_ enteredPIN1: String) -> Effect<SetupPersonalPINAction, Never> {
         if !enteredPIN1.isEmpty {
@@ -37,7 +37,7 @@ struct SetupPersonalPINState: Equatable {
         guard enteredPIN2.count == 6 else { return .none }
         guard enteredPIN1 == enteredPIN2 else {
             withAnimation {
-                attempts += 1
+                remainingAttempts += 1
             }
             return Effect(value: withAnimation { .reset })
                 .delay(for: 0.2, scheduler: environment.mainQueue.animation(.linear(duration: 0.2)))

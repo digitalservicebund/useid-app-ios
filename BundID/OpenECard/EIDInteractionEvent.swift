@@ -6,7 +6,7 @@ enum EIDInteractionEvent: Equatable {
     case cardRecognized
     case cardRemoved
     case requestCAN((String) -> Void)
-    case requestPIN(attempts: Int?, pinCallback: (String) -> Void)
+    case requestPIN(remainingAttempts: Int?, pinCallback: (String) -> Void)
     case requestPINAndCAN((String, String) -> Void)
     case requestPUK((String) -> Void)
     case processCompletedSuccessfully
@@ -14,7 +14,7 @@ enum EIDInteractionEvent: Equatable {
     case requestAuthenticationRequestConfirmation(EIDAuthenticationRequest, (FlaggedAttributes) -> Void)
     case authenticationSuccessful
     case pinManagementStarted
-    case requestChangedPIN(attempts: Int?, pinCallback: (String, String) -> Void)
+    case requestChangedPIN(remainingAttempts: Int?, pinCallback: (String, String) -> Void)
     case requestCANAndChangedPIN(pinCallback: (String, String, String) -> Void)
     
     static func == (lhs: Self, rhs: Self) -> Bool {

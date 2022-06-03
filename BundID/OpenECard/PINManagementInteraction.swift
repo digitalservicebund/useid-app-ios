@@ -9,17 +9,17 @@ class PINManagementInteraction: NSObject, PINManagementInteractionType {
     var publisher: EIDInteractionPublisher { subject.eraseToAnyPublisher() }
     
     func onPinChangeable(_ enterOldNewPins: (NSObjectProtocol & ConfirmOldSetNewPasswordOperationProtocol)!) {
-        onGeneralPINChangeable(attempts: nil, enterOldAndNewPIN: enterOldNewPins)
+        onGeneralPINChangeable(remainingAttempts: nil, enterOldAndNewPIN: enterOldNewPins)
     }
     
-    func onPinChangeable(_ attempts: Int32,
+    func onPinChangeable(_ remainingAttempts: Int32,
                          withEnterOldNewPins enterOldNewPins: (NSObjectProtocol & ConfirmOldSetNewPasswordOperationProtocol)!) {
-        onGeneralPINChangeable(attempts: Int(attempts), enterOldAndNewPIN: enterOldNewPins)
+        onGeneralPINChangeable(remainingAttempts: Int(remainingAttempts), enterOldAndNewPIN: enterOldNewPins)
     }
     
-    private func onGeneralPINChangeable(attempts: Int?,
+    private func onGeneralPINChangeable(remainingAttempts: Int?,
                                         enterOldAndNewPIN: ConfirmOldSetNewPasswordOperationProtocol) {
-        subject.send(.requestChangedPIN(attempts: attempts, pinCallback: enterOldAndNewPIN.confirmPassword))
+        subject.send(.requestChangedPIN(remainingAttempts: remainingAttempts, pinCallback: enterOldAndNewPIN.confirmPassword))
     }
     
     func onPinCanNewPinRequired(_ enterPinCanNewPin: (NSObjectProtocol & ConfirmPinCanNewPinOperationProtocol)!) {

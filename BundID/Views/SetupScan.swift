@@ -12,14 +12,14 @@ struct SetupScanState: Equatable {
     var transportPIN: String
     var newPIN: String
     var error: SetupScanError?
-    var attempts: Int?
+    var remainingAttempts: Int?
 }
 
 enum SetupScanAction: Equatable {
     case onAppear
     case startScan
     case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
-    case wrongTransportPIN(attempts: Int)
+    case wrongTransportPIN(remainingAttempts: Int)
     case cancelScan
     case scannedSuccessfully
 #if DEBUG
@@ -58,27 +58,27 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         case .cardRecognized: print("Card recognized.")
         case .cardRemoved: print("Card removed.")
         case .requestCAN(let canCallback): print("CAN callback not implemented.")
-        case .requestPIN(let attempts, let pinCallback): print("PIN callback not implemented.")
+        case .requestPIN(let remainingAttempts, let pinCallback): print("PIN callback not implemented.")
         case .requestPINAndCAN(let pinCANCallback): print("PIN CAN callback not implemented.")
         case .requestPUK(let pukCallback): print("PUK callback not implemented.")
         case .processCompletedSuccessfully:
             return Effect(value: .scannedSuccessfully)
         case .pinManagementStarted: print("PIN Management started.")
-        case .requestChangedPIN(let attempts, let pinCallback):
-            print("Providing changed PIN with \(attempts ?? 3) attempts.")
+        case .requestChangedPIN(let remainingAttempts, let pinCallback):
+            print("Providing changed PIN with \(remainingAttempts ?? 3) remaining attempts.")
             
             // This is our signal that the user canceled (for now)
-            guard let attempts = attempts else {
+            guard let remainingAttempts = remainingAttempts else {
                 return Effect(value: .cancelScan)
             }
             
-            if state.attempts == nil {
-                state.attempts = attempts
+            if state.remainingAttempts == nil {
+                state.remainingAttempts = remainingAttempts
             }
             
             // Wrong transport/personal PIN provided
-            if state.attempts != attempts {
-                return Effect(value: .wrongTransportPIN(attempts: attempts))
+            if state.remainingAttempts != remainingAttempts {
+                return Effect(value: .wrongTransportPIN(remainingAttempts: remainingAttempts))
             }
             
             pinCallback(state.transportPIN, state.newPIN)

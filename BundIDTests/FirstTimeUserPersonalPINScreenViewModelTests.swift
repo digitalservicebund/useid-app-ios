@@ -46,7 +46,7 @@ class SetupPersonalPINViewModelTests: XCTestCase {
                               environment: environment)
         store.send(.binding(.set(\.$enteredPIN2, "987654"))) { state in
             state.enteredPIN2 = "987654"
-            state.attempts = 1
+            state.remainingAttempts = 1
         }
         
         scheduler.advance(by: 0.2)

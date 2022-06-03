@@ -76,7 +76,7 @@ class DebugIDInteractionManager: IDInteractionManagerType {
         subject.send(.requestCardInsertion({ _ in }))
         subject.send(.cardRecognized)
         subject.send(.cardInteractionComplete)
-        subject.send(.requestChangedPIN(attempts: 3, pinCallback: { _, _ in }))
+        subject.send(.requestChangedPIN(remainingAttempts: 3, pinCallback: { _, _ in }))
         subject.send(.cardRemoved)
         subject.send(.requestCardInsertion({ _ in }))
         subject.send(.cardRecognized)
@@ -90,17 +90,17 @@ class DebugIDInteractionManager: IDInteractionManagerType {
         subject.send(.requestCardInsertion({ _ in }))
         subject.send(.cardRecognized)
         subject.send(.cardInteractionComplete)
-        subject.send(.requestChangedPIN(attempts: 3, pinCallback: { _, _ in }))
+        subject.send(.requestChangedPIN(remainingAttempts: 3, pinCallback: { _, _ in }))
         subject.send(.cardRemoved)
         subject.send(.requestCardInsertion({ _ in }))
         subject.send(.cardRecognized)
         subject.send(.cardInteractionComplete)
-        subject.send(.requestChangedPIN(attempts: 2, pinCallback: { _, _ in }))
+        subject.send(.requestChangedPIN(remainingAttempts: 2, pinCallback: { _, _ in }))
     }
     
     func runNFCError() {
         subject.send(.authenticationStarted)
-        subject.send(.requestChangedPIN(attempts: nil, pinCallback: { _, _ in }))
+        subject.send(.requestChangedPIN(remainingAttempts: nil, pinCallback: { _, _ in }))
     }
 }
 #endif

@@ -13,15 +13,15 @@ class EACInteraction: NSObject, EACInteractionType {
     }
     
     func onPinRequest(_ enterPin: (NSObjectProtocol & ConfirmPasswordOperationProtocol)!) {
-        onGeneralPINRequest(attempts: nil, enterPin: enterPin)
+        onGeneralPINRequest(remainingAttempts: nil, enterPin: enterPin)
     }
     
     func onPinRequest(_ attempt: Int32, withEnterPin enterPin: (NSObjectProtocol & ConfirmPasswordOperationProtocol)!) {
-        onGeneralPINRequest(attempts: Int(attempt), enterPin: enterPin)
+        onGeneralPINRequest(remainingAttempts: Int(attempt), enterPin: enterPin)
     }
     
-    private func onGeneralPINRequest(attempts: Int?, enterPin: ConfirmPasswordOperationProtocol) {
-        subject.send(.requestPIN(attempts: attempts, pinCallback: enterPin.confirmPassword))
+    private func onGeneralPINRequest(remainingAttempts: Int?, enterPin: ConfirmPasswordOperationProtocol) {
+        subject.send(.requestPIN(remainingAttempts: remainingAttempts, pinCallback: enterPin.confirmPassword))
     }
     
     func onPinCanRequest(_ enterPinCan: (NSObjectProtocol & ConfirmPinCanOperationProtocol)!) {

@@ -27,7 +27,7 @@ struct SetupPersonalPIN: View {
                                      shouldBeFocused: viewStore.binding(\.$focusPIN1),
                                      doneConfiguration: nil)
                         .font(.bundTitle)
-                        .modifier(Shake(animatableData: CGFloat(viewStore.attempts)))
+                        .modifier(Shake(animatableData: CGFloat(viewStore.remainingAttempts)))
                         if viewStore.showPIN2 {
                             VStack {
                                 Spacer(minLength: 40)
@@ -42,7 +42,7 @@ struct SetupPersonalPIN: View {
                                              shouldBeFocused: viewStore.binding(\.$focusPIN2),
                                              doneConfiguration: nil)
                                 .font(.bundTitle)
-                                .modifier(Shake(animatableData: CGFloat(viewStore.attempts)))
+                                .modifier(Shake(animatableData: CGFloat(viewStore.remainingAttempts)))
                                 Spacer()
                             }
                             .transition(.move(edge: .bottom).combined(with: .opacity))
