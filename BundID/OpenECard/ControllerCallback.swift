@@ -2,7 +2,7 @@ import Foundation
 import Combine
 import OpenEcard
 
-class ControllerCallback: NSObject, ControllerCallbackProtocol {
+class ControllerCallback: NSObject, ControllerCallbackType {
     
     private let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
     

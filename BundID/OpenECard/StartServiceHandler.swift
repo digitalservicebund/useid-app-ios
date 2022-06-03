@@ -4,18 +4,24 @@ import OpenEcard
 
 class StartServiceHandler: NSObject {
     
-    private let task: IDTask
+    let task: IDTask
     
-    private let controllerCallback: ControllerCallback = ControllerCallback()
-    private let eacInteraction: EACInteraction = EACInteraction()
-    private let pinManagementInteraction: PINManagementInteraction = PINManagementInteraction()
-    
-    private let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+    private let controllerCallback: ControllerCallbackType
+    private let eacInteraction: EACInteractionType
+    private let pinManagementInteraction: PINManagementInteractionType
     
     private var activationController: ActivationControllerProtocol?
     
-    init(task: IDTask) {
+    private let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+    
+    init(task: IDTask,
+         controllerCallback: ControllerCallbackType = ControllerCallback(),
+         eacInteraction: EACInteractionType = EACInteraction(),
+         pinManagementInteraction: PINManagementInteractionType = PINManagementInteraction()) {
         self.task = task
+        self.controllerCallback = controllerCallback
+        self.eacInteraction = eacInteraction
+        self.pinManagementInteraction = pinManagementInteraction
     }
     
     var publisher: EIDInteractionPublisher {

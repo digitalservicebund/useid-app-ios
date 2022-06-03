@@ -1,6 +1,7 @@
 import SwiftUI
 import TCACoordinators
 import ComposableArchitecture
+import OpenEcard
 
 @main
 struct BundIDApp: App {
@@ -8,12 +9,14 @@ struct BundIDApp: App {
     var store: Store<CoordinatorState, CoordinatorAction>
     
     init() {
+        let mainQueue = DispatchQueue.main.eraseToAnyScheduler()
         store = Store(
             initialState: CoordinatorState(routes: [.root(.home, embedInNavigationView: true)]),
             reducer: coordinatorReducer,
             environment: AppEnvironment(
-                mainQueue: DispatchQueue.main.eraseToAnyScheduler(),
-                idInteractionManager: IDInteractionManager()
+                mainQueue: mainQueue,
+                idInteractionManager: IDInteractionManager(openEcard: OpenEcardImp(),
+                                                           nfcMessageProvider: NFCMessageProvider())
             )
         )
     }

@@ -2,7 +2,7 @@ import Foundation
 import Combine
 import OpenEcard
 
-class EACInteraction: NSObject, EacInteractionProtocol {
+class EACInteraction: NSObject, EACInteractionType {
     
     private let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
     

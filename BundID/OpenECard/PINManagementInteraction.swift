@@ -2,7 +2,7 @@ import Foundation
 import Combine
 import OpenEcard
 
-class PINManagementInteraction: NSObject, PinManagementInteractionProtocol {
+class PINManagementInteraction: NSObject, PINManagementInteractionType {
     
     private let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
     
@@ -12,11 +12,13 @@ class PINManagementInteraction: NSObject, PinManagementInteractionProtocol {
         onGeneralPINChangeable(attempts: nil, enterOldAndNewPIN: enterOldNewPins)
     }
     
-    func onPinChangeable(_ attempts: Int32, withEnterOldNewPins enterOldNewPins: (NSObjectProtocol & ConfirmOldSetNewPasswordOperationProtocol)!) {
+    func onPinChangeable(_ attempts: Int32,
+                         withEnterOldNewPins enterOldNewPins: (NSObjectProtocol & ConfirmOldSetNewPasswordOperationProtocol)!) {
         onGeneralPINChangeable(attempts: Int(attempts), enterOldAndNewPIN: enterOldNewPins)
     }
     
-    private func onGeneralPINChangeable(attempts: Int?, enterOldAndNewPIN: ConfirmOldSetNewPasswordOperationProtocol) {
+    private func onGeneralPINChangeable(attempts: Int?,
+                                        enterOldAndNewPIN: ConfirmOldSetNewPasswordOperationProtocol) {
         subject.send(.requestChangedPIN(attempts: attempts, pinCallback: enterOldAndNewPIN.confirmPassword))
     }
     

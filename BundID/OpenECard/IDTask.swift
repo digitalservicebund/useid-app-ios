@@ -1,6 +1,6 @@
 import Foundation
 
-enum IDTask {
+enum IDTask: Equatable {
     case eac(tokenURL: String)
     case pinManagement
 }

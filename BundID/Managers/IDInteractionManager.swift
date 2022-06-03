@@ -1,15 +1,20 @@
 import Foundation
 import Combine
 import OpenEcard
+import CombineSchedulers
+
+typealias NFCConfigType = NSObjectProtocol & NFCConfigProtocol
+
+extension OpenEcardImp: OpenEcardType {}
 
 class IDInteractionManager: IDInteractionManagerType {
     
-    let openEcard: OpenEcardImp
-    let context: ContextManagerProtocol
+    private let openEcard: OpenEcardProtocol
+    private let context: ContextManagerProtocol
     
-    init() {
-        openEcard = OpenEcardImp()!
-        context = openEcard.context(NFCMessageProvider())!
+    init(openEcard: OpenEcardProtocol = OpenEcardImp(), nfcMessageProvider: NFCConfigType = NFCMessageProvider()) {
+        self.openEcard = openEcard
+        self.context = openEcard.context(nfcMessageProvider)
     }
     
     func identify(tokenURL: String) -> EIDInteractionPublisher {
@@ -23,13 +28,12 @@ class IDInteractionManager: IDInteractionManagerType {
     private func start(startServiceHandler: StartServiceHandler) -> EIDInteractionPublisher {
         context.initializeContext(startServiceHandler)
         return startServiceHandler.publisher
-            .receive(on: DispatchQueue.main)
-            .handleEvents(receiveCompletion: { [weak self] _ in
+            .handleEvents(receiveCompletion: { [context] _ in
                 startServiceHandler.cancel()
-                self?.context.terminateContext(StopServiceHandler())
-            }, receiveCancel: { [weak self] in
+                context.terminateContext(StopServiceHandler())
+            }, receiveCancel: { [context] in
                 startServiceHandler.cancel()
-                self?.context.terminateContext(StopServiceHandler())
+                context.terminateContext(StopServiceHandler())
             }).eraseToAnyPublisher()
     }
 }

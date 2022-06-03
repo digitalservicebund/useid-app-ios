@@ -10,6 +10,8 @@
 		E110400A281C2D2F004BA03E /* OpenEcard.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1104008281C2D1C004BA03E /* OpenEcard.xcframework */; };
 		E110400B281C2D2F004BA03E /* OpenEcard.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E1104008281C2D1C004BA03E /* OpenEcard.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E110400D281C389C004BA03E /* SetupIntro.swift in Sources */ = {isa = PBXBuildFile; fileRef = E110400C281C389C004BA03E /* SetupIntro.swift */; };
+		E12CB30428494B0B0039FD56 /* OpenECardTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB30328494B0B0039FD56 /* OpenECardTypes.swift */; };
+		E12CB30628494BD70039FD56 /* IDInteractionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */; };
 		E13925B82840FB7700161F5C /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925B72840FB7700161F5C /* Types.swift */; };
 		E13925C2284110FD00161F5C /* Cuckoo in Frameworks */ = {isa = PBXBuildFile; productRef = E13925C1284110FD00161F5C /* Cuckoo */; };
 		E13925C42841111100161F5C /* GeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925C32841111100161F5C /* GeneratedMocks.swift */; };
@@ -97,6 +99,8 @@
 /* Begin PBXFileReference section */
 		E1104008281C2D1C004BA03E /* OpenEcard.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = OpenEcard.xcframework; sourceTree = "<group>"; };
 		E110400C281C389C004BA03E /* SetupIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntro.swift; sourceTree = "<group>"; };
+		E12CB30328494B0B0039FD56 /* OpenECardTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenECardTypes.swift; sourceTree = "<group>"; };
+		E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDInteractionManagerTests.swift; sourceTree = "<group>"; };
 		E13925B72840FB7700161F5C /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		E13925C32841111100161F5C /* GeneratedMocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
 		E13925C62841119400161F5C /* MockIDInteractionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockIDInteractionManager.swift; sourceTree = "<group>"; };
@@ -259,6 +263,7 @@
 				E13925BD28410FE200161F5C /* Generated */,
 				E1AAACF228378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift */,
 				E149B15B2840F636002C1139 /* SetupScanTests.swift */,
+				E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */,
 			);
 			path = BundIDTests;
 			sourceTree = "<group>";
@@ -376,6 +381,7 @@
 			isa = PBXGroup;
 			children = (
 				E1104008281C2D1C004BA03E /* OpenEcard.xcframework */,
+				E12CB30328494B0B0039FD56 /* OpenECardTypes.swift */,
 				E59097B4281153A100CDA144 /* NFCMessageProvider.swift */,
 				E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */,
 				E5E69D822812FB4500A3B66A /* EIDInteractionEvent.swift */,
@@ -518,6 +524,7 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/${PROJECT_NAME}/Types/Types.swift",
+				"$(SRCROOT)/${PROJECT_NAME}/OpenECard/ControllerCallback.swift",
 			);
 			name = "[Cuckoo] Generate mocks";
 			outputFileListPaths = (
@@ -527,7 +534,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "OUTPUT_FILE=\"${PROJECT_DIR}/BundIDTests/Generated/GeneratedMocks.swift\"\n\necho \"Files: ${SCRIPT_INPUT_FILE_COUNT}\"\n\n\"${PROJECT_DIR}/Cuckoo/run\" --download generate --testable \"${PROJECT_NAME}\" \\\n--output \"${OUTPUT_FILE}\"\n\necho \"Generated Mocks File: ${OUTPUT_FILE}\"\n";
+			shellScript = "OUTPUT_FILE=\"${PROJECT_DIR}/BundIDTests/Generated/GeneratedMocks.swift\"\n\necho \"Files: ${SCRIPT_INPUT_FILE_COUNT}\"\n\n\"${PROJECT_DIR}/Cuckoo/run\" --download generate \\\n--testable \"${PROJECT_NAME}\" \\\n--output \"${OUTPUT_FILE}\"\n\necho \"Generated Mocks File: ${OUTPUT_FILE}\"\n";
 		};
 		E15FCE3F282BFCEA00CD7AD6 /* Localize via SwiftGen */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -558,6 +565,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E149B15C2840F636002C1139 /* SetupScanTests.swift in Sources */,
+				E12CB30628494BD70039FD56 /* IDInteractionManagerTests.swift in Sources */,
 				E13925C42841111100161F5C /* GeneratedMocks.swift in Sources */,
 				E1AAACF328378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift in Sources */,
 			);
@@ -585,6 +593,7 @@
 				E16708BE283E666A001A1637 /* Store+Empty.swift in Sources */,
 				E1CD8E9128214FDB008ADA2A /* SetupPINLetterIntro.swift in Sources */,
 				E5E69D852812FB6100A3B66A /* IDCardInteractionError.swift in Sources */,
+				E12CB30428494B0B0039FD56 /* OpenECardTypes.swift in Sources */,
 				E593E2682816847900154EB0 /* EIDAuthenticationRequest.swift in Sources */,
 				E16708BA283D7CA1001A1637 /* DialogButtons.swift in Sources */,
 				E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */,
