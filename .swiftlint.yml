@@ -20,6 +20,7 @@ opt_in_rules:
   - duplicate_imports
   - yoda_condition
   - xct_specific_matcher
+  - file_header
 
 disabled_rules:
   - line_length
@@ -35,6 +36,9 @@ disabled_rules:
 trailing_whitespace:
  ignores_empty_lines: true
  ignores_comments: true
+
+file_header:
+ forbidden_pattern: Created
 
 excluded:
   - .swift-packages

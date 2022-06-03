@@ -37,64 +37,74 @@ let setupIncorrectTransportPINReducer = Reducer<SetupIncorrectTransportPINState,
 struct SetupIncorrectTransportPIN: View {
     
     var store: Store<SetupIncorrectTransportPINState, SetupIncorrectTransportPINAction>
+    var viewStore: ViewStore<SetupIncorrectTransportPINState, SetupIncorrectTransportPINAction>
+    
+    init(store: Store<SetupIncorrectTransportPINState, SetupIncorrectTransportPINAction>) {
+        self.store = store
+        self.viewStore = ViewStore(store)
+    }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                    WithViewStore(store) { viewStore in
-                        Text(L10n.FirstTimeUser.IncorrectTransportPIN.title)
-                            .font(.bundLargeTitle)
-                            .foregroundColor(.blackish)
-                        Text(L10n.FirstTimeUser.IncorrectTransportPIN.body)
-                            .font(.bundBody)
-                            .foregroundColor(.blackish)
-                        ZStack {
-                            Image(decorative: "Transport-PIN")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                            PINEntryView(pin: viewStore.binding(\.$enteredPIN),
-                                         maxDigits: 5,
-                                         label: L10n.FirstTimeUser.IncorrectTransportPIN.textFieldLabel,
-                                         shouldBeFocused: viewStore.binding(\.$focusTextField),
-                                         doneConfiguration: DoneConfiguration(enabled: viewStore.enteredPIN.count == 5,
-                                                                              title: L10n.FirstTimeUser.IncorrectTransportPIN.continue,
-                                                                              handler: { pin in
+        NavigationView {
+            VStack(alignment: .leading) {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 24) {
+                        WithViewStore(store) { viewStore in
+                            Text(L10n.FirstTimeUser.IncorrectTransportPIN.title)
+                                .font(.bundLargeTitle)
+                                .foregroundColor(.blackish)
+                            Text(L10n.FirstTimeUser.IncorrectTransportPIN.body)
+                                .font(.bundBody)
+                                .foregroundColor(.blackish)
+                            ZStack {
+                                Image(decorative: "Transport-PIN")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                PINEntryView(pin: viewStore.binding(\.$enteredPIN),
+                                             maxDigits: 5,
+                                             label: L10n.FirstTimeUser.IncorrectTransportPIN.textFieldLabel,
+                                             shouldBeFocused: viewStore.binding(\.$focusTextField),
+                                             doneConfiguration: DoneConfiguration(enabled: viewStore.enteredPIN.count == 5,
+                                                                                  title: L10n.FirstTimeUser.IncorrectTransportPIN.continue,
+                                                                                  handler: { pin in
                                     viewStore.send(.done(transportPIN: pin))
-                            }))
-                            .font(.bundTitle)
-                            .background(
-                                Color.white.cornerRadius(10)
-                            )
-                            .padding(40)
-                        }
-                        VStack(spacing: 24) {
-                            VStack {
-                                Text(L10n.FirstTimeUser.IncorrectTransportPIN.remainingAttemptsLld(viewStore.remainingAttempts))
-                                    .font(.bundBody)
-                                    .foregroundColor(.blackish)
-                                    .multilineTextAlignment(.center)
-                                    .lineLimit(nil)
+                                }))
+                                .font(.bundTitle)
+                                .background(
+                                    Color.white.cornerRadius(10)
+                                )
+                                .padding(40)
                             }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button {
-                                    viewStore.send(.end)
-                                } label: {
-                                    Text(verbatim: L10n.FirstTimeUser.IncorrectTransportPIN.end)
+                            VStack(spacing: 24) {
+                                VStack {
+                                    Text(L10n.FirstTimeUser.IncorrectTransportPIN.remainingAttemptsLld(viewStore.remainingAttempts))
+                                        .font(.bundBody)
+                                        .foregroundColor(.blackish)
+                                        .multilineTextAlignment(.center)
+                                        .lineLimit(nil)
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            .toolbar {
+                                ToolbarItem(placement: .navigationBarLeading) {
+                                    Button {
+                                        viewStore.send(.end)
+                                    } label: {
+                                        Text(verbatim: L10n.FirstTimeUser.IncorrectTransportPIN.end)
+                                    }
                                 }
                             }
                         }
                     }
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
             }
+            .navigationBarTitleDisplayMode(.inline)
+            .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
         }
-        .navigationBarTitleDisplayMode(.inline)
-        .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
-        // .interactiveDismissDisabled()
+        .interactiveDismissDisabled {
+            viewStore.send(.end)
+        }
     }
 }
 
