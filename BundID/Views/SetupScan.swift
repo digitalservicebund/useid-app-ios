@@ -22,10 +22,19 @@ enum SetupScanAction: Equatable {
     case wrongTransportPIN(attempts: Int)
     case cancelScan
     case scannedSuccessfully
+#if DEBUG
+    case runDebugSequence(DebugIDInteractionManager.DebugSequence)
+#endif
 }
 
 let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> { state, action, environment in
     switch action {
+#if DEBUG
+    case .runDebugSequence(let debugSequence):
+        // swiftlint:disable:next force_cast
+        (environment.idInteractionManager as! DebugIDInteractionManager).runDebugSequence(debugSequence)
+        return .none
+#endif
     case .onAppear:
         return Effect(value: .startScan)
     case .startScan:
@@ -93,19 +102,38 @@ struct SetupScan: View {
     
     var body: some View {
         WithViewStore(store) { viewStore in
-            VStack {
-                LottieView(name: "38076-id-scan")
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                Spacer()
-                DialogButtons(store: store.stateless,
-                              secondary: nil,
-                              primary: .init(title: "Start scanning", action: .startScan))
-                .disabled(!viewStore.scanAvailable)
-            }
-            .onAppear {
-                viewStore.send(.onAppear)
+            ZStack {
+                VStack {
+                    LottieView(name: "38076-id-scan")
+                        .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                    Spacer()
+                    DialogButtons(store: store.stateless,
+                                  secondary: nil,
+                                  primary: .init(title: "Start scanning", action: .startScan))
+                    .disabled(!viewStore.scanAvailable)
+                }
+                .onAppear {
+                    viewStore.send(.onAppear)
+                }
+#if DEBUG
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button("NFC Error", action: {
+                            viewStore.send(.runDebugSequence(.runNFCError))
+                        }).padding(5).background(Color.red).cornerRadius(8)
+                        Button("Incorrect transport PIN", action: {
+                            viewStore.send(.runDebugSequence(.runTransportPINError))
+                        }).padding(5).background(Color.red).cornerRadius(8)
+                        Button("Success", action: {
+                            viewStore.send(.runDebugSequence(.runSuccessfully))
+                        }).padding(5).background(Color.green).cornerRadius(8)
+                    }.padding()
+                    Spacer()
+                }
+#endif
             }
         }
     }

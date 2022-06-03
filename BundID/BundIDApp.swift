@@ -10,13 +10,20 @@ struct BundIDApp: App {
     
     init() {
         let mainQueue = DispatchQueue.main.eraseToAnyScheduler()
+        
+#if DEBUG
+        let idInteractionManager = DebugIDInteractionManager()
+#else
+        let idInteractionManager = IDInteractionManager(openEcard: OpenEcardImp(),
+                                                        nfcMessageProvider: NFCMessageProvider())
+#endif
+
         store = Store(
             initialState: CoordinatorState(routes: [.root(.home, embedInNavigationView: true)]),
             reducer: coordinatorReducer,
             environment: AppEnvironment(
                 mainQueue: mainQueue,
-                idInteractionManager: IDInteractionManager(openEcard: OpenEcardImp(),
-                                                           nfcMessageProvider: NFCMessageProvider())
+                idInteractionManager: idInteractionManager
             )
         )
     }

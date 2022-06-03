@@ -37,3 +37,70 @@ class IDInteractionManager: IDInteractionManagerType {
             }).eraseToAnyPublisher()
     }
 }
+
+#if DEBUG
+class DebugIDInteractionManager: IDInteractionManagerType {
+    enum DebugSequence {
+        case runSuccessfully
+        case runTransportPINError
+        case runNFCError
+    }
+    
+    private let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+    
+    var publisher: EIDInteractionPublisher {
+        return subject.delay(for: .seconds(1), scheduler: RunLoop.main).eraseToAnyPublisher()
+    }
+    
+    func identify(tokenURL: String) -> EIDInteractionPublisher {
+        return publisher
+    }
+    
+    func changePIN() -> EIDInteractionPublisher {
+        return publisher
+    }
+    
+    func runDebugSequence(_ debugSequence: DebugSequence) {
+        switch debugSequence {
+        case .runSuccessfully:
+            runSuccessfully()
+        case .runTransportPINError:
+            runTransportPINError()
+        case .runNFCError:
+            runNFCError()
+        }
+    }
+    
+    func runSuccessfully() {
+        subject.send(.authenticationStarted)
+        subject.send(.requestCardInsertion({ _ in }))
+        subject.send(.cardRecognized)
+        subject.send(.cardInteractionComplete)
+        subject.send(.requestChangedPIN(attempts: 3, pinCallback: { _, _ in }))
+        subject.send(.cardRemoved)
+        subject.send(.requestCardInsertion({ _ in }))
+        subject.send(.cardRecognized)
+        subject.send(.cardInteractionComplete)
+        subject.send(.processCompletedSuccessfully)
+        subject.send(completion: .finished)
+    }
+    
+    func runTransportPINError() {
+        subject.send(.authenticationStarted)
+        subject.send(.requestCardInsertion({ _ in }))
+        subject.send(.cardRecognized)
+        subject.send(.cardInteractionComplete)
+        subject.send(.requestChangedPIN(attempts: 3, pinCallback: { _, _ in }))
+        subject.send(.cardRemoved)
+        subject.send(.requestCardInsertion({ _ in }))
+        subject.send(.cardRecognized)
+        subject.send(.cardInteractionComplete)
+        subject.send(.requestChangedPIN(attempts: 2, pinCallback: { _, _ in }))
+    }
+    
+    func runNFCError() {
+        subject.send(.authenticationStarted)
+        subject.send(.requestChangedPIN(attempts: nil, pinCallback: { _, _ in }))
+    }
+}
+#endif
