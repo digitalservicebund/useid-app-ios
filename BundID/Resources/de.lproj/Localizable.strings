@@ -11,9 +11,6 @@
 "firstTimeUser_pinLetter_no" = "Nein, neuen PIN-Brief bestellen";
 
 "firstTimeUser_transportPIN_title" = "Geben Sie Ihre 5-stellige Transport-PIN aus dem PIN-Brief ein";
-"firstTimeUser_transportPIN_error_incorrectPIN" = "Inkorrekte Transport-PIN";
-"firstTimeUser_transportPIN_error_tryAgain" = "Versuchen Sie es erneut.";
-"firstTimeUser_transportPIN_switchToPersonalPIN" = "Klicken Sie hier, wenn Ihre PIN 6-stellig ist";
 "firstTimeUser_transportPIN_continue" = "Weiter";
 "firstTimeUser_transportPIN_textFieldLabel" = "Transport-PIN, fünfstellig";
 
@@ -32,3 +29,15 @@
 "firstTimeUser_scan_title" = "Legen Sie Ihren Ausweis dicht an die Rückseite Ihres Smartphones – fast geschafft!";
 "firstTimeUser_scan_body" = "So wird Ihre persönliche PIN Ihrem Ausweis zugeordnet.";
 "firstTimeUser_scan_help" = "Mein Ausweis wird nicht erkannt";
+
+"firstTimeUser_incorrectTransportPIN_title" = "Falsche Transport-PIN";
+"firstTimeUser_incorrectTransportPIN_body" = "Geben Sie Ihre 5-stellige Transport-PIN aus dem PIN-Brief ein.";
+"firstTimeUser_incorrectTransportPIN_continue" = "Weiter";
+"firstTimeUser_incorrectTransportPIN_textFieldLabel" = "Transport-PIN, fünfstellig";
+"firstTimeUser_incorrectTransportPIN_end" = "Einrichtung beenden";
+"firstTimeUser_incorrectTransportPIN_end_title" = "Einrichtung beenden?";
+"firstTimeUser_incorrectTransportPIN_end_message" = "Möchten Sie die Einrichtung Ihres Personalausweises beenden?";
+"firstTimeUser_incorrectTransportPIN_end_confirm" = "Beenden";
+
+"general_ok" = "OK";
+"general_cancel" = "Abbrechen";

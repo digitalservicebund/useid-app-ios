@@ -18,29 +18,36 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
     .withRouteReducer(
         Reducer { state, action, _ in
             switch action {
-            case .routeAction(_, ScreenAction.home(.triggerSetup)):
+            case .routeAction(_, .home(.triggerSetup)):
                 state.routes.presentSheet(.setupIntro, embedInNavigationView: true)
-            case .routeAction(_, ScreenAction.setupIntro(.chooseNo)):
+            case .routeAction(_, .setupIntro(.chooseNo)):
                 state.routes.push(.setupTransportPINIntro)
             case .routeAction(_, .setupTransportPINIntro(.chooseHasPINLetter)):
                 state.routes.push(.setupTransportPIN(SetupTransportPINState()))
             case .routeAction(_, .setupTransportPINIntro(.chooseHasNoPINLetter)):
                 print("Not implemented")
-            case .routeAction(_, ScreenAction.setupIntro(.chooseYes)):
+            case .routeAction(_, .setupIntro(.chooseYes)):
                 print("Not implemented")
-            case .routeAction(_, ScreenAction.setupTransportPIN(SetupTransportPINAction.done(let transportPIN))):
+            case .routeAction(_, .setupTransportPIN(.done(let transportPIN))):
                 state.transportPIN = transportPIN
                 state.routes.push(.setupPersonalPINIntro)
-            case .routeAction(_, ScreenAction.setupPersonalPINIntro(.continue)):
+            case .routeAction(_, .setupPersonalPINIntro(.continue)):
                 state.routes.push(.setupPersonalPIN(SetupPersonalPINState()))
-            case .routeAction(_, action: ScreenAction.setupPersonalPIN(SetupPersonalPINAction.done(pin: let pin))):
+            case .routeAction(_, action: .setupPersonalPIN(.done(pin: let pin))):
                 state.routes.push(.setupScan(SetupScanState(transportPIN: state.transportPIN, newPIN: pin)))
-            case .routeAction(_, action: ScreenAction.setupScan(.scannedSuccessfully)):
+            case .routeAction(_, action: .setupScan(.scannedSuccessfully)):
                 state.routes.push(.setupDone)
-            case .routeAction(_, action: ScreenAction.setupScan(.wrongTransportPIN(attempts: let attempts))):
-                state.routes.presentSheet(.setupTransportPIN(SetupTransportPINState(remainingAttempts: attempts, previouslyUnsuccessful: true)), embedInNavigationView: true)
-            case .routeAction(_, action: ScreenAction.setupDone(.done)):
+            case .routeAction(_, action: .setupScan(.wrongTransportPIN(attempts: let attempts))):
+                state.routes.presentSheet(.setupIncorrectTransportPIN(SetupIncorrectTransportPINState(remainingAttempts: attempts)), embedInNavigationView: true)
+            case .routeAction(_, action: .setupDone(.done)):
                 state.routes.dismiss()
+            case .routeAction(_, action: .setupIncorrectTransportPIN(.done(let transportPIN))):
+                state.transportPIN = transportPIN
+                state.routes.dismiss()
+            case .routeAction(_, action: .setupIncorrectTransportPIN(.confirmEnd)):
+                return Effect.routeWithDelaysIfUnsupported(state.routes) {
+                    $0.dismiss(count: 2)
+                }
             default:
                 break
             }

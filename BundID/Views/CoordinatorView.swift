@@ -32,6 +32,9 @@ struct CoordinatorView: View {
                 CaseLet(state: /ScreenState.setupDone,
                         action: ScreenAction.setupDone,
                         then: SetupDone.init)
+                CaseLet(state: /ScreenState.setupIncorrectTransportPIN,
+                        action: ScreenAction.setupIncorrectTransportPIN,
+                        then: SetupIncorrectTransportPIN.init)
             }
         }
     }
