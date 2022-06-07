@@ -6,15 +6,17 @@ struct ContentView: View {
     @StateObject var viewModel = ContentViewViewModel()
     
     var body: some View {
-        Button {
-            viewModel.identify()
-        } label: {
-            Text("Identify")
-        }
-        Button {
-            viewModel.changePIN()
-        } label: {
-            Text("Change PIN")
+        VStack {
+            Button {
+                viewModel.identify()
+            } label: {
+                Text("Identify")
+            }
+            Button {
+                viewModel.changePIN()
+            } label: {
+                Text("Change PIN")
+            }
         }
     }
 }
