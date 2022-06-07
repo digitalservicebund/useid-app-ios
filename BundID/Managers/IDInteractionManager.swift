@@ -46,18 +46,18 @@ class DebugIDInteractionManager: IDInteractionManagerType {
         case runNFCError
     }
     
-    private let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+    private var subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>?
     
-    var publisher: EIDInteractionPublisher {
+    func identify(tokenURL: String) -> EIDInteractionPublisher {
+        let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+        self.subject = subject
         return subject.delay(for: .seconds(1), scheduler: RunLoop.main).eraseToAnyPublisher()
     }
     
-    func identify(tokenURL: String) -> EIDInteractionPublisher {
-        return publisher
-    }
-    
     func changePIN() -> EIDInteractionPublisher {
-        return publisher
+        let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+        self.subject = subject
+        return subject.delay(for: .seconds(1), scheduler: RunLoop.main).eraseToAnyPublisher()
     }
     
     func runDebugSequence(_ debugSequence: DebugSequence) {
@@ -72,6 +72,7 @@ class DebugIDInteractionManager: IDInteractionManagerType {
     }
     
     func runSuccessfully() {
+        guard let subject = subject else { fatalError() }
         subject.send(.authenticationStarted)
         subject.send(.requestCardInsertion({ _ in }))
         subject.send(.cardRecognized)
@@ -86,6 +87,7 @@ class DebugIDInteractionManager: IDInteractionManagerType {
     }
     
     func runTransportPINError() {
+        guard let subject = subject else { fatalError() }
         subject.send(.authenticationStarted)
         subject.send(.requestCardInsertion({ _ in }))
         subject.send(.cardRecognized)
@@ -99,8 +101,9 @@ class DebugIDInteractionManager: IDInteractionManagerType {
     }
     
     func runNFCError() {
+        guard let subject = subject else { fatalError() }
         subject.send(.authenticationStarted)
-        subject.send(.requestChangedPIN(remainingAttempts: nil, pinCallback: { _, _ in }))
+        subject.send(completion: .failure(.processFailed(resultCode: .INTERNAL_ERROR)))
     }
 }
 #endif
