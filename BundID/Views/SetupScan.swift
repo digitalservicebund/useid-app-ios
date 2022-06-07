@@ -49,6 +49,19 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         state.scanAvailable = true
         return .none
     case .scanEvent(.success(let event)):
+        return state.handle(event: event, environment: environment)
+    case .cancelScan:
+        state.scanAvailable = true
+        return .cancel(id: "ChangePIN")
+    case .wrongTransportPIN:
+        return .cancel(id: "ChangePIN")
+    case .scannedSuccessfully:
+        return .none
+    }
+}
+
+extension SetupScanState {
+    mutating func handle(event: EIDInteractionEvent, environment: AppEnvironment) -> Effect<SetupScanAction, Never> {
         switch event {
         case .authenticationStarted:
             print("Authentication started")
@@ -73,26 +86,20 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
                 return Effect(value: .cancelScan)
             }
             
-            if state.remainingAttempts == nil {
-                state.remainingAttempts = remainingAttempts
+            if self.remainingAttempts == nil {
+                self.remainingAttempts = remainingAttempts
             }
             
             // Wrong transport/personal PIN provided
-            if state.remainingAttempts != remainingAttempts {
+            if self.remainingAttempts != remainingAttempts {
                 return Effect(value: .wrongTransportPIN(remainingAttempts: remainingAttempts))
             }
             
-            pinCallback(state.transportPIN, state.newPIN)
-        case .requestCANAndChangedPIN(let pinCallback): print("Providing CAN and changed PIN not implemented.")
+            pinCallback(transportPIN, newPIN)
+        case .requestCANAndChangedPIN(let pinCallback):
+            print("Providing CAN and changed PIN not implemented.")
         default: print("Received unexpected event.")
         }
-        return .none
-    case .cancelScan:
-        state.scanAvailable = true
-        return .cancel(id: "ChangePIN")
-    case .wrongTransportPIN:
-        return .cancel(id: "ChangePIN")
-    case .scannedSuccessfully:
         return .none
     }
 }
