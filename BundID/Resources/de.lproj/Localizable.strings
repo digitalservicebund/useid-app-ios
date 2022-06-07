@@ -29,6 +29,7 @@
 "firstTimeUser_scan_title" = "Legen Sie Ihren Ausweis dicht an die Rückseite Ihres Smartphones – fast geschafft!";
 "firstTimeUser_scan_body" = "So wird Ihre persönliche PIN Ihrem Ausweis zugeordnet.";
 "firstTimeUser_scan_help" = "Mein Ausweis wird nicht erkannt";
+"firstTimeUser_scan_scan" = "Ausweis auslesen";
 
 "firstTimeUser_incorrectTransportPIN_title" = "Falsche Transport-PIN";
 "firstTimeUser_incorrectTransportPIN_body" = "Geben Sie Ihre 5-stellige Transport-PIN aus dem PIN-Brief ein.";
@@ -38,6 +39,9 @@
 "firstTimeUser_incorrectTransportPIN_end_title" = "Einrichtung beenden?";
 "firstTimeUser_incorrectTransportPIN_end_message" = "Möchten Sie die Einrichtung Ihres Personalausweises beenden?";
 "firstTimeUser_incorrectTransportPIN_end_confirm" = "Beenden";
+
+"firstTimeUser_scan_scanError_title" = "Ihr Ausweis konnte nicht ausgelesen werden";
+"firstTimeUser_scan_scanError_body" = "Versuchen Sie diese Schritte:\n\n • Entfernen Sie die Karte von Ihrem Telefon und legen Sie sie erneut an das Telefon.\n • Wenn Sie eine sehr dicke Handyhülle haben, versuchen Sie, die Hülle zu entfernen.\n • Versuchen Sie, den Bildschirm des Telefons ein- und wieder auszuschalten oder NFC zu deaktivieren und wieder zu aktivieren.";
 
 "general_ok" = "OK";
 "general_cancel" = "Abbrechen";

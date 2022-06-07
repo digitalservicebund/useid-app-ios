@@ -3,15 +3,11 @@ import ComposableArchitecture
 import Combine
 import Lottie
 
-enum SetupScanError: Equatable {
-    case idCardInteraction(IDCardInteractionError)
-}
-
 struct SetupScanState: Equatable {
     var scanAvailable: Bool = true
     var transportPIN: String
     var newPIN: String
-    var error: SetupScanError?
+    var error: IDCardInteractionError?
     var remainingAttempts: Int?
     var attempt = 0
 }
@@ -39,15 +35,16 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
     case .onAppear:
         return Effect(value: .startScan)
     case .startScan:
+        state.error = nil
         state.scanAvailable = false
         return environment.idInteractionManager.changePIN()
             .receive(on: environment.mainQueue)
             .catchToEffect(SetupScanAction.scanEvent)
             .cancellable(id: "ChangePIN", cancelInFlight: true)
     case .scanEvent(.failure(let error)):
-        state.error = .idCardInteraction(error)
+        state.error = error
         state.scanAvailable = true
-        return .none
+        return .cancel(id: "ChangePIN")
     case .scanEvent(.success(let event)):
         return state.handle(event: event, environment: environment)
     case .cancelScan:
@@ -56,7 +53,7 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
     case .wrongTransportPIN:
         return .cancel(id: "ChangePIN")
     case .scannedSuccessfully:
-        return .none
+        return .cancel(id: "ChangePIN")
     }
 }
 
@@ -110,28 +107,43 @@ struct SetupScan: View {
     
     var body: some View {
         WithViewStore(store) { viewStore in
-            VStack {
-                LottieView(name: "38076-id-scan")
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                Spacer()
+            VStack(alignment: .leading, spacing: 0) {
+                ScrollView {
+                    LottieView(name: "38076-id-scan")
+                        .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                    Spacer()
+                    IfLetStore(store.scope(state: \.error).actionless) { errorStore in
+                        VStack(alignment: .leading, spacing: 24) {
+                            Text(L10n.FirstTimeUser.Scan.ScanError.title)
+                                .font(.bundLargeTitle)
+                                .foregroundColor(.blackish)
+                            Text(L10n.FirstTimeUser.Scan.ScanError.body)
+                                .font(.bundBody)
+                                .foregroundColor(.blackish)
+                        }
+                        .padding()
+                    }
 #if targetEnvironment(simulator)
-                HStack {
-                    Button("NFC Error", action: {
-                        viewStore.send(.runDebugSequence(.runNFCError))
-                    }).padding(5).background(Color.red).cornerRadius(8)
-                    Button("Incorrect transport PIN", action: {
-                        viewStore.send(.runDebugSequence(.runTransportPINError))
-                    }).padding(5).background(Color.red).cornerRadius(8)
-                    Button("Success", action: {
-                        viewStore.send(.runDebugSequence(.runSuccessfully))
-                    }).padding(5).background(Color.green).cornerRadius(8)
-                }.padding()
+                    if !viewStore.scanAvailable {
+                        HStack {
+                            Button("NFC Error", action: {
+                                viewStore.send(.runDebugSequence(.runNFCError))
+                            }).padding(5).background(Color.red).cornerRadius(8)
+                            Button("Incorrect transport PIN", action: {
+                                viewStore.send(.runDebugSequence(.runTransportPINError))
+                            }).padding(5).background(Color.red).cornerRadius(8)
+                            Button("Success", action: {
+                                viewStore.send(.runDebugSequence(.runSuccessfully))
+                            }).padding(5).background(Color.green).cornerRadius(8)
+                        }.padding()
+                    }
 #endif
+                }
                 DialogButtons(store: store.stateless,
                               secondary: nil,
-                              primary: .init(title: "Start scanning", action: .startScan))
+                              primary: .init(title: L10n.FirstTimeUser.Scan.scan, action: .startScan))
                 .disabled(!viewStore.scanAvailable)
             }.onChange(of: viewStore.state.attempt, perform: { _ in
                 viewStore.send(.startScan)
@@ -146,5 +158,6 @@ struct SetupScan: View {
 struct SetupScan_Previews: PreviewProvider {
     static var previews: some View {
         SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
+        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456", error: .processFailed(resultCode: .INTERNAL_ERROR)), reducer: .empty, environment: AppEnvironment.preview))
     }
 }
