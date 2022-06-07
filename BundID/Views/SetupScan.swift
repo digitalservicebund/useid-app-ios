@@ -110,40 +110,35 @@ struct SetupScan: View {
     
     var body: some View {
         WithViewStore(store) { viewStore in
-            ZStack {
-                VStack {
-                    LottieView(name: "38076-id-scan")
-                        .aspectRatio(contentMode: .fit)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 10)
-                    Spacer()
-                    DialogButtons(store: store.stateless,
-                                  secondary: nil,
-                                  primary: .init(title: "Start scanning", action: .startScan))
-                    .disabled(!viewStore.scanAvailable)
-                }
-                .onAppear {
-                    viewStore.send(.onAppear)
-                }
+            VStack {
+                LottieView(name: "38076-id-scan")
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                Spacer()
 #if targetEnvironment(simulator)
-                VStack {
-                    HStack {
-                        Button("NFC Error", action: {
-                            viewStore.send(.runDebugSequence(.runNFCError))
-                        }).padding(5).background(Color.red).cornerRadius(8)
-                        Button("Incorrect transport PIN", action: {
-                            viewStore.send(.runDebugSequence(.runTransportPINError))
-                        }).padding(5).background(Color.red).cornerRadius(8)
-                        Button("Success", action: {
-                            viewStore.send(.runDebugSequence(.runSuccessfully))
-                        }).padding(5).background(Color.green).cornerRadius(8)
-                    }.padding()
-                    Spacer()
-                }.opacity(viewStore.scanAvailable ? 0 : 1)
+                HStack {
+                    Button("NFC Error", action: {
+                        viewStore.send(.runDebugSequence(.runNFCError))
+                    }).padding(5).background(Color.red).cornerRadius(8)
+                    Button("Incorrect transport PIN", action: {
+                        viewStore.send(.runDebugSequence(.runTransportPINError))
+                    }).padding(5).background(Color.red).cornerRadius(8)
+                    Button("Success", action: {
+                        viewStore.send(.runDebugSequence(.runSuccessfully))
+                    }).padding(5).background(Color.green).cornerRadius(8)
+                }.padding()
 #endif
+                DialogButtons(store: store.stateless,
+                              secondary: nil,
+                              primary: .init(title: "Start scanning", action: .startScan))
+                .disabled(!viewStore.scanAvailable)
             }.onChange(of: viewStore.state.attempt, perform: { _ in
                 viewStore.send(.startScan)
             })
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
         }
     }
 }
