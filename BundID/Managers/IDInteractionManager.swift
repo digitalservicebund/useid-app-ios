@@ -38,7 +38,7 @@ class IDInteractionManager: IDInteractionManagerType {
     }
 }
 
-#if DEBUG
+#if targetEnvironment(simulator)
 class DebugIDInteractionManager: IDInteractionManagerType {
     enum DebugSequence {
         case runSuccessfully

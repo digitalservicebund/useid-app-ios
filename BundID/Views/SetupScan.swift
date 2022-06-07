@@ -23,14 +23,14 @@ enum SetupScanAction: Equatable {
     case wrongTransportPIN(remainingAttempts: Int)
     case cancelScan
     case scannedSuccessfully
-#if DEBUG
+#if targetEnvironment(simulator)
     case runDebugSequence(DebugIDInteractionManager.DebugSequence)
 #endif
 }
 
 let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> { state, action, environment in
     switch action {
-#if DEBUG
+#if targetEnvironment(simulator)
     case .runDebugSequence(let debugSequence):
         // swiftlint:disable:next force_cast
         (environment.idInteractionManager as! DebugIDInteractionManager).runDebugSequence(debugSequence)
@@ -118,7 +118,7 @@ struct SetupScan: View {
                 .onAppear {
                     viewStore.send(.onAppear)
                 }
-#if DEBUG
+#if targetEnvironment(simulator)
                 VStack {
                     HStack {
                         Button("NFC Error", action: {

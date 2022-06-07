@@ -11,7 +11,7 @@ struct BundIDApp: App {
     init() {
         let mainQueue = DispatchQueue.main.eraseToAnyScheduler()
         
-#if DEBUG
+#if targetEnvironment(simulator)
         let idInteractionManager = DebugIDInteractionManager()
 #else
         let idInteractionManager = IDInteractionManager(openEcard: OpenEcardImp(),
