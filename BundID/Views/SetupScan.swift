@@ -5,6 +5,7 @@ import Lottie
 
 struct SetupScanState: Equatable {
     var isScanning: Bool = false
+    var showProgressCaption: Bool = false
     var transportPIN: String
     var newPIN: String
     var error: IDCardInteractionError?
@@ -63,11 +64,14 @@ extension SetupScanState {
         case .authenticationStarted:
             print("Authentication started")
         case .requestCardInsertion(let messageCallback):
+            self.showProgressCaption = false
             print("Request card insertion.")
             messageCallback("Request card insertion.")
         case .cardInteractionComplete: print("Card interaction complete.")
         case .cardRecognized: print("Card recognized.")
-        case .cardRemoved: print("Card removed.")
+        case .cardRemoved:
+            self.showProgressCaption = true
+            print("Card removed.")
         case .requestCAN(let canCallback): print("CAN callback not implemented.")
         case .requestPIN(let remainingAttempts, let pinCallback): print("PIN callback not implemented.")
         case .requestPINAndCAN(let pinCANCallback): print("PIN CAN callback not implemented.")
@@ -125,10 +129,26 @@ struct SetupScan: View {
                         .padding()
                     }
                 }
-                DialogButtons(store: store.stateless,
-                              secondary: nil,
-                              primary: .init(title: L10n.FirstTimeUser.Scan.scan, action: .startScan))
-                .disabled(viewStore.isScanning)
+                if viewStore.isScanning {
+                    VStack {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: Color.blue900))
+                            .scaleEffect(3)
+                            .frame(maxWidth: .infinity)
+                            .padding(50)
+                        if viewStore.showProgressCaption {
+                        	Text(L10n.FirstTimeUser.Scan.Progress.caption)
+                            	.font(.bundTitle)
+                            	.foregroundColor(.blackish)
+                                .padding(.bottom, 50)
+                        }
+                    }
+                } else {
+                    DialogButtons(store: store.stateless,
+                                  secondary: nil,
+                                  primary: .init(title: L10n.FirstTimeUser.Scan.scan, action: .startScan))
+                    .disabled(viewStore.isScanning)
+                }
             }.onChange(of: viewStore.state.attempt, perform: { _ in
                 viewStore.send(.startScan)
             })
@@ -163,7 +183,7 @@ struct SetupScan_Previews: PreviewProvider {
         SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
         SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456", error: .processFailed(resultCode: .INTERNAL_ERROR)), reducer: .empty, environment: AppEnvironment.preview))
         NavigationView {
-            SetupScan(store: Store(initialState: SetupScanState(isScanning: true, transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
+            SetupScan(store: Store(initialState: SetupScanState(isScanning: true, showProgressCaption: false, transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
         }
     }
 }

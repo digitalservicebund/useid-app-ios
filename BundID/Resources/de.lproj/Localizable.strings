@@ -31,6 +31,8 @@
 "firstTimeUser_scan_help" = "Mein Ausweis wird nicht erkannt";
 "firstTimeUser_scan_scan" = "Ausweis auslesen";
 
+"firstTimeUser_scan_progress_caption" = "Ausweis nicht bewegen";
+
 "firstTimeUser_incorrectTransportPIN_title" = "Falsche Transport-PIN";
 "firstTimeUser_incorrectTransportPIN_body" = "Geben Sie Ihre 5-stellige Transport-PIN aus dem PIN-Brief ein.";
 "firstTimeUser_incorrectTransportPIN_continue" = "Weiter";

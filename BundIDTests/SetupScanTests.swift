@@ -75,8 +75,12 @@ class SetupScanTests: XCTestCase {
             $0.remainingAttempts = 3
         }
         
-        store.receive(.scanEvent(.success(.cardRemoved)))
-        store.receive(.scanEvent(.success(.requestCardInsertion(cardInsertionCallback))))
+        store.receive(.scanEvent(.success(.cardRemoved))) {
+            $0.showProgressCaption = true
+        }
+        store.receive(.scanEvent(.success(.requestCardInsertion(cardInsertionCallback)))) {
+            $0.showProgressCaption = false
+        }
         store.receive(.scanEvent(.success(.cardRecognized)))
         store.receive(.scanEvent(.success(.cardInteractionComplete)))
         store.receive(.scanEvent(.success(.processCompletedSuccessfully)))
