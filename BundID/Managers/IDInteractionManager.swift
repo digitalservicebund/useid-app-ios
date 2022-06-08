@@ -40,9 +40,9 @@ class IDInteractionManager: IDInteractionManagerType {
 
 #if targetEnvironment(simulator)
 class DebugIDInteractionManager: IDInteractionManagerType {
-    enum DebugSequence {
+    enum DebugSequence: Equatable {
         case runSuccessfully
-        case runTransportPINError
+        case runTransportPINError(remainingAttempts: Int)
         case runNFCError
     }
     
@@ -64,8 +64,10 @@ class DebugIDInteractionManager: IDInteractionManagerType {
         switch debugSequence {
         case .runSuccessfully:
             runSuccessfully()
-        case .runTransportPINError:
-            runTransportPINError()
+        case .runTransportPINError(let remainingAttempts) where remainingAttempts == 2:
+            runCardSuspended()
+        case .runTransportPINError(let remainingAttempts):
+            runTransportPINError(remainingAttempts: remainingAttempts)
         case .runNFCError:
             runNFCError()
         }
@@ -86,24 +88,33 @@ class DebugIDInteractionManager: IDInteractionManagerType {
         subject.send(completion: .finished)
     }
     
-    func runTransportPINError() {
+    func runTransportPINError(remainingAttempts: Int) {
         guard let subject = subject else { fatalError() }
         subject.send(.authenticationStarted)
         subject.send(.requestCardInsertion({ _ in }))
         subject.send(.cardRecognized)
         subject.send(.cardInteractionComplete)
-        subject.send(.requestChangedPIN(remainingAttempts: 3, pinCallback: { _, _ in }))
+        subject.send(.requestChangedPIN(remainingAttempts: remainingAttempts, pinCallback: { _, _ in }))
         subject.send(.cardRemoved)
         subject.send(.requestCardInsertion({ _ in }))
         subject.send(.cardRecognized)
         subject.send(.cardInteractionComplete)
-        subject.send(.requestChangedPIN(remainingAttempts: 2, pinCallback: { _, _ in }))
+        subject.send(.requestChangedPIN(remainingAttempts: remainingAttempts - 1, pinCallback: { _, _ in }))
     }
     
     func runNFCError() {
         guard let subject = subject else { fatalError() }
         subject.send(.authenticationStarted)
         subject.send(completion: .failure(.processFailed(resultCode: .INTERNAL_ERROR)))
+    }
+    
+    func runCardSuspended() {
+        guard let subject = subject else { fatalError() }
+        subject.send(.authenticationStarted)
+        subject.send(.requestCardInsertion({ _ in }))
+        subject.send(.cardRecognized)
+        subject.send(.cardInteractionComplete)
+        subject.send(.requestCANAndChangedPIN(pinCallback: { _, _, _ in }))
     }
 }
 #endif

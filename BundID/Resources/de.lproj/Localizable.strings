@@ -41,7 +41,7 @@
 "firstTimeUser_incorrectTransportPIN_end_confirm" = "Beenden";
 
 "firstTimeUser_scan_scanError_title" = "Ihr Ausweis konnte nicht ausgelesen werden";
-"firstTimeUser_scan_scanError_body" = "Versuchen Sie diese Schritte:\n\n • Entfernen Sie die Karte von Ihrem Telefon und legen Sie sie erneut an das Telefon.\n • Wenn Sie eine sehr dicke Handyhülle haben, versuchen Sie, die Hülle zu entfernen.\n • Versuchen Sie, den Bildschirm des Telefons ein- und wieder auszuschalten oder NFC zu deaktivieren und wieder zu aktivieren.";
+"firstTimeUser_scan_scanError_body" = "Versuchen Sie diese Schritte:\n\n • Entfernen Sie die Karte von Ihrem Telefon und legen Sie sie erneut an das Telefon.\n\n • Wenn Sie eine sehr dicke Handyhülle haben, versuchen Sie, die Hülle zu entfernen.\n\n • Versuchen Sie, den Bildschirm des Telefons ein- und wieder auszuschalten oder NFC zu deaktivieren und wieder zu aktivieren.";
 
 "general_ok" = "OK";
 "general_cancel" = "Abbrechen";

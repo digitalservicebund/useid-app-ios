@@ -77,18 +77,17 @@ extension SetupScanState {
         case .pinManagementStarted: print("PIN Management started.")
         case .requestChangedPIN(let remainingAttempts, let pinCallback):
             print("Providing changed PIN with \(remainingAttempts ?? 3) remaining attempts.")
+            let remainingAttemptsBefore = self.remainingAttempts
+            self.remainingAttempts = remainingAttempts
             
             // This is our signal that the user canceled (for now)
             guard let remainingAttempts = remainingAttempts else {
                 return Effect(value: .cancelScan)
             }
             
-            if self.remainingAttempts == nil {
-                self.remainingAttempts = remainingAttempts
-            }
-            
             // Wrong transport/personal PIN provided
-            if self.remainingAttempts != remainingAttempts {
+            if let remainingAttemptsBefore = remainingAttemptsBefore,
+               remainingAttempts < remainingAttemptsBefore {
                 return Effect(value: .wrongTransportPIN(remainingAttempts: remainingAttempts))
             }
             
@@ -132,7 +131,7 @@ struct SetupScan: View {
                                 viewStore.send(.runDebugSequence(.runNFCError))
                             }).padding(5).background(Color.red).cornerRadius(8)
                             Button("Incorrect transport PIN", action: {
-                                viewStore.send(.runDebugSequence(.runTransportPINError))
+                                viewStore.send(.runDebugSequence(.runTransportPINError(remainingAttempts: viewStore.remainingAttempts ?? 3)))
                             }).padding(5).background(Color.red).cornerRadius(8)
                             Button("Success", action: {
                                 viewStore.send(.runDebugSequence(.runSuccessfully))
