@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E110400A281C2D2F004BA03E /* OpenEcard.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1104008281C2D1C004BA03E /* OpenEcard.xcframework */; };
-		E110400B281C2D2F004BA03E /* OpenEcard.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E1104008281C2D1C004BA03E /* OpenEcard.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E110400D281C389C004BA03E /* SetupIntro.swift in Sources */ = {isa = PBXBuildFile; fileRef = E110400C281C389C004BA03E /* SetupIntro.swift */; };
 		E12CB30428494B0B0039FD56 /* OpenECardTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB30328494B0B0039FD56 /* OpenECardTypes.swift */; };
 		E12CB30628494BD70039FD56 /* IDInteractionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */; };
@@ -22,6 +20,7 @@
 		E13925CD28411DA600161F5C /* 38076-id-scan.json in Resources */ = {isa = PBXBuildFile; fileRef = E13925CC28411DA600161F5C /* 38076-id-scan.json */; };
 		E13925CF28411E2400161F5C /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925CE28411E2300161F5C /* LottieView.swift */; };
 		E149B15C2840F636002C1139 /* SetupScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E149B15B2840F636002C1139 /* SetupScanTests.swift */; };
+		E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */ = {isa = PBXBuildFile; productRef = E15C22FF2850F5A8005CCBB9 /* OpenEcard */; };
 		E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */; };
 		E16708A7283CD483001A1637 /* SetupPersonalPINErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708A6283CD483001A1637 /* SetupPersonalPINErrorView.swift */; };
 		E16708AA283D1076001A1637 /* TCACoordinators in Frameworks */ = {isa = PBXBuildFile; productRef = E16708A9283D1076001A1637 /* TCACoordinators */; };
@@ -91,7 +90,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E110400B281C2D2F004BA03E /* OpenEcard.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -99,7 +97,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		E1104008281C2D1C004BA03E /* OpenEcard.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = OpenEcard.xcframework; sourceTree = "<group>"; };
 		E110400C281C389C004BA03E /* SetupIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntro.swift; sourceTree = "<group>"; };
 		E12CB30328494B0B0039FD56 /* OpenECardTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenECardTypes.swift; sourceTree = "<group>"; };
 		E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDInteractionManagerTests.swift; sourceTree = "<group>"; };
@@ -181,8 +178,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E16708AA283D1076001A1637 /* TCACoordinators in Frameworks */,
-				E110400A281C2D2F004BA03E /* OpenEcard.xcframework in Frameworks */,
 				E13925CA28411D4C00161F5C /* Lottie in Frameworks */,
+				E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,7 +383,6 @@
 		E5CEB28B2810466C0076B9FE /* OpenECard */ = {
 			isa = PBXGroup;
 			children = (
-				E1104008281C2D1C004BA03E /* OpenEcard.xcframework */,
 				E12CB30328494B0B0039FD56 /* OpenECardTypes.swift */,
 				E59097B4281153A100CDA144 /* NFCMessageProvider.swift */,
 				E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */,
@@ -448,6 +444,7 @@
 			packageProductDependencies = (
 				E16708A9283D1076001A1637 /* TCACoordinators */,
 				E13925C928411D4C00161F5C /* Lottie */,
+				E15C22FF2850F5A8005CCBB9 /* OpenEcard */,
 			);
 			productName = BundID;
 			productReference = E5CEB27A281041330076B9FE /* BundID.app */;
@@ -485,6 +482,7 @@
 				E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
 				E13925B928410F3F00161F5C /* XCRemoteSwiftPackageReference "Cuckoo" */,
 				E13925C828411D4C00161F5C /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */,
 			);
 			productRefGroup = E5CEB27B281041330076B9FE /* Products */;
 			projectDirPath = "";
@@ -942,6 +940,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TICESoftware/open-ecard-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.2;
+			};
+		};
 		E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/johnpatrickmorgan/TCACoordinators.git";
@@ -962,6 +968,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E13925C828411D4C00161F5C /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		E15C22FF2850F5A8005CCBB9 /* OpenEcard */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */;
+			productName = OpenEcard;
 		};
 		E16708A9283D1076001A1637 /* TCACoordinators */ = {
 			isa = XCSwiftPackageProductDependency;
