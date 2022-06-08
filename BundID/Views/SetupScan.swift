@@ -4,7 +4,7 @@ import Combine
 import Lottie
 
 struct SetupScanState: Equatable {
-    var scanAvailable: Bool = true
+    var isScanning: Bool = false
     var transportPIN: String
     var newPIN: String
     var error: IDCardInteractionError?
@@ -36,19 +36,19 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         return Effect(value: .startScan)
     case .startScan:
         state.error = nil
-        state.scanAvailable = false
+        state.isScanning = true
         return environment.idInteractionManager.changePIN()
             .receive(on: environment.mainQueue)
             .catchToEffect(SetupScanAction.scanEvent)
             .cancellable(id: "ChangePIN", cancelInFlight: true)
     case .scanEvent(.failure(let error)):
         state.error = error
-        state.scanAvailable = true
+        state.isScanning = false
         return .cancel(id: "ChangePIN")
     case .scanEvent(.success(let event)):
         return state.handle(event: event, environment: environment)
     case .cancelScan:
-        state.scanAvailable = true
+        state.isScanning = false
         return .cancel(id: "ChangePIN")
     case .wrongTransportPIN:
         return .cancel(id: "ChangePIN")
@@ -128,7 +128,7 @@ struct SetupScan: View {
                 DialogButtons(store: store.stateless,
                               secondary: nil,
                               primary: .init(title: L10n.FirstTimeUser.Scan.scan, action: .startScan))
-                .disabled(!viewStore.scanAvailable)
+                .disabled(viewStore.isScanning)
             }.onChange(of: viewStore.state.attempt, perform: { _ in
                 viewStore.send(.startScan)
             })
@@ -150,7 +150,7 @@ struct SetupScan: View {
                         }
                     } label: {
                          Image(systemName: "wrench")
-                    }.disabled(viewStore.scanAvailable)
+                    }.disabled(!viewStore.isScanning)
                 }
             }
 #endif
@@ -162,5 +162,8 @@ struct SetupScan_Previews: PreviewProvider {
     static var previews: some View {
         SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
         SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456", error: .processFailed(resultCode: .INTERNAL_ERROR)), reducer: .empty, environment: AppEnvironment.preview))
+        NavigationView {
+            SetupScan(store: Store(initialState: SetupScanState(isScanning: true, transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
+        }
     }
 }

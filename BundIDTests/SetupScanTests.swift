@@ -61,7 +61,7 @@ class SetupScanTests: XCTestCase {
         }
         
         store.send(.startScan) {
-            $0.scanAvailable = false
+            $0.isScanning = true
         }
         
         scheduler.advance()
@@ -103,14 +103,14 @@ class SetupScanTests: XCTestCase {
         }
         
         store.send(.startScan) {
-            $0.scanAvailable = false
+            $0.isScanning = true
         }
         
         scheduler.advance()
         
         store.receive(.scanEvent(.failure(.frameworkError(message: "Fail")))) {
             $0.error = .frameworkError(message: "Fail")
-            $0.scanAvailable = true
+            $0.isScanning = false
         }
     }
 }
