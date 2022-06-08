@@ -555,7 +555,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/BundID/Helpers/LocalizedStrings+Generated.swift",
+				"$(PROJECT_DIR)/BundID/Helpers/LocalizedStrings+Generated.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
