@@ -114,7 +114,7 @@ struct SetupScan: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
                     Spacer()
-                    IfLetStore(store.scope(state: \.error).actionless) { errorStore in
+                    IfLetStore(store.scope(state: \.error).actionless) { _ in
                         VStack(alignment: .leading, spacing: 24) {
                             Text(L10n.FirstTimeUser.Scan.ScanError.title)
                                 .font(.bundLargeTitle)
