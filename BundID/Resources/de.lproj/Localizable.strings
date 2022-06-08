@@ -45,5 +45,11 @@
 "firstTimeUser_scan_scanError_title" = "Ihr Ausweis konnte nicht ausgelesen werden";
 "firstTimeUser_scan_scanError_body" = "Versuchen Sie diese Schritte:\n\n • Entfernen Sie die Karte von Ihrem Telefon und legen Sie sie erneut an das Telefon.\n\n • Wenn Sie eine sehr dicke Handyhülle haben, versuchen Sie, die Hülle zu entfernen.\n\n • Versuchen Sie, den Bildschirm des Telefons ein- und wieder auszuschalten oder NFC zu deaktivieren und wieder zu aktivieren.";
 
+"firstTimeUser_cardDeactivated_title" = "Für Ihren Ausweis ist die Online-Ausweisfunktion nicht aktiviert";
+"firstTimeUser_cardDeactivated_body" = "Wenden Sie sich an Ihr Bürgeramt, um die Online-Ausweisfunktion zu aktivieren.\n\nSie wissen nicht, an wen Sie sich wenden können? Rufen Sie die 115 an oder informieren Sie sich unter:";
+"firstTimeUser_cardDeactivated_link_title" = "Behördenfinder Deutschland";
+"firstTimeUser_cardDeactivated_link_url" = "https://behoerdenfinder.de";
+"firstTimeUser_cardDeactivated_close" = "Schließen";
+
 "general_ok" = "OK";
 "general_cancel" = "Abbrechen";

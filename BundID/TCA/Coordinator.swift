@@ -57,6 +57,10 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                 state.routes.push(.setupScan(SetupScanState(transportPIN: state.transportPIN, newPIN: pin)))
             case .routeAction(_, action: .setupScan(.scannedSuccessfully)):
                 state.routes.push(.setupDone)
+            case .routeAction(_, action: .setupScan(.cardDeactivated)):
+                state.routes.push(.setupCardDeactivated)
+            case .routeAction(_, action: .setupCardDeactivated(.done)):
+                state.routes.dismiss()
             case .routeAction(_, action: .setupScan(.wrongTransportPIN(remainingAttempts: let remainingAttempts))):
                 state.routes.presentSheet(.setupIncorrectTransportPIN(SetupIncorrectTransportPINState(remainingAttempts: remainingAttempts)))
             case .routeAction(_, action: .setupDone(.done)):

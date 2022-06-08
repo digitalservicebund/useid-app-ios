@@ -18,6 +18,7 @@ enum SetupScanAction: Equatable {
     case startScan
     case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case wrongTransportPIN(remainingAttempts: Int)
+    case cardDeactivated
     case cancelScan
     case scannedSuccessfully
 #if targetEnvironment(simulator)
@@ -45,11 +46,18 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
     case .scanEvent(.failure(let error)):
         state.error = error
         state.isScanning = false
+        
+        if error == .cardDeactivated {
+            return Effect(value: .cardDeactivated)
+        }
+        
         return .cancel(id: "ChangePIN")
     case .scanEvent(.success(let event)):
         return state.handle(event: event, environment: environment)
     case .cancelScan:
         state.isScanning = false
+        return .cancel(id: "ChangePIN")
+    case .cardDeactivated:
         return .cancel(id: "ChangePIN")
     case .wrongTransportPIN:
         return .cancel(id: "ChangePIN")
@@ -164,6 +172,9 @@ struct SetupScan: View {
                         }
                         Button("Incorrect transport PIN") {
                             viewStore.send(.runDebugSequence(.runTransportPINError(remainingAttempts: viewStore.remainingAttempts ?? 3)))
+                        }
+                        Button("Card deactivated") {
+                            viewStore.send(.runDebugSequence(.runCardDeactivated))
                         }
                         Button("Success") {
                             viewStore.send(.runDebugSequence(.runSuccessfully))

@@ -44,6 +44,7 @@ class DebugIDInteractionManager: IDInteractionManagerType {
         case runSuccessfully
         case runTransportPINError(remainingAttempts: Int)
         case runNFCError
+        case runCardDeactivated
     }
     
     private var subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>?
@@ -70,6 +71,8 @@ class DebugIDInteractionManager: IDInteractionManagerType {
             runTransportPINError(remainingAttempts: remainingAttempts)
         case .runNFCError:
             runNFCError()
+        case .runCardDeactivated:
+            runCardDeactivated()
         }
     }
     
@@ -106,6 +109,12 @@ class DebugIDInteractionManager: IDInteractionManagerType {
         guard let subject = subject else { fatalError() }
         subject.send(.authenticationStarted)
         subject.send(completion: .failure(.processFailed(resultCode: .INTERNAL_ERROR)))
+    }
+    
+    func runCardDeactivated() {
+        guard let subject = subject else { fatalError() }
+        subject.send(.authenticationStarted)
+        subject.send(completion: .failure(.cardDeactivated))
     }
     
     func runCardSuspended() {
