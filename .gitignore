@@ -78,7 +78,8 @@ Dependencies/
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
-fastlane/test_output
+fastlane/test_output/*
+!fastlane/test_output/.gitkeep
 
 # Code Injection
 #
