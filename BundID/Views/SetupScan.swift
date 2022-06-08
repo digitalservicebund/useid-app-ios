@@ -124,21 +124,6 @@ struct SetupScan: View {
                         }
                         .padding()
                     }
-#if targetEnvironment(simulator)
-                    if !viewStore.scanAvailable {
-                        HStack {
-                            Button("NFC Error", action: {
-                                viewStore.send(.runDebugSequence(.runNFCError))
-                            }).padding(5).background(Color.red).cornerRadius(8)
-                            Button("Incorrect transport PIN", action: {
-                                viewStore.send(.runDebugSequence(.runTransportPINError(remainingAttempts: viewStore.remainingAttempts ?? 3)))
-                            }).padding(5).background(Color.red).cornerRadius(8)
-                            Button("Success", action: {
-                                viewStore.send(.runDebugSequence(.runSuccessfully))
-                            }).padding(5).background(Color.green).cornerRadius(8)
-                        }.padding()
-                    }
-#endif
                 }
                 DialogButtons(store: store.stateless,
                               secondary: nil,
@@ -150,6 +135,25 @@ struct SetupScan: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
+#if targetEnvironment(simulator)
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Menu {
+                        Button("NFC Error") {
+                            viewStore.send(.runDebugSequence(.runNFCError))
+                        }
+                        Button("Incorrect transport PIN") {
+                            viewStore.send(.runDebugSequence(.runTransportPINError(remainingAttempts: viewStore.remainingAttempts ?? 3)))
+                        }
+                        Button("Success") {
+                            viewStore.send(.runDebugSequence(.runSuccessfully))
+                        }
+                    } label: {
+                         Image(systemName: "wrench")
+                    }.disabled(viewStore.scanAvailable)
+                }
+            }
+#endif
         }
     }
 }
