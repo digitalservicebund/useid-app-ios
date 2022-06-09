@@ -113,7 +113,7 @@ class SetupScanTests: XCTestCase {
         scheduler.advance()
         
         store.receive(.scanEvent(.failure(.frameworkError(message: "Fail")))) {
-            $0.error = .frameworkError(message: "Fail")
+            $0.error = .idCardInteraction(.frameworkError(message: "Fail"))
             $0.isScanning = false
         }
     }

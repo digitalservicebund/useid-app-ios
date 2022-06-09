@@ -3,12 +3,17 @@ import ComposableArchitecture
 import Combine
 import Lottie
 
+enum SetupScanError: Equatable {
+    case idCardInteraction(IDCardInteractionError)
+    case unexpectedEvent(EIDInteractionEvent)
+}
+
 struct SetupScanState: Equatable {
     var isScanning: Bool = false
     var showProgressCaption: Bool = false
     var transportPIN: String
     var newPIN: String
-    var error: IDCardInteractionError?
+    var error: SetupScanError?
     var remainingAttempts: Int?
     var attempt = 0
 }
@@ -18,7 +23,7 @@ enum SetupScanAction: Equatable {
     case startScan
     case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case wrongTransportPIN(remainingAttempts: Int)
-    case cardDeactivated
+    case error(SetupErrorType)
     case cancelScan
     case scannedSuccessfully
 #if targetEnvironment(simulator)
@@ -44,20 +49,23 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
             .catchToEffect(SetupScanAction.scanEvent)
             .cancellable(id: "ChangePIN", cancelInFlight: true)
     case .scanEvent(.failure(let error)):
-        state.error = error
+        state.error = .idCardInteraction(error)
         state.isScanning = false
         
-        if error == .cardDeactivated {
-            return Effect(value: .cardDeactivated)
+        switch error {
+        case .cardDeactivated:
+            return Effect(value: .error(.cardDeactivated))
+        case .cardBlocked:
+            return Effect(value: .error(.cardBlocked))
+        default:
+            return .cancel(id: "ChangePIN")
         }
-        
-        return .cancel(id: "ChangePIN")
     case .scanEvent(.success(let event)):
         return state.handle(event: event, environment: environment)
     case .cancelScan:
         state.isScanning = false
         return .cancel(id: "ChangePIN")
-    case .cardDeactivated:
+    case .error:
         return .cancel(id: "ChangePIN")
     case .wrongTransportPIN:
         return .cancel(id: "ChangePIN")
@@ -80,10 +88,6 @@ extension SetupScanState {
         case .cardRemoved:
             self.showProgressCaption = true
             print("Card removed.")
-        case .requestCAN(let canCallback): print("CAN callback not implemented.")
-        case .requestPIN(let remainingAttempts, let pinCallback): print("PIN callback not implemented.")
-        case .requestPINAndCAN(let pinCANCallback): print("PIN CAN callback not implemented.")
-        case .requestPUK(let pukCallback): print("PUK callback not implemented.")
         case .processCompletedSuccessfully:
             return Effect(value: .scannedSuccessfully)
         case .pinManagementStarted: print("PIN Management started.")
@@ -104,11 +108,51 @@ extension SetupScanState {
             }
             
             pinCallback(transportPIN, newPIN)
-        case .requestCANAndChangedPIN(let pinCallback):
-            print("Providing CAN and changed PIN not implemented.")
-        default: print("Received unexpected event.")
+        case .requestCANAndChangedPIN:
+            print("CAN to change PIN requested, so card is suspended. Callback not implemented yet.")
+            return Effect(value: .error(.cardSuspended))
+        case .requestPUK:
+            print("PUK requested, so card is blocked. Callback not implemented yet.")
+            return Effect(value: .error(.cardBlocked))
+        default:
+            self.error = .unexpectedEvent(event)
+            print("Received unexpected event.")
+            return Effect(value: .cancelScan)
         }
         return .none
+    }
+}
+
+extension SetupScanState {
+    var errorTitle: String? {
+        switch self.error {
+        case .idCardInteraction:
+            return L10n.FirstTimeUser.Scan.ScanError.IdCardInteraction.title
+        case .unexpectedEvent:
+            return L10n.FirstTimeUser.Scan.ScanError.UnexpectedEvent.title
+        default:
+            return nil
+        }
+    }
+
+    var errorBody: String? {
+        switch self.error {
+        case .idCardInteraction:
+            return L10n.FirstTimeUser.Scan.ScanError.IdCardInteraction.body
+        case .unexpectedEvent:
+            return L10n.FirstTimeUser.Scan.ScanError.UnexpectedEvent.body
+        default:
+            return nil
+        }
+    }
+    
+    var showLottie: Bool {
+        switch self.error {
+        case .unexpectedEvent:
+            return false
+        default:
+            return true
+        }
     }
 }
 
@@ -120,21 +164,16 @@ struct SetupScan: View {
         WithViewStore(store) { viewStore in
             VStack(alignment: .leading, spacing: 0) {
                 ScrollView {
-                    LottieView(name: "38076-id-scan")
-                        .aspectRatio(contentMode: .fit)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 10)
-                    Spacer()
-                    IfLetStore(store.scope(state: \.error).actionless) { _ in
-                        VStack(alignment: .leading, spacing: 24) {
-                            Text(L10n.FirstTimeUser.Scan.ScanError.title)
-                                .font(.bundLargeTitle)
-                                .foregroundColor(.blackish)
-                            Text(L10n.FirstTimeUser.Scan.ScanError.body)
-                                .font(.bundBody)
-                                .foregroundColor(.blackish)
-                        }
-                        .padding()
+                    if viewStore.state.showLottie {
+                        LottieView(name: "38076-id-scan")
+                            .aspectRatio(contentMode: .fit)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
+                        Spacer()
+                    }
+                    
+                    if let title = viewStore.state.errorTitle {
+                        HeaderView(titleKey: title, bodyKey: viewStore.state.errorBody)
                     }
                 }
                 if viewStore.isScanning {
@@ -176,6 +215,12 @@ struct SetupScan: View {
                         Button("Card deactivated") {
                             viewStore.send(.runDebugSequence(.runCardDeactivated))
                         }
+                        Button("Card blocked") {
+                            viewStore.send(.runDebugSequence(.runCardBlocked))
+                        }
+                        Button("Unexpected event") {
+                            viewStore.send(.runDebugSequence(.runUnexpectedEvent))
+                        }
                         Button("Success") {
                             viewStore.send(.runDebugSequence(.runSuccessfully))
                         }
@@ -192,7 +237,8 @@ struct SetupScan: View {
 struct SetupScan_Previews: PreviewProvider {
     static var previews: some View {
         SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
-        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456", error: .processFailed(resultCode: .INTERNAL_ERROR)), reducer: .empty, environment: AppEnvironment.preview))
+        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456", error: .idCardInteraction(.processFailed(resultCode: .INTERNAL_ERROR))), reducer: .empty, environment: AppEnvironment.preview))
+        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456", error: .unexpectedEvent(.requestPINAndCAN({ _, _ in }))), reducer: .empty, environment: AppEnvironment.preview))
         NavigationView {
             SetupScan(store: Store(initialState: SetupScanState(isScanning: true, showProgressCaption: false, transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
         }

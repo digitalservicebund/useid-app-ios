@@ -38,9 +38,9 @@ struct CoordinatorView: View {
                     CaseLet(state: /ScreenState.setupDone,
                             action: ScreenAction.setupDone,
                             then: SetupDone.init)
-                    CaseLet(state: /ScreenState.setupCardDeactivated,
-                            action: ScreenAction.setupCardDeactivated,
-                            then: SetupCardDeactivated.init)
+                    CaseLet(state: /ScreenState.setupError,
+                            action: ScreenAction.setupError,
+                            then: SetupError.init)
                     CaseLet(state: /ScreenState.setupIncorrectTransportPIN,
                             action: ScreenAction.setupIncorrectTransportPIN,
                             then: SetupIncorrectTransportPIN.init)

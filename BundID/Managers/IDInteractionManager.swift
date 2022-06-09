@@ -45,6 +45,8 @@ class DebugIDInteractionManager: IDInteractionManagerType {
         case runTransportPINError(remainingAttempts: Int)
         case runNFCError
         case runCardDeactivated
+        case runCardBlocked
+        case runUnexpectedEvent
     }
     
     private var subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>?
@@ -73,6 +75,10 @@ class DebugIDInteractionManager: IDInteractionManagerType {
             runNFCError()
         case .runCardDeactivated:
             runCardDeactivated()
+        case .runCardBlocked:
+            runCardBlocked()
+        case .runUnexpectedEvent:
+            runUnexpectedEvent()
         }
     }
     
@@ -124,6 +130,24 @@ class DebugIDInteractionManager: IDInteractionManagerType {
         subject.send(.cardRecognized)
         subject.send(.cardInteractionComplete)
         subject.send(.requestCANAndChangedPIN(pinCallback: { _, _, _ in }))
+    }
+    
+    func runCardBlocked() {
+        guard let subject = subject else { fatalError() }
+        subject.send(.authenticationStarted)
+        subject.send(.requestCardInsertion({ _ in }))
+        subject.send(.cardRecognized)
+        subject.send(.cardInteractionComplete)
+        subject.send(.requestPUK({ _ in }))
+    }
+    
+    func runUnexpectedEvent() {
+        guard let subject = subject else { fatalError() }
+        subject.send(.authenticationStarted)
+        subject.send(.requestCardInsertion({ _ in }))
+        subject.send(.cardRecognized)
+        subject.send(.cardInteractionComplete)
+        subject.send(.requestPINAndCAN({ _, _ in }))
     }
 }
 #endif
