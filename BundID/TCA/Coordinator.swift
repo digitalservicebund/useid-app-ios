@@ -3,6 +3,7 @@ import FlowStacks
 import TCACoordinators
 import IdentifiedCollections
 
+// TODO: SetupCoordinatorState
 struct CoordinatorState: Equatable, IndexedRouterState {
     var transportPIN: String = ""
     var attempt: Int = 0
@@ -28,11 +29,13 @@ struct CoordinatorState: Equatable, IndexedRouterState {
     var states: [Route<ScreenState>]
 }
 
+// TODO: SetupCoordinatorAction
 enum CoordinatorAction: IndexedRouterAction {
     case routeAction(Int, action: ScreenAction)
     case updateRoutes([Route<ScreenState>])
 }
 
+// TODO: setupCoordinatorReducer with State and Action adjusted
 let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironment> = screenReducer
     .forEachIndexedRoute(environment: { $0 })
     .withRouteReducer(
@@ -79,3 +82,5 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
             return .none
         }
     ).debug()
+
+// TODO: Introduce new coordinatorReducer with State and Action which handles: HomeScreen, SetupFlowCoordinator, IdentificationCoordinator
