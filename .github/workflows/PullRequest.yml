@@ -115,8 +115,8 @@ jobs:
         with:
           path: fastlane/test_output
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}                       
-      - name: Run UnitTests
-        run: bundle exec fastlane test_without_building testplan:UnitTests
+      - name: Run all tests
+        run: bundle exec fastlane test_without_building testplan:AllTests
       - name: Archive xcresult
         if: failure()
         uses: actions/upload-artifact@v2
