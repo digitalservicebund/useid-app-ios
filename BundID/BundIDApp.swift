@@ -19,7 +19,7 @@ struct BundIDApp: App {
 #endif
 
         store = Store(
-            initialState: CoordinatorState(states: [.root(.home, embedInNavigationView: true)]),
+            initialState: CoordinatorState(routes: [.root(.home, embedInNavigationView: true)]),
             reducer: coordinatorReducer,
             environment: AppEnvironment(
                 mainQueue: mainQueue,

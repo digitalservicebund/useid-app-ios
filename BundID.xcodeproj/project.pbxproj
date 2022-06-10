@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		E110400D281C389C004BA03E /* SetupIntro.swift in Sources */ = {isa = PBXBuildFile; fileRef = E110400C281C389C004BA03E /* SetupIntro.swift */; };
 		E11EB2A928537DE1008B4042 /* XCUITestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */; };
+		E11EB2AB2853A8B6008B4042 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11EB2AA2853A8B6008B4042 /* Coordinator.swift */; };
+		E11EB2AD2853A8EA008B4042 /* SetupScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11EB2AC2853A8EA008B4042 /* SetupScreens.swift */; };
 		E12CB30428494B0B0039FD56 /* OpenECardTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB30328494B0B0039FD56 /* OpenECardTypes.swift */; };
 		E12CB30628494BD70039FD56 /* IDInteractionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */; };
 		E12CB308284A146E0039FD56 /* SetupIncorrectTransportPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB307284A146D0039FD56 /* SetupIncorrectTransportPIN.swift */; };
@@ -28,7 +30,7 @@
 		E16708AC283D26A2001A1637 /* CoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708AB283D26A2001A1637 /* CoordinatorView.swift */; };
 		E16708AE283D4224001A1637 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708AD283D4224001A1637 /* HomeView.swift */; };
 		E16708B1283D4EAC001A1637 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708B0283D4EAC001A1637 /* AppEnvironment.swift */; };
-		E16708B3283D4ED2001A1637 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708B2283D4ED2001A1637 /* Coordinator.swift */; };
+		E16708B3283D4ED2001A1637 /* SetupCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708B2283D4ED2001A1637 /* SetupCoordinator.swift */; };
 		E16708B5283D4F25001A1637 /* Screens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708B4283D4F25001A1637 /* Screens.swift */; };
 		E16708B7283D7C2B001A1637 /* DialogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708B6283D7C2B001A1637 /* DialogView.swift */; };
 		E16708BA283D7CA1001A1637 /* DialogButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708B9283D7CA1001A1637 /* DialogButtons.swift */; };
@@ -109,6 +111,8 @@
 /* Begin PBXFileReference section */
 		E110400C281C389C004BA03E /* SetupIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntro.swift; sourceTree = "<group>"; };
 		E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUITestHelper.swift; sourceTree = "<group>"; };
+		E11EB2AA2853A8B6008B4042 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		E11EB2AC2853A8EA008B4042 /* SetupScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScreens.swift; sourceTree = "<group>"; };
 		E12CB30328494B0B0039FD56 /* OpenECardTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenECardTypes.swift; sourceTree = "<group>"; };
 		E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDInteractionManagerTests.swift; sourceTree = "<group>"; };
 		E12CB307284A146D0039FD56 /* SetupIncorrectTransportPIN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupIncorrectTransportPIN.swift; sourceTree = "<group>"; };
@@ -124,7 +128,7 @@
 		E16708AB283D26A2001A1637 /* CoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorView.swift; sourceTree = "<group>"; };
 		E16708AD283D4224001A1637 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		E16708B0283D4EAC001A1637 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
-		E16708B2283D4ED2001A1637 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		E16708B2283D4ED2001A1637 /* SetupCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCoordinator.swift; sourceTree = "<group>"; };
 		E16708B4283D4F25001A1637 /* Screens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screens.swift; sourceTree = "<group>"; };
 		E16708B6283D7C2B001A1637 /* DialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogView.swift; sourceTree = "<group>"; };
 		E16708B9283D7CA1001A1637 /* DialogButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogButtons.swift; sourceTree = "<group>"; };
@@ -266,7 +270,9 @@
 			children = (
 				E16708B0283D4EAC001A1637 /* AppEnvironment.swift */,
 				E16708B4283D4F25001A1637 /* Screens.swift */,
-				E16708B2283D4ED2001A1637 /* Coordinator.swift */,
+				E11EB2AC2853A8EA008B4042 /* SetupScreens.swift */,
+				E11EB2AA2853A8B6008B4042 /* Coordinator.swift */,
+				E16708B2283D4ED2001A1637 /* SetupCoordinator.swift */,
 			);
 			path = TCA;
 			sourceTree = "<group>";
@@ -662,7 +668,7 @@
 				E1AB879E282283AB00C7FC94 /* Fonts.swift in Sources */,
 				E16708BC283D824D001A1637 /* Scheduler+Animation.swift in Sources */,
 				E593E26E2816853A00154EB0 /* StopServiceHandler.swift in Sources */,
-				E16708B3283D4ED2001A1637 /* Coordinator.swift in Sources */,
+				E16708B3283D4ED2001A1637 /* SetupCoordinator.swift in Sources */,
 				E16708C0283E6A07001A1637 /* SetupScan.swift in Sources */,
 				E1AAACEB2836668200A51183 /* ShakeEffect.swift in Sources */,
 				E13925CF28411E2400161F5C /* LottieView.swift in Sources */,
@@ -680,6 +686,7 @@
 				E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */,
 				E12CB308284A146E0039FD56 /* SetupIncorrectTransportPIN.swift in Sources */,
 				E1AB87A4282413A700C7FC94 /* PINTextField.swift in Sources */,
+				E11EB2AD2853A8EA008B4042 /* SetupScreens.swift in Sources */,
 				E593E2742816866200154EB0 /* EACInteraction.swift in Sources */,
 				E1AAACFB2837B9A200A51183 /* SetupPersonalPINState.swift in Sources */,
 				E1CD8E93282156F2008ADA2A /* SetupTransportPIN.swift in Sources */,
@@ -699,6 +706,7 @@
 				E5CEB280281041330076B9FE /* ContentView.swift in Sources */,
 				E593E2722816864800154EB0 /* ControllerCallback.swift in Sources */,
 				E1CD8E88281FF62F008ADA2A /* Colors.swift in Sources */,
+				E11EB2AB2853A8B6008B4042 /* Coordinator.swift in Sources */,
 				E5E69D872812FB7A00A3B66A /* IDTask.swift in Sources */,
 				E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */,
 				E1D307B02833A2500088DAFF /* SetupPersonalPIN.swift in Sources */,
