@@ -24,6 +24,14 @@
         "identifier" : "E1AAACEF28378C0E00A51183",
         "name" : "BundIDTests"
       }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:BundID.xcodeproj",
+        "identifier" : "E18E2236285349D200221DB1",
+        "name" : "BundIDUITests"
+      }
     }
   ],
   "version" : 1

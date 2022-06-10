@@ -64,7 +64,7 @@ jobs:
           name: swiftlint-${{ github.sha }}
           path: swiftlint.html
 
-  build:
+  buildForTesting:
     runs-on: self-hosted
     needs: dependencies
     steps:
@@ -82,11 +82,25 @@ jobs:
             .bundle
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}       
       - name: Build
-        run: bundle exec fastlane build
+        run: bundle exec fastlane build_for_testing
+      - name: Save DerivedData folder
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-derived-data
+        with:
+          path: DerivedData
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
+      - name: Save test_output folder
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-test-output
+        with:
+          path: fastlane/test_output
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
 
   runUnitTests:
     runs-on: self-hosted
-    needs: build
+    needs: buildForTesting
     steps:
       - name: Use rbenv shims
         run: echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
@@ -116,7 +130,48 @@ jobs:
           path: fastlane/test_output
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}                       
       - name: Run all tests
-        run: bundle exec fastlane test_without_building testplan:AllTests
+        run: bundle exec fastlane test_without_building testplan:UnitTests
+      - name: Archive xcresult
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: xcresult-${{ github.sha }}
+          path: fastlane/test_output/BundID.xcresult.zip
+
+  runUITests:
+    runs-on: self-hosted
+    needs: buildForTesting
+    steps:
+      - name: Use rbenv shims
+        run: echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+      - name: Check out repository code
+        uses: actions/checkout@v2          
+      - name: Restore Dependencies
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-dependencies
+        with:
+          path: |
+            vendor
+            .bundle
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
+      - name: Restore DerivedData folder
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-derived-data
+        with:
+          path: DerivedData
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
+      - name: Restore test_output folder
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-test-output
+        with:
+          path: fastlane/test_output
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}                       
+      - name: Run UITests
+        run: |
+          bundle exec fastlane test_without_building testplan:UITests
       - name: Archive xcresult
         if: failure()
         uses: actions/upload-artifact@v2

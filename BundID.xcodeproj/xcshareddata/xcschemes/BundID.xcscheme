@@ -32,6 +32,12 @@
             reference = "container:BundID/AllTests.xctestplan"
             default = "YES">
          </TestPlanReference>
+         <TestPlanReference
+            reference = "container:BundID/UnitTests.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:BundID/UITests.xctestplan">
+         </TestPlanReference>
       </TestPlans>
       <Testables>
          <TestableReference
@@ -43,6 +49,16 @@
                BlueprintIdentifier = "E1AAACEF28378C0E00A51183"
                BuildableName = "BundIDTests.xctest"
                BlueprintName = "BundIDTests"
+               ReferencedContainer = "container:BundID.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E18E2236285349D200221DB1"
+               BuildableName = "BundIDUITests.xctest"
+               BlueprintName = "BundIDUITests"
                ReferencedContainer = "container:BundID.xcodeproj">
             </BuildableReference>
          </TestableReference>
