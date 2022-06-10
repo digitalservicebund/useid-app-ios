@@ -23,10 +23,10 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Get App Version
 
-### ios build
+### ios build_for_testing
 
 ```sh
-[bundle exec] fastlane ios build
+[bundle exec] fastlane ios build_for_testing
 ```
 
 Build

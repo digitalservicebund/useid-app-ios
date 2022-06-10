@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "C4649707-2467-4BD5-83BE-FF89F570303E",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:BundID.xcodeproj",
+        "identifier" : "E18E2236285349D200221DB1",
+        "name" : "BundIDUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

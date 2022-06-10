@@ -33,14 +33,16 @@ platform :ios do
   end
 
   desc "Build"
-  lane :build do
+  lane :build_for_testing do
     scan(
       project: "#{PROJECT_FILENAME}.xcodeproj",
       scheme: 'BundID',
       cloned_source_packages_path: '.swift-packages',
       xcpretty_args: '--color',
       build_for_testing: true,
-      clean: true
+      output_xctestrun: true,
+      clean: true,
+      derived_data_path: "./DerivedData"
     )
   end
 
@@ -50,6 +52,7 @@ platform :ios do
       testPlan = options[:testplan] || "AllTests"
       run_tests(
         scheme: "BundID",
+        derived_data_path: "./DerivedData",
         cloned_source_packages_path: '.swift-packages',
         test_without_building: true,
         testplan: testPlan,
@@ -87,7 +90,7 @@ platform :ios do
 
   desc 'Test'
   lane :test do |options|
-    build(options)
+    build_for_testing(options)
     test_without_building(options)
   end
 
