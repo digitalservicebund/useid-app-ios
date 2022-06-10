@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E110400D281C389C004BA03E /* SetupIntro.swift in Sources */ = {isa = PBXBuildFile; fileRef = E110400C281C389C004BA03E /* SetupIntro.swift */; };
+		E11EB2A928537DE1008B4042 /* XCUITestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */; };
 		E12CB30428494B0B0039FD56 /* OpenECardTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB30328494B0B0039FD56 /* OpenECardTypes.swift */; };
 		E12CB30628494BD70039FD56 /* IDInteractionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */; };
 		E12CB308284A146E0039FD56 /* SetupIncorrectTransportPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB307284A146D0039FD56 /* SetupIncorrectTransportPIN.swift */; };
@@ -107,6 +108,7 @@
 
 /* Begin PBXFileReference section */
 		E110400C281C389C004BA03E /* SetupIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntro.swift; sourceTree = "<group>"; };
+		E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUITestHelper.swift; sourceTree = "<group>"; };
 		E12CB30328494B0B0039FD56 /* OpenECardTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenECardTypes.swift; sourceTree = "<group>"; };
 		E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDInteractionManagerTests.swift; sourceTree = "<group>"; };
 		E12CB307284A146D0039FD56 /* SetupIncorrectTransportPIN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupIncorrectTransportPIN.swift; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 			isa = PBXGroup;
 			children = (
 				E18E2239285349D200221DB1 /* BundIDUITests.swift */,
+				E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */,
 			);
 			path = BundIDUITests;
 			sourceTree = "<group>";
@@ -632,6 +635,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E11EB2A928537DE1008B4042 /* XCUITestHelper.swift in Sources */,
 				E18E223A285349D200221DB1 /* BundIDUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

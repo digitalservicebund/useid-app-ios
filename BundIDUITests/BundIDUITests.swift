@@ -2,40 +2,36 @@ import XCTest
 
 final class BundIDUITests: XCTestCase {
 
-    override func setUpWithError() throws {
-        continueAfterFailure = false
-    }
-
     func testSetupHappyPath() throws {
         let app = XCUIApplication()
         app.launch()
         
-        app.buttons["Einrichtung starten"].tap()
-        app.buttons["Nein, jetzt Online-Ausweis einrichten"].tap()
-        app.buttons["Ja, PIN-Brief vorhanden"].tap()
+        app.buttons["Einrichtung starten"].wait().tap()
+        app.buttons["Nein, jetzt Online-Ausweis einrichten"].wait().tap()
+        app.buttons["Ja, PIN-Brief vorhanden"].wait().tap()
         
         let transportPINTextField = app.textFields["Transport-PIN, fünfstellig"]
-        transportPINTextField.tap()
-        transportPINTextField.typeText("12345")
+        transportPINTextField.wait().tap()
+        transportPINTextField.waitAndTypeText("12345")
         
-        app.toolbars["Toolbar"].buttons["Weiter"].tap()
-        app.buttons["Persönliche PIN wählen"].tap()
+        app.toolbars["Toolbar"].buttons["Weiter"].wait().tap()
+        app.buttons["Persönliche PIN wählen"].wait().tap()
         
         let pin1TextField = app.secureTextFields["Persönliche PIN, sechsstellig"]
-        pin1TextField.tap()
-        pin1TextField.typeText("123456")
+        pin1TextField.wait().tap()
+        pin1TextField.waitAndTypeText("123456")
         
         let pin2TextField = app.secureTextFields["Persönliche PIN bestätigen, sechsstellig"]
-        pin2TextField.tap()
-        pin2TextField.typeText("123456")
+        pin2TextField.wait().tap()
+        pin2TextField.waitAndTypeText("123456")
         
-        app.navigationBars.buttons["Schraubenschlüssel"].tap()
-        app.buttons["Success"].tap()
+        app.navigationBars.buttons["Schraubenschlüssel"].wait().tap()
+        app.buttons["Success"].wait().tap()
         
-        XCTAssertTrue(app.staticTexts["Einrichtung abgeschlossen"].waitForExistence(timeout: 5))
+        app.staticTexts["Einrichtung abgeschlossen"].assertExistence()
         
-        app.buttons["Schließen"].tap()
+        app.buttons["Schließen"].wait().tap()
         
-        XCTAssertTrue(app.buttons["Einrichtung starten"].waitForExistence(timeout: 1))
+        app.buttons["Einrichtung starten"].assertExistence()
     }
 }
