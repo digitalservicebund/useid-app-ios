@@ -2,6 +2,7 @@ import ComposableArchitecture
 import FlowStacks
 import TCACoordinators
 import IdentifiedCollections
+import SwiftUI
 
 struct SetupCoordinatorState: Equatable, IndexedRouterState {
     var transportPIN: String = ""
@@ -77,3 +78,41 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
             return .none
         }
     ).debug()
+
+struct SetupCoordinatorView: View {
+    let store: Store<SetupCoordinatorState, SetupCoordinatorAction>
+    
+    var body: some View {
+        TCARouter(store) { screen in
+            SwitchStore(screen) {
+                CaseLet(state: /SetupScreenState.intro,
+                        action: SetupScreenAction.intro,
+                        then: SetupIntro.init)
+                CaseLet(state: /SetupScreenState.transportPINIntro,
+                        action: SetupScreenAction.transportPINIntro,
+                        then: SetupTransportPINIntro.init)
+                CaseLet(state: /SetupScreenState.transportPIN,
+                        action: SetupScreenAction.transportPIN,
+                        then: SetupTransportPIN.init)
+                CaseLet(state: /SetupScreenState.personalPINIntro,
+                        action: SetupScreenAction.personalPINIntro,
+                        then: SetupPersonalPINIntro.init)
+                CaseLet(state: /SetupScreenState.personalPIN,
+                        action: SetupScreenAction.personalPIN,
+                        then: SetupPersonalPIN.init)
+                CaseLet(state: /SetupScreenState.scan,
+                        action: SetupScreenAction.scan,
+                        then: SetupScan.init)
+                CaseLet(state: /SetupScreenState.done,
+                        action: SetupScreenAction.done,
+                        then: SetupDone.init)
+                CaseLet(state: /SetupScreenState.error,
+                        action: SetupScreenAction.error,
+                        then: SetupError.init)
+                CaseLet(state: /SetupScreenState.incorrectTransportPIN,
+                        action: SetupScreenAction.incorrectTransportPIN,
+                        then: SetupIncorrectTransportPIN.init)
+            }
+        }
+    }
+}

@@ -12,7 +12,7 @@ struct DialogButtons<Action>: View {
         let action: Action
     }
     
-    init(store: Store<Void, Action>, secondary: ButtonConfiguration?, primary: ButtonConfiguration?) {
+    init(store: Store<Void, Action>, secondary: ButtonConfiguration? = nil, primary: ButtonConfiguration?) {
         self.store = store
         self.secondaryButtonConfiguration = secondary
         self.primaryButtonConfiguration = primary

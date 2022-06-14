@@ -12,8 +12,8 @@ struct SetupTransportPINIntro: View {
     
     var body: some View {
         DialogView(store: store,
-                   titleKey: L10n.FirstTimeUser.PinLetter.title,
-                   bodyKey: L10n.FirstTimeUser.PinLetter.body,
+                   title: L10n.FirstTimeUser.PinLetter.title,
+                   message: L10n.FirstTimeUser.PinLetter.body,
                    imageMeta: ImageMeta(name: "PIN-Brief"),
                    secondaryButton: .init(title: L10n.FirstTimeUser.PinLetter.yes, action: .chooseHasPINLetter),
                    primaryButton: .init(title: L10n.FirstTimeUser.PinLetter.no, action: .chooseHasNoPINLetter))

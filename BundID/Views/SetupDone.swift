@@ -11,8 +11,8 @@ struct SetupDone: View {
     
     var body: some View {
         DialogView(store: store,
-                   titleKey: "Einrichtung abgeschlossen",
-                   bodyKey: nil,
+                   title: "Einrichtung abgeschlossen",
+                   message: nil,
                    imageMeta: nil,
                    secondaryButton: nil,
                    primaryButton: .init(title: "Schließen",

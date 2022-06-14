@@ -23,6 +23,7 @@ struct BundIDApp: App {
             reducer: coordinatorReducer,
             environment: AppEnvironment(
                 mainQueue: mainQueue,
+                uuidFactory: UUID.init,
                 idInteractionManager: idInteractionManager
             )
         )

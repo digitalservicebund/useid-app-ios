@@ -12,8 +12,8 @@ struct SetupIntro: View {
     
     var body: some View {
         DialogView(store: store,
-                   titleKey: L10n.FirstTimeUser.Intro.title,
-                   bodyKey: L10n.FirstTimeUser.Intro.body,
+                   title: L10n.FirstTimeUser.Intro.title,
+                   message: L10n.FirstTimeUser.Intro.body,
                    imageMeta: ImageMeta(name: "eIDs"),
                    secondaryButton: .init(title: L10n.FirstTimeUser.Intro.yes, action: .chooseYes),
                    primaryButton: .init(title: L10n.FirstTimeUser.Intro.no, action: .chooseNo))

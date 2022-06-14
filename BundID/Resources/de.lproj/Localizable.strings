@@ -1,12 +1,10 @@
 "firstTimeUser_intro_title" = "Haben Sie Ihren Online-Ausweis bereits benutzt?";
 "firstTimeUser_intro_body" = "Folgende Dokumente bieten die Funktion an: Deutscher Personalausweis, Elektronischer Aufenthaltstitel, eID-Karte für Unionsbürger";
-"firstTimeUser_intro_imageAlt" = "";
 "firstTimeUser_intro_yes" = "Ja, ich habe es bereits genutzt";
 "firstTimeUser_intro_no" = "Nein, jetzt Online-Ausweis einrichten";
 
 "firstTimeUser_pinLetter_title" = "Haben Sie noch Ihren PIN-Brief?";
 "firstTimeUser_pinLetter_body" = "Der PIN-Brief wurde Ihnen nach der Beantragung des Ausweises zugesandt.";
-"firstTimeUser_pinLetter_imageAlt" = "Haben Sie noch Ihren PIN-Brief?";
 "firstTimeUser_pinLetter_yes" = "Ja, PIN-Brief vorhanden";
 "firstTimeUser_pinLetter_no" = "Nein, neuen PIN-Brief bestellen";
 
@@ -58,5 +56,31 @@
 "firstTimeUser_error_cardBlocked_body" = "Da Sie Ihre PIN ein drittes Mal falsch eingeben haben, wurde Ihr Ausweis gesperrt.\n\nIhren Ausweis können Sie nur mit Ihrer 10-stelligen PUK in der AusweisApp2 oder im Bürgeramt entsperren.";
 "firstTimeUser_error_close" = "Schließen";
 
+"identification_overview_loading" = "Einen Moment bitte…\n\nDaten werden geladen";
+"identification_overview_loaded_title%@" = "%@";
+"identification_overview_loaded_body%@" = "Mit Eingabe Ihrer persönlichen PIN gewähren Sie „%@“ den Zugriff auf folgende Daten von Ihrem Ausweis:";
+"identification_overview_loaded_moreInfo%@" = "Weitere Informationen zu %@";
+"identification_overview_loaded_continue" = "PIN eingeben";
+
+"identification_overview_error_title" = "Ein Fehler ist aufgetreten";
+"identification_overview_error_body" = "Bitte versuchen Sie es noch einmal. Stellen Sie dabei sicher, dass Sie eine gute Internetverbindung haben.";
+"identification_overview_error_retry" = "Erneut versuchen";
+
 "general_ok" = "OK";
 "general_cancel" = "Abbrechen";
+
+"cardAttribute_dg01" = "Dokumententyp";
+"cardAttribute_dg02" = "Ausgebender Staat";
+"cardAttribute_dg03" = "Ablaufdatum";
+"cardAttribute_dg04" = "Vorname(n)";
+"cardAttribute_dg05" = "Familienname";
+"cardAttribute_dg06" = "Ordensname/Künstlername";
+"cardAttribute_dg07" = "Doktorgrad";
+"cardAttribute_dg08" = "Geburtsdatum";
+"cardAttribute_dg09" = "Geburtsort";
+"cardAttribute_dg10" = "Staatsangehörigkeit";
+"cardAttribute_dg13" = "Geburtsname";
+"cardAttribute_dg17" = "Adresse";
+"cardAttribute_dg19" = "Nebenbestimmungen I";
+"cardAttribute_restrictedIdentification" = "Schlüssel für anbieter- und kartenspezifische Kennung";
+"cardAttribute_ageVerification" = "Vergleichsgeburtsdatum für Altersverifikation";

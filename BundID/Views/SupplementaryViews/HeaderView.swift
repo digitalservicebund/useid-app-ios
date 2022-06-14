@@ -12,20 +12,20 @@ struct LinkMeta {
 
 struct HeaderView: View {
     
-    var titleKey: String
-    var bodyKey: String?
+    var title: String
+    var message: String?
     var imageMeta: ImageMeta?
     var linkMeta: LinkMeta?
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 30) {
             VStack(alignment: .leading, spacing: 0) {
-                Text(titleKey)
+                Text(title)
                     .font(.bundLargeTitle)
                     .foregroundColor(.blackish)
                     .padding(.bottom, 24)
-                if let body = bodyKey {
-                    Text(body)
+                if let message = message {
+                    Text(message)
                         .font(.bundBody)
                         .foregroundColor(.blackish)
                 }
@@ -34,7 +34,7 @@ struct HeaderView: View {
                         .font(.bundBody)
                 }
             }
-            .padding()
+            .padding(.horizontal)
             if let imageMeta = imageMeta {
                 imageMeta.image
                     .resizable()
@@ -58,8 +58,8 @@ extension ImageMeta {
 
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        HeaderView(titleKey: L10n.FirstTimeUser.Intro.title,
-                   bodyKey: L10n.FirstTimeUser.Intro.body,
+        HeaderView(title: L10n.FirstTimeUser.Intro.title,
+                   message: L10n.FirstTimeUser.Intro.body,
                    imageMeta: ImageMeta(name: "PIN-Brief"),
                    linkMeta: LinkMeta(title: "Behördenfinder", url: URL(string: "https://behoerdenfinder.de")!))
         .previewLayout(.sizeThatFits)

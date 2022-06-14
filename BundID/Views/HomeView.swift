@@ -3,6 +3,7 @@ import ComposableArchitecture
 
 enum HomeAction: Equatable {
     case triggerSetup
+    case triggerIdentification(tokenURL: String)
 }
 
 struct HomeView: View {
@@ -12,10 +13,17 @@ struct HomeView: View {
     var body: some View {
         VStack {
             WithViewStore(store) { viewStore in
-                Button {
-                    viewStore.send(.triggerSetup)
-                } label: {
-                    Text("Einrichtung starten")
+                VStack {
+                    Button {
+                        viewStore.send(.triggerSetup)
+                    } label: {
+                        Text("Einrichtung starten")
+                    }
+                    Button {
+                        viewStore.send(.triggerIdentification(tokenURL: demoTokenURL))
+                    } label: {
+                        Text("Identifizierung starten")
+                    }
                 }
             }
         }

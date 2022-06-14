@@ -173,7 +173,7 @@ struct SetupScan: View {
                     }
                     
                     if let title = viewStore.state.errorTitle {
-                        HeaderView(titleKey: title, bodyKey: viewStore.state.errorBody)
+                        HeaderView(title: title, message: viewStore.state.errorBody)
                     }
                 }
                 if viewStore.isScanning {
