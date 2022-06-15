@@ -3,7 +3,7 @@ import TCACoordinators
 import SwiftUI
 
 struct CoordinatorState: Equatable, IndexedRouterState {
-    var tcTokenURL: String?
+    var tokenURL: String?
     var setupPreviouslyFinished: Bool = false
     
     var states: [Route<ScreenState>]
@@ -14,7 +14,7 @@ struct CoordinatorState: Equatable, IndexedRouterState {
                 $0.map { screenState in
                     switch screenState {
                     case .home(var state):
-                        state.tcTokenURL = tcTokenURL
+                        state.tokenURL = tokenURL
                         return .home(state)
                     default:
                         return screenState
@@ -42,7 +42,7 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
             if url.scheme == "bundid" {
                 tokenURL = tokenURL.replacingOccurrences(of: "bundid://", with: "eid://")
             }
-            state.tcTokenURL = tokenURL
+            state.tokenURL = tokenURL
             if state.setupPreviouslyFinished {
                 state.routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)), embedInNavigationView: true)
             } else {
@@ -62,10 +62,10 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                 state.routes.presentSheet(.setupCoordinator(SetupCoordinatorState()), embedInNavigationView: true)
                 return .none
             case .routeAction(_, action: .setupCoordinator(.routeAction(_, action: .intro(.chooseYes)))):
-                if let tcTokenURL = state.tcTokenURL {
+                if let tokenURL = state.tokenURL {
                     return Effect.routeWithDelaysIfUnsupported(state.routes) {
                         $0.dismiss()
-                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tcTokenURL)), embedInNavigationView: true)
+                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)), embedInNavigationView: true)
                     }
                 } else {
                     state.routes.dismiss()
@@ -78,10 +78,10 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                 state.routes.dismiss()
                 return .none
             case .routeAction(_, action: .setupCoordinator(.routeAction(_, action: .done(.done)))):
-                if let tcTokenURL = state.tcTokenURL {
+                if let tokenURL = state.tokenURL {
                     return Effect.routeWithDelaysIfUnsupported(state.routes) {
                         $0.dismiss()
-                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tcTokenURL)), embedInNavigationView: true)
+                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)), embedInNavigationView: true)
                     }
                 } else {
                     state.routes.dismiss()

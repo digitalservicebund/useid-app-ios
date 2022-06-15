@@ -2,7 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct HomeState: Equatable {
-    var tcTokenURL: String?
+    var tokenURL: String?
 }
 
 enum HomeAction: Equatable {
@@ -18,9 +18,9 @@ struct HomeView: View {
         VStack {
             WithViewStore(store) { viewStore in
                 VStack(spacing: 24) {
-                    if let tcTokenURL = viewStore.tcTokenURL {
+                    if let tokenURL = viewStore.tokenURL {
                         Button {
-                            viewStore.send(.triggerIdentification(tokenURL: tcTokenURL))
+                            viewStore.send(.triggerIdentification(tokenURL: tokenURL))
                         } label: {
                             Text("Identifizierung erneut starten")
                         }
