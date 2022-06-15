@@ -95,10 +95,12 @@ struct IdentificationOverview: View {
             CaseLet(state: /IdentificationOverviewTokenFetch.loading,
                     action: TokenFetchAction.loading) { loadingStore in
                 IdentificationOverviewLoading(store: loadingStore)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
             }
             CaseLet(state: /IdentificationOverviewTokenFetch.loaded,
                     action: TokenFetchAction.loaded) { loadedStore in
                 IdentificationOverviewLoaded(store: loadedStore)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
             }
             CaseLet(state: /IdentificationOverviewTokenFetch.error,
                     action: TokenFetchAction.error) { errorStore in
@@ -106,6 +108,7 @@ struct IdentificationOverview: View {
                            title: L10n.Identification.Overview.Error.title,
                            message: L10n.Identification.Overview.Error.body,
                            primaryButton: .init(title: L10n.Identification.Overview.Error.retry, action: .retry))
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
         .onAppear {

@@ -382,8 +382,8 @@
 			isa = PBXGroup;
 			children = (
 				E1F39DD5285784DD00D8D907 /* IdentificationOverview.swift */,
-				E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */,
 				E1EFB5C32858EB0F005C38C6 /* IdentificationOverviewLoading.swift */,
+				E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */,
 			);
 			path = IdentificationOverview;
 			sourceTree = "<group>";
