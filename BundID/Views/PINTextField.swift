@@ -70,9 +70,10 @@ struct PINTextField: UIViewRepresentable {
             doneButton.isEnabled = doneConfiguration.enabled
         }
         
-        switch isFirstResponder {
-        case true: uiView.becomeFirstResponder()
-        case false: uiView.resignFirstResponder()
+        switch (isFirstResponder, uiView.isFirstResponder) {
+        case (true, false): uiView.becomeFirstResponder()
+        case (false, true): uiView.resignFirstResponder()
+        default: break
         }
     }
     
