@@ -11,6 +11,7 @@ class SetupPersonalPINViewModelTests: XCTestCase {
     override func setUp() {
         scheduler = DispatchQueue.test
         environment = AppEnvironment(mainQueue: scheduler.eraseToAnyScheduler(),
+                                     uuidFactory: UUID.init,
                                      idInteractionManager: MockIDInteractionManager(queue: scheduler.eraseToAnyScheduler()))
     }
     

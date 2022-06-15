@@ -15,6 +15,7 @@ class SetupScanTests: XCTestCase {
     override func setUp() {
         scheduler = DispatchQueue.test
         environment = AppEnvironment(mainQueue: scheduler.eraseToAnyScheduler(),
+                                     uuidFactory: UUID.init,
                                      idInteractionManager: mockIDInteractionManager)
     }
     

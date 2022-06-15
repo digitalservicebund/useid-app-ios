@@ -35,7 +35,7 @@ enum CoordinatorAction: Equatable, IndexedRouterAction {
 }
 
 let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironment> = .combine(
-    Reducer { state, action, environment in
+    Reducer { state, action, _ in
         switch action {
         case .openURL(let url):
             var tokenURL = url.absoluteString

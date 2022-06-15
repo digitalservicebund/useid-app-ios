@@ -7,7 +7,7 @@ struct IdentificationOverviewLoadedState: Identifiable, Equatable {
     let request: EIDAuthenticationRequest
     let handler: (FlaggedAttributes) -> Void
     
-    static func ==(lhs: IdentificationOverviewLoadedState, rhs: IdentificationOverviewLoadedState) -> Bool {
+    static func == (lhs: IdentificationOverviewLoadedState, rhs: IdentificationOverviewLoadedState) -> Bool {
         return lhs.id == rhs.id && lhs.request == rhs.request
     }
     

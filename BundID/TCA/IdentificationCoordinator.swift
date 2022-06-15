@@ -43,13 +43,8 @@ enum IdentificationCoordinatorAction: Equatable, IndexedRouterAction {
 let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, IdentificationCoordinatorAction, AppEnvironment> = identificationScreenReducer
     .forEachIndexedRoute(environment: { $0 })
     .withRouteReducer(
-        Reducer { state, action, environment in
-            switch action {
-            case .routeAction(_, action: .overview(.done)):
-                return .none
-            default:
-                return .none
-            }
+        Reducer { _, _, _ in
+            return .none
         }
     )
 
