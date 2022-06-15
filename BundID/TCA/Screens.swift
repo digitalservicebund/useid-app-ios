@@ -1,7 +1,7 @@
 import ComposableArchitecture
 
 enum ScreenState: Equatable {
-    case home
+    case home(HomeState)
     case setupCoordinator(SetupCoordinatorState)
     case identificationCoordinator(IdentificationCoordinatorState)
 }

@@ -1,6 +1,10 @@
 import SwiftUI
 import ComposableArchitecture
 
+struct HomeState: Equatable {
+    var tcTokenURL: String?
+}
+
 enum HomeAction: Equatable {
     case triggerSetup
     case triggerIdentification(tokenURL: String)
@@ -8,21 +12,23 @@ enum HomeAction: Equatable {
 
 struct HomeView: View {
     
-    var store: Store<Void, HomeAction>
+    var store: Store<HomeState, HomeAction>
     
     var body: some View {
         VStack {
             WithViewStore(store) { viewStore in
-                VStack {
+                VStack(spacing: 24) {
+                    if let tcTokenURL = viewStore.tcTokenURL {
+                        Button {
+                            viewStore.send(.triggerIdentification(tokenURL: tcTokenURL))
+                        } label: {
+                            Text("Identifizierung erneut starten")
+                        }
+                    }
                     Button {
                         viewStore.send(.triggerSetup)
                     } label: {
                         Text("Einrichtung starten")
-                    }
-                    Button {
-                        viewStore.send(.triggerIdentification(tokenURL: demoTokenURL))
-                    } label: {
-                        Text("Identifizierung starten")
                     }
                 }
             }
@@ -32,6 +38,6 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(store: Store(initialState: (), reducer: .empty, environment: AppEnvironment.preview))
+        HomeView(store: Store(initialState: .init(), reducer: .empty, environment: AppEnvironment.preview))
     }
 }

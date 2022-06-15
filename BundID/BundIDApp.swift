@@ -19,7 +19,7 @@ struct BundIDApp: App {
 #endif
 
         store = Store(
-            initialState: CoordinatorState(routes: [.root(.home, embedInNavigationView: true)]),
+            initialState: CoordinatorState(states: [.root(.home(HomeState()), embedInNavigationView: true)]),
             reducer: coordinatorReducer,
             environment: AppEnvironment(
                 mainQueue: mainQueue,
@@ -31,7 +31,12 @@ struct BundIDApp: App {
     
     var body: some Scene {
         WindowGroup {
-            CoordinatorView(store: store)
+            WithViewStore(store.stateless) { viewStore in
+                CoordinatorView(store: store)
+                    .onOpenURL { url in
+                        viewStore.send(.openURL(url))
+                    }
+            }
         }
     }
 }
