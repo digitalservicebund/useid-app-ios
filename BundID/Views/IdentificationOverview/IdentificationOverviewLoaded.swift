@@ -25,6 +25,7 @@ struct IdentificationOverviewLoaded: View {
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
                                 .fill(Color.blue100, strokeColor: Color.blue400)
                         )
+                        .shadow(color: .black.opacity(0.08), radius: 20, x: 0, y: 10)
                         .padding(.horizontal)
                         // TODO: accessibility summary
                         
