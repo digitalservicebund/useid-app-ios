@@ -66,6 +66,11 @@
 "identification_overview_error_body" = "Bitte versuchen Sie es noch einmal. Stellen Sie dabei sicher, dass Sie eine gute Internetverbindung haben.";
 "identification_overview_error_retry" = "Erneut versuchen";
 
+"identification_about_subjectInformation" = "Anbieterinformationen";
+"identification_about_subject" = "Anbieter";
+"identification_about_issuer" = "Aussteller des Berechtigungszertifikats";
+"identification_about_terms" = "Terms";
+
 "general_ok" = "OK";
 "general_cancel" = "Abbrechen";
 

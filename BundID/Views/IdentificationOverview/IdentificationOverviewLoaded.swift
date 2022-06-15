@@ -20,6 +20,7 @@ struct IdentificationOverviewLoaded: View {
                             }
                             Spacer()
                         }
+                        .font(.bundBody)
                         .padding(24)
                         .background(
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
@@ -28,11 +29,12 @@ struct IdentificationOverviewLoaded: View {
                         .shadow(color: .black.opacity(0.08), radius: 20, x: 0, y: 10)
                         .padding(.horizontal)
                         
-                        Button {
-                            viewStore.send(.moreInfo)
+                        NavigationLink {
+                            IdentificationAbout(request: viewStore.request)
                         } label: {
                             HStack {
                                 Text(L10n.Identification.Overview.Loaded.moreInfo(viewStore.request.subject))
+                                    .font(.bundBody)
                                     .lineLimit(nil)
                                     .multilineTextAlignment(.leading)
                                 Spacer()

@@ -61,6 +61,7 @@ enum IdentificationOverviewAction: Equatable {
 let identificationOverviewReducer = Reducer<IdentificationOverviewState, IdentificationOverviewAction, AppEnvironment> { state, action, environment in
     switch action {
     case .onAppear:
+        guard state.tokenFetch == .loading else { return .none }
         return Effect(value: .identify)
     case .identify:
         return environment.idInteractionManager.identify(tokenURL: state.tokenURL)

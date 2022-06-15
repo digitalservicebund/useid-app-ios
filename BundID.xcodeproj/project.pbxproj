@@ -59,6 +59,7 @@
 		E1EFB5C22858EAA2005C38C6 /* IdentificationOverviewLoaded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */; };
 		E1EFB5C42858EB0F005C38C6 /* IdentificationOverviewLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C32858EB0F005C38C6 /* IdentificationOverviewLoading.swift */; };
 		E1EFB5C62858EB2A005C38C6 /* Shape+Fill.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C52858EB2A005C38C6 /* Shape+Fill.swift */; };
+		E1EFB5C8285A365E005C38C6 /* IdentificationAbout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C7285A365E005C38C6 /* IdentificationAbout.swift */; };
 		E1F39DD6285784DD00D8D907 /* IdentificationOverview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F39DD5285784DD00D8D907 /* IdentificationOverview.swift */; };
 		E1F39DD8285791BD00D8D907 /* IdentifiableError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F39DD7285791BD00D8D907 /* IdentifiableError.swift */; };
 		E1F39DDA28588AB000D8D907 /* IdentificationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F39DD928588AB000D8D907 /* IdentificationCoordinator.swift */; };
@@ -168,6 +169,7 @@
 		E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoaded.swift; sourceTree = "<group>"; };
 		E1EFB5C32858EB0F005C38C6 /* IdentificationOverviewLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoading.swift; sourceTree = "<group>"; };
 		E1EFB5C52858EB2A005C38C6 /* Shape+Fill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shape+Fill.swift"; sourceTree = "<group>"; };
+		E1EFB5C7285A365E005C38C6 /* IdentificationAbout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationAbout.swift; sourceTree = "<group>"; };
 		E1F39DD5285784DD00D8D907 /* IdentificationOverview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverview.swift; sourceTree = "<group>"; };
 		E1F39DD7285791BD00D8D907 /* IdentifiableError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableError.swift; sourceTree = "<group>"; };
 		E1F39DD928588AB000D8D907 /* IdentificationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCoordinator.swift; sourceTree = "<group>"; };
@@ -384,6 +386,7 @@
 				E1F39DD5285784DD00D8D907 /* IdentificationOverview.swift */,
 				E1EFB5C32858EB0F005C38C6 /* IdentificationOverviewLoading.swift */,
 				E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */,
+				E1EFB5C7285A365E005C38C6 /* IdentificationAbout.swift */,
 			);
 			path = IdentificationOverview;
 			sourceTree = "<group>";
@@ -730,6 +733,7 @@
 				E1BD6C792847A2E5003048E4 /* SetupDone.swift in Sources */,
 				E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */,
 				E1F39DD8285791BD00D8D907 /* IdentifiableError.swift in Sources */,
+				E1EFB5C8285A365E005C38C6 /* IdentificationAbout.swift in Sources */,
 				F43622A72850D6C9008AEBB9 /* SetupError.swift in Sources */,
 				E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */,
 				E13925B82840FB7700161F5C /* Types.swift in Sources */,
