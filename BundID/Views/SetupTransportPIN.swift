@@ -22,6 +22,17 @@ struct SetupTransportPIN: View {
     
     var store: Store<SetupTransportPINState, SetupTransportPINAction>
     
+#if DEBUG
+    @State var digits = 5
+#else
+    let digits = 5
+#endif
+    
+    init(store: Store<SetupTransportPINState, SetupTransportPINAction>) {
+        self.store = store
+        self.digits = 5
+    }
+    
     var body: some View {
         VStack(alignment: .leading) {
             ScrollView {
@@ -35,10 +46,10 @@ struct SetupTransportPIN: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                             PINEntryView(pin: viewStore.binding(\.$enteredPIN),
-                                         maxDigits: 5,
+                                         maxDigits: digits,
                                          label: L10n.FirstTimeUser.TransportPIN.textFieldLabel,
                                          shouldBeFocused: viewStore.binding(\.$focusTextField),
-                                         doneConfiguration: DoneConfiguration(enabled: viewStore.enteredPIN.count == 5,
+                                         doneConfiguration: DoneConfiguration(enabled: viewStore.enteredPIN.count == digits,
                                                                               title: L10n.FirstTimeUser.TransportPIN.continue,
                                                                               handler: { pin in
                                     viewStore.send(.done(transportPIN: pin))
@@ -57,6 +68,15 @@ struct SetupTransportPIN: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        #if DEBUG
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("\(Image(systemName: "arrow.left.and.right")) \(digits == 5 ? "6" : "5")") {
+                    digits = 11 - digits
+                }
+            }
+        }
+        #endif
     }
 }
 
