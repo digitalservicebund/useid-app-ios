@@ -9,9 +9,9 @@ struct IdentificationAbout: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 Text(request.subject)
-                    .font(.bundTitle)
-                Text(L10n.Identification.About.subjectInformation)
                     .font(.bundLargeTitle)
+                Text(L10n.Identification.About.subjectInformation)
+                    .font(.bundTitle)
                 
                 Text(L10n.Identification.About.subject)
                     .font(.bundHeader)
