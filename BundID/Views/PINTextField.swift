@@ -70,6 +70,8 @@ struct PINTextField: UIViewRepresentable {
             doneButton.isEnabled = doneConfiguration.enabled
         }
         
+        context.coordinator.maxLength = maxLength
+        
         switch (isFirstResponder, uiView.isFirstResponder) {
         case (true, false): uiView.becomeFirstResponder()
         case (false, true): uiView.resignFirstResponder()
