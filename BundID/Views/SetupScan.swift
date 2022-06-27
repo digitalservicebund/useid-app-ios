@@ -35,6 +35,9 @@ enum SetupScanAction: Equatable {
 }
 
 let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> { state, action, environment in
+    
+    enum CancelId {}
+    
     switch action {
 #if targetEnvironment(simulator)
     case .runDebugSequence(let debugSequence):
@@ -57,15 +60,13 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         return debuggableInteraction.publisher
             .receive(on: environment.mainQueue)
             .catchToEffect(SetupScanAction.scanEvent)
-            .cancellable(id: "ChangePIN", cancelInFlight: true)
-        
+            .cancellable(id: CancelId.self, cancelInFlight: true)
 #else
         return environment.idInteractionManager.changePIN()
             .receive(on: environment.mainQueue)
             .catchToEffect(SetupScanAction.scanEvent)
-            .cancellable(id: "ChangePIN", cancelInFlight: true)
+            .cancellable(id: CancelId.self, cancelInFlight: true)
 #endif
-        
     case .scanEvent(.failure(let error)):
         state.error = .idCardInteraction(error)
         state.isScanning = false
@@ -76,19 +77,19 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         case .cardBlocked:
             return Effect(value: .error(.cardBlocked))
         default:
-            return .cancel(id: "ChangePIN")
+            return .cancel(id: CancelId.self)
         }
     case .scanEvent(.success(let event)):
         return state.handle(event: event, environment: environment)
     case .cancelScan:
         state.isScanning = false
-        return .cancel(id: "ChangePIN")
+        return .cancel(id: CancelId.self)
     case .error:
-        return .cancel(id: "ChangePIN")
+        return .cancel(id: CancelId.self)
     case .wrongTransportPIN:
-        return .cancel(id: "ChangePIN")
+        return .cancel(id: CancelId.self)
     case .scannedSuccessfully:
-        return .cancel(id: "ChangePIN")
+        return .cancel(id: CancelId.self)
     }
 }
 

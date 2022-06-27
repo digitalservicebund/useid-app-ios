@@ -69,6 +69,9 @@ enum IdentificationOverviewAction: Equatable {
 }
 
 let identificationOverviewReducer = Reducer<IdentificationOverviewState, IdentificationOverviewAction, AppEnvironment> { state, action, environment in
+    
+    enum CancelId {}
+    
     switch action {
 #if targetEnvironment(simulator)
     case .runDebugSequence(let debugSequence):
@@ -89,12 +92,12 @@ let identificationOverviewReducer = Reducer<IdentificationOverviewState, Identif
         return debuggableInteraction.publisher
             .receive(on: environment.mainQueue)
             .catchToEffect(IdentificationOverviewAction.idInteractionEvent)
-            .cancellable(id: "Identify", cancelInFlight: true)
+            .cancellable(id: CancelId.self, cancelInFlight: true)
         #else
         return environment.idInteractionManager.identify(tokenURL: state.tokenURL)
             .receive(on: environment.mainQueue)
             .catchToEffect(IdentificationOverviewAction.idInteractionEvent)
-            .cancellable(id: "Identify", cancelInFlight: true)
+            .cancellable(id: CancelId.self, cancelInFlight: true)
         #endif
     case .idInteractionEvent(.success(let event)):
         switch event {
