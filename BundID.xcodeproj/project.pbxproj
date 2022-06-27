@@ -47,7 +47,9 @@
 		E1AB87A02822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB879F2822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift */; };
 		E1AB87A4282413A700C7FC94 /* PINTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB87A3282413A700C7FC94 /* PINTextField.swift */; };
 		E1AB87AC2825238D00C7FC94 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1AB87AA2825238D00C7FC94 /* Localizable.strings */; };
+		E1B6991C2869B31B00360273 /* DebugIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B6991B2869B31B00360273 /* DebugIDInteractionManager.swift */; };
 		E1BD6C792847A2E5003048E4 /* SetupDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BD6C782847A2E5003048E4 /* SetupDone.swift */; };
+		E1C2D8BA28620E2B000E0F5B /* IdentificationScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C2D8B928620E2B000E0F5B /* IdentificationScan.swift */; };
 		E1CD8E88281FF62F008ADA2A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E87281FF62F008ADA2A /* Colors.swift */; };
 		E1CD8E8C281FFCC1008ADA2A /* BundesSans-DTP-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E1CD8E8A281FFCC1008ADA2A /* BundesSans-DTP-Regular.otf */; };
 		E1CD8E8D281FFCC1008ADA2A /* BundesSans-DTP-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E1CD8E8B281FFCC1008ADA2A /* BundesSans-DTP-Bold.otf */; };
@@ -61,6 +63,7 @@
 		E1EFB5C62858EB2A005C38C6 /* Shape+Fill.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C52858EB2A005C38C6 /* Shape+Fill.swift */; };
 		E1EFB5C8285A365E005C38C6 /* IdentificationAbout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C7285A365E005C38C6 /* IdentificationAbout.swift */; };
 		E1EFB5D0285C794A005C38C6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1EFB5D2285C794A005C38C6 /* InfoPlist.strings */; };
+		E1EFB5D5285C7D81005C38C6 /* IdentificationPersonalPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5D4285C7D81005C38C6 /* IdentificationPersonalPIN.swift */; };
 		E1F39DD6285784DD00D8D907 /* IdentificationOverview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F39DD5285784DD00D8D907 /* IdentificationOverview.swift */; };
 		E1F39DD8285791BD00D8D907 /* IdentifiableError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F39DD7285791BD00D8D907 /* IdentifiableError.swift */; };
 		E1F39DDA28588AB000D8D907 /* IdentificationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F39DD928588AB000D8D907 /* IdentificationCoordinator.swift */; };
@@ -158,7 +161,9 @@
 		E1AB879F2822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPersonalPINIntroScreen.swift; sourceTree = "<group>"; };
 		E1AB87A3282413A700C7FC94 /* PINTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINTextField.swift; sourceTree = "<group>"; };
 		E1AB87AB2825238D00C7FC94 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E1B6991B2869B31B00360273 /* DebugIDInteractionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugIDInteractionManager.swift; sourceTree = "<group>"; };
 		E1BD6C782847A2E5003048E4 /* SetupDone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupDone.swift; sourceTree = "<group>"; };
+		E1C2D8B928620E2B000E0F5B /* IdentificationScan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationScan.swift; sourceTree = "<group>"; };
 		E1CD8E87281FF62F008ADA2A /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		E1CD8E8A281FFCC1008ADA2A /* BundesSans-DTP-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BundesSans-DTP-Regular.otf"; sourceTree = "<group>"; };
 		E1CD8E8B281FFCC1008ADA2A /* BundesSans-DTP-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BundesSans-DTP-Bold.otf"; sourceTree = "<group>"; };
@@ -173,6 +178,7 @@
 		E1EFB5C7285A365E005C38C6 /* IdentificationAbout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationAbout.swift; sourceTree = "<group>"; };
 		E1EFB5D1285C794A005C38C6 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E1EFB5D3285C7B48005C38C6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E1EFB5D4285C7D81005C38C6 /* IdentificationPersonalPIN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationPersonalPIN.swift; sourceTree = "<group>"; };
 		E1F39DD5285784DD00D8D907 /* IdentificationOverview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverview.swift; sourceTree = "<group>"; };
 		E1F39DD7285791BD00D8D907 /* IdentifiableError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableError.swift; sourceTree = "<group>"; };
 		E1F39DD928588AB000D8D907 /* IdentificationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCoordinator.swift; sourceTree = "<group>"; };
@@ -390,6 +396,8 @@
 				E1EFB5C32858EB0F005C38C6 /* IdentificationOverviewLoading.swift */,
 				E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */,
 				E1EFB5C7285A365E005C38C6 /* IdentificationAbout.swift */,
+				E1EFB5D4285C7D81005C38C6 /* IdentificationPersonalPIN.swift */,
+				E1C2D8B928620E2B000E0F5B /* IdentificationScan.swift */,
 			);
 			path = IdentificationOverview;
 			sourceTree = "<group>";
@@ -399,6 +407,7 @@
 			children = (
 				E13925C52841119400161F5C /* Mocks */,
 				E593E278281686DC00154EB0 /* IDInteractionManager.swift */,
+				E1B6991B2869B31B00360273 /* DebugIDInteractionManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -700,6 +709,7 @@
 				E110400D281C389C004BA03E /* SetupIntro.swift in Sources */,
 				E1AB879E282283AB00C7FC94 /* Fonts.swift in Sources */,
 				E16708BC283D824D001A1637 /* Scheduler+Animation.swift in Sources */,
+				E1C2D8BA28620E2B000E0F5B /* IdentificationScan.swift in Sources */,
 				E593E26E2816853A00154EB0 /* StopServiceHandler.swift in Sources */,
 				E16708B3283D4ED2001A1637 /* SetupCoordinator.swift in Sources */,
 				E16708C0283E6A07001A1637 /* SetupScan.swift in Sources */,
@@ -718,12 +728,14 @@
 				E1EFB5C22858EAA2005C38C6 /* IdentificationOverviewLoaded.swift in Sources */,
 				E593E2682816847900154EB0 /* EIDAuthenticationRequest.swift in Sources */,
 				E16708BA283D7CA1001A1637 /* DialogButtons.swift in Sources */,
+				E1EFB5D5285C7D81005C38C6 /* IdentificationPersonalPIN.swift in Sources */,
 				E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */,
 				E1EFB5C42858EB0F005C38C6 /* IdentificationOverviewLoading.swift in Sources */,
 				E12CB308284A146E0039FD56 /* SetupIncorrectTransportPIN.swift in Sources */,
 				E1AB87A4282413A700C7FC94 /* PINTextField.swift in Sources */,
 				E11EB2AD2853A8EA008B4042 /* SetupScreens.swift in Sources */,
 				E1F39DDA28588AB000D8D907 /* IdentificationCoordinator.swift in Sources */,
+				E1B6991C2869B31B00360273 /* DebugIDInteractionManager.swift in Sources */,
 				E1F39DDC28588B0100D8D907 /* IdentificationScreens.swift in Sources */,
 				E1F39DD6285784DD00D8D907 /* IdentificationOverview.swift in Sources */,
 				E593E2742816866200154EB0 /* EACInteraction.swift in Sources */,

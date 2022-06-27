@@ -43,8 +43,18 @@ enum IdentificationCoordinatorAction: Equatable, IndexedRouterAction {
 let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, IdentificationCoordinatorAction, AppEnvironment> = identificationScreenReducer
     .forEachIndexedRoute(environment: { $0 })
     .withRouteReducer(
-        Reducer { _, _, _ in
-            return .none
+        Reducer { state, action, _ in
+            switch action {
+            case .routeAction(_, action: .overview(.done)):
+                state.routes.push(.personalPIN(IdentificationPersonalPINState()))
+                return .none
+            case .routeAction(_, action: .personalPIN(.done(pin: let pin))):
+                state.pin = pin
+                state.routes.push(.scan(IdentificationScanState(tokenURL: state.tokenURL, pin: state.pin)))
+                return .none
+            default:
+                return .none
+            }
         }
     )
 
@@ -57,6 +67,12 @@ struct IdentificationCoordinatorView: View {
                 CaseLet(state: /IdentificationScreenState.overview,
                         action: IdentificationScreenAction.overview,
                         then: IdentificationOverview.init)
+                CaseLet(state: /IdentificationScreenState.personalPIN,
+                        action: IdentificationScreenAction.personalPIN,
+                        then: IdentificationPersonalPIN.init)
+                CaseLet(state: /IdentificationScreenState.scan,
+                        action: IdentificationScreenAction.scan,
+                        then: IdentificationScan.init)
             }
         }
     }

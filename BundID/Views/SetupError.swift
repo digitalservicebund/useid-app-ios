@@ -1,14 +1,14 @@
 import SwiftUI
 import ComposableArchitecture
 
-enum SetupErrorType {
+enum CardErrorType {
     case cardDeactivated
     case cardSuspended
     case cardBlocked
 }
 
 struct SetupErrorState: Equatable {
-    var errorType: SetupErrorType
+    var errorType: CardErrorType
     
     var title: String {
         switch errorType {

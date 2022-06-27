@@ -98,7 +98,10 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
             }
         }
     )
-).debug()
+)
+#if DEBUG
+    .debug()
+#endif
 
 struct CoordinatorView: View {
     let store: Store<CoordinatorState, CoordinatorAction>

@@ -77,7 +77,7 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
             }
             return .none
         }
-    ).debug()
+    )
 
 struct SetupCoordinatorView: View {
     let store: Store<SetupCoordinatorState, SetupCoordinatorAction>

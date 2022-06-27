@@ -26,7 +26,7 @@ final class BundIDUITests: XCTestCase {
         pin2TextField.waitAndTypeText("123456")
         
         app.navigationBars.buttons["Schraubenschlüssel"].wait().tap()
-        app.buttons["Success"].wait().tap()
+        app.buttons["changePINSuccessfully"].wait().tap()
         
         app.staticTexts["Einrichtung abgeschlossen"].assertExistence()
         

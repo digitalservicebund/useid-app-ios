@@ -72,8 +72,7 @@ let setupPersonalPINReducer = Reducer<SetupPersonalPINState, SetupPersonalPINAct
         state.enteredPIN1 = ""
         state.focusPIN1 = true
         return .none
-    case .done(pin: let pin):
-        print(pin)
+    case .done:
         return .none
     }
 }.binding()

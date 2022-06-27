@@ -7,6 +7,10 @@ struct IdentificationOverviewLoadedState: Identifiable, Equatable {
     let request: EIDAuthenticationRequest
     let handler: (FlaggedAttributes) -> Void
     
+#if targetEnvironment(simulator)
+    var availableDebugActions: [IdentifyDebugSequence] = []
+#endif
+    
     static func == (lhs: IdentificationOverviewLoadedState, rhs: IdentificationOverviewLoadedState) -> Bool {
         return lhs.id == rhs.id && lhs.request == rhs.request
     }
@@ -28,6 +32,9 @@ enum IdentificationOverviewTokenFetch: Equatable {
 struct IdentificationOverviewState: Equatable {
     var tokenURL: String
     var tokenFetch: IdentificationOverviewTokenFetch = .loading
+    #if targetEnvironment(simulator)
+    var availableDebugActions: [IdentifyDebugSequence] = []
+    #endif
 }
 
 enum TokenFetchLoadingAction: Equatable {
@@ -56,18 +63,39 @@ enum IdentificationOverviewAction: Equatable {
     case tokenFetch(TokenFetchAction)
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case done
+#if targetEnvironment(simulator)
+    case runDebugSequence(IdentifyDebugSequence)
+#endif
 }
 
 let identificationOverviewReducer = Reducer<IdentificationOverviewState, IdentificationOverviewAction, AppEnvironment> { state, action, environment in
     switch action {
+#if targetEnvironment(simulator)
+    case .runDebugSequence(let debugSequence):
+        // swiftlint:disable:next force_cast
+        let debugInteractionManager = environment.idInteractionManager as! DebugIDInteractionManager
+        state.availableDebugActions = debugInteractionManager.runIdentify(debugSequence: debugSequence)
+        return .none
+#endif
     case .onAppear:
         guard state.tokenFetch == .loading else { return .none }
         return Effect(value: .identify)
     case .identify:
+        #if targetEnvironment(simulator)
+        // swiftlint:disable:next force_cast
+        let debugIDInteractionManager = environment.idInteractionManager as! DebugIDInteractionManager
+        let debuggableInteraction = debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
+        state.availableDebugActions = debuggableInteraction.sequence
+        return debuggableInteraction.publisher
+            .receive(on: environment.mainQueue)
+            .catchToEffect(IdentificationOverviewAction.idInteractionEvent)
+            .cancellable(id: "Identify", cancelInFlight: true)
+        #else
         return environment.idInteractionManager.identify(tokenURL: state.tokenURL)
             .receive(on: environment.mainQueue)
             .catchToEffect(IdentificationOverviewAction.idInteractionEvent)
             .cancellable(id: "Identify", cancelInFlight: true)
+        #endif
     case .idInteractionEvent(.success(let event)):
         switch event {
         case .requestAuthenticationRequestConfirmation(let request, let handler):
@@ -82,6 +110,8 @@ let identificationOverviewReducer = Reducer<IdentificationOverviewState, Identif
     case .tokenFetch(.error(.retry)):
         state.tokenFetch = .loading
         return Effect(value: .identify)
+    case .tokenFetch(.loaded(.continue)):
+        return Effect(value: .done)
     default:
         return .none
     }
@@ -121,6 +151,21 @@ struct IdentificationOverview: View {
                     ViewStore(store.stateless).send(.cancel)
                 }
             }
+#if targetEnvironment(simulator)
+            ToolbarItem(placement: .primaryAction) {
+                WithViewStore(store) { viewStore in
+                    Menu {
+                        ForEach(viewStore.availableDebugActions) { sequence in
+                            Button(sequence.id) {
+                                viewStore.send(.runDebugSequence(sequence))
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "wrench")
+                    }
+                }
+            }
+#endif
         }
     }
 }

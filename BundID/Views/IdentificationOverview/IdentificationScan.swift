@@ -3,44 +3,47 @@ import ComposableArchitecture
 import Combine
 import Lottie
 
-enum SetupScanError: Equatable {
+enum IdentificationScanError: Equatable {
     case idCardInteraction(IDCardInteractionError)
     case unexpectedEvent(EIDInteractionEvent)
 }
 
-struct SetupScanState: Equatable {
+struct IdentificationScanState: Equatable {
     var isScanning: Bool = false
     var showProgressCaption: Bool = false
-    var transportPIN: String
-    var newPIN: String
-    var error: SetupScanError?
+    var tokenURL: String
+    var pin: String
+    var error: IdentificationScanError?
     var remainingAttempts: Int?
     var attempt = 0
 #if targetEnvironment(simulator)
-    var availableDebugActions: [ChangePINDebugSequence] = []
+    var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
 }
 
-enum SetupScanAction: Equatable {
+enum IdentificationScanAction: Equatable {
     case onAppear
     case startScan
     case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
-    case wrongTransportPIN(remainingAttempts: Int)
+    case wrongPIN(remainingAttempts: Int)
     case error(CardErrorType)
     case cancelScan
     case scannedSuccessfully
 #if targetEnvironment(simulator)
-    case runDebugSequence(ChangePINDebugSequence)
+    case runDebugSequence(IdentifyDebugSequence)
 #endif
 }
 
-let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> { state, action, environment in
+let identificationScanReducer = Reducer<IdentificationScanState, IdentificationScanAction, AppEnvironment> { state, action, environment in
+    
+    enum IdentifyId {}
+    
     switch action {
 #if targetEnvironment(simulator)
     case .runDebugSequence(let debugSequence):
         // swiftlint:disable:next force_cast
         let debugInteractionManager = (environment.idInteractionManager as! DebugIDInteractionManager)
-        state.availableDebugActions = debugInteractionManager.runChangePIN(debugSequence: debugSequence)
+        state.availableDebugActions = debugInteractionManager.runIdentify(debugSequence: debugSequence)
         return .none
 #endif
     case .onAppear:
@@ -52,20 +55,19 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
 #if targetEnvironment(simulator)
         // swiftlint:disable:next force_cast
         let debugIDInteractionManager = environment.idInteractionManager as! DebugIDInteractionManager
-        let debuggableInteraction = debugIDInteractionManager.debuggableChangePIN()
+        let debuggableInteraction = debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
         state.availableDebugActions = debuggableInteraction.sequence
         return debuggableInteraction.publisher
             .receive(on: environment.mainQueue)
-            .catchToEffect(SetupScanAction.scanEvent)
-            .cancellable(id: "ChangePIN", cancelInFlight: true)
+            .catchToEffect(IdentificationScanAction.scanEvent)
+            .cancellable(id: IdentifyId.self, cancelInFlight: true)
         
 #else
-        return environment.idInteractionManager.changePIN()
+        return environment.idInteractionManager.identify(tokenURL: state.tokenURL)
             .receive(on: environment.mainQueue)
-            .catchToEffect(SetupScanAction.scanEvent)
-            .cancellable(id: "ChangePIN", cancelInFlight: true)
+            .catchToEffect(IdentificationScanAction.scanEvent)
+            .cancellable(id: IdentifyId.self, cancelInFlight: true)
 #endif
-        
     case .scanEvent(.failure(let error)):
         state.error = .idCardInteraction(error)
         state.isScanning = false
@@ -76,24 +78,24 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         case .cardBlocked:
             return Effect(value: .error(.cardBlocked))
         default:
-            return .cancel(id: "ChangePIN")
+            return .cancel(id: IdentifyId.self)
         }
     case .scanEvent(.success(let event)):
         return state.handle(event: event, environment: environment)
     case .cancelScan:
         state.isScanning = false
-        return .cancel(id: "ChangePIN")
+        return .cancel(id: IdentifyId.self)
     case .error:
-        return .cancel(id: "ChangePIN")
-    case .wrongTransportPIN:
-        return .cancel(id: "ChangePIN")
+        return .cancel(id: IdentifyId.self)
+    case .wrongPIN:
+        return .cancel(id: IdentifyId.self)
     case .scannedSuccessfully:
-        return .cancel(id: "ChangePIN")
+        return .cancel(id: IdentifyId.self)
     }
 }
 
-extension SetupScanState {
-    mutating func handle(event: EIDInteractionEvent, environment: AppEnvironment) -> Effect<SetupScanAction, Never> {
+extension IdentificationScanState {
+    mutating func handle(event: EIDInteractionEvent, environment: AppEnvironment) -> Effect<IdentificationScanAction, Never> {
         switch event {
         case .authenticationStarted:
             print("Authentication started")
@@ -109,7 +111,7 @@ extension SetupScanState {
         case .processCompletedSuccessfully:
             return Effect(value: .scannedSuccessfully)
         case .pinManagementStarted: print("PIN Management started.")
-        case .requestChangedPIN(let remainingAttempts, let pinCallback):
+        case .requestPIN(let remainingAttempts, let pinCallback):
             print("Providing changed PIN with \(remainingAttempts ?? 3) remaining attempts.")
             let remainingAttemptsBefore = self.remainingAttempts
             self.remainingAttempts = remainingAttempts
@@ -122,10 +124,10 @@ extension SetupScanState {
             // Wrong transport/personal PIN provided
             if let remainingAttemptsBefore = remainingAttemptsBefore,
                remainingAttempts < remainingAttemptsBefore {
-                return Effect(value: .wrongTransportPIN(remainingAttempts: remainingAttempts))
+                return Effect(value: .wrongPIN(remainingAttempts: remainingAttempts))
             }
             
-            pinCallback(transportPIN, newPIN)
+            pinCallback(pin)
         case .requestCANAndChangedPIN:
             print("CAN to change PIN requested, so card is suspended. Callback not implemented yet.")
             return Effect(value: .error(.cardSuspended))
@@ -141,7 +143,7 @@ extension SetupScanState {
     }
 }
 
-extension SetupScanState {
+extension IdentificationScanState {
     var errorTitle: String? {
         switch self.error {
         case .idCardInteraction:
@@ -152,7 +154,7 @@ extension SetupScanState {
             return nil
         }
     }
-
+    
     var errorBody: String? {
         switch self.error {
         case .idCardInteraction:
@@ -174,9 +176,9 @@ extension SetupScanState {
     }
 }
 
-struct SetupScan: View {
+struct IdentificationScan: View {
     
-    var store: Store<SetupScanState, SetupScanAction>
+    var store: Store<IdentificationScanState, IdentificationScanAction>
     
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -202,9 +204,9 @@ struct SetupScan: View {
                             .frame(maxWidth: .infinity)
                             .padding(50)
                         if viewStore.showProgressCaption {
-                        	Text(L10n.FirstTimeUser.Scan.Progress.caption)
-                            	.font(.bundTitle)
-                            	.foregroundColor(.blackish)
+                            Text(L10n.FirstTimeUser.Scan.Progress.caption)
+                                .font(.bundTitle)
+                                .foregroundColor(.blackish)
                                 .padding(.bottom, 50)
                         }
                     }
@@ -230,7 +232,7 @@ struct SetupScan: View {
                             }
                         }
                     } label: {
-                         Image(systemName: "wrench")
+                        Image(systemName: "wrench")
                     }.disabled(!viewStore.isScanning)
                 }
             }
@@ -239,13 +241,9 @@ struct SetupScan: View {
     }
 }
 
-struct SetupScan_Previews: PreviewProvider {
+struct IdentificationScan_Previews: PreviewProvider {
     static var previews: some View {
-        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
-        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456", error: .idCardInteraction(.processFailed(resultCode: .INTERNAL_ERROR))), reducer: .empty, environment: AppEnvironment.preview))
-        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456", error: .unexpectedEvent(.requestPINAndCAN({ _, _ in }))), reducer: .empty, environment: AppEnvironment.preview))
-        NavigationView {
-            SetupScan(store: Store(initialState: SetupScanState(isScanning: true, showProgressCaption: false, transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
-        }
+        IdentificationScan(store: Store(initialState: IdentificationScanState(tokenURL: demoTokenURL, pin: "123456"), reducer: .empty, environment: AppEnvironment.preview))
+        IdentificationScan(store: Store(initialState: IdentificationScanState(isScanning: true, tokenURL: demoTokenURL, pin: "123456"), reducer: .empty, environment: AppEnvironment.preview))
     }
 }
