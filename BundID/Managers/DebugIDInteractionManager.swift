@@ -2,7 +2,7 @@ import Foundation
 import OpenEcard
 import Combine
 
-#if targetEnvironment(simulator)
+#if MOCK_OPENECARD
 
 struct DebuggableInteraction<T> {
     var publisher: EIDInteractionPublisher
@@ -264,4 +264,5 @@ class DebugIDInteractionManager: IDInteractionManagerType {
         return debugSequence.run(card: &card, subject: subject!)
     }
 }
+
 #endif

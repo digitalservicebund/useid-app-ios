@@ -16,7 +16,7 @@ struct IdentificationScanState: Equatable {
     var error: IdentificationScanError?
     var remainingAttempts: Int?
     var attempt = 0
-#if targetEnvironment(simulator)
+#if MOCK_OPENECARD
     var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
 }
@@ -29,7 +29,7 @@ enum IdentificationScanAction: Equatable {
     case error(CardErrorType)
     case cancelScan
     case scannedSuccessfully
-#if targetEnvironment(simulator)
+#if MOCK_OPENECARD
     case runDebugSequence(IdentifyDebugSequence)
 #endif
 }
@@ -39,7 +39,7 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
     enum IdentifyId {}
     
     switch action {
-#if targetEnvironment(simulator)
+#if MOCK_OPENECARD
     case .runDebugSequence(let debugSequence):
         // swiftlint:disable:next force_cast
         let debugInteractionManager = (environment.idInteractionManager as! DebugIDInteractionManager)
@@ -52,7 +52,7 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
         state.error = nil
         state.isScanning = true
         
-#if targetEnvironment(simulator)
+#if MOCK_OPENECARD
         // swiftlint:disable:next force_cast
         let debugIDInteractionManager = environment.idInteractionManager as! DebugIDInteractionManager
         let debuggableInteraction = debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
@@ -222,7 +222,7 @@ struct IdentificationScan: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
-#if targetEnvironment(simulator)
+#if MOCK_OPENECARD
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Menu {

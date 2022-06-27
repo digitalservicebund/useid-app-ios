@@ -7,7 +7,7 @@ struct IdentificationOverviewLoadedState: Identifiable, Equatable {
     let request: EIDAuthenticationRequest
     let handler: (FlaggedAttributes) -> Void
     
-#if targetEnvironment(simulator)
+#if MOCK_OPENECARD
     var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
     
@@ -32,7 +32,7 @@ enum IdentificationOverviewTokenFetch: Equatable {
 struct IdentificationOverviewState: Equatable {
     var tokenURL: String
     var tokenFetch: IdentificationOverviewTokenFetch = .loading
-    #if targetEnvironment(simulator)
+    #if MOCK_OPENECARD
     var availableDebugActions: [IdentifyDebugSequence] = []
     #endif
 }
@@ -63,7 +63,7 @@ enum IdentificationOverviewAction: Equatable {
     case tokenFetch(TokenFetchAction)
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case done
-#if targetEnvironment(simulator)
+#if MOCK_OPENECARD
     case runDebugSequence(IdentifyDebugSequence)
 #endif
 }
@@ -73,7 +73,7 @@ let identificationOverviewReducer = Reducer<IdentificationOverviewState, Identif
     enum CancelId {}
     
     switch action {
-#if targetEnvironment(simulator)
+#if MOCK_OPENECARD
     case .runDebugSequence(let debugSequence):
         // swiftlint:disable:next force_cast
         let debugInteractionManager = environment.idInteractionManager as! DebugIDInteractionManager
@@ -84,7 +84,7 @@ let identificationOverviewReducer = Reducer<IdentificationOverviewState, Identif
         guard state.tokenFetch == .loading else { return .none }
         return Effect(value: .identify)
     case .identify:
-        #if targetEnvironment(simulator)
+        #if MOCK_OPENECARD
         // swiftlint:disable:next force_cast
         let debugIDInteractionManager = environment.idInteractionManager as! DebugIDInteractionManager
         let debuggableInteraction = debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
@@ -154,7 +154,7 @@ struct IdentificationOverview: View {
                     ViewStore(store.stateless).send(.cancel)
                 }
             }
-#if targetEnvironment(simulator)
+#if MOCK_OPENECARD
             ToolbarItem(placement: .primaryAction) {
                 WithViewStore(store) { viewStore in
                     Menu {

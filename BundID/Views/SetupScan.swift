@@ -16,7 +16,7 @@ struct SetupScanState: Equatable {
     var error: SetupScanError?
     var remainingAttempts: Int?
     var attempt = 0
-#if targetEnvironment(simulator)
+#if MOCK_OPENECARD
     var availableDebugActions: [ChangePINDebugSequence] = []
 #endif
 }
@@ -29,7 +29,7 @@ enum SetupScanAction: Equatable {
     case error(CardErrorType)
     case cancelScan
     case scannedSuccessfully
-#if targetEnvironment(simulator)
+#if MOCK_OPENECARD
     case runDebugSequence(ChangePINDebugSequence)
 #endif
 }
@@ -39,7 +39,7 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
     enum CancelId {}
     
     switch action {
-#if targetEnvironment(simulator)
+#if MOCK_OPENECARD
     case .runDebugSequence(let debugSequence):
         // swiftlint:disable:next force_cast
         let debugInteractionManager = (environment.idInteractionManager as! DebugIDInteractionManager)
@@ -52,7 +52,7 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         state.error = nil
         state.isScanning = true
         
-#if targetEnvironment(simulator)
+#if MOCK_OPENECARD
         // swiftlint:disable:next force_cast
         let debugIDInteractionManager = environment.idInteractionManager as! DebugIDInteractionManager
         let debuggableInteraction = debugIDInteractionManager.debuggableChangePIN()
@@ -221,7 +221,7 @@ struct SetupScan: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
-#if targetEnvironment(simulator)
+#if MOCK_OPENECARD
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Menu {
