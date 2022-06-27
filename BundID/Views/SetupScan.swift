@@ -16,7 +16,7 @@ struct SetupScanState: Equatable {
     var error: SetupScanError?
     var remainingAttempts: Int?
     var attempt = 0
-#if MOCK_OPENECARD
+#if DEBUG
     var availableDebugActions: [ChangePINDebugSequence] = []
 #endif
 }
@@ -29,7 +29,7 @@ enum SetupScanAction: Equatable {
     case error(CardErrorType)
     case cancelScan
     case scannedSuccessfully
-#if MOCK_OPENECARD
+#if DEBUG
     case runDebugSequence(ChangePINDebugSequence)
 #endif
 }
@@ -39,11 +39,9 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
     enum CancelId {}
     
     switch action {
-#if MOCK_OPENECARD
+#if DEBUG
     case .runDebugSequence(let debugSequence):
-        // swiftlint:disable:next force_cast
-        let debugInteractionManager = (environment.idInteractionManager as! DebugIDInteractionManager)
-        state.availableDebugActions = debugInteractionManager.runChangePIN(debugSequence: debugSequence)
+        state.availableDebugActions = environment.debugIDInteractionManager.runChangePIN(debugSequence: debugSequence)
         return .none
 #endif
     case .onAppear:
@@ -51,22 +49,23 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
     case .startScan:
         state.error = nil
         state.isScanning = true
-        
-#if MOCK_OPENECARD
-        // swiftlint:disable:next force_cast
-        let debugIDInteractionManager = environment.idInteractionManager as! DebugIDInteractionManager
-        let debuggableInteraction = debugIDInteractionManager.debuggableChangePIN()
-        state.availableDebugActions = debuggableInteraction.sequence
-        return debuggableInteraction.publisher
-            .receive(on: environment.mainQueue)
-            .catchToEffect(SetupScanAction.scanEvent)
-            .cancellable(id: CancelId.self, cancelInFlight: true)
+    
+        let publisher: EIDInteractionPublisher
+#if DEBUG
+        if MOCK_OPENECARD {
+            let debuggableInteraction = environment.debugIDInteractionManager.debuggableChangePIN()
+            state.availableDebugActions = debuggableInteraction.sequence
+            publisher = debuggableInteraction.publisher
+        } else {
+            publisher = environment.idInteractionManager.changePIN()
+        }
 #else
-        return environment.idInteractionManager.changePIN()
+        publisher = environment.idInteractionManager.changePIN()
+#endif
+        return publisher
             .receive(on: environment.mainQueue)
             .catchToEffect(SetupScanAction.scanEvent)
             .cancellable(id: CancelId.self, cancelInFlight: true)
-#endif
     case .scanEvent(.failure(let error)):
         state.error = .idCardInteraction(error)
         state.isScanning = false
@@ -221,7 +220,7 @@ struct SetupScan: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
-#if MOCK_OPENECARD
+#if DEBUG
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Menu {

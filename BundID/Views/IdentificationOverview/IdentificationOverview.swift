@@ -7,7 +7,7 @@ struct IdentificationOverviewLoadedState: Identifiable, Equatable {
     let request: EIDAuthenticationRequest
     let handler: (FlaggedAttributes) -> Void
     
-#if MOCK_OPENECARD
+#if DEBUG
     var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
     
@@ -32,7 +32,7 @@ enum IdentificationOverviewTokenFetch: Equatable {
 struct IdentificationOverviewState: Equatable {
     var tokenURL: String
     var tokenFetch: IdentificationOverviewTokenFetch = .loading
-    #if MOCK_OPENECARD
+    #if DEBUG
     var availableDebugActions: [IdentifyDebugSequence] = []
     #endif
 }
@@ -63,7 +63,7 @@ enum IdentificationOverviewAction: Equatable {
     case tokenFetch(TokenFetchAction)
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case done
-#if MOCK_OPENECARD
+#if DEBUG
     case runDebugSequence(IdentifyDebugSequence)
 #endif
 }
@@ -73,32 +73,32 @@ let identificationOverviewReducer = Reducer<IdentificationOverviewState, Identif
     enum CancelId {}
     
     switch action {
-#if MOCK_OPENECARD
+#if DEBUG
     case .runDebugSequence(let debugSequence):
-        // swiftlint:disable:next force_cast
-        let debugInteractionManager = environment.idInteractionManager as! DebugIDInteractionManager
-        state.availableDebugActions = debugInteractionManager.runIdentify(debugSequence: debugSequence)
+        state.availableDebugActions = environment.debugIDInteractionManager.runIdentify(debugSequence: debugSequence)
         return .none
 #endif
     case .onAppear:
         guard state.tokenFetch == .loading else { return .none }
         return Effect(value: .identify)
     case .identify:
-        #if MOCK_OPENECARD
-        // swiftlint:disable:next force_cast
-        let debugIDInteractionManager = environment.idInteractionManager as! DebugIDInteractionManager
-        let debuggableInteraction = debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
-        state.availableDebugActions = debuggableInteraction.sequence
-        return debuggableInteraction.publisher
+        let publisher: EIDInteractionPublisher
+#if DEBUG
+        if MOCK_OPENECARD {
+            let debuggableInteraction = environment.debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
+            state.availableDebugActions = debuggableInteraction.sequence
+            publisher = debuggableInteraction.publisher
+        } else {
+            publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
+        }
+#else
+        publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
+#endif
+        return publisher
             .receive(on: environment.mainQueue)
             .catchToEffect(IdentificationOverviewAction.idInteractionEvent)
             .cancellable(id: CancelId.self, cancelInFlight: true)
-        #else
-        return environment.idInteractionManager.identify(tokenURL: state.tokenURL)
-            .receive(on: environment.mainQueue)
-            .catchToEffect(IdentificationOverviewAction.idInteractionEvent)
-            .cancellable(id: CancelId.self, cancelInFlight: true)
-        #endif
+        
     case .idInteractionEvent(.success(let event)):
         switch event {
         case .requestAuthenticationRequestConfirmation(let request, let handler):
@@ -154,7 +154,7 @@ struct IdentificationOverview: View {
                     ViewStore(store.stateless).send(.cancel)
                 }
             }
-#if MOCK_OPENECARD
+#if DEBUG
             ToolbarItem(placement: .primaryAction) {
                 WithViewStore(store) { viewStore in
                     Menu {

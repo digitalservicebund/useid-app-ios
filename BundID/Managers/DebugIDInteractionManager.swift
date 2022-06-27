@@ -2,7 +2,17 @@ import Foundation
 import OpenEcard
 import Combine
 
-#if MOCK_OPENECARD
+#if DEBUG
+
+func processInfoContainsArgument(_ argument: String) -> Bool {
+    ProcessInfo.processInfo.arguments.contains(argument)
+}
+
+#if targetEnvironment(simulator)
+let MOCK_OPENECARD = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil // Always mock except in unit tests
+#else
+let MOCK_OPENECARD = processInfoContainsArgument("MOCK_OPENECARD")
+#endif
 
 struct DebuggableInteraction<T> {
     var publisher: EIDInteractionPublisher

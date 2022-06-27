@@ -16,7 +16,7 @@ struct IdentificationScanState: Equatable {
     var error: IdentificationScanError?
     var remainingAttempts: Int?
     var attempt = 0
-#if MOCK_OPENECARD
+#if DEBUG
     var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
 }
@@ -29,21 +29,19 @@ enum IdentificationScanAction: Equatable {
     case error(CardErrorType)
     case cancelScan
     case scannedSuccessfully
-#if MOCK_OPENECARD
+#if DEBUG
     case runDebugSequence(IdentifyDebugSequence)
 #endif
 }
 
 let identificationScanReducer = Reducer<IdentificationScanState, IdentificationScanAction, AppEnvironment> { state, action, environment in
     
-    enum IdentifyId {}
+    enum CancelId {}
     
     switch action {
-#if MOCK_OPENECARD
+#if DEBUG
     case .runDebugSequence(let debugSequence):
-        // swiftlint:disable:next force_cast
-        let debugInteractionManager = (environment.idInteractionManager as! DebugIDInteractionManager)
-        state.availableDebugActions = debugInteractionManager.runIdentify(debugSequence: debugSequence)
+        state.availableDebugActions = environment.debugIDInteractionManager.runIdentify(debugSequence: debugSequence)
         return .none
 #endif
     case .onAppear:
@@ -52,22 +50,22 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
         state.error = nil
         state.isScanning = true
         
-#if MOCK_OPENECARD
-        // swiftlint:disable:next force_cast
-        let debugIDInteractionManager = environment.idInteractionManager as! DebugIDInteractionManager
-        let debuggableInteraction = debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
-        state.availableDebugActions = debuggableInteraction.sequence
-        return debuggableInteraction.publisher
-            .receive(on: environment.mainQueue)
-            .catchToEffect(IdentificationScanAction.scanEvent)
-            .cancellable(id: IdentifyId.self, cancelInFlight: true)
-        
+        let publisher: EIDInteractionPublisher
+#if DEBUG
+        if MOCK_OPENECARD {
+            let debuggableInteraction = environment.debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
+            state.availableDebugActions = debuggableInteraction.sequence
+            publisher = debuggableInteraction.publisher
+        } else {
+            publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
+        }
 #else
-        return environment.idInteractionManager.identify(tokenURL: state.tokenURL)
+        publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
+#endif
+        return publisher
             .receive(on: environment.mainQueue)
             .catchToEffect(IdentificationScanAction.scanEvent)
-            .cancellable(id: IdentifyId.self, cancelInFlight: true)
-#endif
+            .cancellable(id: CancelId.self, cancelInFlight: true)
     case .scanEvent(.failure(let error)):
         state.error = .idCardInteraction(error)
         state.isScanning = false
@@ -78,19 +76,19 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
         case .cardBlocked:
             return Effect(value: .error(.cardBlocked))
         default:
-            return .cancel(id: IdentifyId.self)
+            return .cancel(id: CancelId.self)
         }
     case .scanEvent(.success(let event)):
         return state.handle(event: event, environment: environment)
     case .cancelScan:
         state.isScanning = false
-        return .cancel(id: IdentifyId.self)
+        return .cancel(id: CancelId.self)
     case .error:
-        return .cancel(id: IdentifyId.self)
+        return .cancel(id: CancelId.self)
     case .wrongPIN:
-        return .cancel(id: IdentifyId.self)
+        return .cancel(id: CancelId.self)
     case .scannedSuccessfully:
-        return .cancel(id: IdentifyId.self)
+        return .cancel(id: CancelId.self)
     }
 }
 
@@ -222,7 +220,7 @@ struct IdentificationScan: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
-#if MOCK_OPENECARD
+#if DEBUG
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Menu {
