@@ -115,6 +115,14 @@ let identificationOverviewReducer = Reducer<IdentificationOverviewState, Identif
         return Effect(value: .identify)
     case .tokenFetch(.loaded(.continue)):
         return Effect(value: .done)
+    case .done:
+        guard case .loaded(let subState) = state.tokenFetch else { return .none }
+        var dict: [IDCardAttribute: Bool] = [:]
+        for attribute in subState.requiredReadAttributes {
+            dict[attribute] = true
+        }
+        subState.handler(dict)
+        return .none
     default:
         return .none
     }

@@ -8,7 +8,7 @@ enum PersonalPINError: Equatable {
 
 struct IdentificationPersonalPINState: Equatable {
     @BindableState var enteredPIN: String = ""
-    var error: PersonalPINError? = .incorrect
+    var error: PersonalPINError?
     var remainingAttempts: Int?
     
     var doneButtonEnabled: Bool {
@@ -71,8 +71,8 @@ struct IdentificationPersonalPIN: View {
                                      shouldBeFocused: .constant(true),
                                      doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                           title: L10n.Identification.PersonalPIN.continue,
-                                                                          handler: { _ in
-                            print("Continuing not yet implemented")
+                                                                          handler: { pin in
+                            viewStore.send(.done(pin: pin))
                         }))
                         .font(.bundTitle)
                     }

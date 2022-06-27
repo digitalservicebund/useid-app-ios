@@ -37,9 +37,18 @@ class EACInteraction: NSObject, EACInteractionType {
     }
     
     func onServerData(_ data: (NSObjectProtocol & ServerDataProtocol)!, withTransactionData transactionData: String!, withSelectReadWrite selectReadWrite: (NSObjectProtocol & ConfirmAttributeSelectionOperationProtocol)!) {
-        let readAttributes: FlaggedAttributes
         do {
-            readAttributes = try data.getReadAccessAttributes()!.mapToAttributeRequirements()
+            let readAccessAttributes = data.getReadAccessAttributes()!
+            let flaggedAttributes = try readAccessAttributes.mapToAttributeRequirements()
+            
+            let eidServerData = EIDAuthenticationRequest(issuer: data.getIssuer(), issuerURL: data.getIssuerUrl(), subject: data.getSubject(), subjectURL: data.getSubjectUrl(), validity: data.getValidity(), terms: .text(data.getTermsOfUsage().getDataString()), readAttributes: flaggedAttributes)
+            
+            let confirmationCallback: (FlaggedAttributes) -> Void = { attributes in
+                let selected = attributes.selectableItemsSettingChecked
+                selectReadWrite.enterAttributeSelection(selected, withWrite: [])
+            }
+            
+            subject.send(.requestAuthenticationRequestConfirmation(eidServerData, confirmationCallback))
         } catch IDCardInteractionError.unexpectedReadAttribute(let attribute) {
             subject.send(completion: .failure(.unexpectedReadAttribute(attribute)))
             return
@@ -47,12 +56,6 @@ class EACInteraction: NSObject, EACInteractionType {
             subject.send(completion: .failure(.frameworkError(message: nil)))
             return
         }
-        
-        let eidServerData = EIDAuthenticationRequest(issuer: data.getIssuer(), issuerURL: data.getIssuerUrl(), subject: data.getSubject(), subjectURL: data.getSubjectUrl(), validity: data.getValidity(), terms: .text(data.getTermsOfUsage().getDataString()), readAttributes: readAttributes)
-        
-        let confirmationCallback: (FlaggedAttributes) -> Void = { selectReadWrite.enterAttributeSelection($0.selectableItemsSettingChecked, withWrite: []) }
-        
-        subject.send(.requestAuthenticationRequestConfirmation(eidServerData, confirmationCallback))
     }
     
     func onCardAuthenticationSuccessful() {
