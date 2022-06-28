@@ -7,15 +7,20 @@ import ComposableArchitecture
 
 struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
     var tokenURL: String
-    var token: IdentificationOverviewLoadedState?
+    var tokenFetch: IdentificationOverviewTokenFetch = .loading
     var pin: String = ""
+
+#if DEBUG
+    var availableDebugActions: [IdentifyDebugSequence] = []
+#endif
+    
     var routes: [Route<IdentificationScreenState>] {
         get {
             states.map {
                 $0.map { screenState in
                     switch screenState {
                     case .overview(var state):
-                        state.tokenURL = tokenURL
+                        state.tokenFetch = tokenFetch
                         return .overview(state)
                     default:
                         return screenState
@@ -24,27 +29,84 @@ struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
             }
         }
         set {
-            states = newValue
+            states = newValue.map {
+                $0.map { screenState in
+                    switch screenState {
+                    case .overview(let subState):
+                        tokenFetch = subState.tokenFetch
+                    default:
+                        break
+                    }
+                    return screenState
+                }
+            }
         }
     }
     var states: [Route<IdentificationScreenState>]
     
     init(tokenURL: String) {
         self.tokenURL = tokenURL
-        self.states = [.root(.overview(IdentificationOverviewState(tokenURL: tokenURL)))]
+        self.states = [.root(.overview(IdentificationOverviewState()))]
     }
 }
 
 enum IdentificationCoordinatorAction: Equatable, IndexedRouterAction {
     case routeAction(Int, action: IdentificationScreenAction)
     case updateRoutes([Route<IdentificationScreenState>])
+    case loadToken
+    case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
+#if DEBUG
+    case runDebugSequence(IdentifyDebugSequence)
+#endif
 }
 
 let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, IdentificationCoordinatorAction, AppEnvironment> = identificationScreenReducer
     .forEachIndexedRoute(environment: { $0 })
     .withRouteReducer(
-        Reducer { state, action, _ in
+        Reducer { state, action, environment in
+            enum CancelId {}
+            
             switch action {
+#if DEBUG
+            case .runDebugSequence(let debugSequence):
+                state.availableDebugActions = environment.debugIDInteractionManager.runIdentify(debugSequence: debugSequence)
+                return .none
+#endif
+            case .loadToken:
+                let publisher: EIDInteractionPublisher
+#if DEBUG
+                if MOCK_OPENECARD {
+                    let debuggableInteraction = environment.debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
+                    state.availableDebugActions = debuggableInteraction.sequence
+                    publisher = debuggableInteraction.publisher
+                } else {
+                    publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
+                }
+#else
+                publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
+#endif
+                return publisher
+                    .receive(on: environment.mainQueue)
+                    .catchToEffect(IdentificationCoordinatorAction.idInteractionEvent)
+                    .cancellable(id: CancelId.self, cancelInFlight: true)
+                
+            case .idInteractionEvent(.success(let event)):
+                switch event {
+                case .requestAuthenticationRequestConfirmation(let request, let handler):
+                    state.tokenFetch = .loaded(IdentificationOverviewLoadedState(id: environment.uuidFactory(), request: request, handler: handler))
+                    return .none
+                case .requestPIN(remainingAttempts: let remainingAttempts, pinCallback: let callback):
+                    // TODO: remember callback here to fire later
+                    return .none
+                default:
+                    return .none
+                }
+            case .idInteractionEvent(.failure(let error)):
+                state.tokenFetch = .error(IdentifiableError(error))
+                return .none
+            case .routeAction(_, action: .overview(.identify)):
+                if case .loaded = state.tokenFetch { return .none }
+                return Effect(value: .loadToken)
             case .routeAction(_, action: .overview(.done)):
                 state.routes.push(.personalPIN(IdentificationPersonalPINState()))
                 return .none
@@ -74,6 +136,23 @@ struct IdentificationCoordinatorView: View {
                         action: IdentificationScreenAction.scan,
                         then: IdentificationScan.init)
             }
+        }
+        .toolbar {
+#if DEBUG
+            ToolbarItem(placement: .primaryAction) {
+                WithViewStore(store) { viewStore in
+                    Menu {
+                        ForEach(viewStore.availableDebugActions) { sequence in
+                            Button(sequence.id) {
+                                viewStore.send(.runDebugSequence(sequence))
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "wrench")
+                    }
+                }
+            }
+#endif
         }
     }
 }

@@ -30,11 +30,7 @@ enum IdentificationOverviewTokenFetch: Equatable {
 }
 
 struct IdentificationOverviewState: Equatable {
-    var tokenURL: String
     var tokenFetch: IdentificationOverviewTokenFetch = .loading
-    #if DEBUG
-    var availableDebugActions: [IdentifyDebugSequence] = []
-    #endif
 }
 
 enum TokenFetchLoadingAction: Equatable {
@@ -61,54 +57,15 @@ enum IdentificationOverviewAction: Equatable {
     case identify
     case cancel
     case tokenFetch(TokenFetchAction)
-    case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case done
-#if DEBUG
-    case runDebugSequence(IdentifyDebugSequence)
-#endif
 }
 
 let identificationOverviewReducer = Reducer<IdentificationOverviewState, IdentificationOverviewAction, AppEnvironment> { state, action, environment in
     
-    enum CancelId {}
-    
     switch action {
-#if DEBUG
-    case .runDebugSequence(let debugSequence):
-        state.availableDebugActions = environment.debugIDInteractionManager.runIdentify(debugSequence: debugSequence)
-        return .none
-#endif
     case .onAppear:
-        guard state.tokenFetch == .loading else { return .none }
         return Effect(value: .identify)
     case .identify:
-        let publisher: EIDInteractionPublisher
-#if DEBUG
-        if MOCK_OPENECARD {
-            let debuggableInteraction = environment.debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
-            state.availableDebugActions = debuggableInteraction.sequence
-            publisher = debuggableInteraction.publisher
-        } else {
-            publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
-        }
-#else
-        publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
-#endif
-        return publisher
-            .receive(on: environment.mainQueue)
-            .catchToEffect(IdentificationOverviewAction.idInteractionEvent)
-            .cancellable(id: CancelId.self, cancelInFlight: true)
-        
-    case .idInteractionEvent(.success(let event)):
-        switch event {
-        case .requestAuthenticationRequestConfirmation(let request, let handler):
-            state.tokenFetch = .loaded(IdentificationOverviewLoadedState(id: environment.uuidFactory(), request: request, handler: handler))
-            return .none
-        default:
-            return .none
-        }
-    case .idInteractionEvent(.failure(let error)):
-        state.tokenFetch = .error(IdentifiableError(error))
         return .none
     case .tokenFetch(.error(.retry)):
         state.tokenFetch = .loading
@@ -162,21 +119,6 @@ struct IdentificationOverview: View {
                     ViewStore(store.stateless).send(.cancel)
                 }
             }
-#if DEBUG
-            ToolbarItem(placement: .primaryAction) {
-                WithViewStore(store) { viewStore in
-                    Menu {
-                        ForEach(viewStore.availableDebugActions) { sequence in
-                            Button(sequence.id) {
-                                viewStore.send(.runDebugSequence(sequence))
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "wrench")
-                    }
-                }
-            }
-#endif
         }
     }
 }
@@ -185,7 +127,7 @@ let demoTokenURL = "http://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Ft
 
 struct IdentificationOverview_Previews: PreviewProvider {
     static var previews: some View {
-        IdentificationOverview(store: .init(initialState: IdentificationOverviewState(tokenURL: demoTokenURL),
+        IdentificationOverview(store: .init(initialState: IdentificationOverviewState(),
                                             reducer: identificationOverviewReducer,
                                             environment: AppEnvironment.preview))
     }
