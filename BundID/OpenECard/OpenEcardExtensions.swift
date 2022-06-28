@@ -39,8 +39,10 @@ class SelectableItem: NSObject, SelectableItemProtocol {
     func isRequired() -> Bool { false }
 }
 
-extension Dictionary where Key == IDCardAttribute, Value == Bool {
-    var selectableItemsSettingChecked: [NSObjectProtocol & SelectableItemProtocol] {
-        map { SelectableItem(attribute: $0.key.rawValue, checked: $0.value) }
-    }
-}
+// Does not work probably due to robovm bug
+
+//extension Dictionary where Key == IDCardAttribute, Value == Bool {
+//    var selectableItemsSettingChecked: [NSObjectProtocol & SelectableItemProtocol] {
+//        map { SelectableItem(attribute: $0.key.rawValue, checked: $0.value) }
+//    }
+//}

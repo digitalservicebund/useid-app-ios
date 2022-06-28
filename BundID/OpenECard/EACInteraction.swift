@@ -44,8 +44,12 @@ class EACInteraction: NSObject, EACInteractionType {
             let eidServerData = EIDAuthenticationRequest(issuer: data.getIssuer(), issuerURL: data.getIssuerUrl(), subject: data.getSubject(), subjectURL: data.getSubjectUrl(), validity: data.getValidity(), terms: .text(data.getTermsOfUsage().getDataString()), readAttributes: flaggedAttributes)
             
             let confirmationCallback: (FlaggedAttributes) -> Void = { attributes in
-                let selected = attributes.selectableItemsSettingChecked
-                selectReadWrite.enterAttributeSelection(selected, withWrite: [])
+                readAccessAttributes.forEach { attribute in
+                    if let checked = attributes[IDCardAttribute(rawValue: attribute.getName()!)!] {
+                        attribute.setChecked(checked)
+                    }
+                }
+                selectReadWrite.enterAttributeSelection(readAccessAttributes, withWrite: [])
             }
             
             subject.send(.requestAuthenticationRequestConfirmation(eidServerData, confirmationCallback))
