@@ -58,6 +58,7 @@
 		E1CD8E93282156F2008ADA2A /* SetupTransportPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E92282156F2008ADA2A /* SetupTransportPIN.swift */; };
 		E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E9428215971008ADA2A /* PINEntryView.swift */; };
 		E1D307B02833A2500088DAFF /* SetupPersonalPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D307AF2833A2500088DAFF /* SetupPersonalPIN.swift */; };
+		E1DA8463286DD45800710DD9 /* IdentificationDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DA8462286DD45800710DD9 /* IdentificationDone.swift */; };
 		E1EFB5C22858EAA2005C38C6 /* IdentificationOverviewLoaded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */; };
 		E1EFB5C42858EB0F005C38C6 /* IdentificationOverviewLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C32858EB0F005C38C6 /* IdentificationOverviewLoading.swift */; };
 		E1EFB5C62858EB2A005C38C6 /* Shape+Fill.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C52858EB2A005C38C6 /* Shape+Fill.swift */; };
@@ -86,7 +87,7 @@
 		E5E69D852812FB6100A3B66A /* IDCardInteractionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D842812FB6100A3B66A /* IDCardInteractionError.swift */; };
 		E5E69D872812FB7A00A3B66A /* IDTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D862812FB7A00A3B66A /* IDTask.swift */; };
 		E5E69D892812FB8D00A3B66A /* IDCardAttribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D882812FB8D00A3B66A /* IDCardAttribute.swift */; };
-		F43622A72850D6C9008AEBB9 /* SetupError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43622A62850D6C9008AEBB9 /* SetupError.swift */; };
+		F43622A72850D6C9008AEBB9 /* CardError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43622A62850D6C9008AEBB9 /* CardError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -172,6 +173,7 @@
 		E1CD8E92282156F2008ADA2A /* SetupTransportPIN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupTransportPIN.swift; sourceTree = "<group>"; };
 		E1CD8E9428215971008ADA2A /* PINEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINEntryView.swift; sourceTree = "<group>"; };
 		E1D307AF2833A2500088DAFF /* SetupPersonalPIN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupPersonalPIN.swift; sourceTree = "<group>"; };
+		E1DA8462286DD45800710DD9 /* IdentificationDone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationDone.swift; sourceTree = "<group>"; };
 		E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoaded.swift; sourceTree = "<group>"; };
 		E1EFB5C32858EB0F005C38C6 /* IdentificationOverviewLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoading.swift; sourceTree = "<group>"; };
 		E1EFB5C52858EB2A005C38C6 /* Shape+Fill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shape+Fill.swift"; sourceTree = "<group>"; };
@@ -204,7 +206,7 @@
 		E5E69D842812FB6100A3B66A /* IDCardInteractionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDCardInteractionError.swift; sourceTree = "<group>"; };
 		E5E69D862812FB7A00A3B66A /* IDTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDTask.swift; sourceTree = "<group>"; };
 		E5E69D882812FB8D00A3B66A /* IDCardAttribute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDCardAttribute.swift; sourceTree = "<group>"; };
-		F43622A62850D6C9008AEBB9 /* SetupError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupError.swift; sourceTree = "<group>"; };
+		F43622A62850D6C9008AEBB9 /* CardError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -361,7 +363,7 @@
 				E12CB307284A146D0039FD56 /* SetupIncorrectTransportPIN.swift */,
 				E1CD8E9428215971008ADA2A /* PINEntryView.swift */,
 				E1AB87A3282413A700C7FC94 /* PINTextField.swift */,
-				F43622A62850D6C9008AEBB9 /* SetupError.swift */,
+				F43622A62850D6C9008AEBB9 /* CardError.swift */,
 				E1EFB5C02858EA8C005C38C6 /* IdentificationOverview */,
 			);
 			path = Views;
@@ -398,6 +400,7 @@
 				E1EFB5C7285A365E005C38C6 /* IdentificationAbout.swift */,
 				E1EFB5D4285C7D81005C38C6 /* IdentificationPersonalPIN.swift */,
 				E1C2D8B928620E2B000E0F5B /* IdentificationScan.swift */,
+				E1DA8462286DD45800710DD9 /* IdentificationDone.swift */,
 			);
 			path = IdentificationOverview;
 			sourceTree = "<group>";
@@ -751,7 +754,7 @@
 				E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */,
 				E1F39DD8285791BD00D8D907 /* IdentifiableError.swift in Sources */,
 				E1EFB5C8285A365E005C38C6 /* IdentificationAbout.swift in Sources */,
-				F43622A72850D6C9008AEBB9 /* SetupError.swift in Sources */,
+				F43622A72850D6C9008AEBB9 /* CardError.swift in Sources */,
 				E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */,
 				E13925B82840FB7700161F5C /* Types.swift in Sources */,
 				E13925C72841119400161F5C /* MockIDInteractionManager.swift in Sources */,
@@ -762,6 +765,7 @@
 				E11EB2AB2853A8B6008B4042 /* Coordinator.swift in Sources */,
 				E5E69D872812FB7A00A3B66A /* IDTask.swift in Sources */,
 				E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */,
+				E1DA8463286DD45800710DD9 /* IdentificationDone.swift in Sources */,
 				E1D307B02833A2500088DAFF /* SetupPersonalPIN.swift in Sources */,
 				E16708B5283D4F25001A1637 /* Screens.swift in Sources */,
 				E5CEB27E281041330076B9FE /* BundIDApp.swift in Sources */,

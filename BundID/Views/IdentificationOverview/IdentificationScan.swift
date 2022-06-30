@@ -24,11 +24,7 @@ struct IdentificationScanState: Equatable {
 enum IdentificationScanAction: Equatable {
     case onAppear
     case startScan
-    case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
-    case wrongPIN(remainingAttempts: Int)
-    case error(CardErrorType)
     case cancelScan
-    case scannedSuccessfully
 #if DEBUG
     case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -39,104 +35,13 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
     enum CancelId {}
     
     switch action {
-#if DEBUG
-    case .runDebugSequence(let debugSequence):
-        state.availableDebugActions = environment.debugIDInteractionManager.runIdentify(debugSequence: debugSequence)
-        return .none
-#endif
     case .onAppear:
         return Effect(value: .startScan)
     case .startScan:
-        state.error = nil
-        state.isScanning = true
-        
-        let publisher: EIDInteractionPublisher
-#if DEBUG
-        if MOCK_OPENECARD {
-            let debuggableInteraction = environment.debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
-            state.availableDebugActions = debuggableInteraction.sequence
-            publisher = debuggableInteraction.publisher
-        } else {
-            publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
-        }
-#else
-        publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
-#endif
-        return publisher
-            .receive(on: environment.mainQueue)
-            .catchToEffect(IdentificationScanAction.scanEvent)
-            .cancellable(id: CancelId.self, cancelInFlight: true)
-    case .scanEvent(.failure(let error)):
-        state.error = .idCardInteraction(error)
-        state.isScanning = false
-        
-        switch error {
-        case .cardDeactivated:
-            return Effect(value: .error(.cardDeactivated))
-        case .cardBlocked:
-            return Effect(value: .error(.cardBlocked))
-        default:
-            return .cancel(id: CancelId.self)
-        }
-    case .scanEvent(.success(let event)):
-        return state.handle(event: event, environment: environment)
+        return .none
     case .cancelScan:
-        state.isScanning = false
         return .cancel(id: CancelId.self)
-    case .error:
-        return .cancel(id: CancelId.self)
-    case .wrongPIN:
-        return .cancel(id: CancelId.self)
-    case .scannedSuccessfully:
-        return .cancel(id: CancelId.self)
-    }
-}
-
-extension IdentificationScanState {
-    mutating func handle(event: EIDInteractionEvent, environment: AppEnvironment) -> Effect<IdentificationScanAction, Never> {
-        switch event {
-        case .authenticationStarted:
-            print("Authentication started")
-        case .requestCardInsertion(let messageCallback):
-            self.showProgressCaption = false
-            print("Request card insertion.")
-            messageCallback("Request card insertion.")
-        case .cardInteractionComplete: print("Card interaction complete.")
-        case .cardRecognized: print("Card recognized.")
-        case .cardRemoved:
-            self.showProgressCaption = true
-            print("Card removed.")
-        case .processCompletedSuccessfully:
-            return Effect(value: .scannedSuccessfully)
-        case .pinManagementStarted: print("PIN Management started.")
-        case .requestPIN(let remainingAttempts, let pinCallback):
-            print("Providing changed PIN with \(remainingAttempts ?? 3) remaining attempts.")
-            let remainingAttemptsBefore = self.remainingAttempts
-            self.remainingAttempts = remainingAttempts
-            
-            // This is our signal that the user canceled (for now)
-            guard let remainingAttempts = remainingAttempts else {
-                return Effect(value: .cancelScan)
-            }
-            
-            // Wrong transport/personal PIN provided
-            if let remainingAttemptsBefore = remainingAttemptsBefore,
-               remainingAttempts < remainingAttemptsBefore {
-                return Effect(value: .wrongPIN(remainingAttempts: remainingAttempts))
-            }
-            
-            pinCallback(pin)
-        case .requestCANAndChangedPIN:
-            print("CAN to change PIN requested, so card is suspended. Callback not implemented yet.")
-            return Effect(value: .error(.cardSuspended))
-        case .requestPUK:
-            print("PUK requested, so card is blocked. Callback not implemented yet.")
-            return Effect(value: .error(.cardBlocked))
-        default:
-            self.error = .unexpectedEvent(event)
-            print("Received unexpected event.")
-            return Effect(value: .cancelScan)
-        }
+    case .runDebugSequence:
         return .none
     }
 }
@@ -220,9 +125,11 @@ struct IdentificationScan: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
+        }
+        .toolbar {
 #if DEBUG
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
+            ToolbarItem(placement: .primaryAction) {
+                WithViewStore(store) { viewStore in
                     Menu {
                         ForEach(viewStore.availableDebugActions) { sequence in
                             Button(sequence.id) {
@@ -231,7 +138,7 @@ struct IdentificationScan: View {
                         }
                     } label: {
                         Image(systemName: "wrench")
-                    }.disabled(!viewStore.isScanning)
+                    }
                 }
             }
 #endif

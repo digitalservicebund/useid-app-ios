@@ -93,6 +93,9 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
             case .routeAction(_, action: .identificationCoordinator(.routeAction(_, action: .overview(.cancel)))):
                 state.routes.dismiss()
                 return .none
+            case .routeAction(_, action: .identificationCoordinator(.routeAction(_, action: .done(.close)))):
+                state.routes.dismiss()
+                return .none
             default:
                 return .none
             }

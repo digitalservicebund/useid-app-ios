@@ -110,7 +110,7 @@ extension SetupScanState {
             return Effect(value: .scannedSuccessfully)
         case .pinManagementStarted: print("PIN Management started.")
         case .requestChangedPIN(let remainingAttempts, let pinCallback):
-            print("Providing changed PIN with \(remainingAttempts ?? 3) remaining attempts.")
+            print("Providing changed PIN with \(String(describing: remainingAttempts)) remaining attempts.")
             let remainingAttemptsBefore = self.remainingAttempts
             self.remainingAttempts = remainingAttempts
             

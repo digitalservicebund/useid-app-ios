@@ -7,7 +7,7 @@ enum CardErrorType {
     case cardBlocked
 }
 
-struct SetupErrorState: Equatable {
+struct CardErrorState: Equatable {
     var errorType: CardErrorType
     
     var title: String {
@@ -42,12 +42,12 @@ struct SetupErrorState: Equatable {
     }
 }
 
-enum SetupErrorAction: Equatable {
+enum CardErrorAction: Equatable {
     case done
 }
 
-struct SetupError: View {
-    var store: Store<SetupErrorState, SetupErrorAction>
+struct CardError: View {
+    var store: Store<CardErrorState, CardErrorAction>
     
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -58,13 +58,13 @@ struct SetupError: View {
 
 struct SetupError_Previews: PreviewProvider {
     static var previews: some View {
-        SetupError(store: Store(initialState: .init(errorType: .cardDeactivated),
+        CardError(store: Store(initialState: .init(errorType: .cardDeactivated),
                                 reducer: .empty,
                                 environment: AppEnvironment.preview))
-        SetupError(store: Store(initialState: .init(errorType: .cardSuspended),
+        CardError(store: Store(initialState: .init(errorType: .cardSuspended),
                                 reducer: .empty,
                                 environment: AppEnvironment.preview))
-        SetupError(store: Store(initialState: .init(errorType: .cardBlocked),
+        CardError(store: Store(initialState: .init(errorType: .cardBlocked),
                                 reducer: .empty,
                                 environment: AppEnvironment.preview))
     }

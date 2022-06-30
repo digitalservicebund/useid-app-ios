@@ -31,6 +31,9 @@ enum IdentificationOverviewTokenFetch: Equatable {
 
 struct IdentificationOverviewState: Equatable {
     var tokenFetch: IdentificationOverviewTokenFetch = .loading
+#if DEBUG
+    var availableDebugActions: [IdentifyDebugSequence] = []
+#endif
 }
 
 enum TokenFetchLoadingAction: Equatable {
@@ -58,6 +61,9 @@ enum IdentificationOverviewAction: Equatable {
     case cancel
     case tokenFetch(TokenFetchAction)
     case done
+#if DEBUG
+    case runDebugSequence(IdentifyDebugSequence)
+#endif
 }
 
 let identificationOverviewReducer = Reducer<IdentificationOverviewState, IdentificationOverviewAction, AppEnvironment> { state, action, environment in
@@ -119,6 +125,23 @@ struct IdentificationOverview: View {
                     ViewStore(store.stateless).send(.cancel)
                 }
             }
+        }
+        .toolbar {
+#if DEBUG
+            ToolbarItem(placement: .primaryAction) {
+                WithViewStore(store) { viewStore in
+                    Menu {
+                        ForEach(viewStore.availableDebugActions) { sequence in
+                            Button(sequence.id) {
+                                viewStore.send(.runDebugSequence(sequence))
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "wrench")
+                    }
+                }
+            }
+#endif
         }
     }
 }

@@ -9,7 +9,7 @@ enum SetupScreenState: Equatable {
     case scan(SetupScanState)
     case done
     case incorrectTransportPIN(SetupIncorrectTransportPINState)
-    case error(SetupErrorState)
+    case error(CardErrorState)
 }
 
 enum SetupScreenAction: Equatable {
@@ -21,7 +21,7 @@ enum SetupScreenAction: Equatable {
     case scan(SetupScanAction)
     case done(SetupDoneAction)
     case incorrectTransportPIN(SetupIncorrectTransportPINAction)
-    case error(SetupErrorAction)
+    case error(CardErrorAction)
 }
 
 let setupScreenReducer = Reducer<SetupScreenState, SetupScreenAction, AppEnvironment>.combine(

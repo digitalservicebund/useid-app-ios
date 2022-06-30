@@ -57,7 +57,7 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
             case .routeAction(_, action: .scan(.scannedSuccessfully)):
                 state.routes.push(.done)
             case .routeAction(_, action: .scan(.error(let errorType))):
-                state.routes.push(.error(SetupErrorState(errorType: errorType)))
+                state.routes.push(.error(CardErrorState(errorType: errorType)))
             case .routeAction(_, action: .scan(.wrongTransportPIN(remainingAttempts: let remainingAttempts))):
                 state.routes.presentSheet(.incorrectTransportPIN(SetupIncorrectTransportPINState(remainingAttempts: remainingAttempts)))
             case .routeAction(let index, action: .incorrectTransportPIN(.confirmEnd)):
@@ -108,7 +108,7 @@ struct SetupCoordinatorView: View {
                         then: SetupDone.init)
                 CaseLet(state: /SetupScreenState.error,
                         action: SetupScreenAction.error,
-                        then: SetupError.init)
+                        then: CardError.init)
                 CaseLet(state: /SetupScreenState.incorrectTransportPIN,
                         action: SetupScreenAction.incorrectTransportPIN,
                         then: SetupIncorrectTransportPIN.init)
