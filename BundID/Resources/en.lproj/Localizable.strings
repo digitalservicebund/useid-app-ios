@@ -8,7 +8,7 @@
 "firstTimeUser_pinLetter_body" = "You should have gotten a letter with a PIN-code when you requested the ID card.";
 "firstTimeUser_intro_no" = "No, register an online ID now";
 "firstTimeUser_intro_title" = "Have you used your online ID-card already?";
-"firstTimeUser_intro_body" = "The following documents offer this function: German personal ID-card, electronic permanent resident card, eID card for EU citizens.";
+"firstTimeUser_intro_body" = "The following documents offer this function: German identity card, electronic permanent resident card, eID card for EU citizens";
 "firstTimeUser_pinLetter_yes" = "Yes, I have my PIN-letter";
 "firstTimeUser_pinLetter_no" = "No, send me a new PIN-letter";
 "firstTimeUser_personalPINIntro_title" = "Pick a personal PIN for your ID-card";
