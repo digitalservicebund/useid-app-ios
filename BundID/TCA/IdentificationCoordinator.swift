@@ -5,10 +5,30 @@ import IdentifiedCollections
 import SwiftUI
 import ComposableArchitecture
 
+struct PINCallback: Identifiable, Equatable {
+    
+    let id: UUID
+    private let callback: (String) -> Void
+    
+    init(id: UUID, callback: @escaping (String) -> Void) {
+        self.id = id
+        self.callback = callback
+    }
+    
+    static func == (lhs: PINCallback, rhs: PINCallback) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    func callAsFunction(_ pin: String) {
+        callback(pin)
+    }
+}
+
 struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
     var tokenURL: String
     var tokenFetch: IdentificationOverviewTokenFetch = .loading
-    var pin: String = ""
+    var pin: String?
+    var pinCallback: PINCallback?
 
 #if DEBUG
     var availableDebugActions: [IdentifyDebugSequence] = []
@@ -96,7 +116,7 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                     state.tokenFetch = .loaded(IdentificationOverviewLoadedState(id: environment.uuidFactory(), request: request, handler: handler))
                     return .none
                 case .requestPIN(remainingAttempts: let remainingAttempts, pinCallback: let callback):
-                    // TODO: remember callback here to fire later
+                    state.pinCallback = PINCallback(id: environment.uuidFactory(), callback: callback)
                     return .none
                 default:
                     return .none
@@ -112,7 +132,12 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 return .none
             case .routeAction(_, action: .personalPIN(.done(pin: let pin))):
                 state.pin = pin
-                state.routes.push(.scan(IdentificationScanState(tokenURL: state.tokenURL, pin: state.pin)))
+                state.routes.push(.scan(IdentificationScanState(tokenURL: state.tokenURL, pin: pin)))
+                return .none
+            case .routeAction(_, action: .scan(.startScan)):
+                guard let pinCallback = state.pinCallback,
+                      let pin = state.pin else { return .none }
+                pinCallback(pin)
                 return .none
             default:
                 return .none
