@@ -19,3 +19,5 @@
 "firstTimeUser_transportPIN_title" = "Type in your five-digit transport PIN found in your PIN letter";
 "firstTimeUser_transportPIN_continue" = "Continue";
 "firstTimeUser_transportPIN_textFieldLabel" = "Transport PIN, five digits";
+"firstTimeUser_personalPIN_body" = "You enter this PIN every time you use your ID card online.";
+"firstTimeUser_personalPIN_textFieldLabel_first" = "PIN, six digits";
