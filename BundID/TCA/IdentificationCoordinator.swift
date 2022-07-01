@@ -90,7 +90,6 @@ enum IdentificationCoordinatorAction: Equatable, IndexedRouterAction {
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case identifiedSuccessfully
     case error(CardErrorType)
-    case cancelScan
 #if DEBUG
     case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -157,10 +156,9 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                     .cancellable(id: CancelId.self, cancelInFlight: true)
             case .wrongPIN(remainingAttempts: let remainingAttempts):
                 state.remainingAttempts = remainingAttempts
-                state.routes.presentSheet(.incorrectPersonalPIN(IdentificationPersonalPINState(error: .incorrect, remainingAttempts: remainingAttempts)), embedInNavigationView: true)
+                state.routes.presentSheet(.incorrectPersonalPIN(IdentificationIncorrectPersonalPINState(error: .incorrect,
+                                                                                                        remainingAttempts: remainingAttempts)))
                 return .none
-            case .cancelScan:
-                return .cancel(id: CancelId.self)
             case .idInteractionEvent(.success(let event)):
                 return state.handle(event: event, environment: environment)
             case .idInteractionEvent(.failure(let error)):
@@ -201,6 +199,14 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                       let pin = state.pin else { return .none }
                 pinCallback(pin)
                 return .none
+            case .routeAction(let index, action: .incorrectPersonalPIN(.confirmEnd)):
+                state.routes.dismiss()
+                
+                // Dismissing two sheets at the same time from different coordinators is not well supported.
+                // Waiting for 0.65s (as TCACoordinators does) fixes this temporarily.
+                return Effect(value: .routeAction(index, action: .incorrectPersonalPIN(.afterConfirmEnd)))
+                    .delay(for: 0.65, scheduler: environment.mainQueue)
+                    .eraseToEffect()
             default:
                 return .none
             }
@@ -276,7 +282,7 @@ struct IdentificationCoordinatorView: View {
                         then: IdentificationPersonalPIN.init)
                 CaseLet(state: /IdentificationScreenState.incorrectPersonalPIN,
                         action: IdentificationScreenAction.incorrectPersonalPIN,
-                        then: IdentificationPersonalPIN.init)
+                        then: IdentificationIncorrectPersonalPIN.init)
                 CaseLet(state: /IdentificationScreenState.scan,
                         action: IdentificationScreenAction.scan,
                         then: IdentificationScan.init)

@@ -24,7 +24,6 @@ struct IdentificationScanState: Equatable {
 enum IdentificationScanAction: Equatable {
     case onAppear
     case startScan
-    case cancelScan
 #if DEBUG
     case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -32,15 +31,11 @@ enum IdentificationScanAction: Equatable {
 
 let identificationScanReducer = Reducer<IdentificationScanState, IdentificationScanAction, AppEnvironment> { state, action, environment in
     
-    enum CancelId {}
-    
     switch action {
     case .onAppear:
         return Effect(value: .startScan)
     case .startScan:
         return .none
-    case .cancelScan:
-        return .cancel(id: CancelId.self)
     case .runDebugSequence:
         return .none
     }

@@ -4,7 +4,7 @@ import ComposableArchitecture
 enum IdentificationScreenState: Equatable {
     case overview(IdentificationOverviewState)
     case personalPIN(IdentificationPersonalPINState)
-    case incorrectPersonalPIN(IdentificationPersonalPINState)
+    case incorrectPersonalPIN(IdentificationIncorrectPersonalPINState)
     case scan(IdentificationScanState)
     case error(CardErrorState)
     case done(IdentificationDoneState)
@@ -13,7 +13,7 @@ enum IdentificationScreenState: Equatable {
 enum IdentificationScreenAction: Equatable {
     case overview(IdentificationOverviewAction)
     case personalPIN(IdentificationPersonalPINAction)
-    case incorrectPersonalPIN(IdentificationPersonalPINAction)
+    case incorrectPersonalPIN(IdentificationIncorrectPersonalPINAction)
     case scan(IdentificationScanAction)
     case error(CardErrorAction)
     case done(IdentificationDoneAction)
@@ -32,7 +32,7 @@ let identificationScreenReducer = Reducer<IdentificationScreenState, Identificat
             action: /IdentificationScreenAction.personalPIN,
             environment: { $0 }
         ),
-    identificationPersonalPINReducer
+    identificationIncorrectPersonalPINReducer
         .pullback(
             state: /IdentificationScreenState.incorrectPersonalPIN,
             action: /IdentificationScreenAction.incorrectPersonalPIN,

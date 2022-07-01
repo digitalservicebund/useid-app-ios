@@ -2,26 +2,14 @@ import SwiftUI
 import Combine
 import ComposableArchitecture
 
-enum PersonalPINError: Equatable {
-    case incorrect
-}
-
 struct IdentificationPersonalPINState: Equatable {
     @BindableState var enteredPIN: String = ""
-    var error: PersonalPINError?
-    var remainingAttempts: Int?
     
     var doneButtonEnabled: Bool {
         return enteredPIN.count == 6
     }
     
     mutating func handlePINChange(_ enteredPIN: String) -> Effect<IdentificationPersonalPINAction, Never> {
-        if !enteredPIN.isEmpty {
-            withAnimation {
-                error = nil
-            }
-        }
-        
         return .none
     }
 }
@@ -29,7 +17,6 @@ struct IdentificationPersonalPINState: Equatable {
 enum IdentificationPersonalPINAction: BindableAction, Equatable {
     case onAppear
     case done(pin: String)
-    case reset
     case binding(BindingAction<IdentificationPersonalPINState>)
 }
 
@@ -40,10 +27,6 @@ let identificationPersonalPINReducer = Reducer<IdentificationPersonalPINState, I
     case .binding(\.$enteredPIN):
         return state.handlePINChange(state.enteredPIN)
     case .binding:
-        return .none
-    case .reset:
-        state.error = nil
-        state.enteredPIN = ""
         return .none
     case .done:
         return .none
@@ -76,29 +59,6 @@ struct IdentificationPersonalPIN: View {
                         }))
                         .font(.bundTitle)
                     }
-                    
-                    VStack {
-                        if case .incorrect = viewStore.error {
-                            VStack(spacing: 3) {
-                                Text(L10n.Identification.PersonalPIN.Error.Incorrect.title)
-                                    .font(.bundBodyBold)
-                                    .foregroundColor(.red900)
-                                Text(L10n.Identification.PersonalPIN.Error.Incorrect.body)
-                                    .font(.bundBody)
-                                    .foregroundColor(.blackish)
-                                    .multilineTextAlignment(.center)
-                            }
-                            .transition(.move(edge: .bottom).combined(with: .opacity))
-                        }
-                        if let remainingAttempts = viewStore.remainingAttempts {
-                            Text(L10n.Identification.PersonalPIN.Error.Incorrect.remainingAttemptsLld(remainingAttempts))
-                                .font(.bundBody)
-                                .foregroundColor(.blackish)
-                                .multilineTextAlignment(.center)
-                                .transition(.move(edge: .bottom).combined(with: .opacity))
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
                     Spacer()
                 }
                 .navigationBarTitleDisplayMode(.inline)
@@ -120,17 +80,7 @@ struct IdentificationPersonalPIN_Previews: PreviewProvider {
         }
         .previewDevice("iPhone 12")
         NavigationView {
-            IdentificationPersonalPIN(store: Store(initialState: IdentificationPersonalPINState(enteredPIN: "",
-                                                                                                error: .incorrect,
-                                                                                               remainingAttempts: 2),
-                                                   reducer: .empty,
-                                                   environment: AppEnvironment.preview))
-        }
-        .previewDevice("iPhone 12")
-        NavigationView {
-            IdentificationPersonalPIN(store: Store(initialState: IdentificationPersonalPINState(enteredPIN: "1",
-                                                                                                error: nil,
-                                                                                               remainingAttempts: 2),
+            IdentificationPersonalPIN(store: Store(initialState: IdentificationPersonalPINState(),
                                                    reducer: .empty,
                                                    environment: AppEnvironment.preview))
         }
