@@ -59,12 +59,6 @@ let identificationIncorrectPersonalPINReducer = Reducer<IdentificationIncorrectP
 struct IdentificationIncorrectPersonalPIN: View {
     
     var store: Store<IdentificationIncorrectPersonalPINState, IdentificationIncorrectPersonalPINAction>
-    var viewStore: ViewStore<IdentificationIncorrectPersonalPINState, IdentificationIncorrectPersonalPINAction>
-    
-    init(store: Store<IdentificationIncorrectPersonalPINState, IdentificationIncorrectPersonalPINAction>) {
-        self.store = store
-        self.viewStore = ViewStore(store)
-    }
     
     var body: some View {
         NavigationView {
@@ -76,38 +70,42 @@ struct IdentificationIncorrectPersonalPIN: View {
                             .foregroundColor(.blackish)
                         VStack {
                             Spacer()
-                            PINEntryView(pin: viewStore.binding(\.$enteredPIN),
-                                         maxDigits: 6,
-                                         groupEvery: 3,
-                                         showPIN: false,
-                                         label: L10n.Identification.PersonalPIN.textFieldLabel,
-                                         shouldBeFocused: .constant(true),
-                                         doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
-                                                                              title: L10n.Identification.PersonalPIN.continue,
-                                                                              handler: { pin in
-                                viewStore.send(.done(pin: pin))
-                            }))
-                            .font(.bundTitle)
+                            WithViewStore(store) { viewStore in
+                                PINEntryView(pin: viewStore.binding(\.$enteredPIN),
+                                             maxDigits: 6,
+                                             groupEvery: 3,
+                                             showPIN: false,
+                                             label: L10n.Identification.PersonalPIN.textFieldLabel,
+                                             shouldBeFocused: .constant(true),
+                                             doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
+                                                                                  title: L10n.Identification.PersonalPIN.continue,
+                                                                                  handler: { pin in
+                                    viewStore.send(.done(pin: pin))
+                                }))
+                                .font(.bundTitle)
+                            }
                         }
                         
                         VStack {
-                            if case .incorrect = viewStore.error {
-                                VStack(spacing: 3) {
-                                    Text(L10n.Identification.PersonalPIN.Error.Incorrect.title)
-                                        .font(.bundBodyBold)
-                                        .foregroundColor(.red900)
-                                    Text(L10n.Identification.PersonalPIN.Error.Incorrect.body)
-                                        .font(.bundBody)
-                                        .foregroundColor(.blackish)
-                                        .multilineTextAlignment(.center)
+                            WithViewStore(store) { viewStore in
+                                if case .incorrect = viewStore.error {
+                                    VStack(spacing: 3) {
+                                        Text(L10n.Identification.PersonalPIN.Error.Incorrect.title)
+                                            .font(.bundBodyBold)
+                                            .foregroundColor(.red900)
+                                        Text(L10n.Identification.PersonalPIN.Error.Incorrect.body)
+                                            .font(.bundBody)
+                                            .foregroundColor(.blackish)
+                                            .multilineTextAlignment(.center)
+                                    }
+                                    .transition(.move(edge: .bottom).combined(with: .opacity))
                                 }
-                                .transition(.move(edge: .bottom).combined(with: .opacity))
+                                Text(L10n.Identification.PersonalPIN.Error.Incorrect.remainingAttemptsLld(viewStore.remainingAttempts))
+                                    .font(.bundBody)
+                                    .foregroundColor(.blackish)
+                                    .multilineTextAlignment(.center)
+                                    .transition(.move(edge: .bottom).combined(with: .opacity))
                             }
-                            Text(L10n.Identification.PersonalPIN.Error.Incorrect.remainingAttemptsLld(viewStore.remainingAttempts))
-                                .font(.bundBody)
-                                .foregroundColor(.blackish)
-                                .multilineTextAlignment(.center)
-                                .transition(.move(edge: .bottom).combined(with: .opacity))
                         }
                         .frame(maxWidth: .infinity)
                         Spacer()
@@ -116,14 +114,14 @@ struct IdentificationIncorrectPersonalPIN: View {
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading) {
                             Button {
-                                viewStore.send(.end)
+                                ViewStore(store.stateless).send(.end)
                             } label: {
                                 Text(verbatim: L10n.FirstTimeUser.IncorrectTransportPIN.end)
                             }
                         }
                     }
                     .onAppear {
-                        viewStore.send(.onAppear)
+                        ViewStore(store.stateless).send(.onAppear)
                     }
                 }
                 .padding(.horizontal)
@@ -131,9 +129,8 @@ struct IdentificationIncorrectPersonalPIN: View {
             .navigationBarTitleDisplayMode(.inline)
             .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
         }
-        
         .interactiveDismissDisabled {
-            viewStore.send(.end)
+            ViewStore(store.stateless).send(.end)
         }
     }
 }
