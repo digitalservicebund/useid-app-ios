@@ -172,7 +172,7 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 }
                 return Effect(value: localAction)
             case .routeAction(_, action: .scan(.identifiedSuccessfully)):
-                state.routes.push(.done(IdentificationDoneState(subject: "TODO"))) // TODO: Fill subject
+                state.routes.push(.done(IdentificationDoneState(subject: "TODO")))
                 return .none
             case .routeAction(_, action: .incorrectPersonalPIN(.done(let pin))):
                 state.pin = pin

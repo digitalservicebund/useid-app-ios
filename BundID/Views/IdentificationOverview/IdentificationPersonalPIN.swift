@@ -22,7 +22,7 @@ enum IdentificationPersonalPINAction: BindableAction, Equatable {
     case binding(BindingAction<IdentificationPersonalPINState>)
 }
 
-let identificationPersonalPINReducer = Reducer<IdentificationPersonalPINState, IdentificationPersonalPINAction, AppEnvironment> { state, action, environment in
+let identificationPersonalPINReducer = Reducer<IdentificationPersonalPINState, IdentificationPersonalPINAction, AppEnvironment> { state, action, _ in
     switch action {
     case .onAppear:
         return .none

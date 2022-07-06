@@ -64,7 +64,7 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             subject.send(completion: .failure(.processFailed(resultCode: .DEPENDING_HOST_UNREACHABLE)))
             return []
         case .requestAuthorization:
-            subject.send(.requestAuthenticationRequestConfirmation(IdentifyDebugSequence.authenticationRequest, { attributes in
+            subject.send(.requestAuthenticationRequestConfirmation(IdentifyDebugSequence.authenticationRequest, { _ in
                 subject.send(.requestPIN(remainingAttempts: nil, pinCallback: { _ in
                     subject.send(.authenticationStarted)
                     subject.send(.requestCardInsertion({ _ in }))
