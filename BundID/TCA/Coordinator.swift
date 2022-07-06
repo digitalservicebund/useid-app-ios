@@ -71,7 +71,8 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                     state.routes.dismiss()
                     return .none
                 }
-            case .routeAction(_, action: .setupCoordinator(.routeAction(_, action: .error(.done)))):
+            case .routeAction(_, action: .setupCoordinator(.routeAction(_, action: .error(.done)))),
+                    .routeAction(_, action: .identificationCoordinator(.routeAction(_, action: .error(.done)))):
                 state.routes.dismiss()
                 return .none
             case .routeAction(_, action: .setupCoordinator(.routeAction(_, action: .incorrectTransportPIN(.afterConfirmEnd)))),

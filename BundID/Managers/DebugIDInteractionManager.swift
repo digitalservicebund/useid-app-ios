@@ -70,7 +70,7 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
                     subject.send(.requestCardInsertion({ _ in }))
                 }))
             }))
-            return [.identifySuccessfully, .runPINError(remainingAttempts: card.remainingAttempts), .cancel]
+            return [.identifySuccessfully, .runPINError(remainingAttempts: card.remainingAttempts), .runCardBlocked, .runCardSuspended, .runCardDeactivated, .cancel]
         case .cancel:
             subject.send(.requestPIN(remainingAttempts: nil, pinCallback: { _ in }))
             return []
@@ -78,6 +78,7 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             card.remainingAttempts = 3
             subject.send(.cardRecognized)
             subject.send(.cardInteractionComplete)
+            subject.send(.authenticationSuccessful)
             subject.send(.processCompletedSuccessfully)
             subject.send(completion: .finished)
             return []
@@ -91,14 +92,21 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             
             subject.send(.cardRecognized)
             subject.send(.cardInteractionComplete)
-            subject.send(.requestPIN(remainingAttempts: card.remainingAttempts, pinCallback: { _ in callback() }))
+            
+            if card.remainingAttempts >= 2 {
+                subject.send(.requestPIN(remainingAttempts: card.remainingAttempts, pinCallback: { _ in callback() }))
+            } else if card.remainingAttempts == 1 {
+                subject.send(.requestPINAndCAN({ _, _ in }))
+            } else {
+                subject.send(completion: .failure(.cardBlocked))
+            }
             
             return [.identifySuccessfully, .runPINError(remainingAttempts: card.remainingAttempts), .cancel]
         case .runNFCError:
             subject.send(completion: .failure(.processFailed(resultCode: .INTERNAL_ERROR)))
             return IdentifyDebugSequence.defaultScanningActions(card: card)
         case .runCardSuspended:
-            subject.send(.requestCANAndChangedPIN(pinCallback: { _, _, _ in }))
+            subject.send(.requestPINAndCAN({ _, _ in }))
             return IdentifyDebugSequence.defaultScanningActions(card: card)
         case .runCardDeactivated:
             subject.send(.cardRecognized)
@@ -230,7 +238,6 @@ class DebugIDInteractionManager: IDInteractionManagerType {
         subject.send(.requestCardInsertion({ _ in }))
         
         return subject
-            .delay(for: .seconds(1), scheduler: RunLoop.main)
             .eraseToAnyPublisher()
     }
     
@@ -247,7 +254,6 @@ class DebugIDInteractionManager: IDInteractionManagerType {
         subject.send(.requestCardInsertion({ _ in }))
         
         return subject
-            .delay(for: .seconds(1), scheduler: RunLoop.main)
             .eraseToAnyPublisher()
     }
     

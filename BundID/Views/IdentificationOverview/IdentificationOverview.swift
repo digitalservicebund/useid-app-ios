@@ -29,11 +29,15 @@ enum IdentificationOverviewTokenFetch: Equatable {
     case error(IdentifiableError)
 }
 
-struct IdentificationOverviewState: Equatable {
+struct IdentificationOverviewState: Equatable, IDInteractionHandler {
     var tokenFetch: IdentificationOverviewTokenFetch = .loading
 #if DEBUG
     var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
+    
+    func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationOverviewAction? {
+        return .idInteractionEvent(event)
+    }
 }
 
 enum TokenFetchLoadingAction: Equatable {
@@ -61,6 +65,8 @@ enum IdentificationOverviewAction: Equatable {
     case cancel
     case tokenFetch(TokenFetchAction)
     case done
+    case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
+    case callbackReceived(PINCallback)
 #if DEBUG
     case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -78,6 +84,11 @@ let identificationOverviewReducer = Reducer<IdentificationOverviewState, Identif
         return Effect(value: .identify)
     case .tokenFetch(.loaded(.continue)):
         return Effect(value: .done)
+    case .idInteractionEvent(.success(let event)):
+        return state.handle(event: event, environment: environment)
+    case .idInteractionEvent(.failure(let error)):
+        state.tokenFetch = .error(IdentifiableError(error))
+        return .none
     case .done:
         guard case .loaded(let subState) = state.tokenFetch else { return .none }
         var dict: [IDCardAttribute: Bool] = [:]
@@ -86,8 +97,24 @@ let identificationOverviewReducer = Reducer<IdentificationOverviewState, Identif
         }
         subState.handler(dict)
         return .none
+    case .callbackReceived:
+        return .none
     default:
         return .none
+    }
+}
+
+extension IdentificationOverviewState {
+    mutating func handle(event: EIDInteractionEvent, environment: AppEnvironment) -> Effect<IdentificationOverviewAction, Never> {
+        switch event {
+        case .requestAuthenticationRequestConfirmation(let request, let handler):
+            tokenFetch = .loaded(IdentificationOverviewLoadedState(id: environment.uuidFactory(), request: request, handler: handler))
+            return .none
+        case .requestPIN(remainingAttempts: nil, pinCallback: let handler):
+            return Effect(value: .callbackReceived(PINCallback(id: environment.uuidFactory(), callback: handler)))
+        default:
+            return .none
+        }
     }
 }
 
@@ -117,7 +144,7 @@ struct IdentificationOverview: View {
             }
         }
         .onAppear {
-            ViewStore(store).send(.onAppear)
+            ViewStore(store.stateless).send(.onAppear)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

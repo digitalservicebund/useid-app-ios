@@ -24,14 +24,16 @@ struct PINCallback: Identifiable, Equatable {
     }
 }
 
+protocol IDInteractionHandler {
+    associatedtype LocalAction
+    func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> LocalAction?
+}
+
 struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
     var tokenURL: String
     var tokenFetch: IdentificationOverviewTokenFetch = .loading
     var pin: String?
     var attempt: Int = 0
-    var requestedPIN = false
-    var remainingAttempts: Int?
-    var pinCallback: PINCallback?
     var authenticationSuccessful = false
 
 #if DEBUG
@@ -80,15 +82,21 @@ struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
         self.tokenURL = tokenURL
         self.states = [.root(.overview(IdentificationOverviewState()))]
     }
+    
+    func transformToLocalInteractionHandler(event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationCoordinatorAction? {
+        for (index, state) in states.enumerated().reversed() {
+            guard let action = state.screen.transformToLocalAction(event) else { continue }
+            return .routeAction(index, action: action)
+        }
+        return nil
+    }
 }
 
 enum IdentificationCoordinatorAction: Equatable, IndexedRouterAction {
     case routeAction(Int, action: IdentificationScreenAction)
     case updateRoutes([Route<IdentificationScreenState>])
     case loadToken
-    case wrongPIN(remainingAttempts: Int)
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
-    case identifiedSuccessfully
     case error(CardErrorType)
 #if DEBUG
     case runDebugSequence(IdentifyDebugSequence)
@@ -154,26 +162,16 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                     .receive(on: environment.mainQueue)
                     .catchToEffect(IdentificationCoordinatorAction.idInteractionEvent)
                     .cancellable(id: CancelId.self, cancelInFlight: true)
-            case .wrongPIN(remainingAttempts: let remainingAttempts):
-                state.remainingAttempts = remainingAttempts
+            case .routeAction(_, action: .scan(.wrongPIN(remainingAttempts: let remainingAttempts))):
                 state.routes.presentSheet(.incorrectPersonalPIN(IdentificationIncorrectPersonalPINState(error: .incorrect,
                                                                                                         remainingAttempts: remainingAttempts)))
                 return .none
-            case .idInteractionEvent(.success(let event)):
-                return state.handle(event: event, environment: environment)
-            case .idInteractionEvent(.failure(let error)):
-                switch error {
-                case .cardBlocked:
-                    state.routes.push(.error(CardErrorState(errorType: .cardBlocked)))
-                case .cardDeactivated:
-                    state.routes.push(.error(CardErrorState(errorType: .cardDeactivated)))
-                default:
-                    state.tokenFetch = .error(IdentifiableError(error))
-                    // TODO: We need to check in which state we are, to set the error in the right state
-                    // E.g. if state.isScanning or use more advanced cases
+            case .idInteractionEvent(let result):
+                guard let localAction = state.transformToLocalInteractionHandler(event: result) else {
+                    fatalError("No handler here. What to do?")
                 }
-                return .none
-            case .identifiedSuccessfully:
+                return Effect(value: localAction)
+            case .routeAction(_, action: .scan(.identifiedSuccessfully)):
                 state.routes.push(.done(IdentificationDoneState(subject: "TODO"))) // TODO: Fill subject
                 return .none
             case .routeAction(_, action: .incorrectPersonalPIN(.done(let pin))):
@@ -187,17 +185,21 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
             case .routeAction(_, action: .overview(.runDebugSequence(let sequence))),
                     .routeAction(_, action: .scan(.runDebugSequence(let sequence))):
                 return Effect(value: .runDebugSequence(sequence))
-            case .routeAction(_, action: .overview(.done)):
-                state.routes.push(.personalPIN(IdentificationPersonalPINState()))
+            case .routeAction(_, action: .overview(.callbackReceived(let callback))):
+                state.routes.push(.personalPIN(IdentificationPersonalPINState(callback: callback)))
                 return .none
-            case .routeAction(_, action: .personalPIN(.done(pin: let pin))):
+            case .routeAction(_, action: .personalPIN(.done(pin: let pin, pinCallback: let pinCallback))):
                 state.pin = pin
-                state.routes.push(.scan(IdentificationScanState(tokenURL: state.tokenURL, pin: pin)))
+                state.routes.push(.scan(IdentificationScanState(tokenURL: state.tokenURL, pin: pin, pinCallback: pinCallback)))
                 return .none
-            case .routeAction(_, action: .scan(.startScan)):
-                guard let pinCallback = state.pinCallback,
-                      let pin = state.pin else { return .none }
-                pinCallback(pin)
+            case .routeAction(_, action: .scan(.cardBlocked)):
+                state.routes.push(.error(CardErrorState(errorType: .cardBlocked)))
+                return .none
+            case .routeAction(_, action: .scan(.cardSuspended)):
+                state.routes.push(.error(CardErrorState(errorType: .cardSuspended)))
+                return .none
+            case .routeAction(_, action: .scan(.cardDeactivated)):
+                state.routes.push(.error(CardErrorState(errorType: .cardDeactivated)))
                 return .none
             case .routeAction(let index, action: .incorrectPersonalPIN(.confirmEnd)):
                 state.routes.dismiss()
@@ -212,61 +214,6 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
             }
         }
     )
-
-extension IdentificationCoordinatorState {
-    mutating func handle(event: EIDInteractionEvent, environment: AppEnvironment) -> Effect<IdentificationCoordinatorAction, Never> {
-        switch event {
-        case .requestAuthenticationRequestConfirmation(let request, let handler):
-            tokenFetch = .loaded(IdentificationOverviewLoadedState(id: environment.uuidFactory(), request: request, handler: handler))
-            return .none
-        case .requestPIN(remainingAttempts: let remainingAttempts, pinCallback: let callback):
-            print("Providing PIN with \(remainingAttempts) remaining attempts.")
-            pinCallback = PINCallback(id: environment.uuidFactory(), callback: callback)
-            
-            guard requestedPIN else {
-                // This is the first request for the PIN with unknown remainingAttempts.
-                // Store callback and wait for pin entry to succeed.
-                requestedPIN = true
-                return .none
-            }
-            
-            let remainingAttemptsBefore = self.remainingAttempts
-            self.remainingAttempts = remainingAttempts
-            
-            // This is our signal that the user canceled (for now)
-            guard let remainingAttempts = remainingAttempts else {
-                return .none
-            }
-            
-            // Wrong transport/personal PIN provided again
-            if let remainingAttemptsBefore = remainingAttemptsBefore, remainingAttempts < remainingAttemptsBefore {
-                return Effect(value: .wrongPIN(remainingAttempts: remainingAttempts))
-            } else if remainingAttemptsBefore == nil { // Wrong transport/personal PIN provided first time
-                return Effect(value: .wrongPIN(remainingAttempts: remainingAttempts))
-            }
-            
-            return .none
-        case .authenticationStarted,
-            .cardInteractionComplete,
-            .cardRecognized:
-            return .none
-        case .authenticationSuccessful:
-            authenticationSuccessful = true
-            return .none
-        case .cardRemoved:
-            authenticationSuccessful = false
-            return .none
-        case .processCompletedSuccessfully:
-            if authenticationSuccessful {
-                return Effect(value: .identifiedSuccessfully)
-            } else {
-                return .none // TODO: Return error
-            }
-        default:
-            return .none
-        }
-    }
-}
 
 struct IdentificationCoordinatorView: View {
     let store: Store<IdentificationCoordinatorState, IdentificationCoordinatorAction>
@@ -289,6 +236,9 @@ struct IdentificationCoordinatorView: View {
                 CaseLet(state: /IdentificationScreenState.done,
                         action: IdentificationScreenAction.done,
                         then: IdentificationDone.init)
+                CaseLet(state: /IdentificationScreenState.error,
+                        action: IdentificationScreenAction.error,
+                        then: CardError.init)
             }
         }
     }

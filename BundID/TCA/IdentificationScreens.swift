@@ -1,13 +1,26 @@
 import Foundation
 import ComposableArchitecture
 
-enum IdentificationScreenState: Equatable {
+enum IdentificationScreenState: Equatable, IDInteractionHandler {
     case overview(IdentificationOverviewState)
     case personalPIN(IdentificationPersonalPINState)
     case incorrectPersonalPIN(IdentificationIncorrectPersonalPINState)
     case scan(IdentificationScanState)
     case error(CardErrorState)
     case done(IdentificationDoneState)
+    
+    func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationScreenAction? {
+        switch self {
+        case .overview(let state):
+            guard let localAction = state.transformToLocalAction(event) else { return nil }
+            return .overview(localAction)
+        case .scan(let state):
+            guard let localAction = state.transformToLocalAction(event) else { return nil }
+            return .scan(localAction)
+        default:
+            return nil
+        }
+    }
 }
 
 enum IdentificationScreenAction: Equatable {

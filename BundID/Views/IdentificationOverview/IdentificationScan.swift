@@ -8,22 +8,35 @@ enum IdentificationScanError: Equatable {
     case unexpectedEvent(EIDInteractionEvent)
 }
 
-struct IdentificationScanState: Equatable {
-    var isScanning: Bool = false
+struct IdentificationScanState: Equatable, IDInteractionHandler {
+    var isScanning: Bool = true
     var showProgressCaption: Bool = false
     var tokenURL: String
     var pin: String
+    var pinCallback: PINCallback
+    var requestedPIN = false
     var error: IdentificationScanError?
     var remainingAttempts: Int?
     var attempt = 0
+    var authenticationSuccessful = false
 #if DEBUG
     var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
+    
+    func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationScanAction? {
+        return .idInteractionEvent(event)
+    }
 }
 
 enum IdentificationScanAction: Equatable {
     case onAppear
     case startScan
+    case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
+    case wrongPIN(remainingAttempts: Int)
+    case identifiedSuccessfully
+    case cardDeactivated
+    case cardBlocked
+    case cardSuspended
 #if DEBUG
     case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -35,9 +48,76 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
     case .onAppear:
         return Effect(value: .startScan)
     case .startScan:
+        guard let pinCallback = state.pinCallback,
+              let pin = state.pin else { return .none }
+        pinCallback(pin)
+        state.isScanning = true
         return .none
     case .runDebugSequence:
         return .none
+    case .idInteractionEvent(.success(let event)):
+        return state.handle(event: event, environment: environment)
+    case .idInteractionEvent(.failure(let error)):
+        state.error = .idCardInteraction(error)
+        state.isScanning = false
+        switch error {
+        case .cardDeactivated:
+            return Effect(value: .cardDeactivated)
+        case .cardBlocked:
+            return Effect(value: .cardBlocked)
+        default:
+            return .none
+        }
+    case .wrongPIN(let remainingAttempts):
+        state.remainingAttempts = remainingAttempts
+        return .none
+    case .identifiedSuccessfully:
+        state.isScanning = false
+        return .none
+    case .cardBlocked:
+        return .none
+    case .cardSuspended:
+        return .none
+    case .cardDeactivated:
+        return .none
+    }
+}
+
+extension IdentificationScanState {
+    mutating func handle(event: EIDInteractionEvent, environment: AppEnvironment) -> Effect<IdentificationScanAction, Never> {
+        switch event {
+        case .requestPIN(remainingAttempts: let remainingAttempts, pinCallback: let callback):
+            
+            pinCallback = PINCallback(id: environment.uuidFactory(), callback: callback)
+            
+            // This is our signal that the user canceled (for now)
+            guard let remainingAttempts = remainingAttempts else {
+                isScanning = false
+                return .none
+            }
+            
+            return Effect(value: .wrongPIN(remainingAttempts: remainingAttempts))
+        case .requestPINAndCAN:
+            return Effect(value: .cardSuspended)
+        case .authenticationStarted,
+                .cardInteractionComplete,
+                .cardRecognized:
+            return .none
+        case .authenticationSuccessful:
+            authenticationSuccessful = true
+            return .none
+        case .cardRemoved:
+            authenticationSuccessful = false
+            return .none
+        case .processCompletedSuccessfully where authenticationSuccessful:
+            return Effect(value: .identifiedSuccessfully)
+        case .processCompletedSuccessfully:
+            error = .unexpectedEvent(.processCompletedSuccessfully)
+            isScanning = false
+            return .none
+        default:
+            return .none
+        }
     }
 }
 
@@ -143,7 +223,7 @@ struct IdentificationScan: View {
 
 struct IdentificationScan_Previews: PreviewProvider {
     static var previews: some View {
-        IdentificationScan(store: Store(initialState: IdentificationScanState(tokenURL: demoTokenURL, pin: "123456"), reducer: .empty, environment: AppEnvironment.preview))
-        IdentificationScan(store: Store(initialState: IdentificationScanState(isScanning: true, tokenURL: demoTokenURL, pin: "123456"), reducer: .empty, environment: AppEnvironment.preview))
+        IdentificationScan(store: Store(initialState: IdentificationScanState(tokenURL: demoTokenURL, pin: "123456", pinCallback: PINCallback(id: .zero, callback: { _ in })), reducer: .empty, environment: AppEnvironment.preview))
+        IdentificationScan(store: Store(initialState: IdentificationScanState(isScanning: true, tokenURL: demoTokenURL, pin: "123456", pinCallback: PINCallback(id: .zero, callback: { _ in })), reducer: .empty, environment: AppEnvironment.preview))
     }
 }
