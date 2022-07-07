@@ -48,9 +48,7 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
     case .onAppear:
         return Effect(value: .startScan)
     case .startScan:
-        guard let pinCallback = state.pinCallback,
-              let pin = state.pin else { return .none }
-        pinCallback(pin)
+        state.pinCallback(state.pin)
         state.isScanning = true
         return .none
     case .runDebugSequence:
