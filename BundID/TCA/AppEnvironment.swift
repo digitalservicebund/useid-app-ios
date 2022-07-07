@@ -9,7 +9,9 @@ struct AppEnvironment {
     
     #if PREVIEW
     let debugIDInteractionManager: DebugIDInteractionManager
-
+    #endif
+    
+    #if DEBUG
     static let preview: AppEnvironment = AppEnvironment(
         mainQueue: DispatchQueue.main.eraseToAnyScheduler(),
         uuidFactory: UUID.init,

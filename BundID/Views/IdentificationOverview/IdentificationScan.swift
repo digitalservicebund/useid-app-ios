@@ -9,15 +9,15 @@ enum IdentificationScanError: Equatable {
 }
 
 struct IdentificationScanState: Equatable, IDInteractionHandler {
-    var isScanning: Bool = true
-    var showProgressCaption: Bool = false
-    var tokenURL: String
+    let tokenURL: String
+    
     var pin: String
     var pinCallback: PINCallback
-    var requestedPIN = false
+    var attempt = 0
+    var isScanning: Bool = true
+    var showProgressCaption: Bool = false
     var error: IdentificationScanError?
     var remainingAttempts: Int?
-    var attempt = 0
     var authenticationSuccessful = false
 #if PREVIEW
     var availableDebugActions: [IdentifyDebugSequence] = []
@@ -34,9 +34,7 @@ enum IdentificationScanAction: Equatable {
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case wrongPIN(remainingAttempts: Int)
     case identifiedSuccessfully
-    case cardDeactivated
-    case cardBlocked
-    case cardSuspended
+    case error(CardErrorType)
 #if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -51,8 +49,10 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
         state.pinCallback(state.pin)
         state.isScanning = true
         return .none
+#if PREVIEW
     case .runDebugSequence:
         return .none
+#endif
     case .idInteractionEvent(.success(let event)):
         return state.handle(event: event, environment: environment)
     case .idInteractionEvent(.failure(let error)):
@@ -60,9 +60,9 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
         state.isScanning = false
         switch error {
         case .cardDeactivated:
-            return Effect(value: .cardDeactivated)
+            return Effect(value: .error(.cardDeactivated))
         case .cardBlocked:
-            return Effect(value: .cardBlocked)
+            return Effect(value: .error(.cardBlocked))
         default:
             return .none
         }
@@ -72,11 +72,7 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
     case .identifiedSuccessfully:
         state.isScanning = false
         return .none
-    case .cardBlocked:
-        return .none
-    case .cardSuspended:
-        return .none
-    case .cardDeactivated:
+    case .error:
         return .none
     }
 }
@@ -96,7 +92,7 @@ extension IdentificationScanState {
             
             return Effect(value: .wrongPIN(remainingAttempts: remainingAttempts))
         case .requestPINAndCAN:
-            return Effect(value: .cardSuspended)
+            return Effect(value: .error(.cardSuspended))
         case .authenticationStarted,
                 .cardInteractionComplete,
                 .cardRecognized:
@@ -222,6 +218,6 @@ struct IdentificationScan: View {
 struct IdentificationScan_Previews: PreviewProvider {
     static var previews: some View {
         IdentificationScan(store: Store(initialState: IdentificationScanState(tokenURL: demoTokenURL, pin: "123456", pinCallback: PINCallback(id: .zero, callback: { _ in })), reducer: .empty, environment: AppEnvironment.preview))
-        IdentificationScan(store: Store(initialState: IdentificationScanState(isScanning: true, tokenURL: demoTokenURL, pin: "123456", pinCallback: PINCallback(id: .zero, callback: { _ in })), reducer: .empty, environment: AppEnvironment.preview))
+        IdentificationScan(store: Store(initialState: IdentificationScanState(tokenURL: demoTokenURL, pin: "123456", pinCallback: PINCallback(id: .zero, callback: { _ in }), isScanning: true), reducer: .empty, environment: AppEnvironment.preview))
     }
 }

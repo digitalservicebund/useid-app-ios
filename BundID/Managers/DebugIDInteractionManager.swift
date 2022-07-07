@@ -73,7 +73,7 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             return [.identifySuccessfully, .runPINError(remainingAttempts: card.remainingAttempts), .runCardBlocked, .runCardSuspended, .runCardDeactivated, .cancel]
         case .cancel:
             subject.send(.requestPIN(remainingAttempts: nil, pinCallback: { _ in }))
-            return []
+            return [.identifySuccessfully, .runPINError(remainingAttempts: card.remainingAttempts), .runCardBlocked, .runCardSuspended, .runCardDeactivated, .cancel]
         case .identifySuccessfully:
             card.remainingAttempts = 3
             subject.send(.cardRecognized)

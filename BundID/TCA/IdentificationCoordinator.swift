@@ -31,7 +31,6 @@ protocol IDInteractionHandler {
 
 struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
     var tokenURL: String
-    var tokenFetch: IdentificationOverviewTokenFetch = .loading
     var pin: String?
     var attempt: Int = 0
     var authenticationSuccessful = false
@@ -46,12 +45,13 @@ struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
                 $0.map { screenState in
                     switch screenState {
                     case .overview(var state):
-                        state.tokenFetch = tokenFetch
 #if PREVIEW
                         state.availableDebugActions = availableDebugActions
 #endif
                         return .overview(state)
                     case .scan(var state):
+                        state.pin = pin!
+                        state.attempt = attempt
 #if PREVIEW
                         state.availableDebugActions = availableDebugActions
 #endif
@@ -66,8 +66,6 @@ struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
             states = newValue.map {
                 $0.map { screenState in
                     switch screenState {
-                    case .overview(let subState):
-                        tokenFetch = subState.tokenFetch
                     default:
                         break
                     }
@@ -180,7 +178,6 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 state.routes.dismiss()
                 return .none
             case .routeAction(_, action: .overview(.identify)):
-                if case .loaded = state.tokenFetch { return .none }
                 return Effect(value: .loadToken)
             case .routeAction(_, action: .overview(.runDebugSequence(let sequence))),
                     .routeAction(_, action: .scan(.runDebugSequence(let sequence))):
@@ -190,16 +187,14 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 return .none
             case .routeAction(_, action: .personalPIN(.done(pin: let pin, pinCallback: let pinCallback))):
                 state.pin = pin
-                state.routes.push(.scan(IdentificationScanState(tokenURL: state.tokenURL, pin: pin, pinCallback: pinCallback)))
+                state.routes.push(
+                    .scan(IdentificationScanState(tokenURL: state.tokenURL,
+                                                  pin: pin,
+                                                  pinCallback: pinCallback))
+                )
                 return .none
-            case .routeAction(_, action: .scan(.cardBlocked)):
-                state.routes.push(.error(CardErrorState(errorType: .cardBlocked)))
-                return .none
-            case .routeAction(_, action: .scan(.cardSuspended)):
-                state.routes.push(.error(CardErrorState(errorType: .cardSuspended)))
-                return .none
-            case .routeAction(_, action: .scan(.cardDeactivated)):
-                state.routes.push(.error(CardErrorState(errorType: .cardDeactivated)))
+            case .routeAction(_, action: .scan(.error(let error))):
+                state.routes.push(.error(CardErrorState(errorType: error)))
                 return .none
             case .routeAction(let index, action: .incorrectPersonalPIN(.confirmEnd)):
                 state.routes.dismiss()
