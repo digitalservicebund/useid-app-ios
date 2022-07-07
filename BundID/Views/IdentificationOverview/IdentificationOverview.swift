@@ -64,9 +64,8 @@ enum IdentificationOverviewAction: Equatable {
     case identify
     case cancel
     case tokenFetch(TokenFetchAction)
-    case done
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
-    case callbackReceived(PINCallback)
+    case callbackReceived(EIDAuthenticationRequest, PINCallback)
 #if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -83,19 +82,17 @@ let identificationOverviewReducer = Reducer<IdentificationOverviewState, Identif
         state.tokenFetch = .loading
         return Effect(value: .identify)
     case .tokenFetch(.loaded(.continue)):
-        return Effect(value: .done)
-    case .idInteractionEvent(.success(let event)):
-        return state.handle(event: event, environment: environment)
-    case .idInteractionEvent(.failure(let error)):
-        state.tokenFetch = .error(IdentifiableError(error))
-        return .none
-    case .done:
         guard case .loaded(let subState) = state.tokenFetch else { return .none }
         var dict: [IDCardAttribute: Bool] = [:]
         for attribute in subState.requiredReadAttributes {
             dict[attribute] = true
         }
         subState.handler(dict)
+        return .none
+    case .idInteractionEvent(.success(let event)):
+        return state.handle(event: event, environment: environment)
+    case .idInteractionEvent(.failure(let error)):
+        state.tokenFetch = .error(IdentifiableError(error))
         return .none
     case .callbackReceived:
         return .none
@@ -111,7 +108,8 @@ extension IdentificationOverviewState {
             tokenFetch = .loaded(IdentificationOverviewLoadedState(id: environment.uuidFactory(), request: request, handler: handler))
             return .none
         case .requestPIN(remainingAttempts: nil, pinCallback: let handler):
-            return Effect(value: .callbackReceived(PINCallback(id: environment.uuidFactory(), callback: handler)))
+            guard case .loaded(let subState) = tokenFetch else { return .none } // TODO: Move to subreducer
+            return Effect(value: .callbackReceived(subState.request, PINCallback(id: environment.uuidFactory(), callback: handler)))
         default:
             return .none
         }

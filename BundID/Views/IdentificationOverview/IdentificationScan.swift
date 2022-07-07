@@ -9,7 +9,7 @@ enum IdentificationScanError: Equatable {
 }
 
 struct IdentificationScanState: Equatable, IDInteractionHandler {
-    let tokenURL: String
+    let request: EIDAuthenticationRequest
     
     var pin: String
     var pinCallback: PINCallback
@@ -33,7 +33,7 @@ enum IdentificationScanAction: Equatable {
     case startScan
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case wrongPIN(remainingAttempts: Int)
-    case identifiedSuccessfully
+    case identifiedSuccessfully(EIDAuthenticationRequest)
     case error(CardErrorType)
 #if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
@@ -104,7 +104,7 @@ extension IdentificationScanState {
             authenticationSuccessful = false
             return .none
         case .processCompletedSuccessfully where authenticationSuccessful:
-            return Effect(value: .identifiedSuccessfully)
+            return Effect(value: .identifiedSuccessfully(request))
         case .processCompletedSuccessfully:
             error = .unexpectedEvent(.processCompletedSuccessfully)
             isScanning = false
@@ -217,7 +217,7 @@ struct IdentificationScan: View {
 
 struct IdentificationScan_Previews: PreviewProvider {
     static var previews: some View {
-        IdentificationScan(store: Store(initialState: IdentificationScanState(tokenURL: demoTokenURL, pin: "123456", pinCallback: PINCallback(id: .zero, callback: { _ in })), reducer: .empty, environment: AppEnvironment.preview))
-        IdentificationScan(store: Store(initialState: IdentificationScanState(tokenURL: demoTokenURL, pin: "123456", pinCallback: PINCallback(id: .zero, callback: { _ in }), isScanning: true), reducer: .empty, environment: AppEnvironment.preview))
+        IdentificationScan(store: Store(initialState: IdentificationScanState(request: .preview, pin: "123456", pinCallback: PINCallback(id: .zero, callback: { _ in })), reducer: .empty, environment: AppEnvironment.preview))
+        IdentificationScan(store: Store(initialState: IdentificationScanState(request: .preview, pin: "123456", pinCallback: PINCallback(id: .zero, callback: { _ in }), isScanning: true), reducer: .empty, environment: AppEnvironment.preview))
     }
 }

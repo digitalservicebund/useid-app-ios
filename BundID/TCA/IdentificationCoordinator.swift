@@ -169,8 +169,8 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                     fatalError("No handler here. What to do?")
                 }
                 return Effect(value: localAction)
-            case .routeAction(_, action: .scan(.identifiedSuccessfully)):
-                state.routes.push(.done(IdentificationDoneState(subject: "TODO")))
+            case .routeAction(_, action: .scan(.identifiedSuccessfully(let request))):
+                state.routes.push(.done(IdentificationDoneState(request: request)))
                 return .none
             case .routeAction(_, action: .incorrectPersonalPIN(.done(let pin))):
                 state.pin = pin
@@ -182,13 +182,13 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
             case .routeAction(_, action: .overview(.runDebugSequence(let sequence))),
                     .routeAction(_, action: .scan(.runDebugSequence(let sequence))):
                 return Effect(value: .runDebugSequence(sequence))
-            case .routeAction(_, action: .overview(.callbackReceived(let callback))):
-                state.routes.push(.personalPIN(IdentificationPersonalPINState(callback: callback)))
+            case .routeAction(_, action: .overview(.callbackReceived(let request, let callback))):
+                state.routes.push(.personalPIN(IdentificationPersonalPINState(request: request, callback: callback)))
                 return .none
-            case .routeAction(_, action: .personalPIN(.done(pin: let pin, pinCallback: let pinCallback))):
+            case .routeAction(_, action: .personalPIN(.done(request: let request, pin: let pin, pinCallback: let pinCallback))):
                 state.pin = pin
                 state.routes.push(
-                    .scan(IdentificationScanState(tokenURL: state.tokenURL,
+                    .scan(IdentificationScanState(request: request,
                                                   pin: pin,
                                                   pinCallback: pinCallback))
                 )

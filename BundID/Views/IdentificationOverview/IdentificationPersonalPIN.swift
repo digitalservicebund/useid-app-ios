@@ -4,6 +4,7 @@ import ComposableArchitecture
 
 struct IdentificationPersonalPINState: Equatable {
     
+    var request: EIDAuthenticationRequest
     var callback: PINCallback
     @BindableState var enteredPIN: String = ""
     
@@ -18,7 +19,7 @@ struct IdentificationPersonalPINState: Equatable {
 
 enum IdentificationPersonalPINAction: BindableAction, Equatable {
     case onAppear
-    case done(pin: String, pinCallback: PINCallback)
+    case done(request: EIDAuthenticationRequest, pin: String, pinCallback: PINCallback)
     case binding(BindingAction<IdentificationPersonalPINState>)
 }
 
@@ -57,7 +58,9 @@ struct IdentificationPersonalPIN: View {
                                      doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                           title: L10n.Identification.PersonalPIN.continue,
                                                                           handler: { pin in
-                            viewStore.send(.done(pin: pin, pinCallback: viewStore.callback))
+                            viewStore.send(.done(request: viewStore.request,
+                                                 pin: pin,
+                                                 pinCallback: viewStore.callback))
                         }))
                         .font(.bundTitle)
                     }
@@ -76,13 +79,13 @@ struct IdentificationPersonalPIN: View {
 struct IdentificationPersonalPIN_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationPersonalPIN(store: Store(initialState: IdentificationPersonalPINState(callback: PINCallback(id: UUID(), callback: { _ in }), enteredPIN: "12345"),
+            IdentificationPersonalPIN(store: Store(initialState: IdentificationPersonalPINState(request: .preview, callback: PINCallback(id: UUID(), callback: { _ in }), enteredPIN: "12345"),
                                                    reducer: .empty,
                                                    environment: AppEnvironment.preview))
         }
         .previewDevice("iPhone 12")
         NavigationView {
-            IdentificationPersonalPIN(store: Store(initialState: IdentificationPersonalPINState(callback: PINCallback(id: UUID(), callback: { _ in })),
+            IdentificationPersonalPIN(store: Store(initialState: IdentificationPersonalPINState(request: .preview, callback: PINCallback(id: UUID(), callback: { _ in })),
                                                    reducer: .empty,
                                                    environment: AppEnvironment.preview))
         }

@@ -56,15 +56,13 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
         return actions
     }
     
-    static let authenticationRequest = EIDAuthenticationRequest(issuer: "Issuer", issuerURL: "https://issuer.com", subject: "Subject", subjectURL: "https://subject.com", validity: "Validity", terms: AuthenticationTerms.text("Terms"), readAttributes: [.DG01: true, .DG02: true, .DG03: true, .DG04: true, .DG05: false, .DG06: false])
-    
     func run(card: inout Card, subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>) -> [IdentifyDebugSequence] {
         switch self {
         case .loadError:
             subject.send(completion: .failure(.processFailed(resultCode: .DEPENDING_HOST_UNREACHABLE)))
             return []
         case .requestAuthorization:
-            subject.send(.requestAuthenticationRequestConfirmation(IdentifyDebugSequence.authenticationRequest, { _ in
+            subject.send(.requestAuthenticationRequestConfirmation(EIDAuthenticationRequest.preview, { _ in
                 subject.send(.requestPIN(remainingAttempts: nil, pinCallback: { _ in
                     subject.send(.authenticationStarted)
                     subject.send(.requestCardInsertion({ _ in }))
@@ -266,6 +264,10 @@ class DebugIDInteractionManager: IDInteractionManagerType {
     func runIdentify(debugSequence: IdentifyDebugSequence) -> [IdentifyDebugSequence] {
         return debugSequence.run(card: &card, subject: subject!)
     }
+}
+
+extension EIDAuthenticationRequest {
+    static let preview = EIDAuthenticationRequest(issuer: "Issuer", issuerURL: "https://issuer.com", subject: "Subject", subjectURL: "https://subject.com", validity: "Validity", terms: AuthenticationTerms.text("Terms"), readAttributes: [.DG01: true, .DG02: true, .DG03: true, .DG04: true, .DG05: false, .DG06: false])
 }
 
 #endif

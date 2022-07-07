@@ -3,7 +3,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct IdentificationDoneState: Equatable {
-    var subject: String
+    var request: EIDAuthenticationRequest
 }
 
 enum IdentificationDoneAction: Equatable {
@@ -14,13 +14,15 @@ struct IdentificationDone: View {
     let store: Store<IdentificationDoneState, IdentificationDoneAction>
     
     var body: some View {
-        DialogView(store: store.stateless,
-                   title: "Identifikation abgeschlossen",
-                   message: nil,
-                   imageMeta: nil,
-                   secondaryButton: nil,
-                   primaryButton: .init(title: "Schließen",
-                                        action: .close))
+        WithViewStore(store) { viewStore in
+            DialogView(store: store.stateless,
+                       title: "Identifikation abgeschlossen",
+                       message: "Machen Sie weiter bei \(viewStore.request.subject).",
+                       imageMeta: nil,
+                       secondaryButton: nil,
+                       primaryButton: .init(title: "Schließen",
+                                            action: .close))
             .navigationBarBackButtonHidden(true)
+        }
     }
 }
