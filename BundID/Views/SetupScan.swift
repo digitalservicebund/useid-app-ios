@@ -16,7 +16,7 @@ struct SetupScanState: Equatable {
     var error: SetupScanError?
     var remainingAttempts: Int?
     var attempt = 0
-#if DEBUG
+#if PREVIEW
     var availableDebugActions: [ChangePINDebugSequence] = []
 #endif
 }
@@ -29,7 +29,7 @@ enum SetupScanAction: Equatable {
     case error(CardErrorType)
     case cancelScan
     case scannedSuccessfully
-#if DEBUG
+#if PREVIEW
     case runDebugSequence(ChangePINDebugSequence)
 #endif
 }
@@ -39,7 +39,7 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
     enum CancelId {}
     
     switch action {
-#if DEBUG
+#if PREVIEW
     case .runDebugSequence(let debugSequence):
         state.availableDebugActions = environment.debugIDInteractionManager.runChangePIN(debugSequence: debugSequence)
         return .none
@@ -51,7 +51,7 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         state.isScanning = true
     
         let publisher: EIDInteractionPublisher
-#if DEBUG
+#if PREVIEW
         if MOCK_OPENECARD {
             let debuggableInteraction = environment.debugIDInteractionManager.debuggableChangePIN()
             state.availableDebugActions = debuggableInteraction.sequence
@@ -220,7 +220,7 @@ struct SetupScan: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
-#if DEBUG
+#if PREVIEW
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Menu {

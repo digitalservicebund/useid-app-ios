@@ -25,7 +25,7 @@ struct HomeView: View {
                             Text("Identifizierung erneut starten")
                         }
                     }
-                    #if DEBUG
+                    #if PREVIEW
                     Button {
                         viewStore.send(.triggerIdentification(tokenURL: demoTokenURL))
                     } label: {

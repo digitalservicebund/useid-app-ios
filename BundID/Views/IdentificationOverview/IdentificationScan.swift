@@ -19,7 +19,7 @@ struct IdentificationScanState: Equatable, IDInteractionHandler {
     var remainingAttempts: Int?
     var attempt = 0
     var authenticationSuccessful = false
-#if DEBUG
+#if PREVIEW
     var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
     
@@ -37,7 +37,7 @@ enum IdentificationScanAction: Equatable {
     case cardDeactivated
     case cardBlocked
     case cardSuspended
-#if DEBUG
+#if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
 #endif
 }
@@ -202,7 +202,7 @@ struct IdentificationScan: View {
             }
         }
         .toolbar {
-#if DEBUG
+#if PREVIEW
             ToolbarItem(placement: .primaryAction) {
                 WithViewStore(store) { viewStore in
                     Menu {

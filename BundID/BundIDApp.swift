@@ -11,7 +11,7 @@ struct BundIDApp: App {
     init() {
         let mainQueue = DispatchQueue.main.eraseToAnyScheduler()
         
-#if DEBUG
+#if PREVIEW
         if MOCK_OPENECARD {
             let idInteractionManager = DebugIDInteractionManager()
             

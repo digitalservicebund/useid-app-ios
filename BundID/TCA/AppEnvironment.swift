@@ -7,7 +7,7 @@ struct AppEnvironment {
     let uuidFactory: () -> UUID
     let idInteractionManager: IDInteractionManagerType
     
-    #if DEBUG
+    #if PREVIEW
     let debugIDInteractionManager: DebugIDInteractionManager
 
     static let preview: AppEnvironment = AppEnvironment(

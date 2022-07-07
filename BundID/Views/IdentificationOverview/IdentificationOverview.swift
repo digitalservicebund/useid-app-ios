@@ -7,7 +7,7 @@ struct IdentificationOverviewLoadedState: Identifiable, Equatable {
     let request: EIDAuthenticationRequest
     let handler: (FlaggedAttributes) -> Void
     
-#if DEBUG
+#if PREVIEW
     var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
     
@@ -31,7 +31,7 @@ enum IdentificationOverviewTokenFetch: Equatable {
 
 struct IdentificationOverviewState: Equatable, IDInteractionHandler {
     var tokenFetch: IdentificationOverviewTokenFetch = .loading
-#if DEBUG
+#if PREVIEW
     var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
     
@@ -67,7 +67,7 @@ enum IdentificationOverviewAction: Equatable {
     case done
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case callbackReceived(PINCallback)
-#if DEBUG
+#if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
 #endif
 }
@@ -154,7 +154,7 @@ struct IdentificationOverview: View {
             }
         }
         .toolbar {
-#if DEBUG
+#if PREVIEW
             ToolbarItem(placement: .primaryAction) {
                 WithViewStore(store) { viewStore in
                     Menu {

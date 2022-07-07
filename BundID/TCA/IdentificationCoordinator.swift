@@ -36,7 +36,7 @@ struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
     var attempt: Int = 0
     var authenticationSuccessful = false
 
-#if DEBUG
+#if PREVIEW
     var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
     
@@ -47,12 +47,12 @@ struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
                     switch screenState {
                     case .overview(var state):
                         state.tokenFetch = tokenFetch
-#if DEBUG
+#if PREVIEW
                         state.availableDebugActions = availableDebugActions
 #endif
                         return .overview(state)
                     case .scan(var state):
-#if DEBUG
+#if PREVIEW
                         state.availableDebugActions = availableDebugActions
 #endif
                         return .scan(state)
@@ -98,7 +98,7 @@ enum IdentificationCoordinatorAction: Equatable, IndexedRouterAction {
     case loadToken
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case error(CardErrorType)
-#if DEBUG
+#if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
 #endif
 }
@@ -140,14 +140,14 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
             enum CancelId {}
             
             switch action {
-#if DEBUG
+#if PREVIEW
             case .runDebugSequence(let debugSequence):
                 state.availableDebugActions = environment.debugIDInteractionManager.runIdentify(debugSequence: debugSequence)
                 return .none
 #endif
             case .loadToken:
                 let publisher: EIDInteractionPublisher
-#if DEBUG
+#if PREVIEW
                 if MOCK_OPENECARD {
                     let debuggableInteraction = environment.debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
                     state.availableDebugActions = debuggableInteraction.sequence

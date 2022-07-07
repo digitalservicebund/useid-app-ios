@@ -22,7 +22,7 @@ struct SetupTransportPIN: View {
     
     var store: Store<SetupTransportPINState, SetupTransportPINAction>
     
-#if DEBUG
+#if PREVIEW
     @State var digits = 5
 #else
     let digits = 5
@@ -68,7 +68,7 @@ struct SetupTransportPIN: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        #if DEBUG
+        #if PREVIEW
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("\(Image(systemName: "arrow.left.and.right")) \(digits == 5 ? "6" : "5")") {

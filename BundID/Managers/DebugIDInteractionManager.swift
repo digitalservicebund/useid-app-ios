@@ -2,7 +2,7 @@ import Foundation
 import OpenEcard
 import Combine
 
-#if DEBUG
+#if PREVIEW
 
 func processInfoContainsArgument(_ argument: String) -> Bool {
     ProcessInfo.processInfo.arguments.contains(argument)
