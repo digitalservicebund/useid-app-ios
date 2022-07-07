@@ -78,6 +78,10 @@
 "identification_personalPIN_error_incorrect_title" = "Inkorrekte persönliche PIN";
 "identification_personalPIN_error_incorrect_body" = "Versuchen Sie es erneut.";
 
+"identification_done_title" = "Sie haben sich erfolgreich ausgewiesen";
+"identification_done_message" = "Machen Sie weiter bei „%@“.";
+"identification_done_close" = "Schließen";
+
 "general_ok" = "OK";
 "general_cancel" = "Abbrechen";
 

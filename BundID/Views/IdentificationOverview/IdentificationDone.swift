@@ -16,11 +16,11 @@ struct IdentificationDone: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             DialogView(store: store.stateless,
-                       title: "Identifikation abgeschlossen",
-                       message: "Machen Sie weiter bei \(viewStore.request.subject).",
+                       title: L10n.Identification.Done.title,
+                       message: L10n.Identification.Done.message(viewStore.request.subject),
                        imageMeta: nil,
                        secondaryButton: nil,
-                       primaryButton: .init(title: "Schließen",
+                       primaryButton: .init(title: L10n.Identification.Done.close,
                                             action: .close))
             .navigationBarBackButtonHidden(true)
         }
