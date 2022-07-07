@@ -15,7 +15,10 @@ struct IdentificationOverviewLoaded: View {
                         HStack {
                             VStack(alignment: .leading, spacing: 12) {
                                 ForEach(viewStore.requiredReadAttributes) { attribute in
-                                    Text(attribute.localizedTitle)
+                                    HStack(spacing: 10) {
+                                        Text("•")
+                                        Text(attribute.localizedTitle)
+                                    }
                                 }
                             }
                             Spacer()
