@@ -93,7 +93,6 @@ struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
 enum IdentificationCoordinatorAction: Equatable, IndexedRouterAction {
     case routeAction(Int, action: IdentificationScreenAction)
     case updateRoutes([Route<IdentificationScreenState>])
-    case loadToken
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case error(CardErrorType)
 #if PREVIEW
@@ -143,23 +142,6 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 state.availableDebugActions = environment.debugIDInteractionManager.runIdentify(debugSequence: debugSequence)
                 return .none
 #endif
-            case .loadToken:
-                let publisher: EIDInteractionPublisher
-#if PREVIEW
-                if MOCK_OPENECARD {
-                    let debuggableInteraction = environment.debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
-                    state.availableDebugActions = debuggableInteraction.sequence
-                    publisher = debuggableInteraction.publisher
-                } else {
-                    publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
-                }
-#else
-                publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
-#endif
-                return publisher
-                    .receive(on: environment.mainQueue)
-                    .catchToEffect(IdentificationCoordinatorAction.idInteractionEvent)
-                    .cancellable(id: CancelId.self, cancelInFlight: true)
             case .routeAction(_, action: .scan(.wrongPIN(remainingAttempts: let remainingAttempts))):
                 state.routes.presentSheet(.incorrectPersonalPIN(IdentificationIncorrectPersonalPINState(error: .incorrect,
                                                                                                         remainingAttempts: remainingAttempts)))
@@ -178,7 +160,22 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 state.routes.dismiss()
                 return .none
             case .routeAction(_, action: .overview(.identify)):
-                return Effect(value: .loadToken)
+                let publisher: EIDInteractionPublisher
+#if PREVIEW
+                if MOCK_OPENECARD {
+                    let debuggableInteraction = environment.debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
+                    state.availableDebugActions = debuggableInteraction.sequence
+                    publisher = debuggableInteraction.publisher
+                } else {
+                    publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
+                }
+#else
+                publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
+#endif
+                return publisher
+                    .receive(on: environment.mainQueue)
+                    .catchToEffect(IdentificationCoordinatorAction.idInteractionEvent)
+                    .cancellable(id: CancelId.self, cancelInFlight: true)
             case .routeAction(_, action: .overview(.runDebugSequence(let sequence))),
                     .routeAction(_, action: .scan(.runDebugSequence(let sequence))):
                 return Effect(value: .runDebugSequence(sequence))
