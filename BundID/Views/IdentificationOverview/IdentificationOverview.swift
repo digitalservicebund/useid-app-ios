@@ -67,6 +67,8 @@ enum TokenFetchAction: Equatable {
     case error(TokenFetchErrorAction)
 }
 
+typealias PINCallback = IdentifiableCallback<String>
+
 enum IdentificationOverviewAction: Equatable {
     case onAppear
     case identify

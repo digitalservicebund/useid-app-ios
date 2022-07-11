@@ -5,25 +5,6 @@ import IdentifiedCollections
 import SwiftUI
 import ComposableArchitecture
 
-struct PINCallback: Identifiable, Equatable {
-    
-    let id: UUID
-    private let callback: (String) -> Void
-    
-    init(id: UUID, callback: @escaping (String) -> Void) {
-        self.id = id
-        self.callback = callback
-    }
-    
-    static func == (lhs: PINCallback, rhs: PINCallback) -> Bool {
-        return lhs.id == rhs.id
-    }
-    
-    func callAsFunction(_ pin: String) {
-        callback(pin)
-    }
-}
-
 protocol IDInteractionHandler {
     associatedtype LocalAction
     func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> LocalAction?
