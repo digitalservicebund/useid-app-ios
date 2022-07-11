@@ -5,7 +5,7 @@ import TCACoordinators
 struct IdentificationOverviewLoadedState: Identifiable, Equatable {
     let id: UUID
     let request: EIDAuthenticationRequest
-    let handler: (FlaggedAttributes) -> Void
+    let handler: IdentifiableCallback<FlaggedAttributes>
     
 #if PREVIEW
     var availableDebugActions: [IdentifyDebugSequence] = []
@@ -23,10 +23,21 @@ struct IdentificationOverviewLoadedState: Identifiable, Equatable {
     }
 }
 
-enum IdentificationOverviewTokenFetch: Equatable {
+enum IdentificationOverviewTokenFetch: Equatable, IDInteractionHandler {
     case loading
     case loaded(IdentificationOverviewLoadedState)
     case error(IdentifiableError)
+    
+    func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> TokenFetchAction? {
+        switch self {
+        case .loading:
+            return .loading(.idInteractionEvent(event))
+        case .loaded(let identificationOverviewLoadedState):
+            return nil
+        case .error(let identifiableError):
+            return nil
+        }
+    }
 }
 
 struct IdentificationOverviewState: Equatable, IDInteractionHandler {
@@ -36,12 +47,9 @@ struct IdentificationOverviewState: Equatable, IDInteractionHandler {
 #endif
     
     func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationOverviewAction? {
-        return .idInteractionEvent(event)
+        guard let subAction = tokenFetch.transformToLocalAction(event) else { return nil }
+        return .tokenFetch(subAction)
     }
-}
-
-enum TokenFetchLoadingAction: Equatable {
-    case done(Result<IdentificationOverviewLoadedState, IdentifiableError>)
 }
 
 enum TokenFetchLoadedAction: Equatable {
@@ -54,7 +62,7 @@ enum TokenFetchErrorAction: Equatable {
 }
 
 enum TokenFetchAction: Equatable {
-    case loading(TokenFetchLoadingAction)
+    case loading(IdentificationOverviewLoadingAction)
     case loaded(TokenFetchLoadedAction)
     case error(TokenFetchErrorAction)
 }
@@ -64,49 +72,52 @@ enum IdentificationOverviewAction: Equatable {
     case identify
     case cancel
     case tokenFetch(TokenFetchAction)
-    case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case callbackReceived(EIDAuthenticationRequest, PINCallback)
 #if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
 #endif
 }
 
-let identificationOverviewReducer = Reducer<IdentificationOverviewState, IdentificationOverviewAction, AppEnvironment> { state, action, environment in
-    
-    switch action {
-    case .onAppear:
-        return Effect(value: .identify)
-    case .identify:
-        return .none
-    case .tokenFetch(.error(.retry)):
-        state.tokenFetch = .loading
-        return Effect(value: .identify)
-    case .tokenFetch(.loaded(.continue)):
-        guard case .loaded(let subState) = state.tokenFetch else { return .none }
-        var dict: [IDCardAttribute: Bool] = [:]
-        for attribute in subState.requiredReadAttributes {
-            dict[attribute] = true
+let tokenFetchReducer = Reducer<IdentificationOverviewTokenFetch, TokenFetchAction, AppEnvironment>.combine(
+    identificationOverviewLoadingReducer.pullback(state: /IdentificationOverviewTokenFetch.loading,
+                                                  action: /TokenFetchAction.loading,
+                                                  environment: { $0 })
+)
+
+let identificationOverviewReducer = Reducer<IdentificationOverviewState, IdentificationOverviewAction, AppEnvironment>.combine(
+    tokenFetchReducer.pullback(state: \.tokenFetch, action: /IdentificationOverviewAction.tokenFetch, environment: { $0 }),
+    Reducer { state, action, environment in
+        switch action {
+        case .tokenFetch(.loading(.onAppear)):
+            return Effect(value: .identify)
+        case .tokenFetch(.error(.retry)):
+            state.tokenFetch = .loading
+            return Effect(value: .identify)
+        case .tokenFetch(.loading(.failure(let error))):
+            state.tokenFetch = .error(error)
+            return .none
+        case .tokenFetch(.loading(.done(let request, let callback))):
+            state.tokenFetch = .loaded(IdentificationOverviewLoadedState(id: environment.uuidFactory(), request: request, handler: callback))
+            return .none
+        case .tokenFetch(.loaded(.continue)):
+            guard case .loaded(let subState) = state.tokenFetch else { return .none } // TODO: subreducer for state loaded
+            var dict: [IDCardAttribute: Bool] = [:]
+            for attribute in subState.requiredReadAttributes {
+                dict[attribute] = true
+            }
+            subState.handler(dict)
+            return .none
+        case .callbackReceived:
+            return .none
+        default:
+            return .none
         }
-        subState.handler(dict)
-        return .none
-    case .idInteractionEvent(.success(let event)):
-        return state.handle(event: event, environment: environment)
-    case .idInteractionEvent(.failure(let error)):
-        state.tokenFetch = .error(IdentifiableError(error))
-        return .none
-    case .callbackReceived:
-        return .none
-    default:
-        return .none
     }
-}
+)
 
 extension IdentificationOverviewState {
     mutating func handle(event: EIDInteractionEvent, environment: AppEnvironment) -> Effect<IdentificationOverviewAction, Never> {
         switch event {
-        case .requestAuthenticationRequestConfirmation(let request, let handler):
-            tokenFetch = .loaded(IdentificationOverviewLoadedState(id: environment.uuidFactory(), request: request, handler: handler))
-            return .none
         case .requestPIN(remainingAttempts: nil, pinCallback: let handler):
             guard case .loaded(let subState) = tokenFetch else { return .none } // TODO: Move to subreducer
             return Effect(value: .callbackReceived(subState.request, PINCallback(id: environment.uuidFactory(), callback: handler)))
@@ -134,15 +145,13 @@ struct IdentificationOverview: View {
             }
             CaseLet(state: /IdentificationOverviewTokenFetch.error,
                     action: TokenFetchAction.error) { errorStore in
+                // TODO: Own error view
                 DialogView(store: errorStore.stateless,
                            title: L10n.Identification.Overview.Error.title,
                            message: L10n.Identification.Overview.Error.body,
                            primaryButton: .init(title: L10n.Identification.Overview.Error.retry, action: .retry))
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
-        }
-        .onAppear {
-            ViewStore(store.stateless).send(.onAppear)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

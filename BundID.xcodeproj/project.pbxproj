@@ -66,6 +66,7 @@
 		E1EFB5C8285A365E005C38C6 /* IdentificationAbout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C7285A365E005C38C6 /* IdentificationAbout.swift */; };
 		E1EFB5D0285C794A005C38C6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1EFB5D2285C794A005C38C6 /* InfoPlist.strings */; };
 		E1EFB5D5285C7D81005C38C6 /* IdentificationPersonalPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5D4285C7D81005C38C6 /* IdentificationPersonalPIN.swift */; };
+		E1F2F3D728770F28004C8D4B /* IdentifiableCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F2F3D628770F28004C8D4B /* IdentifiableCallback.swift */; };
 		E1F39DD6285784DD00D8D907 /* IdentificationOverview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F39DD5285784DD00D8D907 /* IdentificationOverview.swift */; };
 		E1F39DD8285791BD00D8D907 /* IdentifiableError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F39DD7285791BD00D8D907 /* IdentifiableError.swift */; };
 		E1F39DDA28588AB000D8D907 /* IdentificationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F39DD928588AB000D8D907 /* IdentificationCoordinator.swift */; };
@@ -184,6 +185,7 @@
 		E1EFB5D1285C794A005C38C6 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E1EFB5D3285C7B48005C38C6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E1EFB5D4285C7D81005C38C6 /* IdentificationPersonalPIN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationPersonalPIN.swift; sourceTree = "<group>"; };
+		E1F2F3D628770F28004C8D4B /* IdentifiableCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableCallback.swift; sourceTree = "<group>"; };
 		E1F39DD5285784DD00D8D907 /* IdentificationOverview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverview.swift; sourceTree = "<group>"; };
 		E1F39DD7285791BD00D8D907 /* IdentifiableError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableError.swift; sourceTree = "<group>"; };
 		E1F39DD928588AB000D8D907 /* IdentificationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCoordinator.swift; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 				E1F39DD7285791BD00D8D907 /* IdentifiableError.swift */,
 				E1EFB5C52858EB2A005C38C6 /* Shape+Fill.swift */,
 				E1FFDF0B2875C7E9006DFE03 /* UUID+Zero.swift */,
+				E1F2F3D628770F28004C8D4B /* IdentifiableCallback.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -742,6 +745,7 @@
 				E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */,
 				E1EFB5C42858EB0F005C38C6 /* IdentificationOverviewLoading.swift in Sources */,
 				E12CB308284A146E0039FD56 /* SetupIncorrectTransportPIN.swift in Sources */,
+				E1F2F3D728770F28004C8D4B /* IdentifiableCallback.swift in Sources */,
 				E1FFDF0C2875C7E9006DFE03 /* UUID+Zero.swift in Sources */,
 				E1AB87A4282413A700C7FC94 /* PINTextField.swift in Sources */,
 				E11EB2AD2853A8EA008B4042 /* SetupScreens.swift in Sources */,
