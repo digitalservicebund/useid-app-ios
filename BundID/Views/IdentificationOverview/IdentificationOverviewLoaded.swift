@@ -1,7 +1,7 @@
 import ComposableArchitecture
 import SwiftUI
 
-let identificationOverviewLoadedReducer = Reducer<IdentificationOverviewLoadedState, TokenFetchLoadedAction, AppEnvironment> { state, action, environment in
+let identificationOverviewLoadedReducer = Reducer<IdentificationOverviewLoadedState, IdentificationOverviewLoadedAction, AppEnvironment> { state, action, environment in
     switch action {
     case .idInteractionEvent(.success(.requestPIN(remainingAttempts: nil, pinCallback: let handler))):
         return Effect(value: .callbackReceived(state.request, PINCallback(id: environment.uuidFactory(), callback: handler)))
@@ -26,7 +26,7 @@ let identificationOverviewLoadedReducer = Reducer<IdentificationOverviewLoadedSt
 }
 
 struct IdentificationOverviewLoaded: View {
-    var store: Store<IdentificationOverviewLoadedState, TokenFetchLoadedAction>
+    var store: Store<IdentificationOverviewLoadedState, IdentificationOverviewLoadedAction>
     
     var body: some View {
         WithViewStore(store) { viewStore in

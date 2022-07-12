@@ -1,14 +1,23 @@
 import ComposableArchitecture
 import SwiftUI
 
+struct IdentificationOverviewLoadingState: Equatable {
+#if PREVIEW
+    var availableDebugActions: [IdentifyDebugSequence] = []
+#endif
+}
+
 enum IdentificationOverviewLoadingAction: Equatable {
     case onAppear
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case done(EIDAuthenticationRequest, IdentifiableCallback<FlaggedAttributes>)
     case failure(IdentifiableError)
+    #if PREVIEW
+    case runDebugSequence(IdentifyDebugSequence)
+    #endif
 }
 
-let identificationOverviewLoadingReducer = Reducer<Void, IdentificationOverviewLoadingAction, AppEnvironment> { state, action, environment in
+let identificationOverviewLoadingReducer = Reducer<IdentificationOverviewLoadingState, IdentificationOverviewLoadingAction, AppEnvironment> { _, action, environment in
     switch action {
     case .onAppear:
         return .none
@@ -22,11 +31,13 @@ let identificationOverviewLoadingReducer = Reducer<Void, IdentificationOverviewL
         return .none
     case .failure:
         return .none
+    case .runDebugSequence:
+        return .none
     }
 }
 
 struct IdentificationOverviewLoading: View {
-    var store: Store<Void, IdentificationOverviewLoadingAction>
+    var store: Store<IdentificationOverviewLoadingState, IdentificationOverviewLoadingAction>
     
     var body: some View {
         VStack {
@@ -43,5 +54,23 @@ struct IdentificationOverviewLoading: View {
         .onAppear {
             ViewStore(store.stateless).send(.onAppear)
         }
+#if PREVIEW
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                WithViewStore(store) { viewStore in
+                    Menu {
+                        ForEach(viewStore.availableDebugActions) { sequence in
+                            Button(sequence.id) {
+                                viewStore.send(.runDebugSequence(sequence))
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "wrench")
+                    }
+                    .disabled(viewStore.availableDebugActions.isEmpty)
+                }
+            }
+        }
+#endif
     }
 }

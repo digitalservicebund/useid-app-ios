@@ -7,10 +7,6 @@ struct IdentificationOverviewLoadedState: Identifiable, Equatable {
     let request: EIDAuthenticationRequest
     let handler: IdentifiableCallback<FlaggedAttributes>
     
-#if PREVIEW
-    var availableDebugActions: [IdentifyDebugSequence] = []
-#endif
-    
     var requiredReadAttributes: IdentifiedArrayOf<IDCardAttribute> {
         let requiredAttributes = request.readAttributes.compactMap { (key: IDCardAttribute, isRequired: Bool) in
             isRequired ? key : nil
@@ -19,12 +15,12 @@ struct IdentificationOverviewLoadedState: Identifiable, Equatable {
     }
 }
 
-enum IdentificationOverviewTokenFetch: Equatable, IDInteractionHandler {
-    case loading
+enum IdentificationOverviewState: Equatable, IDInteractionHandler {
+    case loading(IdentificationOverviewLoadingState)
     case loaded(IdentificationOverviewLoadedState)
     case error(IdentifiableError)
     
-    func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> TokenFetchAction? {
+    func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationOverviewAction? {
         switch self {
         case .loading:
             return .loading(.idInteractionEvent(event))
@@ -34,21 +30,23 @@ enum IdentificationOverviewTokenFetch: Equatable, IDInteractionHandler {
             return nil
         }
     }
-}
-
-struct IdentificationOverviewState: Equatable, IDInteractionHandler {
-    var tokenFetch: IdentificationOverviewTokenFetch = .loading
-#if PREVIEW
-    var availableDebugActions: [IdentifyDebugSequence] = []
-#endif
     
-    func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationOverviewAction? {
-        guard let subAction = tokenFetch.transformToLocalAction(event) else { return nil }
-        return .tokenFetch(subAction)
+#if PREVIEW
+    var availableDebugActions: [IdentifyDebugSequence] {
+        get {
+            guard case .loading(let loadingState) = self else { return [] }
+            return loadingState.availableDebugActions
+        }
+        set {
+            guard case .loading(var loadingState) = self else { return }
+            loadingState.availableDebugActions = newValue
+            self = .loading(loadingState)
+        }
     }
+#endif
 }
 
-enum TokenFetchLoadedAction: Equatable {
+enum IdentificationOverviewLoadedAction: Equatable {
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case moreInfo
     case callbackReceived(EIDAuthenticationRequest, PINCallback)
@@ -56,51 +54,41 @@ enum TokenFetchLoadedAction: Equatable {
     case failure(IdentifiableError)
 }
 
-enum TokenFetchErrorAction: Equatable {
+enum IdentificationOverviewErrorAction: Equatable {
     case retry
-}
-
-enum TokenFetchAction: Equatable {
-    case loading(IdentificationOverviewLoadingAction)
-    case loaded(TokenFetchLoadedAction)
-    case error(TokenFetchErrorAction)
 }
 
 typealias PINCallback = IdentifiableCallback<String>
 
 enum IdentificationOverviewAction: Equatable {
+    case loading(IdentificationOverviewLoadingAction)
+    case loaded(IdentificationOverviewLoadedAction)
+    case error(IdentificationOverviewErrorAction)
+    
     case onAppear
     case identify
     case cancel
-    case tokenFetch(TokenFetchAction)
-#if PREVIEW
-    case runDebugSequence(IdentifyDebugSequence)
-#endif
 }
 
-let tokenFetchReducer = Reducer<IdentificationOverviewTokenFetch, TokenFetchAction, AppEnvironment>.combine(
-    identificationOverviewLoadingReducer.pullback(state: /IdentificationOverviewTokenFetch.loading,
-                                                  action: /TokenFetchAction.loading,
-                                                  environment: { $0 }),
-    identificationOverviewLoadedReducer.pullback(state: /IdentificationOverviewTokenFetch.loaded,
-                                                 action: /TokenFetchAction.loaded,
-                                                 environment: { $0 })
-)
-
 let identificationOverviewReducer = Reducer<IdentificationOverviewState, IdentificationOverviewAction, AppEnvironment>.combine(
-    tokenFetchReducer.pullback(state: \.tokenFetch, action: /IdentificationOverviewAction.tokenFetch, environment: { $0 }),
+    identificationOverviewLoadingReducer.pullback(state: /IdentificationOverviewState.loading,
+                                                  action: /IdentificationOverviewAction.loading,
+                                                  environment: { $0 }),
+    identificationOverviewLoadedReducer.pullback(state: /IdentificationOverviewState.loaded,
+                                                 action: /IdentificationOverviewAction.loaded,
+                                                 environment: { $0 }),
     Reducer { state, action, environment in
         switch action {
-        case .tokenFetch(.loading(.onAppear)):
+        case .loading(.onAppear):
             return Effect(value: .identify)
-        case .tokenFetch(.error(.retry)):
-            state.tokenFetch = .loading
+        case .error(.retry):
+            state = .loading(IdentificationOverviewLoadingState())
             return Effect(value: .identify)
-        case .tokenFetch(.loading(.failure(let error))):
-            state.tokenFetch = .error(error)
+        case .loading(.failure(let error)):
+            state = .error(error)
             return .none
-        case .tokenFetch(.loading(.done(let request, let callback))):
-            state.tokenFetch = .loaded(IdentificationOverviewLoadedState(id: environment.uuidFactory(), request: request, handler: callback))
+        case .loading(.done(let request, let callback)):
+            state = .loaded(IdentificationOverviewLoadedState(id: environment.uuidFactory(), request: request, handler: callback))
             return .none
         default:
             return .none
@@ -113,20 +101,19 @@ struct IdentificationOverview: View {
     var store: Store<IdentificationOverviewState, IdentificationOverviewAction>
     
     var body: some View {
-        SwitchStore(store.scope(state: \.tokenFetch, action: IdentificationOverviewAction.tokenFetch)) {
-            CaseLet(state: /IdentificationOverviewTokenFetch.loading,
-                    action: TokenFetchAction.loading) { loadingStore in
+        SwitchStore(store) {
+            CaseLet(state: /IdentificationOverviewState.loading,
+                    action: IdentificationOverviewAction.loading) { loadingStore in
                 IdentificationOverviewLoading(store: loadingStore)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
-            CaseLet(state: /IdentificationOverviewTokenFetch.loaded,
-                    action: TokenFetchAction.loaded) { loadedStore in
+            CaseLet(state: /IdentificationOverviewState.loaded,
+                    action: IdentificationOverviewAction.loaded) { loadedStore in
                 IdentificationOverviewLoaded(store: loadedStore)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
-            CaseLet(state: /IdentificationOverviewTokenFetch.error,
-                    action: TokenFetchAction.error) { errorStore in
-                // TODO: Own error view
+            CaseLet(state: /IdentificationOverviewState.error,
+                    action: IdentificationOverviewAction.error) { errorStore in
                 DialogView(store: errorStore.stateless,
                            title: L10n.Identification.Overview.Error.title,
                            message: L10n.Identification.Overview.Error.body,
@@ -141,23 +128,6 @@ struct IdentificationOverview: View {
                 }
             }
         }
-        .toolbar {
-#if PREVIEW
-            ToolbarItem(placement: .primaryAction) {
-                WithViewStore(store) { viewStore in
-                    Menu {
-                        ForEach(viewStore.availableDebugActions) { sequence in
-                            Button(sequence.id) {
-                                viewStore.send(.runDebugSequence(sequence))
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "wrench")
-                    }
-                }
-            }
-#endif
-        }
     }
 }
 
@@ -165,7 +135,7 @@ let demoTokenURL = "http://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Ft
 
 struct IdentificationOverview_Previews: PreviewProvider {
     static var previews: some View {
-        IdentificationOverview(store: .init(initialState: IdentificationOverviewState(),
+        IdentificationOverview(store: .init(initialState: IdentificationOverviewState.loading(IdentificationOverviewLoadingState()),
                                             reducer: identificationOverviewReducer,
                                             environment: AppEnvironment.preview))
     }

@@ -59,7 +59,7 @@ struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
     
     init(tokenURL: String) {
         self.tokenURL = tokenURL
-        self.states = [.root(.overview(IdentificationOverviewState()))]
+        self.states = [.root(.overview(.loading(IdentificationOverviewLoadingState())))]
     }
     
     func transformToLocalInteractionHandler(event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationCoordinatorAction? {
@@ -157,10 +157,10 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                     .receive(on: environment.mainQueue)
                     .catchToEffect(IdentificationCoordinatorAction.idInteractionEvent)
                     .cancellable(id: CancelId.self, cancelInFlight: true)
-            case .routeAction(_, action: .overview(.runDebugSequence(let sequence))),
+            case .routeAction(_, action: .overview(.loading(.runDebugSequence(let sequence)))),
                     .routeAction(_, action: .scan(.runDebugSequence(let sequence))):
                 return Effect(value: .runDebugSequence(sequence))
-            case .routeAction(_, action: .overview(.tokenFetch(.loaded(.callbackReceived(let request, let callback))))):
+            case .routeAction(_, action: .overview(.loaded(.callbackReceived(let request, let callback)))):
                 state.routes.push(.personalPIN(IdentificationPersonalPINState(request: request, callback: callback)))
                 return .none
             case .routeAction(_, action: .personalPIN(.done(request: let request, pin: let pin, pinCallback: let pinCallback))):
