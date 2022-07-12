@@ -11,10 +11,6 @@ struct IdentificationOverviewLoadedState: Identifiable, Equatable {
     var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
     
-    static func == (lhs: IdentificationOverviewLoadedState, rhs: IdentificationOverviewLoadedState) -> Bool {
-        return lhs.id == rhs.id && lhs.request == rhs.request
-    }
-    
     var requiredReadAttributes: IdentifiedArrayOf<IDCardAttribute> {
         let requiredAttributes = request.readAttributes.compactMap { (key: IDCardAttribute, isRequired: Bool) in
             isRequired ? key : nil
@@ -32,9 +28,9 @@ enum IdentificationOverviewTokenFetch: Equatable, IDInteractionHandler {
         switch self {
         case .loading:
             return .loading(.idInteractionEvent(event))
-        case .loaded(let identificationOverviewLoadedState):
-            return nil
-        case .error(let identifiableError):
+        case .loaded:
+            return .loaded(.idInteractionEvent(event))
+        case .error:
             return nil
         }
     }
@@ -53,8 +49,11 @@ struct IdentificationOverviewState: Equatable, IDInteractionHandler {
 }
 
 enum TokenFetchLoadedAction: Equatable {
-    case `continue`
+    case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case moreInfo
+    case callbackReceived(EIDAuthenticationRequest, PINCallback)
+    case done
+    case failure(IdentifiableError)
 }
 
 enum TokenFetchErrorAction: Equatable {
@@ -74,7 +73,6 @@ enum IdentificationOverviewAction: Equatable {
     case identify
     case cancel
     case tokenFetch(TokenFetchAction)
-    case callbackReceived(EIDAuthenticationRequest, PINCallback)
 #if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -83,7 +81,10 @@ enum IdentificationOverviewAction: Equatable {
 let tokenFetchReducer = Reducer<IdentificationOverviewTokenFetch, TokenFetchAction, AppEnvironment>.combine(
     identificationOverviewLoadingReducer.pullback(state: /IdentificationOverviewTokenFetch.loading,
                                                   action: /TokenFetchAction.loading,
-                                                  environment: { $0 })
+                                                  environment: { $0 }),
+    identificationOverviewLoadedReducer.pullback(state: /IdentificationOverviewTokenFetch.loaded,
+                                                 action: /TokenFetchAction.loaded,
+                                                 environment: { $0 })
 )
 
 let identificationOverviewReducer = Reducer<IdentificationOverviewState, IdentificationOverviewAction, AppEnvironment>.combine(
@@ -101,33 +102,11 @@ let identificationOverviewReducer = Reducer<IdentificationOverviewState, Identif
         case .tokenFetch(.loading(.done(let request, let callback))):
             state.tokenFetch = .loaded(IdentificationOverviewLoadedState(id: environment.uuidFactory(), request: request, handler: callback))
             return .none
-        case .tokenFetch(.loaded(.continue)):
-            guard case .loaded(let subState) = state.tokenFetch else { return .none } // TODO: subreducer for state loaded
-            var dict: [IDCardAttribute: Bool] = [:]
-            for attribute in subState.requiredReadAttributes {
-                dict[attribute] = true
-            }
-            subState.handler(dict)
-            return .none
-        case .callbackReceived:
-            return .none
         default:
             return .none
         }
     }
 )
-
-extension IdentificationOverviewState {
-    mutating func handle(event: EIDInteractionEvent, environment: AppEnvironment) -> Effect<IdentificationOverviewAction, Never> {
-        switch event {
-        case .requestPIN(remainingAttempts: nil, pinCallback: let handler):
-            guard case .loaded(let subState) = tokenFetch else { return .none } // TODO: Move to subreducer
-            return Effect(value: .callbackReceived(subState.request, PINCallback(id: environment.uuidFactory(), callback: handler)))
-        default:
-            return .none
-        }
-    }
-}
 
 struct IdentificationOverview: View {
     

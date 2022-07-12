@@ -160,7 +160,7 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
             case .routeAction(_, action: .overview(.runDebugSequence(let sequence))),
                     .routeAction(_, action: .scan(.runDebugSequence(let sequence))):
                 return Effect(value: .runDebugSequence(sequence))
-            case .routeAction(_, action: .overview(.callbackReceived(let request, let callback))):
+            case .routeAction(_, action: .overview(.tokenFetch(.loaded(.callbackReceived(let request, let callback))))):
                 state.routes.push(.personalPIN(IdentificationPersonalPINState(request: request, callback: callback)))
                 return .none
             case .routeAction(_, action: .personalPIN(.done(request: let request, pin: let pin, pinCallback: let pinCallback))):

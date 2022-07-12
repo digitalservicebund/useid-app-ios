@@ -1,6 +1,30 @@
 import ComposableArchitecture
 import SwiftUI
 
+let identificationOverviewLoadedReducer = Reducer<IdentificationOverviewLoadedState, TokenFetchLoadedAction, AppEnvironment> { state, action, environment in
+    switch action {
+    case .idInteractionEvent(.success(.requestPIN(remainingAttempts: nil, pinCallback: let handler))):
+        return Effect(value: .callbackReceived(state.request, PINCallback(id: environment.uuidFactory(), callback: handler)))
+    case .idInteractionEvent(.failure(let error)):
+        return Effect(value: .failure(IdentifiableError(error)))
+    case .idInteractionEvent:
+        return .none
+    case .done:
+        var dict: [IDCardAttribute: Bool] = [:]
+        for attribute in state.requiredReadAttributes {
+            dict[attribute] = true
+        }
+        state.handler(dict)
+        return .none
+    case .failure:
+        return .none
+    case .callbackReceived:
+        return .none
+    case .moreInfo:
+        return .none
+    }
+}
+
 struct IdentificationOverviewLoaded: View {
     var store: Store<IdentificationOverviewLoadedState, TokenFetchLoadedAction>
     
@@ -55,7 +79,7 @@ struct IdentificationOverviewLoaded: View {
                     }
                 }
                 DialogButtons(store: store.stateless,
-                              primary: .init(title: L10n.Identification.Overview.Loaded.continue, action: .continue))
+                              primary: .init(title: L10n.Identification.Overview.Loaded.continue, action: .done))
             }
             .navigationBarTitleDisplayMode(.inline)
         }
