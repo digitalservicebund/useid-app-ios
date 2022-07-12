@@ -221,19 +221,7 @@ struct SetupScan: View {
                 viewStore.send(.onAppear)
             }
 #if PREVIEW
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Menu {
-                        ForEach(viewStore.availableDebugActions) { sequence in
-                            Button(sequence.id) {
-                                viewStore.send(.runDebugSequence(sequence))
-                            }
-                        }
-                    } label: {
-                         Image(systemName: "wrench")
-                    }.disabled(!viewStore.isScanning)
-                }
-            }
+            .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: SetupScanAction.runDebugSequence)
 #endif
         }
     }

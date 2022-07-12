@@ -195,23 +195,9 @@ struct IdentificationScan: View {
                 viewStore.send(.onAppear)
             }
         }
-        .toolbar {
 #if PREVIEW
-            ToolbarItem(placement: .primaryAction) {
-                WithViewStore(store) { viewStore in
-                    Menu {
-                        ForEach(viewStore.availableDebugActions) { sequence in
-                            Button(sequence.id) {
-                                viewStore.send(.runDebugSequence(sequence))
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "wrench")
-                    }
-                }
-            }
+        .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: IdentificationScanAction.runDebugSequence)
 #endif
-        }
     }
 }
 

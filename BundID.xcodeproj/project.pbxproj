@@ -37,6 +37,7 @@
 		E16708BC283D824D001A1637 /* Scheduler+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708BB283D824D001A1637 /* Scheduler+Animation.swift */; };
 		E16708BE283E666A001A1637 /* Store+Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708BD283E666A001A1637 /* Store+Empty.swift */; };
 		E16708C0283E6A07001A1637 /* SetupScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708BF283E6A07001A1637 /* SetupScan.swift */; };
+		E17604D1287E24F1007DFA10 /* DebugMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17604D0287E24F1007DFA10 /* DebugMenu.swift */; };
 		E18E223A285349D200221DB1 /* BundIDUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18E2239285349D200221DB1 /* BundIDUITests.swift */; };
 		E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
 		E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACE728350FD500A51183 /* Array+Safe.swift */; };
@@ -150,6 +151,7 @@
 		E16708BB283D824D001A1637 /* Scheduler+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Scheduler+Animation.swift"; sourceTree = "<group>"; };
 		E16708BD283E666A001A1637 /* Store+Empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Store+Empty.swift"; sourceTree = "<group>"; };
 		E16708BF283E6A07001A1637 /* SetupScan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScan.swift; sourceTree = "<group>"; };
+		E17604D0287E24F1007DFA10 /* DebugMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugMenu.swift; sourceTree = "<group>"; };
 		E18E22322853496B00221DB1 /* UnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitTests.xctestplan; sourceTree = "<group>"; };
 		E18E2237285349D200221DB1 /* BundIDUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BundIDUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E18E2239285349D200221DB1 /* BundIDUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundIDUITests.swift; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 				E16708B9283D7CA1001A1637 /* DialogButtons.swift */,
 				E1AB8799282281C400C7FC94 /* HeaderView.swift */,
 				E13925CE28411E2300161F5C /* LottieView.swift */,
+				E17604D0287E24F1007DFA10 /* DebugMenu.swift */,
 			);
 			path = SupplementaryViews;
 			sourceTree = "<group>";
@@ -753,6 +756,7 @@
 				E1B6991C2869B31B00360273 /* DebugIDInteractionManager.swift in Sources */,
 				E1F39DDC28588B0100D8D907 /* IdentificationScreens.swift in Sources */,
 				E1F39DD6285784DD00D8D907 /* IdentificationOverview.swift in Sources */,
+				E17604D1287E24F1007DFA10 /* DebugMenu.swift in Sources */,
 				E593E2742816866200154EB0 /* EACInteraction.swift in Sources */,
 				E1AAACFB2837B9A200A51183 /* SetupPersonalPINState.swift in Sources */,
 				E1CD8E93282156F2008ADA2A /* SetupTransportPIN.swift in Sources */,

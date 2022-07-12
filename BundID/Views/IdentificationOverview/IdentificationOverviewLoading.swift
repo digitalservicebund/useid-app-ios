@@ -55,22 +55,7 @@ struct IdentificationOverviewLoading: View {
             ViewStore(store.stateless).send(.onAppear)
         }
 #if PREVIEW
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                WithViewStore(store) { viewStore in
-                    Menu {
-                        ForEach(viewStore.availableDebugActions) { sequence in
-                            Button(sequence.id) {
-                                viewStore.send(.runDebugSequence(sequence))
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "wrench")
-                    }
-                    .disabled(viewStore.availableDebugActions.isEmpty)
-                }
-            }
-        }
+        .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: IdentificationOverviewLoadingAction.runDebugSequence)
 #endif
     }
 }
