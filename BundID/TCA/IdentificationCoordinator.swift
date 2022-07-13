@@ -192,26 +192,28 @@ struct IdentificationCoordinatorView: View {
     let store: Store<IdentificationCoordinatorState, IdentificationCoordinatorAction>
     
     var body: some View {
-        TCARouter(store) { screen in
-            SwitchStore(screen) {
-                CaseLet(state: /IdentificationScreenState.overview,
-                        action: IdentificationScreenAction.overview,
-                        then: IdentificationOverview.init)
-                CaseLet(state: /IdentificationScreenState.personalPIN,
-                        action: IdentificationScreenAction.personalPIN,
-                        then: IdentificationPersonalPIN.init)
-                CaseLet(state: /IdentificationScreenState.incorrectPersonalPIN,
-                        action: IdentificationScreenAction.incorrectPersonalPIN,
-                        then: IdentificationIncorrectPersonalPIN.init)
-                CaseLet(state: /IdentificationScreenState.scan,
-                        action: IdentificationScreenAction.scan,
-                        then: IdentificationScan.init)
-                CaseLet(state: /IdentificationScreenState.done,
-                        action: IdentificationScreenAction.done,
-                        then: IdentificationDone.init)
-                CaseLet(state: /IdentificationScreenState.error,
-                        action: IdentificationScreenAction.error,
-                        then: CardError.init)
+        NavigationView {
+            TCARouter(store) { screen in
+                SwitchStore(screen) {
+                    CaseLet(state: /IdentificationScreenState.overview,
+                            action: IdentificationScreenAction.overview,
+                            then: IdentificationOverview.init)
+                    CaseLet(state: /IdentificationScreenState.personalPIN,
+                            action: IdentificationScreenAction.personalPIN,
+                            then: IdentificationPersonalPIN.init)
+                    CaseLet(state: /IdentificationScreenState.incorrectPersonalPIN,
+                            action: IdentificationScreenAction.incorrectPersonalPIN,
+                            then: IdentificationIncorrectPersonalPIN.init)
+                    CaseLet(state: /IdentificationScreenState.scan,
+                            action: IdentificationScreenAction.scan,
+                            then: IdentificationScan.init)
+                    CaseLet(state: /IdentificationScreenState.done,
+                            action: IdentificationScreenAction.done,
+                            then: IdentificationDone.init)
+                    CaseLet(state: /IdentificationScreenState.error,
+                            action: IdentificationScreenAction.error,
+                            then: CardError.init)
+                }
             }
         }
     }

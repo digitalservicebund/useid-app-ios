@@ -65,7 +65,7 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                 if let tokenURL = state.tokenURL {
                     return Effect.routeWithDelaysIfUnsupported(state.routes) {
                         $0.dismiss()
-                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)), embedInNavigationView: true)
+                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
                     }
                 } else {
                     state.routes.dismiss()
@@ -83,14 +83,14 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                 if let tokenURL = state.tokenURL {
                     return Effect.routeWithDelaysIfUnsupported(state.routes) {
                         $0.dismiss()
-                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)), embedInNavigationView: true)
+                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
                     }
                 } else {
                     state.routes.dismiss()
                     return .none
                 }
             case .routeAction(_, action: .home(.triggerIdentification(tokenURL: let tokenURL))):
-                state.routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)), embedInNavigationView: true)
+                state.routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
                 return .none
             case .routeAction(_, action: .identificationCoordinator(.routeAction(_, action: .overview(.cancel)))):
                 state.routes.dismiss()

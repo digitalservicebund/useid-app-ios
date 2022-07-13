@@ -12,9 +12,9 @@ enum IdentificationOverviewLoadingAction: Equatable {
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case done(EIDAuthenticationRequest, IdentifiableCallback<FlaggedAttributes>)
     case failure(IdentifiableError)
-    #if PREVIEW
+#if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
-    #endif
+#endif
 }
 
 let identificationOverviewLoadingReducer = Reducer<IdentificationOverviewLoadingState, IdentificationOverviewLoadingAction, AppEnvironment> { _, action, environment in

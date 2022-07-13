@@ -35,7 +35,7 @@ class IDInteractionManagerTests: XCTestCase {
         }
         
         _ = IDInteractionManager(openEcard: mockOpenEcard,
-                                                      nfcMessageProvider: NFCMessageProvider())
+                                 nfcMessageProvider: NFCMessageProvider())
         
         verify(mockOpenEcard).context(any())
     }

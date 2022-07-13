@@ -118,7 +118,7 @@ struct IdentificationOverview: View {
                            title: L10n.Identification.Overview.Error.title,
                            message: L10n.Identification.Overview.Error.body,
                            primaryButton: .init(title: L10n.Identification.Overview.Error.retry, action: .retry))
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
         .toolbar {
