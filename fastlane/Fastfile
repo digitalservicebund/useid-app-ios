@@ -59,7 +59,6 @@ platform :ios do
         devices: ["iPhone 13"],
         skip_detect_devices: true,
         prelaunch_simulator: false,
-        skip_package_dependencies_resolution: true,
         disable_package_automatic_updates: true,
         result_bundle: true,
         code_coverage: true,
