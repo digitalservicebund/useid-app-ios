@@ -1049,10 +1049,6 @@
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = VDTVKQ35RL;
 				ENABLE_PREVIEWS = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/BundID/OpenECard",
-				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BundID/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "UseID Preview";
@@ -1093,10 +1089,6 @@
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = VDTVKQ35RL;
 				ENABLE_PREVIEWS = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/BundID/OpenECard",
-				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BundID/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "UseID Preview";

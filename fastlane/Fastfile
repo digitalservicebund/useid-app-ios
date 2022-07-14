@@ -118,6 +118,8 @@ platform :ios do
   lane :buildPreview do |_options|
     ensure_git_status_clean
 
+    install_provisioning_profile(path: ENV["PP_PATH"])
+
     build_app(
       project: "#{PROJECT_FILENAME}.xcodeproj",
       configuration: 'Release',

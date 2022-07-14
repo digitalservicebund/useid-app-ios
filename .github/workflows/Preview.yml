@@ -82,8 +82,13 @@ jobs:
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+          echo "KEYCHAIN_PATH=$KEYCHAIN_PATH" >> $GITHUB_ENV
+          echo "PP_PATH=$PP_PATH" >> $GITHUB_ENV
       - name: fastlane preview testflight
         env:
+            KEYCHAIN_PATH: ${{ env.KEYCHAIN_PATH }}
+            PP_PATH: ${{ env.PP_PATH }}
             APPSTORE_API_KEY_ID: '${{ secrets.APPSTORE_API_KEY_ID }}'
             APPSTORE_API_ISSUER_ID: '${{ secrets.APPSTORE_API_ISSUER_ID }}'
             APPSTORE_API_KEY_CONTENT: '${{ secrets.APPSTORE_API_KEY_CONTENT }}'
