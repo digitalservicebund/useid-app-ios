@@ -9,7 +9,7 @@
     }
   ],
   "defaultOptions" : {
-
+    "language" : "de"
   },
   "testTargets" : [
     {
