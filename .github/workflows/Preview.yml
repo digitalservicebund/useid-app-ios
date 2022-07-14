@@ -1,0 +1,62 @@
+name: Create Preview Version
+on:
+  push:
+    branches:
+      - 'preview/**'
+
+jobs:
+  dependencies:
+    runs-on: self-hosted
+    steps:
+      - name: Use rbenv shims
+        run: echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Restore Dependencies
+        uses: actions/cache@v2
+        id: cache-dependencies
+        env:
+          cache-name: cache-dependencies
+        with:
+          path: |
+            vendor
+            .bundle
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}        
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: bundle install --path=vendor
+      - name: Save Dependencies
+        uses: actions/cache@v2
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        env:
+          cache-name: cache-dependencies
+        with:
+          path: |
+            vendor
+            .bundle
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
+          
+  testFlight:
+    runs-on: self-hosted
+    needs: dependencies
+    steps:
+      - name: Use rbenv shims
+        run: echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+      - name: Check out repository code
+        uses: actions/checkout@v2            
+      - name: Restore Dependencies
+        uses: actions/cache@v2
+        id: cache-dependencies
+        env:
+          cache-name: cache-dependencies
+        with:
+          path: |
+            vendor
+            .bundle
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}  
+      - name: fastlane preview testflight
+        env:
+            APPSTORE_API_KEY_ID: '${{ secrets.APPSTORE_API_KEY_ID }}'
+            APPSTORE_API_ISSUER_ID: '${{ secrets.APPSTORE_API_ISSUER_ID }}'
+            APPSTORE_API_KEY_CONTENT: '${{ secrets.APPSTORE_API_KEY_CONTENT }}'
+        run: bundle exec fastlane preview

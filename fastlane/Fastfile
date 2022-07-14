@@ -108,14 +108,14 @@ platform :ios do
     )
   end
 
-  desc 'Trigger Release'
-  lane :release do |options|
-    buildRelease(options)
-    deliverRelease(options)
+  desc 'Trigger Preview'
+  lane :preview do |options|
+    buildPreview(options)
+    deliverPreview(options)
   end
 
-  desc 'Build Release'
-  lane :buildRelease do |_options|
+  desc 'Build Preview'
+  lane :buildPreview do |_options|
     ensure_git_status_clean
 
     build_app(
@@ -134,17 +134,10 @@ platform :ios do
     push_to_git_remote
   end
 
-  desc 'Deliver Release'
-  lane :deliverRelease do |options|
+  desc 'Deliver Preview'
+  lane :deliverPreview do |options|
     make_screenshots = options[:screenshots] == true
-    deliver(
-      force: true,
-      submission_information: {
-        add_id_info_uses_idfa: false
-      },
-      skip_screenshots: !make_screenshots,
-      precheck_include_in_app_purchases: false
-    )
+    upload_to_testflight(api_key: ENV['APPSTORECONNECT_API_KEY'])
   end
 
   desc 'Bump version'
@@ -156,5 +149,25 @@ platform :ios do
 
     commit_version_bump(xcodeproj: "#{PROJECT_FILENAME}.xcodeproj")
     add_git_tag(tag: "#{version}-#{build_number}")
+  end
+
+  desc 'Update App Version'
+  lane :updateAppVersion do |options|
+    new_app_version = getGitBranch
+    puts "Updating App version with git branch name: #{new_app_version}"
+    rel_path = options[:rel_path] || '../'
+    project = Xcodeproj::Project.open("#{rel_path}BundID.xcodeproj")
+    project.build_configuration_list.build_configurations.each do |build_configuration|
+      puts "Bumping version of #{build_configuration} from \
+            #{build_configuration.build_settings['MARKETING_VERSION']} to #{new_app_version}"
+      build_configuration.build_settings['MARKETING_VERSION'] = new_app_version
+    end
+    project.save
+    puts "Saved project. Returning #{getAppVersion}"
+  end
+
+  desc "Get git branch name"
+  lane :getGitBranch do |options|
+    git_branch.gsub(/^.*[\\\/]/, '')
   end
 end
