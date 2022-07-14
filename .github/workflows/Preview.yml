@@ -89,6 +89,7 @@ jobs:
         env:
             KEYCHAIN_PATH: ${{ env.KEYCHAIN_PATH }}
             PP_PATH: ${{ env.PP_PATH }}
+            KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
             APPSTORE_API_KEY_ID: '${{ secrets.APPSTORE_API_KEY_ID }}'
             APPSTORE_API_ISSUER_ID: '${{ secrets.APPSTORE_API_ISSUER_ID }}'
             APPSTORE_API_KEY_CONTENT: '${{ secrets.APPSTORE_API_KEY_CONTENT }}'

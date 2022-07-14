@@ -118,6 +118,7 @@ platform :ios do
   lane :buildPreview do |_options|
     ensure_git_status_clean
 
+    unlock_keychain(path: ENV["KEYCHAIN_PATH"], password: ENV["KEYCHAIN_PASSWORD"])
     install_provisioning_profile(path: ENV["PP_PATH"])
 
     build_app(
@@ -126,12 +127,7 @@ platform :ios do
       clean: true,
       scheme: 'BundID',
       cloned_source_packages_path: '.swift-packages',
-      export_method: 'app-store',
-      export_options: {
-        provisioningProfiles: { 
-          "de.bund.digitalservice.UseID-Preview" => "UseID Preview - Distribution"
-        }
-      }
+      export_method: 'app-store'
     )
 
     version = getAppVersion
