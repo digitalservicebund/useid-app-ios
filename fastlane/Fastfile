@@ -118,8 +118,12 @@ platform :ios do
   lane :buildPreview do |_options|
     ensure_git_status_clean
 
+    sh('security find-identity -p codesigning')
+
     unlock_keychain(path: ENV["KEYCHAIN_PATH"], password: ENV["KEYCHAIN_PASSWORD"])
     install_provisioning_profile(path: ENV["PP_PATH"])
+
+    sh('security find-identity -p codesigning')
 
     build_app(
       project: "#{PROJECT_FILENAME}.xcodeproj",
