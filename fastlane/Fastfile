@@ -124,7 +124,12 @@ platform :ios do
       clean: true,
       scheme: 'BundID',
       cloned_source_packages_path: '.swift-packages',
-      export_method: 'app-store'
+      export_method: 'app-store',
+      export_options: {
+        provisioningProfiles: { 
+          "de.bund.digitalservice.UseID-Preview" => "UseID Preview - Distribution"
+        }
+      }
     )
 
     version = getAppVersion
