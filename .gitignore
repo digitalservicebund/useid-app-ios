@@ -124,3 +124,7 @@ BundID/Helpers/LocalizedStrings+Generated.swift
 .swift-packages
 swiftlint.html
 BundIDTests/Generated
+
+.bundle
+vendor
+.env
