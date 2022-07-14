@@ -55,29 +55,29 @@ Test
 
 Lint code
 
-### ios release
+### ios preview
 
 ```sh
-[bundle exec] fastlane ios release
+[bundle exec] fastlane ios preview
 ```
 
-Trigger Release
+Trigger Preview
 
-### ios buildRelease
+### ios buildPreview
 
 ```sh
-[bundle exec] fastlane ios buildRelease
+[bundle exec] fastlane ios buildPreview
 ```
 
-Build Release
+Build Preview
 
-### ios deliverRelease
+### ios deliverPreview
 
 ```sh
-[bundle exec] fastlane ios deliverRelease
+[bundle exec] fastlane ios deliverPreview
 ```
 
-Deliver Release
+Deliver Preview
 
 ### ios bumpVersion
 
@@ -86,6 +86,22 @@ Deliver Release
 ```
 
 Bump version
+
+### ios updateAppVersion
+
+```sh
+[bundle exec] fastlane ios updateAppVersion
+```
+
+Update App Version
+
+### ios getGitBranch
+
+```sh
+[bundle exec] fastlane ios getGitBranch
+```
+
+Get git branch name
 
 ----
 
