@@ -83,12 +83,14 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}       
       - name: Build
         run: bundle exec fastlane build_for_testing
-      - name: Save DerivedData folder
+      - name: Save DerivedData and SwiftPM folder
         uses: actions/cache@v2
         env:
           cache-name: cache-derived-data
         with:
-          path: DerivedData
+          path: |
+            DerivedData
+            .swift-packages
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
       - name: Save test_output folder
         uses: actions/cache@v2
@@ -115,12 +117,14 @@ jobs:
             vendor
             .bundle
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
-      - name: Restore DerivedData folder
+      - name: Restore DerivedData and SwiftPM folder
         uses: actions/cache@v2
         env:
           cache-name: cache-derived-data
         with:
-          path: DerivedData
+          path: |
+            DerivedData
+            .swift-packages
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
       - name: Restore test_output folder
         uses: actions/cache@v2
@@ -155,12 +159,14 @@ jobs:
             vendor
             .bundle
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
-      - name: Restore DerivedData folder
+      - name: Restore DerivedData and SwiftPM folder
         uses: actions/cache@v2
         env:
           cache-name: cache-derived-data
         with:
-          path: DerivedData
+          path: |
+            DerivedData
+            .swift-packages
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
       - name: Restore test_output folder
         uses: actions/cache@v2
@@ -170,8 +176,7 @@ jobs:
           path: fastlane/test_output
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}                       
       - name: Run UITests
-        run: |
-          bundle exec fastlane test_without_building testplan:UITests
+        run: bundle exec fastlane test_without_building testplan:UITests
       - name: Archive xcresult
         if: failure()
         uses: actions/upload-artifact@v2
