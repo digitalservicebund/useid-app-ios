@@ -133,6 +133,8 @@ platform :ios do
         provisioningProfiles: { 
           "de.bund.digitalservice.UseID-Preview" => "UseID Preview - Distribution"
         }
+      },
+      include_bitcode: false
     )
 
     artifcats = "../artifacts"
