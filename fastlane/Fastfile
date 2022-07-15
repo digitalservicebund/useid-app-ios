@@ -125,7 +125,7 @@ platform :ios do
       scheme: 'BundID',
       cloned_source_packages_path: '.swift-packages',
       export_method: 'app-store',
-      export-options: {
+      export_options: {
         provisioningProfiles: { 
           "de.bund.digitalservice.UseID-Preview" => "UseID Preview - Distribution"
         }
