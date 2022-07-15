@@ -65,6 +65,7 @@ jobs:
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          APPSTORECONNECT_API_KEY_PATH=$RUNNER_TEMP/api_key.json
 
           # import certificate and provisioning profile from secrets
           echo -n "$DISTRIBUTION_CERTIFICATE_P12_BASE64" | base64 --decode --output $CERTIFICATE_PATH
@@ -84,13 +85,16 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
+          echo ENV['APPSTORECONNECT_API_KEY'] > $APPSTORECONNECT_API_KEY_PATH
+
           echo "KEYCHAIN_PATH=$KEYCHAIN_PATH" >> $GITHUB_ENV
           echo "PP_PATH=$PP_PATH" >> $GITHUB_ENV
-          security find-identity -p codesigning
+          echo "APPSTORECONNECT_API_KEY_PATH=$APPSTORECONNECT_API_KEY_PATH" >> $GITHUB_ENV
       - name: fastlane preview testflight
         env:
             KEYCHAIN_PATH: ${{ env.KEYCHAIN_PATH }}
             PP_PATH: ${{ env.PP_PATH }}
+            APPSTORECONNECT_API_KEY_PATH: ${{ env.APPSTORECONNECT_API_KEY_PATH }}
             KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
             APPSTORE_API_KEY_ID: '${{ secrets.APPSTORE_API_KEY_ID }}'
             APPSTORE_API_ISSUER_ID: '${{ secrets.APPSTORE_API_ISSUER_ID }}'

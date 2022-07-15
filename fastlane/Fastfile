@@ -118,6 +118,9 @@ platform :ios do
   lane :buildPreview do |_options|
     ensure_git_status_clean
 
+    updateAppVersion
+    increment_build_number
+
     build_app(
       project: "#{PROJECT_FILENAME}.xcodeproj",
       configuration: 'Release',
@@ -142,25 +145,16 @@ platform :ios do
   desc 'Deliver Preview'
   lane :deliverPreview do |options|
     make_screenshots = options[:screenshots] == true
-    upload_to_testflight(api_key: ENV['APPSTORECONNECT_API_KEY'])
-  end
-
-  desc 'Bump version'
-  lane :bumpVersion do
-    increment_build_number
-
-    version = getAppVersion
-    build_number = get_build_number
-
-    commit_version_bump(xcodeproj: "#{PROJECT_FILENAME}.xcodeproj")
-    add_git_tag(tag: "#{version}-#{build_number}")
+    upload_to_testflight(api_key_path: ENV['APPSTORECONNECT_API_KEY_PATH'])
   end
 
   desc 'Update App Version'
   lane :updateAppVersion do |options|
     new_app_version = getGitBranch
-    puts "Updating App version with git branch name: #{new_app_version}"
+    
+    puts "Updating App version from git branch name: #{new_app_version}"
     rel_path = options[:rel_path] || '../'
+    
     project = Xcodeproj::Project.open("#{rel_path}BundID.xcodeproj")
     project.build_configuration_list.build_configurations.each do |build_configuration|
       puts "Bumping version of #{build_configuration} from \
@@ -168,6 +162,7 @@ platform :ios do
       build_configuration.build_settings['MARKETING_VERSION'] = new_app_version
     end
     project.save
+
     puts "Saved project. Returning #{getAppVersion}"
   end
 
