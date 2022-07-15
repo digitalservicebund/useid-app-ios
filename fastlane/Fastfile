@@ -139,8 +139,17 @@ platform :ios do
     build_number = get_build_number
 
     commit_version_bump(xcodeproj: "#{PROJECT_FILENAME}.xcodeproj")
-    add_git_tag(tag: "preview-#{version}-#{build_number}")
-    push_to_git_remote
+    tag = "preview-#{version}-#{build_number}"
+    add_git_tag(tag: tag)
+    push_to_git_remote(tags: false, push_options: ["tag #{tag}"])
+  end
+
+  lane :asd do
+    increment_build_number
+    commit_version_bump(xcodeproj: "#{PROJECT_FILENAME}.xcodeproj")
+    tag = "asd"
+    add_git_tag(tag: tag)
+    push_to_git_remote(tags: false, push_options: ["tag #{tag}"])
   end
 
   desc 'Deliver Preview'

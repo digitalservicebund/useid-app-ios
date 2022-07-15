@@ -71,6 +71,14 @@ Trigger Preview
 
 Build Preview
 
+### ios asd
+
+```sh
+[bundle exec] fastlane ios asd
+```
+
+
+
 ### ios deliverPreview
 
 ```sh
@@ -78,14 +86,6 @@ Build Preview
 ```
 
 Deliver Preview
-
-### ios bumpVersion
-
-```sh
-[bundle exec] fastlane ios bumpVersion
-```
-
-Bump version
 
 ### ios updateAppVersion
 
