@@ -1,6 +1,9 @@
-name: Checks on Pullrequests
-on:
-  pull_request
+name: Tests on pull requests and release candidates
+on: 
+    pull_request:
+    push:
+      branches:
+        - 'preview/**'
       
 concurrency: 
   group: ${{ github.head_ref || github.ref }} # Cancel old runs if they have not finished yet
