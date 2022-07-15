@@ -98,6 +98,12 @@ jobs:
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
           PP_PATH: ${{ env.PP_PATH }}
         run: bundle exec fastlane preview
+      - name: Upload xcarchive
+        uses: actions/upload-artifact@v3
+        with:
+          name: UseID-Preview.xcarchive.zip
+          path: artifacts/*.xcarchive.zip
+          if-no-files-found: error
       - name: Clean up keychain and provisioning profile
         if: ${{ always() }}
         run: |

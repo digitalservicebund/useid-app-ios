@@ -604,7 +604,7 @@
 			);
 			mainGroup = E5CEB271281041330076B9FE;
 			packageReferences = (
-				E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators.git" */,
+				E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
 				E13925B928410F3F00161F5C /* XCRemoteSwiftPackageReference "Cuckoo" */,
 				E13925C828411D4C00161F5C /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */,
@@ -1176,7 +1176,7 @@
 				minimumVersion = 2.1.2;
 			};
 		};
-		E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators.git" */ = {
+		E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/johnpatrickmorgan/TCACoordinators.git";
 			requirement = {
@@ -1204,7 +1204,7 @@
 		};
 		E16708A9283D1076001A1637 /* TCACoordinators */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators.git" */;
+			package = E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators" */;
 			productName = TCACoordinators;
 		};
 /* End XCSwiftPackageProductDependency section */

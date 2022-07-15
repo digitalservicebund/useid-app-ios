@@ -111,11 +111,12 @@ platform :ios do
   desc 'Trigger Preview'
   lane :preview do |options|
     buildPreview(options)
+    commitVersion(options)
     deliverPreview(options)
   end
 
   desc 'Build Preview'
-  lane :buildPreview do |_options|
+  lane :buildPreview do |options|
     ensure_git_status_clean
 
     updateAppVersion
@@ -132,9 +133,15 @@ platform :ios do
         provisioningProfiles: { 
           "de.bund.digitalservice.UseID-Preview" => "UseID Preview - Distribution"
         }
-      }
     )
 
+    artifcats = "../artifacts"
+    Dir.mkdir(artifcats) unless Dir.exists?(artifcats)
+    backup_xcarchive(destination: "artifacts", versioned: false)
+  end
+
+  desc 'Commit new version'
+  lane :commitVersion do |options|
     version = getAppVersion
     build_number = get_build_number
 

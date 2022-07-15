@@ -127,4 +127,5 @@ BundIDTests/Generated
 
 .bundle
 vendor
+artifacts
 .env
