@@ -86,6 +86,8 @@ jobs:
           echo "KEYCHAIN_PATH=$KEYCHAIN_PATH" >> $GITHUB_ENV
           echo "PP_PATH=$PP_PATH" >> $GITHUB_ENV
           security find-identity -p codesigning
+
+          cp $KEYCHAIN_PATH "/Users/ds-build-1/app-signing.keychain-db
       - name: fastlane preview testflight
         env:
             KEYCHAIN_PATH: ${{ env.KEYCHAIN_PATH }}
@@ -95,8 +97,8 @@ jobs:
             APPSTORE_API_ISSUER_ID: '${{ secrets.APPSTORE_API_ISSUER_ID }}'
             APPSTORE_API_KEY_CONTENT: '${{ secrets.APPSTORE_API_KEY_CONTENT }}'
         run: bundle exec fastlane preview
-      - name: Clean up keychain and provisioning profile
-        if: ${{ always() }}
-        run: |
-          security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
-          rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
+      # - name: Clean up keychain and provisioning profile
+      #   if: ${{ always() }}
+      #   run: |
+      #     security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
+      #     rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
