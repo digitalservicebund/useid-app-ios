@@ -87,7 +87,7 @@ jobs:
           echo "PP_PATH=$PP_PATH" >> $GITHUB_ENV
           security find-identity -p codesigning
 
-          cp $KEYCHAIN_PATH "/Users/ds-build-1/app-signing.keychain-db
+          cp $KEYCHAIN_PATH "/Users/ds-build-1/app-signing.keychain-db"
       - name: fastlane preview testflight
         env:
             KEYCHAIN_PATH: ${{ env.KEYCHAIN_PATH }}
