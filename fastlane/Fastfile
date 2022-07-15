@@ -138,7 +138,8 @@ platform :ios do
     version = getAppVersion
     build_number = get_build_number
 
-    add_git_tag(tag: "#{version}-#{build_number}")
+    commit_version_bump(xcodeproj: "#{PROJECT_FILENAME}.xcodeproj")
+    add_git_tag(tag: "preview-#{version}-#{build_number}")
     push_to_git_remote
   end
 
