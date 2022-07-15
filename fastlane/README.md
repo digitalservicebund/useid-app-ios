@@ -79,14 +79,6 @@ Build Preview
 
 Deliver Preview
 
-### ios bumpVersion
-
-```sh
-[bundle exec] fastlane ios bumpVersion
-```
-
-Bump version
-
 ### ios updateAppVersion
 
 ```sh
