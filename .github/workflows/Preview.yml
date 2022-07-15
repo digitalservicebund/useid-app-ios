@@ -60,6 +60,7 @@ jobs:
           DISTRIBUTION_CERTIFICATE_P12_PASSWORD: ${{ secrets.DISTRIBUTION_CERTIFICATE_P12_PASSWORD }}
           PREVIEW_DISTRIBUTION_PROVISIONING_PROFILE_BASE64: ${{ secrets.PREVIEW_DISTRIBUTION_PROVISIONING_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          APPSTORECONNECT_API_KEY_JSON: ${{ secrets.APPSTORECONNECT_API_KEY_JSON }}
         run: |
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
@@ -85,20 +86,17 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
-          echo ENV['APPSTORECONNECT_API_KEY'] > $APPSTORECONNECT_API_KEY_PATH
+          echo ENV['APPSTORECONNECT_API_KEY_JSON'] > $APPSTORECONNECT_API_KEY_PATH
 
           echo "KEYCHAIN_PATH=$KEYCHAIN_PATH" >> $GITHUB_ENV
           echo "PP_PATH=$PP_PATH" >> $GITHUB_ENV
           echo "APPSTORECONNECT_API_KEY_PATH=$APPSTORECONNECT_API_KEY_PATH" >> $GITHUB_ENV
       - name: fastlane preview testflight
         env:
-            KEYCHAIN_PATH: ${{ env.KEYCHAIN_PATH }}
-            PP_PATH: ${{ env.PP_PATH }}
-            APPSTORECONNECT_API_KEY_PATH: ${{ env.APPSTORECONNECT_API_KEY_PATH }}
-            KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-            APPSTORE_API_KEY_ID: '${{ secrets.APPSTORE_API_KEY_ID }}'
-            APPSTORE_API_ISSUER_ID: '${{ secrets.APPSTORE_API_ISSUER_ID }}'
-            APPSTORE_API_KEY_CONTENT: '${{ secrets.APPSTORE_API_KEY_CONTENT }}'
+          APPSTORECONNECT_API_KEY_PATH: ${{ env.APPSTORECONNECT_API_KEY_PATH }}
+          KEYCHAIN_PATH: ${{ env.KEYCHAIN_PATH }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          PP_PATH: ${{ env.PP_PATH }}
         run: bundle exec fastlane preview
       - name: Clean up keychain and provisioning profile
         if: ${{ always() }}
