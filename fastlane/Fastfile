@@ -117,14 +117,19 @@ platform :ios do
   desc 'Build Preview'
   lane :buildPreview do |_options|
     ensure_git_status_clean
-    
+
     build_app(
       project: "#{PROJECT_FILENAME}.xcodeproj",
       configuration: 'Release',
       clean: true,
       scheme: 'BundID',
       cloned_source_packages_path: '.swift-packages',
-      export_method: 'app-store'
+      export_method: 'app-store',
+      export-options: {
+        provisioningProfiles: { 
+          "de.bund.digitalservice.UseID-Preview" => "UseID Preview - Distribution"
+        }
+      }
     )
 
     version = getAppVersion
