@@ -141,17 +141,12 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 state.routes.dismiss()
                 return .none
             case .routeAction(_, action: .overview(.identify)):
-                let publisher: EIDInteractionPublisher
 #if PREVIEW
-                if MOCK_OPENECARD {
-                    let debuggableInteraction = environment.debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
-                    state.availableDebugActions = debuggableInteraction.sequence
-                    publisher = debuggableInteraction.publisher
-                } else {
-                    publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
-                }
+                let debuggableInteraction = environment.debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
+                state.availableDebugActions = debuggableInteraction.sequence
+                let publisher = debuggableInteraction.publisher
 #else
-                publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
+                let publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
 #endif
                 return publisher
                     .receive(on: environment.mainQueue)

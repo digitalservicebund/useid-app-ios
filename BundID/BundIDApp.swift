@@ -12,34 +12,18 @@ struct BundIDApp: App {
         let mainQueue = DispatchQueue.main.eraseToAnyScheduler()
         
 #if PREVIEW
-        if MOCK_OPENECARD {
-            let idInteractionManager = DebugIDInteractionManager()
-            
-            store = Store(
-                initialState: CoordinatorState(states: [.root(.home(HomeState()), embedInNavigationView: true)]),
-                reducer: coordinatorReducer,
-                environment: AppEnvironment(
-                    mainQueue: mainQueue,
-                    uuidFactory: UUID.init,
-                    idInteractionManager: idInteractionManager,
-                    debugIDInteractionManager: idInteractionManager
-                )
+        let idInteractionManager = DebugIDInteractionManager()
+        
+        store = Store(
+            initialState: CoordinatorState(states: [.root(.home(HomeState()), embedInNavigationView: true)]),
+            reducer: coordinatorReducer,
+            environment: AppEnvironment(
+                mainQueue: mainQueue,
+                uuidFactory: UUID.init,
+                idInteractionManager: idInteractionManager,
+                debugIDInteractionManager: idInteractionManager
             )
-        } else {
-            let idInteractionManager = IDInteractionManager(openEcard: OpenEcardImp(),
-                                                            nfcMessageProvider: NFCMessageProvider())
-            
-            store = Store(
-                initialState: CoordinatorState(states: [.root(.home(HomeState()), embedInNavigationView: true)]),
-                reducer: coordinatorReducer,
-                environment: AppEnvironment(
-                    mainQueue: mainQueue,
-                    uuidFactory: UUID.init,
-                    idInteractionManager: idInteractionManager,
-                    debugIDInteractionManager: DebugIDInteractionManager()
-                )
-            )
-        }
+        )
 #else
         let idInteractionManager = IDInteractionManager(openEcard: OpenEcardImp(),
                                                         nfcMessageProvider: NFCMessageProvider())

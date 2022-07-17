@@ -50,17 +50,12 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         state.error = nil
         state.isScanning = true
     
-        let publisher: EIDInteractionPublisher
 #if PREVIEW
-        if MOCK_OPENECARD {
-            let debuggableInteraction = environment.debugIDInteractionManager.debuggableChangePIN()
-            state.availableDebugActions = debuggableInteraction.sequence
-            publisher = debuggableInteraction.publisher
-        } else {
-            publisher = environment.idInteractionManager.changePIN()
-        }
+        let debuggableInteraction = environment.debugIDInteractionManager.debuggableChangePIN()
+        state.availableDebugActions = debuggableInteraction.sequence
+        let publisher = debuggableInteraction.publisher
 #else
-        publisher = environment.idInteractionManager.changePIN()
+        let publisher = environment.idInteractionManager.changePIN()
 #endif
         return publisher
             .receive(on: environment.mainQueue)
