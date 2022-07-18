@@ -1,6 +1,8 @@
 name: Tests on pull requests and release candidates
 on: 
     pull_request:
+      branches-ignore:
+        - 'preview/**'
     push:
       branches:
         - 'preview/**'
