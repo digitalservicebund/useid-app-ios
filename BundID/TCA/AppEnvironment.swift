@@ -7,7 +7,7 @@ struct AppEnvironment {
     let uuidFactory: () -> UUID
     let idInteractionManager: IDInteractionManagerType
     
-    #if PREVIEW
+#if PREVIEW
     let debugIDInteractionManager: DebugIDInteractionManager
     
     static let preview: AppEnvironment = AppEnvironment(
@@ -16,5 +16,11 @@ struct AppEnvironment {
         idInteractionManager: MockIDInteractionManager(queue: DispatchQueue.main.eraseToAnyScheduler()),
         debugIDInteractionManager: DebugIDInteractionManager()
     )
-    #endif
+#else
+    static let preview: AppEnvironment = AppEnvironment(
+        mainQueue: DispatchQueue.main.eraseToAnyScheduler(),
+        uuidFactory: UUID.init,
+        idInteractionManager: MockIDInteractionManager(queue: DispatchQueue.main.eraseToAnyScheduler())
+    )
+#endif
 }

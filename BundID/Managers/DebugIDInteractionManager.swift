@@ -4,6 +4,16 @@ import Combine
 
 #if PREVIEW
 
+func processInfoContainsArgument(_ argument: String) -> Bool {
+    ProcessInfo.processInfo.arguments.contains(argument)
+}
+
+#if targetEnvironment(simulator)
+let MOCK_OPENECARD = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil // Always mock except in unit tests
+#else
+let MOCK_OPENECARD = !processInfoContainsArgument("REAL_OPENECARD")
+#endif
+
 struct DebuggableInteraction<T> {
     var publisher: EIDInteractionPublisher
     var sequence: [T]
@@ -255,9 +265,21 @@ class DebugIDInteractionManager: IDInteractionManagerType {
         return debugSequence.run(card: &card, subject: subject!)
     }
 }
+#endif
 
 extension EIDAuthenticationRequest {
-    static let preview = EIDAuthenticationRequest(issuer: "Issuer", issuerURL: "https://issuer.com", subject: "Subject", subjectURL: "https://subject.com", validity: "Validity", terms: AuthenticationTerms.text("Terms"), readAttributes: [.DG01: true, .DG02: true, .DG03: true, .DG04: true, .DG05: false, .DG06: false])
+    static let preview = EIDAuthenticationRequest(
+        issuer: "Issuer",
+        issuerURL: "https://issuer.com",
+        subject: "Subject",
+        subjectURL: "https://subject.com",
+        validity: "Validity",
+        terms: AuthenticationTerms.text("Terms"),
+        readAttributes: [.DG01: true,
+        .DG02: true,
+        .DG03: true,
+        .DG04: true,
+        .DG05: false,
+        .DG06: false]
+    )
 }
-
-#endif

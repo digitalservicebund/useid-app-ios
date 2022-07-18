@@ -141,20 +141,27 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 state.routes.dismiss()
                 return .none
             case .routeAction(_, action: .overview(.identify)):
+                let publisher: EIDInteractionPublisher
 #if PREVIEW
-                let debuggableInteraction = environment.debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
-                state.availableDebugActions = debuggableInteraction.sequence
-                let publisher = debuggableInteraction.publisher
+                if MOCK_OPENECARD {
+                    let debuggableInteraction = environment.debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
+                    state.availableDebugActions = debuggableInteraction.sequence
+                    publisher = debuggableInteraction.publisher
+                } else {
+                    publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
+                }
 #else
-                let publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
+                publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL)
 #endif
                 return publisher
                     .receive(on: environment.mainQueue)
                     .catchToEffect(IdentificationCoordinatorAction.idInteractionEvent)
                     .cancellable(id: CancelId.self, cancelInFlight: true)
+#if PREVIEW
             case .routeAction(_, action: .overview(.loading(.runDebugSequence(let sequence)))),
                     .routeAction(_, action: .scan(.runDebugSequence(let sequence))):
                 return Effect(value: .runDebugSequence(sequence))
+#endif
             case .routeAction(_, action: .overview(.loaded(.callbackReceived(let request, let callback)))):
                 state.routes.push(.personalPIN(IdentificationPersonalPINState(request: request, callback: callback)))
                 return .none

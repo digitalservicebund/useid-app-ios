@@ -104,7 +104,7 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
         }
     )
 )
-#if PREVIEW
+#if DEBUG
     .debug()
 #endif
 

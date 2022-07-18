@@ -31,8 +31,10 @@ let identificationOverviewLoadingReducer = Reducer<IdentificationOverviewLoading
         return .none
     case .failure:
         return .none
+#if PREVIEW
     case .runDebugSequence:
         return .none
+#endif
     }
 }
 
