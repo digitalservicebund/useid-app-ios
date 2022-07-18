@@ -275,11 +275,14 @@ extension EIDAuthenticationRequest {
         subjectURL: "https://subject.com",
         validity: "Validity",
         terms: AuthenticationTerms.text("Terms"),
-        readAttributes: [.DG01: true,
-        .DG02: true,
-        .DG03: true,
-        .DG04: true,
-        .DG05: false,
-        .DG06: false]
+        transactionInfo: nil,
+        readAttributes: [
+            .DG01: true,
+            .DG02: true,
+            .DG03: true,
+            .DG04: true,
+            .DG05: false,
+            .DG06: false
+        ]
     )
 }

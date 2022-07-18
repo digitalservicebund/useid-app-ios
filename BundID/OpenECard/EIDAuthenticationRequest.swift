@@ -7,5 +7,6 @@ struct EIDAuthenticationRequest: Equatable {
     let subjectURL: String
     let validity: String
     let terms: AuthenticationTerms
+    let transactionInfo: String?
     let readAttributes: FlaggedAttributes
 }

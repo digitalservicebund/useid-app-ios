@@ -41,7 +41,16 @@ class EACInteraction: NSObject, EACInteractionType {
             let readAccessAttributes = data.getReadAccessAttributes()!
             let flaggedAttributes = try readAccessAttributes.mapToAttributeRequirements()
             
-            let eidServerData = EIDAuthenticationRequest(issuer: data.getIssuer(), issuerURL: data.getIssuerUrl(), subject: data.getSubject(), subjectURL: data.getSubjectUrl(), validity: data.getValidity(), terms: .text(data.getTermsOfUsage().getDataString()), readAttributes: flaggedAttributes)
+            let eidServerData = EIDAuthenticationRequest(
+                issuer: data.getIssuer(),
+                issuerURL: data.getIssuerUrl(),
+                subject: data.getSubject(),
+                subjectURL: data.getSubjectUrl(),
+                validity: data.getValidity(),
+                terms: .text(data.getTermsOfUsage().getDataString()),
+                transactionInfo: transactionData,
+                readAttributes: flaggedAttributes
+            )
             
             let confirmationCallback: (FlaggedAttributes) -> Void = { attributes in
                 readAccessAttributes.forEach { attribute in
