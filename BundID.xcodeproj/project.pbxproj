@@ -287,6 +287,36 @@
 			path = Animations;
 			sourceTree = "<group>";
 		};
+		E13F9E372886F2C70088E955 /* Setup */ = {
+			isa = PBXGroup;
+			children = (
+				E5CEB27F281041330076B9FE /* ContentView.swift */,
+				E16708AD283D4224001A1637 /* HomeView.swift */,
+				E110400C281C389C004BA03E /* SetupIntro.swift */,
+				E1CD8E9028214FDB008ADA2A /* SetupPINLetterIntro.swift */,
+				E1CD8E92282156F2008ADA2A /* SetupTransportPIN.swift */,
+				E1AB879F2822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift */,
+				E1AAACF92837B98100A51183 /* SetupPersonalPIN */,
+				E16708BF283E6A07001A1637 /* SetupScan.swift */,
+				E1BD6C782847A2E5003048E4 /* SetupDone.swift */,
+				E12CB307284A146D0039FD56 /* SetupIncorrectTransportPIN.swift */,
+			);
+			path = Setup;
+			sourceTree = "<group>";
+		};
+		E13F9E392886F2EE0088E955 /* Identification */ = {
+			isa = PBXGroup;
+			children = (
+				E1EFB5C02858EA8C005C38C6 /* IdentificationOverview */,
+				E1EFB5C7285A365E005C38C6 /* IdentificationAbout.swift */,
+				E1EFB5D4285C7D81005C38C6 /* IdentificationPersonalPIN.swift */,
+				E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */,
+				E1C2D8B928620E2B000E0F5B /* IdentificationScan.swift */,
+				E1DA8462286DD45800710DD9 /* IdentificationDone.swift */,
+			);
+			path = Identification;
+			sourceTree = "<group>";
+		};
 		E15FCE40282BFD4A00CD7AD6 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -326,6 +356,9 @@
 				E1AB8799282281C400C7FC94 /* HeaderView.swift */,
 				E13925CE28411E2300161F5C /* LottieView.swift */,
 				E17604D0287E24F1007DFA10 /* DebugMenu.swift */,
+				E1CD8E9428215971008ADA2A /* PINEntryView.swift */,
+				E1AB87A3282413A700C7FC94 /* PINTextField.swift */,
+				F43622A62850D6C9008AEBB9 /* CardError.swift */,
 			);
 			path = SupplementaryViews;
 			sourceTree = "<group>";
@@ -365,20 +398,8 @@
 			isa = PBXGroup;
 			children = (
 				E16708B8283D7C47001A1637 /* SupplementaryViews */,
-				E5CEB27F281041330076B9FE /* ContentView.swift */,
-				E16708AD283D4224001A1637 /* HomeView.swift */,
-				E110400C281C389C004BA03E /* SetupIntro.swift */,
-				E1CD8E9028214FDB008ADA2A /* SetupPINLetterIntro.swift */,
-				E1CD8E92282156F2008ADA2A /* SetupTransportPIN.swift */,
-				E1AB879F2822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift */,
-				E1AAACF92837B98100A51183 /* SetupPersonalPIN */,
-				E16708BF283E6A07001A1637 /* SetupScan.swift */,
-				E1BD6C782847A2E5003048E4 /* SetupDone.swift */,
-				E12CB307284A146D0039FD56 /* SetupIncorrectTransportPIN.swift */,
-				E1CD8E9428215971008ADA2A /* PINEntryView.swift */,
-				E1AB87A3282413A700C7FC94 /* PINTextField.swift */,
-				F43622A62850D6C9008AEBB9 /* CardError.swift */,
-				E1EFB5C02858EA8C005C38C6 /* IdentificationOverview */,
+				E13F9E372886F2C70088E955 /* Setup */,
+				E13F9E392886F2EE0088E955 /* Identification */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -411,11 +432,6 @@
 				E1F39DD5285784DD00D8D907 /* IdentificationOverview.swift */,
 				E1EFB5C32858EB0F005C38C6 /* IdentificationOverviewLoading.swift */,
 				E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */,
-				E1EFB5C7285A365E005C38C6 /* IdentificationAbout.swift */,
-				E1EFB5D4285C7D81005C38C6 /* IdentificationPersonalPIN.swift */,
-				E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */,
-				E1C2D8B928620E2B000E0F5B /* IdentificationScan.swift */,
-				E1DA8462286DD45800710DD9 /* IdentificationDone.swift */,
 			);
 			path = IdentificationOverview;
 			sourceTree = "<group>";
