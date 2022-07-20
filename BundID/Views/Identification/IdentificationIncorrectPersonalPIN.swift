@@ -32,7 +32,6 @@ enum IdentificationIncorrectPersonalPINAction: BindableAction, Equatable {
     case done(pin: String)
     case end
     case confirmEnd
-    case afterConfirmEnd
     case dismissAlert
     case binding(BindingAction<IdentificationIncorrectPersonalPINState>)
 }

@@ -32,6 +32,7 @@ struct SetupCoordinatorState: Equatable, IndexedRouterState {
 enum SetupCoordinatorAction: Equatable, IndexedRouterAction {
     case routeAction(Int, action: SetupScreenAction)
     case updateRoutes([Route<SetupScreenState>])
+    case afterConfirmEnd
 }
 
 let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorAction, AppEnvironment> = setupScreenReducer
@@ -65,7 +66,7 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
                 
                 // Dismissing two sheets at the same time from different coordinators is not well supported.
                 // Waiting for 0.65s (as TCACoordinators does) fixes this temporarily.
-                return Effect(value: .routeAction(index, action: .incorrectTransportPIN(.afterConfirmEnd)))
+                return Effect(value: .afterConfirmEnd)
                     .delay(for: 0.65, scheduler: environment.mainQueue)
                     .eraseToEffect()
             case .routeAction(_, action: .incorrectTransportPIN(.done(let transportPIN))):

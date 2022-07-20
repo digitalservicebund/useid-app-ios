@@ -16,7 +16,6 @@ enum SetupIncorrectTransportPINAction: BindableAction, Equatable {
     case done(transportPIN: String)
     case end
     case confirmEnd
-    case afterConfirmEnd
     case dismissAlert
     case binding(BindingAction<SetupIncorrectTransportPINState>)
 }

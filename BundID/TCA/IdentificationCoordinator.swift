@@ -78,6 +78,7 @@ enum IdentificationCoordinatorAction: Equatable, IndexedRouterAction {
     case updateRoutes([Route<IdentificationScreenState>])
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case cardError(CardErrorType)
+    case afterConfirmEnd
 #if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -131,7 +132,8 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 return .none
             case .idInteractionEvent(let result):
                 guard let localAction = state.transformToLocalInteractionHandler(event: result) else {
-                    fatalError("No handler here. What to do?")
+                    fatalError("TODO: This should be handled be sent to error tracking and silently ignored.")
+                    return .none
                 }
                 return Effect(value: localAction)
             case .routeAction(_, action: .scan(.identifiedSuccessfully(let request))):
@@ -183,7 +185,7 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 
                 // Dismissing two sheets at the same time from different coordinators is not well supported.
                 // Waiting for 0.65s (as TCACoordinators does) fixes this temporarily.
-                return Effect(value: .routeAction(index, action: .incorrectPersonalPIN(.afterConfirmEnd)))
+                return Effect(value: .afterConfirmEnd)
                     .delay(for: 0.65, scheduler: environment.mainQueue)
                     .eraseToEffect()
             default:

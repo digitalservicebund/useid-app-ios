@@ -153,4 +153,28 @@ class IdentificationCoordinatorReducerTests: XCTestCase {
             $0.states = [.root(.scan(scanState))]
         }
     }
+    
+    func testEndOnIncorrectPIN() {
+        let pin = "123456"
+        let request = EIDAuthenticationRequest.preview
+        let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
+        let store = TestStore(
+            initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
+                                                         pin: pin,
+                                                         states: [
+                                                            .root(.scan(IdentificationScanState(request: request, pin: pin, pinCallback: callback))),
+                                                            .sheet(.incorrectPersonalPIN(IdentificationIncorrectPersonalPINState(remainingAttempts: 2)))
+                                                         ]),
+            reducer: identificationCoordinatorReducer,
+            environment: environment
+        )
+        
+        store.send(.routeAction(1, action: .incorrectPersonalPIN(IdentificationIncorrectPersonalPINAction.confirmEnd))) {
+            $0.states.removeLast()
+        }
+        
+        scheduler.advance(by: 0.65)
+        
+        store.receive(.afterConfirmEnd)
+    }
 }

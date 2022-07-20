@@ -75,8 +75,8 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                     .routeAction(_, action: .identificationCoordinator(.routeAction(_, action: .cardError(.done)))):
                 state.routes.dismiss()
                 return .none
-            case .routeAction(_, action: .setupCoordinator(.routeAction(_, action: .incorrectTransportPIN(.afterConfirmEnd)))),
-                    .routeAction(_, action: .identificationCoordinator(.routeAction(_, action: .incorrectPersonalPIN(.afterConfirmEnd)))):
+            case .routeAction(_, action: .setupCoordinator(.afterConfirmEnd)),
+                    .routeAction(_, action: .identificationCoordinator(.afterConfirmEnd)):
                 state.routes.dismiss()
                 return .none
             case .routeAction(_, action: .setupCoordinator(.routeAction(_, action: .done(.done)))):
