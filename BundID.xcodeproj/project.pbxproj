@@ -22,11 +22,12 @@
 		E13925CA28411D4C00161F5C /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = E13925C928411D4C00161F5C /* Lottie */; };
 		E13925CD28411DA600161F5C /* 38076-id-scan.json in Resources */ = {isa = PBXBuildFile; fileRef = E13925CC28411DA600161F5C /* 38076-id-scan.json */; };
 		E13925CF28411E2400161F5C /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925CE28411E2300161F5C /* LottieView.swift */; };
-		E13F9E3B2886F3420088E955 /* IdentificationCoordinatorReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E3A2886F3420088E955 /* IdentificationCoordinatorReducerTests.swift */; };
+		E13F9E3B2886F3420088E955 /* IdentificationCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E3A2886F3420088E955 /* IdentificationCoordinatorTests.swift */; };
 		E13F9E3D288802500088E955 /* UUID+InitFromNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E3C288802500088E955 /* UUID+InitFromNumber.swift */; };
 		E13F9E3F288804140088E955 /* IdentificationScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E3E288804140088E955 /* IdentificationScanTests.swift */; };
 		E13F9E4128882A9C0088E955 /* Bundle+Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E4028882A9C0088E955 /* Bundle+Version.swift */; };
 		E13F9E43288835350088E955 /* IdentificationCoordinatorStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */; };
+		E13F9E45288853950088E955 /* CoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E44288853950088E955 /* CoordinatorTests.swift */; };
 		E149B15C2840F636002C1139 /* SetupScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E149B15B2840F636002C1139 /* SetupScanTests.swift */; };
 		E156DD02287EF9C200C88914 /* XCUITestDeeplinking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E156DD01287EF9C200C88914 /* XCUITestDeeplinking.swift */; };
 		E15776A0286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */; };
@@ -144,11 +145,12 @@
 		E13925C62841119400161F5C /* MockIDInteractionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockIDInteractionManager.swift; sourceTree = "<group>"; };
 		E13925CC28411DA600161F5C /* 38076-id-scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "38076-id-scan.json"; sourceTree = "<group>"; };
 		E13925CE28411E2300161F5C /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
-		E13F9E3A2886F3420088E955 /* IdentificationCoordinatorReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCoordinatorReducerTests.swift; sourceTree = "<group>"; };
+		E13F9E3A2886F3420088E955 /* IdentificationCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCoordinatorTests.swift; sourceTree = "<group>"; };
 		E13F9E3C288802500088E955 /* UUID+InitFromNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UUID+InitFromNumber.swift"; sourceTree = "<group>"; };
 		E13F9E3E288804140088E955 /* IdentificationScanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationScanTests.swift; sourceTree = "<group>"; };
 		E13F9E4028882A9C0088E955 /* Bundle+Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Version.swift"; sourceTree = "<group>"; };
 		E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCoordinatorStateTests.swift; sourceTree = "<group>"; };
+		E13F9E44288853950088E955 /* CoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorTests.swift; sourceTree = "<group>"; };
 		E149B15B2840F636002C1139 /* SetupScanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScanTests.swift; sourceTree = "<group>"; };
 		E156DD01287EF9C200C88914 /* XCUITestDeeplinking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUITestDeeplinking.swift; sourceTree = "<group>"; };
 		E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentificationIncorrectPersonalPIN.swift; sourceTree = "<group>"; };
@@ -392,9 +394,10 @@
 				E1AAACF228378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift */,
 				E149B15B2840F636002C1139 /* SetupScanTests.swift */,
 				E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */,
-				E13F9E3A2886F3420088E955 /* IdentificationCoordinatorReducerTests.swift */,
+				E13F9E3A2886F3420088E955 /* IdentificationCoordinatorTests.swift */,
 				E13F9E3E288804140088E955 /* IdentificationScanTests.swift */,
 				E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */,
+				E13F9E44288853950088E955 /* CoordinatorTests.swift */,
 			);
 			path = BundIDTests;
 			sourceTree = "<group>";
@@ -746,8 +749,9 @@
 				E149B15C2840F636002C1139 /* SetupScanTests.swift in Sources */,
 				E13F9E3D288802500088E955 /* UUID+InitFromNumber.swift in Sources */,
 				E12CB30628494BD70039FD56 /* IDInteractionManagerTests.swift in Sources */,
-				E13F9E3B2886F3420088E955 /* IdentificationCoordinatorReducerTests.swift in Sources */,
+				E13F9E3B2886F3420088E955 /* IdentificationCoordinatorTests.swift in Sources */,
 				E13925C42841111100161F5C /* GeneratedMocks.swift in Sources */,
+				E13F9E45288853950088E955 /* CoordinatorTests.swift in Sources */,
 				E1AAACF328378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift in Sources */,
 				E13F9E43288835350088E955 /* IdentificationCoordinatorStateTests.swift in Sources */,
 				E13F9E3F288804140088E955 /* IdentificationScanTests.swift in Sources */,

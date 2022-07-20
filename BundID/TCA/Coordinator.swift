@@ -42,6 +42,8 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
             if url.scheme == "bundid" {
                 tokenURL = tokenURL.replacingOccurrences(of: "bundid://", with: "eid://")
             }
+            guard tokenURL.hasPrefix("eid://") else { return .none }
+            
             state.tokenURL = tokenURL
             if state.setupPreviouslyFinished {
                 state.routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)), embedInNavigationView: true)

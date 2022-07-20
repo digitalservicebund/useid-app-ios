@@ -5,7 +5,7 @@ import Combine
 
 @testable import BundID
 
-class IdentificationCoordinatorReducerTests: XCTestCase {
+class IdentificationCoordinatorTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var environment: AppEnvironment!
