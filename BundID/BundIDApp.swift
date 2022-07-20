@@ -10,50 +10,47 @@ struct BundIDApp: App {
     
     init() {
         let mainQueue = DispatchQueue.main.eraseToAnyScheduler()
-        
+        let environment: AppEnvironment
 #if PREVIEW
         if MOCK_OPENECARD {
             let idInteractionManager = DebugIDInteractionManager()
             
-            store = Store(
-                initialState: CoordinatorState(states: [.root(.home(HomeState()), embedInNavigationView: true)]),
-                reducer: coordinatorReducer,
-                environment: AppEnvironment(
-                    mainQueue: mainQueue,
-                    uuidFactory: UUID.init,
-                    idInteractionManager: idInteractionManager,
-                    debugIDInteractionManager: idInteractionManager
-                )
+            environment = AppEnvironment(
+                mainQueue: mainQueue,
+                uuidFactory: UUID.init,
+                idInteractionManager: idInteractionManager,
+                debugIDInteractionManager: idInteractionManager
             )
         } else {
             let idInteractionManager = IDInteractionManager(openEcard: OpenEcardImp(),
                                                             nfcMessageProvider: NFCMessageProvider())
             
-            store = Store(
-                initialState: CoordinatorState(states: [.root(.home(HomeState()), embedInNavigationView: true)]),
-                reducer: coordinatorReducer,
-                environment: AppEnvironment(
-                    mainQueue: mainQueue,
-                    uuidFactory: UUID.init,
-                    idInteractionManager: idInteractionManager,
-                    debugIDInteractionManager: DebugIDInteractionManager()
-                )
+            environment = AppEnvironment(
+                mainQueue: mainQueue,
+                uuidFactory: UUID.init,
+                idInteractionManager: idInteractionManager,
+                debugIDInteractionManager: DebugIDInteractionManager()
             )
         }
 #else
         let idInteractionManager = IDInteractionManager(openEcard: OpenEcardImp(),
                                                         nfcMessageProvider: NFCMessageProvider())
         
-        store = Store(
-            initialState: CoordinatorState(states: [.root(.home(HomeState()), embedInNavigationView: true)]),
-            reducer: coordinatorReducer,
-            environment: AppEnvironment(
-                mainQueue: mainQueue,
-                uuidFactory: UUID.init,
-                idInteractionManager: idInteractionManager
-            )
+        environment = AppEnvironment(
+            mainQueue: mainQueue,
+            uuidFactory: UUID.init,
+            idInteractionManager: idInteractionManager
         )
 #endif
+        
+        let homeState = HomeState(appVersion: Bundle.main.version,
+                                  buildNumber: Bundle.main.buildNumber)
+        
+        store = Store(
+            initialState: CoordinatorState(states: [.root(.home(homeState), embedInNavigationView: true)]),
+            reducer: coordinatorReducer,
+            environment: environment
+        )
     }
     
     var body: some Scene {
