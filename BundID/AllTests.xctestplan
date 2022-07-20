@@ -9,7 +9,6 @@
     }
   ],
   "defaultOptions" : {
-    "codeCoverage" : false,
     "language" : "de",
     "targetForVariableExpansion" : {
       "containerPath" : "container:BundID.xcodeproj",

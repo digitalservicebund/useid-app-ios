@@ -17,7 +17,6 @@ struct IdentificationScanState: Equatable, IDInteractionHandler {
     var isScanning: Bool = true
     var showProgressCaption: Bool = false
     var error: IdentificationScanError?
-    var remainingAttempts: Int?
     var authenticationSuccessful = false
 #if PREVIEW
     var availableDebugActions: [IdentifyDebugSequence] = []
@@ -67,8 +66,7 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
         default:
             return .none
         }
-    case .wrongPIN(let remainingAttempts):
-        state.remainingAttempts = remainingAttempts
+    case .wrongPIN:
         return .none
     case .identifiedSuccessfully:
         state.isScanning = false
@@ -84,10 +82,10 @@ extension IdentificationScanState {
         case .requestPIN(remainingAttempts: let remainingAttempts, pinCallback: let callback):
             
             pinCallback = PINCallback(id: environment.uuidFactory(), callback: callback)
+            isScanning = false
             
             // This is our signal that the user canceled (for now)
             guard let remainingAttempts = remainingAttempts else {
-                isScanning = false
                 return .none
             }
             

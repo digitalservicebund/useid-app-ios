@@ -9,7 +9,15 @@
     }
   ],
   "defaultOptions" : {
-
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:BundID.xcodeproj",
+          "identifier" : "E5CEB279281041330076B9FE",
+          "name" : "BundID"
+        }
+      ]
+    }
   },
   "testTargets" : [
     {

@@ -124,9 +124,7 @@ class IdentificationCoordinatorReducerTests: XCTestCase {
             environment: environment)
         
         store.send(.routeAction(0, action: .scan(.wrongPIN(remainingAttempts: 2)))) {
-            guard case .scan(var scanState) = $0.states[0].screen else { return XCTFail("Unexpected state") }
-            scanState.remainingAttempts = 2
-            $0.states = [.root(.scan(scanState)), .sheet(.incorrectPersonalPIN(.init(error: .incorrect, remainingAttempts: 2)))]
+            $0.states.append(.sheet(.incorrectPersonalPIN(.init(error: .incorrect, remainingAttempts: 2))))
         }
     }
     
@@ -140,8 +138,7 @@ class IdentificationCoordinatorReducerTests: XCTestCase {
                                                          states: [
                                                             .root(.scan(.init(request: request,
                                                                               pin: pin,
-                                                                              pinCallback: callback,
-                                                                              remainingAttempts: 2))),
+                                                                              pinCallback: callback))),
                                                             .sheet(.incorrectPersonalPIN(IdentificationIncorrectPersonalPINState(enteredPIN: "112233", remainingAttempts: 2)))
                                                          ]),
             reducer: identificationCoordinatorReducer,
