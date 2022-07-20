@@ -57,17 +57,19 @@ struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
     }
     var states: [Route<IdentificationScreenState>]
     
-    init(tokenURL: String) {
-        self.tokenURL = tokenURL
-        self.states = [.root(.overview(.loading(IdentificationOverviewLoadingState())))]
-    }
-    
     func transformToLocalInteractionHandler(event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationCoordinatorAction? {
         for (index, state) in states.enumerated().reversed() {
             guard let action = state.screen.transformToLocalAction(event) else { continue }
             return .routeAction(index, action: action)
         }
         return nil
+    }
+}
+
+extension IdentificationCoordinatorState {
+    init(tokenURL: String) {
+        self.tokenURL = tokenURL
+        self.states = [.root(.overview(.loading(IdentificationOverviewLoadingState())))]
     }
 }
 
