@@ -77,7 +77,7 @@ enum IdentificationCoordinatorAction: Equatable, IndexedRouterAction {
     case routeAction(Int, action: IdentificationScreenAction)
     case updateRoutes([Route<IdentificationScreenState>])
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
-    case error(CardErrorType)
+    case cardError(CardErrorType)
 #if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -176,7 +176,7 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 )
                 return .none
             case .routeAction(_, action: .scan(.error(let error))):
-                state.routes.push(.error(CardErrorState(errorType: error)))
+                state.routes.push(.cardError(CardErrorState(errorType: error)))
                 return .none
             case .routeAction(let index, action: .incorrectPersonalPIN(.confirmEnd)):
                 state.routes.dismiss()
@@ -214,8 +214,8 @@ struct IdentificationCoordinatorView: View {
                     CaseLet(state: /IdentificationScreenState.done,
                             action: IdentificationScreenAction.done,
                             then: IdentificationDone.init)
-                    CaseLet(state: /IdentificationScreenState.error,
-                            action: IdentificationScreenAction.error,
+                    CaseLet(state: /IdentificationScreenState.cardError,
+                            action: IdentificationScreenAction.cardError,
                             then: CardError.init)
                 }
             }
