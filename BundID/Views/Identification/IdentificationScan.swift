@@ -44,6 +44,7 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
     
     switch action {
     case .onAppear:
+        guard !state.isScanning else { return .none }
         return Effect(value: .startScan)
     case .startScan:
         state.pinCallback(state.pin)
