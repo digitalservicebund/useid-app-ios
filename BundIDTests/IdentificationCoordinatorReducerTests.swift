@@ -128,6 +128,26 @@ class IdentificationCoordinatorReducerTests: XCTestCase {
         }
     }
     
+    func testScanToError() throws {
+        let pin = "123456"
+        let request = EIDAuthenticationRequest.preview
+        let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
+        let store = TestStore(
+            initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
+                                                         pin: pin,
+                                                         states: [
+                                                            .root(.scan(.init(request: request,
+                                                                              pin: pin,
+                                                                              pinCallback: callback)))
+                                                         ]),
+            reducer: identificationCoordinatorReducer,
+            environment: environment)
+        
+        store.send(.routeAction(0, action: .scan(.error(.cardBlocked)))) {
+            $0.states.append(.push(.cardError(.init(errorType: .cardBlocked))))
+        }
+    }
+    
     func testIncorrectPINToScan() throws {
         let pin = "123456"
         let request = EIDAuthenticationRequest.preview
@@ -152,6 +172,32 @@ class IdentificationCoordinatorReducerTests: XCTestCase {
             scanState.pin = $0.pin!
             $0.states = [.root(.scan(scanState))]
         }
+    }
+    
+    func testOverviewIdentify() {
+        let store = TestStore(
+            initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
+                                                         states: [
+                                                            .root(.overview(.loading(IdentificationOverviewLoadingState())))
+                                                         ]),
+            reducer: identificationCoordinatorReducer,
+            environment: environment
+        )
+        
+        let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+        stub(mockIDInteractionManager) {
+            $0.identify(tokenURL: demoTokenURL).thenReturn(subject.eraseToAnyPublisher())
+        }
+        
+        store.send(.routeAction(0, action: .overview(.identify)))
+        
+        subject.send(.authenticationStarted)
+        subject.send(completion: .finished)
+        
+        scheduler.advance()
+        
+        store.receive(.idInteractionEvent(.success(.authenticationStarted)))
+        store.receive(.routeAction(0, action: .overview(.loading(.idInteractionEvent(.success(.authenticationStarted))))))
     }
     
     func testEndOnIncorrectPIN() {
