@@ -15,8 +15,10 @@ jobs:
   dependencies:
     runs-on: self-hosted
     steps:
-      - name: Use rbenv shims
-        run: echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+      - name: Setup shell
+        run: |
+          echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+          eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v2
       - name: Restore Dependencies
@@ -49,8 +51,10 @@ jobs:
     runs-on: self-hosted
     needs: dependencies
     steps:
-      - name: Use rbenv shims
-        run: echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+      - name: Setup shell
+        run: |
+          echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+          eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v2       
       - name: Restore Dependencies
@@ -75,8 +79,10 @@ jobs:
     runs-on: self-hosted
     needs: dependencies
     steps:
-      - name: Use rbenv shims
-        run: echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+      - name: Setup shell
+        run: |
+          echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+          eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v2            
       - name: Restore Dependencies
@@ -111,8 +117,10 @@ jobs:
     runs-on: self-hosted
     needs: buildForTesting
     steps:
-      - name: Use rbenv shims
-        run: echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+      - name: Setup shell
+        run: |
+          echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+          eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v2          
       - name: Restore Dependencies
@@ -153,8 +161,10 @@ jobs:
     runs-on: self-hosted
     needs: buildForTesting
     steps:
-      - name: Use rbenv shims
-        run: echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+      - name: Setup shell
+        run: |
+          echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+          eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v2          
       - name: Restore Dependencies
