@@ -56,9 +56,6 @@ func openDeeplink(deeplink: String, app: XCUIApplication, timeout: TimeInterval 
         quickPathContinueTextButton.tap()
     }
     
-    expect(element: urlTextField, status: .hittable)
-    urlTextField.tap()
-    
     urlTextField.typeText(deeplink)
     
     safari.buttons[KeyboardKeys.go.rawValue].wait(timeout: timeout).tap()
