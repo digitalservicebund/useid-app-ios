@@ -44,12 +44,20 @@ struct HomeView: View {
                             }
                         }
                         Spacer()
-                        Text("Version: \(viewStore.appVersion) - \(viewStore.buildNumber)")
+                        Text("Version: \(viewStore.appVersion) - \(viewStore.buildNumber) (\(environment))")
                             .font(.bundCaption2)
                     }
                 }
             }
         }
+    }
+    
+    var environment: String {
+#if PREVIEW
+        return "PREVIEW"
+#else
+        return "PRODUCTION"
+#endif
     }
 }
 
