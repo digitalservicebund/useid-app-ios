@@ -25,6 +25,8 @@ jobs:
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: bundle install --path=vendor
+      - name: Brew bundle
+        run: brew bundle --no-lock
       - name: Save Dependencies
         uses: actions/cache@v2
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
