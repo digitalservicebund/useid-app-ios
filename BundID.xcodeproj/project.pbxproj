@@ -11,6 +11,7 @@
 		E11EB2A928537DE1008B4042 /* XCUITestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */; };
 		E11EB2AB2853A8B6008B4042 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11EB2AA2853A8B6008B4042 /* Coordinator.swift */; };
 		E11EB2AD2853A8EA008B4042 /* SetupScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11EB2AC2853A8EA008B4042 /* SetupScreens.swift */; };
+		E128E0BA288941DC00C5195F /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = E128E0B9288941DC00C5195F /* Sentry */; };
 		E12CB30428494B0B0039FD56 /* OpenECardTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB30328494B0B0039FD56 /* OpenECardTypes.swift */; };
 		E12CB30628494BD70039FD56 /* IDInteractionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */; };
 		E12CB308284A146E0039FD56 /* SetupIncorrectTransportPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB307284A146D0039FD56 /* SetupIncorrectTransportPIN.swift */; };
@@ -254,6 +255,7 @@
 				E16708AA283D1076001A1637 /* TCACoordinators in Frameworks */,
 				E13925CA28411D4C00161F5C /* Lottie in Frameworks */,
 				E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */,
+				E128E0BA288941DC00C5195F /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -600,6 +602,7 @@
 				E16708A9283D1076001A1637 /* TCACoordinators */,
 				E13925C928411D4C00161F5C /* Lottie */,
 				E15C22FF2850F5A8005CCBB9 /* OpenEcard */,
+				E128E0B9288941DC00C5195F /* Sentry */,
 			);
 			productName = BundID;
 			productReference = E5CEB27A281041330076B9FE /* BundID.app */;
@@ -642,6 +645,7 @@
 				E13925B928410F3F00161F5C /* XCRemoteSwiftPackageReference "Cuckoo" */,
 				E13925C828411D4C00161F5C /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */,
+				E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			productRefGroup = E5CEB27B281041330076B9FE /* Products */;
 			projectDirPath = "";
@@ -1477,6 +1481,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 		E13925B928410F3F00161F5C /* XCRemoteSwiftPackageReference "Cuckoo" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Brightify/Cuckoo";
@@ -1512,6 +1524,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		E128E0B9288941DC00C5195F /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
 		E13925C1284110FD00161F5C /* Cuckoo */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E13925B928410F3F00161F5C /* XCRemoteSwiftPackageReference "Cuckoo" */;

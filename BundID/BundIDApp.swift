@@ -2,6 +2,7 @@ import SwiftUI
 import TCACoordinators
 import ComposableArchitecture
 import OpenEcard
+import Sentry
 
 @main
 struct BundIDApp: App {
@@ -9,6 +10,19 @@ struct BundIDApp: App {
     var store: Store<CoordinatorState, CoordinatorAction>
     
     init() {
+        SentrySDK.start { options in
+#if PREVIEW
+            options.dsn = "https://70d55c1a01854e01a6360cc815b88d34@o1248831.ingest.sentry.io/6589396"
+#else
+            options.dsn = "https://81bc611af42347bc8d7b487f807f9577@o1248831.ingest.sentry.io/6589505"
+#endif
+            options.debug = true
+            
+            // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+            // We recommend adjusting this value in production.
+            options.tracesSampleRate = 1.0
+        }
+        
         let mainQueue = DispatchQueue.main.eraseToAnyScheduler()
         let environment: AppEnvironment
 #if PREVIEW
