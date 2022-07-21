@@ -72,12 +72,10 @@ final class BundIDUITests: XCTestCase {
     
     func testIdentificationHappyPath() throws {
         let app = XCUIApplication()
+        app.launchArguments = ["TOKEN_URL=bundid://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Ftest.governikus-eid.de%3A443%2FAutent-DemoApplication%2FWebServiceRequesterServlet%3Fdummy%3Dfalse%26useCan%3Dfalse%26ta%3Dfalse"]
         app.launch()
         
-        let demoTokenURL = "bundid://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Ftest.governikus-eid.de%3A443%2FAutent-DemoApplication%2FWebServiceRequesterServlet%3Fdummy%3Dfalse%26useCan%3Dfalse%26ta%3Dfalse"
-        openDeeplink(deeplink: demoTokenURL, app: app)
-        
-        app.buttons["Ja, ich habe es bereits genutzt"].wait().tap()
+        app.buttons["Identifizierung erneut starten"].wait().tap()
         
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["requestAuthorization"].wait().tap()
@@ -110,12 +108,10 @@ final class BundIDUITests: XCTestCase {
     
     func testIdentificationLoadError() throws {
         let app = XCUIApplication()
+        app.launchArguments = ["TOKEN_URL=bundid://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Ftest.governikus-eid.de%3A443%2FAutent-DemoApplication%2FWebServiceRequesterServlet%3Fdummy%3Dfalse%26useCan%3Dfalse%26ta%3Dfalse"]
         app.launch()
         
-        let demoTokenURL = "bundid://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Ftest.governikus-eid.de%3A443%2FAutent-DemoApplication%2FWebServiceRequesterServlet%3Fdummy%3Dfalse%26useCan%3Dfalse%26ta%3Dfalse"
-        openDeeplink(deeplink: demoTokenURL, app: app)
-        
-        app.buttons["Ja, ich habe es bereits genutzt"].wait().tap()
+        app.buttons["Identifizierung erneut starten"].wait().tap()
         
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["loadError"].wait().tap()

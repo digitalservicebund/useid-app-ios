@@ -79,6 +79,38 @@ Build Preview
 
 Deliver Preview
 
+### ios production
+
+```sh
+[bundle exec] fastlane ios production
+```
+
+Trigger Production
+
+### ios buildProduction
+
+```sh
+[bundle exec] fastlane ios buildProduction
+```
+
+Build Production
+
+### ios deliverProduction
+
+```sh
+[bundle exec] fastlane ios deliverProduction
+```
+
+Deliver Production
+
+### ios commitVersion
+
+```sh
+[bundle exec] fastlane ios commitVersion
+```
+
+Commit new version
+
 ### ios updateAppVersion
 
 ```sh

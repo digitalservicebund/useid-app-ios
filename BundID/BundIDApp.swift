@@ -4,9 +4,22 @@ import ComposableArchitecture
 import OpenEcard
 import Sentry
 
+func parseArguments() -> [String: String] {
+    var arguments = [String: String]()
+    for argument in ProcessInfo.processInfo.arguments[1...] {
+        let keyValues = argument.split(separator: "=", maxSplits: 1)
+        guard keyValues.count >= 1 && keyValues.count <= 2 else { continue }
+        let key = keyValues.first!
+        let value = keyValues.count > 1 ? keyValues.last! : "1"
+        arguments[String(key)] = String(value)
+    }
+    return arguments
+}
+
 @main
 struct BundIDApp: App {
     
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var store: Store<CoordinatorState, CoordinatorAction>
     
     init() {
@@ -57,11 +70,18 @@ struct BundIDApp: App {
         )
 #endif
         
+        let arguments = parseArguments()
+#if PREVIEW
+        let tokenURL: String? = arguments["TOKEN_URL"]
+#else
+        let tokenURL: String? = nil
+#endif
+        
         let homeState = HomeState(appVersion: Bundle.main.version,
                                   buildNumber: Bundle.main.buildNumber)
         
         store = Store(
-            initialState: CoordinatorState(states: [.root(.home(homeState), embedInNavigationView: true)]),
+            initialState: CoordinatorState(tokenURL: tokenURL, states: [.root(.home(homeState), embedInNavigationView: true)]),
             reducer: coordinatorReducer,
             environment: environment
         )

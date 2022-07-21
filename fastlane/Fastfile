@@ -27,7 +27,7 @@ platform :ios do
   lane :getAppVersion do |options|
     rel_path = options[:rel_path] || '../'
     project = Xcodeproj::Project.open("#{rel_path}#{PROJECT_FILENAME}.xcodeproj")
-    version = project.build_settings('Release')['MARKETING_VERSION']
+    version = project.build_settings('Release Production')['MARKETING_VERSION']
     puts "Current version: #{version}"
     version
   end
@@ -110,6 +110,7 @@ platform :ios do
 
   desc 'Trigger Preview'
   lane :preview do |options|
+    options['tag_prefix'] = 'preview-'
     buildPreview(options)
     commitVersion(options)
     deliverPreview(options)
@@ -124,7 +125,7 @@ platform :ios do
 
     build_app(
       project: "#{PROJECT_FILENAME}.xcodeproj",
-      configuration: 'Release',
+      configuration: 'Release Preview',
       clean: true,
       scheme: 'BundID',
       cloned_source_packages_path: '.swift-packages',
@@ -142,17 +143,6 @@ platform :ios do
     backup_xcarchive(destination: "artifacts", versioned: false)
   end
 
-  desc 'Commit new version'
-  lane :commitVersion do |options|
-    version = getAppVersion
-    build_number = get_build_number
-
-    commit_version_bump(xcodeproj: "#{PROJECT_FILENAME}.xcodeproj")
-    tag = "preview-#{version}-#{build_number}"
-    add_git_tag(tag: tag)
-    push_to_git_remote(tags: false, push_options: ["tag #{tag}"])
-  end
-
   desc 'Deliver Preview'
   lane :deliverPreview do |options|
     make_screenshots = options[:screenshots] == true
@@ -162,6 +152,63 @@ platform :ios do
       org_slug: 'digitalservice',
       project_slug: 'useid-preview-ios-e5',
     )
+  end
+
+  desc 'Trigger Production'
+  lane :production do |options|
+    options['tag_prefix'] = ''
+    buildProduction(options)
+    commitVersion(options)
+    deliverProduction(options)
+  end
+
+  desc 'Build Production'
+  lane :buildProduction do |options|
+    ensure_git_status_clean
+
+    updateAppVersion
+    increment_build_number
+
+    build_app(
+      project: "#{PROJECT_FILENAME}.xcodeproj",
+      configuration: 'Release Production',
+      clean: true,
+      scheme: 'BundID',
+      cloned_source_packages_path: '.swift-packages',
+      export_method: 'app-store',
+      export_options: {
+        provisioningProfiles: { 
+          "de.bund.digitalservice.UseID" => "UseID - Distribution"
+        }
+      },
+      include_bitcode: false
+    )
+
+    artifcats = "../artifacts"
+    Dir.mkdir(artifcats) unless Dir.exists?(artifcats)
+    backup_xcarchive(destination: "artifacts", versioned: false)
+  end
+
+  desc 'Deliver Production'
+  lane :deliverProduction do |options|
+    make_screenshots = options[:screenshots] == true
+    upload_to_testflight(api_key_path: ENV['APPSTORECONNECT_API_KEY_PATH'])
+    sentry_upload_dsym(
+      auth_token: ENV['SENTRY_AUTH_TOKEN'],
+      org_slug: 'digitalservice',
+      project_slug: 'useid-ios',
+    )
+  end
+
+  desc 'Commit new version'
+  lane :commitVersion do |options|
+    version = getAppVersion
+    build_number = get_build_number
+
+    commit_version_bump(xcodeproj: "#{PROJECT_FILENAME}.xcodeproj")
+    tag = "#{options['tag_prefix']}#{version}-#{build_number}"
+    add_git_tag(tag: tag)
+    push_to_git_remote(tags: false, push_options: ["tag #{tag}"])
   end
 
   desc 'Update App Version'
