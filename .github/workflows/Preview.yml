@@ -100,6 +100,7 @@ jobs:
         run: bundle exec fastlane preview
       - name: Upload xcarchive
         uses: actions/upload-artifact@v3
+        if: ${{ always() }}
         with:
           name: UseID-Preview.xcarchive.zip
           path: artifacts/*.xcarchive.zip
