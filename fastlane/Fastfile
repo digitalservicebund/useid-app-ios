@@ -192,12 +192,12 @@ platform :ios do
   desc 'Deliver Production'
   lane :deliverProduction do |options|
     make_screenshots = options[:screenshots] == true
-    upload_to_testflight(api_key_path: ENV['APPSTORECONNECT_API_KEY_PATH'])
     sentry_upload_dsym(
       auth_token: ENV['SENTRY_AUTH_TOKEN'],
       org_slug: 'digitalservice',
       project_slug: 'useid-ios',
     )
+    upload_to_testflight(api_key_path: ENV['APPSTORECONNECT_API_KEY_PATH'])
   end
 
   desc 'Commit new version'
