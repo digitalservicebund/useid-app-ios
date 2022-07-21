@@ -129,3 +129,5 @@ BundIDTests/Generated
 vendor
 artifacts
 .env
+Brewfile.lock.json
+
