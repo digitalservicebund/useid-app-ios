@@ -14,15 +14,14 @@ final class CoordinatorTests: XCTestCase {
     
     var mockIDInteractionManager = MockIDInteractionManagerType()
     
+    func uuidFactory() -> UUID {
+        let currentCount = self.uuidCount
+        self.uuidCount += 1
+        return UUID(number: currentCount)
+    }
+    
     override func setUp() {
         scheduler = DispatchQueue.test
-        
-        let uuidFactory = {
-            let currentCount = self.uuidCount
-            self.uuidCount += 1
-            return UUID(number: currentCount)
-        }
-        
         environment = AppEnvironment(mainQueue: scheduler.eraseToAnyScheduler(),
                                      uuidFactory: uuidFactory,
                                      idInteractionManager: mockIDInteractionManager,
