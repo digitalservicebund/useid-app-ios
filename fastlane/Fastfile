@@ -151,7 +151,10 @@ platform :ios do
       org_slug: 'digitalservice',
       project_slug: 'useid-preview-ios-e5',
     )
-    upload_to_testflight(api_key_path: ENV['APPSTORECONNECT_API_KEY_PATH'])
+    upload_to_testflight(
+      api_key_path: ENV['APPSTORECONNECT_API_KEY_PATH'],
+      skip_waiting_for_build_processing: true
+    )
   end
 
   desc 'Trigger Production'
@@ -197,7 +200,10 @@ platform :ios do
       org_slug: 'digitalservice',
       project_slug: 'useid-ios',
     )
-    upload_to_testflight(api_key_path: ENV['APPSTORECONNECT_API_KEY_PATH'])
+    upload_to_testflight(
+      api_key_path: ENV['APPSTORECONNECT_API_KEY_PATH'],
+      skip_waiting_for_build_processing: true
+    )
   end
 
   desc 'Commit new version'
