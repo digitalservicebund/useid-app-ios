@@ -14,7 +14,7 @@ struct IdentificationScanState: Equatable, IDInteractionHandler {
     var pin: String
     var pinCallback: PINCallback
     var attempt = 0
-    var isScanning: Bool = true
+    var isScanning: Bool = false
     var showProgressCaption: Bool = false
     var error: IdentificationScanError?
     var authenticationSuccessful = false
