@@ -29,10 +29,9 @@ struct BundIDApp: App {
 #else
             options.dsn = "https://81bc611af42347bc8d7b487f807f9577@o1248831.ingest.sentry.io/6589505"
 #endif
+#if DEBUG
             options.debug = true
-            
-            // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-            // We recommend adjusting this value in production.
+#endif
             options.tracesSampleRate = 1.0
         }
         

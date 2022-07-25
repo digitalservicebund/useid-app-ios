@@ -105,7 +105,7 @@ enum IdentificationCoordinatorAction: Equatable, IndexedRouterAction {
 
  Card removed before process finished:
  .cardRecognized
- .authenticationSuccessful
+ .authenticationSuccessful (optional)
  .cardRemoved // difference from happy path?
  .processCompletedSuccessfully // not really successful
  

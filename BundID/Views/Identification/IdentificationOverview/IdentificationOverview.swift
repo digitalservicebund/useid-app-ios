@@ -5,7 +5,7 @@ import TCACoordinators
 struct IdentificationOverviewLoadedState: Identifiable, Equatable {
     let id: UUID
     let request: EIDAuthenticationRequest
-    let handler: IdentifiableCallback<FlaggedAttributes>
+    var handler: IdentifiableCallback<FlaggedAttributes>
     
     var requiredReadAttributes: IdentifiedArrayOf<IDCardAttribute> {
         let requiredAttributes = request.readAttributes.compactMap { (key: IDCardAttribute, isRequired: Bool) in
