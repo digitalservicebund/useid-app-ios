@@ -82,6 +82,10 @@
 "identification_done_message" = "Machen Sie weiter bei „%@“.";
 "identification_done_close" = "Schließen";
 
+"identification_scan_unexpectedError_title" = "Fehler aufgetreten";
+"identification_scan_unexpectedError_message" = "Ein unerwarteter Fehler ist aufgetreten. Bitte kehren Sie zur Webseite zurück und wiederholen Sie den Vorgang.";
+"identification_scan_unexpectedError_close" = "Schließen";
+
 "general_ok" = "OK";
 "general_cancel" = "Abbrechen";
 

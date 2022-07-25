@@ -169,8 +169,8 @@ struct IdentificationScan: View {
                         Spacer()
                     }
                     
-                    if let title = viewStore.state.errorTitle {
-                        HeaderView(title: title, message: viewStore.state.errorBody)
+                    if viewStore.error != nil {
+                        HeaderView(title: L10n.Identification.Scan.UnexpectedError.title, message: L10n.Identification.Scan.UnexpectedError.message)
                     }
                 }
                 if viewStore.isScanning {
@@ -192,7 +192,7 @@ struct IdentificationScan: View {
                                   secondary: nil,
                                   primary: viewStore.isRetryAvailable ?
                         .init(title: L10n.FirstTimeUser.Scan.scan, action: .startScan) :
-                        .init(title: L10n.Identification.Done.close, action: .end))
+                        .init(title: L10n.Identification.Scan.UnexpectedError.close, action: .end))
                     .disabled(viewStore.isScanning)
                 }
             }.onChange(of: viewStore.state.attempt, perform: { _ in
