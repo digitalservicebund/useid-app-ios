@@ -15,6 +15,7 @@ struct IdentificationScanState: Equatable, IDInteractionHandler {
     var pinCallback: PINCallback
     var attempt = 0
     var isScanning: Bool = false
+    var isRetryAvailable: Bool = true
     var showProgressCaption: Bool = false
     var error: IdentificationScanError?
     var authenticationSuccessful = false
@@ -34,6 +35,7 @@ enum IdentificationScanAction: Equatable {
     case wrongPIN(remainingAttempts: Int)
     case identifiedSuccessfully(EIDAuthenticationRequest)
     case error(CardErrorType)
+    case end
 #if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -73,6 +75,8 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
         return .none
     case .error:
         return .none
+    case .end:
+        return .none
     }
 }
 
@@ -83,6 +87,7 @@ extension IdentificationScanState {
             
             pinCallback = PINCallback(id: environment.uuidFactory(), callback: callback)
             isScanning = false
+            isRetryAvailable = true
             
             // This is our signal that the user canceled (for now)
             guard let remainingAttempts = remainingAttempts else {
@@ -107,6 +112,7 @@ extension IdentificationScanState {
         case .processCompletedSuccessfully:
             error = .unexpectedEvent(.processCompletedSuccessfully)
             isScanning = false
+            isRetryAvailable = false
             return .none
         default:
             return .none
@@ -184,7 +190,9 @@ struct IdentificationScan: View {
                 } else {
                     DialogButtons(store: store.stateless,
                                   secondary: nil,
-                                  primary: .init(title: L10n.FirstTimeUser.Scan.scan, action: .startScan))
+                                  primary: viewStore.isRetryAvailable ?
+                        .init(title: L10n.FirstTimeUser.Scan.scan, action: .startScan) :
+                        .init(title: L10n.Identification.Done.close, action: .end))
                     .disabled(viewStore.isScanning)
                 }
             }.onChange(of: viewStore.state.attempt, perform: { _ in
