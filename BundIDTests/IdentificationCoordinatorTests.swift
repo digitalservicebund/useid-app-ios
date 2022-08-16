@@ -85,7 +85,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         }
     }
     
-    func testScanToDone() throws {
+    func testScanToDoneWithoutRedirect() throws {
         let pin = "123456"
         let request = EIDAuthenticationRequest.preview
         let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
@@ -100,10 +100,28 @@ class IdentificationCoordinatorTests: XCTestCase {
             reducer: identificationCoordinatorReducer,
             environment: environment)
         
-        store.send(.routeAction(0, action: .scan(.identifiedSuccessfully(request)))) {
+        store.send(.routeAction(0, action: .scan(.identifiedSuccessfullyWithoutRedirect(request))))
+    }
+    
+    func testScanToDoneWithRedirect() throws {
+        let pin = "123456"
+        let request = EIDAuthenticationRequest.preview
+        let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
+        let store = TestStore(
+            initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
+                                                         pin: pin,
+                                                         states: [
+                                                            .root(.scan(.init(request: request,
+                                                                              pin: pin,
+                                                                              pinCallback: callback)))
+                                                         ]),
+            reducer: identificationCoordinatorReducer,
+            environment: environment)
+        
+        store.send(.routeAction(0, action: .scan(.identifiedSuccessfullyWithRedirect(request, redirectURL: "https://example.com")))) {
             guard case .scan(var scanState) = $0.states[0].screen else { return XCTFail("Unexpected state") }
             scanState.isScanning = false
-            $0.states = [.root(.scan(scanState)), .push(.done(.init(request: request)))]
+            $0.states = [.root(.scan(scanState)), .push(.done(.init(request: request, redirectURL: "https://example.com")))]
         }
     }
     

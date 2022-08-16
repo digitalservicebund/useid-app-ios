@@ -136,8 +136,8 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                     return .none
                 }
                 return Effect(value: localAction)
-            case .routeAction(_, action: .scan(.identifiedSuccessfully(let request))):
-                state.routes.push(.done(IdentificationDoneState(request: request)))
+            case .routeAction(_, action: .scan(.identifiedSuccessfullyWithRedirect(let request, let urlString))):
+                state.routes.push(.done(IdentificationDoneState(request: request, redirectURL: urlString)))
                 return .none
             case .routeAction(_, action: .incorrectPersonalPIN(.done(let pin))):
                 state.pin = pin

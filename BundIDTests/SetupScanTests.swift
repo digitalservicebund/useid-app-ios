@@ -55,7 +55,7 @@ class SetupScanTests: XCTestCase {
                     subject.send(.requestCardInsertion(cardInsertionCallback))
                     subject.send(.cardRecognized)
                     subject.send(.cardInteractionComplete)
-                    subject.send(.processCompletedSuccessfully)
+                    subject.send(.processCompletedSuccessfullyWithoutRedirect)
                     subject.send(completion: .finished)
                 }
                 return subject.eraseToAnyPublisher()
@@ -85,7 +85,7 @@ class SetupScanTests: XCTestCase {
         }
         store.receive(.scanEvent(.success(.cardRecognized)))
         store.receive(.scanEvent(.success(.cardInteractionComplete)))
-        store.receive(.scanEvent(.success(.processCompletedSuccessfully)))
+        store.receive(.scanEvent(.success(.processCompletedSuccessfullyWithoutRedirect)))
         
         store.receive(.scannedSuccessfully)
         

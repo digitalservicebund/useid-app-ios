@@ -49,7 +49,7 @@ class ContentViewViewModel: ObservableObject {
                 pinCallback("123456")
             case .requestPINAndCAN(let pinCANCallback): print("PIN CAN callback not implemented.")
             case .requestPUK(let pukCallback): print("PUK callback not implemented.")
-            case .processCompletedSuccessfully: print("Process completed successfully.")
+            case .processCompletedSuccessfullyWithoutRedirect: print("Process completed successfully.")
             
             case .authenticationStarted: print("Authentication started.")
             case .requestAuthenticationRequestConfirmation(let request, let confirmationCallback):
@@ -80,7 +80,7 @@ class ContentViewViewModel: ObservableObject {
             case .requestPIN(let remainingAttempts, let pinCallback): print("PIN callback not implemented.")
             case .requestPINAndCAN(let pinCANCallback): print("PIN CAN callback not implemented.")
             case .requestPUK(let pukCallback): print("PUK callback not implemented.")
-            case .processCompletedSuccessfully: print("Process completed successfully.")
+            case .processCompletedSuccessfullyWithoutRedirect: print("Process completed successfully.")
             case .pinManagementStarted: print("PIN Management started.")
             case .requestChangedPIN(let remainingAttempts, let pinCallback):
                 print("Providing changed PIN with \(remainingAttempts ?? 3) remaining attempts.")

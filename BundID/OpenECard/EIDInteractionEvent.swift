@@ -9,7 +9,8 @@ enum EIDInteractionEvent: Equatable {
     case requestPIN(remainingAttempts: Int?, pinCallback: (_ pin: String) -> Void)
     case requestPINAndCAN((_ pin: String, _ can: String) -> Void)
     case requestPUK((String) -> Void)
-    case processCompletedSuccessfully
+    case processCompletedSuccessfullyWithoutRedirect
+    case processCompletedSuccessfullyWithRedirect(url: String)
     case authenticationStarted
     case requestAuthenticationRequestConfirmation(EIDAuthenticationRequest, (FlaggedAttributes) -> Void)
     case authenticationSuccessful
@@ -28,7 +29,9 @@ enum EIDInteractionEvent: Equatable {
             return lhsAttempts == rhsAttempts
         case (.requestPINAndCAN, .requestPINAndCAN): return true
         case (.requestPUK, .requestPUK): return true
-        case (.processCompletedSuccessfully, .processCompletedSuccessfully): return true
+        case (.processCompletedSuccessfullyWithoutRedirect, .processCompletedSuccessfullyWithoutRedirect): return true
+        case (.processCompletedSuccessfullyWithRedirect(let lhsURL), .processCompletedSuccessfullyWithRedirect(let rhsURL)):
+            return lhsURL == rhsURL
         case (.authenticationStarted, .authenticationStarted): return true
         case (.requestAuthenticationRequestConfirmation(let lhsRequest, _), .requestAuthenticationRequestConfirmation(let rhsRequest, _)): return lhsRequest == rhsRequest
         case (.authenticationSuccessful, .authenticationSuccessful): return true

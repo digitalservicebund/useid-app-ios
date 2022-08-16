@@ -106,7 +106,7 @@ extension SetupScanState {
         case .cardRemoved:
             self.showProgressCaption = true
             print("Card removed.")
-        case .processCompletedSuccessfully:
+        case .processCompletedSuccessfullyWithoutRedirect:
             return Effect(value: .scannedSuccessfully)
         case .pinManagementStarted: print("PIN Management started.")
         case .requestChangedPIN(let remainingAttempts, let pinCallback):

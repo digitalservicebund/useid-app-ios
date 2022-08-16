@@ -103,6 +103,10 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
             case .routeAction(_, action: .identificationCoordinator(.routeAction(_, action: .done(.close)))):
                 state.routes.dismiss()
                 return .none
+            case .routeAction(_, action: .identificationCoordinator(.routeAction(_, action: .done(.openURL(let url))))):
+                state.routes.dismiss()
+                UIApplication.shared.open(url)
+                return .none
             default:
                 return .none
             }

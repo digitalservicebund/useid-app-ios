@@ -97,13 +97,16 @@ final class BundIDUITests: XCTestCase {
         app.toolbars["Toolbar"].buttons["Weiter"].wait().tap()
         
         app.navigationBars.buttons["Debug"].wait().tap()
-        app.buttons["identifySuccessfully"].wait().tap()
+        app.buttons["identifySuccessfullyWithRedirect"].wait().tap()
         
         app.staticTexts["Sie haben sich erfolgreich ausgewiesen"].assertExistence()
         
         app.buttons["Schließen"].wait().tap()
         
         app.buttons["Einrichtung starten"].assertExistence()
+        
+        let safari = XCUIApplication(bundleIdentifier: SafariIdentifiers.bundleId.rawValue)
+        XCTAssertEqual(safari.state, .runningForeground)
     }
     
     func testIdentificationLoadError() throws {

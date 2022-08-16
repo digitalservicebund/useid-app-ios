@@ -14,8 +14,11 @@ class ControllerCallback: NSObject, ControllerCallbackType {
     
     func onAuthenticationCompletion(_ result: (NSObjectProtocol & ActivationResultProtocol)!) {
         switch result.getCode() {
-        case .OK, .REDIRECT:
-            subject.send(.processCompletedSuccessfully)
+        case .OK:
+            subject.send(.processCompletedSuccessfullyWithoutRedirect)
+            subject.send(completion: .finished)
+        case .REDIRECT:
+            subject.send(.processCompletedSuccessfullyWithRedirect(url: result.getRedirectUrl()))
             subject.send(completion: .finished)
         case .INTERRUPTED:
             break

@@ -33,7 +33,8 @@ enum IdentificationScanAction: Equatable {
     case startScan
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case wrongPIN(remainingAttempts: Int)
-    case identifiedSuccessfully(EIDAuthenticationRequest)
+    case identifiedSuccessfullyWithRedirect(EIDAuthenticationRequest, redirectURL: String)
+    case identifiedSuccessfullyWithoutRedirect(EIDAuthenticationRequest)
     case error(CardErrorType)
     case end
 #if PREVIEW
@@ -70,7 +71,10 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
         }
     case .wrongPIN:
         return .none
-    case .identifiedSuccessfully:
+    case .identifiedSuccessfullyWithoutRedirect:
+        state.isScanning = false
+        return .none
+    case .identifiedSuccessfullyWithRedirect:
         state.isScanning = false
         return .none
     case .error:
@@ -107,10 +111,15 @@ extension IdentificationScanState {
         case .cardRemoved:
             authenticationSuccessful = false
             return .none
-        case .processCompletedSuccessfully where authenticationSuccessful:
-            return Effect(value: .identifiedSuccessfully(request))
-        case .processCompletedSuccessfully:
-            error = .unexpectedEvent(.processCompletedSuccessfully)
+        case .processCompletedSuccessfullyWithRedirect(let urlString) where authenticationSuccessful:
+            return Effect(value: .identifiedSuccessfullyWithRedirect(request, redirectURL: urlString))
+        case .processCompletedSuccessfullyWithoutRedirect:
+            error = .unexpectedEvent(.processCompletedSuccessfullyWithoutRedirect)
+            isScanning = false
+            isRetryAvailable = false
+            return .none
+        case .processCompletedSuccessfullyWithRedirect(let urlString):
+            error = .unexpectedEvent(.processCompletedSuccessfullyWithRedirect(url: urlString))
             isScanning = false
             isRetryAvailable = false
             return .none
