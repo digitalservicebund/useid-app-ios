@@ -80,7 +80,7 @@ struct BundIDApp: App {
                                   buildNumber: Bundle.main.buildNumber)
         
         store = Store(
-            initialState: CoordinatorState(tokenURL: tokenURL, states: [.root(.home(homeState), embedInNavigationView: true)]),
+            initialState: CoordinatorState(tokenURL: tokenURL, states: [.root(.home(homeState), embedInNavigationView: false)]),
             reducer: coordinatorReducer,
             environment: environment
         )
