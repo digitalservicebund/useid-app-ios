@@ -38,10 +38,7 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
     Reducer { state, action, _ in
         switch action {
         case .openURL(let url):
-            var tokenURL = url.absoluteString
-            if url.scheme == "bundid" {
-                tokenURL = tokenURL.replacingOccurrences(of: "bundid://", with: "eid://")
-            }
+            let tokenURL = url.absoluteString
             guard tokenURL.hasPrefix("eid://") else { return .none }
             
             state.tokenURL = tokenURL
