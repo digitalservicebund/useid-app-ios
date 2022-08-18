@@ -98,6 +98,11 @@ struct HomeView: View {
                 .buttonStyle(BundButtonStyle(isPrimary: true))
             }
         }
+        .background(
+            RoundedRectangle(cornerRadius: 14)
+                .foregroundColor(.white)
+                .shadow(color: .black.opacity(0.04), radius: 32, x: 0, y: 4)
+        )
         .overlay(
             RoundedRectangle(cornerRadius: 14)
                 .stroke(Color.gray300, lineWidth: 1)
@@ -141,6 +146,11 @@ struct HomeView: View {
             .padding(24)
         }
         .buttonStyle(.plain)
+        .background(
+            RoundedRectangle(cornerRadius: 14)
+                .foregroundColor(.white)
+                .shadow(color: .black.opacity(0.04), radius: 32, x: 0, y: 4)
+        )
         .overlay(
             RoundedRectangle(cornerRadius: 14)
                 .stroke(Color.gray300, lineWidth: 1)
