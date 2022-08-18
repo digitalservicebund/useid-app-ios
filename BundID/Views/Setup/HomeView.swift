@@ -39,7 +39,7 @@ struct HomeView: View {
                         setupActionView
                         listView
                         Spacer(minLength: 0)
-                        Text("Version: \(viewStore.appVersion) - \(viewStore.buildNumber) (\(environment))")
+                        Text(L10n.Home.version(version))
                             .font(.bundCaption2)
                             .padding(.bottom)
                     }
@@ -141,6 +141,15 @@ struct HomeView: View {
             RoundedRectangle(cornerRadius: 14)
                 .stroke(Color.gray300, lineWidth: 1)
         )
+    }
+    
+    var version: String {
+        let appVersion = "\(viewStore.appVersion) - \(viewStore.buildNumber)"
+#if PREVIEW
+        return "\(appVersion) (\(environment))"
+#else
+        return appVersion
+#endif
     }
     
     var environment: String {
