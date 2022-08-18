@@ -21,35 +21,39 @@ struct HomeView: View {
     }
     
     var body: some View {
-        NavigationView {
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 16) {
-                    headerView
-                        .padding(.top, 20)
-                        .padding(.bottom)
-                        .background(Color.blue200)
-                    
+        GeometryReader { proxy in
+            NavigationView {
+                ScrollView(showsIndicators: false) {
                     VStack(spacing: 16) {
-                        HStack {
-                            Text(L10n.Home.More.title)
-                                .font(.title)
-                                .bold()
-                            Spacer()
-                        }
-                        setupActionView
-                        listView
-                        Spacer(minLength: 0)
-                        Text(L10n.Home.version(version))
-                            .font(.bundCaption2)
+                        headerView
+                            .padding(.top, 20 + proxy.safeAreaInsets.top)
                             .padding(.bottom)
+                            .background(Color.blue200)
+                            .onAppear {
+                                print(proxy.safeAreaInsets.top)
+                            }
+                        
+                        VStack(spacing: 16) {
+                            HStack {
+                                Text(L10n.Home.More.title)
+                                    .font(.title)
+                                    .bold()
+                                Spacer()
+                            }
+                            setupActionView
+                            listView
+                            Spacer(minLength: 0)
+                            Text(L10n.Home.version(version))
+                                .font(.bundCaption2)
+                                .padding(.bottom)
+                        }
+                        .padding(.horizontal, 24)
                     }
-                    .padding(.horizontal, 24)
                 }
+                .navigationBarHidden(true)
+                .ignoresSafeArea(.container, edges: .top)
             }
-            .navigationBarHidden(true)
-            .ignoresSafeArea(.container, edges: .top)
         }
-        
     }
     
     @ViewBuilder
