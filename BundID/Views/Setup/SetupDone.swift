@@ -11,11 +11,11 @@ struct SetupDone: View {
     
     var body: some View {
         DialogView(store: store,
-                   title: "Einrichtung abgeschlossen",
+                   title: L10n.FirstTimeUser.Done.title,
                    message: nil,
-                   imageMeta: nil,
+                   imageMeta: ImageMeta(name: "eIDs"),
                    secondaryButton: nil,
-                   primaryButton: .init(title: "Schließen",
+                   primaryButton: .init(title: L10n.FirstTimeUser.Done.close,
                                         action: .done))
         .navigationBarBackButtonHidden(true)
     }

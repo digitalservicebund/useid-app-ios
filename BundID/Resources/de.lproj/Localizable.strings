@@ -45,6 +45,9 @@
 "firstTimeUser_error_cardBlocked_title" = "Ihr Ausweis ist gesperrt";
 "firstTimeUser_error_cardBlocked_body" = "Da Sie Ihre PIN ein drittes Mal falsch eingeben haben, wurde Ihr Ausweis gesperrt.\n\nIhren Ausweis können Sie nur mit Ihrer 10-stelligen PUK in der AusweisApp2 oder im Bürgeramt entsperren.";
 "firstTimeUser_error_close" = "Schließen";
+"firstTimeUser_done_title" = "Sie haben Ihren Online-Ausweis erfolgreich eingerichtet.";
+"firstTimeUser_done_close" = "Fertig";
+"firstTimeUser_done_identify" = "Jetzt ausweisen";
 
 "identification_overview_loading" = "Einen Moment bitte…\n\nDaten werden geladen";
 "identification_overview_loaded_title" = "%@";

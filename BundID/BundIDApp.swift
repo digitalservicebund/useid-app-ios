@@ -93,6 +93,9 @@ struct BundIDApp: App {
                     .onOpenURL { url in
                         viewStore.send(.openURL(url))
                     }
+                    .onAppear {
+                        viewStore.send(.onAppear)
+                    }
             }
         }
     }

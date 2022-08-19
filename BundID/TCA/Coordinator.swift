@@ -26,10 +26,23 @@ struct CoordinatorState: Equatable, IndexedRouterState {
             states = newValue
         }
     }
+    
+    mutating func handleURL(_ url: String) -> Effect<CoordinatorAction, Never> {
+        guard url.hasPrefix("eid://") else { return .none }
+        
+        tokenURL = url
+        if setupPreviouslyFinished {
+            routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: url)), embedInNavigationView: true)
+        } else {
+            routes.presentSheet(.setupCoordinator(SetupCoordinatorState()), embedInNavigationView: true)
+        }
+        return .none
+    }
 }
 
 enum CoordinatorAction: Equatable, IndexedRouterAction {
     case openURL(URL)
+    case onAppear
     case routeAction(Int, action: ScreenAction)
     case updateRoutes([Route<ScreenState>])
 }
@@ -39,15 +52,10 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
         switch action {
         case .openURL(let url):
             let tokenURL = url.absoluteString
-            guard tokenURL.hasPrefix("eid://") else { return .none }
-            
-            state.tokenURL = tokenURL
-            if state.setupPreviouslyFinished {
-                state.routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)), embedInNavigationView: true)
-            } else {
-                state.routes.presentSheet(.setupCoordinator(SetupCoordinatorState()), embedInNavigationView: true)
-            }
-            return .none
+            return state.handleURL(tokenURL)
+        case .onAppear:
+            guard let tokenURL = state.tokenURL else { return .none }
+            return state.handleURL(tokenURL)
         default:
             return .none
         }
