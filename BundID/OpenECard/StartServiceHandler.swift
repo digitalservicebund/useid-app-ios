@@ -4,7 +4,7 @@ import OpenEcard
 
 class StartServiceHandler: NSObject {
     
-    let task: IDTask
+    private let task: IDTask
     
     private let controllerCallback: ControllerCallbackType
     private let eacInteraction: EACInteractionType
