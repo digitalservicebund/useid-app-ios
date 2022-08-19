@@ -104,10 +104,10 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             return [.identifySuccessfullyWithRedirect, .runPINError(remainingAttempts: card.remainingAttempts), .cancel]
         case .runNFCError:
             subject.send(completion: .failure(.processFailed(resultCode: .INTERNAL_ERROR)))
-            return IdentifyDebugSequence.defaultScanningActions(card: card)
+            return [.cancel]
         case .runCardSuspended:
             subject.send(.requestPINAndCAN({ _, _ in }))
-            return IdentifyDebugSequence.defaultScanningActions(card: card)
+            return [.cancel]
         case .runCardDeactivated:
             subject.send(.cardRecognized)
             subject.send(.cardInteractionComplete)
