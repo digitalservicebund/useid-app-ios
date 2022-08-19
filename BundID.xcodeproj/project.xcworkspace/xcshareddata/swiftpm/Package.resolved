@@ -46,6 +46,15 @@
       }
     },
     {
+      "identity" : "richtext",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/digitalservicebund/RichText.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "ec458b343aa704cb2c4a791f4bdf1bbef9cb8cef"
+      }
+    },
+    {
       "identity" : "sentry-cocoa",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",

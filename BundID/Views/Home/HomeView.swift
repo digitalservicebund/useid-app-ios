@@ -113,31 +113,42 @@ struct HomeView: View {
                 Button {
                     
                 } label: {
-                    Text(L10n.Home.Actions.license)
+                    Text(L10n.Home.Actions.licenses)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
                 }
                 Divider()
                     .foregroundColor(.gray300)
                     .padding(.vertical, 16)
-                Button {
-                    
+                NavigationLink {
+                    HTMLView(title: L10n.Accessibility.title,
+                             html: L10n.Accessibility.Html.text)
                 } label: {
                     Text(L10n.Home.Actions.accessibilityStatement)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
                 }
                 Divider()
                     .foregroundColor(.gray300)
                     .padding(.vertical, 16)
-                Button {
-                    
+                NavigationLink {
+                    HTMLView(title: L10n.TermsOfUse.title,
+                             html: L10n.TermsOfUse.Html.text)
                 } label: {
                     Text(L10n.Home.Actions.terms)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
                 }
                 Divider()
                     .foregroundColor(.gray300)
                     .padding(.vertical, 16)
-                Button {
-                    
+                NavigationLink {
+                    HTMLView(title: L10n.Imprint.title,
+                             html: L10n.Imprint.Html.text)
                 } label: {
-                    Text(L10n.Home.Actions.legal)
+                    Text(L10n.Home.Actions.imprint)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
                 }
             }
             .padding(24)
