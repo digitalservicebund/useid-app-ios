@@ -50,14 +50,6 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
         }
     }
     
-    static func defaultScanningActions(card: Card) -> [IdentifyDebugSequence] {
-        let actions: [IdentifyDebugSequence] = [
-            .cancel
-        ]
-        
-        return actions
-    }
-    
     func run(card: inout Card, subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>) -> [IdentifyDebugSequence] {
         switch self {
         case .loadError:
