@@ -224,6 +224,7 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
 class DebugIDInteractionManager: IDInteractionManagerType {
     
     private var subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>?
+    private var card: Card = Card(remainingAttempts: 3)
     
     func debuggableIdentify(tokenURL: String) -> DebuggableInteraction<IdentifyDebugSequence> {
         return DebuggableInteraction(publisher: identify(tokenURL: tokenURL),
@@ -256,8 +257,6 @@ class DebugIDInteractionManager: IDInteractionManagerType {
         return subject
             .eraseToAnyPublisher()
     }
-    
-    var card: Card = Card(remainingAttempts: 3)
     
     func runChangePIN(debugSequence: ChangePINDebugSequence) -> [ChangePINDebugSequence] {
         return debugSequence.run(card: &card, subject: subject!)
