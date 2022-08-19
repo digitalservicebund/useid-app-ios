@@ -133,7 +133,6 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
             case .idInteractionEvent(let result):
                 guard let localAction = state.transformToLocalInteractionHandler(event: result) else {
                     fatalError("TODO: This should be handled be sent to error tracking and silently ignored.")
-                    return .none
                 }
                 return Effect(value: localAction)
             case .routeAction(_, action: .scan(.identifiedSuccessfullyWithRedirect(let request, let urlString))):
