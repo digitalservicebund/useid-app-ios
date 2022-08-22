@@ -61,65 +61,62 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
         }
     },
     screenReducer
-    .forEachIndexedRoute(environment: { $0 })
-    .withRouteReducer(
-        Reducer { state, action, _ in
-            switch action {
-            case .routeAction(_, .home(.triggerSetup)):
-                state.routes.presentSheet(.setupCoordinator(SetupCoordinatorState()), embedInNavigationView: true)
-                return .none
-            case .routeAction(_, action: .setupCoordinator(.routeAction(_, action: .intro(.chooseYes)))):
-                if let tokenURL = state.tokenURL {
-                    return Effect.routeWithDelaysIfUnsupported(state.routes) {
-                        $0.dismiss()
-                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
+        .forEachIndexedRoute(environment: { $0 })
+        .withRouteReducer(
+            Reducer { state, action, _ in
+                guard case let .routeAction(_, action: routeAction) = action else { return .none }
+                
+                switch routeAction {
+                case .home(.triggerSetup):
+                    state.routes.presentSheet(.setupCoordinator(SetupCoordinatorState()), embedInNavigationView: true)
+                    return .none
+                case .setupCoordinator(.routeAction(_, action: .intro(.chooseYes))):
+                    if let tokenURL = state.tokenURL {
+                        return Effect.routeWithDelaysIfUnsupported(state.routes) {
+                            $0.dismiss()
+                            $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
+                        }
+                    } else {
+                        state.routes.dismiss()
+                        return .none
                     }
-                } else {
+                case .setupCoordinator(.routeAction(_, action: .error(.done))),
+                        .identificationCoordinator(.routeAction(_, action: .cardError(.done))):
                     state.routes.dismiss()
                     return .none
-                }
-            case .routeAction(_, action: .setupCoordinator(.routeAction(_, action: .error(.done)))),
-                    .routeAction(_, action: .identificationCoordinator(.routeAction(_, action: .cardError(.done)))):
-                state.routes.dismiss()
-                return .none
-            case .routeAction(_, action: .setupCoordinator(.afterConfirmEnd)),
-                    .routeAction(_, action: .identificationCoordinator(.afterConfirmEnd)):
-                state.routes.dismiss()
-                return .none
-            case .routeAction(_, action: .setupCoordinator(.routeAction(_, action: .done(.done)))):
-                if let tokenURL = state.tokenURL {
-                    return Effect.routeWithDelaysIfUnsupported(state.routes) {
-                        $0.dismiss()
-                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
-                    }
-                } else {
+                case .setupCoordinator(.afterConfirmEnd), .identificationCoordinator(.afterConfirmEnd):
                     state.routes.dismiss()
                     return .none
+                case .setupCoordinator(.routeAction(_, action: .done(.done))):
+                    if let tokenURL = state.tokenURL {
+                        return Effect.routeWithDelaysIfUnsupported(state.routes) {
+                            $0.dismiss()
+                            $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
+                        }
+                    } else {
+                        state.routes.dismiss()
+                        return .none
+                    }
+                case .home(.triggerIdentification(tokenURL: let tokenURL)):
+                    state.routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
+                    return .none
+                case .identificationCoordinator(.routeAction(_, action: .overview(.cancel))),
+                        .identificationCoordinator(.routeAction(_, action: .scan(.end))),
+                        .identificationCoordinator(.routeAction(_, action: .done(.close))):
+                    state.routes.dismiss()
+                    return .none
+                case .identificationCoordinator(.routeAction(_, action: .done(.openURL(let url)))):
+                    state.routes.dismiss()
+                    UIApplication.shared.open(url)
+                    return .none
+                default:
+                    return .none
                 }
-            case .routeAction(_, action: .home(.triggerIdentification(tokenURL: let tokenURL))):
-                state.routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
-                return .none
-            case .routeAction(_, action: .identificationCoordinator(.routeAction(_, action: .overview(.cancel)))):
-                state.routes.dismiss()
-                return .none
-            case .routeAction(_, action: .identificationCoordinator(.routeAction(_, action: .scan(.end)))):
-                state.routes.dismiss()
-                return .none
-            case .routeAction(_, action: .identificationCoordinator(.routeAction(_, action: .done(.close)))):
-                state.routes.dismiss()
-                return .none
-            case .routeAction(_, action: .identificationCoordinator(.routeAction(_, action: .done(.openURL(let url))))):
-                state.routes.dismiss()
-                UIApplication.shared.open(url)
-                return .none
-            default:
-                return .none
             }
-        }
-    )
+        )
 )
 #if DEBUG
-    .debug()
+.debug()
 #endif
 
 struct CoordinatorView: View {

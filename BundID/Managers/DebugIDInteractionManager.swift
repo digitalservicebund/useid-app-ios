@@ -50,14 +50,6 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
         }
     }
     
-    static func defaultScanningActions(card: Card) -> [IdentifyDebugSequence] {
-        let actions: [IdentifyDebugSequence] = [
-            .cancel
-        ]
-        
-        return actions
-    }
-    
     func run(card: inout Card, subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>) -> [IdentifyDebugSequence] {
         switch self {
         case .loadError:
@@ -112,10 +104,10 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             return [.identifySuccessfullyWithRedirect, .runPINError(remainingAttempts: card.remainingAttempts), .cancel]
         case .runNFCError:
             subject.send(completion: .failure(.processFailed(resultCode: .INTERNAL_ERROR)))
-            return IdentifyDebugSequence.defaultScanningActions(card: card)
+            return [.cancel]
         case .runCardSuspended:
             subject.send(.requestPINAndCAN({ _, _ in }))
-            return IdentifyDebugSequence.defaultScanningActions(card: card)
+            return [.cancel]
         case .runCardDeactivated:
             subject.send(.cardRecognized)
             subject.send(.cardInteractionComplete)
@@ -232,6 +224,7 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
 class DebugIDInteractionManager: IDInteractionManagerType {
     
     private var subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>?
+    private var card: Card = Card(remainingAttempts: 3)
     
     func debuggableIdentify(tokenURL: String) -> DebuggableInteraction<IdentifyDebugSequence> {
         return DebuggableInteraction(publisher: identify(tokenURL: tokenURL),
@@ -264,8 +257,6 @@ class DebugIDInteractionManager: IDInteractionManagerType {
         return subject
             .eraseToAnyPublisher()
     }
-    
-    var card: Card = Card(remainingAttempts: 3)
     
     func runChangePIN(debugSequence: ChangePINDebugSequence) -> [ChangePINDebugSequence] {
         return debugSequence.run(card: &card, subject: subject!)

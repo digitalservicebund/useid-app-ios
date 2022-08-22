@@ -4,6 +4,7 @@ import Combine
 
 struct MockIDInteractionManager: IDInteractionManagerType {
     var queue: AnySchedulerOf<DispatchQueue>
+    
     func changePIN() -> EIDInteractionPublisher {
         let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
         queue.schedule {

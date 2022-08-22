@@ -96,7 +96,6 @@
 		E593E2762816868100154EB0 /* PINManagementInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E2752816868100154EB0 /* PINManagementInteraction.swift */; };
 		E593E279281686DC00154EB0 /* IDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E278281686DC00154EB0 /* IDInteractionManager.swift */; };
 		E5CEB27E281041330076B9FE /* BundIDApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CEB27D281041330076B9FE /* BundIDApp.swift */; };
-		E5CEB280281041330076B9FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CEB27F281041330076B9FE /* ContentView.swift */; };
 		E5CEB282281041340076B9FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5CEB281281041340076B9FE /* Assets.xcassets */; };
 		E5CEB285281041340076B9FE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5CEB284281041340076B9FE /* Preview Assets.xcassets */; };
 		E5E69D832812FB4500A3B66A /* EIDInteractionEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D822812FB4500A3B66A /* EIDInteractionEvent.swift */; };
@@ -225,7 +224,6 @@
 		E593E278281686DC00154EB0 /* IDInteractionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDInteractionManager.swift; sourceTree = "<group>"; };
 		E5CEB27A281041330076B9FE /* BundID.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BundID.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5CEB27D281041330076B9FE /* BundIDApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundIDApp.swift; sourceTree = "<group>"; };
-		E5CEB27F281041330076B9FE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E5CEB281281041340076B9FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E5CEB284281041340076B9FE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E5CEB29428104F920076B9FE /* BundID.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BundID.entitlements; sourceTree = "<group>"; };
@@ -309,7 +307,6 @@
 		E13F9E372886F2C70088E955 /* Setup */ = {
 			isa = PBXGroup;
 			children = (
-				E5CEB27F281041330076B9FE /* ContentView.swift */,
 				E16708AD283D4224001A1637 /* HomeView.swift */,
 				E110400C281C389C004BA03E /* SetupIntro.swift */,
 				E1CD8E9028214FDB008ADA2A /* SetupPINLetterIntro.swift */,
@@ -833,7 +830,6 @@
 				E13925B82840FB7700161F5C /* Types.swift in Sources */,
 				E13925C72841119400161F5C /* MockIDInteractionManager.swift in Sources */,
 				E16708B1283D4EAC001A1637 /* AppEnvironment.swift in Sources */,
-				E5CEB280281041330076B9FE /* ContentView.swift in Sources */,
 				E593E2722816864800154EB0 /* ControllerCallback.swift in Sources */,
 				E1CD8E88281FF62F008ADA2A /* Colors.swift in Sources */,
 				E11EB2AB2853A8B6008B4042 /* Coordinator.swift in Sources */,
@@ -1003,7 +999,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6YK3KTLWQR;
+				DEVELOPMENT_TEAM = VDTVKQ35RL;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.bund.digitalservice.UseIDTests;
@@ -1019,7 +1015,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6YK3KTLWQR;
+				DEVELOPMENT_TEAM = VDTVKQ35RL;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.bund.digitalservice.UseIDUITests;
@@ -1138,7 +1134,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6YK3KTLWQR;
+				DEVELOPMENT_TEAM = VDTVKQ35RL;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.bund.digitalservice.UseIDTests;
@@ -1154,7 +1150,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6YK3KTLWQR;
+				DEVELOPMENT_TEAM = VDTVKQ35RL;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.bund.digitalservice.UseIDUITests;
@@ -1170,7 +1166,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6YK3KTLWQR;
+				DEVELOPMENT_TEAM = VDTVKQ35RL;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.bund.digitalservice.UseIDUITests;
@@ -1186,7 +1182,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6YK3KTLWQR;
+				DEVELOPMENT_TEAM = VDTVKQ35RL;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.bund.digitalservice.UseIDUITests;
@@ -1204,7 +1200,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6YK3KTLWQR;
+				DEVELOPMENT_TEAM = VDTVKQ35RL;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.bund.digitalservice.UseIDTests;
@@ -1222,7 +1218,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6YK3KTLWQR;
+				DEVELOPMENT_TEAM = VDTVKQ35RL;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.bund.digitalservice.UseIDTests;
