@@ -21,45 +21,39 @@ struct HomeView: View {
     }
     
     var body: some View {
-        GeometryReader { proxy in
-            NavigationView {
-                ScrollView(showsIndicators: false) {
+        NavigationView {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 16) {
+                    headerView
+                        .padding(.bottom)
+                        .background(Color.blue200)
+                    
                     VStack(spacing: 16) {
-                        headerView
-                            .padding(.top, 20 + proxy.safeAreaInsets.top)
-                            .padding(.bottom)
-                            .background(Color.blue200)
-                            .onAppear {
-                                print(proxy.safeAreaInsets.top)
-                            }
-                        
-                        VStack(spacing: 16) {
-                            HStack {
-                                Text(L10n.Home.More.title)
-                                    .font(.title)
-                                    .bold()
-                                Spacer()
-                            }
-                            setupActionView
-                            listView
-                            Spacer(minLength: 0)
-                            Text(L10n.Home.version(version))
-                                .font(.bundCaption2)
-                                .padding(.bottom)
+                        HStack {
+                            Text(L10n.Home.More.title)
+                                .font(.title)
+                                .bold()
+                            Spacer()
                         }
-                        .padding(.horizontal, 24)
+                        setupActionView
+                        listView
+                        Spacer(minLength: 0)
+                        Text(L10n.Home.version(version))
+                            .font(.bundCaption2)
+                            .padding(.bottom)
                     }
+                    .padding(.horizontal, 24)
                 }
-                .navigationBarHidden(true)
-                .ignoresSafeArea(.container, edges: .top)
             }
+            .navigationBarHidden(true)
+            .ignoresSafeArea(.container, edges: .top)
         }
     }
     
     @ViewBuilder
     var headerView: some View {
         VStack {
-            ImageMeta(name: "PIN-Brief").image
+            ImageMeta(name: "AbstractWidget").image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
             Button {
@@ -87,6 +81,7 @@ struct HomeView: View {
             ImageMeta(name: "eIDs").image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
+                .padding()
             VStack {
                 Spacer(minLength: 160)
                 Button {
