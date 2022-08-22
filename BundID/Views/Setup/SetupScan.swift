@@ -16,7 +16,7 @@ struct SetupScanState: Equatable {
     var error: SetupScanError?
     var remainingAttempts: Int?
     var attempt = 0
-    var showNFCAlert: AlertState<SetupScanAction>?
+    var nfcInfoAlert: AlertState<SetupScanAction>?
 #if PREVIEW
     var availableDebugActions: [ChangePINDebugSequence] = []
 #endif
@@ -93,13 +93,13 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
     case .scannedSuccessfully:
         return .cancel(id: CancelId.self)
     case .showNFCInfo:
-        state.showNFCAlert = AlertState(title: TextState(L10n.FirstTimeUser.Scan.Info.title),
+        state.nfcInfoAlert = AlertState(title: TextState(L10n.FirstTimeUser.Scan.Info.title),
                                         message: TextState(L10n.FirstTimeUser.Scan.Info.message),
                                         dismissButton: .cancel(TextState(L10n.General.ok),
                                                                action: .send(.dismissNFCInfo)))
         return .none
     case .dismissNFCInfo:
-        state.showNFCAlert = nil
+        state.nfcInfoAlert = nil
         return .none
     }
 }
@@ -273,7 +273,7 @@ struct SetupScan: View {
             .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: SetupScanAction.runDebugSequence)
 #endif
         }
-        .alert(store.scope(state: \.showNFCAlert), dismiss: .dismissNFCInfo)
+        .alert(store.scope(state: \.nfcInfoAlert), dismiss: .dismissNFCInfo)
     }
 }
 

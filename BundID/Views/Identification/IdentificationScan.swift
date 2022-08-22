@@ -19,6 +19,7 @@ struct IdentificationScanState: Equatable, IDInteractionHandler {
     var showProgressCaption: Bool = false
     var error: IdentificationScanError?
     var authenticationSuccessful = false
+    var nfcInfoAlert: AlertState<IdentificationScanAction>?
 #if PREVIEW
     var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
@@ -37,6 +38,8 @@ enum IdentificationScanAction: Equatable {
     case identifiedSuccessfullyWithoutRedirect(EIDAuthenticationRequest)
     case error(CardErrorType)
     case end
+    case showNFCInfo
+    case dismissNFCInfo
 #if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -80,6 +83,15 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
     case .error:
         return .none
     case .end:
+        return .none
+    case .showNFCInfo:
+        state.nfcInfoAlert = AlertState(title: TextState(L10n.FirstTimeUser.Scan.Info.title),
+                                        message: TextState(L10n.FirstTimeUser.Scan.Info.message),
+                                        dismissButton: .cancel(TextState(L10n.General.ok),
+                                                               action: .send(.dismissNFCInfo)))
+        return .none
+    case .dismissNFCInfo:
+        state.nfcInfoAlert = nil
         return .none
     }
 }
@@ -198,7 +210,7 @@ struct IdentificationScan: View {
                     } else {
                         ScanBody(title: L10n.Identification.Scan.title,
                                  message: L10n.Identification.Scan.message,
-                                 infoTapped: { },
+                                 infoTapped: { viewStore.send(.showNFCInfo) },
                                  helpTapped: { })
                         if viewStore.isRetryAvailable {
                             DialogButtons(store: store.stateless,
@@ -218,6 +230,7 @@ struct IdentificationScan: View {
 #if PREVIEW
         .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: IdentificationScanAction.runDebugSequence)
 #endif
+        .alert(store.scope(state: \.nfcInfoAlert), dismiss: .dismissNFCInfo)
     }
 }
 
