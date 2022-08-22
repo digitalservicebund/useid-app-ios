@@ -186,6 +186,41 @@ extension SetupScanState {
     }
 }
 
+struct ScanBody: View {
+    
+    let title: String
+    let message: String
+    let infoTapped: () -> Void
+    let helpTapped: () -> Void
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text(title)
+                .font(.bundLargeTitle)
+                .foregroundColor(.blackish)
+                .padding(.bottom, 24)
+            Text(message)
+                .font(.bundBody)
+                .foregroundColor(.blackish)
+                .padding(.bottom, 24)
+            Button(action: infoTapped, label: {
+                Text(L10n.FirstTimeUser.Scan.info)
+                    .bold()
+            })
+            .padding()
+            .background(RoundedRectangle(cornerRadius: 12).foregroundColor(.blue200))
+            .padding(.bottom, 16)
+            Button(action: helpTapped, label: {
+                Text(L10n.FirstTimeUser.Scan.help)
+                    .bold()
+            })
+            .padding()
+            .background(RoundedRectangle(cornerRadius: 12).foregroundColor(.blue200))
+        }
+        .padding()
+    }
+}
+
 struct SetupScan: View {
     
     var store: Store<SetupScanState, SetupScanAction>
@@ -202,37 +237,31 @@ struct SetupScan: View {
                     if let title = viewStore.state.errorTitle {
                         HeaderView(title: title, message: viewStore.state.errorBody)
                             .padding(.bottom)
-                    } else {
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text(L10n.FirstTimeUser.Scan.title)
-                                .font(.bundLargeTitle)
-                                .foregroundColor(.blackish)
-                                .padding(.bottom, 24)
-                            Text(L10n.FirstTimeUser.Scan.body)
-                                .font(.bundBody)
-                                .foregroundColor(.blackish)
-                                .padding(.bottom, 24)
-                            Button {
-                                viewStore.send(.showNFCInfo)
-                            } label: {
-                                Text(L10n.FirstTimeUser.Scan.info)
-                                    .bold()
+                    } else if viewStore.isScanning {
+                        VStack {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: Color.blue900))
+                                .scaleEffect(3)
+                                .frame(maxWidth: .infinity)
+                                .padding(50)
+                            if viewStore.showProgressCaption {
+                                Text(L10n.FirstTimeUser.Scan.Progress.caption)
+                                    .font(.bundTitle)
+                                    .foregroundColor(.blackish)
+                                    .padding(.bottom, 50)
+                                    .padding(.bottom)
                             }
-                            .padding()
-                            .background(RoundedRectangle(cornerRadius: 12).foregroundColor(.blue200))
-                            .padding(.bottom, 16)
-                            Button {
-                                
-                            } label: {
-                                Text(L10n.FirstTimeUser.Scan.help)
-                                    .bold()
-                            }
-                            .padding()
-                            .background(RoundedRectangle(cornerRadius: 12).foregroundColor(.blue200))
                         }
-                        .padding()
+                    } else {
+                        ScanBody(title: L10n.FirstTimeUser.Scan.title,
+                                 message: L10n.FirstTimeUser.Scan.body,
+                                 infoTapped: { viewStore.send(.showNFCInfo) },
+                                 helpTapped: { })
+                        DialogButtons(store: store.stateless,
+                                      secondary: nil,
+                                      primary: .init(title: L10n.FirstTimeUser.Scan.scan, action: .startScan))
+                        .disabled(viewStore.isScanning)
                     }
-                    
                 }
             }.onChange(of: viewStore.state.attempt, perform: { _ in
                 viewStore.send(.startScan)
