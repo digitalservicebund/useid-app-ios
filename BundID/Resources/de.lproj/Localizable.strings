@@ -22,6 +22,8 @@
 "firstTimeUser_scan_title" = "Übertragen Sie ihre neue PIN auf den Ausweis.";
 "firstTimeUser_scan_body" = "Fast geschafft! Bitte halten Sie Ihren Ausweis dicht an die Rückseite des Smartphones. Die App nutzt die NFC-Sensoren in Smartphone und Ausweis, um ihrem Ausweis die neue PIN zuzuordnen.";
 "firstTimeUser_scan_info" = "Wie funktioniert die NFC-Technologie?";
+"firstTimeUser_scan_info_title" = "Wie funktioniert die NFC-Technologie?";
+"firstTimeUser_scan_info_message" = "NFC steht für Near Field Communication. Die Technik ermöglicht den kontaktlosen Austausch von Daten über sehr kurze Strecken. Sie wird bspw. auch beim Bezahlen mit dem Smartphone an der Supermarktkasse verwendet.";
 "firstTimeUser_scan_help" = "Mein Ausweis wird nicht erkannt";
 "firstTimeUser_scan_scan" = "Ausweis auslesen";
 "firstTimeUser_scan_progress_caption" = "Ausweis nicht bewegen";
