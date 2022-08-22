@@ -2,7 +2,14 @@ import SwiftUI
 
 struct ImageMeta {
     let name: String
-    let labelKey: String? = nil
+    let labelKey: String?
+    let maxHeight: CGFloat?
+    
+    init(name: String, labelKey: String? = nil, maxHeight: CGFloat? = nil) {
+        self.name = name
+        self.labelKey = labelKey
+        self.maxHeight = maxHeight
+    }
 }
 
 struct LinkMeta {
@@ -39,7 +46,7 @@ struct HeaderView: View {
                 imageMeta.image
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: .infinity)
+                    .frame(maxWidth: .infinity, maxHeight: imageMeta.maxHeight)
                     .padding(.vertical, 10)
             }
         }
