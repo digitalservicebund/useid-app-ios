@@ -3,6 +3,7 @@ import ComposableArchitecture
 
 enum SetupDoneAction: Equatable {
     case done
+    case triggerIdentification
 }
 
 struct SetupDone: View {
@@ -14,9 +15,10 @@ struct SetupDone: View {
                    title: L10n.FirstTimeUser.Done.title,
                    message: nil,
                    imageMeta: ImageMeta(name: "eIDs"),
-                   secondaryButton: nil,
-                   primaryButton: .init(title: L10n.FirstTimeUser.Done.close,
-                                        action: .done))
+                                      secondaryButton: .init(title: L10n.FirstTimeUser.DoneConfirmation.confirm,
+                                                             action: .done),
+                                      primaryButton: .init(title: L10n.FirstTimeUser.DoneConfirmation.startIdentification,
+                                                           action: .triggerIdentification))
         .navigationBarBackButtonHidden(true)
     }
 }

@@ -183,36 +183,44 @@ struct SetupScan: View {
             VStack(alignment: .leading, spacing: 0) {
                 ScrollView {
                     if viewStore.state.showLottie {
-                        LottieView(name: "38076-id-scan")
+                        LottieView(name: "animation_id-scan")
                             .aspectRatio(contentMode: .fit)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 10)
-                        Spacer()
                     }
                     
                     if let title = viewStore.state.errorTitle {
                         HeaderView(title: title, message: viewStore.state.errorBody)
-                    }
-                }
-                if viewStore.isScanning {
-                    VStack {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: Color.blue900))
-                            .scaleEffect(3)
-                            .frame(maxWidth: .infinity)
-                            .padding(50)
-                        if viewStore.showProgressCaption {
-                        	Text(L10n.FirstTimeUser.Scan.Progress.caption)
-                            	.font(.bundTitle)
-                            	.foregroundColor(.blackish)
-                                .padding(.bottom, 50)
+                            .padding(.bottom)
+                    } else {
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text(L10n.FirstTimeUser.Scan.title)
+                                .font(.bundLargeTitle)
+                                .foregroundColor(.blackish)
+                                .padding(.bottom, 24)
+                            Text(L10n.FirstTimeUser.Scan.body)
+                                .font(.bundBody)
+                                .foregroundColor(.blackish)
+                                .padding(.bottom, 24)
+                            Button {
+                                
+                            } label: {
+                                Text(L10n.FirstTimeUser.Scan.info)
+                                    .bold()
+                            }
+                            .padding()
+                            .background(RoundedRectangle(cornerRadius: 12).foregroundColor(.blue200))
+                            .padding(.bottom, 16)
+                            Button {
+                                
+                            } label: {
+                                Text(L10n.FirstTimeUser.Scan.help)
+                                    .bold()
+                            }
+                            .padding()
+                            .background(RoundedRectangle(cornerRadius: 12).foregroundColor(.blue200))
                         }
+                        .padding()
                     }
-                } else {
-                    DialogButtons(store: store.stateless,
-                                  secondary: nil,
-                                  primary: .init(title: L10n.FirstTimeUser.Scan.scan, action: .startScan))
-                    .disabled(viewStore.isScanning)
+                    
                 }
             }.onChange(of: viewStore.state.attempt, perform: { _ in
                 viewStore.send(.startScan)

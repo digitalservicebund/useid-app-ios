@@ -84,10 +84,11 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                         .identificationCoordinator(.routeAction(_, action: .cardError(.done))):
                     state.routes.dismiss()
                     return .none
-                case .setupCoordinator(.afterConfirmEnd), .identificationCoordinator(.afterConfirmEnd):
+                case .setupCoordinator(.afterConfirmEnd),
+                        .identificationCoordinator(.afterConfirmEnd):
                     state.routes.dismiss()
                     return .none
-                case .setupCoordinator(.routeAction(_, action: .done(.done))):
+                case .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification))):
                     if let tokenURL = state.tokenURL {
                         return Effect.routeWithDelaysIfUnsupported(state.routes) {
                             $0.dismiss()
@@ -97,6 +98,9 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                         state.routes.dismiss()
                         return .none
                     }
+                case .setupCoordinator(.routeAction(_, action: .done(.done))):
+                    state.routes.dismiss()
+                    return .none
                 case .home(.triggerIdentification(tokenURL: let tokenURL)):
                     state.routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
                     return .none

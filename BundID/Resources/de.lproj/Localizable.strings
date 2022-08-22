@@ -19,8 +19,9 @@
 "firstTimeUser_personalPIN_confirmation" = "Geben Sie Ihre persönliche PIN zur Bestätigung noch einmal ein.";
 "firstTimeUser_personalPIN_error_mismatch_title" = "PINs stimmen nicht überein";
 "firstTimeUser_personalPIN_error_mismatch_body" = "Versuchen Sie es erneut.";
-"firstTimeUser_scan_title" = "Legen Sie Ihren Ausweis dicht an die Rückseite Ihres Smartphones – fast geschafft!";
-"firstTimeUser_scan_body" = "So wird Ihre persönliche PIN Ihrem Ausweis zugeordnet.";
+"firstTimeUser_scan_title" = "Übertragen Sie ihre neue PIN auf den Ausweis.";
+"firstTimeUser_scan_body" = "Fast geschafft! Bitte halten Sie Ihren Ausweis dicht an die Rückseite des Smartphones. Die App nutzt die NFC-Sensoren in Smartphone und Ausweis, um ihrem Ausweis die neue PIN zuzuordnen.";
+"firstTimeUser_scan_info" = "Wie funktioniert die NFC-Technologie?";
 "firstTimeUser_scan_help" = "Mein Ausweis wird nicht erkannt";
 "firstTimeUser_scan_scan" = "Ausweis auslesen";
 "firstTimeUser_scan_progress_caption" = "Ausweis nicht bewegen";
@@ -32,6 +33,9 @@
 "firstTimeUser_incorrectTransportPIN_end_title" = "Einrichtung beenden?";
 "firstTimeUser_incorrectTransportPIN_end_message" = "Möchten Sie die Einrichtung Ihres Personalausweises beenden?";
 "firstTimeUser_incorrectTransportPIN_end_confirm" = "Beenden";
+"firstTimeUser_doneConfirmation_title" = "Sie haben Ihren Online-Ausweis erfolgreich eingerichtet.";
+"firstTimeUser_doneConfirmation_startIdentification" = "Jetzt ausweisen";
+"firstTimeUser_doneConfirmation_confirm" = "Fertig";
 "firstTimeUser_scan_scanError_idCardInteraction_title" = "Ihr Ausweis konnte nicht ausgelesen werden";
 "firstTimeUser_scan_scanError_idCardInteraction_body" = "Versuchen Sie diese Schritte:\n\n • Entfernen Sie die Karte von Ihrem Telefon und legen Sie sie erneut an das Telefon.\n\n • Wenn Sie eine sehr dicke Handyhülle haben, versuchen Sie, die Hülle zu entfernen.";
 "firstTimeUser_scan_scanError_unexpectedEvent_title" = "Es ist ein Fehler passiert";
