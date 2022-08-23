@@ -5,17 +5,16 @@ struct LottieView: UIViewRepresentable {
     
     var name: String
     var loopMode: LottieLoopMode = .loop
+    var cache: LRUAnimationCache = .sharedCache
+    var backgroundColor: SwiftUI.Color?
 
     func makeUIView(context: UIViewRepresentableContext<LottieView>) -> UIView {
         
-        let animation = Animation.named(name)
-        
         let animationView = AnimationView()
-        animationView.animation = animation
         animationView.contentMode = .scaleAspectFit
         animationView.loopMode = loopMode
         animationView.translatesAutoresizingMaskIntoConstraints = false
-        animationView.play()
+        animationView.backgroundColor = backgroundColor != nil ? UIColor(backgroundColor!) : nil
         
         let view = UIView(frame: .zero)
         view.addSubview(animationView)
@@ -24,6 +23,14 @@ struct LottieView: UIViewRepresentable {
             animationView.heightAnchor.constraint(equalTo: view.heightAnchor),
             animationView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
+        
+        Task {
+            let animation = Animation.named(name, animationCache: cache)
+            await MainActor.run {
+                animationView.animation = animation
+                animationView.play()
+            }
+        }
 
         return view
     }

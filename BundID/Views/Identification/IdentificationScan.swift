@@ -183,7 +183,7 @@ struct IdentificationScan: View {
             VStack(alignment: .leading, spacing: 0) {
                 ScrollView {
                     if viewStore.state.showLottie {
-                        LottieView(name: "animation_id-scan")
+                        LottieView(name: "animation_id-scan", backgroundColor: Color(0xEBEFF2))
                             .aspectRatio(contentMode: .fit)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 10)
