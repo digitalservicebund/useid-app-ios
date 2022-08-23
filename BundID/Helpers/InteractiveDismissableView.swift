@@ -2,17 +2,19 @@ import Foundation
 import SwiftUI
 
 extension View {
-    public func interactiveDismissDisabled(onAttemptToDismiss: (() -> Void)? = nil) -> some View {
-        InteractiveDismissableView(view: self, onAttemptToDismiss: onAttemptToDismiss)
+    public func interactiveDismissDisabled(_ dismissDisabled: Bool = true, onAttemptToDismiss: (() -> Void)? = nil) -> some View {
+        InteractiveDismissableView(view: self, dismissDisabled: dismissDisabled, onAttemptToDismiss: onAttemptToDismiss)
     }
 }
 
 class SubHostingController<T: View>: UIHostingController<T>, UIAdaptivePresentationControllerDelegate {
     
     let onAttemptToDismiss: (() -> Void)?
+    var dismissDisabled: Bool
     
-    init(rootView: T, onAttemptToDismiss: (() -> Void)?) {
+    init(rootView: T, dismissDisabled: Bool, onAttemptToDismiss: (() -> Void)?) {
         self.onAttemptToDismiss = onAttemptToDismiss
+        self.dismissDisabled = dismissDisabled
         super.init(rootView: rootView)
     }
     
@@ -26,7 +28,7 @@ class SubHostingController<T: View>: UIHostingController<T>, UIAdaptivePresentat
     }
     
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
-        return false
+        return !dismissDisabled
     }
     
     func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
@@ -37,13 +39,15 @@ class SubHostingController<T: View>: UIHostingController<T>, UIAdaptivePresentat
 struct InteractiveDismissableView<T: View>: UIViewControllerRepresentable {
     
     let view: T
+    let dismissDisabled: Bool
     let onAttemptToDismiss: (() -> Void)?
     
-    func makeUIViewController(context: Context) -> UIHostingController<T> {
-        SubHostingController(rootView: view, onAttemptToDismiss: onAttemptToDismiss)
+    func makeUIViewController(context: Context) -> SubHostingController<T> {
+        SubHostingController(rootView: view, dismissDisabled: dismissDisabled, onAttemptToDismiss: onAttemptToDismiss)
     }
     
-    func updateUIViewController(_ uiViewController: UIHostingController<T>, context: Context) {
+    func updateUIViewController(_ subHostingController: SubHostingController<T>, context: Context) {
+        subHostingController.dismissDisabled = dismissDisabled
     }
     
     func makeCoordinator() -> Coordinator {

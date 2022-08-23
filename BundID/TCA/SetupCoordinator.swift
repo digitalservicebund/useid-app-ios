@@ -8,6 +8,15 @@ struct SetupCoordinatorState: Equatable, IndexedRouterState {
     var transportPIN: String = ""
     var attempt: Int = 0
     var tokenURL: String?
+    var needsEndConfirmation: Bool {
+        routes.contains {
+            switch $0.screen {
+            case .transportPIN: return true
+            default: return false
+            }
+        }
+    }
+    var alert: AlertState<SetupCoordinatorAction>?
     
     var routes: [Route<SetupScreenState>] {
         get {
@@ -34,7 +43,10 @@ struct SetupCoordinatorState: Equatable, IndexedRouterState {
 enum SetupCoordinatorAction: Equatable, IndexedRouterAction {
     case routeAction(Int, action: SetupScreenAction)
     case updateRoutes([Route<SetupScreenState>])
+    case end
+    case confirmEnd
     case afterConfirmEnd
+    case dismissAlert
 }
 
 let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorAction, AppEnvironment> = setupScreenReducer
@@ -75,6 +87,17 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
                 state.transportPIN = transportPIN
                 state.attempt += 1
                 state.routes.dismiss()
+            case .end:
+                state.alert = AlertState(title: TextState(verbatim: L10n.FirstTimeUser.IncorrectTransportPIN.End.title),
+                                         message: TextState(verbatim: L10n.FirstTimeUser.IncorrectTransportPIN.End.message),
+                                         primaryButton: .destructive(TextState(verbatim: L10n.FirstTimeUser.IncorrectTransportPIN.End.confirm),
+                                                                     action: .send(.confirmEnd)),
+                                         secondaryButton: .cancel(TextState(verbatim: L10n.General.cancel)))
+            case .confirmEnd:
+                return .none
+            case .dismissAlert:
+                state.alert = nil
+                return .none
             default:
                 break
             }
@@ -86,35 +109,43 @@ struct SetupCoordinatorView: View {
     let store: Store<SetupCoordinatorState, SetupCoordinatorAction>
     
     var body: some View {
-        TCARouter(store) { screen in
-            SwitchStore(screen) {
-                CaseLet(state: /SetupScreenState.intro,
-                        action: SetupScreenAction.intro,
-                        then: SetupIntro.init)
-                CaseLet(state: /SetupScreenState.transportPINIntro,
-                        action: SetupScreenAction.transportPINIntro,
-                        then: SetupTransportPINIntro.init)
-                CaseLet(state: /SetupScreenState.transportPIN,
-                        action: SetupScreenAction.transportPIN,
-                        then: SetupTransportPIN.init)
-                CaseLet(state: /SetupScreenState.personalPINIntro,
-                        action: SetupScreenAction.personalPINIntro,
-                        then: SetupPersonalPINIntro.init)
-                CaseLet(state: /SetupScreenState.personalPIN,
-                        action: SetupScreenAction.personalPIN,
-                        then: SetupPersonalPIN.init)
-                CaseLet(state: /SetupScreenState.scan,
-                        action: SetupScreenAction.scan,
-                        then: SetupScan.init)
-                CaseLet(state: /SetupScreenState.done,
-                        action: SetupScreenAction.done,
-                        then: SetupDone.init)
-                CaseLet(state: /SetupScreenState.error,
-                        action: SetupScreenAction.error,
-                        then: CardError.init)
-                CaseLet(state: /SetupScreenState.incorrectTransportPIN,
-                        action: SetupScreenAction.incorrectTransportPIN,
-                        then: SetupIncorrectTransportPIN.init)
+        WithViewStore(store) { viewStore in
+            NavigationView {
+                TCARouter(store) { screen in
+                    SwitchStore(screen) {
+                        CaseLet(state: /SetupScreenState.intro,
+                                action: SetupScreenAction.intro,
+                                then: SetupIntro.init)
+                        CaseLet(state: /SetupScreenState.transportPINIntro,
+                                action: SetupScreenAction.transportPINIntro,
+                                then: SetupTransportPINIntro.init)
+                        CaseLet(state: /SetupScreenState.transportPIN,
+                                action: SetupScreenAction.transportPIN,
+                                then: SetupTransportPIN.init)
+                        CaseLet(state: /SetupScreenState.personalPINIntro,
+                                action: SetupScreenAction.personalPINIntro,
+                                then: SetupPersonalPINIntro.init)
+                        CaseLet(state: /SetupScreenState.personalPIN,
+                                action: SetupScreenAction.personalPIN,
+                                then: SetupPersonalPIN.init)
+                        CaseLet(state: /SetupScreenState.scan,
+                                action: SetupScreenAction.scan,
+                                then: SetupScan.init)
+                        CaseLet(state: /SetupScreenState.done,
+                                action: SetupScreenAction.done,
+                                then: SetupDone.init)
+                        CaseLet(state: /SetupScreenState.error,
+                                action: SetupScreenAction.error,
+                                then: CardError.init)
+                        CaseLet(state: /SetupScreenState.incorrectTransportPIN,
+                                action: SetupScreenAction.incorrectTransportPIN,
+                                then: SetupIncorrectTransportPIN.init)
+                    }
+                }
+                .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
+            }
+            .interactiveDismissDisabled(viewStore.needsEndConfirmation) {
+                viewStore.send(.end)
             }
         }
     }
