@@ -34,7 +34,7 @@ struct CoordinatorState: Equatable, IndexedRouterState {
         if setupPreviouslyFinished {
             routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: url)), embedInNavigationView: true)
         } else {
-            routes.presentSheet(.setupCoordinator(SetupCoordinatorState()), embedInNavigationView: true)
+            routes.presentSheet(.setupCoordinator(SetupCoordinatorState(tokenURL: tokenURL)), embedInNavigationView: true)
         }
         return .none
     }

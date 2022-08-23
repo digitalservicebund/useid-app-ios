@@ -56,12 +56,9 @@ struct HomeView: View {
             ImageMeta(name: "AbstractWidget").image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
+#if PREVIEW
             Button {
-                if let tokenURL = viewStore.tokenURL {
-                    viewStore.send(.triggerIdentification(tokenURL: tokenURL))
-                } else {
-                    viewStore.send(.triggerIdentification(tokenURL: demoTokenURL))
-                }
+                viewStore.send(.triggerIdentification(tokenURL: viewStore.tokenURL ?? demoTokenURL))
             } label: {
                 Text(L10n.Home.Header.title)
                     .font(.title)
@@ -69,6 +66,11 @@ struct HomeView: View {
             }
             .buttonStyle(.plain)
             .padding(.bottom)
+#else
+            Text(L10n.Home.Header.title)
+                .font(.title)
+                .bold()
+#endif
             Text(L10n.Home.Header.infoText)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 20)

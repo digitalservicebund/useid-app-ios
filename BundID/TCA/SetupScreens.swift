@@ -7,7 +7,7 @@ enum SetupScreenState: Equatable {
     case personalPINIntro
     case personalPIN(SetupPersonalPINState)
     case scan(SetupScanState)
-    case done
+    case done(SetupDoneState)
     case incorrectTransportPIN(SetupIncorrectTransportPINState)
     case error(CardErrorState)
 }

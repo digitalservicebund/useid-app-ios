@@ -7,6 +7,8 @@ import SwiftUI
 struct SetupCoordinatorState: Equatable, IndexedRouterState {
     var transportPIN: String = ""
     var attempt: Int = 0
+    var tokenURL: String?
+    
     var routes: [Route<SetupScreenState>] {
         get {
             states.map {
@@ -56,7 +58,7 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
             case .routeAction(_, action: .personalPIN(.done(pin: let pin))):
                 state.routes.push(.scan(SetupScanState(transportPIN: state.transportPIN, newPIN: pin)))
             case .routeAction(_, action: .scan(.scannedSuccessfully)):
-                state.routes.push(.done)
+                state.routes.push(.done(SetupDoneState(tokenURL: state.tokenURL)))
             case .routeAction(_, action: .scan(.error(let errorType))):
                 state.routes.push(.error(CardErrorState(errorType: errorType)))
             case .routeAction(_, action: .scan(.wrongTransportPIN(remainingAttempts: let remainingAttempts))):
