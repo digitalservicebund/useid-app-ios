@@ -227,6 +227,7 @@ struct IdentificationScan: View {
                 viewStore.send(.onAppear)
             }
         }
+        .navigationBarBackButtonHidden(true)
 #if PREVIEW
         .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: IdentificationScanAction.runDebugSequence)
 #endif
