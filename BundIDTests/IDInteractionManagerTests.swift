@@ -22,24 +22,6 @@ extension MockContextManagerType: NSObjectProtocol {
 }
 
 class IDInteractionManagerTests: XCTestCase {
-    func testInitCallsContext() throws {
-        let mockOpenEcard = MockOpenEcardType()
-        let mockContextManager = MockContextManagerType()
-        
-        stub(mockOpenEcard) {
-            $0.context(any()).thenReturn(mockContextManager)
-        }
-        
-        stub(mockContextManager) {
-            $0.initializeContext(any()).thenDoNothing()
-        }
-        
-        _ = IDInteractionManager(openEcard: mockOpenEcard,
-                                 nfcMessageProvider: NFCMessageProvider())
-        
-        verify(mockOpenEcard).context(any())
-    }
-    
     func testChangePIN() throws {
         let mockOpenEcard = MockOpenEcardType()
         let mockContextManager = MockContextManagerType()
@@ -52,8 +34,7 @@ class IDInteractionManagerTests: XCTestCase {
             $0.initializeContext(any()).thenDoNothing()
         }
         
-        let interactionManager = IDInteractionManager(openEcard: mockOpenEcard,
-                                                      nfcMessageProvider: NFCMessageProvider())
+        let interactionManager = IDInteractionManager(openEcard: mockOpenEcard)
         
         _ = interactionManager.changePIN()
         
@@ -62,5 +43,29 @@ class IDInteractionManagerTests: XCTestCase {
         let argument = argumentCaptor.value as! StartServiceHandler
         
         XCTAssertEqual(argument.task, .pinManagement)
+    }
+    
+    func testIdentify() throws {
+        let mockOpenEcard = MockOpenEcardType()
+        let mockContextManager = MockContextManagerType()
+        
+        stub(mockOpenEcard) {
+            $0.context(any()).thenReturn(mockContextManager)
+        }
+        
+        stub(mockContextManager) {
+            $0.initializeContext(any()).thenDoNothing()
+        }
+        
+        let interactionManager = IDInteractionManager(openEcard: mockOpenEcard)
+        
+        let tokenURL = "eid://tokenURL.org"
+        _ = interactionManager.identify(tokenURL: tokenURL, nfcMessages: .identification)
+        
+        let argumentCaptor = ArgumentCaptor<NSObjectProtocol & StartServiceHandlerProtocol>()
+        verify(mockContextManager).initializeContext(argumentCaptor.capture())
+        let argument = argumentCaptor.value as! StartServiceHandler
+        
+        XCTAssertEqual(argument.task, .eac(tokenURL: tokenURL))
     }
 }

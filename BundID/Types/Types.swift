@@ -5,8 +5,8 @@ import OpenEcard
 import Combine
 
 protocol IDInteractionManagerType {
-    func identify(tokenURL: String) -> EIDInteractionPublisher
-    func changePIN() -> EIDInteractionPublisher
+    func identify(tokenURL: String, nfcMessages: NFCMessages) -> EIDInteractionPublisher
+    func changePIN(nfcMessages: NFCMessages) -> EIDInteractionPublisher
 }
 
 protocol OpenEcardType: OpenEcardProtocol {

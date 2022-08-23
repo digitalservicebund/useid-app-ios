@@ -39,7 +39,7 @@ final class CoordinatorTests: XCTestCase {
             guard case .home(var homeState) = $0.states[0].screen else { return XCTFail("Incorrect state") }
             homeState.tokenURL = tokenURLString
             $0.tokenURL = tokenURLString
-            $0.states = [.root(.home(homeState)), .sheet(.setupCoordinator(SetupCoordinatorState(tokenURL: tokenURLString)), embedInNavigationView: true)]
+            $0.states = [.root(.home(homeState)), .sheet(.setupCoordinator(SetupCoordinatorState(tokenURL: tokenURLString)), embedInNavigationView: false)]
         }
     }
     

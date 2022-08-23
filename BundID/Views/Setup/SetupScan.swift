@@ -60,10 +60,10 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
             state.availableDebugActions = debuggableInteraction.sequence
             publisher = debuggableInteraction.publisher
         } else {
-            publisher = environment.idInteractionManager.changePIN()
+            publisher = environment.idInteractionManager.changePIN(nfcMessages: .setup)
         }
 #else
-        publisher = environment.idInteractionManager.changePIN()
+        publisher = environment.idInteractionManager.changePIN(nfcMessages: .setup)
 #endif
         return publisher
             .receive(on: environment.mainQueue)
@@ -111,8 +111,7 @@ extension SetupScanState {
             print("Authentication started")
         case .requestCardInsertion(let messageCallback):
             self.showProgressCaption = false
-            print("Request card insertion.")
-            messageCallback("Request card insertion.")
+            messageCallback(L10n.FirstTimeUser.Scan.scanningCard)
         case .cardInteractionComplete: print("Card interaction complete.")
         case .cardRecognized: print("Card recognized.")
         case .cardRemoved:
@@ -183,41 +182,6 @@ extension SetupScanState {
         default:
             return true
         }
-    }
-}
-
-struct ScanBody: View {
-    
-    let title: String
-    let message: String
-    let infoTapped: () -> Void
-    let helpTapped: () -> Void
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text(title)
-                .font(.bundLargeTitle)
-                .foregroundColor(.blackish)
-                .padding(.bottom, 24)
-            Text(message)
-                .font(.bundBody)
-                .foregroundColor(.blackish)
-                .padding(.bottom, 24)
-            Button(action: infoTapped, label: {
-                Text(L10n.FirstTimeUser.Scan.info)
-                    .bold()
-            })
-            .padding()
-            .background(RoundedRectangle(cornerRadius: 12).foregroundColor(.blue200))
-            .padding(.bottom, 16)
-            Button(action: helpTapped, label: {
-                Text(L10n.FirstTimeUser.Scan.help)
-                    .bold()
-            })
-            .padding()
-            .background(RoundedRectangle(cornerRadius: 12).foregroundColor(.blue200))
-        }
-        .padding()
     }
 }
 

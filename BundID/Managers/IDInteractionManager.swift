@@ -10,23 +10,27 @@ extension OpenEcardImp: OpenEcardType {}
 class IDInteractionManager: IDInteractionManagerType {
     
     private let openEcard: OpenEcardProtocol
-    private let context: ContextManagerProtocol
+    private var context: ContextManagerProtocol?
     
-    init(openEcard: OpenEcardProtocol = OpenEcardImp(), nfcMessageProvider: NFCConfigType = NFCMessageProvider()) {
+    init(openEcard: OpenEcardProtocol = OpenEcardImp()) {
         self.openEcard = openEcard
-        self.context = openEcard.context(nfcMessageProvider)
     }
     
-    func identify(tokenURL: String) -> EIDInteractionPublisher {
-        start(startServiceHandler: StartServiceHandler(task: .eac(tokenURL: tokenURL)))
+    func identify(tokenURL: String, nfcMessages: NFCMessages = .identification) -> EIDInteractionPublisher {
+        start(startServiceHandler: StartServiceHandler(task: .eac(tokenURL: tokenURL)),
+              nfcMessages: nfcMessages)
     }
     
-    func changePIN() -> EIDInteractionPublisher {
-        start(startServiceHandler: StartServiceHandler(task: .pinManagement))
+    func changePIN(nfcMessages: NFCMessages = NFCMessages.setup) -> EIDInteractionPublisher {
+        start(startServiceHandler: StartServiceHandler(task: .pinManagement),
+              nfcMessages: nfcMessages)
     }
     
-    private func start(startServiceHandler: StartServiceHandler) -> EIDInteractionPublisher {
+    private func start(startServiceHandler: StartServiceHandler, nfcMessages: NFCMessages) -> EIDInteractionPublisher {
+        let nfcMessageProvider = NFCMessageProvider(nfcMessages: nfcMessages)
+        let context = openEcard.context(nfcMessageProvider)!
         context.initializeContext(startServiceHandler)
+        self.context = context
         return startServiceHandler.publisher
             .handleEvents(receiveCompletion: { [context] _ in
                 startServiceHandler.cancel()

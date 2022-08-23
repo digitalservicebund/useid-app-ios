@@ -5,7 +5,7 @@ import Combine
 struct MockIDInteractionManager: IDInteractionManagerType {
     var queue: AnySchedulerOf<DispatchQueue>
     
-    func changePIN() -> EIDInteractionPublisher {
+    func changePIN(nfcMessages: NFCMessages) -> EIDInteractionPublisher {
         let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
         queue.schedule {
             subject.send(.authenticationStarted)
@@ -14,7 +14,7 @@ struct MockIDInteractionManager: IDInteractionManagerType {
         return subject.eraseToAnyPublisher()
     }
     
-    func identify(tokenURL: String) -> EIDInteractionPublisher {
+    func identify(tokenURL: String, nfcMessages: NFCMessages) -> EIDInteractionPublisher {
         let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
         subject.send(completion: .failure(.frameworkError(message: "Not implemented")))
         return subject.eraseToAnyPublisher()

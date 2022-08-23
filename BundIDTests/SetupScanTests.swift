@@ -43,7 +43,7 @@ class SetupScanTests: XCTestCase {
         
         let queue = scheduler!
         stub(mockIDInteractionManager) { mock in
-            mock.changePIN().then { _ in
+            mock.changePIN(nfcMessages: NFCMessages.setup).then { _ in
                 let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
                 queue.schedule {
                     subject.send(.authenticationStarted)
@@ -99,7 +99,7 @@ class SetupScanTests: XCTestCase {
         
         let queue = scheduler!
         stub(mockIDInteractionManager) { mock in
-            mock.changePIN().then { _ in
+            mock.changePIN(nfcMessages: NFCMessages.setup).then { _ in
                 let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
                 queue.schedule {
                     subject.send(completion: .failure(.frameworkError(message: "Fail")))

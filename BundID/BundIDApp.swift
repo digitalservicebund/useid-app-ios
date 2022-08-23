@@ -48,8 +48,7 @@ struct BundIDApp: App {
                 debugIDInteractionManager: idInteractionManager
             )
         } else {
-            let idInteractionManager = IDInteractionManager(openEcard: OpenEcardImp(),
-                                                            nfcMessageProvider: NFCMessageProvider())
+            let idInteractionManager = IDInteractionManager(openEcard: OpenEcardImp())
             
             environment = AppEnvironment(
                 mainQueue: mainQueue,
@@ -59,8 +58,7 @@ struct BundIDApp: App {
             )
         }
 #else
-        let idInteractionManager = IDInteractionManager(openEcard: OpenEcardImp(),
-                                                        nfcMessageProvider: NFCMessageProvider())
+        let idInteractionManager = IDInteractionManager(openEcard: OpenEcardImp())
         
         environment = AppEnvironment(
             mainQueue: mainQueue,

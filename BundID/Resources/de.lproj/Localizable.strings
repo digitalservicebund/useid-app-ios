@@ -27,6 +27,8 @@
 "firstTimeUser_scan_help" = "Mein Ausweis wird nicht erkannt";
 "firstTimeUser_scan_scan" = "Ausweis auslesen";
 "firstTimeUser_scan_progress_caption" = "Ausweis nicht bewegen";
+"firstTimeUser_scan_scanningCard" = "Ausweis wird geprüft";
+"firstTimeUser_scan_scanSuccess" = "PIN erfolgreich übertragen";
 "firstTimeUser_incorrectTransportPIN_title" = "Falsche Transport-PIN";
 "firstTimeUser_incorrectTransportPIN_body" = "Geben Sie Ihre 5-stellige Transport-PIN aus dem PIN-Brief ein.";
 "firstTimeUser_incorrectTransportPIN_continue" = "Weiter";
@@ -84,6 +86,7 @@
 "identification_scan_title" = "Rufen Sie die Daten von Ihrem Ausweis ab.";
 "identification_scan_message" = "Halten Sie Ihren Ausweis dicht an die Rückseite des Smartphones. Die App nutzt die NFC-Sensoren in Smartphone und Ausweis, um Ihre PIN zu überprüfen und die benötigten Daten abzurufen.";
 "identification_scan_scan" = "Jetzt Daten abrufen";
+"identification_scan_scanSuccess" = "Übertragung erfolgreich";
 
 "identification_scan_unexpectedError_title" = "Fehler aufgetreten";
 "identification_scan_unexpectedError_message" = "Ein unerwarteter Fehler ist aufgetreten. Bitte kehren Sie zur Webseite zurück und wiederholen Sie den Vorgang.";
@@ -107,6 +110,13 @@
 "cardAttribute_dg19" = "Nebenbestimmungen I";
 "cardAttribute_restrictedIdentification" = "Schlüssel für anbieter- und kartenspezifische Kennung";
 "cardAttribute_ageVerification" = "Vergleichsgeburtsdatum für Altersverifikation";
+
+"cardInteraction_provideCard" = "Platzieren Sie Ihren Ausweis oben dicht an die obere Geräterückseite.";
+"cardInteraction_cardRecognized" = "Ausweis erkannt";
+"cardInteraction_error_default" = "Fehler beim Lesen aufgetreten";
+"cardInteraction_error_timeout" = "Zeitlimit erreicht";
+"cardInteraction_error_tagLost" = "Karte wurde entfernt";
+"cardInteraction_cardConnected" = "Ausweis verbunden";
 
 "home_header_title" = "Ausweisen";
 "home_header_infoText" = "Öffnen Sie auf ihrem Smartphone die Internseite vom Anbieter und drücken Sie auf den Button »Mit Bundes Login ausweisen«";
