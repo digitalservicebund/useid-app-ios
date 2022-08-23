@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D2A6773828B4DD5D0033373E /* Array+SafeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */; };
 		E10BB69A28AF7FB2007EF50C /* LocalizedStrings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */; };
 		E10BB69B28AF83DD007EF50C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1AB87AA2825238D00C7FC94 /* Localizable.strings */; };
 		E10BB69C28AF83E1007EF50C /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
@@ -136,6 +137,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+SafeTests.swift"; sourceTree = "<group>"; };
 		E110400C281C389C004BA03E /* SetupIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntro.swift; sourceTree = "<group>"; };
 		E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUITestHelper.swift; sourceTree = "<group>"; };
 		E11EB2AA2853A8B6008B4042 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
@@ -402,6 +404,7 @@
 				E13F9E3E288804140088E955 /* IdentificationScanTests.swift */,
 				E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */,
 				E13F9E44288853950088E955 /* CoordinatorTests.swift */,
+				D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */,
 			);
 			path = BundIDTests;
 			sourceTree = "<group>";
@@ -762,6 +765,7 @@
 				E13F9E3B2886F3420088E955 /* IdentificationCoordinatorTests.swift in Sources */,
 				E13925C42841111100161F5C /* GeneratedMocks.swift in Sources */,
 				E13F9E45288853950088E955 /* CoordinatorTests.swift in Sources */,
+				D2A6773828B4DD5D0033373E /* Array+SafeTests.swift in Sources */,
 				E1AAACF328378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift in Sources */,
 				E13F9E43288835350088E955 /* IdentificationCoordinatorStateTests.swift in Sources */,
 				E13F9E3F288804140088E955 /* IdentificationScanTests.swift in Sources */,
