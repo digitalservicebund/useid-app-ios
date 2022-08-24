@@ -36,13 +36,7 @@ let setupIncorrectTransportPINReducer = Reducer<SetupIncorrectTransportPINState,
 
 struct SetupIncorrectTransportPIN: View {
     
-    var store: Store<SetupIncorrectTransportPINState, SetupIncorrectTransportPINAction>
-    var viewStore: ViewStore<SetupIncorrectTransportPINState, SetupIncorrectTransportPINAction>
-    
-    init(store: Store<SetupIncorrectTransportPINState, SetupIncorrectTransportPINAction>) {
-        self.store = store
-        self.viewStore = ViewStore(store)
-    }
+    let store: Store<SetupIncorrectTransportPINState, SetupIncorrectTransportPINAction>
     
     var body: some View {
         NavigationView {
@@ -103,7 +97,7 @@ struct SetupIncorrectTransportPIN: View {
             .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
         }
         .interactiveDismissDisabled {
-            viewStore.send(.end)
+            ViewStore(store.stateless).send(.end)
         }
     }
 }

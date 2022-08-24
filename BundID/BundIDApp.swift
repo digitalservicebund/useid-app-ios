@@ -86,15 +86,13 @@ struct BundIDApp: App {
     
     var body: some Scene {
         WindowGroup {
-            WithViewStore(store.stateless) { viewStore in
-                CoordinatorView(store: store)
-                    .onOpenURL { url in
-                        viewStore.send(.openURL(url))
-                    }
-                    .onAppear {
-                        viewStore.send(.onAppear)
-                    }
-            }
+            CoordinatorView(store: store)
+                .onOpenURL { url in
+                    ViewStore(store.stateless).send(.openURL(url))
+                }
+                .onAppear {
+                    ViewStore(store.stateless).send(.onAppear)
+                }
         }
     }
 }
