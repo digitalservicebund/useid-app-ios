@@ -6,6 +6,10 @@
 "firstTimeUser_pinLetter_body" = "Der PIN-Brief wurde Ihnen nach der Beantragung des Ausweises zugesandt.";
 "firstTimeUser_pinLetter_yes" = "Ja, PIN-Brief vorhanden";
 "firstTimeUser_pinLetter_no" = "Nein, neuen PIN-Brief bestellen";
+"firstTimeUser_missingPINLetter_title" = "Neuen PIN-Brief bestellen";
+"firstTimeUser_missingPINLetter_body" = "Wir arbeiten noch an dieser Funktion.\n\nWeitere Informationen über den PIN-Rücksetzbrief finden Sie unter";
+"firstTimeUser_missingPINLetter_link_title" = "www.pin-ruecksetzbrief-bestellen.de ↗";
+"firstTimeUser_missingPINLetter_link_url" = "https://www.pin-ruecksetzbrief-bestellen.de";
 "firstTimeUser_transportPIN_title" = "Geben Sie Ihre 5-stellige Transport-PIN aus dem PIN-Brief ein";
 "firstTimeUser_transportPIN_continue" = "Weiter";
 "firstTimeUser_transportPIN_textFieldLabel" = "Transport-PIN, fünfstellig";

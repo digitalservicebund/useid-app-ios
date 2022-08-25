@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		B9C7735028B3C64100E41332 /* animation_id-scan.json in Resources */ = {isa = PBXBuildFile; fileRef = B9C7734F28B3C64100E41332 /* animation_id-scan.json */; };
+		D28D27FF28B7A91B008DA310 /* MissingPINLetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */; };
+		D28D280228B7A9F5008DA310 /* SetupDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D280028B7A9F5008DA310 /* SetupDone.swift */; };
+		D28D280328B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D280128B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift */; };
 		D2A6773828B4DD5D0033373E /* Array+SafeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */; };
 		E10BB69A28AF7FB2007EF50C /* LocalizedStrings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */; };
 		E10BB69B28AF83DD007EF50C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1AB87AA2825238D00C7FC94 /* Localizable.strings */; };
@@ -20,7 +23,6 @@
 		E128E0BC28898D3400C5195F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E128E0BB28898D3400C5195F /* AppDelegate.swift */; };
 		E12CB30428494B0B0039FD56 /* OpenECardTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB30328494B0B0039FD56 /* OpenECardTypes.swift */; };
 		E12CB30628494BD70039FD56 /* IDInteractionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */; };
-		E12CB308284A146E0039FD56 /* SetupIncorrectTransportPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB307284A146D0039FD56 /* SetupIncorrectTransportPIN.swift */; };
 		E12CB30A284A2C700039FD56 /* InteractiveDismissableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB309284A2C700039FD56 /* InteractiveDismissableView.swift */; };
 		E135D6AA28B7696400A32862 /* SetupCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E135D6A928B7696400A32862 /* SetupCoordinatorTests.swift */; };
 		E135D6AC28B76A3500A32862 /* Matchable+UseID.swift in Sources */ = {isa = PBXBuildFile; fileRef = E135D6AB28B76A3500A32862 /* Matchable+UseID.swift */; };
@@ -68,7 +70,6 @@
 		E1AB87AC2825238D00C7FC94 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1AB87AA2825238D00C7FC94 /* Localizable.strings */; };
 		E1B6991C2869B31B00360273 /* DebugIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B6991B2869B31B00360273 /* DebugIDInteractionManager.swift */; };
 		E1B7A4F628B674850086933E /* RichText in Frameworks */ = {isa = PBXBuildFile; productRef = E1B7A4F528B674850086933E /* RichText */; };
-		E1BD6C792847A2E5003048E4 /* SetupDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BD6C782847A2E5003048E4 /* SetupDone.swift */; };
 		E1C2D8BA28620E2B000E0F5B /* IdentificationScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C2D8B928620E2B000E0F5B /* IdentificationScan.swift */; };
 		E1CD8E88281FF62F008ADA2A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E87281FF62F008ADA2A /* Colors.swift */; };
 		E1CD8E8C281FFCC1008ADA2A /* BundesSans-DTP-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E1CD8E8A281FFCC1008ADA2A /* BundesSans-DTP-Regular.otf */; };
@@ -144,6 +145,9 @@
 
 /* Begin PBXFileReference section */
 		B9C7734F28B3C64100E41332 /* animation_id-scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "animation_id-scan.json"; sourceTree = "<group>"; };
+		D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissingPINLetter.swift; sourceTree = "<group>"; };
+		D28D280028B7A9F5008DA310 /* SetupDone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupDone.swift; sourceTree = "<group>"; };
+		D28D280128B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupIncorrectTransportPIN.swift; sourceTree = "<group>"; };
 		D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+SafeTests.swift"; sourceTree = "<group>"; };
 		E110400C281C389C004BA03E /* SetupIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntro.swift; sourceTree = "<group>"; };
 		E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUITestHelper.swift; sourceTree = "<group>"; };
@@ -152,7 +156,6 @@
 		E128E0BB28898D3400C5195F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E12CB30328494B0B0039FD56 /* OpenECardTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenECardTypes.swift; sourceTree = "<group>"; };
 		E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDInteractionManagerTests.swift; sourceTree = "<group>"; };
-		E12CB307284A146D0039FD56 /* SetupIncorrectTransportPIN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupIncorrectTransportPIN.swift; sourceTree = "<group>"; };
 		E12CB309284A2C700039FD56 /* InteractiveDismissableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractiveDismissableView.swift; sourceTree = "<group>"; };
 		E135D6A928B7696400A32862 /* SetupCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCoordinatorTests.swift; sourceTree = "<group>"; };
 		E135D6AB28B76A3500A32862 /* Matchable+UseID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Matchable+UseID.swift"; sourceTree = "<group>"; };
@@ -200,7 +203,6 @@
 		E1AB87A3282413A700C7FC94 /* PINTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINTextField.swift; sourceTree = "<group>"; };
 		E1AB87AB2825238D00C7FC94 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E1B6991B2869B31B00360273 /* DebugIDInteractionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugIDInteractionManager.swift; sourceTree = "<group>"; };
-		E1BD6C782847A2E5003048E4 /* SetupDone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupDone.swift; sourceTree = "<group>"; };
 		E1C2D8B928620E2B000E0F5B /* IdentificationScan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationScan.swift; sourceTree = "<group>"; };
 		E1CD8E87281FF62F008ADA2A /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		E1CD8E8A281FFCC1008ADA2A /* BundesSans-DTP-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BundesSans-DTP-Regular.otf"; sourceTree = "<group>"; };
@@ -322,14 +324,15 @@
 		E13F9E372886F2C70088E955 /* Setup */ = {
 			isa = PBXGroup;
 			children = (
+				D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */,
+				D28D280028B7A9F5008DA310 /* SetupDone.swift */,
+				D28D280128B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift */,
 				E110400C281C389C004BA03E /* SetupIntro.swift */,
-				E1CD8E9028214FDB008ADA2A /* SetupPINLetterIntro.swift */,
-				E1CD8E92282156F2008ADA2A /* SetupTransportPIN.swift */,
-				E1AB879F2822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift */,
 				E1AAACF92837B98100A51183 /* SetupPersonalPIN */,
+				E1AB879F2822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift */,
+				E1CD8E9028214FDB008ADA2A /* SetupPINLetterIntro.swift */,
 				E16708BF283E6A07001A1637 /* SetupScan.swift */,
-				E1BD6C782847A2E5003048E4 /* SetupDone.swift */,
-				E12CB307284A146D0039FD56 /* SetupIncorrectTransportPIN.swift */,
+				E1CD8E92282156F2008ADA2A /* SetupTransportPIN.swift */,
 			);
 			path = Setup;
 			sourceTree = "<group>";
@@ -817,6 +820,7 @@
 				E16708B3283D4ED2001A1637 /* SetupCoordinator.swift in Sources */,
 				E16708C0283E6A07001A1637 /* SetupScan.swift in Sources */,
 				E1AAACEB2836668200A51183 /* ShakeEffect.swift in Sources */,
+				D28D280228B7A9F5008DA310 /* SetupDone.swift in Sources */,
 				E13925CF28411E2400161F5C /* LottieView.swift in Sources */,
 				E593E279281686DC00154EB0 /* IDInteractionManager.swift in Sources */,
 				E59097B5281153A100CDA144 /* NFCMessageProvider.swift in Sources */,
@@ -826,6 +830,7 @@
 				E16708BE283E666A001A1637 /* Store+Empty.swift in Sources */,
 				E1CD8E9128214FDB008ADA2A /* SetupPINLetterIntro.swift in Sources */,
 				E1EB9FFA28B5288A007FF467 /* ScanBody.swift in Sources */,
+				D28D280328B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift in Sources */,
 				E5E69D852812FB6100A3B66A /* IDCardInteractionError.swift in Sources */,
 				E1EFB5C62858EB2A005C38C6 /* Shape+Fill.swift in Sources */,
 				E12CB30428494B0B0039FD56 /* OpenECardTypes.swift in Sources */,
@@ -836,7 +841,6 @@
 				E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */,
 				E17E1C5128AFAABF004B0815 /* HTMLView.swift in Sources */,
 				E1EFB5C42858EB0F005C38C6 /* IdentificationOverviewLoading.swift in Sources */,
-				E12CB308284A146E0039FD56 /* SetupIncorrectTransportPIN.swift in Sources */,
 				E1F2F3D728770F28004C8D4B /* IdentifiableCallback.swift in Sources */,
 				E1FFDF0C2875C7E9006DFE03 /* UUID+Zero.swift in Sources */,
 				E1AB87A4282413A700C7FC94 /* PINTextField.swift in Sources */,
@@ -855,9 +859,9 @@
 				E16708A7283CD483001A1637 /* SetupPersonalPINErrorView.swift in Sources */,
 				E128E0BC28898D3400C5195F /* AppDelegate.swift in Sources */,
 				E1AB87A02822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift in Sources */,
+				D28D27FF28B7A91B008DA310 /* MissingPINLetter.swift in Sources */,
 				E593E2762816868100154EB0 /* PINManagementInteraction.swift in Sources */,
 				E1AB879A282281C400C7FC94 /* HeaderView.swift in Sources */,
-				E1BD6C792847A2E5003048E4 /* SetupDone.swift in Sources */,
 				E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */,
 				E1F39DD8285791BD00D8D907 /* IdentifiableError.swift in Sources */,
 				E1EFB5C8285A365E005C38C6 /* IdentificationAbout.swift in Sources */,

@@ -35,10 +35,11 @@ struct HeaderView: View {
                     Text(message)
                         .font(.bundBody)
                         .foregroundColor(.blackish)
+                        .padding(.bottom, 24)
                 }
                 if let linkMeta = linkMeta {
                     Link(linkMeta.title, destination: linkMeta.url)
-                        .font(.bundBody)
+                        .font(.bundBodyBold)
                 }
             }
             .padding(.horizontal)
@@ -48,6 +49,7 @@ struct HeaderView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: .infinity, maxHeight: imageMeta.maxHeight)
                     .padding(.vertical, 10)
+                    .padding(.horizontal, 24)
             }
         }
     }

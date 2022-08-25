@@ -51,7 +51,11 @@ struct CardError: View {
     
     var body: some View {
         WithViewStore(store) { viewStore in
-            DialogView(store: store.stateless, title: viewStore.title, message: viewStore.body, linkMeta: viewStore.linkMeta, secondaryButton: nil, primaryButton: .init(title: L10n.FirstTimeUser.Error.close, action: .done))
+            DialogView(store: store.stateless,
+                       title: viewStore.title,
+                       message: viewStore.body,
+                       linkMeta: viewStore.linkMeta,
+                       primaryButton: .init(title: L10n.FirstTimeUser.Error.close, action: .done))
         }.navigationBarBackButtonHidden(true)
     }
 }

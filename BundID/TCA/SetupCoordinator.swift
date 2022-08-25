@@ -56,10 +56,10 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
             switch action {
             case .routeAction(_, .intro(.chooseNo)):
                 state.routes.push(.transportPINIntro)
-            case .routeAction(_, .transportPINIntro(.chooseHasPINLetter)):
+            case .routeAction(_, .transportPINIntro(.availablePINLetter)):
                 state.routes.push(.transportPIN(SetupTransportPINState()))
-            case .routeAction(_, .transportPINIntro(.chooseHasNoPINLetter)):
-                print("Not implemented")
+            case .routeAction(_, .transportPINIntro(.missingPINLetter)):
+                state.routes.push(.missingPINLetter)
             case .routeAction(_, .intro(.chooseYes)):
                 print("Not implemented")
             case .routeAction(_, .transportPIN(.done(let transportPIN))):
@@ -140,6 +140,14 @@ struct SetupCoordinatorView: View {
                         CaseLet(state: /SetupScreenState.incorrectTransportPIN,
                                 action: SetupScreenAction.incorrectTransportPIN,
                                 then: SetupIncorrectTransportPIN.init)
+                        Default {
+                            SwitchStore(screen) {
+                                CaseLet(state: /SetupScreenState.missingPINLetter,
+                                        action: SetupScreenAction.missingPINLetter,
+                                        then: MissingPINLetter.init)
+                            }
+                        }
+                        
                     }
                 }
                 .alert(store.scope(state: \.alert), dismiss: .dismissAlert)

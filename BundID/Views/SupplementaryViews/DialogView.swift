@@ -7,24 +7,8 @@ struct DialogView<Action>: View {
     var message: String?
     var imageMeta: ImageMeta?
     var linkMeta: LinkMeta?
-    var secondaryButtonConfiguration: DialogButtons<Action>.ButtonConfiguration?
-    var primaryButtonConfiguration: DialogButtons<Action>.ButtonConfiguration?
-    
-    init(store: Store<Void, Action>,
-         title: String,
-         message: String?,
-         imageMeta: ImageMeta? = nil,
-         linkMeta: LinkMeta? = nil,
-         secondaryButton: DialogButtons<Action>.ButtonConfiguration? = nil,
-         primaryButton: DialogButtons<Action>.ButtonConfiguration?) {
-        self.store = store
-        self.title = title
-        self.message = message
-        self.imageMeta = imageMeta
-        self.linkMeta = linkMeta
-        self.secondaryButtonConfiguration = secondaryButton
-        self.primaryButtonConfiguration = primaryButton
-    }
+    var secondaryButton: DialogButtons<Action>.ButtonConfiguration?
+    var primaryButton: DialogButtons<Action>.ButtonConfiguration?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -35,8 +19,8 @@ struct DialogView<Action>: View {
                            linkMeta: linkMeta)
             }
             DialogButtons(store: store,
-                          secondary: secondaryButtonConfiguration,
-                          primary: primaryButtonConfiguration)
+                          secondary: secondaryButton,
+                          primary: primaryButton)
         }
         .ignoresSafeArea(.keyboard)
         .navigationBarTitleDisplayMode(.inline)

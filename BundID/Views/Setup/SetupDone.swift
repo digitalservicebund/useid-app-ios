@@ -28,7 +28,6 @@ struct SetupDone: View {
         WithViewStore(store) { viewStore in
             DialogView(store: store.stateless,
                        title: L10n.FirstTimeUser.Done.title,
-                       message: nil,
                        imageMeta: ImageMeta(name: "eIDs"),
                        primaryButton: viewStore.primaryButton)
         }
