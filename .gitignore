@@ -120,7 +120,7 @@ Temporary Items
 # Application specific files to ignore
 BundID/OpenECard/OpenEcard.framework/
 BundID/OpenECard/OpenEcard.xcframework
-BundID/Helpers/LocalizedStrings+Generated.swift
+BundID/Generated
 .swift-packages
 swiftlint.html
 BundIDTests/Generated

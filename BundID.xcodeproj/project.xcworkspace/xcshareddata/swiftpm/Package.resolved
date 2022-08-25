@@ -28,6 +28,15 @@
       }
     },
     {
+      "identity" : "licenseplistviewcontroller",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/yhirano/LicensePlistViewController.git",
+      "state" : {
+        "revision" : "1fb4a71c2e37a4ea1a9a135c6d2aff65130c8a55",
+        "version" : "2.2.0"
+      }
+    },
+    {
       "identity" : "lottie-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/airbnb/lottie-ios",

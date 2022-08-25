@@ -110,8 +110,10 @@ struct HomeView: View {
     var listView: some View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading, spacing: 0) {
-                Button {
-                    
+                NavigationLink {
+                    LicensesView()
+                        .navigationTitle(L10n.Home.Actions.licenses)
+                        .ignoresSafeArea()
                 } label: {
                     Text(L10n.Home.Actions.licenses)
                         .frame(maxWidth: .infinity, alignment: .leading)

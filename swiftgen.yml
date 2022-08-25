@@ -3,6 +3,6 @@ strings:
     - BundID/Resources/de.lproj
   outputs:
     - templateName: structured-swift5
-      output: BundID/Helpers/LocalizedStrings+Generated.swift
+      output: BundID/Generated/LocalizedStrings+Generated.swift
   options:
     separator: "_"
