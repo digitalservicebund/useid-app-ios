@@ -5,8 +5,6 @@ import Combine
 
 @testable import BundID
 
-extension NFCMessages: Matchable {}
-
 class IdentificationCoordinatorTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
@@ -241,5 +239,22 @@ class IdentificationCoordinatorTests: XCTestCase {
         scheduler.advance(by: 0.65)
         
         store.receive(.afterConfirmEnd)
+    }
+    
+    func testEndTriggersConfirmation() {
+        let pin = "123456"
+        let store = TestStore(
+            initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
+                                                         pin: pin,
+                                                         states: [
+                                                            .root(.overview(.loading(IdentificationOverviewLoadingState()))),
+                                                         ]),
+            reducer: identificationCoordinatorReducer,
+            environment: environment
+        )
+        
+        store.send(.end) {
+            $0.alert = AlertState(title: .init(verbatim: L10n.Identification.ConfirmEnd.title), message: .init(verbatim: L10n.Identification.ConfirmEnd.message), primaryButton: .destructive(.init(verbatim: L10n.Identification.ConfirmEnd.confirm), send: .confirmEnd), secondaryButton: .cancel(.init(verbatim: L10n.General.cancel)))
+        }
     }
 }

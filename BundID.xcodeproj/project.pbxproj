@@ -22,6 +22,8 @@
 		E12CB30628494BD70039FD56 /* IDInteractionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */; };
 		E12CB308284A146E0039FD56 /* SetupIncorrectTransportPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB307284A146D0039FD56 /* SetupIncorrectTransportPIN.swift */; };
 		E12CB30A284A2C700039FD56 /* InteractiveDismissableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB309284A2C700039FD56 /* InteractiveDismissableView.swift */; };
+		E135D6AA28B7696400A32862 /* SetupCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E135D6A928B7696400A32862 /* SetupCoordinatorTests.swift */; };
+		E135D6AC28B76A3500A32862 /* Matchable+UseID.swift in Sources */ = {isa = PBXBuildFile; fileRef = E135D6AB28B76A3500A32862 /* Matchable+UseID.swift */; };
 		E13925B82840FB7700161F5C /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925B72840FB7700161F5C /* Types.swift */; };
 		E13925C2284110FD00161F5C /* Cuckoo in Frameworks */ = {isa = PBXBuildFile; productRef = E13925C1284110FD00161F5C /* Cuckoo */; };
 		E13925C42841111100161F5C /* GeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925C32841111100161F5C /* GeneratedMocks.swift */; };
@@ -152,6 +154,8 @@
 		E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDInteractionManagerTests.swift; sourceTree = "<group>"; };
 		E12CB307284A146D0039FD56 /* SetupIncorrectTransportPIN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupIncorrectTransportPIN.swift; sourceTree = "<group>"; };
 		E12CB309284A2C700039FD56 /* InteractiveDismissableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractiveDismissableView.swift; sourceTree = "<group>"; };
+		E135D6A928B7696400A32862 /* SetupCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCoordinatorTests.swift; sourceTree = "<group>"; };
+		E135D6AB28B76A3500A32862 /* Matchable+UseID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Matchable+UseID.swift"; sourceTree = "<group>"; };
 		E13925B72840FB7700161F5C /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		E13925C32841111100161F5C /* GeneratedMocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
 		E13925C62841119400161F5C /* MockIDInteractionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockIDInteractionManager.swift; sourceTree = "<group>"; };
@@ -415,6 +419,7 @@
 			children = (
 				E13925BD28410FE200161F5C /* Generated */,
 				E13F9E3C288802500088E955 /* UUID+InitFromNumber.swift */,
+				E135D6AB28B76A3500A32862 /* Matchable+UseID.swift */,
 				E1AAACF228378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift */,
 				E149B15B2840F636002C1139 /* SetupScanTests.swift */,
 				E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */,
@@ -423,6 +428,7 @@
 				E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */,
 				E13F9E44288853950088E955 /* CoordinatorTests.swift */,
 				D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */,
+				E135D6A928B7696400A32862 /* SetupCoordinatorTests.swift */,
 			);
 			path = BundIDTests;
 			sourceTree = "<group>";
@@ -783,7 +789,9 @@
 			files = (
 				E149B15C2840F636002C1139 /* SetupScanTests.swift in Sources */,
 				E13F9E3D288802500088E955 /* UUID+InitFromNumber.swift in Sources */,
+				E135D6AC28B76A3500A32862 /* Matchable+UseID.swift in Sources */,
 				E12CB30628494BD70039FD56 /* IDInteractionManagerTests.swift in Sources */,
+				E135D6AA28B7696400A32862 /* SetupCoordinatorTests.swift in Sources */,
 				E13F9E3B2886F3420088E955 /* IdentificationCoordinatorTests.swift in Sources */,
 				E13925C42841111100161F5C /* GeneratedMocks.swift in Sources */,
 				E13F9E45288853950088E955 /* CoordinatorTests.swift in Sources */,

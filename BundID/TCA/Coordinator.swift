@@ -32,9 +32,9 @@ struct CoordinatorState: Equatable, IndexedRouterState {
         
         tokenURL = url
         if setupPreviouslyFinished {
-            routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: url)), embedInNavigationView: true)
+            routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: url)))
         } else {
-            routes.presentSheet(.setupCoordinator(SetupCoordinatorState(tokenURL: tokenURL)), embedInNavigationView: false)
+            routes.presentSheet(.setupCoordinator(SetupCoordinatorState(tokenURL: tokenURL)))
         }
         return .none
     }
@@ -68,7 +68,7 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                 
                 switch routeAction {
                 case .home(.triggerSetup):
-                    state.routes.presentSheet(.setupCoordinator(SetupCoordinatorState()), embedInNavigationView: false)
+                    state.routes.presentSheet(.setupCoordinator(SetupCoordinatorState()))
                     return .none
                 case .setupCoordinator(.routeAction(_, action: .intro(.chooseYes))):
                     if let tokenURL = state.tokenURL {
@@ -114,6 +114,9 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                     UIApplication.shared.open(url)
                     return .none
                 case .setupCoordinator(.confirmEnd):
+                    state.routes.dismiss()
+                    return .none
+                case .identificationCoordinator(.confirmEnd):
                     state.routes.dismiss()
                     return .none
                 default:

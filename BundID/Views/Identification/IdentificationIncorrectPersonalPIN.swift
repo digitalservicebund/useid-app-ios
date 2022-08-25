@@ -41,9 +41,9 @@ let identificationIncorrectPersonalPINReducer = Reducer<IdentificationIncorrectP
     case .binding(\.$enteredPIN):
         return state.handlePINChange(state.enteredPIN)
     case .end:
-        state.alert = AlertState(title: TextState(verbatim: L10n.FirstTimeUser.IncorrectTransportPIN.End.title),
-                                 message: TextState(verbatim: L10n.FirstTimeUser.IncorrectTransportPIN.End.message),
-                                 primaryButton: .destructive(TextState(verbatim: L10n.FirstTimeUser.IncorrectTransportPIN.End.confirm),
+        state.alert = AlertState(title: TextState(verbatim: L10n.Identification.ConfirmEnd.title),
+                                 message: TextState(verbatim: L10n.Identification.ConfirmEnd.message),
+                                 primaryButton: .destructive(TextState(verbatim: L10n.Identification.ConfirmEnd.confirm),
                                                              action: .send(.confirmEnd)),
                                  secondaryButton: .cancel(TextState(verbatim: L10n.General.cancel)))
         return .none

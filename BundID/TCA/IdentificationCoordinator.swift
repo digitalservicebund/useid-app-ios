@@ -15,6 +15,16 @@ struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
     var pin: String?
     var attempt: Int = 0
     var authenticationSuccessful = false
+    
+    var needsEndConfirmation: Bool {
+        routes.contains {
+            switch $0.screen {
+            case .personalPIN: return true
+            default: return false
+            }
+        }
+    }
+    var alert: AlertState<IdentificationCoordinatorAction>?
 
 #if PREVIEW
     var availableDebugActions: [IdentifyDebugSequence] = []
@@ -78,7 +88,10 @@ enum IdentificationCoordinatorAction: Equatable, IndexedRouterAction {
     case updateRoutes([Route<IdentificationScreenState>])
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case cardError(CardErrorType)
+    case end
+    case confirmEnd
     case afterConfirmEnd
+    case dismissAlert
 #if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -187,6 +200,19 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 return Effect(value: .afterConfirmEnd)
                     .delay(for: 0.65, scheduler: environment.mainQueue)
                     .eraseToEffect()
+                
+            case .end:
+                state.alert = AlertState(title: TextState(verbatim: L10n.Identification.ConfirmEnd.title),
+                                         message: TextState(verbatim: L10n.Identification.ConfirmEnd.message),
+                                         primaryButton: .destructive(TextState(verbatim: L10n.Identification.ConfirmEnd.confirm),
+                                                                     action: .send(.confirmEnd)),
+                                         secondaryButton: .cancel(TextState(verbatim: L10n.General.cancel)))
+                return .none
+            case .confirmEnd:
+                return .none
+            case .dismissAlert:
+                state.alert = nil
+                return .none
             default:
                 return .none
             }
@@ -197,28 +223,34 @@ struct IdentificationCoordinatorView: View {
     let store: Store<IdentificationCoordinatorState, IdentificationCoordinatorAction>
     
     var body: some View {
-        NavigationView {
-            TCARouter(store) { screen in
-                SwitchStore(screen) {
-                    CaseLet(state: /IdentificationScreenState.overview,
-                            action: IdentificationScreenAction.overview,
-                            then: IdentificationOverview.init)
-                    CaseLet(state: /IdentificationScreenState.personalPIN,
-                            action: IdentificationScreenAction.personalPIN,
-                            then: IdentificationPersonalPIN.init)
-                    CaseLet(state: /IdentificationScreenState.incorrectPersonalPIN,
-                            action: IdentificationScreenAction.incorrectPersonalPIN,
-                            then: IdentificationIncorrectPersonalPIN.init)
-                    CaseLet(state: /IdentificationScreenState.scan,
-                            action: IdentificationScreenAction.scan,
-                            then: IdentificationScan.init)
-                    CaseLet(state: /IdentificationScreenState.done,
-                            action: IdentificationScreenAction.done,
-                            then: IdentificationDone.init)
-                    CaseLet(state: /IdentificationScreenState.cardError,
-                            action: IdentificationScreenAction.cardError,
-                            then: CardError.init)
+        WithViewStore(store) { viewStore in
+            NavigationView {
+                TCARouter(store) { screen in
+                    SwitchStore(screen) {
+                        CaseLet(state: /IdentificationScreenState.overview,
+                                action: IdentificationScreenAction.overview,
+                                then: IdentificationOverview.init)
+                        CaseLet(state: /IdentificationScreenState.personalPIN,
+                                action: IdentificationScreenAction.personalPIN,
+                                then: IdentificationPersonalPIN.init)
+                        CaseLet(state: /IdentificationScreenState.incorrectPersonalPIN,
+                                action: IdentificationScreenAction.incorrectPersonalPIN,
+                                then: IdentificationIncorrectPersonalPIN.init)
+                        CaseLet(state: /IdentificationScreenState.scan,
+                                action: IdentificationScreenAction.scan,
+                                then: IdentificationScan.init)
+                        CaseLet(state: /IdentificationScreenState.done,
+                                action: IdentificationScreenAction.done,
+                                then: IdentificationDone.init)
+                        CaseLet(state: /IdentificationScreenState.cardError,
+                                action: IdentificationScreenAction.cardError,
+                                then: CardError.init)
+                    }
                 }
+                .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
+            }
+            .interactiveDismissDisabled(viewStore.needsEndConfirmation) {
+                viewStore.send(.end)
             }
         }
     }

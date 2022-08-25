@@ -65,7 +65,7 @@ final class BundIDUITests: XCTestCase {
         
         app.buttons[L10n.FirstTimeUser.IncorrectTransportPIN.end].wait().tap()
         
-        app.buttons[L10n.FirstTimeUser.IncorrectTransportPIN.End.confirm].wait().tap()
+        app.buttons[L10n.FirstTimeUser.ConfirmEnd.confirm].wait().tap()
         
         app.buttons[L10n.Home.Actions.setup].assertExistence()
     }
