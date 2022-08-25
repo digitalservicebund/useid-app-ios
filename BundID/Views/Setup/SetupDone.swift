@@ -6,19 +6,12 @@ struct SetupDoneState: Equatable {
     
     var primaryButton: DialogButtons<SetupDoneAction>.ButtonConfiguration {
         guard let tokenURL = tokenURL else {
-            return .init(title: L10n.FirstTimeUser.DoneConfirmation.confirm,
+            return .init(title: L10n.FirstTimeUser.Done.close,
                          action: .done)
         }
         
-        return .init(title: L10n.FirstTimeUser.DoneConfirmation.startIdentification,
+        return .init(title: L10n.FirstTimeUser.Done.identify,
                      action: .triggerIdentification(tokenURL: tokenURL))
-    }
-    
-    var secondaryButton: DialogButtons<SetupDoneAction>.ButtonConfiguration? {
-        guard tokenURL != nil else { return nil }
-        
-        return .init(title: L10n.FirstTimeUser.DoneConfirmation.confirm,
-                     action: .done)
     }
 }
 
@@ -37,7 +30,6 @@ struct SetupDone: View {
                        title: L10n.FirstTimeUser.Done.title,
                        message: nil,
                        imageMeta: ImageMeta(name: "eIDs"),
-                       secondaryButton: viewStore.secondaryButton,
                        primaryButton: viewStore.primaryButton)
         }
         .navigationBarBackButtonHidden(true)

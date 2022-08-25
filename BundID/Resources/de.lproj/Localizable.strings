@@ -37,9 +37,6 @@
 "firstTimeUser_incorrectTransportPIN_end_title" = "Einrichtung beenden?";
 "firstTimeUser_incorrectTransportPIN_end_message" = "Möchten Sie die Einrichtung Ihres Personalausweises beenden?";
 "firstTimeUser_incorrectTransportPIN_end_confirm" = "Beenden";
-"firstTimeUser_doneConfirmation_title" = "Sie haben Ihren Online-Ausweis erfolgreich eingerichtet.";
-"firstTimeUser_doneConfirmation_startIdentification" = "Jetzt ausweisen";
-"firstTimeUser_doneConfirmation_confirm" = "Fertig";
 "firstTimeUser_scan_scanError_idCardInteraction_title" = "Ihr Ausweis konnte nicht ausgelesen werden";
 "firstTimeUser_scan_scanError_idCardInteraction_body" = "Versuchen Sie diese Schritte:\n\n • Entfernen Sie die Karte von Ihrem Telefon und legen Sie sie erneut an das Telefon.\n\n • Wenn Sie eine sehr dicke Handyhülle haben, versuchen Sie, die Hülle zu entfernen.";
 "firstTimeUser_scan_scanError_unexpectedEvent_title" = "Es ist ein Fehler passiert";
@@ -54,7 +51,7 @@
 "firstTimeUser_error_cardBlocked_body" = "Da Sie Ihre PIN ein drittes Mal falsch eingeben haben, wurde Ihr Ausweis gesperrt.\n\nIhren Ausweis können Sie nur mit Ihrer 10-stelligen PUK in der AusweisApp2 oder im Bürgeramt entsperren.";
 "firstTimeUser_error_close" = "Schließen";
 "firstTimeUser_done_title" = "Sie haben Ihren Online-Ausweis erfolgreich eingerichtet.";
-"firstTimeUser_done_close" = "Fertig";
+"firstTimeUser_done_close" = "Einrichtung abschließen";
 "firstTimeUser_done_identify" = "Jetzt ausweisen";
 
 "identification_overview_loading" = "Einen Moment bitte…\n\nDaten werden geladen";
