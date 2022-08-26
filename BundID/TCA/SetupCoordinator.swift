@@ -56,9 +56,9 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
             switch action {
             case .routeAction(_, .intro(.chooseNo)):
                 state.routes.push(.transportPINIntro)
-            case .routeAction(_, .transportPINIntro(.availablePINLetter)):
+            case .routeAction(_, .transportPINIntro(.choosePINLetterAvailable)):
                 state.routes.push(.transportPIN(SetupTransportPINState()))
-            case .routeAction(_, .transportPINIntro(.missingPINLetter)):
+            case .routeAction(_, .transportPINIntro(.choosePINLetterMissing)):
                 state.routes.push(.missingPINLetter)
             case .routeAction(_, .intro(.chooseYes)):
                 print("Not implemented")

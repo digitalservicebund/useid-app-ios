@@ -2,8 +2,8 @@ import SwiftUI
 import ComposableArchitecture
 
 enum SetupTransportPINIntroAction: Equatable {
-    case availablePINLetter
-    case missingPINLetter
+    case choosePINLetterAvailable
+    case choosePINLetterMissing
 }
 
 struct SetupTransportPINIntro: View {
@@ -16,8 +16,8 @@ struct SetupTransportPINIntro: View {
                    message: L10n.FirstTimeUser.PinLetter.body,
                    imageMeta: ImageMeta(name: "PIN-Brief",
                                         maxHeight: 300.0),
-                   secondaryButton: .init(title: L10n.FirstTimeUser.PinLetter.yes, action: .availablePINLetter),
-                   primaryButton: .init(title: L10n.FirstTimeUser.PinLetter.no, action: .missingPINLetter))
+                   secondaryButton: .init(title: L10n.FirstTimeUser.PinLetter.yes, action: .choosePINLetterAvailable),
+                   primaryButton: .init(title: L10n.FirstTimeUser.PinLetter.no, action: .choosePINLetterMissing))
     }
 }
 
