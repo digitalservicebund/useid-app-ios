@@ -141,6 +141,9 @@ struct SetupCoordinatorView: View {
                                 action: SetupScreenAction.incorrectTransportPIN,
                                 then: SetupIncorrectTransportPIN.init)
                         Default {
+                            // There is a maximum case let statements allowed per switch store view.
+                            // This works around this issue by nesting a second switch store inside the default case.
+                            // For more information see: https://github.com/pointfreeco/swift-composable-architecture/issues/602
                             SwitchStore(screen) {
                                 CaseLet(state: /SetupScreenState.missingPINLetter,
                                         action: SetupScreenAction.missingPINLetter,
