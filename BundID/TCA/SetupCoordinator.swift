@@ -54,13 +54,13 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
     .withRouteReducer(
         Reducer { state, action, environment in
             switch action {
-            case .routeAction(_, .intro(.chooseNo)):
+            case .routeAction(_, .intro(.chooseSetupNotDoneYet)):
                 state.routes.push(.transportPINIntro)
             case .routeAction(_, .transportPINIntro(.choosePINLetterAvailable)):
                 state.routes.push(.transportPIN(SetupTransportPINState()))
             case .routeAction(_, .transportPINIntro(.choosePINLetterMissing)):
                 state.routes.push(.missingPINLetter)
-            case .routeAction(_, .intro(.chooseYes)):
+            case .routeAction(_, .intro(.chooseSetupAlreadyDone)):
                 print("Not implemented")
             case .routeAction(_, .transportPIN(.done(let transportPIN))):
                 state.transportPIN = transportPIN

@@ -21,10 +21,9 @@ final class IdentificationScanTests: XCTestCase {
     
     override func setUp() {
         scheduler = DispatchQueue.test
-        environment = AppEnvironment(mainQueue: scheduler.eraseToAnyScheduler(),
-                                     uuidFactory: uuidFactory,
-                                     idInteractionManager: mockIDInteractionManager,
-                                     debugIDInteractionManager: DebugIDInteractionManager())
+        environment = AppEnvironment.mocked(mainQueue: scheduler.eraseToAnyScheduler(),
+                                            uuidFactory: uuidFactory,
+                                            idInteractionManager: mockIDInteractionManager)
     }
     
     func testOnAppearTriggersScanning() throws {

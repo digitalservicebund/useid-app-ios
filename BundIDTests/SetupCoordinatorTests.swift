@@ -24,6 +24,7 @@ class SetupCoordinatorTests: XCTestCase {
         environment = AppEnvironment(mainQueue: scheduler.eraseToAnyScheduler(),
                                      uuidFactory: uuidFactory,
                                      idInteractionManager: mockIDInteractionManager,
+                                     storageManager: MockStorageManagerType(),
                                      debugIDInteractionManager: DebugIDInteractionManager())
     }
     

@@ -2,11 +2,12 @@ import XCTest
 
 final class BundIDUITests: XCTestCase {
 
-    func testSetupHappyPath() throws {
+    func testFirstTimeUserHappyPath() throws {
         let app = XCUIApplication()
+        app.launchWithDefaultArguments()
+        app.launchWithResetUserDefaults()
         app.launch()
         
-        app.buttons[L10n.Home.Actions.setup].wait().tap()
         app.buttons[L10n.FirstTimeUser.Intro.no].wait().tap()
         app.buttons[L10n.FirstTimeUser.PinLetter.yes].wait().tap()
         
@@ -35,8 +36,20 @@ final class BundIDUITests: XCTestCase {
         app.buttons[L10n.Home.Actions.setup].assertExistence()
     }
     
+    func testLaunchSetupManually() throws {
+        let app = XCUIApplication()
+        app.launchWithDefaultArguments()
+        app.launchWithSetupCompleted()
+        app.launch()
+        
+        app.buttons[L10n.Home.Actions.setup].wait().tap()
+        app.staticTexts[L10n.FirstTimeUser.Intro.title].assertExistence()
+    }
+    
     func testSetupWrongTransportPINAndEndEarly() throws {
         let app = XCUIApplication()
+        app.launchWithDefaultArguments()
+        app.launchWithSetupCompleted()
         app.launch()
         
         app.buttons[L10n.Home.Actions.setup].wait().tap()
@@ -70,12 +83,22 @@ final class BundIDUITests: XCTestCase {
         app.buttons[L10n.Home.Actions.setup].assertExistence()
     }
     
-    func testIdentificationHappyPath() throws {
+    func testIdentificationTriggersSetupForFirstTimeUsers() throws {
         let app = XCUIApplication()
-        app.launchArguments = ["TOKEN_URL=eid://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Ftest.governikus-eid.de%3A443%2FAutent-DemoApplication%2FWebServiceRequesterServlet%3Fdummy%3Dfalse%26useCan%3Dfalse%26ta%3Dfalse"]
+        app.launchWithDefaultArguments()
+        app.launchWithResetUserDefaults()
+        app.launchWithDemoTokenURL()
         app.launch()
         
-        app.buttons[L10n.FirstTimeUser.Intro.yes].wait().tap()
+        app.staticTexts[L10n.FirstTimeUser.Intro.title].assertExistence()
+    }
+    
+    func testIdentificationHappyPath() throws {
+        let app = XCUIApplication()
+        app.launchWithDefaultArguments()
+        app.launchWithSetupCompleted()
+        app.launchWithDemoTokenURL()
+        app.launch()
         
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["requestAuthorization"].wait().tap()
@@ -111,10 +134,10 @@ final class BundIDUITests: XCTestCase {
     
     func testIdentificationLoadError() throws {
         let app = XCUIApplication()
-        app.launchArguments = ["TOKEN_URL=eid://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Ftest.governikus-eid.de%3A443%2FAutent-DemoApplication%2FWebServiceRequesterServlet%3Fdummy%3Dfalse%26useCan%3Dfalse%26ta%3Dfalse"]
+        app.launchWithDefaultArguments()
+        app.launchWithSetupCompleted()
+        app.launchWithDemoTokenURL()
         app.launch()
-        
-        app.buttons[L10n.FirstTimeUser.Intro.yes].wait().tap()
         
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["loadError"].wait().tap()

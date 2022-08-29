@@ -40,6 +40,10 @@
 		E13F9E43288835350088E955 /* IdentificationCoordinatorStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */; };
 		E13F9E45288853950088E955 /* CoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E44288853950088E955 /* CoordinatorTests.swift */; };
 		E149B15C2840F636002C1139 /* SetupScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E149B15B2840F636002C1139 /* SetupScanTests.swift */; };
+		E14C21B228B8BF9100192338 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C21B128B8BF9100192338 /* StorageManager.swift */; };
+		E14C21B428B8FB8F00192338 /* AppEnvironment+Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C21B328B8FB8F00192338 /* AppEnvironment+Tests.swift */; };
+		E14C21B628B90BF500192338 /* StorageKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C21B528B90BF500192338 /* StorageKey.swift */; };
+		E14C21B728B90BF500192338 /* StorageKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C21B528B90BF500192338 /* StorageKey.swift */; };
 		E156DD02287EF9C200C88914 /* XCUITestDeeplinking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E156DD01287EF9C200C88914 /* XCUITestDeeplinking.swift */; };
 		E15776A0286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */; };
 		E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */ = {isa = PBXBuildFile; productRef = E15C22FF2850F5A8005CCBB9 /* OpenEcard */; };
@@ -59,6 +63,9 @@
 		E17E1C5128AFAABF004B0815 /* HTMLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17E1C5028AFAABF004B0815 /* HTMLView.swift */; };
 		E18E223A285349D200221DB1 /* BundIDUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18E2239285349D200221DB1 /* BundIDUITests.swift */; };
 		E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
+		E1A769FD28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A769FC28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift */; };
+		E1A769FF28B940C6001E1F04 /* LaunchArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A769FE28B940C6001E1F04 /* LaunchArgument.swift */; };
+		E1A76A0028B940C6001E1F04 /* LaunchArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A769FE28B940C6001E1F04 /* LaunchArgument.swift */; };
 		E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACE728350FD500A51183 /* Array+Safe.swift */; };
 		E1AAACEB2836668200A51183 /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACEA2836668200A51183 /* ShakeEffect.swift */; };
 		E1AAACF328378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACF228378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift */; };
@@ -74,7 +81,6 @@
 		E1BC3D8128B7E73B007A7B39 /* Licenses in Resources */ = {isa = PBXBuildFile; fileRef = E1BC3D7F28B7E73B007A7B39 /* Licenses */; };
 		E1BC3D8228B7E73B007A7B39 /* Licenses.plist in Resources */ = {isa = PBXBuildFile; fileRef = E1BC3D8028B7E73B007A7B39 /* Licenses.plist */; };
 		E1BC3D8628B7E919007A7B39 /* LicensePlistViewController in Frameworks */ = {isa = PBXBuildFile; productRef = E1BC3D8528B7E919007A7B39 /* LicensePlistViewController */; };
-		E1BD6C792847A2E5003048E4 /* SetupDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BD6C782847A2E5003048E4 /* SetupDone.swift */; };
 		E1C2D8BA28620E2B000E0F5B /* IdentificationScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C2D8B928620E2B000E0F5B /* IdentificationScan.swift */; };
 		E1CD8E88281FF62F008ADA2A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E87281FF62F008ADA2A /* Colors.swift */; };
 		E1CD8E8C281FFCC1008ADA2A /* BundesSans-DTP-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E1CD8E8A281FFCC1008ADA2A /* BundesSans-DTP-Regular.otf */; };
@@ -177,6 +183,9 @@
 		E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCoordinatorStateTests.swift; sourceTree = "<group>"; };
 		E13F9E44288853950088E955 /* CoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorTests.swift; sourceTree = "<group>"; };
 		E149B15B2840F636002C1139 /* SetupScanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScanTests.swift; sourceTree = "<group>"; };
+		E14C21B128B8BF9100192338 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
+		E14C21B328B8FB8F00192338 /* AppEnvironment+Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppEnvironment+Tests.swift"; sourceTree = "<group>"; };
+		E14C21B528B90BF500192338 /* StorageKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageKey.swift; sourceTree = "<group>"; };
 		E156DD01287EF9C200C88914 /* XCUITestDeeplinking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUITestDeeplinking.swift; sourceTree = "<group>"; };
 		E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentificationIncorrectPersonalPIN.swift; sourceTree = "<group>"; };
 		E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LocalizedStrings+Generated.swift"; sourceTree = "<group>"; };
@@ -197,6 +206,8 @@
 		E18E2239285349D200221DB1 /* BundIDUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundIDUITests.swift; sourceTree = "<group>"; };
 		E18E224228534A8500221DB1 /* UITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UITests.xctestplan; sourceTree = "<group>"; };
 		E19D26B0282557B00005B111 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		E1A769FC28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+LaunchArguments.swift"; sourceTree = "<group>"; };
+		E1A769FE28B940C6001E1F04 /* LaunchArgument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchArgument.swift; sourceTree = "<group>"; };
 		E1AAACE728350FD500A51183 /* Array+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Safe.swift"; sourceTree = "<group>"; };
 		E1AAACEA2836668200A51183 /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
 		E1AAACF028378C0E00A51183 /* BundIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BundIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -212,7 +223,6 @@
 		E1BC3D7828B7E40B007A7B39 /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
 		E1BC3D7F28B7E73B007A7B39 /* Licenses */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Licenses; sourceTree = "<group>"; };
 		E1BC3D8028B7E73B007A7B39 /* Licenses.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Licenses.plist; sourceTree = "<group>"; };
-		E1BD6C782847A2E5003048E4 /* SetupDone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupDone.swift; sourceTree = "<group>"; };
 		E1C2D8B928620E2B000E0F5B /* IdentificationScan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationScan.swift; sourceTree = "<group>"; };
 		E1CD8E87281FF62F008ADA2A /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		E1CD8E8A281FFCC1008ADA2A /* BundesSans-DTP-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BundesSans-DTP-Regular.otf"; sourceTree = "<group>"; };
@@ -374,6 +384,7 @@
 				E1FFDF0B2875C7E9006DFE03 /* UUID+Zero.swift */,
 				E1F2F3D628770F28004C8D4B /* IdentifiableCallback.swift */,
 				E13F9E4028882A9C0088E955 /* Bundle+Version.swift */,
+				E14C21B528B90BF500192338 /* StorageKey.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -424,6 +435,7 @@
 				E18E2239285349D200221DB1 /* BundIDUITests.swift */,
 				E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */,
 				E156DD01287EF9C200C88914 /* XCUITestDeeplinking.swift */,
+				E1A769FC28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift */,
 			);
 			path = BundIDUITests;
 			sourceTree = "<group>";
@@ -443,6 +455,7 @@
 				E13F9E44288853950088E955 /* CoordinatorTests.swift */,
 				D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */,
 				E135D6A928B7696400A32862 /* SetupCoordinatorTests.swift */,
+				E14C21B328B8FB8F00192338 /* AppEnvironment+Tests.swift */,
 			);
 			path = BundIDTests;
 			sourceTree = "<group>";
@@ -516,6 +529,7 @@
 				E13925C52841119400161F5C /* Mocks */,
 				E593E278281686DC00154EB0 /* IDInteractionManager.swift */,
 				E1B6991B2869B31B00360273 /* DebugIDInteractionManager.swift */,
+				E14C21B128B8BF9100192338 /* StorageManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -560,6 +574,7 @@
 				E18E224228534A8500221DB1 /* UITests.xctestplan */,
 				E1AAACFD2837C41700A51183 /* AllTests.xctestplan */,
 				E5CEB27D281041330076B9FE /* BundIDApp.swift */,
+				E1A769FE28B940C6001E1F04 /* LaunchArgument.swift */,
 				E128E0BB28898D3400C5195F /* AppDelegate.swift */,
 				E5CEB281281041340076B9FE /* Assets.xcassets */,
 				E1CD8E89281FFCA0008ADA2A /* Resources */,
@@ -829,6 +844,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				E13A632128B8010A00AB7A39 /* LocalizedStrings+Generated.swift in Sources */,
+				E1A769FD28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift in Sources */,
+				E1A76A0028B940C6001E1F04 /* LaunchArgument.swift in Sources */,
+				E14C21B728B90BF500192338 /* StorageKey.swift in Sources */,
 				E11EB2A928537DE1008B4042 /* XCUITestHelper.swift in Sources */,
 				E156DD02287EF9C200C88914 /* XCUITestDeeplinking.swift in Sources */,
 				E18E223A285349D200221DB1 /* BundIDUITests.swift in Sources */,
@@ -848,6 +866,7 @@
 				E13925C42841111100161F5C /* GeneratedMocks.swift in Sources */,
 				E13F9E45288853950088E955 /* CoordinatorTests.swift in Sources */,
 				D2A6773828B4DD5D0033373E /* Array+SafeTests.swift in Sources */,
+				E14C21B428B8FB8F00192338 /* AppEnvironment+Tests.swift in Sources */,
 				E1AAACF328378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift in Sources */,
 				E13F9E43288835350088E955 /* IdentificationCoordinatorStateTests.swift in Sources */,
 				E13F9E3F288804140088E955 /* IdentificationScanTests.swift in Sources */,
@@ -867,6 +886,7 @@
 				E1C2D8BA28620E2B000E0F5B /* IdentificationScan.swift in Sources */,
 				E593E26E2816853A00154EB0 /* StopServiceHandler.swift in Sources */,
 				E16708B3283D4ED2001A1637 /* SetupCoordinator.swift in Sources */,
+				E14C21B628B90BF500192338 /* StorageKey.swift in Sources */,
 				E16708C0283E6A07001A1637 /* SetupScan.swift in Sources */,
 				E1AAACEB2836668200A51183 /* ShakeEffect.swift in Sources */,
 				D28D280228B7A9F5008DA310 /* SetupDone.swift in Sources */,
@@ -887,6 +907,7 @@
 				E593E2682816847900154EB0 /* EIDAuthenticationRequest.swift in Sources */,
 				E16708BA283D7CA1001A1637 /* DialogButtons.swift in Sources */,
 				E1EFB5D5285C7D81005C38C6 /* IdentificationPersonalPIN.swift in Sources */,
+				E1A769FF28B940C6001E1F04 /* LaunchArgument.swift in Sources */,
 				E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */,
 				E17E1C5128AFAABF004B0815 /* HTMLView.swift in Sources */,
 				E1EFB5C42858EB0F005C38C6 /* IdentificationOverviewLoading.swift in Sources */,
@@ -898,6 +919,7 @@
 				E1B6991C2869B31B00360273 /* DebugIDInteractionManager.swift in Sources */,
 				E1F39DDC28588B0100D8D907 /* IdentificationScreens.swift in Sources */,
 				E1F39DD6285784DD00D8D907 /* IdentificationOverview.swift in Sources */,
+				E14C21B228B8BF9100192338 /* StorageManager.swift in Sources */,
 				E17604D1287E24F1007DFA10 /* DebugMenu.swift in Sources */,
 				E13F9E4128882A9C0088E955 /* Bundle+Version.swift in Sources */,
 				E593E2742816866200154EB0 /* EACInteraction.swift in Sources */,
@@ -1090,10 +1112,15 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VDTVKQ35RL;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"UNIT_TESTS=1",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.bund.digitalservice.UseIDTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "PREVIEW DEBUG UNIT_TESTS";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1225,10 +1252,15 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VDTVKQ35RL;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"UNIT_TESTS=1",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.bund.digitalservice.UseIDTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "PREVIEW UNIT_TESTS";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1291,10 +1323,15 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VDTVKQ35RL;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"UNIT_TESTS=1",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.bund.digitalservice.UseIDTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG UNIT_TESTS";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1309,10 +1346,15 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VDTVKQ35RL;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"UNIT_TESTS=1",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.bund.digitalservice.UseIDTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = UNIT_TESTS;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

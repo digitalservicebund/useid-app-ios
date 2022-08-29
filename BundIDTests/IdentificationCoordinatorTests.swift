@@ -21,10 +21,9 @@ class IdentificationCoordinatorTests: XCTestCase {
     
     override func setUp() {
         scheduler = DispatchQueue.test
-        environment = AppEnvironment(mainQueue: scheduler.eraseToAnyScheduler(),
-                                     uuidFactory: uuidFactory,
-                                     idInteractionManager: mockIDInteractionManager,
-                                     debugIDInteractionManager: DebugIDInteractionManager())
+        environment = AppEnvironment.mocked(mainQueue: scheduler.eraseToAnyScheduler(),
+                                            uuidFactory: uuidFactory,
+                                            idInteractionManager: mockIDInteractionManager)
     }
     
     func testOverviewLoadingSuccess() throws {
@@ -254,7 +253,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         )
         
         store.send(.end) {
-            $0.alert = AlertState(title: .init(verbatim: L10n.Identification.ConfirmEnd.title), message: .init(verbatim: L10n.Identification.ConfirmEnd.message), primaryButton: .destructive(.init(verbatim: L10n.Identification.ConfirmEnd.confirm), send: .confirmEnd), secondaryButton: .cancel(.init(verbatim: L10n.General.cancel)))
+            $0.alert = AlertState(title: .init(verbatim: L10n.Identification.ConfirmEnd.title), message: .init(verbatim: L10n.Identification.ConfirmEnd.message), primaryButton: .destructive(.init(verbatim: L10n.Identification.ConfirmEnd.confirm), action: .send(.confirmEnd)), secondaryButton: .cancel(.init(verbatim: L10n.General.cancel)))
         }
     }
 }

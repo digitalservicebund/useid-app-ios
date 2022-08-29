@@ -2,8 +2,8 @@ import SwiftUI
 import ComposableArchitecture
 
 enum SetupIntroAction: Equatable {
-    case chooseYes
-    case chooseNo
+    case chooseSetupAlreadyDone
+    case chooseSetupNotDoneYet
 }
 
 struct SetupIntro: View {
@@ -15,8 +15,8 @@ struct SetupIntro: View {
                    title: L10n.FirstTimeUser.Intro.title,
                    message: L10n.FirstTimeUser.Intro.body,
                    imageMeta: ImageMeta(name: "eIDs"),
-                   secondaryButton: .init(title: L10n.FirstTimeUser.Intro.yes, action: .chooseYes),
-                   primaryButton: .init(title: L10n.FirstTimeUser.Intro.no, action: .chooseNo))
+                   secondaryButton: .init(title: L10n.FirstTimeUser.Intro.yes, action: .chooseSetupAlreadyDone),
+                   primaryButton: .init(title: L10n.FirstTimeUser.Intro.no, action: .chooseSetupNotDoneYet))
     }
 }
 

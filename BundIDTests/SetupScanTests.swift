@@ -14,10 +14,8 @@ class SetupScanTests: XCTestCase {
     
     override func setUp() {
         scheduler = DispatchQueue.test
-        environment = AppEnvironment(mainQueue: scheduler.eraseToAnyScheduler(),
-                                     uuidFactory: UUID.init,
-                                     idInteractionManager: mockIDInteractionManager,
-                                     debugIDInteractionManager: DebugIDInteractionManager())
+        environment = AppEnvironment.mocked(mainQueue: scheduler.eraseToAnyScheduler(),
+                                            idInteractionManager: mockIDInteractionManager)
     }
     
     func testChangePINSuccess() throws {

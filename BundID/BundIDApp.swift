@@ -4,18 +4,6 @@ import ComposableArchitecture
 import OpenEcard
 import Sentry
 
-func parseArguments() -> [String: String] {
-    var arguments = [String: String]()
-    for argument in ProcessInfo.processInfo.arguments[1...] {
-        let keyValues = argument.split(separator: "=", maxSplits: 1)
-        guard keyValues.count >= 1 && keyValues.count <= 2 else { continue }
-        let key = keyValues.first!
-        let value = keyValues.count > 1 ? keyValues.last! : "1"
-        arguments[String(key)] = String(value)
-    }
-    return arguments
-}
-
 @main
 struct BundIDApp: App {
     
@@ -34,9 +22,20 @@ struct BundIDApp: App {
 #endif
             options.tracesSampleRate = 1.0
         }
-        
+        let userDefaults = UserDefaults.standard
         let mainQueue = DispatchQueue.main.eraseToAnyScheduler()
         let environment: AppEnvironment
+        
+        if CommandLine.arguments.contains(LaunchArgument.resetUserDefaults) {
+            userDefaults.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
+        }
+        
+        if CommandLine.arguments.contains(LaunchArgument.setupCompleted) {
+            userDefaults.set(true, forKey: StorageKey.setupCompleted.rawValue)
+        }
+        
+        let storageManager = StorageManager(userDefaults: userDefaults)
+        
 #if PREVIEW
         if MOCK_OPENECARD {
             let idInteractionManager = DebugIDInteractionManager()
@@ -45,6 +44,7 @@ struct BundIDApp: App {
                 mainQueue: mainQueue,
                 uuidFactory: UUID.init,
                 idInteractionManager: idInteractionManager,
+                storageManager: storageManager,
                 debugIDInteractionManager: idInteractionManager
             )
         } else {
@@ -54,6 +54,7 @@ struct BundIDApp: App {
                 mainQueue: mainQueue,
                 uuidFactory: UUID.init,
                 idInteractionManager: idInteractionManager,
+                storageManager: storageManager,
                 debugIDInteractionManager: DebugIDInteractionManager()
             )
         }
@@ -63,13 +64,13 @@ struct BundIDApp: App {
         environment = AppEnvironment(
             mainQueue: mainQueue,
             uuidFactory: UUID.init,
-            idInteractionManager: idInteractionManager
+            idInteractionManager: idInteractionManager,
+            storageManager: storageManager
         )
 #endif
         
-        let arguments = parseArguments()
 #if PREVIEW
-        let tokenURL: String? = arguments["TOKEN_URL"]
+        let tokenURL: String? = CommandLine.arguments.contains(LaunchArgument.useDemoTokenURL) ? demoTokenURL : nil
 #else
         let tokenURL: String? = nil
 #endif
@@ -77,8 +78,15 @@ struct BundIDApp: App {
         let homeState = HomeState(appVersion: Bundle.main.version,
                                   buildNumber: Bundle.main.buildNumber)
         
+        let coordinatorState = CoordinatorState(
+            tokenURL: tokenURL,
+            states: [
+                .root(.home(homeState), embedInNavigationView: false)
+            ]
+        )
+        
         store = Store(
-            initialState: CoordinatorState(tokenURL: tokenURL, states: [.root(.home(homeState), embedInNavigationView: false)]),
+            initialState: coordinatorState,
             reducer: coordinatorReducer,
             environment: environment
         )

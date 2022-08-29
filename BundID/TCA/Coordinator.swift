@@ -4,8 +4,6 @@ import SwiftUI
 
 struct CoordinatorState: Equatable, IndexedRouterState {
     var tokenURL: String?
-    var setupPreviouslyFinished: Bool = false
-    
     var states: [Route<ScreenState>]
     
     var routes: [Route<ScreenState>] {
@@ -27,16 +25,25 @@ struct CoordinatorState: Equatable, IndexedRouterState {
         }
     }
     
-    mutating func handleURL(_ url: String) -> Effect<CoordinatorAction, Never> {
+    mutating func handleURL(_ url: String, environment: AppEnvironment) -> Effect<CoordinatorAction, Never> {
         guard url.hasPrefix("eid://") else { return .none }
         
         tokenURL = url
-        if setupPreviouslyFinished {
+        if environment.storageManager.setupCompleted {
             routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: url)))
         } else {
             routes.presentSheet(.setupCoordinator(SetupCoordinatorState(tokenURL: tokenURL)))
         }
         return .none
+    }
+    
+    mutating func handleAppStartWithoutURL(environment: AppEnvironment) -> Effect<CoordinatorAction, Never> {
+        if environment.storageManager.setupCompleted {
+            return .none
+        } else {
+            routes.presentSheet(.setupCoordinator(SetupCoordinatorState()))
+            return .none
+        }
     }
 }
 
@@ -48,14 +55,16 @@ enum CoordinatorAction: Equatable, IndexedRouterAction {
 }
 
 let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironment> = .combine(
-    Reducer { state, action, _ in
+    Reducer { state, action, environment in
         switch action {
         case .openURL(let url):
             let tokenURL = url.absoluteString
-            return state.handleURL(tokenURL)
+            return state.handleURL(tokenURL, environment: environment)
         case .onAppear:
-            guard let tokenURL = state.tokenURL else { return .none }
-            return state.handleURL(tokenURL)
+            guard let tokenURL = state.tokenURL else {
+                return state.handleAppStartWithoutURL(environment: environment)
+            }
+            return state.handleURL(tokenURL, environment: environment)
         default:
             return .none
         }
@@ -63,14 +72,14 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
     screenReducer
         .forEachIndexedRoute(environment: { $0 })
         .withRouteReducer(
-            Reducer { state, action, _ in
+            Reducer { state, action, environment in
                 guard case let .routeAction(_, action: routeAction) = action else { return .none }
                 
                 switch routeAction {
                 case .home(.triggerSetup):
                     state.routes.presentSheet(.setupCoordinator(SetupCoordinatorState()))
                     return .none
-                case .setupCoordinator(.routeAction(_, action: .intro(.chooseYes))):
+                case .setupCoordinator(.routeAction(_, action: .intro(.chooseSetupAlreadyDone))):
                     if let tokenURL = state.tokenURL {
                         return Effect.routeWithDelaysIfUnsupported(state.routes) {
                             $0.dismiss()
@@ -108,6 +117,11 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                         .identificationCoordinator(.routeAction(_, action: .scan(.end))),
                         .identificationCoordinator(.routeAction(_, action: .done(.close))):
                     state.routes.dismiss()
+                    return .none
+                case .identificationCoordinator(.routeAction(_, action: .scan(.identifiedSuccessfullyWithoutRedirect))),
+                        .identificationCoordinator(.routeAction(_, action: .scan(.identifiedSuccessfullyWithRedirect))),
+                        .setupCoordinator(.routeAction(_, action: .scan(.scannedSuccessfully))):
+                    environment.storageManager.updateSetupCompleted(true)
                     return .none
                 case .identificationCoordinator(.routeAction(_, action: .done(.openURL(let url)))):
                     state.routes.dismiss()

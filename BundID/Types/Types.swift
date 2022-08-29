@@ -21,3 +21,8 @@ protocol ContextManagerType: ContextManagerProtocol {
     func initializeContext(_ handler: (NSObjectProtocol & StartServiceHandlerProtocol))
     func terminateContext(_ handler: (NSObjectProtocol & StopServiceHandlerProtocol)!)
 }
+
+protocol StorageManagerType {
+    var setupCompleted: Bool { get }
+    func updateSetupCompleted(_ newValue: Bool)
+}
