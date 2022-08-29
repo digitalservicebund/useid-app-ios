@@ -35,7 +35,7 @@ See the corresponding [readme](fastlane/README.md) for more information about ou
 
 ## Getting started
 
-Open the proejct file with Xcode and hit ⌘+R to run the project. Or hit ⌘+U to run all unit and UI tests.
+Open the project file with Xcode and hit ⌘+R to run the project. Or hit ⌘+U to run all unit and UI tests.
 
 
 # License
@@ -44,4 +44,4 @@ This project is licensed under the [GNU General Public License v3 (GPLv3)](LICEN
 
 # Localization
 
-This project uses [Weblate](https://hosted.weblate.org/engage/useid/) for localization. 
+This project uses [Weblate](https://hosted.weblate.org/engage/useid/) for localization.
