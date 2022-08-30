@@ -15,6 +15,11 @@
           "containerPath" : "container:BundID.xcodeproj",
           "identifier" : "E5CEB279281041330076B9FE",
           "name" : "BundID"
+        },
+        {
+          "containerPath" : "container:Analytics",
+          "identifier" : "Analytics",
+          "name" : "Analytics"
         }
       ]
     },
@@ -23,7 +28,8 @@
       "containerPath" : "container:BundID.xcodeproj",
       "identifier" : "E5CEB279281041330076B9FE",
       "name" : "BundID"
-    }
+    },
+    "testExecutionOrdering" : "random"
   },
   "testTargets" : [
     {
