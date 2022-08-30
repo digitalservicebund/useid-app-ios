@@ -10,6 +10,12 @@ struct ImageMeta {
         self.labelKey = labelKey
         self.maxHeight = maxHeight
     }
+    
+    init(asset: ImageAsset, labelKey: String? = nil, maxHeight: CGFloat? = nil) {
+        self.name = asset.name
+        self.labelKey = labelKey
+        self.maxHeight = maxHeight
+    }
 }
 
 struct LinkMeta {
@@ -69,7 +75,7 @@ struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
         HeaderView(title: L10n.FirstTimeUser.Intro.title,
                    message: L10n.FirstTimeUser.Intro.body,
-                   imageMeta: ImageMeta(name: "PIN-Brief"),
+                   imageMeta: ImageMeta(asset: Asset.pinBrief),
                    linkMeta: LinkMeta(title: "Behördenfinder", url: URL(string: "https://behoerdenfinder.de")!))
         .previewLayout(.sizeThatFits)
     }

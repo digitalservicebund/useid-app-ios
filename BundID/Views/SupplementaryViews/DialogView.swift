@@ -32,7 +32,7 @@ struct DialogView_Previews: PreviewProvider {
         DialogView<DialogButtonsPreviewAction>(store: .empty,
                                                title: "Titel",
                                                message: "Lorem ipsum dolor set amet",
-                                               imageMeta: ImageMeta(name: "eIDs"),
+                                               imageMeta: ImageMeta(asset: Asset.eiDs),
                                                secondaryButton: .init(title: "Secondary", action: .secondary),
                                                primaryButton: .init(title: "Primary", action: .primary))
     }

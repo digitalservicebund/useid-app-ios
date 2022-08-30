@@ -14,7 +14,7 @@ struct SetupIntro: View {
         DialogView(store: store,
                    title: L10n.FirstTimeUser.Intro.title,
                    message: L10n.FirstTimeUser.Intro.body,
-                   imageMeta: ImageMeta(name: "eIDs"),
+                   imageMeta: ImageMeta(asset: Asset.eiDs),
                    secondaryButton: .init(title: L10n.FirstTimeUser.Intro.yes, action: .chooseSetupAlreadyDone),
                    primaryButton: .init(title: L10n.FirstTimeUser.Intro.no, action: .chooseSetupNotDoneYet))
     }

@@ -13,7 +13,7 @@ struct SetupPersonalPINIntro: View {
         DialogView(store: store,
                    title: L10n.FirstTimeUser.PersonalPINIntro.title,
                    message: L10n.FirstTimeUser.PersonalPINIntro.body,
-                   imageMeta: ImageMeta(name: "eIDs+PIN"),
+                   imageMeta: ImageMeta(asset: Asset.eiDsPIN),
                    primaryButton: .init(title: L10n.FirstTimeUser.PersonalPINIntro.continue, action: .continue))
     }
 }
