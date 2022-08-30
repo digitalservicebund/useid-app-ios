@@ -28,7 +28,7 @@ struct SetupDone: View {
         WithViewStore(store) { viewStore in
             DialogView(store: store.stateless,
                        title: L10n.FirstTimeUser.Done.title,
-                       imageMeta: ImageMeta(name: "eIDs"),
+                       imageMeta: ImageMeta(asset: Asset.eiDs),
                        primaryButton: viewStore.primaryButton)
         }
         .navigationBarBackButtonHidden(true)

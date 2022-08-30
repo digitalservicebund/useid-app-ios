@@ -53,7 +53,7 @@ struct HomeView: View {
     @ViewBuilder
     var headerView: some View {
         VStack {
-            ImageMeta(name: "AbstractWidget").image
+            ImageMeta(asset: Asset.abstractWidget).image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
 #if PREVIEW
@@ -80,7 +80,7 @@ struct HomeView: View {
     @ViewBuilder
     var setupActionView: some View {
         ZStack {
-            ImageMeta(name: "eIDs").image
+            ImageMeta(asset: Asset.eiDs).image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .padding()

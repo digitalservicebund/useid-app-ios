@@ -6,3 +6,10 @@ strings:
       output: BundID/Generated/LocalizedStrings+Generated.swift
   options:
     separator: "_"
+xcassets:
+  - inputs: BundID/Assets.xcassets
+    outputs:
+      - templateName: swift5
+        output: BundID/Generated/Assets+Generated.swift
+        params:
+          enumName: Asset

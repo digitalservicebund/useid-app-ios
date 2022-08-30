@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B9C7735028B3C64100E41332 /* animation_id-scan.json in Resources */ = {isa = PBXBuildFile; fileRef = B9C7734F28B3C64100E41332 /* animation_id-scan.json */; };
+		D21E682028BCEB0A0055EBFE /* Assets+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21E681F28BCEB0A0055EBFE /* Assets+Generated.swift */; };
 		D28D27FF28B7A91B008DA310 /* MissingPINLetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */; };
 		D28D280228B7A9F5008DA310 /* SetupDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D280028B7A9F5008DA310 /* SetupDone.swift */; };
 		D28D280328B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D280128B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift */; };
@@ -156,6 +157,7 @@
 
 /* Begin PBXFileReference section */
 		B9C7734F28B3C64100E41332 /* animation_id-scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "animation_id-scan.json"; sourceTree = "<group>"; };
+		D21E681F28BCEB0A0055EBFE /* Assets+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Assets+Generated.swift"; sourceTree = "<group>"; };
 		D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissingPINLetter.swift; sourceTree = "<group>"; };
 		D28D280028B7A9F5008DA310 /* SetupDone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupDone.swift; sourceTree = "<group>"; };
 		D28D280128B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupIncorrectTransportPIN.swift; sourceTree = "<group>"; };
@@ -494,6 +496,7 @@
 		E1BC3D7A28B7E5C0007A7B39 /* Generated */ = {
 			isa = PBXGroup;
 			children = (
+				D21E681F28BCEB0A0055EBFE /* Assets+Generated.swift */,
 				E1BC3D7F28B7E73B007A7B39 /* Licenses */,
 				E1BC3D8028B7E73B007A7B39 /* Licenses.plist */,
 				E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */,
@@ -804,12 +807,14 @@
 			inputPaths = (
 				"$(SRCROOT)/BundID/Resources/de.lproj/Localizable.strings",
 				"$(SRCROOT)/BundID/Resources/de.lproj/Localizable.stringsdict",
+				"$(SRCROOT)/BundID/Assets.xcassets",
 			);
 			name = "Localize via SwiftGen";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 				"$(PROJECT_DIR)/BundID/Generated/LocalizedStrings+Generated.swift",
+				"$(PROJECT_DIR)/BundID/Generated/Assets+Generated.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -950,6 +955,7 @@
 				E1DA8463286DD45800710DD9 /* IdentificationDone.swift in Sources */,
 				E1D307B02833A2500088DAFF /* SetupPersonalPIN.swift in Sources */,
 				E16708B5283D4F25001A1637 /* Screens.swift in Sources */,
+				D21E682028BCEB0A0055EBFE /* Assets+Generated.swift in Sources */,
 				E5CEB27E281041330076B9FE /* BundIDApp.swift in Sources */,
 				E1CD8E8F2820395F008ADA2A /* BundButtonStyle.swift in Sources */,
 			);
