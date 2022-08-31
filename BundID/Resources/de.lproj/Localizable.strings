@@ -2,7 +2,7 @@
 "firstTimeUser_intro_body" = "Bei der Einrichtung haben Sie Ihre persönliche Ausweis-PIN festgelegt.";
 "firstTimeUser_intro_yes" = "Jetzt Online-Ausweis einrichten";
 "firstTimeUser_intro_no" = "Bereits eingerichtet";
-"firstTimeUser_pinLetter_title" = "Haben Sie Ihren  PIN-Brief noch?";
+"firstTimeUser_pinLetter_title" = "Haben Sie Ihren PIN-Brief noch?";
 "firstTimeUser_pinLetter_body" = "Den PIN-Brief haben Sie nach der Beantragung des Ausweises per Post erhalten.";
 "firstTimeUser_pinLetter_yes" = "Ja, PIN-Brief vorhanden";
 "firstTimeUser_pinLetter_no" = "Nein, neuen PIN-Brief bestellen";
@@ -10,7 +10,7 @@
 "firstTimeUser_missingPINLetter_body" = "Wir arbeiten noch an dieser Funktion.\n\nWeitere Informationen über den PIN-Rücksetzbrief finden Sie unter";
 "firstTimeUser_missingPINLetter_link_title" = "www.pin-ruecksetzbrief-bestellen.de ↗";
 "firstTimeUser_missingPINLetter_link_url" = "https://www.pin-ruecksetzbrief-bestellen.de";
-"firstTimeUser_transportPIN_title" = "Geben Sie die  Transport-PIN ein.";
+"firstTimeUser_transportPIN_title" = "Geben Sie die Transport-PIN ein.";
 "firstTimeUser_transportPIN_continue" = "Weiter";
 "firstTimeUser_transportPIN_textFieldLabel" = "Transport-PIN, fünfstellig";
 "firstTimeUser_personalPINIntro_title" = "Vergeben Sie nun Ihre persönliche Ausweis-PIN.";
