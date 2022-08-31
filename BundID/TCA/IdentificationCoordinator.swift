@@ -192,6 +192,9 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
             case .routeAction(_, action: .scan(.error(let errorState))):
                 state.routes.presentSheet(.error(errorState))
                 return .none
+            case .routeAction(_, action: .scan(.showHelp)):
+                state.routes.presentSheet(.error(ScanErrorState(errorType: .help, retry: true)))
+                return .none
             case .routeAction(_, action: .error(.retry)):
                 state.routes.dismiss()
                 return .none

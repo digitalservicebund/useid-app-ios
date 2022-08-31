@@ -39,6 +39,7 @@ enum IdentificationScanAction: Equatable {
     case end
     case showNFCInfo
     case dismissNFCInfo
+    case showHelp
 #if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -87,6 +88,8 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
                                         message: TextState(L10n.FirstTimeUser.Scan.Info.message),
                                         dismissButton: .cancel(TextState(L10n.General.ok),
                                                                action: .send(.dismissNFCInfo)))
+        return .none
+    case .showHelp:
         return .none
     case .dismissNFCInfo:
         state.nfcInfoAlert = nil
@@ -171,7 +174,7 @@ struct IdentificationScan: View {
                                  buttonTitle: L10n.Identification.Scan.scan,
                                  buttonTapped: { viewStore.send(.startScan) },
                                  infoTapped: { viewStore.send(.showNFCInfo) },
-                                 helpTapped: { })
+                                 helpTapped: { viewStore.send(.showHelp) })
                             .disabled(!viewStore.scanAvailable)
                     }
                 }

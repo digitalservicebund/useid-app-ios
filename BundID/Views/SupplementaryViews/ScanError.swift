@@ -5,6 +5,7 @@ enum ScanErrorType: Equatable {
     case cardDeactivated
     case cardSuspended
     case cardBlocked
+    case help
     case idCardInteraction(IDCardInteractionError)
     case unexpectedEvent(EIDInteractionEvent)
 }
@@ -22,7 +23,8 @@ struct ScanErrorState: Equatable {
         case .cardBlocked:
             return L10n.ScanError.CardBlocked.title
         case .idCardInteraction,
-                .unexpectedEvent:
+                .unexpectedEvent,
+                .help:
             return L10n.ScanError.CardUnreadable.title
         }
     }
@@ -36,7 +38,8 @@ struct ScanErrorState: Equatable {
         case .cardBlocked:
             return L10n.ScanError.CardBlocked.body
         case .idCardInteraction,
-                .unexpectedEvent:
+                .unexpectedEvent,
+                .help:
             return L10n.ScanError.CardUnreadable.body
         }
     }

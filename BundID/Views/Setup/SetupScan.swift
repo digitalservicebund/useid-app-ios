@@ -32,6 +32,7 @@ enum SetupScanAction: Equatable {
     case scannedSuccessfully
     case showNFCInfo
     case dismissAlert
+    case showHelp
 #if PREVIEW
     case runDebugSequence(ChangePINDebugSequence)
 #endif
@@ -99,6 +100,8 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
                                  message: TextState(L10n.FirstTimeUser.Scan.Info.message),
                                  dismissButton: .cancel(TextState(L10n.General.ok),
                                                         action: .send(.dismissAlert)))
+        return .none
+    case .showHelp:
         return .none
     case .dismissAlert:
         state.alert = nil
@@ -185,7 +188,7 @@ struct SetupScan: View {
                                  buttonTitle: L10n.FirstTimeUser.Scan.scan,
                                  buttonTapped: { viewStore.send(.startScan) },
                                  infoTapped: { viewStore.send(.showNFCInfo) },
-                                 helpTapped: { })
+                                 helpTapped: { viewStore.send(.showHelp) })
                         .disabled(!viewStore.scanAvailable)
                     }
                 }

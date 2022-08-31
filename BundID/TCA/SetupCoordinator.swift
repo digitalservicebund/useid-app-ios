@@ -73,6 +73,8 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
                 state.routes.push(.done(SetupDoneState(tokenURL: state.tokenURL)))
             case .routeAction(_, action: .scan(.error(let errorState))):
                 state.routes.presentSheet(.error(errorState))
+            case .routeAction(_, action: .scan(.showHelp)):
+                state.routes.presentSheet(.error(ScanErrorState(errorType: .help, retry: true)))
             case .routeAction(_, action: .error(.retry)):
                 state.routes.dismiss()
             case .routeAction(_, action: .error(.end)):
