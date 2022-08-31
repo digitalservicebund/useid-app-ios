@@ -7,9 +7,7 @@
 "firstTimeUser_pinLetter_yes" = "Ja, PIN-Brief vorhanden";
 "firstTimeUser_pinLetter_no" = "Nein, neuen PIN-Brief bestellen";
 "firstTimeUser_missingPINLetter_title" = "Neuen PIN-Brief bestellen";
-"firstTimeUser_missingPINLetter_body" = "Wir arbeiten noch an dieser Funktion.\n\nWeitere Informationen über den PIN-Rücksetzbrief finden Sie unter";
-"firstTimeUser_missingPINLetter_link_title" = "www.pin-ruecksetzbrief-bestellen.de ↗";
-"firstTimeUser_missingPINLetter_link_url" = "https://www.pin-ruecksetzbrief-bestellen.de";
+"firstTimeUser_missingPINLetter_body" = "Wir arbeiten noch an dieser Funktion.\n\nWeitere Informationen über den PIN-Rücksetzbrief finden Sie unter\n\n**[www.pin-ruecksetzbrief-bestellen.de ↗](https://www.pin-ruecksetzbrief-bestellen.de)**";
 "firstTimeUser_transportPIN_title" = "Geben Sie die Transport-PIN ein.";
 "firstTimeUser_transportPIN_continue" = "Weiter";
 "firstTimeUser_transportPIN_textFieldLabel" = "Transport-PIN, fünfstellig";
@@ -29,7 +27,7 @@
 "firstTimeUser_scan_info_title" = "Wie funktioniert die NFC-Technologie?";
 "firstTimeUser_scan_info_message" = "NFC steht für Near Field Communication. Die Technik ermöglicht den kontaktlosen Austausch von Daten über sehr kurze Strecken. Sie wird bspw. auch beim Bezahlen mit dem Smartphone an der Supermarktkasse verwendet.";
 "firstTimeUser_scan_help" = "Mein Ausweis wird nicht erkannt";
-"firstTimeUser_scan_scan" = "Ausweis auslesen";
+"firstTimeUser_scan_scan" = "Jetzt übertragen";
 "firstTimeUser_scan_progress_caption" = "Ausweis nicht bewegen";
 "firstTimeUser_scan_scanningCard" = "Ausweis wird geprüft";
 "firstTimeUser_scan_scanSuccess" = "PIN erfolgreich übertragen";
@@ -41,18 +39,15 @@
 "firstTimeUser_confirmEnd_title" = "Einrichtung beenden?";
 "firstTimeUser_confirmEnd_message" = "Möchten Sie die Einrichtung Ihres Personalausweises beenden?";
 "firstTimeUser_confirmEnd_confirm" = "Beenden";
-"firstTimeUser_scan_scanError_idCardInteraction_title" = "Ihr Ausweis konnte nicht ausgelesen werden";
-"firstTimeUser_scan_scanError_idCardInteraction_body" = "Versuchen Sie diese Schritte:\n\n • Entfernen Sie die Karte von Ihrem Telefon und legen Sie sie erneut an das Telefon.\n\n • Wenn Sie eine sehr dicke Handyhülle haben, versuchen Sie, die Hülle zu entfernen.";
-"firstTimeUser_scan_scanError_unexpectedEvent_title" = "Ein Fehler ist aufgetreten";
-"firstTimeUser_scan_scanError_unexpectedEvent_body" = "Bitte legen Sie Ihren Ausweis erneut an das Smartphone.";
-"firstTimeUser_error_cardDeactivated_title" = "Für Ihren Ausweis ist die Online-Ausweisfunktion nicht aktiviert";
-"firstTimeUser_error_cardDeactivated_body" = "Wenden Sie sich an Ihr Bürgeramt, um die Online-Ausweisfunktion zu aktivieren.\n\nSie wissen nicht, an wen Sie sich wenden können? Rufen Sie die 115 an oder informieren Sie sich unter:";
-"firstTimeUser_error_cardDeactivated_link_title" = "Behördenfinder Deutschland";
-"firstTimeUser_error_cardDeactivated_link_url" = "https://behoerdenfinder.de";
-"firstTimeUser_error_cardSuspended_title" = "Sie haben zum zweiten Mal die falsche PIN eingegeben";
-"firstTimeUser_error_cardSuspended_body" = "Sollten Sie ihre PIN ein drittes mal falsch eingeben, wird ihr Ausweis gesperrt.\n\nIhren Ausweis können Sie dann nur mit Ihrer 10-stelligen PUK in der AusweisApp2 oder im Bürgeramt entsperren.";
-"firstTimeUser_error_cardBlocked_title" = "Ihr Ausweis ist gesperrt";
-"firstTimeUser_error_cardBlocked_body" = "Da Sie Ihre PIN ein drittes Mal falsch eingeben haben, wurde Ihr Ausweis gesperrt.\n\nIhren Ausweis können Sie nur mit Ihrer 10-stelligen PUK in der AusweisApp2 oder im Bürgeramt entsperren.";
+
+"cardError_cardDeactivated_title" = "Für Ihren Ausweis ist die Online-Ausweisfunktion nicht aktiviert";
+"cardError_cardDeactivated_body" = "Wenden Sie sich an Ihr Bürgeramt, um die Online-Ausweisfunktion zu aktivieren.\n\nSie wissen nicht, an wen Sie sich wenden können? Rufen Sie die 115 an oder informieren Sie sich unter:";
+"cardError_cardSuspended_title" = "Sie haben zum zweiten Mal die falsche PIN eingegeben";
+"cardError_cardSuspended_body" = "Sollten Sie ihre PIN ein drittes mal falsch eingeben, wird ihr Ausweis gesperrt.\n\nIhren Ausweis können Sie dann nur mit Ihrer 10-stelligen PUK in der AusweisApp2 oder im Bürgeramt entsperren.";
+"cardError_cardBlocked_title" = "Ihr Ausweis ist gesperrt";
+"cardError_cardBlocked_body" = "Da Sie Ihre PIN ein drittes Mal falsch eingeben haben, wurde Ihr Ausweis gesperrt.\n\nIhren Ausweis können Sie nur mit Ihrer 10-stelligen PUK in der AusweisApp2 oder im Bürgeramt entsperren.";
+"cardError_cardUnreadable_title" = "Ihr Ausweis wurde nicht erkannt.";
+"cardError_cardUnreadable_body" = "Folgende Dokumente bieten die Funktion an: Deutscher Personalausweis, Elektronischer Aufenthaltstitel, eID-Karte für Bürgerinnen und Bürger der Europäischen Union und des Europäischer Wirtschaftsraum.\n\nWenn Sie eines der oben genannten Dokumente benutzen und das Problem weiter auftritt, versuchen Sie diese Schritte:\n\n- Entfernen Sie die Karte von Ihrem Smartphone und legen Sie sie erneut an das Smartphone.\n- Wenn Sie eine sehr dicke Handyhülle haben, versuchen Sie, die Hülle zu entfernen.";
 "firstTimeUser_error_close" = "Schließen";
 "firstTimeUser_done_title" = "Sie haben Ihren Online-Ausweis erfolgreich eingerichtet.";
 "firstTimeUser_done_close" = "Einrichtung abschließen";

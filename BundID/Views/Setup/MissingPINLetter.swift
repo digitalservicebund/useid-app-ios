@@ -10,9 +10,7 @@ struct MissingPINLetter: View {
         DialogView(store: store,
                    title: L10n.FirstTimeUser.MissingPINLetter.title,
                    message: L10n.FirstTimeUser.MissingPINLetter.body,
-                   imageMeta: ImageMeta(asset: Asset.missingPINBrief),
-                   linkMeta: LinkMeta(title: L10n.FirstTimeUser.MissingPINLetter.Link.title,
-                                      url: URL(string: L10n.FirstTimeUser.MissingPINLetter.Link.url)!))
+                   imageMeta: ImageMeta(asset: Asset.missingPINBrief))
     }
 }
 

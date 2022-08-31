@@ -87,7 +87,7 @@ enum IdentificationCoordinatorAction: Equatable, IndexedRouterAction {
     case routeAction(Int, action: IdentificationScreenAction)
     case updateRoutes([Route<IdentificationScreenState>])
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
-    case cardError(CardErrorType)
+    case cardError(CardErrorState)
     case end
     case confirmEnd
     case afterConfirmEnd
@@ -189,9 +189,21 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                                                   pinCallback: pinCallback))
                 )
                 return .none
-            case .routeAction(_, action: .scan(.error(let error))):
-                state.routes.push(.cardError(CardErrorState(errorType: error)))
+            case .routeAction(_, action: .scan(.error(let errorState))):
+                state.routes.presentSheet(.error(errorState))
                 return .none
+            case .routeAction(_, action: .error(.retry)):
+                state.routes.dismiss()
+                return .none
+            case .routeAction(_, action: .error(.end)):
+                state.routes.dismiss()
+                
+                // Dismissing two sheets at the same time from different coordinators is not well supported.
+                // Waiting for 0.65s (as TCACoordinators does) fixes this temporarily.
+                return Effect(value: .afterConfirmEnd)
+                    .delay(for: 0.65, scheduler: environment.mainQueue)
+                    .eraseToEffect()
+                
             case .routeAction(let index, action: .incorrectPersonalPIN(.confirmEnd)):
                 state.routes.dismiss()
                 
@@ -242,8 +254,8 @@ struct IdentificationCoordinatorView: View {
                         CaseLet(state: /IdentificationScreenState.done,
                                 action: IdentificationScreenAction.done,
                                 then: IdentificationDone.init)
-                        CaseLet(state: /IdentificationScreenState.cardError,
-                                action: IdentificationScreenAction.cardError,
+                        CaseLet(state: /IdentificationScreenState.error,
+                                action: IdentificationScreenAction.error,
                                 then: CardError.init)
                     }
                 }

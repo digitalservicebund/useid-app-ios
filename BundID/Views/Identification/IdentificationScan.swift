@@ -3,7 +3,7 @@ import ComposableArchitecture
 import Combine
 import Lottie
 
-enum IdentificationScanError: Equatable {
+enum IdentificationScanError: Error, Equatable {
     case idCardInteraction(IDCardInteractionError)
     case unexpectedEvent(EIDInteractionEvent)
 }
@@ -15,9 +15,8 @@ struct IdentificationScanState: Equatable, IDInteractionHandler {
     var pinCallback: PINCallback
     var attempt = 0
     var isScanning: Bool = false
-    var isRetryAvailable: Bool = true
+    var scanAvailable: Bool = true
     var showProgressCaption: Bool = false
-    var error: IdentificationScanError?
     var authenticationSuccessful = false
     var nfcInfoAlert: AlertState<IdentificationScanAction>?
 #if PREVIEW
@@ -36,7 +35,7 @@ enum IdentificationScanAction: Equatable {
     case wrongPIN(remainingAttempts: Int)
     case identifiedSuccessfullyWithRedirect(EIDAuthenticationRequest, redirectURL: String)
     case identifiedSuccessfullyWithoutRedirect(EIDAuthenticationRequest)
-    case error(CardErrorType)
+    case error(CardErrorState)
     case end
     case showNFCInfo
     case dismissNFCInfo
@@ -49,9 +48,9 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
     
     switch action {
     case .onAppear:
-        guard !state.isScanning else { return .none }
-        return Effect(value: .startScan)
+        return .none
     case .startScan:
+        guard !state.isScanning else { return .none }
         state.pinCallback(state.pin)
         state.isScanning = true
         return .none
@@ -62,15 +61,14 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
     case .idInteractionEvent(.success(let event)):
         return state.handle(event: event, environment: environment)
     case .idInteractionEvent(.failure(let error)):
-        state.error = .idCardInteraction(error)
         state.isScanning = false
         switch error {
         case .cardDeactivated:
-            return Effect(value: .error(.cardDeactivated))
+            return Effect(value: .error(CardErrorState(errorType: .cardDeactivated, retry: false)))
         case .cardBlocked:
-            return Effect(value: .error(.cardBlocked))
+            return Effect(value: .error(CardErrorState(errorType: .cardBlocked, retry: false)))
         default:
-            return .none
+            return Effect(value: .error(CardErrorState(errorType: .idCardInteraction(error), retry: true)))
         }
     case .wrongPIN:
         return .none
@@ -103,7 +101,7 @@ extension IdentificationScanState {
             
             pinCallback = PINCallback(id: environment.uuidFactory(), callback: callback)
             isScanning = false
-            isRetryAvailable = true
+            scanAvailable = true
             
             // This is our signal that the user canceled (for now)
             guard let remainingAttempts = remainingAttempts else {
@@ -112,7 +110,9 @@ extension IdentificationScanState {
             
             return Effect(value: .wrongPIN(remainingAttempts: remainingAttempts))
         case .requestPINAndCAN:
-            return Effect(value: .error(.cardSuspended))
+            isScanning = false
+            scanAvailable = false
+            return Effect(value: .error(CardErrorState(errorType: .cardSuspended, retry: scanAvailable)))
         case .authenticationStarted,
                 .cardInteractionComplete,
                 .cardRecognized:
@@ -125,51 +125,13 @@ extension IdentificationScanState {
             return .none
         case .processCompletedSuccessfullyWithRedirect(let urlString) where authenticationSuccessful:
             return Effect(value: .identifiedSuccessfullyWithRedirect(request, redirectURL: urlString))
-        case .processCompletedSuccessfullyWithoutRedirect:
-            error = .unexpectedEvent(.processCompletedSuccessfullyWithoutRedirect)
+        case .processCompletedSuccessfullyWithoutRedirect,
+                .processCompletedSuccessfullyWithRedirect:
             isScanning = false
-            isRetryAvailable = false
-            return .none
-        case .processCompletedSuccessfullyWithRedirect(let urlString):
-            error = .unexpectedEvent(.processCompletedSuccessfullyWithRedirect(url: urlString))
-            isScanning = false
-            isRetryAvailable = false
-            return .none
+            scanAvailable = false
+            return Effect(value: .error(CardErrorState(errorType: .unexpectedEvent(event), retry: scanAvailable)))
         default:
             return .none
-        }
-    }
-}
-
-extension IdentificationScanState {
-    var errorTitle: String? {
-        switch self.error {
-        case .idCardInteraction:
-            return L10n.FirstTimeUser.Scan.ScanError.IdCardInteraction.title
-        case .unexpectedEvent:
-            return L10n.FirstTimeUser.Scan.ScanError.UnexpectedEvent.title
-        default:
-            return nil
-        }
-    }
-    
-    var errorBody: String? {
-        switch self.error {
-        case .idCardInteraction:
-            return L10n.FirstTimeUser.Scan.ScanError.IdCardInteraction.body
-        case .unexpectedEvent:
-            return L10n.FirstTimeUser.Scan.ScanError.UnexpectedEvent.body
-        default:
-            return nil
-        }
-    }
-    
-    var showLottie: Bool {
-        switch self.error {
-        case .unexpectedEvent:
-            return false
-        default:
-            return true
         }
     }
 }
@@ -182,17 +144,13 @@ struct IdentificationScan: View {
         WithViewStore(store) { viewStore in
             VStack(alignment: .leading, spacing: 0) {
                 ScrollView {
-                    if viewStore.state.showLottie {
-                        LottieView(name: "animation_id-scan", backgroundColor: Color(0xEBEFF2))
-                            .aspectRatio(contentMode: .fit)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 10)
-                        Spacer()
-                    }
                     
-                    if viewStore.error != nil {
-                        HeaderView(title: L10n.Identification.Scan.UnexpectedError.title, message: L10n.Identification.Scan.UnexpectedError.message)
-                    }
+                    LottieView(name: "animation_id-scan", backgroundColor: Color(0xEBEFF2))
+                        .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                    Spacer()
+                    
                     if viewStore.isScanning {
                         VStack {
                             ProgressView()
@@ -210,14 +168,11 @@ struct IdentificationScan: View {
                     } else {
                         ScanBody(title: L10n.Identification.Scan.title,
                                  message: L10n.Identification.Scan.message,
+                                 buttonTitle: L10n.Identification.Scan.scan,
+                                 buttonTapped: { viewStore.send(.startScan) },
                                  infoTapped: { viewStore.send(.showNFCInfo) },
                                  helpTapped: { })
-                        if viewStore.isRetryAvailable {
-                            DialogButtons(store: store.stateless,
-                                          secondary: nil,
-                                          primary: .init(title: L10n.Identification.Scan.scan, action: .startScan))
-                            .disabled(viewStore.isScanning)
-                        }
+                            .disabled(!viewStore.scanAvailable)
                     }
                 }
             }.onChange(of: viewStore.state.attempt, perform: { _ in

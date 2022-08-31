@@ -28,7 +28,6 @@ struct HeaderView: View {
     var title: String
     var message: String?
     var imageMeta: ImageMeta?
-    var linkMeta: LinkMeta?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 30) {
@@ -38,14 +37,10 @@ struct HeaderView: View {
                     .foregroundColor(.blackish)
                     .padding(.bottom, 24)
                 if let message = message {
-                    Text(message)
+                    Text(attributed(message: message))
                         .font(.bundBody)
                         .foregroundColor(.blackish)
                         .padding(.bottom, 24)
-                }
-                if let linkMeta = linkMeta {
-                    Link(linkMeta.title, destination: linkMeta.url)
-                        .font(.bundBodyBold)
                 }
             }
             .padding(.horizontal)
@@ -58,6 +53,11 @@ struct HeaderView: View {
                     .padding(.horizontal, 24)
             }
         }
+    }
+    
+    func attributed(message: String) -> AttributedString {
+        (try? AttributedString(markdown: message,
+                              options: .init(interpretedSyntax: .inlineOnlyPreservingWhitespace))) ?? AttributedString(message)
     }
 }
 
@@ -75,8 +75,7 @@ struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
         HeaderView(title: L10n.FirstTimeUser.Intro.title,
                    message: L10n.FirstTimeUser.Intro.body,
-                   imageMeta: ImageMeta(asset: Asset.pinBrief),
-                   linkMeta: LinkMeta(title: "Behördenfinder", url: URL(string: "https://behoerdenfinder.de")!))
+                   imageMeta: ImageMeta(asset: Asset.pinBrief))
         .previewLayout(.sizeThatFits)
     }
 }

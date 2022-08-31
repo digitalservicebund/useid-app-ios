@@ -71,8 +71,18 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
                 state.routes.push(.scan(SetupScanState(transportPIN: state.transportPIN, newPIN: pin)))
             case .routeAction(_, action: .scan(.scannedSuccessfully)):
                 state.routes.push(.done(SetupDoneState(tokenURL: state.tokenURL)))
-            case .routeAction(_, action: .scan(.error(let errorType))):
-                state.routes.push(.error(CardErrorState(errorType: errorType)))
+            case .routeAction(_, action: .scan(.error(let errorState))):
+                state.routes.presentSheet(.error(errorState))
+            case .routeAction(_, action: .error(.retry)):
+                state.routes.dismiss()
+            case .routeAction(_, action: .error(.end)):
+                state.routes.dismiss()
+                
+                // Dismissing two sheets at the same time from different coordinators is not well supported.
+                // Waiting for 0.65s (as TCACoordinators does) fixes this temporarily.
+                return Effect(value: .afterConfirmEnd)
+                    .delay(for: 0.65, scheduler: environment.mainQueue)
+                    .eraseToEffect()
             case .routeAction(_, action: .scan(.wrongTransportPIN(remainingAttempts: let remainingAttempts))):
                 state.routes.presentSheet(.incorrectTransportPIN(SetupIncorrectTransportPINState(remainingAttempts: remainingAttempts)))
             case .routeAction(let index, action: .incorrectTransportPIN(.confirmEnd)):

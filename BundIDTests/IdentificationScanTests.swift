@@ -26,7 +26,7 @@ final class IdentificationScanTests: XCTestCase {
                                             idInteractionManager: mockIDInteractionManager)
     }
     
-    func testOnAppearTriggersScanning() throws {
+    func testOnAppearDoesNotTriggerScanning() throws {
         
         let request = EIDAuthenticationRequest.preview
         let pin = "123456"
@@ -43,9 +43,6 @@ final class IdentificationScanTests: XCTestCase {
         )
         
         store.send(.onAppear)
-        store.receive(.startScan) {
-            $0.isScanning = true
-        }
     }
     
     func testOnAppearIgnoredWhenAlreadyScanning() throws {

@@ -6,7 +6,7 @@ enum IdentificationScreenState: Equatable, IDInteractionHandler {
     case personalPIN(IdentificationPersonalPINState)
     case incorrectPersonalPIN(IdentificationIncorrectPersonalPINState)
     case scan(IdentificationScanState)
-    case cardError(CardErrorState)
+    case error(CardErrorState)
     case done(IdentificationDoneState)
     
     func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationScreenAction? {
@@ -28,7 +28,7 @@ enum IdentificationScreenAction: Equatable {
     case personalPIN(IdentificationPersonalPINAction)
     case incorrectPersonalPIN(IdentificationIncorrectPersonalPINAction)
     case scan(IdentificationScanAction)
-    case cardError(CardErrorAction)
+    case error(CardErrorAction)
     case done(IdentificationDoneAction)
 }
 

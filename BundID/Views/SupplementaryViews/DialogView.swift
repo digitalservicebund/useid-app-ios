@@ -6,7 +6,6 @@ struct DialogView<Action>: View {
     var title: String
     var message: String?
     var imageMeta: ImageMeta?
-    var linkMeta: LinkMeta?
     var secondaryButton: DialogButtons<Action>.ButtonConfiguration?
     var primaryButton: DialogButtons<Action>.ButtonConfiguration?
     
@@ -15,8 +14,7 @@ struct DialogView<Action>: View {
             ScrollView {
                 HeaderView(title: title,
                            message: message,
-                           imageMeta: imageMeta,
-                           linkMeta: linkMeta)
+                           imageMeta: imageMeta)
             }
             DialogButtons(store: store,
                           secondary: secondaryButton,

@@ -3,17 +3,17 @@ import ComposableArchitecture
 import Combine
 import Lottie
 
-enum SetupScanError: Equatable {
+enum SetupScanError: Error, Equatable {
     case idCardInteraction(IDCardInteractionError)
     case unexpectedEvent(EIDInteractionEvent)
 }
 
 struct SetupScanState: Equatable {
     var isScanning: Bool = false
+    var scanAvailable: Bool = true
     var showProgressCaption: Bool = false
     var transportPIN: String
     var newPIN: String
-    var error: SetupScanError?
     var remainingAttempts: Int?
     var attempt = 0
     var alert: AlertState<SetupScanAction>?
@@ -27,7 +27,7 @@ enum SetupScanAction: Equatable {
     case startScan
     case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case wrongTransportPIN(remainingAttempts: Int)
-    case error(CardErrorType)
+    case error(CardErrorState)
     case cancelScan
     case scannedSuccessfully
     case showNFCInfo
@@ -48,9 +48,9 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         return .none
 #endif
     case .onAppear:
-        return Effect(value: .startScan)
+        return .none
     case .startScan:
-        state.error = nil
+        guard !state.isScanning else { return .none }
         state.isScanning = true
     
         let publisher: EIDInteractionPublisher
@@ -70,16 +70,18 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
             .catchToEffect(SetupScanAction.scanEvent)
             .cancellable(id: CancelId.self, cancelInFlight: true)
     case .scanEvent(.failure(let error)):
-        state.error = .idCardInteraction(error)
         state.isScanning = false
         
         switch error {
         case .cardDeactivated:
-            return Effect(value: .error(.cardDeactivated))
+            state.scanAvailable = false
+            return Effect(value: .error(CardErrorState(errorType: .cardDeactivated, retry: state.scanAvailable)))
         case .cardBlocked:
-            return Effect(value: .error(.cardBlocked))
+            state.scanAvailable = false
+            return Effect(value: .error(CardErrorState(errorType: .cardBlocked, retry: state.scanAvailable)))
         default:
-            return .cancel(id: CancelId.self)
+            state.scanAvailable = true
+            return Effect(value: .error(CardErrorState(errorType: .idCardInteraction(error), retry: state.scanAvailable)))
         }
     case .scanEvent(.success(let event)):
         return state.handle(event: event, environment: environment)
@@ -139,49 +141,15 @@ extension SetupScanState {
             pinCallback(transportPIN, newPIN)
         case .requestCANAndChangedPIN:
             print("CAN to change PIN requested, so card is suspended. Callback not implemented yet.")
-            return Effect(value: .error(.cardSuspended))
+            return Effect(value: .error(CardErrorState(errorType: .cardSuspended, retry: false)))
         case .requestPUK:
             print("PUK requested, so card is blocked. Callback not implemented yet.")
-            return Effect(value: .error(.cardBlocked))
+            return Effect(value: .error(CardErrorState(errorType: .cardBlocked, retry: false)))
         default:
-            self.error = .unexpectedEvent(event)
             print("Received unexpected event.")
-            return Effect(value: .cancelScan)
+            return Effect(value: .error(CardErrorState(errorType: .unexpectedEvent(event), retry: true)))
         }
         return .none
-    }
-}
-
-extension SetupScanState {
-    var errorTitle: String? {
-        switch self.error {
-        case .idCardInteraction:
-            return L10n.FirstTimeUser.Scan.ScanError.IdCardInteraction.title
-        case .unexpectedEvent:
-            return L10n.FirstTimeUser.Scan.ScanError.UnexpectedEvent.title
-        default:
-            return nil
-        }
-    }
-
-    var errorBody: String? {
-        switch self.error {
-        case .idCardInteraction:
-            return L10n.FirstTimeUser.Scan.ScanError.IdCardInteraction.body
-        case .unexpectedEvent:
-            return L10n.FirstTimeUser.Scan.ScanError.UnexpectedEvent.body
-        default:
-            return nil
-        }
-    }
-    
-    var showLottie: Bool {
-        switch self.error {
-        case .unexpectedEvent:
-            return false
-        default:
-            return true
-        }
     }
 }
 
@@ -193,15 +161,10 @@ struct SetupScan: View {
         WithViewStore(store) { viewStore in
             VStack(alignment: .leading, spacing: 0) {
                 ScrollView {
-                    if viewStore.state.showLottie {
-                        LottieView(name: "animation_id-scan", backgroundColor: Color(0xEBEFF2))
-                            .aspectRatio(contentMode: .fit)
-                    }
+                    LottieView(name: "animation_id-scan", backgroundColor: Color(0xEBEFF2))
+                        .aspectRatio(contentMode: .fit)
                     
-                    if let title = viewStore.state.errorTitle {
-                        HeaderView(title: title, message: viewStore.state.errorBody)
-                            .padding(.bottom)
-                    } else if viewStore.isScanning {
+                    if viewStore.isScanning {
                         VStack {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: Color.blue900))
@@ -219,12 +182,11 @@ struct SetupScan: View {
                     } else {
                         ScanBody(title: L10n.FirstTimeUser.Scan.title,
                                  message: L10n.FirstTimeUser.Scan.body,
+                                 buttonTitle: L10n.FirstTimeUser.Scan.scan,
+                                 buttonTapped: { viewStore.send(.startScan) },
                                  infoTapped: { viewStore.send(.showNFCInfo) },
                                  helpTapped: { })
-                        DialogButtons(store: store.stateless,
-                                      secondary: nil,
-                                      primary: .init(title: L10n.FirstTimeUser.Scan.scan, action: .startScan))
-                        .disabled(viewStore.isScanning)
+                        .disabled(!viewStore.scanAvailable)
                     }
                 }
             }.onChange(of: viewStore.state.attempt, perform: { _ in
@@ -244,8 +206,8 @@ struct SetupScan: View {
 struct SetupScan_Previews: PreviewProvider {
     static var previews: some View {
         SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
-        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456", error: .idCardInteraction(.processFailed(resultCode: .INTERNAL_ERROR))), reducer: .empty, environment: AppEnvironment.preview))
-        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456", error: .unexpectedEvent(.requestPINAndCAN({ _, _ in }))), reducer: .empty, environment: AppEnvironment.preview))
+        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
+        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
         NavigationView {
             SetupScan(store: Store(initialState: SetupScanState(isScanning: true, showProgressCaption: false, transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
         }

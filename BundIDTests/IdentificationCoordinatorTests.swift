@@ -159,8 +159,9 @@ class IdentificationCoordinatorTests: XCTestCase {
             reducer: identificationCoordinatorReducer,
             environment: environment)
         
-        store.send(.routeAction(0, action: .scan(.error(.cardBlocked)))) {
-            $0.states.append(.push(.cardError(.init(errorType: .cardBlocked))))
+        let errorState = CardErrorState(errorType: .cardBlocked, retry: false)
+        store.send(.routeAction(0, action: .scan(.error(errorState)))) {
+            $0.states.append(.sheet(.error(errorState)))
         }
     }
     

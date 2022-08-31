@@ -89,10 +89,6 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                         state.routes.dismiss()
                         return .none
                     }
-                case .setupCoordinator(.routeAction(_, action: .error(.done))),
-                        .identificationCoordinator(.routeAction(_, action: .cardError(.done))):
-                    state.routes.dismiss()
-                    return .none
                 case .setupCoordinator(.afterConfirmEnd),
                         .identificationCoordinator(.afterConfirmEnd):
                     state.routes.dismiss()

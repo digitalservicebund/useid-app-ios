@@ -4,6 +4,8 @@ struct ScanBody: View {
     
     let title: String
     let message: String
+    let buttonTitle: String
+    let buttonTapped: () -> Void
     let infoTapped: () -> Void
     let helpTapped: () -> Void
     
@@ -12,6 +14,9 @@ struct ScanBody: View {
             Text(title)
                 .font(.bundLargeTitle)
                 .foregroundColor(.blackish)
+            Button(buttonTitle,
+                   action: buttonTapped)
+            .buttonStyle(BundButtonStyle(isPrimary: true))
             Text(message)
                 .font(.bundBody)
                 .foregroundColor(.blackish)
