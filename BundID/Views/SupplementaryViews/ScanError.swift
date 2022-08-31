@@ -59,7 +59,7 @@ struct ScanError: View {
                 DialogView(store: store.stateless,
                            title: viewStore.title,
                            message: viewStore.markdown,
-                           primaryButton: .init(title: L10n.FirstTimeUser.Error.close,
+                           primaryButton: .init(title: L10n.ScanError.close,
                                                 action: viewStore.retry ? .retry : .end))
                 .interactiveDismissDisabled(!viewStore.retry)
             }.navigationBarBackButtonHidden(true)

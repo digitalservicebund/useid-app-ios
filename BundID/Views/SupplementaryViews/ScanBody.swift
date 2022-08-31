@@ -22,13 +22,13 @@ struct ScanBody: View {
                 .foregroundColor(.blackish)
             VStack(alignment: .leading, spacing: 16) {
                 Button(action: infoTapped, label: {
-                    Text(L10n.FirstTimeUser.Scan.info)
+                    Text(L10n.General.Scan.info)
                         .bold()
                 })
                 .padding(EdgeInsets(top: 8, leading: 10, bottom: 10, trailing: 8))
                 .background(RoundedRectangle(cornerRadius: 12).foregroundColor(.blue200))
                 Button(action: helpTapped, label: {
-                    Text(L10n.FirstTimeUser.Scan.help)
+                    Text(L10n.General.Scan.help)
                         .bold()
                 })
                 .padding(EdgeInsets(top: 8, leading: 10, bottom: 10, trailing: 8))

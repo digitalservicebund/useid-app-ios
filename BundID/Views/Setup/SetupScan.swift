@@ -96,8 +96,8 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
     case .scannedSuccessfully:
         return .cancel(id: CancelId.self)
     case .showNFCInfo:
-        state.alert = AlertState(title: TextState(L10n.FirstTimeUser.Scan.Info.title),
-                                 message: TextState(L10n.FirstTimeUser.Scan.Info.message),
+        state.alert = AlertState(title: TextState(L10n.General.Scan.Info.title),
+                                 message: TextState(L10n.General.Scan.Info.message),
                                  dismissButton: .cancel(TextState(L10n.General.ok),
                                                         action: .send(.dismissAlert)))
         return .none

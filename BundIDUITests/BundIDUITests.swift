@@ -123,6 +123,8 @@ final class BundIDUITests: XCTestCase {
         
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
         
+        app.buttons[L10n.Identification.Scan.scan].tap()
+        
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["identifySuccessfullyWithRedirect"].wait().tap()
         
@@ -149,5 +151,32 @@ final class BundIDUITests: XCTestCase {
         app.buttons[L10n.Identification.Overview.Error.retry].wait().tap()
         
         app.staticTexts[L10n.Identification.Overview.loading].assertExistence()
+    }
+    
+    func testIdentificationScanHelp() throws {
+        let app = XCUIApplication()
+        app.launchWithDefaultArguments()
+        app.launchWithSetupCompleted()
+        app.launchWithDemoTokenURL()
+        app.launch()
+        
+        app.navigationBars.buttons["Debug"].wait().tap()
+        app.buttons["requestAuthorization"].wait().tap()
+        
+        app.buttons[L10n.Identification.Overview.Loaded.continue].wait().tap()
+        
+        let pinTextField = app.secureTextFields[L10n.Identification.PersonalPIN.textFieldLabel]
+        pinTextField.wait().tap()
+        pinTextField.waitAndTypeText("123456")
+        
+        app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
+        
+        app.buttons[L10n.General.Scan.help].tap()
+        
+        app.staticTexts[L10n.ScanError.CardUnreadable.title].assertExistence()
+        app.buttons[L10n.ScanError.close].tap()
+        
+        app.buttons[L10n.Identification.Scan.scan].assertExistence()
+        app.buttons[L10n.Identification.Scan.scan].tap()
     }
 }

@@ -23,10 +23,6 @@
 "firstTimeUser_personalPIN_error_mismatch_body" = "Versuchen Sie es erneut.";
 "firstTimeUser_scan_title" = "Übertragen Sie ihre neue PIN auf den Ausweis.";
 "firstTimeUser_scan_body" = "Fast geschafft! Bitte halten Sie Ihren Ausweis dicht an die Rückseite des Smartphones. Die App nutzt die NFC-Sensoren in Smartphone und Ausweis, um ihrem Ausweis die neue PIN zuzuordnen.";
-"firstTimeUser_scan_info" = "Wie funktioniert die NFC-Technologie?";
-"firstTimeUser_scan_info_title" = "Wie funktioniert die NFC-Technologie?";
-"firstTimeUser_scan_info_message" = "NFC steht für Near Field Communication. Die Technik ermöglicht den kontaktlosen Austausch von Daten über sehr kurze Strecken. Sie wird bspw. auch beim Bezahlen mit dem Smartphone an der Supermarktkasse verwendet.";
-"firstTimeUser_scan_help" = "Mein Ausweis wird nicht erkannt";
 "firstTimeUser_scan_scan" = "Jetzt übertragen";
 "firstTimeUser_scan_progress_caption" = "Ausweis nicht bewegen";
 "firstTimeUser_scan_scanningCard" = "Ausweis wird geprüft";
@@ -48,7 +44,8 @@
 "scanError_cardBlocked_body" = "Da Sie Ihre PIN ein drittes Mal falsch eingeben haben, wurde Ihr Ausweis gesperrt.\n\nIhren Ausweis können Sie nur mit Ihrer 10-stelligen PUK in der AusweisApp2 oder im Bürgeramt entsperren.";
 "scanError_cardUnreadable_title" = "Ihr Ausweis wurde nicht erkannt.";
 "scanError_cardUnreadable_body" = "Folgende Dokumente bieten die Funktion an: Deutscher Personalausweis, Elektronischer Aufenthaltstitel, eID-Karte für Bürgerinnen und Bürger der Europäischen Union und des Europäischer Wirtschaftsraum.\n\nWenn Sie eines der oben genannten Dokumente benutzen und das Problem weiter auftritt, versuchen Sie diese Schritte:\n\n- Entfernen Sie die Karte von Ihrem Smartphone und legen Sie sie erneut an das Smartphone.\n- Wenn Sie eine sehr dicke Handyhülle haben, versuchen Sie, die Hülle zu entfernen.";
-"firstTimeUser_error_close" = "Schließen";
+"scanError_close" = "Schließen";
+
 "firstTimeUser_done_title" = "Sie haben Ihren Online-Ausweis erfolgreich eingerichtet.";
 "firstTimeUser_done_close" = "Einrichtung abschließen";
 "firstTimeUser_done_identify" = "Jetzt ausweisen";
@@ -75,6 +72,7 @@
 "identification_done_close" = "Schließen";
 "identification_scan_title" = "Rufen Sie die Daten von Ihrem Ausweis ab.";
 "identification_scan_message" = "Halten Sie Ihren Ausweis dicht an die Rückseite des Smartphones. Die App nutzt die NFC-Sensoren in Smartphone und Ausweis, um Ihre PIN zu überprüfen und die benötigten Daten abzurufen.";
+"identification_scan_progress_caption" = "Ausweis nicht bewegen";
 "identification_scan_scan" = "Jetzt Daten abrufen";
 "identification_scan_scanSuccess" = "Übertragung erfolgreich";
 "identification_scan_unexpectedError_title" = "Fehler aufgetreten";
@@ -85,6 +83,11 @@
 "identification_confirmEnd_confirm" = "Beenden";
 "general_ok" = "OK";
 "general_cancel" = "Abbrechen";
+"general_scan_info" = "Wie funktioniert die NFC-Technologie?";
+"general_scan_info_title" = "Wie funktioniert die NFC-Technologie?";
+"general_scan_info_message" = "NFC steht für Near Field Communication. Die Technik ermöglicht den kontaktlosen Austausch von Daten über sehr kurze Strecken. Sie wird bspw. auch beim Bezahlen mit dem Smartphone an der Supermarktkasse verwendet.";
+"general_scan_help" = "Mein Ausweis wird nicht erkannt";
+
 "cardAttribute_dg01" = "Dokumententyp";
 "cardAttribute_dg02" = "Ausgebender Staat";
 "cardAttribute_dg03" = "Ablaufdatum";

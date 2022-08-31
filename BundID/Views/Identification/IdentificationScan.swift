@@ -84,8 +84,8 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
     case .end:
         return .none
     case .showNFCInfo:
-        state.nfcInfoAlert = AlertState(title: TextState(L10n.FirstTimeUser.Scan.Info.title),
-                                        message: TextState(L10n.FirstTimeUser.Scan.Info.message),
+        state.nfcInfoAlert = AlertState(title: TextState(L10n.General.Scan.Info.title),
+                                        message: TextState(L10n.General.Scan.Info.message),
                                         dismissButton: .cancel(TextState(L10n.General.ok),
                                                                action: .send(.dismissNFCInfo)))
         return .none
@@ -162,7 +162,7 @@ struct IdentificationScan: View {
                                 .frame(maxWidth: .infinity)
                                 .padding(50)
                             if viewStore.showProgressCaption {
-                                Text(L10n.FirstTimeUser.Scan.Progress.caption)
+                                Text(L10n.Identification.Scan.Progress.caption)
                                     .font(.bundTitle)
                                     .foregroundColor(.blackish)
                                     .padding(.bottom, 50)
