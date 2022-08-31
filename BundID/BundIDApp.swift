@@ -39,7 +39,7 @@ struct BundIDApp: App {
         }
         
         let storageManager = StorageManager(userDefaults: userDefaults)
-        let matomoUrl = URL(string: "https://localhost/matomo.php")!
+        let matomoUrl = URL(string: "https://bund.matomo.cloud/matomo.php")!
         
 #if PREVIEW
         if MOCK_OPENECARD {
@@ -50,7 +50,7 @@ struct BundIDApp: App {
                 uuidFactory: UUID.init,
                 idInteractionManager: idInteractionManager,
                 storageManager: storageManager,
-                analytics: MatomoAnalyticsClient(siteId: "10", baseURL: matomoUrl),
+                analytics: MatomoAnalyticsClient(siteId: "2", baseURL: matomoUrl),
                 debugIDInteractionManager: idInteractionManager
             )
         } else {
@@ -61,7 +61,7 @@ struct BundIDApp: App {
                 uuidFactory: UUID.init,
                 idInteractionManager: idInteractionManager,
                 storageManager: storageManager,
-                analytics: MatomoAnalyticsClient(siteId: "10", baseURL: matomoUrl),
+                analytics: MatomoAnalyticsClient(siteId: "2", baseURL: matomoUrl),
                 debugIDInteractionManager: DebugIDInteractionManager()
             )
         }
@@ -73,7 +73,7 @@ struct BundIDApp: App {
             uuidFactory: UUID.init,
             idInteractionManager: idInteractionManager,
             storageManager: storageManager,
-            analytics: MatomoAnalyticsClient(siteId: "1", baseURL: matomoUrl)
+            analytics: MatomoAnalyticsClient(siteId: "3", baseURL: matomoUrl)
         )
 #endif
         

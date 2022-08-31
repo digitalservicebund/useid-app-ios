@@ -18,7 +18,7 @@ struct AppEnvironment {
         uuidFactory: UUID.init,
         idInteractionManager: MockIDInteractionManager(queue: DispatchQueue.main.eraseToAnyScheduler()),
         storageManager: StorageManager(),
-        analytics: MatomoAnalyticsClient(siteId: "10", baseURL: URL(string: "https://localhost/matomo.php")!),
+        analytics: MatomoAnalyticsClient(siteId: "1", baseURL: URL(string: "https://localhost/matomo.php")!),
         debugIDInteractionManager: DebugIDInteractionManager()
     )
 #else
@@ -27,7 +27,7 @@ struct AppEnvironment {
         uuidFactory: UUID.init,
         idInteractionManager: MockIDInteractionManager(queue: DispatchQueue.main.eraseToAnyScheduler()),
         storageManager: StorageManager(),
-        analytics: MatomoAnalyticsClient(siteId: "10", baseURL: URL(string: "https://localhost/matomo.php")!)
+        analytics: MatomoAnalyticsClient(siteId: "1", baseURL: URL(string: "https://localhost/matomo.php")!)
     )
 #endif
 }
