@@ -25,6 +25,7 @@ class SetupCoordinatorTests: XCTestCase {
                                      uuidFactory: uuidFactory,
                                      idInteractionManager: mockIDInteractionManager,
                                      storageManager: MockStorageManagerType(),
+                                     analytics: MockAnalyticsClient(),
                                      debugIDInteractionManager: DebugIDInteractionManager())
     }
     
@@ -41,12 +42,12 @@ class SetupCoordinatorTests: XCTestCase {
     }
     
     func testMissingPINLetterNavigation() {
-            let store = TestStore(initialState: SetupCoordinatorState(states: [.root(.intro), .push(.transportPINIntro)]),
-                                  reducer: setupCoordinatorReducer,
-                                  environment: environment)
-            
-            store.send(.routeAction(0, action: .transportPINIntro(.choosePINLetterMissing))) {
-                $0.routes = [.root(.intro), .push(.transportPINIntro), .push(.missingPINLetter)]
-            }
+        let store = TestStore(initialState: SetupCoordinatorState(states: [.root(.intro), .push(.transportPINIntro)]),
+                              reducer: setupCoordinatorReducer,
+                              environment: environment)
+        
+        store.send(.routeAction(0, action: .transportPINIntro(.choosePINLetterMissing))) {
+            $0.routes = [.root(.intro), .push(.transportPINIntro), .push(.missingPINLetter)]
         }
+    }
 }

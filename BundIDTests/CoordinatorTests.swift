@@ -3,12 +3,14 @@ import ComposableArchitecture
 import Cuckoo
 import Combine
 import TCACoordinators
+import Analytics
 
 @testable import BundID
 
 final class CoordinatorTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
+    var mockAnalyticsClient: MockAnalyticsClient!
     var environment: AppEnvironment!
     var uuidCount = 0
     
@@ -23,9 +25,16 @@ final class CoordinatorTests: XCTestCase {
     
     override func setUp() {
         scheduler = DispatchQueue.test
+        mockAnalyticsClient = MockAnalyticsClient()
         environment = AppEnvironment.mocked(uuidFactory: uuidFactory,
                                             idInteractionManager: mockIDInteractionManager,
-                                            storageManager: mockStorageManager)
+                                            storageManager: mockStorageManager,
+                                            analytics: mockAnalyticsClient)
+        
+        stub(mockAnalyticsClient) {
+            $0.track(view: any()).thenDoNothing()
+            $0.track(event: any()).thenDoNothing()
+        }
     }
     
     func testOpeningTheAppWithUnfinishedSetup() {
@@ -179,5 +188,18 @@ final class CoordinatorTests: XCTestCase {
         }
         
         verify(mockStorageManager).updateSetupCompleted(true)
+    }
+    
+    func testTriggerSetup() {
+        let root = Route<ScreenState>.root(.home(HomeState(appVersion: "1.0.0", buildNumber: 1)))
+        let store = TestStore(initialState: CoordinatorState(states: [root]),
+                              reducer: coordinatorReducer,
+                              environment: environment)
+        
+        store.send(.routeAction(0, action: .home(.triggerSetup))) { state in
+            state.routes = [root, .sheet(.setupCoordinator(SetupCoordinatorState()))]
+        }
+        
+        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "Setup", action: "Start"))
     }
 }

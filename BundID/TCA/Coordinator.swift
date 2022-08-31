@@ -113,7 +113,10 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                 switch routeAction {
                 case .home(.triggerSetup):
                     state.routes.presentSheet(.setupCoordinator(SetupCoordinatorState()))
-                    return .none
+                    return .fireAndForget {
+                        let event = AnalyticsEvent(category: "Setup", action: "Start")
+                        environment.analytics.track(event: event)
+                    }
                 case .setupCoordinator(.routeAction(_, action: .intro(.chooseSetupAlreadyDone))):
                     if let tokenURL = state.tokenURL {
                         return Effect.routeWithDelaysIfUnsupported(state.routes) {
