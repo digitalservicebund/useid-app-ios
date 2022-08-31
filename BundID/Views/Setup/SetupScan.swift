@@ -27,7 +27,7 @@ enum SetupScanAction: Equatable {
     case startScan
     case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case wrongTransportPIN(remainingAttempts: Int)
-    case error(CardErrorState)
+    case error(ScanErrorState)
     case cancelScan
     case scannedSuccessfully
     case showNFCInfo
@@ -75,13 +75,13 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         switch error {
         case .cardDeactivated:
             state.scanAvailable = false
-            return Effect(value: .error(CardErrorState(errorType: .cardDeactivated, retry: state.scanAvailable)))
+            return Effect(value: .error(ScanErrorState(errorType: .cardDeactivated, retry: state.scanAvailable)))
         case .cardBlocked:
             state.scanAvailable = false
-            return Effect(value: .error(CardErrorState(errorType: .cardBlocked, retry: state.scanAvailable)))
+            return Effect(value: .error(ScanErrorState(errorType: .cardBlocked, retry: state.scanAvailable)))
         default:
             state.scanAvailable = true
-            return Effect(value: .error(CardErrorState(errorType: .idCardInteraction(error), retry: state.scanAvailable)))
+            return Effect(value: .error(ScanErrorState(errorType: .idCardInteraction(error), retry: state.scanAvailable)))
         }
     case .scanEvent(.success(let event)):
         return state.handle(event: event, environment: environment)
@@ -141,13 +141,13 @@ extension SetupScanState {
             pinCallback(transportPIN, newPIN)
         case .requestCANAndChangedPIN:
             print("CAN to change PIN requested, so card is suspended. Callback not implemented yet.")
-            return Effect(value: .error(CardErrorState(errorType: .cardSuspended, retry: false)))
+            return Effect(value: .error(ScanErrorState(errorType: .cardSuspended, retry: false)))
         case .requestPUK:
             print("PUK requested, so card is blocked. Callback not implemented yet.")
-            return Effect(value: .error(CardErrorState(errorType: .cardBlocked, retry: false)))
+            return Effect(value: .error(ScanErrorState(errorType: .cardBlocked, retry: false)))
         default:
             print("Received unexpected event.")
-            return Effect(value: .error(CardErrorState(errorType: .unexpectedEvent(event), retry: true)))
+            return Effect(value: .error(ScanErrorState(errorType: .unexpectedEvent(event), retry: true)))
         }
         return .none
     }

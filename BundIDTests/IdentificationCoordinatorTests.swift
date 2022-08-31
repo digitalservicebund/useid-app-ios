@@ -159,7 +159,7 @@ class IdentificationCoordinatorTests: XCTestCase {
             reducer: identificationCoordinatorReducer,
             environment: environment)
         
-        let errorState = CardErrorState(errorType: .cardBlocked, retry: false)
+        let errorState = ScanErrorState(errorType: .cardBlocked, retry: false)
         store.send(.routeAction(0, action: .scan(.error(errorState)))) {
             $0.states.append(.sheet(.error(errorState)))
         }

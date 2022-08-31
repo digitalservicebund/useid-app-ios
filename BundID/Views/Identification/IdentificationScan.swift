@@ -35,7 +35,7 @@ enum IdentificationScanAction: Equatable {
     case wrongPIN(remainingAttempts: Int)
     case identifiedSuccessfullyWithRedirect(EIDAuthenticationRequest, redirectURL: String)
     case identifiedSuccessfullyWithoutRedirect(EIDAuthenticationRequest)
-    case error(CardErrorState)
+    case error(ScanErrorState)
     case end
     case showNFCInfo
     case dismissNFCInfo
@@ -64,11 +64,11 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
         state.isScanning = false
         switch error {
         case .cardDeactivated:
-            return Effect(value: .error(CardErrorState(errorType: .cardDeactivated, retry: false)))
+            return Effect(value: .error(ScanErrorState(errorType: .cardDeactivated, retry: false)))
         case .cardBlocked:
-            return Effect(value: .error(CardErrorState(errorType: .cardBlocked, retry: false)))
+            return Effect(value: .error(ScanErrorState(errorType: .cardBlocked, retry: false)))
         default:
-            return Effect(value: .error(CardErrorState(errorType: .idCardInteraction(error), retry: true)))
+            return Effect(value: .error(ScanErrorState(errorType: .idCardInteraction(error), retry: true)))
         }
     case .wrongPIN:
         return .none
@@ -112,7 +112,7 @@ extension IdentificationScanState {
         case .requestPINAndCAN:
             isScanning = false
             scanAvailable = false
-            return Effect(value: .error(CardErrorState(errorType: .cardSuspended, retry: scanAvailable)))
+            return Effect(value: .error(ScanErrorState(errorType: .cardSuspended, retry: scanAvailable)))
         case .authenticationStarted,
                 .cardInteractionComplete,
                 .cardRecognized:
@@ -129,7 +129,7 @@ extension IdentificationScanState {
                 .processCompletedSuccessfullyWithRedirect:
             isScanning = false
             scanAvailable = false
-            return Effect(value: .error(CardErrorState(errorType: .unexpectedEvent(event), retry: scanAvailable)))
+            return Effect(value: .error(ScanErrorState(errorType: .unexpectedEvent(event), retry: scanAvailable)))
         default:
             return .none
         }

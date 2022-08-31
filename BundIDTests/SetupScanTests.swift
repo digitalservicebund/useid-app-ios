@@ -116,6 +116,6 @@ class SetupScanTests: XCTestCase {
             $0.isScanning = false
         }
         
-        store.receive(.error(CardErrorState(errorType: .idCardInteraction(.frameworkError(message: "Fail")), retry: true)))
+        store.receive(.error(ScanErrorState(errorType: .idCardInteraction(.frameworkError(message: "Fail")), retry: true)))
     }
 }

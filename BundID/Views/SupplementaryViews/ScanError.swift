@@ -1,7 +1,7 @@
 import SwiftUI
 import ComposableArchitecture
 
-enum CardErrorType: Equatable {
+enum ScanErrorType: Equatable {
     case cardDeactivated
     case cardSuspended
     case cardBlocked
@@ -9,46 +9,46 @@ enum CardErrorType: Equatable {
     case unexpectedEvent(EIDInteractionEvent)
 }
 
-struct CardErrorState: Equatable {
-    var errorType: CardErrorType
+struct ScanErrorState: Equatable {
+    var errorType: ScanErrorType
     var retry: Bool
     
     var title: String {
         switch errorType {
         case .cardDeactivated:
-            return L10n.CardError.CardDeactivated.title
+            return L10n.ScanError.CardDeactivated.title
         case .cardSuspended:
-            return L10n.CardError.CardSuspended.title
+            return L10n.ScanError.CardSuspended.title
         case .cardBlocked:
-            return L10n.CardError.CardBlocked.title
+            return L10n.ScanError.CardBlocked.title
         case .idCardInteraction,
                 .unexpectedEvent:
-            return L10n.CardError.CardUnreadable.title
+            return L10n.ScanError.CardUnreadable.title
         }
     }
     
     var markdown: String {
         switch errorType {
         case .cardDeactivated:
-            return L10n.CardError.CardDeactivated.body
+            return L10n.ScanError.CardDeactivated.body
         case .cardSuspended:
-            return L10n.CardError.CardSuspended.body
+            return L10n.ScanError.CardSuspended.body
         case .cardBlocked:
-            return L10n.CardError.CardBlocked.body
+            return L10n.ScanError.CardBlocked.body
         case .idCardInteraction,
                 .unexpectedEvent:
-            return L10n.CardError.CardUnreadable.body
+            return L10n.ScanError.CardUnreadable.body
         }
     }
 }
 
-enum CardErrorAction: Equatable {
+enum ScanErrorAction: Equatable {
     case end
     case retry
 }
 
-struct CardError: View {
-    var store: Store<CardErrorState, CardErrorAction>
+struct ScanError: View {
+    var store: Store<ScanErrorState, ScanErrorAction>
     
     var body: some View {
         NavigationView {
@@ -66,16 +66,16 @@ struct CardError: View {
 
 struct SetupError_Previews: PreviewProvider {
     static var previews: some View {
-        CardError(store: Store(initialState: .init(errorType: .cardDeactivated, retry: false),
+        ScanError(store: Store(initialState: .init(errorType: .cardDeactivated, retry: false),
                                 reducer: .empty,
                                 environment: AppEnvironment.preview))
-        CardError(store: Store(initialState: .init(errorType: .cardSuspended, retry: false),
+        ScanError(store: Store(initialState: .init(errorType: .cardSuspended, retry: false),
                                 reducer: .empty,
                                 environment: AppEnvironment.preview))
-        CardError(store: Store(initialState: .init(errorType: .cardBlocked, retry: false),
+        ScanError(store: Store(initialState: .init(errorType: .cardBlocked, retry: false),
                                 reducer: .empty,
                                 environment: AppEnvironment.preview))
-        CardError(store: Store(initialState: .init(errorType: .unexpectedEvent(.cardRemoved), retry: true),
+        ScanError(store: Store(initialState: .init(errorType: .unexpectedEvent(.cardRemoved), retry: true),
                                reducer: .empty,
                                environment: AppEnvironment.preview))
     }

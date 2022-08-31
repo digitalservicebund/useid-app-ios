@@ -9,7 +9,7 @@ enum SetupScreenState: Equatable {
     case scan(SetupScanState)
     case done(SetupDoneState)
     case incorrectTransportPIN(SetupIncorrectTransportPINState)
-    case error(CardErrorState)
+    case error(ScanErrorState)
     case missingPINLetter
 }
 
@@ -22,7 +22,7 @@ enum SetupScreenAction: Equatable {
     case scan(SetupScanAction)
     case done(SetupDoneAction)
     case incorrectTransportPIN(SetupIncorrectTransportPINAction)
-    case error(CardErrorAction)
+    case error(ScanErrorAction)
     case missingPINLetter(MissingPINLetterAction)
 }
 

@@ -40,14 +40,14 @@
 "firstTimeUser_confirmEnd_message" = "Möchten Sie die Einrichtung Ihres Personalausweises beenden?";
 "firstTimeUser_confirmEnd_confirm" = "Beenden";
 
-"cardError_cardDeactivated_title" = "Für Ihren Ausweis ist die Online-Ausweisfunktion nicht aktiviert";
-"cardError_cardDeactivated_body" = "Wenden Sie sich an Ihr Bürgeramt, um die Online-Ausweisfunktion zu aktivieren.\n\nSie wissen nicht, an wen Sie sich wenden können? Rufen Sie die 115 an oder informieren Sie sich unter:";
-"cardError_cardSuspended_title" = "Sie haben zum zweiten Mal die falsche PIN eingegeben";
-"cardError_cardSuspended_body" = "Sollten Sie ihre PIN ein drittes mal falsch eingeben, wird ihr Ausweis gesperrt.\n\nIhren Ausweis können Sie dann nur mit Ihrer 10-stelligen PUK in der AusweisApp2 oder im Bürgeramt entsperren.";
-"cardError_cardBlocked_title" = "Ihr Ausweis ist gesperrt";
-"cardError_cardBlocked_body" = "Da Sie Ihre PIN ein drittes Mal falsch eingeben haben, wurde Ihr Ausweis gesperrt.\n\nIhren Ausweis können Sie nur mit Ihrer 10-stelligen PUK in der AusweisApp2 oder im Bürgeramt entsperren.";
-"cardError_cardUnreadable_title" = "Ihr Ausweis wurde nicht erkannt.";
-"cardError_cardUnreadable_body" = "Folgende Dokumente bieten die Funktion an: Deutscher Personalausweis, Elektronischer Aufenthaltstitel, eID-Karte für Bürgerinnen und Bürger der Europäischen Union und des Europäischer Wirtschaftsraum.\n\nWenn Sie eines der oben genannten Dokumente benutzen und das Problem weiter auftritt, versuchen Sie diese Schritte:\n\n- Entfernen Sie die Karte von Ihrem Smartphone und legen Sie sie erneut an das Smartphone.\n- Wenn Sie eine sehr dicke Handyhülle haben, versuchen Sie, die Hülle zu entfernen.";
+"scanError_cardDeactivated_title" = "Für Ihren Ausweis ist die Online-Ausweisfunktion nicht aktiviert";
+"scanError_cardDeactivated_body" = "Wenden Sie sich an Ihr Bürgeramt, um die Online-Ausweisfunktion zu aktivieren.\n\nSie wissen nicht, an wen Sie sich wenden können? Rufen Sie die 115 an oder informieren Sie sich unter:";
+"scanError_cardSuspended_title" = "Sie haben zum zweiten Mal die falsche PIN eingegeben";
+"scanError_cardSuspended_body" = "Sollten Sie ihre PIN ein drittes mal falsch eingeben, wird ihr Ausweis gesperrt.\n\nIhren Ausweis können Sie dann nur mit Ihrer 10-stelligen PUK in der AusweisApp2 oder im Bürgeramt entsperren.";
+"scanError_cardBlocked_title" = "Ihr Ausweis ist gesperrt";
+"scanError_cardBlocked_body" = "Da Sie Ihre PIN ein drittes Mal falsch eingeben haben, wurde Ihr Ausweis gesperrt.\n\nIhren Ausweis können Sie nur mit Ihrer 10-stelligen PUK in der AusweisApp2 oder im Bürgeramt entsperren.";
+"scanError_cardUnreadable_title" = "Ihr Ausweis wurde nicht erkannt.";
+"scanError_cardUnreadable_body" = "Folgende Dokumente bieten die Funktion an: Deutscher Personalausweis, Elektronischer Aufenthaltstitel, eID-Karte für Bürgerinnen und Bürger der Europäischen Union und des Europäischer Wirtschaftsraum.\n\nWenn Sie eines der oben genannten Dokumente benutzen und das Problem weiter auftritt, versuchen Sie diese Schritte:\n\n- Entfernen Sie die Karte von Ihrem Smartphone und legen Sie sie erneut an das Smartphone.\n- Wenn Sie eine sehr dicke Handyhülle haben, versuchen Sie, die Hülle zu entfernen.";
 "firstTimeUser_error_close" = "Schließen";
 "firstTimeUser_done_title" = "Sie haben Ihren Online-Ausweis erfolgreich eingerichtet.";
 "firstTimeUser_done_close" = "Einrichtung abschließen";

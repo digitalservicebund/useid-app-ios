@@ -122,7 +122,7 @@
 		E5E69D852812FB6100A3B66A /* IDCardInteractionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D842812FB6100A3B66A /* IDCardInteractionError.swift */; };
 		E5E69D872812FB7A00A3B66A /* IDTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D862812FB7A00A3B66A /* IDTask.swift */; };
 		E5E69D892812FB8D00A3B66A /* IDCardAttribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D882812FB8D00A3B66A /* IDCardAttribute.swift */; };
-		F43622A72850D6C9008AEBB9 /* CardError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43622A62850D6C9008AEBB9 /* CardError.swift */; };
+		F43622A72850D6C9008AEBB9 /* ScanError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43622A62850D6C9008AEBB9 /* ScanError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -269,7 +269,7 @@
 		E5E69D842812FB6100A3B66A /* IDCardInteractionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDCardInteractionError.swift; sourceTree = "<group>"; };
 		E5E69D862812FB7A00A3B66A /* IDTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDTask.swift; sourceTree = "<group>"; };
 		E5E69D882812FB8D00A3B66A /* IDCardAttribute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDCardAttribute.swift; sourceTree = "<group>"; };
-		F43622A62850D6C9008AEBB9 /* CardError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardError.swift; sourceTree = "<group>"; };
+		F43622A62850D6C9008AEBB9 /* ScanError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -416,7 +416,7 @@
 				E17604D0287E24F1007DFA10 /* DebugMenu.swift */,
 				E1CD8E9428215971008ADA2A /* PINEntryView.swift */,
 				E1AB87A3282413A700C7FC94 /* PINTextField.swift */,
-				F43622A62850D6C9008AEBB9 /* CardError.swift */,
+				F43622A62850D6C9008AEBB9 /* ScanError.swift */,
 				E1EB9FF928B5288A007FF467 /* ScanBody.swift */,
 			);
 			path = SupplementaryViews;
@@ -941,7 +941,7 @@
 				E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */,
 				E1F39DD8285791BD00D8D907 /* IdentifiableError.swift in Sources */,
 				E1EFB5C8285A365E005C38C6 /* IdentificationAbout.swift in Sources */,
-				F43622A72850D6C9008AEBB9 /* CardError.swift in Sources */,
+				F43622A72850D6C9008AEBB9 /* ScanError.swift in Sources */,
 				E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */,
 				E13925B82840FB7700161F5C /* Types.swift in Sources */,
 				E13925C72841119400161F5C /* MockIDInteractionManager.swift in Sources */,

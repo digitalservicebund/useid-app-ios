@@ -87,7 +87,7 @@ enum IdentificationCoordinatorAction: Equatable, IndexedRouterAction {
     case routeAction(Int, action: IdentificationScreenAction)
     case updateRoutes([Route<IdentificationScreenState>])
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
-    case cardError(CardErrorState)
+    case scanError(ScanErrorState)
     case end
     case confirmEnd
     case afterConfirmEnd
@@ -256,7 +256,7 @@ struct IdentificationCoordinatorView: View {
                                 then: IdentificationDone.init)
                         CaseLet(state: /IdentificationScreenState.error,
                                 action: IdentificationScreenAction.error,
-                                then: CardError.init)
+                                then: ScanError.init)
                     }
                 }
                 .alert(store.scope(state: \.alert), dismiss: .dismissAlert)

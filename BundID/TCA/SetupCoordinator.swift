@@ -146,7 +146,7 @@ struct SetupCoordinatorView: View {
                                 then: SetupDone.init)
                         CaseLet(state: /SetupScreenState.error,
                                 action: SetupScreenAction.error,
-                                then: CardError.init)
+                                then: ScanError.init)
                         CaseLet(state: /SetupScreenState.incorrectTransportPIN,
                                 action: SetupScreenAction.incorrectTransportPIN,
                                 then: SetupIncorrectTransportPIN.init)
