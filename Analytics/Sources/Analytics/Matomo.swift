@@ -5,7 +5,7 @@ public final class MatomoAnalyticsClient: AnalyticsClient {
     private let tracker: MatomoTrackerProtocol
     private let sessionTimeout: TimeInterval
     
-    private var lastRoute: [String] = []
+    private var lastRoute: [String]?
     private var lastActivity: Date?
     
     public convenience init(siteId: String, baseURL: URL) {

@@ -23,19 +23,6 @@ struct SetupScanState: Equatable {
 #endif
 }
 
-extension SetupScanState: AnalyticsView {
-     var route: [String] {
-         guard let error = error else { return [] }
-         
-         switch error {
-          case .idCardInteraction(let idCardInteractionError):
-             return ["idCardInteraction"] // + idCardInteractionError.route
-          case .unexpectedEvent(let eIDInteractionEvent):
-             return ["unexpectedEvent"] //+ eIDInteractionEvent.route
-          }
-     }
- }
-
 enum SetupScanAction: Equatable {
     case onAppear
     case startScan

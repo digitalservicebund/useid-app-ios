@@ -13,7 +13,7 @@ extension ScreenState: AnalyticsView {
          case .home(let state):
              return state.route
          case .setupCoordinator(let state):
-             return ["setup"] + state.route
+             return ["firstTimeUser"] + state.route
          case .identificationCoordinator(let state):
              return ["identification"] + state.route
          }

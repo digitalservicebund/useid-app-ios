@@ -1,4 +1,5 @@
 import SwiftUI
+import Analytics
 import ComposableArchitecture
 
 enum ScanErrorType: Equatable {
@@ -48,6 +49,23 @@ struct ScanErrorState: Equatable {
 enum ScanErrorAction: Equatable {
     case end
     case retry
+}
+
+extension ScanErrorType: AnalyticsView {
+    var route: [String] {
+        switch self {
+        case .help:
+            return ["scanHelp"]
+        case .cardDeactivated:
+            return ["cardDeactivated"]
+        case .cardSuspended:
+            return ["cardSuspended"]
+        case .cardBlocked:
+            return ["cardBlocked"]
+        case .idCardInteraction, .unexpectedEvent:
+            return ["cardUnreadable"]
+        }
+    }
 }
 
 struct ScanError: View {

@@ -20,21 +20,21 @@ extension SetupScreenState: AnalyticsView {
          case .intro:
              return ["intro"]
          case .transportPINIntro:
-             return ["transportPINIntro"]
+             return ["PINLetter"]
          case .transportPIN:
              return ["transportPIN"]
          case .personalPINIntro:
              return ["personalPINIntro"]
          case .personalPIN:
              return ["personalPIN"]
-         case .scan(let state):
-             return ["scan"] + state.route
+         case .scan:
+             return ["scan"]
          case .done:
              return ["done"]
          case .incorrectTransportPIN:
              return ["incorrectTransportPIN"]
          case .error(let state):
-             return ["error"] + state.route
+             return state.errorType.route
          case .missingPINLetter:
              return ["missingPINLetter"]
          }

@@ -28,7 +28,7 @@ extension IdentificationScreenState: AnalyticsView {
      var route: [String] {
          switch self {
          case .overview:
-             return ["overview"]
+             return ["attributes"]
          case .scan:
              return ["scan"]
          case .personalPIN:
@@ -37,8 +37,8 @@ extension IdentificationScreenState: AnalyticsView {
              return ["done"]
          case .incorrectPersonalPIN:
              return ["incorrectPersonalPIN"]
-         case .cardError(let error):
-             return ["error"]
+         case .error(let state):
+             return state.errorType.route
          }
      }
  }
