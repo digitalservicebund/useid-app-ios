@@ -66,7 +66,6 @@ enum IdentificationOverviewAction: Equatable {
     case error(IdentificationOverviewErrorAction)
     
     case onAppear
-    case identify
     case cancel
 }
 
@@ -79,11 +78,9 @@ let identificationOverviewReducer = Reducer<IdentificationOverviewState, Identif
                                                  environment: { $0 }),
     Reducer { state, action, environment in
         switch action {
-        case .loading(.onAppear):
-            return Effect(value: .identify)
         case .error(.retry):
             state = .loading(IdentificationOverviewLoadingState())
-            return Effect(value: .identify)
+            return Effect(value: .loading(.identify))
         case .loading(.failure(let error)):
             state = .error(error)
             return .none

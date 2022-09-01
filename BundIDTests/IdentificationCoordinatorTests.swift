@@ -206,7 +206,7 @@ class IdentificationCoordinatorTests: XCTestCase {
             $0.identify(tokenURL: demoTokenURL, nfcMessages: NFCMessages.identification).thenReturn(subject.eraseToAnyPublisher())
         }
         
-        store.send(.routeAction(0, action: .overview(.identify)))
+        store.send(.routeAction(0, action: .overview(.loading(.identify))))
         
         subject.send(.authenticationStarted)
         subject.send(completion: .finished)

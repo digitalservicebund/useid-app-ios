@@ -156,7 +156,7 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 state.attempt += 1
                 state.routes.dismiss()
                 return .none
-            case .routeAction(_, action: .overview(.identify)):
+            case .routeAction(_, action: .overview(.loading(.identify))):
                 let publisher: EIDInteractionPublisher
 #if PREVIEW
                 if MOCK_OPENECARD {

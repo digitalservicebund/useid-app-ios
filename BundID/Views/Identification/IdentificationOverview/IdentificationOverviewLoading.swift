@@ -2,6 +2,7 @@ import ComposableArchitecture
 import SwiftUI
 
 struct IdentificationOverviewLoadingState: Equatable {
+    var onAppearCalled = false
 #if PREVIEW
     var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
@@ -9,6 +10,7 @@ struct IdentificationOverviewLoadingState: Equatable {
 
 enum IdentificationOverviewLoadingAction: Equatable {
     case onAppear
+    case identify
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case done(EIDAuthenticationRequest, IdentifiableCallback<FlaggedAttributes>)
     case failure(IdentifiableError)
@@ -17,9 +19,16 @@ enum IdentificationOverviewLoadingAction: Equatable {
 #endif
 }
 
-let identificationOverviewLoadingReducer = Reducer<IdentificationOverviewLoadingState, IdentificationOverviewLoadingAction, AppEnvironment> { _, action, environment in
+let identificationOverviewLoadingReducer = Reducer<IdentificationOverviewLoadingState, IdentificationOverviewLoadingAction, AppEnvironment> { state, action, environment in
     switch action {
     case .onAppear:
+        guard !state.onAppearCalled else {
+            return .none
+        }
+        state.onAppearCalled = true
+        
+        return Effect(value: .identify)
+    case .identify:
         return .none
     case .idInteractionEvent(.success(.requestAuthenticationRequestConfirmation(let request, let handler))):
         return Effect(value: .done(request, IdentifiableCallback(id: environment.uuidFactory(), callback: handler)))

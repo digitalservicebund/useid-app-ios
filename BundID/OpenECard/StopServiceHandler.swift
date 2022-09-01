@@ -7,6 +7,6 @@ class StopServiceHandler: NSObject, StopServiceHandlerProtocol {
     }
     
     func onFailure(_ response: (NSObjectProtocol & ServiceErrorResponseProtocol)!) {
-        print("Failed to stop service.")
+        print("Failed to stop service. Reason: \( response.errorDescription)")
     }
 }
