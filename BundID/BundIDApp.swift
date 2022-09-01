@@ -18,6 +18,9 @@ struct BundIDApp: App {
             options.dsn = "https://81bc611af42347bc8d7b487f807f9577@o1248831.ingest.sentry.io/6589505"
 #endif
 #if DEBUG
+            options.enabled = false
+#endif
+#if SENTRY_DEBUG
             options.debug = true
 #endif
             options.tracesSampleRate = 1.0
