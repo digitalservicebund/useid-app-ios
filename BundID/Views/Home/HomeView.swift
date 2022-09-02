@@ -5,6 +5,15 @@ struct HomeState: Equatable {
     var appVersion: String
     var buildNumber: Int
     var tokenURL: String?
+    
+    var versionInfo: String {
+        let appVersion = "\(appVersion) - \(buildNumber)"
+#if PREVIEW
+        return "\(appVersion) (PREVIEW)"
+#else
+        return appVersion
+#endif
+    }
 }
 
 enum HomeAction: Equatable {
@@ -13,12 +22,7 @@ enum HomeAction: Equatable {
 }
 
 struct HomeView: View {
-    
-    var viewStore: ViewStore<HomeState, HomeAction>
-    
-    init(store: Store<HomeState, HomeAction>) {
-        self.viewStore = ViewStore(store)
-    }
+    let store: Store<HomeState, HomeAction>
     
     var body: some View {
         NavigationView {
@@ -31,16 +35,17 @@ struct HomeView: View {
                     VStack(spacing: 16) {
                         HStack {
                             Text(L10n.Home.More.title)
-                                .font(.title)
-                                .bold()
+                                .font(.bundTitle)
                             Spacer()
                         }
                         setupActionView
                         listView
                         Spacer(minLength: 0)
-                        Text(L10n.Home.version(version))
-                            .font(.bundCaption2)
-                            .padding(.bottom)
+                        WithViewStore(store) { viewStore in
+                            Text(L10n.Home.version(viewStore.state.versionInfo))
+                                .font(.bundCaption2)
+                                .padding(.bottom)
+                        }
                     }
                     .padding(.horizontal, 24)
                 }
@@ -52,29 +57,34 @@ struct HomeView: View {
     
     @ViewBuilder
     var headerView: some View {
-        VStack {
+        VStack(spacing: 0) {
             ImageMeta(asset: Asset.abstractWidget).image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
+                .padding(.bottom, 20)
 #if PREVIEW
-            Button {
-                viewStore.send(.triggerIdentification(tokenURL: viewStore.tokenURL ?? demoTokenURL))
-            } label: {
-                Text(L10n.Home.Header.title)
-                    .font(.title)
-                    .bold()
+            WithViewStore(store) { viewStore in
+                title.onTapGesture {
+                    viewStore.send(.triggerIdentification(tokenURL: viewStore.tokenURL ?? demoTokenURL))
+                }
             }
-            .buttonStyle(.plain)
-            .padding(.bottom)
 #else
-            Text(L10n.Home.Header.title)
-                .font(.title)
-                .bold()
+            title
 #endif
             Text(L10n.Home.Header.infoText)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 36)
+                .padding(.bottom, 20)
+                .font(.bundCustom(size: 20, relativeTo: .body))
         }
+    }
+    
+    @ViewBuilder
+    var title: some View {
+        Text(L10n.Home.Header.title)
+            .font(.bundLargeTitle)
+            .padding(.bottom, 8)
+            .padding(.horizontal, 36)
     }
     
     @ViewBuilder
@@ -87,7 +97,7 @@ struct HomeView: View {
             VStack {
                 Spacer(minLength: 160)
                 Button {
-                    viewStore.send(.triggerSetup)
+                    ViewStore(store.stateless).send(.triggerSetup)
                 } label: {
                     Text(L10n.Home.Actions.setup)
                 }
@@ -156,6 +166,7 @@ struct HomeView: View {
             .padding(24)
         }
         .buttonStyle(.plain)
+        .font(.bundBody)
         .background(
             RoundedRectangle(cornerRadius: 14)
                 .foregroundColor(.white)
@@ -165,23 +176,6 @@ struct HomeView: View {
             RoundedRectangle(cornerRadius: 14)
                 .stroke(Color.gray300, lineWidth: 1)
         )
-    }
-    
-    var version: String {
-        let appVersion = "\(viewStore.appVersion) - \(viewStore.buildNumber)"
-#if PREVIEW
-        return "\(appVersion) (\(environment))"
-#else
-        return appVersion
-#endif
-    }
-    
-    var environment: String {
-#if PREVIEW
-        return "PREVIEW"
-#else
-        return "PRODUCTION"
-#endif
     }
 }
 
