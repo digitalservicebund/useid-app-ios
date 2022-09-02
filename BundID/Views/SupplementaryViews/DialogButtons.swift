@@ -20,15 +20,15 @@ struct DialogButtons<Action>: View {
     
     var body: some View {
         VStack {
-            if let secondaryButtonConfiguration = secondaryButtonConfiguration {
-                Button(secondaryButtonConfiguration.title,
-                       action: { ViewStore(store).send(secondaryButtonConfiguration.action) })
-                .buttonStyle(BundButtonStyle(isPrimary: false))
-            }
             if let primaryButtonConfiguration = primaryButtonConfiguration {
                 Button(primaryButtonConfiguration.title,
                        action: { ViewStore(store).send(primaryButtonConfiguration.action) })
                 .buttonStyle(BundButtonStyle(isPrimary: true))
+            }
+            if let secondaryButtonConfiguration = secondaryButtonConfiguration {
+                Button(secondaryButtonConfiguration.title,
+                       action: { ViewStore(store).send(secondaryButtonConfiguration.action) })
+                .buttonStyle(BundButtonStyle(isPrimary: false))
             }
         }
         .padding([.leading, .bottom, .trailing])

@@ -15,8 +15,8 @@ struct SetupTransportPINIntro: View {
                    title: L10n.FirstTimeUser.PinLetter.title,
                    message: L10n.FirstTimeUser.PinLetter.body,
                    imageMeta: ImageMeta(asset: Asset.pinBrief, maxHeight: 300.0),
-                   secondaryButton: .init(title: L10n.FirstTimeUser.PinLetter.yes, action: .choosePINLetterAvailable),
-                   primaryButton: .init(title: L10n.FirstTimeUser.PinLetter.no, action: .choosePINLetterMissing))
+                   secondaryButton: .init(title: L10n.FirstTimeUser.PinLetter.no, action: .choosePINLetterMissing),
+                   primaryButton: .init(title: L10n.FirstTimeUser.PinLetter.yes, action: .choosePINLetterAvailable))
     }
 }
 

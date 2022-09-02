@@ -1,7 +1,7 @@
 "firstTimeUser_intro_title" = "Haben Sie Ihren Online-Ausweis bereits eingerichtet?";
 "firstTimeUser_intro_body" = "Bei der Einrichtung haben Sie Ihre persönliche Ausweis-PIN festgelegt.";
-"firstTimeUser_intro_yes" = "Jetzt Online-Ausweis einrichten";
-"firstTimeUser_intro_no" = "Bereits eingerichtet";
+"firstTimeUser_intro_yes" = "Bereits eingerichtet";
+"firstTimeUser_intro_no" = "Jetzt Online-Ausweis einrichten";
 "firstTimeUser_pinLetter_title" = "Haben Sie Ihren PIN-Brief noch?";
 "firstTimeUser_pinLetter_body" = "Den PIN-Brief haben Sie nach der Beantragung des Ausweises per Post erhalten.";
 "firstTimeUser_pinLetter_yes" = "Ja, PIN-Brief vorhanden";
