@@ -121,6 +121,15 @@ struct HomeView: View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading, spacing: 0) {
                 NavigationLink {
+                    HTMLView(title: L10n.Privacy.title,
+                             html: L10n.Privacy.Html.text)
+                } label: {
+                    Text(L10n.Home.Actions.privacy)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
+                }
+                listDivider
+                NavigationLink {
                     LicensesView()
                         .navigationTitle(L10n.Home.Actions.licenses)
                         .ignoresSafeArea()
@@ -129,9 +138,7 @@ struct HomeView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                 }
-                Divider()
-                    .foregroundColor(.gray300)
-                    .padding(.vertical, 16)
+                listDivider
                 NavigationLink {
                     HTMLView(title: L10n.Accessibility.title,
                              html: L10n.Accessibility.Html.text)
@@ -140,9 +147,7 @@ struct HomeView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                 }
-                Divider()
-                    .foregroundColor(.gray300)
-                    .padding(.vertical, 16)
+                listDivider
                 NavigationLink {
                     HTMLView(title: L10n.TermsOfUse.title,
                              html: L10n.TermsOfUse.Html.text)
@@ -151,9 +156,8 @@ struct HomeView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                 }
-                Divider()
-                    .foregroundColor(.gray300)
-                    .padding(.vertical, 16)
+                listDivider
+                
                 NavigationLink {
                     HTMLView(title: L10n.Imprint.title,
                              html: L10n.Imprint.Html.text)
@@ -176,6 +180,13 @@ struct HomeView: View {
             RoundedRectangle(cornerRadius: 14)
                 .stroke(Color.gray300, lineWidth: 1)
         )
+    }
+    
+    @ViewBuilder
+    var listDivider: some View {
+        Divider()
+            .foregroundColor(.gray300)
+            .padding(.vertical, 16)
     }
 }
 
