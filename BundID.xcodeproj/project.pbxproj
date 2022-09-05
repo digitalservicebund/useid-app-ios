@@ -39,6 +39,8 @@
 		E13F9E4128882A9C0088E955 /* Bundle+Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E4028882A9C0088E955 /* Bundle+Version.swift */; };
 		E13F9E43288835350088E955 /* IdentificationCoordinatorStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */; };
 		E13F9E45288853950088E955 /* CoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E44288853950088E955 /* CoordinatorTests.swift */; };
+		E144EBD628C63A31009B4900 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = E144EBD528C63A31009B4900 /* MarkdownUI */; };
+		E144EBD828C63A4D009B4900 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E144EBD728C63A4D009B4900 /* AboutView.swift */; };
 		E149B15C2840F636002C1139 /* SetupScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E149B15B2840F636002C1139 /* SetupScanTests.swift */; };
 		E14C21B228B8BF9100192338 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C21B128B8BF9100192338 /* StorageManager.swift */; };
 		E14C21B428B8FB8F00192338 /* AppEnvironment+Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C21B328B8FB8F00192338 /* AppEnvironment+Tests.swift */; };
@@ -60,7 +62,6 @@
 		E16708BE283E666A001A1637 /* Store+Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708BD283E666A001A1637 /* Store+Empty.swift */; };
 		E16708C0283E6A07001A1637 /* SetupScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708BF283E6A07001A1637 /* SetupScan.swift */; };
 		E17604D1287E24F1007DFA10 /* DebugMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17604D0287E24F1007DFA10 /* DebugMenu.swift */; };
-		E17E1C5128AFAABF004B0815 /* HTMLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17E1C5028AFAABF004B0815 /* HTMLView.swift */; };
 		E18E223A285349D200221DB1 /* BundIDUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18E2239285349D200221DB1 /* BundIDUITests.swift */; };
 		E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
 		E1A769FD28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A769FC28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift */; };
@@ -76,7 +77,6 @@
 		E1AB87A4282413A700C7FC94 /* PINTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB87A3282413A700C7FC94 /* PINTextField.swift */; };
 		E1AB87AC2825238D00C7FC94 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1AB87AA2825238D00C7FC94 /* Localizable.strings */; };
 		E1B6991C2869B31B00360273 /* DebugIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B6991B2869B31B00360273 /* DebugIDInteractionManager.swift */; };
-		E1B7A4F628B674850086933E /* RichText in Frameworks */ = {isa = PBXBuildFile; productRef = E1B7A4F528B674850086933E /* RichText */; };
 		E1BC3D7928B7E40B007A7B39 /* LicensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BC3D7828B7E40B007A7B39 /* LicensesView.swift */; };
 		E1BC3D8128B7E73B007A7B39 /* Licenses in Resources */ = {isa = PBXBuildFile; fileRef = E1BC3D7F28B7E73B007A7B39 /* Licenses */; };
 		E1BC3D8228B7E73B007A7B39 /* Licenses.plist in Resources */ = {isa = PBXBuildFile; fileRef = E1BC3D8028B7E73B007A7B39 /* Licenses.plist */; };
@@ -182,6 +182,7 @@
 		E13F9E4028882A9C0088E955 /* Bundle+Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Version.swift"; sourceTree = "<group>"; };
 		E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCoordinatorStateTests.swift; sourceTree = "<group>"; };
 		E13F9E44288853950088E955 /* CoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorTests.swift; sourceTree = "<group>"; };
+		E144EBD728C63A4D009B4900 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		E149B15B2840F636002C1139 /* SetupScanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScanTests.swift; sourceTree = "<group>"; };
 		E14C21B128B8BF9100192338 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		E14C21B328B8FB8F00192338 /* AppEnvironment+Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppEnvironment+Tests.swift"; sourceTree = "<group>"; };
@@ -200,7 +201,6 @@
 		E16708BD283E666A001A1637 /* Store+Empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Store+Empty.swift"; sourceTree = "<group>"; };
 		E16708BF283E6A07001A1637 /* SetupScan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScan.swift; sourceTree = "<group>"; };
 		E17604D0287E24F1007DFA10 /* DebugMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugMenu.swift; sourceTree = "<group>"; };
-		E17E1C5028AFAABF004B0815 /* HTMLView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLView.swift; sourceTree = "<group>"; };
 		E18E22322853496B00221DB1 /* UnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitTests.xctestplan; sourceTree = "<group>"; };
 		E18E2237285349D200221DB1 /* BundIDUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BundIDUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E18E2239285349D200221DB1 /* BundIDUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundIDUITests.swift; sourceTree = "<group>"; };
@@ -291,7 +291,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E16708AA283D1076001A1637 /* TCACoordinators in Frameworks */,
-				E1B7A4F628B674850086933E /* RichText in Frameworks */,
+				E144EBD628C63A31009B4900 /* MarkdownUI in Frameworks */,
 				E1BC3D8628B7E919007A7B39 /* LicensePlistViewController in Frameworks */,
 				E13925CA28411D4C00161F5C /* Lottie in Frameworks */,
 				E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */,
@@ -408,6 +408,7 @@
 				E1AB87A3282413A700C7FC94 /* PINTextField.swift */,
 				E1EB9FF928B5288A007FF467 /* ScanBody.swift */,
 				F43622A62850D6C9008AEBB9 /* ScanError.swift */,
+				E144EBD728C63A4D009B4900 /* AboutView.swift */,
 			);
 			path = SupplementaryViews;
 			sourceTree = "<group>";
@@ -668,8 +669,8 @@
 				E13925C928411D4C00161F5C /* Lottie */,
 				E15C22FF2850F5A8005CCBB9 /* OpenEcard */,
 				E128E0B9288941DC00C5195F /* Sentry */,
-				E1B7A4F528B674850086933E /* RichText */,
 				E1BC3D8528B7E919007A7B39 /* LicensePlistViewController */,
+				E144EBD528C63A31009B4900 /* MarkdownUI */,
 			);
 			productName = BundID;
 			productReference = E5CEB27A281041330076B9FE /* BundID.app */;
@@ -708,13 +709,13 @@
 			);
 			mainGroup = E5CEB271281041330076B9FE;
 			packageReferences = (
-				E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators.git" */,
+				E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
 				E13925B928410F3F00161F5C /* XCRemoteSwiftPackageReference "Cuckoo" */,
 				E13925C828411D4C00161F5C /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */,
-				E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */,
-				E1B7A4F428B674850086933E /* XCRemoteSwiftPackageReference "RichText.git" */,
-				E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController.git" */,
+				E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */,
+				E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 			);
 			productRefGroup = E5CEB27B281041330076B9FE /* Products */;
 			projectDirPath = "";
@@ -902,7 +903,6 @@
 				E1EFB5D5285C7D81005C38C6 /* IdentificationPersonalPIN.swift in Sources */,
 				E1A769FF28B940C6001E1F04 /* LaunchArgument.swift in Sources */,
 				E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */,
-				E17E1C5128AFAABF004B0815 /* HTMLView.swift in Sources */,
 				E1EFB5C42858EB0F005C38C6 /* IdentificationOverviewLoading.swift in Sources */,
 				E1F2F3D728770F28004C8D4B /* IdentifiableCallback.swift in Sources */,
 				E1FFDF0C2875C7E9006DFE03 /* UUID+Zero.swift in Sources */,
@@ -927,6 +927,7 @@
 				E593E2762816868100154EB0 /* PINManagementInteraction.swift in Sources */,
 				E1AB879A282281C400C7FC94 /* HeaderView.swift in Sources */,
 				E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */,
+				E144EBD828C63A4D009B4900 /* AboutView.swift in Sources */,
 				E1F39DD8285791BD00D8D907 /* IdentifiableError.swift in Sources */,
 				E1EFB5C8285A365E005C38C6 /* IdentificationAbout.swift in Sources */,
 				F43622A72850D6C9008AEBB9 /* ScanError.swift in Sources */,
@@ -1613,7 +1614,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */ = {
+		E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
 			requirement = {
@@ -1637,6 +1638,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/MarkdownUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TICESoftware/open-ecard-ios";
@@ -1645,7 +1654,7 @@
 				minimumVersion = 2.1.2;
 			};
 		};
-		E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators.git" */ = {
+		E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/johnpatrickmorgan/TCACoordinators.git";
 			requirement = {
@@ -1653,15 +1662,7 @@
 				minimumVersion = 0.1.2;
 			};
 		};
-		E1B7A4F428B674850086933E /* XCRemoteSwiftPackageReference "RichText.git" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/digitalservicebund/RichText.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-		E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController.git" */ = {
+		E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/yhirano/LicensePlistViewController.git";
 			requirement = {
@@ -1674,7 +1675,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		E128E0B9288941DC00C5195F /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */;
+			package = E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = Sentry;
 		};
 		E13925C1284110FD00161F5C /* Cuckoo */ = {
@@ -1687,6 +1688,11 @@
 			package = E13925C828411D4C00161F5C /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
 		};
+		E144EBD528C63A31009B4900 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */;
+			productName = MarkdownUI;
+		};
 		E15C22FF2850F5A8005CCBB9 /* OpenEcard */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */;
@@ -1694,17 +1700,12 @@
 		};
 		E16708A9283D1076001A1637 /* TCACoordinators */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators.git" */;
+			package = E16708A8283D1076001A1637 /* XCRemoteSwiftPackageReference "TCACoordinators" */;
 			productName = TCACoordinators;
-		};
-		E1B7A4F528B674850086933E /* RichText */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E1B7A4F428B674850086933E /* XCRemoteSwiftPackageReference "RichText.git" */;
-			productName = RichText;
 		};
 		E1BC3D8528B7E919007A7B39 /* LicensePlistViewController */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController.git" */;
+			package = E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */;
 			productName = LicensePlistViewController;
 		};
 /* End XCSwiftPackageProductDependency section */

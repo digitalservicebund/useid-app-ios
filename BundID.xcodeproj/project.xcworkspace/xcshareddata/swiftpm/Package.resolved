@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "attributedtext",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gonzalezreal/AttributedText",
+      "state" : {
+        "revision" : "2dc2d7864e0fee4b524a5850d7d7cf9a7eeda0fc",
+        "version" : "1.0.0"
+      }
+    },
+    {
       "identity" : "combine-schedulers",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/combine-schedulers",
@@ -46,21 +55,30 @@
       }
     },
     {
+      "identity" : "markdownui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gonzalezreal/MarkdownUI",
+      "state" : {
+        "revision" : "6a33c60ad430772d69ac5278e35474d6b3e5d30a",
+        "version" : "1.1.1"
+      }
+    },
+    {
+      "identity" : "networkimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gonzalezreal/NetworkImage",
+      "state" : {
+        "revision" : "c97f83e771c95186af80ef6118f158852a9e54be",
+        "version" : "4.0.1"
+      }
+    },
+    {
       "identity" : "open-ecard-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/TICESoftware/open-ecard-ios",
       "state" : {
         "revision" : "e9065acbc4bfacbfe6c4d5b90746692293eb852e",
         "version" : "2.1.2"
-      }
-    },
-    {
-      "identity" : "richtext",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/digitalservicebund/RichText.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "ec458b343aa704cb2c4a791f4bdf1bbef9cb8cef"
       }
     },
     {
@@ -115,6 +133,15 @@
       "state" : {
         "revision" : "2d6b7ffcc67afd9077fac5e5a29bcd6d39b71076",
         "version" : "0.4.0"
+      }
+    },
+    {
+      "identity" : "swiftcommonmark",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gonzalezreal/SwiftCommonMark",
+      "state" : {
+        "revision" : "ed252beaddecce28ea6363f800c773d6169011b8",
+        "version" : "1.0.0"
       }
     },
     {

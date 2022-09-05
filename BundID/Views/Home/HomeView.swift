@@ -121,8 +121,8 @@ struct HomeView: View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading, spacing: 0) {
                 NavigationLink {
-                    HTMLView(title: L10n.Privacy.title,
-                             html: L10n.Privacy.Html.text)
+                    AboutView(title: L10n.Privacy.title,
+                              markdown: L10n.Privacy.text)
                 } label: {
                     Text(L10n.Home.Actions.privacy)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -140,8 +140,8 @@ struct HomeView: View {
                 }
                 listDivider
                 NavigationLink {
-                    HTMLView(title: L10n.Accessibility.title,
-                             html: L10n.Accessibility.Html.text)
+                    AboutView(title: L10n.Accessibility.title,
+                              markdown: L10n.Accessibility.text)
                 } label: {
                     Text(L10n.Home.Actions.accessibilityStatement)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -149,8 +149,8 @@ struct HomeView: View {
                 }
                 listDivider
                 NavigationLink {
-                    HTMLView(title: L10n.TermsOfUse.title,
-                             html: L10n.TermsOfUse.Html.text)
+                    AboutView(title: L10n.TermsOfUse.title,
+                              markdown: L10n.TermsOfUse.text)
                 } label: {
                     Text(L10n.Home.Actions.terms)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -159,8 +159,8 @@ struct HomeView: View {
                 listDivider
                 
                 NavigationLink {
-                    HTMLView(title: L10n.Imprint.title,
-                             html: L10n.Imprint.Html.text)
+                    AboutView(title: L10n.Imprint.title,
+                              markdown: L10n.Imprint.text)
                 } label: {
                     Text(L10n.Home.Actions.imprint)
                         .frame(maxWidth: .infinity, alignment: .leading)
