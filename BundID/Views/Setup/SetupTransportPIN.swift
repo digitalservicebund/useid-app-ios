@@ -37,7 +37,7 @@ struct SetupTransportPIN: View {
                     .font(.bundBody)
                     .foregroundColor(.blackish)
                 ZStack {
-                    Asset.transportPIN.swiftUIImage
+                    Image(decorative: Asset.transportPIN)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                     
@@ -63,7 +63,6 @@ struct SetupTransportPIN: View {
             .padding(.horizontal)
         }
         .navigationBarTitleDisplayMode(.inline)
-#if PREVIEW
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("\(Image(systemName: "arrow.left.and.right")) \(digits == 5 ? "6" : "5")") {
@@ -71,7 +70,6 @@ struct SetupTransportPIN: View {
                 }
             }
         }
-#endif
     }
 }
 
