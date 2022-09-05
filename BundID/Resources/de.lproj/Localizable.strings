@@ -14,16 +14,16 @@
 "firstTimeUser_transportPIN_textFieldLabel" = "Transport-PIN, fünfstellig";
 "firstTimeUser_personalPINIntro_title" = "Vergeben Sie nun Ihre persönliche Ausweis-PIN.";
 "firstTimeUser_personalPINIntro_body" = "Merken Sie sich Ihre persönliche Ausweis-PIN gut. Sie benötigen diese jedes Mal, wenn Sie die Online-Ausweisfunktion in Zukunft nutzen.";
-"firstTimeUser_personalPINIntro_continue" = "Persönliche PIN vergeben";
+"firstTimeUser_personalPINIntro_continue" = "Persönliche Ausweis–PIN vergeben";
 "firstTimeUser_personalPIN_title" = "Vergeben Sie nun Ihre persönliche Ausweis-PIN.";
 "firstTimeUser_personalPIN_body" = "Diese PIN geben Sie jedes Mal ein, wenn Sie Ihren Ausweis online benutzen.";
 "firstTimeUser_personalPIN_textFieldLabel_first" = "Persönliche PIN, sechsstellig";
 "firstTimeUser_personalPIN_textFieldLabel_second" = "Persönliche PIN bestätigen, sechsstellig";
-"firstTimeUser_personalPIN_confirmation" = "PIN zum Bestätigen bitte wiederholen";
+"firstTimeUser_personalPIN_confirmation" = "PIN zum Bestätigen wiederholen";
 "firstTimeUser_personalPIN_error_mismatch_title" = "PINs stimmen nicht überein";
 "firstTimeUser_personalPIN_error_mismatch_body" = "Versuchen Sie es erneut.";
-"firstTimeUser_scan_title" = "Übertragen Sie ihre neue PIN auf den Ausweis.";
-"firstTimeUser_scan_body" = "Fast geschafft! Bitte halten Sie Ihren Ausweis dicht an die Rückseite des Smartphones. Die App nutzt die NFC-Sensoren in Smartphone und Ausweis, um ihrem Ausweis die neue PIN zuzuordnen.";
+"firstTimeUser_scan_title" = "Übertragen Sie Ihre neue PIN auf den Ausweis.";
+"firstTimeUser_scan_body" = "Fast geschafft! Halten Sie im nächsten Schritt Ihren Ausweis dicht an die obere Rückseite des iPhones. Die App nutzt die NFC-Sensoren in iPhone und Ausweis, um Ihrem Ausweis die neue PIN zuzuordnen.";
 "firstTimeUser_scan_scan" = "Jetzt übertragen";
 "firstTimeUser_scan_progress_caption" = "Ausweis nicht bewegen";
 "firstTimeUser_scan_scanningCard" = "Ausweis wird geprüft";
@@ -32,11 +32,11 @@
 "firstTimeUser_incorrectTransportPIN_body" = "Geben Sie Ihre 5-stellige Transport-PIN aus dem PIN-Brief ein.";
 "firstTimeUser_incorrectTransportPIN_continue" = "Weiter";
 "firstTimeUser_incorrectTransportPIN_textFieldLabel" = "Transport-PIN, fünfstellig";
-"firstTimeUser_incorrectTransportPIN_end" = "Einrichtung beenden";
-"firstTimeUser_confirmEnd_title" = "Einrichtung beenden?";
-"firstTimeUser_confirmEnd_message" = "Möchten Sie die Einrichtung Ihres Personalausweises beenden?";
-"firstTimeUser_confirmEnd_confirm" = "Beenden";
-
+"firstTimeUser_incorrectTransportPIN_end" = "Einrichtung abbrechen";
+"firstTimeUser_confirmEnd_title" = "Einrichtung abbrechen?";
+"firstTimeUser_confirmEnd_message" = "Möchten Sie die Einrichtung der Online-Ausweisfunktion abbrechen?\n\nSie können die Einrichtung später erneut starten.";
+"firstTimeUser_confirmEnd_confirm" = "Ja";
+"firstTimeUser_confirmEnd_deny" = "Abbrechen";
 "scanError_cardDeactivated_title" = "Für Ihren Ausweis ist die Online-Ausweisfunktion nicht aktiviert";
 "scanError_cardDeactivated_body" = "Wenden Sie sich an Ihr Bürgeramt, um die Online-Ausweisfunktion zu aktivieren.\n\nSie wissen nicht, an wen Sie sich wenden können? Rufen Sie die 115 an oder informieren Sie sich unter:";
 "scanError_cardSuspended_title" = "Sie haben zum zweiten Mal die falsche PIN eingegeben";
@@ -46,7 +46,6 @@
 "scanError_cardUnreadable_title" = "Ihr Ausweis wurde nicht erkannt.";
 "scanError_cardUnreadable_body" = "Folgende Dokumente bieten die Funktion an: Deutscher Personalausweis, Elektronischer Aufenthaltstitel, eID-Karte für Bürgerinnen und Bürger der Europäischen Union und des Europäischer Wirtschaftsraum.\n\nWenn Sie eines der oben genannten Dokumente benutzen und das Problem weiter auftritt, versuchen Sie diese Schritte:\n\n- Entfernen Sie die Karte von Ihrem Smartphone und legen Sie sie erneut an das Smartphone.\n- Wenn Sie eine sehr dicke Handyhülle haben, versuchen Sie, die Hülle zu entfernen.";
 "scanError_close" = "Schließen";
-
 "firstTimeUser_done_title" = "Sie haben Ihren Online-Ausweis erfolgreich eingerichtet.";
 "firstTimeUser_done_close" = "Einrichtung abschließen";
 "firstTimeUser_done_identify" = "Jetzt ausweisen";
@@ -127,4 +126,3 @@
 "privacy_html_text" = "<h2>Datenschutzerklärung</h2><p>Stand: DD.MM.JJJJ</p><h4>Lorem ipsum</h4><p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et iusto duo dolores e+ rum</p><h4>Lorem ipsum</h4><p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et iusto duo dolores e+ rum</p>";
 "termsOfUse_title" = "Nutzungsbedingungen";
 "termsOfUse_html_text" = "<h2>Nutzungsbedingungen</h2><p>Stand: DD.MM.JJJJ</p><h4>Lorem ipsum</h4><p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et iusto duo dolores e+ rum</p><h4>Lorem ipsum</h4><p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et iusto duo dolores e+ rum</p>";
-"firstTimeUser_confirmEnd_deny" = "Abbrechen";
