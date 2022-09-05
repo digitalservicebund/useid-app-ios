@@ -29,7 +29,7 @@ extension Font {
     static let bundCaption2: Font = .custom(fontName, size: 12, relativeTo: .caption2)
     
     static func bundCustom(size: CGFloat, relativeTo textStyle: Font.TextStyle) -> Font {
-        .custom(fontName, size: size, relativeTo: .body)
+        .custom(fontName, size: size, relativeTo: textStyle)
     }
     
     private static let fontName = "BundesSans"
