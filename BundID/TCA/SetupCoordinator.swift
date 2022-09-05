@@ -171,5 +171,6 @@ struct SetupCoordinatorView: View {
                 viewStore.send(.end)
             }
         }
+        .ignoresSafeArea(.keyboard)
     }
 }
