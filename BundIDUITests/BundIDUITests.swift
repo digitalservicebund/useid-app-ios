@@ -26,7 +26,7 @@ final class BundIDUITests: XCTestCase {
         pin2TextField.wait().tap()
         pin2TextField.waitAndTypeText("123456")
         
-        app.buttons[L10n.FirstTimeUser.Scan.scan].tap()
+        app.buttons[L10n.FirstTimeUser.Scan.scan].wait().tap()
         
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
@@ -73,7 +73,7 @@ final class BundIDUITests: XCTestCase {
         pin2TextField.wait().tap()
         pin2TextField.waitAndTypeText("123456")
         
-        app.buttons[L10n.FirstTimeUser.Scan.scan].tap()
+        app.buttons[L10n.FirstTimeUser.Scan.scan].wait().tap()
         
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["runPINError"].wait().tap()
