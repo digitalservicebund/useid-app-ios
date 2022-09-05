@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B9C7735028B3C64100E41332 /* animation_id-scan.json in Resources */ = {isa = PBXBuildFile; fileRef = B9C7734F28B3C64100E41332 /* animation_id-scan.json */; };
 		D21E682028BCEB0A0055EBFE /* Assets+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21E681F28BCEB0A0055EBFE /* Assets+Generated.swift */; };
 		D28D27FF28B7A91B008DA310 /* MissingPINLetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */; };
 		D28D280228B7A9F5008DA310 /* SetupDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D280028B7A9F5008DA310 /* SetupDone.swift */; };
@@ -31,7 +30,6 @@
 		E13925C42841111100161F5C /* GeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925C32841111100161F5C /* GeneratedMocks.swift */; };
 		E13925C72841119400161F5C /* MockIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925C62841119400161F5C /* MockIDInteractionManager.swift */; };
 		E13925CA28411D4C00161F5C /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = E13925C928411D4C00161F5C /* Lottie */; };
-		E13925CD28411DA600161F5C /* 38076-id-scan.json in Resources */ = {isa = PBXBuildFile; fileRef = E13925CC28411DA600161F5C /* 38076-id-scan.json */; };
 		E13925CF28411E2400161F5C /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925CE28411E2300161F5C /* LottieView.swift */; };
 		E13A632128B8010A00AB7A39 /* LocalizedStrings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */; };
 		E13F9E3B2886F3420088E955 /* IdentificationCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E3A2886F3420088E955 /* IdentificationCoordinatorTests.swift */; };
@@ -156,7 +154,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		B9C7734F28B3C64100E41332 /* animation_id-scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "animation_id-scan.json"; sourceTree = "<group>"; };
 		D21E681F28BCEB0A0055EBFE /* Assets+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Assets+Generated.swift"; sourceTree = "<group>"; };
 		D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissingPINLetter.swift; sourceTree = "<group>"; };
 		D28D280028B7A9F5008DA310 /* SetupDone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupDone.swift; sourceTree = "<group>"; };
@@ -176,7 +173,6 @@
 		E13925B72840FB7700161F5C /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		E13925C32841111100161F5C /* GeneratedMocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
 		E13925C62841119400161F5C /* MockIDInteractionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockIDInteractionManager.swift; sourceTree = "<group>"; };
-		E13925CC28411DA600161F5C /* 38076-id-scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "38076-id-scan.json"; sourceTree = "<group>"; };
 		E13925CE28411E2300161F5C /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
 		E13F9E3A2886F3420088E955 /* IdentificationCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCoordinatorTests.swift; sourceTree = "<group>"; };
 		E13F9E3C288802500088E955 /* UUID+InitFromNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UUID+InitFromNumber.swift"; sourceTree = "<group>"; };
@@ -333,15 +329,6 @@
 				E13925C62841119400161F5C /* MockIDInteractionManager.swift */,
 			);
 			path = Mocks;
-			sourceTree = "<group>";
-		};
-		E13925CB28411D9D00161F5C /* Animations */ = {
-			isa = PBXGroup;
-			children = (
-				B9C7734F28B3C64100E41332 /* animation_id-scan.json */,
-				E13925CC28411DA600161F5C /* 38076-id-scan.json */,
-			);
-			path = Animations;
 			sourceTree = "<group>";
 		};
 		E13F9E372886F2C70088E955 /* Setup */ = {
@@ -507,7 +494,6 @@
 		E1CD8E89281FFCA0008ADA2A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E13925CB28411D9D00161F5C /* Animations */,
 				E1AB87AA2825238D00C7FC94 /* Localizable.strings */,
 				E19D26B1282557B00005B111 /* Localizable.stringsdict */,
 				E1CD8E8B281FFCC1008ADA2A /* BundesSans-DTP-Bold.otf */,
@@ -761,11 +747,9 @@
 			files = (
 				E1AB87AC2825238D00C7FC94 /* Localizable.strings in Resources */,
 				E1EFB5D0285C794A005C38C6 /* InfoPlist.strings in Resources */,
-				E13925CD28411DA600161F5C /* 38076-id-scan.json in Resources */,
 				E1CD8E8C281FFCC1008ADA2A /* BundesSans-DTP-Regular.otf in Resources */,
 				E5CEB285281041340076B9FE /* Preview Assets.xcassets in Resources */,
 				E5CEB282281041340076B9FE /* Assets.xcassets in Resources */,
-				B9C7735028B3C64100E41332 /* animation_id-scan.json in Resources */,
 				E1CD8E8D281FFCC1008ADA2A /* BundesSans-DTP-Bold.otf in Resources */,
 				E1BC3D8128B7E73B007A7B39 /* Licenses in Resources */,
 				E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */,

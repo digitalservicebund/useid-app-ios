@@ -164,8 +164,8 @@ struct SetupScan: View {
         WithViewStore(store) { viewStore in
             VStack(alignment: .leading, spacing: 0) {
                 ScrollView {
-                    LottieView(name: "animation_id-scan", backgroundColor: Color(0xEBEFF2))
-                        .aspectRatio(contentMode: .fit)
+                        LottieView(name: Asset.animationIdScan.name, backgroundColor: Color(0xEBEFF2))
+                            .aspectRatio(contentMode: .fit)
                     
                     if viewStore.isScanning {
                         VStack {
