@@ -55,6 +55,7 @@ struct IdentificationPersonalPIN: View {
                                      showPIN: false,
                                      label: L10n.Identification.PersonalPIN.textFieldLabel,
                                      shouldBeFocused: .constant(true),
+                                     backgroundColor: .gray100,
                                      doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                           title: L10n.Identification.PersonalPIN.continue,
                                                                           handler: { pin in

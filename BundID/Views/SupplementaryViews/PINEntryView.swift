@@ -8,6 +8,7 @@ public struct PINEntryView: View {
     var showPIN = true
     var label: String = ""
     @Binding var shouldBeFocused: Bool
+    var backgroundColor: Color = .clear
     var doneConfiguration: DoneConfiguration?
     
     public var body: some View {
@@ -51,7 +52,9 @@ public struct PINEntryView: View {
             }
             Spacer()
         }
-        .padding()
+        .padding(.vertical)
+        .background(RoundedRectangle(cornerRadius: 10).foregroundColor(backgroundColor))
+        .padding(.horizontal)
         .accessibilityHidden(true)
         .accessibilityElement(children: .ignore)
     }

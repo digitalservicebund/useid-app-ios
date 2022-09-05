@@ -24,6 +24,7 @@ struct SetupPersonalPIN: View {
                                      showPIN: false,
                                      label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.first,
                                      shouldBeFocused: viewStore.binding(\.$focusPIN1),
+                                     backgroundColor: .gray100,
                                      doneConfiguration: nil)
                         .font(.bundTitle)
                         .modifier(Shake(animatableData: CGFloat(viewStore.remainingAttempts)))
@@ -39,6 +40,7 @@ struct SetupPersonalPIN: View {
                                              showPIN: false,
                                              label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.second,
                                              shouldBeFocused: viewStore.binding(\.$focusPIN2),
+                                             backgroundColor: .gray100,
                                              doneConfiguration: nil)
                                 .font(.bundTitle)
                                 .modifier(Shake(animatableData: CGFloat(viewStore.remainingAttempts)))
