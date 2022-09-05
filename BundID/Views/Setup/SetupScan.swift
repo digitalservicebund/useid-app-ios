@@ -53,7 +53,7 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
     case .startScan:
         guard !state.isScanning else { return .none }
         state.isScanning = true
-    
+        
         let publisher: EIDInteractionPublisher
 #if PREVIEW
         if MOCK_OPENECARD {
@@ -164,8 +164,8 @@ struct SetupScan: View {
         WithViewStore(store) { viewStore in
             VStack(alignment: .leading, spacing: 0) {
                 ScrollView {
-                        LottieView(name: Asset.animationIdScan.name, backgroundColor: Color(0xEBEFF2))
-                            .aspectRatio(contentMode: .fit)
+                    LottieView(name: Asset.animationIdScan.name, backgroundColor: Color(0xEBEFF2))
+                        .aspectRatio(contentMode: .fit)
                     
                     if viewStore.isScanning {
                         VStack {
