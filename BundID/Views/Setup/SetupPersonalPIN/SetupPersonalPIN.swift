@@ -14,9 +14,8 @@ struct SetupPersonalPIN: View {
         ScrollView {
             WithViewStore(store) { viewStore in
                 VStack(alignment: .leading, spacing: 24) {
-                    Text(L10n.FirstTimeUser.PersonalPIN.title)
-                        .font(.bundLargeTitle)
-                        .foregroundColor(.blackish)
+                    HeaderView(title: L10n.FirstTimeUser.PersonalPIN.title,
+                               message: L10n.FirstTimeUser.PersonalPIN.body)
                     VStack {
                         Spacer()
                         PINEntryView(pin: viewStore.binding(\.$enteredPIN1),

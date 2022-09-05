@@ -19,7 +19,7 @@
 "firstTimeUser_personalPINIntro_body" = "Merken Sie sich Ihre persönliche Ausweis-PIN gut. Sie benötigen diese jedes Mal, wenn Sie die Online-Ausweisfunktion in Zukunft nutzen.";
 "firstTimeUser_personalPINIntro_continue" = "Persönliche Ausweis–PIN vergeben";
 "firstTimeUser_personalPIN_title" = "Vergeben Sie nun Ihre persönliche Ausweis-PIN.";
-"firstTimeUser_personalPIN_body" = "Diese PIN geben Sie jedes Mal ein, wenn Sie Ihren Ausweis online benutzen.";
+"firstTimeUser_personalPIN_body" = "Merken Sie sich Ihre persönliche Ausweis-PIN gut. Sie benötigen diese jedes Mal, wenn Sie die Online-Ausweisfunktion in Zukunft nutzen.";
 "firstTimeUser_personalPIN_textFieldLabel_first" = "Persönliche PIN, sechsstellig";
 "firstTimeUser_personalPIN_textFieldLabel_second" = "Persönliche PIN bestätigen, sechsstellig";
 "firstTimeUser_personalPIN_confirmation" = "PIN zum Bestätigen wiederholen";
