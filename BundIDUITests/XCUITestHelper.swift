@@ -4,6 +4,12 @@ extension XCUIElement {
     
     func wait(timeout: TimeInterval = 5, file: StaticString = #filePath, line: UInt = #line) -> XCUIElement {
         assertExistence(file: file, line: line)
+  
+        // Element might be behind system overlays (e.g. home indicator).
+        // This blocks interacting with it (e.g. tapping).
+        // Scrolling until the element is completly visible on screen resolves this issue (in most cases).
+        XCUIApplication().scrollElementIntoVisibility(self)
+        
         return self
     }
     
@@ -29,5 +35,23 @@ extension XCUIElement {
     
     func longStaticText(containing text: String, file: StaticString = #filePath, line: UInt = #line) -> XCUIElement {
         return staticTexts.element(matching: NSPredicate(format: "label CONTAINS[c] %@", text))
+    }
+}
+
+extension XCUIApplication {
+    func hasVisible(element: XCUIElement) -> Bool {
+        frame.contains(element.frame)
+    }
+    
+    func scrollElementIntoVisibility(_ element: XCUIElement, maxSwipeActions: Int = 10) {
+        guard !hasVisible(element: element) else { return }
+        
+        for _ in 0..<maxSwipeActions {
+            swipeUp()
+            
+            if hasVisible(element: element) {
+                break
+            }
+        }
     }
 }
