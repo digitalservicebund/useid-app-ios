@@ -104,7 +104,7 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
                                          message: TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.message),
                                          primaryButton: .destructive(TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.confirm),
                                                                      action: .send(.confirmEnd)),
-                                         secondaryButton: .cancel(TextState(verbatim: L10n.General.cancel)))
+                                         secondaryButton: .cancel(TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.deny)))
             case .confirmEnd:
                 return .none
             case .dismissAlert:

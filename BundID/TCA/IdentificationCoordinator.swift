@@ -221,7 +221,7 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                                          message: TextState(verbatim: L10n.Identification.ConfirmEnd.message),
                                          primaryButton: .destructive(TextState(verbatim: L10n.Identification.ConfirmEnd.confirm),
                                                                      action: .send(.confirmEnd)),
-                                         secondaryButton: .cancel(TextState(verbatim: L10n.General.cancel)))
+                                         secondaryButton: .cancel(TextState(verbatim: L10n.Identification.ConfirmEnd.deny)))
                 return .none
             case .confirmEnd:
                 return .none

@@ -53,6 +53,7 @@
 "firstTimeUser_done_title" = "Sie haben Ihren Online-Ausweis erfolgreich eingerichtet.";
 "firstTimeUser_done_close" = "Einrichtung abschließen";
 "firstTimeUser_done_identify" = "Jetzt ausweisen";
+"identification_overview_end" = "Abbrechen";
 "identification_overview_loading" = "Einen Moment bitte…\n\nDaten werden geladen";
 "identification_overview_loaded_title" = "%@";
 "identification_overview_loaded_body" = "Mit Eingabe Ihrer persönlichen PIN gewähren Sie „%@“ den Zugriff auf folgende Daten von Ihrem Ausweis:";

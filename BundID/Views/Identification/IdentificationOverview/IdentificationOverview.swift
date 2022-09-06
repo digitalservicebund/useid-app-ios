@@ -120,7 +120,7 @@ struct IdentificationOverview: View {
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button(L10n.General.cancel) {
+                Button(L10n.Identification.Overview.end) {
                     ViewStore(store.stateless).send(.cancel)
                 }
             }

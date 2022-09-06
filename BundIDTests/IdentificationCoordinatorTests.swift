@@ -254,7 +254,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         )
         
         store.send(.end) {
-            $0.alert = AlertState(title: .init(verbatim: L10n.Identification.ConfirmEnd.title), message: .init(verbatim: L10n.Identification.ConfirmEnd.message), primaryButton: .destructive(.init(verbatim: L10n.Identification.ConfirmEnd.confirm), action: .send(.confirmEnd)), secondaryButton: .cancel(.init(verbatim: L10n.General.cancel)))
+            $0.alert = AlertState(title: .init(verbatim: L10n.Identification.ConfirmEnd.title), message: .init(verbatim: L10n.Identification.ConfirmEnd.message), primaryButton: .destructive(.init(verbatim: L10n.Identification.ConfirmEnd.confirm), action: .send(.confirmEnd)), secondaryButton: .cancel(.init(verbatim: L10n.Identification.ConfirmEnd.deny)))
         }
     }
 }
