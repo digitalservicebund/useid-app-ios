@@ -104,7 +104,10 @@ jobs:
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
           PP_PATH: ${{ env.PP_PATH }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: bundle exec fastlane preview
+        run: |
+            export LANG=en_US.UTF-8;
+            export LANGUAGE=en_US:en;
+            bundle exec fastlane preview
       - name: Upload xcarchive
         uses: actions/upload-artifact@v3
         if: ${{ always() }}
