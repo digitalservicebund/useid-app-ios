@@ -5,10 +5,10 @@ struct DialogView<Action>: View {
     var store: Store<Void, Action>
     var title: String
     var message: String?
+    var infoBoxContent: InfoBoxContent?
     var imageMeta: ImageMeta?
     var secondaryButton: DialogButtons<Action>.ButtonConfiguration?
     var primaryButton: DialogButtons<Action>.ButtonConfiguration?
-    var infoBoxContent: InfoBoxContent?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {

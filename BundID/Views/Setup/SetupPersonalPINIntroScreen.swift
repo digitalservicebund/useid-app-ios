@@ -11,10 +11,10 @@ struct SetupPersonalPINIntro: View {
     var body: some View {
         DialogView(store: store,
                    title: L10n.FirstTimeUser.PersonalPINIntro.title,
+                   infoBoxContent: .init(title: L10n.FirstTimeUser.PersonalPINIntro.Info.title,
+                                         message: L10n.FirstTimeUser.PersonalPINIntro.Info.body),
                    imageMeta: ImageMeta(asset: Asset.eiDsPIN),
                    primaryButton: .init(title: L10n.FirstTimeUser.PersonalPINIntro.continue,
-                                        action: .continue),
-                   infoBoxContent: .init(title: L10n.FirstTimeUser.PersonalPINIntro.Info.title,
-                                         message: L10n.FirstTimeUser.PersonalPINIntro.Info.body))
+                                        action: .continue))
     }
 }
