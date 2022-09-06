@@ -57,7 +57,7 @@
 "identification_overview_loading" = "Einen Moment bitte…\n\nDaten werden geladen";
 "identification_overview_loaded_title" = "%@";
 "identification_overview_loaded_body" = "Mit Eingabe Ihrer persönlichen PIN gewähren Sie „%@“ den Zugriff auf folgende Daten von Ihrem Ausweis:";
-"identification_overview_loaded_moreInfo" = "Weitere Informationen zu „%@“";
+"identification_overview_loaded_moreInfo" = "Weitere Informationen";
 "identification_overview_loaded_continue" = "PIN eingeben";
 "identification_overview_error_title" = "Ein Fehler ist aufgetreten";
 "identification_overview_error_body" = "Bitte versuchen Sie es noch einmal. Stellen Sie dabei sicher, dass Sie eine gute Internetverbindung haben.";

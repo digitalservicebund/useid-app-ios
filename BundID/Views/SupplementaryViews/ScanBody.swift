@@ -21,18 +21,10 @@ struct ScanBody: View {
                 .font(.bundBody)
                 .foregroundColor(.blackish)
             VStack(alignment: .leading, spacing: 16) {
-                Button(action: infoTapped, label: {
-                    Text(L10n.General.Scan.info)
-                        .bold()
-                })
-                .padding(EdgeInsets(top: 8, leading: 10, bottom: 10, trailing: 8))
-                .background(RoundedRectangle(cornerRadius: 12).foregroundColor(.blue200))
-                Button(action: helpTapped, label: {
-                    Text(L10n.General.Scan.help)
-                        .bold()
-                })
-                .padding(EdgeInsets(top: 8, leading: 10, bottom: 10, trailing: 8))
-                .background(RoundedRectangle(cornerRadius: 12).foregroundColor(.blue200))
+                Button(L10n.General.Scan.info, action: infoTapped)
+                    .buttonStyle(BundTextButtonStyle())
+                Button(L10n.General.Scan.help, action: helpTapped)
+                    .buttonStyle(BundTextButtonStyle())
             }
         }
         .padding()

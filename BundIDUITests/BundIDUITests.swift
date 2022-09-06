@@ -110,7 +110,7 @@ final class BundIDUITests: XCTestCase {
         app.staticTexts["Subject"].assertExistence()
         app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
         
-        app.buttons[L10n.Identification.Overview.Loaded.moreInfo("Subject")].wait().tap()
+        app.buttons[L10n.Identification.Overview.Loaded.moreInfo].wait().tap()
         
         app.staticTexts[L10n.Identification.About.terms].assertExistence()
         app.navigationBars.buttons.firstMatch.wait().tap()
