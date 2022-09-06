@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D201402728C5E6FD0002A054 /* InfoBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D201402628C5E6FD0002A054 /* InfoBox.swift */; };
 		D21E682028BCEB0A0055EBFE /* Assets+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21E681F28BCEB0A0055EBFE /* Assets+Generated.swift */; };
 		D28D27FF28B7A91B008DA310 /* MissingPINLetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */; };
 		D28D280228B7A9F5008DA310 /* SetupDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D280028B7A9F5008DA310 /* SetupDone.swift */; };
@@ -154,6 +155,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D201402628C5E6FD0002A054 /* InfoBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoBox.swift; sourceTree = "<group>"; };
 		D21E681F28BCEB0A0055EBFE /* Assets+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Assets+Generated.swift"; sourceTree = "<group>"; };
 		D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissingPINLetter.swift; sourceTree = "<group>"; };
 		D28D280028B7A9F5008DA310 /* SetupDone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupDone.swift; sourceTree = "<group>"; };
@@ -395,16 +397,17 @@
 		E16708B8283D7C47001A1637 /* SupplementaryViews */ = {
 			isa = PBXGroup;
 			children = (
-				E17E1C5028AFAABF004B0815 /* HTMLView.swift */,
-				E16708B6283D7C2B001A1637 /* DialogView.swift */,
-				E16708B9283D7CA1001A1637 /* DialogButtons.swift */,
-				E1AB8799282281C400C7FC94 /* HeaderView.swift */,
-				E13925CE28411E2300161F5C /* LottieView.swift */,
 				E17604D0287E24F1007DFA10 /* DebugMenu.swift */,
+				E16708B9283D7CA1001A1637 /* DialogButtons.swift */,
+				E16708B6283D7C2B001A1637 /* DialogView.swift */,
+				E1AB8799282281C400C7FC94 /* HeaderView.swift */,
+				E17E1C5028AFAABF004B0815 /* HTMLView.swift */,
+				D201402628C5E6FD0002A054 /* InfoBox.swift */,
+				E13925CE28411E2300161F5C /* LottieView.swift */,
 				E1CD8E9428215971008ADA2A /* PINEntryView.swift */,
 				E1AB87A3282413A700C7FC94 /* PINTextField.swift */,
-				F43622A62850D6C9008AEBB9 /* ScanError.swift */,
 				E1EB9FF928B5288A007FF467 /* ScanBody.swift */,
+				F43622A62850D6C9008AEBB9 /* ScanError.swift */,
 			);
 			path = SupplementaryViews;
 			sourceTree = "<group>";
@@ -891,6 +894,7 @@
 				D28D280328B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift in Sources */,
 				E5E69D852812FB6100A3B66A /* IDCardInteractionError.swift in Sources */,
 				E1EFB5C62858EB2A005C38C6 /* Shape+Fill.swift in Sources */,
+				D201402728C5E6FD0002A054 /* InfoBox.swift in Sources */,
 				E12CB30428494B0B0039FD56 /* OpenECardTypes.swift in Sources */,
 				E1EFB5C22858EAA2005C38C6 /* IdentificationOverviewLoaded.swift in Sources */,
 				E593E2682816847900154EB0 /* EIDAuthenticationRequest.swift in Sources */,

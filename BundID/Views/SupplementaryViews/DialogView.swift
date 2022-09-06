@@ -8,12 +8,14 @@ struct DialogView<Action>: View {
     var imageMeta: ImageMeta?
     var secondaryButton: DialogButtons<Action>.ButtonConfiguration?
     var primaryButton: DialogButtons<Action>.ButtonConfiguration?
+    var infoBoxContent: InfoBoxContent?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
                 HeaderView(title: title,
                            message: message,
+                           infoBoxContent: infoBoxContent,
                            imageMeta: imageMeta)
             }
             DialogButtons(store: store,

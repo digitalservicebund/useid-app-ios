@@ -6,14 +6,15 @@ enum SetupPersonalPINIntroAction: Equatable {
 }
 
 struct SetupPersonalPINIntro: View {
-    
     var store: Store<Void, SetupPersonalPINIntroAction>
     
     var body: some View {
         DialogView(store: store,
                    title: L10n.FirstTimeUser.PersonalPINIntro.title,
-                   message: L10n.FirstTimeUser.PersonalPINIntro.body,
                    imageMeta: ImageMeta(asset: Asset.eiDsPIN),
-                   primaryButton: .init(title: L10n.FirstTimeUser.PersonalPINIntro.continue, action: .continue))
+                   primaryButton: .init(title: L10n.FirstTimeUser.PersonalPINIntro.continue,
+                                        action: .continue),
+                   infoBoxContent: .init(title: L10n.FirstTimeUser.PersonalPINIntro.Info.title,
+                                         message: L10n.FirstTimeUser.PersonalPINIntro.Info.body))
     }
 }

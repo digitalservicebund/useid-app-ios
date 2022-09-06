@@ -24,40 +24,38 @@ struct LinkMeta {
 }
 
 struct HeaderView: View {
-    
     var title: String
     var message: String?
+    var infoBoxContent: InfoBoxContent?
     var imageMeta: ImageMeta?
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 30) {
-            VStack(alignment: .leading, spacing: 0) {
-                Text(title)
-                    .font(.bundLargeTitle)
-                    .foregroundColor(.blackish)
-                    .padding(.bottom, 24)
-                if let message = message {
-                    Text(attributed(message: message))
-                        .font(.bundBody)
-                        .foregroundColor(.blackish)
-                        .padding(.bottom, 24)
-                }
+        VStack(alignment: .leading, spacing: 24) {
+            Text(title)
+                .font(.bundLargeTitle)
+                .foregroundColor(.blackish)
+            if let infoBoxContent = infoBoxContent {
+                InfoBox(content: infoBoxContent)
             }
-            .padding(.horizontal)
+            if let message = message {
+                Text(attributed(message: message))
+                    .font(.bundBody)
+                    .foregroundColor(.blackish)
+            }
             if let imageMeta = imageMeta {
                 imageMeta.image
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: .infinity, maxHeight: imageMeta.maxHeight)
                     .padding(.vertical, 10)
-                    .padding(.horizontal, 24)
             }
         }
+        .padding(.horizontal)
     }
     
     func attributed(message: String) -> AttributedString {
         (try? AttributedString(markdown: message,
-                              options: .init(interpretedSyntax: .inlineOnlyPreservingWhitespace))) ?? AttributedString(message)
+                               options: .init(interpretedSyntax: .inlineOnlyPreservingWhitespace))) ?? AttributedString(message)
     }
 }
 

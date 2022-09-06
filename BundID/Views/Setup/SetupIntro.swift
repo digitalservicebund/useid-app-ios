@@ -25,10 +25,10 @@ struct SetupIntro_Previews: PreviewProvider {
         NavigationView {
             SetupIntro(store: Store(initialState: (), reducer: .empty, environment: AppEnvironment.preview))
         }
-            .previewDevice("iPhone SE (2nd generation)")
+        .previewDevice("iPhone SE (2nd generation)")
         NavigationView {
             SetupIntro(store: Store(initialState: (), reducer: .empty, environment: AppEnvironment.preview))
         }
-            .previewDevice("iPhone 12")
+        .previewDevice("iPhone 12")
     }
 }
