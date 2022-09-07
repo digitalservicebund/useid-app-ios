@@ -7,6 +7,7 @@ struct LottieView: UIViewRepresentable {
     var loopMode: LottieLoopMode = .loop
     var cache: LRUAnimationCache = .sharedCache
     var backgroundColor: SwiftUI.Color?
+    var accessiblityLabel: String?
 
     func makeUIView(context: UIViewRepresentableContext<LottieView>) -> UIView {
         
@@ -17,6 +18,9 @@ struct LottieView: UIViewRepresentable {
         animationView.backgroundColor = backgroundColor != nil ? UIColor(backgroundColor!) : nil
         
         let view = UIView(frame: .zero)
+        view.accessibilityTraits = .image
+        view.isAccessibilityElement = accessiblityLabel != nil
+        view.accessibilityLabel = accessiblityLabel
         view.addSubview(animationView)
         
         NSLayoutConstraint.activate([

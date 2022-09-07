@@ -93,6 +93,7 @@
 "general_scan_info_title" = "Wie funktioniert die NFC-Technologie?";
 "general_scan_info_message" = "NFC steht für Near Field Communication. Die Technik ermöglicht den kontaktlosen Austausch von Daten über sehr kurze Strecken. Sie wird bspw. auch beim Bezahlen mit dem Smartphone an der Supermarktkasse verwendet.";
 "general_scan_help" = "Mein Ausweis wird nicht erkannt";
+"general_scan_animationAccessibilityLabel" = "Legen Sie ihren Ausweis auf eine gerade Oberfläche, um Bewegungen bei dem Scanvorgang zu vermeiden. Legen Sie anschließend Ihr iPhone auf den Ausweis. Die obere Rückseite des iPhones sollte direkt auf dem Ausweis liegen. Warten Sie einen Moment, bis der Scanvorgang abgeschlossen wurde.";
 
 "cardAttribute_dg01" = "Dokumententyp";
 "cardAttribute_dg02" = "Ausgebender Staat";

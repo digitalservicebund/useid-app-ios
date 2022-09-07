@@ -164,7 +164,9 @@ struct SetupScan: View {
         WithViewStore(store) { viewStore in
             VStack(alignment: .leading, spacing: 0) {
                 ScrollView {
-                    LottieView(name: Asset.animationIdScan.name, backgroundColor: Color(0xEBEFF2))
+                    LottieView(name: Asset.animationIdScan.name,
+                               backgroundColor: Color(0xEBEFF2),
+                               accessiblityLabel: L10n.General.Scan.animationAccessibilityLabel)
                         .aspectRatio(540.0 / 367.0, contentMode: .fit)
                     
                     if viewStore.isScanning {
@@ -179,7 +181,6 @@ struct SetupScan: View {
                                     .font(.bundTitle)
                                     .foregroundColor(.blackish)
                                     .padding(.bottom, 50)
-                                    .padding(.bottom)
                             }
                         }
                     } else {
