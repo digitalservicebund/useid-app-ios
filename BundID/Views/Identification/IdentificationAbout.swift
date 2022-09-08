@@ -10,10 +10,10 @@ struct IdentificationAbout: View {
             VStack(alignment: .leading, spacing: 24) {
                 Text(request.subject)
                     .font(.bundLargeTitle)
-                Text(L10n.Identification.About.subjectInformation)
+                Text(L10n.Identification.AttributeConsentInfo.providerInfo)
                     .font(.bundTitle)
                 
-                Text(L10n.Identification.About.subject)
+                Text(L10n.Identification.AttributeConsentInfo.provider)
                     .font(.bundHeader)
                 VStack(alignment: .leading, spacing: 0) {
                     Text(request.subject)
@@ -21,7 +21,7 @@ struct IdentificationAbout: View {
                 }
                 .font(.bundBody)
                 
-                Text(L10n.Identification.About.issuer)
+                Text(L10n.Identification.AttributeConsentInfo.issuer)
                     .font(.bundHeader)
                 VStack(alignment: .leading, spacing: 0) {
                     Text(request.issuer)
@@ -29,7 +29,7 @@ struct IdentificationAbout: View {
                 }
                 .font(.bundBody)
                 
-                Text(L10n.Identification.About.terms)
+                Text(L10n.Identification.AttributeConsentInfo.terms)
                     .font(.bundHeader)
                 Text(request.terms.description)
                     .font(.bundBody)

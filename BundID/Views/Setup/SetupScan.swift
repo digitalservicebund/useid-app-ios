@@ -96,8 +96,8 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
     case .scannedSuccessfully:
         return .cancel(id: CancelId.self)
     case .showNFCInfo:
-        state.alert = AlertState(title: TextState(L10n.General.Scan.Info.title),
-                                 message: TextState(L10n.General.Scan.Info.message),
+        state.alert = AlertState(title: TextState(L10n.HelpNFC.title),
+                                 message: TextState(L10n.HelpNFC.body),
                                  dismissButton: .cancel(TextState(L10n.General.ok),
                                                         action: .send(.dismissAlert)))
         return .none
@@ -166,7 +166,7 @@ struct SetupScan: View {
                 ScrollView {
                     LottieView(name: Asset.animationIdScan.name,
                                backgroundColor: Color(0xEBEFF2),
-                               accessiblityLabel: L10n.General.Scan.animationAccessibilityLabel)
+                               accessiblityLabel: L10n.Scan.animationAccessibilityLabel)
                         .aspectRatio(540.0 / 367.0, contentMode: .fit)
                     
                     if viewStore.isScanning {
@@ -177,10 +177,15 @@ struct SetupScan: View {
                                 .frame(maxWidth: .infinity)
                                 .padding(50)
                             if viewStore.showProgressCaption {
-                                Text(L10n.FirstTimeUser.Scan.Progress.caption)
-                                    .font(.bundTitle)
-                                    .foregroundColor(.blackish)
-                                    .padding(.bottom, 50)
+                                VStack(spacing: 24) {
+                                    Text(L10n.FirstTimeUser.Scan.Progress.title)
+                                        .font(.bundTitle)
+                                        .foregroundColor(.blackish)
+                                    Text(L10n.FirstTimeUser.Scan.Progress.body)
+                                        .font(.bundBody)
+                                        .foregroundColor(.blackish)
+                                }
+                                .padding(.bottom, 50)
                             }
                         }
                     } else {
@@ -188,7 +193,7 @@ struct SetupScan: View {
                                  message: L10n.FirstTimeUser.Scan.body,
                                  buttonTitle: L10n.FirstTimeUser.Scan.scan,
                                  buttonTapped: { viewStore.send(.startScan) },
-                                 infoTapped: { viewStore.send(.showNFCInfo) },
+                                 nfcInfoTapped: { viewStore.send(.showNFCInfo) },
                                  helpTapped: { viewStore.send(.showHelp) })
                         .disabled(!viewStore.scanAvailable)
                     }

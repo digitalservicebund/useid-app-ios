@@ -1,4 +1,5 @@
 import SwiftUI
+import MarkdownUI
 
 struct ImageMeta {
     let name: String
@@ -38,8 +39,8 @@ struct HeaderView: View {
                 InfoBox(content: infoBoxContent)
             }
             if let message = message {
-                Text(attributed(message: message))
-                    .font(.bundBody)
+                Markdown(message)
+                    .markdownStyle(MarkdownStyle(font: .bundBody))
                     .foregroundColor(.blackish)
             }
             if let imageMeta = imageMeta {
@@ -60,7 +61,7 @@ struct HeaderView: View {
 }
 
 extension ImageMeta {
-    var image: Image {
+    var image: SwiftUI.Image {
         if let labelKey = labelKey {
             return Image(name, label: Text(labelKey))
         } else {

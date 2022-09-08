@@ -26,8 +26,8 @@ struct IdentificationDone: View {
         WithViewStore(store) { viewStore in
             DialogView(store: store.stateless,
                        title: L10n.Identification.Done.title,
-                       message: L10n.Identification.Done.message(viewStore.request.subject),
-                       primaryButton: .init(title: L10n.Identification.Done.close,
+                       message: L10n.Identification.Done.body(viewStore.request.subject),
+                       primaryButton: .init(title: L10n.Identification.Done.continue,
                                             action: viewStore.hasValidURL ? .openURL(URL(string: viewStore.redirectURL)!) : .close))
             .navigationBarBackButtonHidden(true)
         }

@@ -112,15 +112,15 @@ struct IdentificationOverview: View {
             CaseLet(state: /IdentificationOverviewState.error,
                     action: IdentificationOverviewAction.error) { errorStore in
                 DialogView(store: errorStore.stateless,
-                           title: L10n.Identification.Overview.Error.title,
-                           message: L10n.Identification.Overview.Error.body,
-                           primaryButton: .init(title: L10n.Identification.Overview.Error.retry, action: .retry))
+                           title: L10n.Identification.FetchMetadataError.title,
+                           message: L10n.Identification.FetchMetadataError.body,
+                           primaryButton: .init(title: L10n.Identification.FetchMetadataError.retry, action: .retry))
                 .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button(L10n.Identification.Overview.end) {
+                Button(L10n.Identification.end) {
                     ViewStore(store.stateless).send(.cancel)
                 }
             }

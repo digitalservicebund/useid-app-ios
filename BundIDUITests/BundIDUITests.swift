@@ -35,7 +35,7 @@ final class BundIDUITests: XCTestCase {
         
         app.buttons[L10n.FirstTimeUser.Done.close].wait().tap()
         
-        app.buttons[L10n.Home.Actions.setup].assertExistence()
+        app.buttons[L10n.Home.startSetup].assertExistence()
     }
     
     func testLaunchSetupManually() throws {
@@ -44,7 +44,7 @@ final class BundIDUITests: XCTestCase {
         app.launchWithSetupCompleted()
         app.launch()
         
-        app.buttons[L10n.Home.Actions.setup].wait().tap()
+        app.buttons[L10n.Home.startSetup].wait().tap()
         app.staticTexts[L10n.FirstTimeUser.Intro.title].assertExistence()
     }
     
@@ -54,7 +54,7 @@ final class BundIDUITests: XCTestCase {
         app.launchWithSetupCompleted()
         app.launch()
         
-        app.buttons[L10n.Home.Actions.setup].wait().tap()
+        app.buttons[L10n.Home.startSetup].wait().tap()
         app.buttons[L10n.FirstTimeUser.Intro.no].wait().tap()
         app.buttons[L10n.FirstTimeUser.PinLetter.yes].wait().tap()
         
@@ -84,7 +84,7 @@ final class BundIDUITests: XCTestCase {
         
         app.buttons[L10n.FirstTimeUser.ConfirmEnd.confirm].wait().tap()
         
-        app.buttons[L10n.Home.Actions.setup].assertExistence()
+        app.buttons[L10n.Home.startSetup].assertExistence()
     }
     
     func testIdentificationTriggersSetupForFirstTimeUsers() throws {
@@ -107,15 +107,14 @@ final class BundIDUITests: XCTestCase {
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["requestAuthorization"].wait().tap()
         
-        app.staticTexts["Subject"].assertExistence()
         app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
         
-        app.buttons[L10n.Identification.Overview.Loaded.moreInfo].wait().tap()
+        app.buttons[L10n.Identification.AttributeConsent.moreInfo].wait().tap()
         
-        app.staticTexts[L10n.Identification.About.terms].assertExistence()
+        app.staticTexts[L10n.Identification.AttributeConsentInfo.terms].assertExistence()
         app.navigationBars.buttons.firstMatch.wait().tap()
         
-        app.buttons[L10n.Identification.Overview.Loaded.continue].wait().tap()
+        app.buttons[L10n.Identification.AttributeConsent.continue].wait().tap()
         
         let pinTextField = app.secureTextFields[L10n.Identification.PersonalPIN.textFieldLabel]
         pinTextField.wait().tap()
@@ -130,9 +129,9 @@ final class BundIDUITests: XCTestCase {
         
         app.staticTexts[L10n.Identification.Done.title].assertExistence()
         
-        app.buttons[L10n.Identification.Done.close].wait().tap()
+        app.buttons[L10n.Identification.Done.continue].wait().tap()
         
-        app.buttons[L10n.Home.Actions.setup].assertExistence()
+        app.buttons[L10n.Home.startSetup].assertExistence()
         
         let safari = XCUIApplication(bundleIdentifier: SafariIdentifiers.bundleId.rawValue)
         XCTAssertEqual(safari.state, .runningForeground)
@@ -148,9 +147,9 @@ final class BundIDUITests: XCTestCase {
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["loadError"].wait().tap()
         
-        app.buttons[L10n.Identification.Overview.Error.retry].wait().tap()
+        app.buttons[L10n.Identification.FetchMetadataError.retry].wait().tap()
         
-        app.staticTexts[L10n.Identification.Overview.loading].assertExistence()
+        app.staticTexts[L10n.Identification.FetchMetadata.loadingData].assertExistence()
     }
     
     func testIdentificationScanHelp() throws {
@@ -163,7 +162,7 @@ final class BundIDUITests: XCTestCase {
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["requestAuthorization"].wait().tap()
         
-        app.buttons[L10n.Identification.Overview.Loaded.continue].wait().tap()
+        app.buttons[L10n.Identification.AttributeConsent.continue].wait().tap()
         
         let pinTextField = app.secureTextFields[L10n.Identification.PersonalPIN.textFieldLabel]
         pinTextField.wait().tap()
@@ -171,7 +170,7 @@ final class BundIDUITests: XCTestCase {
         
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
         
-        app.buttons[L10n.General.Scan.help].tap()
+        app.buttons[L10n.Scan.helpScanning].tap()
         
         app.staticTexts[L10n.ScanError.CardUnreadable.title].assertExistence()
         app.buttons[L10n.ScanError.close].tap()

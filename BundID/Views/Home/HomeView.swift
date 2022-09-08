@@ -99,7 +99,7 @@ struct HomeView: View {
                 Button {
                     ViewStore(store.stateless).send(.triggerSetup)
                 } label: {
-                    Text(L10n.Home.Actions.setup)
+                    Text(L10n.Home.startSetup)
                 }
                 .padding()
                 .buttonStyle(BundButtonStyle(isPrimary: true))
@@ -124,17 +124,17 @@ struct HomeView: View {
                     AboutView(title: L10n.Privacy.title,
                               markdown: L10n.Privacy.text)
                 } label: {
-                    Text(L10n.Home.Actions.privacy)
+                    Text(L10n.Home.More.privacy)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                 }
                 listDivider
                 NavigationLink {
                     LicensesView()
-                        .navigationTitle(L10n.Home.Actions.licenses)
+                        .navigationTitle(L10n.Home.More.licenses)
                         .ignoresSafeArea()
                 } label: {
-                    Text(L10n.Home.Actions.licenses)
+                    Text(L10n.Home.More.licenses)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                 }
@@ -143,7 +143,7 @@ struct HomeView: View {
                     AboutView(title: L10n.Accessibility.title,
                               markdown: L10n.Accessibility.text)
                 } label: {
-                    Text(L10n.Home.Actions.accessibilityStatement)
+                    Text(L10n.Home.More.accessibilityStatement)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                 }
@@ -152,7 +152,7 @@ struct HomeView: View {
                     AboutView(title: L10n.TermsOfUse.title,
                               markdown: L10n.TermsOfUse.text)
                 } label: {
-                    Text(L10n.Home.Actions.terms)
+                    Text(L10n.Home.More.terms)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                 }
@@ -162,7 +162,7 @@ struct HomeView: View {
                     AboutView(title: L10n.Imprint.title,
                               markdown: L10n.Imprint.text)
                 } label: {
-                    Text(L10n.Home.Actions.imprint)
+                    Text(L10n.Home.More.imprint)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                 }

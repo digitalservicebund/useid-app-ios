@@ -57,10 +57,15 @@ struct IdentificationOverviewLoading: View {
                 .scaleEffect(3)
                 .frame(maxWidth: .infinity)
                 .padding(50)
-            Text(L10n.Identification.Overview.loading)
-                .font(.bundBody)
-                .foregroundColor(.blackish)
-                .padding(.bottom, 50)
+            VStack(spacing: 24) {
+                Text(L10n.Identification.FetchMetadata.pleaseWait)
+                    .font(.bundBody)
+                    .foregroundColor(.blackish)
+                Text(L10n.Identification.FetchMetadata.loadingData)
+                    .font(.bundBody)
+                    .foregroundColor(.blackish)
+            }
+            .padding(.bottom, 50)
         }
         .onAppear {
             ViewStore(store.stateless).send(.onAppear)

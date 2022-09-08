@@ -33,12 +33,12 @@ struct IdentificationOverviewLoaded: View {
             VStack(alignment: .leading, spacing: 0) {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
-                        HeaderView(title: L10n.Identification.Overview.Loaded.title(viewStore.request.subject),
-                                   message: L10n.Identification.Overview.Loaded.body(viewStore.request.subject))
+                        HeaderView(title: L10n.Identification.AttributeConsent.title(viewStore.request.subject),
+                                   message: L10n.Identification.AttributeConsent.body)
                         
                         attributesBox
                         
-                        NavigationLink.init(L10n.Identification.Overview.Loaded.moreInfo) {
+                        NavigationLink.init(L10n.Identification.AttributeConsent.moreInfo) {
                             IdentificationAbout(request: viewStore.request)
                         }
                         .buttonStyle(BundTextButtonStyle())
@@ -46,7 +46,7 @@ struct IdentificationOverviewLoaded: View {
                     }
                 }
                 DialogButtons(store: store.stateless,
-                              primary: .init(title: L10n.Identification.Overview.Loaded.continue, action: .done))
+                              primary: .init(title: L10n.Identification.AttributeConsent.continue, action: .done))
             }
             .navigationBarTitleDisplayMode(.inline)
         }

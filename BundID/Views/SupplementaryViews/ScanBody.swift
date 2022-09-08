@@ -6,7 +6,7 @@ struct ScanBody: View {
     let message: String
     let buttonTitle: String
     let buttonTapped: () -> Void
-    let infoTapped: () -> Void
+    let nfcInfoTapped: () -> Void
     let helpTapped: () -> Void
     
     var body: some View {
@@ -21,9 +21,9 @@ struct ScanBody: View {
                 .font(.bundBody)
                 .foregroundColor(.blackish)
             VStack(alignment: .leading, spacing: 16) {
-                Button(L10n.General.Scan.info, action: infoTapped)
+                Button(L10n.Scan.helpNFC, action: nfcInfoTapped)
                     .buttonStyle(BundTextButtonStyle())
-                Button(L10n.General.Scan.help, action: helpTapped)
+                Button(L10n.Scan.helpScanning, action: helpTapped)
                     .buttonStyle(BundTextButtonStyle())
             }
         }

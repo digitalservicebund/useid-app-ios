@@ -16,7 +16,6 @@ struct IdentificationScanState: Equatable, IDInteractionHandler {
     var attempt = 0
     var isScanning: Bool = false
     var scanAvailable: Bool = true
-    var showProgressCaption: Bool = false
     var authenticationSuccessful = false
     var nfcInfoAlert: AlertState<IdentificationScanAction>?
 #if PREVIEW
@@ -84,8 +83,8 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
     case .end:
         return .none
     case .showNFCInfo:
-        state.nfcInfoAlert = AlertState(title: TextState(L10n.General.Scan.Info.title),
-                                        message: TextState(L10n.General.Scan.Info.message),
+        state.nfcInfoAlert = AlertState(title: TextState(L10n.HelpNFC.title),
+                                        message: TextState(L10n.HelpNFC.body),
                                         dismissButton: .cancel(TextState(L10n.General.ok),
                                                                action: .send(.dismissNFCInfo)))
         return .none
@@ -149,7 +148,7 @@ struct IdentificationScan: View {
                 ScrollView {
                     LottieView(name: Asset.animationIdScan.name,
                                backgroundColor: Color(0xEBEFF2),
-                               accessiblityLabel: L10n.General.Scan.animationAccessibilityLabel)
+                               accessiblityLabel: L10n.Scan.animationAccessibilityLabel)
                         .aspectRatio(540.0 / 367.0, contentMode: .fit)
                     
                     if viewStore.isScanning {
@@ -159,19 +158,13 @@ struct IdentificationScan: View {
                                 .scaleEffect(3)
                                 .frame(maxWidth: .infinity)
                                 .padding(50)
-                            if viewStore.showProgressCaption {
-                                Text(L10n.Identification.Scan.Progress.caption)
-                                    .font(.bundTitle)
-                                    .foregroundColor(.blackish)
-                                    .padding(.bottom, 50)
-                            }
                         }
                     } else {
                         ScanBody(title: L10n.Identification.Scan.title,
                                  message: L10n.Identification.Scan.message,
                                  buttonTitle: L10n.Identification.Scan.scan,
                                  buttonTapped: { viewStore.send(.startScan) },
-                                 infoTapped: { viewStore.send(.showNFCInfo) },
+                                 nfcInfoTapped: { viewStore.send(.showNFCInfo) },
                                  helpTapped: { viewStore.send(.showHelp) })
                             .disabled(!viewStore.scanAvailable)
                     }
