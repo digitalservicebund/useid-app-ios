@@ -41,6 +41,14 @@
         "identifier" : "E18E2236285349D200221DB1",
         "name" : "BundIDUITests"
       }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Analytics",
+        "identifier" : "AnalyticsTests",
+        "name" : "AnalyticsTests"
+      }
     }
   ],
   "version" : 1

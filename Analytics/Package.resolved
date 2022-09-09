@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "matomo-sdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/digitalservicebund/matomo-sdk-ios",
+      "state" : {
+        "branch" : "develop",
+        "revision" : "1d853c3b7acfdb6552f63666390e37374f87c5cd"
+      }
+    }
+  ],
+  "version" : 2
+}

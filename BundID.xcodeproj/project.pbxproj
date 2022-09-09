@@ -156,6 +156,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D28BC72228BE0A44003C012C /* Analytics */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Analytics; sourceTree = "<group>"; };
 		D201402628C5E6FD0002A054 /* InfoBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoBox.swift; sourceTree = "<group>"; };
 		D21E681F28BCEB0A0055EBFE /* Assets+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Assets+Generated.swift"; sourceTree = "<group>"; };
 		D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissingPINLetter.swift; sourceTree = "<group>"; };
@@ -304,6 +305,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D28BC72128BE0A44003C012C /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				D28BC72228BE0A44003C012C /* Analytics */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 		E13925BD28410FE200161F5C /* Generated */ = {
 			isa = PBXGroup;
 			children = (
@@ -537,6 +546,7 @@
 				E18E2238285349D200221DB1 /* BundIDUITests */,
 				E5CEB27B281041330076B9FE /* Products */,
 				E13925C0284110FD00161F5C /* Frameworks */,
+				D28BC72128BE0A44003C012C /* Packages */,
 			);
 			sourceTree = "<group>";
 		};
