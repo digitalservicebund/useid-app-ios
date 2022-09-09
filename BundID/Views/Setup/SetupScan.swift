@@ -67,10 +67,16 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
 #else
         publisher = environment.idInteractionManager.changePIN(nfcMessages: .setup)
 #endif
-        return publisher
-            .receive(on: environment.mainQueue)
-            .catchToEffect(SetupScanAction.scanEvent)
-            .cancellable(id: CancelId.self, cancelInFlight: true)
+        return .concatenate(
+            Effect.fireAndForget {
+                let event = AnalyticsEvent(category: "firstTimeUser", action: "buttonPressed", name: "scan")
+                environment.analytics.track(event: event)
+            },
+            publisher
+                .receive(on: environment.mainQueue)
+                .catchToEffect(SetupScanAction.scanEvent)
+                .cancellable(id: CancelId.self, cancelInFlight: true)
+        )
     case .scanEvent(.failure(let error)):
         state.isScanning = false
         
@@ -101,7 +107,10 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
                                  message: TextState(L10n.HelpNFC.body),
                                  dismissButton: .cancel(TextState(L10n.General.ok),
                                                         action: .send(.dismissAlert)))
-        return .none
+        return .fireAndForget {
+            let event = AnalyticsEvent(category: "firstTimeUser", action: "alertShown", name: "NFCInfo")
+            environment.analytics.track(event: event)
+        }
     case .showHelp:
         return .none
     case .dismissAlert:

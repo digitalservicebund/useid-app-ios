@@ -25,23 +25,23 @@ enum IdentificationScreenState: Equatable, IDInteractionHandler {
 }
 
 extension IdentificationScreenState: AnalyticsView {
-     var route: [String] {
-         switch self {
-         case .overview:
-             return ["attributes"]
-         case .scan:
-             return ["scan"]
-         case .personalPIN:
-             return ["personalPIN"]
-         case .done:
-             return ["done"]
-         case .incorrectPersonalPIN:
-             return ["incorrectPersonalPIN"]
-         case .error(let state):
-             return state.errorType.route
-         }
-     }
- }
+    var route: [String] {
+        switch self {
+        case .overview:
+            return ["attributes"]
+        case .scan:
+            return ["scan"]
+        case .personalPIN:
+            return ["personalPIN"]
+        case .done:
+            return ["done"]
+        case .incorrectPersonalPIN:
+            return ["incorrectPersonalPIN"]
+        case .error(let state):
+            return state.errorType.route
+        }
+    }
+}
 
 enum IdentificationScreenAction: Equatable {
     case overview(IdentificationOverviewAction)
@@ -75,6 +75,12 @@ let identificationScreenReducer = Reducer<IdentificationScreenState, Identificat
         .pullback(
             state: /IdentificationScreenState.scan,
             action: /IdentificationScreenAction.scan,
+            environment: { $0 }
+        ),
+    identificationDoneReducer
+        .pullback(
+            state: /IdentificationScreenState.done,
+            action: /IdentificationScreenAction.done,
             environment: { $0 }
         )
 )

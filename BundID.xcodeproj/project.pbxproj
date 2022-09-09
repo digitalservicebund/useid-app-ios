@@ -9,12 +9,15 @@
 /* Begin PBXBuildFile section */
 		D201402728C5E6FD0002A054 /* InfoBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D201402628C5E6FD0002A054 /* InfoBox.swift */; };
 		D21E682028BCEB0A0055EBFE /* Assets+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21E681F28BCEB0A0055EBFE /* Assets+Generated.swift */; };
+		D245421828CB9E68002600C9 /* IdentificationOverviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D245421728CB9E68002600C9 /* IdentificationOverviewTests.swift */; };
 		D28D27FF28B7A91B008DA310 /* MissingPINLetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */; };
 		D28D280228B7A9F5008DA310 /* SetupDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D280028B7A9F5008DA310 /* SetupDone.swift */; };
 		D28D280328B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D280128B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift */; };
+		D29E53B928CF14FC0029AB4D /* IdentificationDoneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29E53B828CF14FC0029AB4D /* IdentificationDoneTests.swift */; };
 		D2A6773828B4DD5D0033373E /* Array+SafeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */; };
-		D2B76A7A28BE4B93000B442D /* Analytics in Frameworks */ = {isa = PBXBuildFile; productRef = D2B76A7928BE4B93000B442D /* Analytics */; };
 		D2AD47AF28C73B7400863D43 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2AD47AE28C73B7400863D43 /* Launch Screen.storyboard */; };
+		D2B76A7A28BE4B93000B442D /* Analytics in Frameworks */ = {isa = PBXBuildFile; productRef = D2B76A7928BE4B93000B442D /* Analytics */; };
+		D2C5915028CB86570048D379 /* MissingPINLetterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C5914F28CB86570048D379 /* MissingPINLetterTests.swift */; };
 		E10BB69B28AF83DD007EF50C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1AB87AA2825238D00C7FC94 /* Localizable.strings */; };
 		E10BB69C28AF83E1007EF50C /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
 		E110400D281C389C004BA03E /* SetupIntro.swift in Sources */ = {isa = PBXBuildFile; fileRef = E110400C281C389C004BA03E /* SetupIntro.swift */; };
@@ -71,7 +74,7 @@
 		E1A76A0028B940C6001E1F04 /* LaunchArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A769FE28B940C6001E1F04 /* LaunchArgument.swift */; };
 		E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACE728350FD500A51183 /* Array+Safe.swift */; };
 		E1AAACEB2836668200A51183 /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACEA2836668200A51183 /* ShakeEffect.swift */; };
-		E1AAACF328378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACF228378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift */; };
+		E1AAACF328378C0E00A51183 /* SetupPersonalPINTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACF228378C0E00A51183 /* SetupPersonalPINTests.swift */; };
 		E1AAACFB2837B9A200A51183 /* SetupPersonalPINState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACFA2837B9A200A51183 /* SetupPersonalPINState.swift */; };
 		E1AB879A282281C400C7FC94 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB8799282281C400C7FC94 /* HeaderView.swift */; };
 		E1AB879E282283AB00C7FC94 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB879D282283AB00C7FC94 /* Fonts.swift */; };
@@ -157,15 +160,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D28BC72228BE0A44003C012C /* Analytics */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Analytics; sourceTree = "<group>"; };
 		D201402628C5E6FD0002A054 /* InfoBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoBox.swift; sourceTree = "<group>"; };
 		D21E681F28BCEB0A0055EBFE /* Assets+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Assets+Generated.swift"; sourceTree = "<group>"; };
+		D245421728CB9E68002600C9 /* IdentificationOverviewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewTests.swift; sourceTree = "<group>"; };
+		D28BC72228BE0A44003C012C /* Analytics */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Analytics; sourceTree = "<group>"; };
 		D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissingPINLetter.swift; sourceTree = "<group>"; };
 		D28D280028B7A9F5008DA310 /* SetupDone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupDone.swift; sourceTree = "<group>"; };
 		D28D280128B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupIncorrectTransportPIN.swift; sourceTree = "<group>"; };
+		D29E53B828CF14FC0029AB4D /* IdentificationDoneTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationDoneTests.swift; sourceTree = "<group>"; };
 		D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+SafeTests.swift"; sourceTree = "<group>"; };
 		D2AD47AE28C73B7400863D43 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		D2B596F528B8E41A0042BE32 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D2C5914F28CB86570048D379 /* MissingPINLetterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPINLetterTests.swift; sourceTree = "<group>"; };
 		E110400C281C389C004BA03E /* SetupIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntro.swift; sourceTree = "<group>"; };
 		E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUITestHelper.swift; sourceTree = "<group>"; };
 		E11EB2AA2853A8B6008B4042 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
@@ -215,7 +221,7 @@
 		E1AAACE728350FD500A51183 /* Array+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Safe.swift"; sourceTree = "<group>"; };
 		E1AAACEA2836668200A51183 /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
 		E1AAACF028378C0E00A51183 /* BundIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BundIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E1AAACF228378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTimeUserPersonalPINScreenViewModelTests.swift; sourceTree = "<group>"; };
+		E1AAACF228378C0E00A51183 /* SetupPersonalPINTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPersonalPINTests.swift; sourceTree = "<group>"; };
 		E1AAACFA2837B9A200A51183 /* SetupPersonalPINState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPersonalPINState.swift; sourceTree = "<group>"; };
 		E1AAACFD2837C41700A51183 /* AllTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = AllTests.xctestplan; path = BundID/AllTests.xctestplan; sourceTree = SOURCE_ROOT; };
 		E1AB8799282281C400C7FC94 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
@@ -444,14 +450,17 @@
 				E14C21B328B8FB8F00192338 /* AppEnvironment+Tests.swift */,
 				D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */,
 				E13F9E44288853950088E955 /* CoordinatorTests.swift */,
-				E1AAACF228378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift */,
 				E13925BD28410FE200161F5C /* Generated */,
 				E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */,
 				E13F9E3A2886F3420088E955 /* IdentificationCoordinatorTests.swift */,
+				D29E53B828CF14FC0029AB4D /* IdentificationDoneTests.swift */,
+				D245421728CB9E68002600C9 /* IdentificationOverviewTests.swift */,
 				E13F9E3E288804140088E955 /* IdentificationScanTests.swift */,
 				E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */,
 				E135D6AB28B76A3500A32862 /* Matchable+UseID.swift */,
+				D2C5914F28CB86570048D379 /* MissingPINLetterTests.swift */,
 				E135D6A928B7696400A32862 /* SetupCoordinatorTests.swift */,
+				E1AAACF228378C0E00A51183 /* SetupPersonalPINTests.swift */,
 				E149B15B2840F636002C1139 /* SetupScanTests.swift */,
 				E13F9E3C288802500088E955 /* UUID+InitFromNumber.swift */,
 			);
@@ -860,8 +869,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				E149B15C2840F636002C1139 /* SetupScanTests.swift in Sources */,
+				D245421828CB9E68002600C9 /* IdentificationOverviewTests.swift in Sources */,
 				E13F9E3D288802500088E955 /* UUID+InitFromNumber.swift in Sources */,
+				D2C5915028CB86570048D379 /* MissingPINLetterTests.swift in Sources */,
 				E135D6AC28B76A3500A32862 /* Matchable+UseID.swift in Sources */,
+				D29E53B928CF14FC0029AB4D /* IdentificationDoneTests.swift in Sources */,
 				E12CB30628494BD70039FD56 /* IDInteractionManagerTests.swift in Sources */,
 				E135D6AA28B7696400A32862 /* SetupCoordinatorTests.swift in Sources */,
 				E13F9E3B2886F3420088E955 /* IdentificationCoordinatorTests.swift in Sources */,
@@ -869,7 +881,7 @@
 				E13F9E45288853950088E955 /* CoordinatorTests.swift in Sources */,
 				D2A6773828B4DD5D0033373E /* Array+SafeTests.swift in Sources */,
 				E14C21B428B8FB8F00192338 /* AppEnvironment+Tests.swift in Sources */,
-				E1AAACF328378C0E00A51183 /* FirstTimeUserPersonalPINScreenViewModelTests.swift in Sources */,
+				E1AAACF328378C0E00A51183 /* SetupPersonalPINTests.swift in Sources */,
 				E13F9E43288835350088E955 /* IdentificationCoordinatorStateTests.swift in Sources */,
 				E13F9E3F288804140088E955 /* IdentificationScanTests.swift in Sources */,
 			);

@@ -1,22 +1,33 @@
 import Foundation
 import SwiftUI
 import ComposableArchitecture
+import Analytics
 
 struct IdentificationDoneState: Equatable {
     var request: EIDAuthenticationRequest
     var redirectURL: String
     
     var hasValidURL: Bool {
-        if URL(string: redirectURL) != nil {
-            return true
-        }
-        return false
+        URL(string: redirectURL) != nil
     }
 }
 
 enum IdentificationDoneAction: Equatable {
     case close
     case openURL(URL)
+}
+
+let identificationDoneReducer = Reducer<IdentificationDoneState, IdentificationDoneAction, AppEnvironment> { _, action, environment in
+    switch action {
+    case .openURL(let url):
+        UIApplication.shared.open(url)
+        return .fireAndForget {
+            let event = AnalyticsEvent(category: "identification", action: "buttonPressed", name: "continueToService")
+            environment.analytics.track(event: event)
+        }
+    default:
+        return .none
+    }
 }
 
 struct IdentificationDone: View {

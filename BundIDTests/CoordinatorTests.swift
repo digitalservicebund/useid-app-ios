@@ -200,6 +200,8 @@ final class CoordinatorTests: XCTestCase {
             state.routes = [root, .sheet(.setupCoordinator(SetupCoordinatorState()))]
         }
         
-        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "Setup", action: "Start"))
+        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "firstTimeUser",
+                                                                action: "buttonPressed",
+                                                                name: "start"))
     }
 }

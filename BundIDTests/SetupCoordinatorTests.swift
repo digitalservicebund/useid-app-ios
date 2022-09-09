@@ -47,7 +47,7 @@ class SetupCoordinatorTests: XCTestCase {
                               environment: environment)
         
         store.send(.routeAction(0, action: .transportPINIntro(.choosePINLetterMissing))) {
-            $0.routes = [.root(.intro), .push(.transportPINIntro), .push(.missingPINLetter)]
+            $0.routes = [.root(.intro), .push(.transportPINIntro), .push(.missingPINLetter(.init()))]
         }
     }
 }

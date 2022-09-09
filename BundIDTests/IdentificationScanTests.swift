@@ -2,14 +2,16 @@ import XCTest
 import ComposableArchitecture
 import Cuckoo
 import Combine
+import Analytics
 
 @testable import BundID
 
 final class IdentificationScanTests: XCTestCase {
-
+    
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var environment: AppEnvironment!
     var uuidCount = 0
+    var mockAnalyticsClient: MockAnalyticsClient!
     
     var mockIDInteractionManager = MockIDInteractionManagerType()
     
@@ -20,10 +22,17 @@ final class IdentificationScanTests: XCTestCase {
     }
     
     override func setUp() {
+        mockAnalyticsClient = MockAnalyticsClient()
         scheduler = DispatchQueue.test
         environment = AppEnvironment.mocked(mainQueue: scheduler.eraseToAnyScheduler(),
                                             uuidFactory: uuidFactory,
-                                            idInteractionManager: mockIDInteractionManager)
+                                            idInteractionManager: mockIDInteractionManager,
+                                            analytics: mockAnalyticsClient)
+        
+        stub(mockAnalyticsClient) {
+            $0.track(view: any()).thenDoNothing()
+            $0.track(event: any()).thenDoNothing()
+        }
     }
     
     func testOnAppearDoesNotTriggerScanning() throws {
@@ -63,9 +72,8 @@ final class IdentificationScanTests: XCTestCase {
         
         let request = EIDAuthenticationRequest.preview
         let pin = "123456"
-        let pinCallback = PINCallback(id: UUID(number: 0)) { pin in
-            
-        }
+        let pinCallback = PINCallback(id: UUID(number: 0)) { _ in }
+        
         let store = TestStore(initialState: IdentificationScanState(request: request,
                                                                     pin: pin,
                                                                     pinCallback: pinCallback,
@@ -102,5 +110,49 @@ final class IdentificationScanTests: XCTestCase {
         
         store.receive(.wrongPIN(remainingAttempts: 2))
     }
-
+    
+    func testshowNFCInfo() {
+        let request = EIDAuthenticationRequest.preview
+        let pin = "123456"
+        let pinCallback = PINCallback(id: UUID(number: 0)) { _ in }
+        
+        let store = TestStore(initialState: IdentificationScanState(request: request,
+                                                                    pin: pin,
+                                                                    pinCallback: pinCallback,
+                                                                    isScanning: false),
+                              reducer: identificationScanReducer,
+                              environment: environment)
+        
+        store.send(.showNFCInfo) {
+            $0.nfcInfoAlert = AlertState(title: TextState(L10n.HelpNFC.title),
+                                         message: TextState(L10n.HelpNFC.body),
+                                         dismissButton: .cancel(TextState(L10n.General.ok),
+                                                                action: .send(.dismissNFCInfo)))
+        }
+        
+        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification",
+                                                                action: "alertShown",
+                                                                name: "NFCInfo"))
+    }
+    
+    func testStartScanTracking() {
+        let request = EIDAuthenticationRequest.preview
+        let pin = "123456"
+        let pinCallback = PINCallback(id: UUID(number: 0)) { _ in }
+        
+        let store = TestStore(initialState: IdentificationScanState(request: request,
+                                                                    pin: pin,
+                                                                    pinCallback: pinCallback,
+                                                                    isScanning: false),
+                              reducer: identificationScanReducer,
+                              environment: environment)
+        
+        store.send(.startScan) {
+            $0.isScanning = true
+        }
+        
+        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification",
+                                                                action: "buttonPressed",
+                                                                name: "scan"))
+    }
 }

@@ -114,7 +114,7 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                 case .home(.triggerSetup):
                     state.routes.presentSheet(.setupCoordinator(SetupCoordinatorState()))
                     return .fireAndForget {
-                        let event = AnalyticsEvent(category: "Setup", action: "Start")
+                        let event = AnalyticsEvent(category: "firstTimeUser", action: "buttonPressed", name: "start")
                         environment.analytics.track(event: event)
                     }
                 case .setupCoordinator(.routeAction(_, action: .intro(.chooseSetupAlreadyDone))):
@@ -159,7 +159,6 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                     return .none
                 case .identificationCoordinator(.routeAction(_, action: .done(.openURL(let url)))):
                     state.routes.dismiss()
-                    UIApplication.shared.open(url)
                     return .none
                 case .setupCoordinator(.confirmEnd):
                     state.routes.dismiss()

@@ -1,6 +1,7 @@
 import SwiftUI
 import Combine
 import ComposableArchitecture
+import Analytics
 
 struct SetupPersonalPINState: Equatable {
     @BindableState var enteredPIN1: String = ""
@@ -39,9 +40,17 @@ struct SetupPersonalPINState: Equatable {
             withAnimation {
                 remainingAttempts += 1
             }
-            return Effect(value: withAnimation { .reset })
-                .delay(for: 0.2, scheduler: environment.mainQueue.animation(.linear(duration: 0.2)))
-                .eraseToEffect()
+            return .concatenate(
+                .fireAndForget {
+                    let event = AnalyticsEvent(category: "firstTimeUser",
+                                               action: "errorShown",
+                                               name: "personalPINMismatch")
+                    environment.analytics.track(event: event)
+                },
+                Effect(value: withAnimation { .reset })
+                    .delay(for: 0.2, scheduler: environment.mainQueue.animation(.linear(duration: 0.2)))
+                    .eraseToEffect()
+            )
         }
         
         return Effect(value: .done(pin: enteredPIN2))

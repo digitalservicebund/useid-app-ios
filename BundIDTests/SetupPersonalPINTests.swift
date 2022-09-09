@@ -1,5 +1,7 @@
 import XCTest
 import ComposableArchitecture
+import Cuckoo
+import Analytics
 
 @testable import BundID
 
@@ -7,10 +9,17 @@ class SetupPersonalPINViewModelTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var environment: AppEnvironment!
+    var mockAnalyticsClient: MockAnalyticsClient!
     
     override func setUp() {
         scheduler = DispatchQueue.test
-        environment = AppEnvironment.mocked(mainQueue: scheduler.eraseToAnyScheduler())
+        mockAnalyticsClient = MockAnalyticsClient()
+        environment = AppEnvironment.mocked(mainQueue: scheduler.eraseToAnyScheduler(), analytics: mockAnalyticsClient)
+        
+        stub(mockAnalyticsClient) {
+            $0.track(view: any()).thenDoNothing()
+            $0.track(event: any()).thenDoNothing()
+        }
     }
     
     func testCompletePIN1() throws {
@@ -57,6 +66,10 @@ class SetupPersonalPINViewModelTests: XCTestCase {
             state.enteredPIN1 = ""
             state.focusPIN1 = true
         }
+        
+        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "firstTimeUser",
+                                                                action: "errorShown",
+                                                                name: "personalPINMismatch"))
     }
     
     func testTypingWhileShowingError() throws {

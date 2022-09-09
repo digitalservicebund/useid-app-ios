@@ -2,6 +2,7 @@ import XCTest
 import ComposableArchitecture
 import Cuckoo
 import Combine
+import Analytics
 
 @testable import BundID
 
@@ -9,13 +10,21 @@ class SetupScanTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var environment: AppEnvironment!
+    var mockAnalyticsClient: MockAnalyticsClient!
     
     var mockIDInteractionManager = MockIDInteractionManagerType()
     
     override func setUp() {
+        mockAnalyticsClient = MockAnalyticsClient()
         scheduler = DispatchQueue.test
         environment = AppEnvironment.mocked(mainQueue: scheduler.eraseToAnyScheduler(),
-                                            idInteractionManager: mockIDInteractionManager)
+                                            idInteractionManager: mockIDInteractionManager,
+                                            analytics: mockAnalyticsClient)
+        
+        stub(mockAnalyticsClient) {
+            $0.track(view: any()).thenDoNothing()
+            $0.track(event: any()).thenDoNothing()
+        }
     }
     
     func testChangePINSuccess() throws {
@@ -117,5 +126,49 @@ class SetupScanTests: XCTestCase {
         }
         
         store.receive(.error(ScanErrorState(errorType: .idCardInteraction(.frameworkError(message: "Fail")), retry: true)))
+    }
+    
+    func testShowNFCInfo() {
+        let store = TestStore(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"),
+                              reducer: setupScanReducer,
+                              environment: environment)
+        
+        store.send(.showNFCInfo) {
+            $0.alert = AlertState(title: TextState(L10n.HelpNFC.title),
+                                  message: TextState(L10n.HelpNFC.body),
+                                  dismissButton: .cancel(TextState(L10n.General.ok),
+                                                         action: .send(.dismissAlert)))
+        }
+        
+        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "firstTimeUser",
+                                                                action: "alertShown",
+                                                                name: "NFCInfo"))
+    }
+    
+    func testStartScanTracking() {
+        let store = TestStore(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"),
+                              reducer: setupScanReducer,
+                              environment: environment)
+        
+        stub(mockIDInteractionManager) { mock in
+            mock.changePIN(nfcMessages: NFCMessages.setup).then { _ in
+                let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+                self.scheduler.schedule {
+                    subject.send(completion: .finished)
+                }
+                return subject.eraseToAnyPublisher()
+            }
+        }
+        
+        
+        store.send(.startScan) {
+            $0.isScanning = true
+        }
+        
+        scheduler.advance()
+        
+        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "firstTimeUser",
+                                                                action: "buttonPressed",
+                                                                name: "scan"))
     }
 }

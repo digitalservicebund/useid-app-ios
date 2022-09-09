@@ -11,35 +11,35 @@ enum SetupScreenState: Equatable {
     case done(SetupDoneState)
     case incorrectTransportPIN(SetupIncorrectTransportPINState)
     case error(ScanErrorState)
-    case missingPINLetter
+    case missingPINLetter(MissingPINLetterState)
 }
 
 extension SetupScreenState: AnalyticsView {
-     var route: [String] {
-         switch self {
-         case .intro:
-             return ["intro"]
-         case .transportPINIntro:
-             return ["PINLetter"]
-         case .transportPIN:
-             return ["transportPIN"]
-         case .personalPINIntro:
-             return ["personalPINIntro"]
-         case .personalPIN:
-             return ["personalPIN"]
-         case .scan:
-             return ["scan"]
-         case .done:
-             return ["done"]
-         case .incorrectTransportPIN:
-             return ["incorrectTransportPIN"]
-         case .error(let state):
-             return state.errorType.route
-         case .missingPINLetter:
-             return ["missingPINLetter"]
-         }
-     }
- }
+    var route: [String] {
+        switch self {
+        case .intro:
+            return ["intro"]
+        case .transportPINIntro:
+            return ["PINLetter"]
+        case .transportPIN:
+            return ["transportPIN"]
+        case .personalPINIntro:
+            return ["personalPINIntro"]
+        case .personalPIN:
+            return ["personalPIN"]
+        case .scan:
+            return ["scan"]
+        case .done:
+            return ["done"]
+        case .incorrectTransportPIN:
+            return ["incorrectTransportPIN"]
+        case .error(let state):
+            return state.errorType.route
+        case .missingPINLetter:
+            return ["missingPINLetter"]
+        }
+    }
+}
 
 enum SetupScreenAction: Equatable {
     case intro(SetupIntroAction)
@@ -77,6 +77,12 @@ let setupScreenReducer = Reducer<SetupScreenState, SetupScreenAction, AppEnviron
         .pullback(
             state: /SetupScreenState.incorrectTransportPIN,
             action: /SetupScreenAction.incorrectTransportPIN,
+            environment: { $0 }
+        ),
+    missingPINLetterReducer
+        .pullback(
+            state: /SetupScreenState.missingPINLetter,
+            action: /SetupScreenAction.missingPINLetter,
             environment: { $0 }
         )
 )
