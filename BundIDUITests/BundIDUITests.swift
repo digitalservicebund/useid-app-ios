@@ -8,8 +8,8 @@ final class BundIDUITests: XCTestCase {
         app.launchWithResetUserDefaults()
         app.launch()
         
-        app.buttons[L10n.FirstTimeUser.Intro.no].wait().tap()
-        app.buttons[L10n.FirstTimeUser.PinLetter.yes].wait().tap()
+        app.buttons[L10n.FirstTimeUser.Intro.startSetup].wait().tap()
+        app.buttons[L10n.FirstTimeUser.PinLetter.letterPresent].wait().tap()
         
         let transportPINTextField = app.textFields[L10n.FirstTimeUser.TransportPIN.textFieldLabel]
         transportPINTextField.wait().tap()
@@ -55,8 +55,8 @@ final class BundIDUITests: XCTestCase {
         app.launch()
         
         app.buttons[L10n.Home.startSetup].wait().tap()
-        app.buttons[L10n.FirstTimeUser.Intro.no].wait().tap()
-        app.buttons[L10n.FirstTimeUser.PinLetter.yes].wait().tap()
+        app.buttons[L10n.FirstTimeUser.Intro.startSetup].wait().tap()
+        app.buttons[L10n.FirstTimeUser.PinLetter.letterPresent].wait().tap()
         
         let transportPINTextField = app.textFields[L10n.FirstTimeUser.TransportPIN.textFieldLabel]
         transportPINTextField.wait().tap()
