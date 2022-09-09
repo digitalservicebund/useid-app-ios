@@ -1,5 +1,6 @@
 import Foundation
 import ComposableArchitecture
+import Analytics
 
 enum IdentificationScreenState: Equatable, IDInteractionHandler {
     case overview(IdentificationOverviewState)
@@ -22,6 +23,25 @@ enum IdentificationScreenState: Equatable, IDInteractionHandler {
         }
     }
 }
+
+extension IdentificationScreenState: AnalyticsView {
+     var route: [String] {
+         switch self {
+         case .overview:
+             return ["overview"]
+         case .scan:
+             return ["scan"]
+         case .personalPIN:
+             return ["personalPIN"]
+         case .done:
+             return ["done"]
+         case .incorrectPersonalPIN:
+             return ["incorrectPersonalPIN"]
+         case .cardError(let error):
+             return ["error"]
+         }
+     }
+ }
 
 enum IdentificationScreenAction: Equatable {
     case overview(IdentificationOverviewAction)

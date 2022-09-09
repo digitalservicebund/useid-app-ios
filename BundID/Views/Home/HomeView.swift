@@ -1,5 +1,6 @@
 import SwiftUI
 import ComposableArchitecture
+import Analytics
 
 struct HomeState: Equatable {
     var appVersion: String
@@ -15,6 +16,12 @@ struct HomeState: Equatable {
 #endif
     }
 }
+
+extension HomeState: AnalyticsView {
+     var route: [String] {
+        []
+     }
+ }
 
 enum HomeAction: Equatable {
     case triggerSetup

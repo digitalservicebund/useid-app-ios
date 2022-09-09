@@ -13,6 +13,7 @@
 		D28D280228B7A9F5008DA310 /* SetupDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D280028B7A9F5008DA310 /* SetupDone.swift */; };
 		D28D280328B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D280128B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift */; };
 		D2A6773828B4DD5D0033373E /* Array+SafeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */; };
+		D2B76A7A28BE4B93000B442D /* Analytics in Frameworks */ = {isa = PBXBuildFile; productRef = D2B76A7928BE4B93000B442D /* Analytics */; };
 		D2AD47AF28C73B7400863D43 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2AD47AE28C73B7400863D43 /* Launch Screen.storyboard */; };
 		E10BB69B28AF83DD007EF50C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1AB87AA2825238D00C7FC94 /* Localizable.strings */; };
 		E10BB69C28AF83E1007EF50C /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
@@ -296,6 +297,7 @@
 				E16708AA283D1076001A1637 /* TCACoordinators in Frameworks */,
 				E144EBD628C63A31009B4900 /* MarkdownUI in Frameworks */,
 				E1BC3D8628B7E919007A7B39 /* LicensePlistViewController in Frameworks */,
+				D2B76A7A28BE4B93000B442D /* Analytics in Frameworks */,
 				E13925CA28411D4C00161F5C /* Lottie in Frameworks */,
 				E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */,
 				E128E0BA288941DC00C5195F /* Sentry in Frameworks */,
@@ -327,13 +329,6 @@
 				E13925B72840FB7700161F5C /* Types.swift */,
 			);
 			path = Types;
-			sourceTree = "<group>";
-		};
-		E13925C0284110FD00161F5C /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		E13925C52841119400161F5C /* Mocks */ = {
@@ -545,7 +540,6 @@
 				E1AAACF128378C0E00A51183 /* BundIDTests */,
 				E18E2238285349D200221DB1 /* BundIDUITests */,
 				E5CEB27B281041330076B9FE /* Products */,
-				E13925C0284110FD00161F5C /* Frameworks */,
 				D28BC72128BE0A44003C012C /* Packages */,
 			);
 			sourceTree = "<group>";
@@ -682,6 +676,7 @@
 				E15C22FF2850F5A8005CCBB9 /* OpenEcard */,
 				E128E0B9288941DC00C5195F /* Sentry */,
 				E1BC3D8528B7E919007A7B39 /* LicensePlistViewController */,
+				D2B76A7928BE4B93000B442D /* Analytics */,
 				E144EBD528C63A31009B4900 /* MarkdownUI */,
 			);
 			productName = BundID;
@@ -1726,6 +1721,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D2B76A7928BE4B93000B442D /* Analytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Analytics;
+		};
 		E128E0B9288941DC00C5195F /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */;

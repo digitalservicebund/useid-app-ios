@@ -3,6 +3,7 @@ import FlowStacks
 import TCACoordinators
 import IdentifiedCollections
 import SwiftUI
+import Analytics
 
 struct SetupCoordinatorState: Equatable, IndexedRouterState {
     var transportPIN: String = ""
@@ -39,6 +40,12 @@ struct SetupCoordinatorState: Equatable, IndexedRouterState {
     }
     var states: [Route<SetupScreenState>] = [.root(.intro)]
 }
+
+extension SetupCoordinatorState: AnalyticsView {
+     var route: [String] {
+         states.last?.screen.route ?? []
+     }
+ }
 
 enum SetupCoordinatorAction: Equatable, IndexedRouterAction {
     case routeAction(Int, action: SetupScreenAction)

@@ -4,6 +4,7 @@ import TCACoordinators
 import IdentifiedCollections
 import SwiftUI
 import ComposableArchitecture
+import Analytics
 
 protocol IDInteractionHandler {
     associatedtype LocalAction
@@ -75,6 +76,12 @@ struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
         return nil
     }
 }
+
+extension IdentificationCoordinatorState: AnalyticsView {
+     var route: [String] {
+         states.last?.screen.route ?? []
+     }
+ }
 
 extension IdentificationCoordinatorState {
     init(tokenURL: String) {

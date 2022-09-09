@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import TCACoordinators
 import SwiftUI
+import Analytics
 
 struct CoordinatorState: Equatable, IndexedRouterState {
     var tokenURL: String?
@@ -74,9 +75,16 @@ struct CoordinatorState: Equatable, IndexedRouterState {
     }
 }
 
+extension Array: AnalyticsView where Element == Route<ScreenState> {
+    public var route: [String] {
+        flatMap(\.screen.route)
+    }
+}
+
 enum CoordinatorAction: Equatable, IndexedRouterAction {
     case openURL(URL)
     case onAppear
+    case didEnterBackground
     case routeAction(Int, action: ScreenAction)
     case updateRoutes([Route<ScreenState>])
 }
@@ -160,7 +168,23 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                     return .none
                 }
             }
-        )
+        ),
+    Reducer { state, action, environment in
+        switch action {
+        case .routeAction, .onAppear:
+            let routes = state.routes
+            return .fireAndForget {
+                environment.analytics.track(view: routes)
+            }
+        case .didEnterBackground:
+            return .fireAndForget {
+                environment.analytics.dispatch()
+            }
+        default:
+            return .none
+        }
+    }
+
 )
 #if DEBUG
     .debug()

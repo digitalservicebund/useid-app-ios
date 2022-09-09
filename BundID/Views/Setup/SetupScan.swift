@@ -2,6 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 import Combine
 import Lottie
+import Analytics
 
 enum SetupScanError: Error, Equatable {
     case idCardInteraction(IDCardInteractionError)
@@ -21,6 +22,19 @@ struct SetupScanState: Equatable {
     var availableDebugActions: [ChangePINDebugSequence] = []
 #endif
 }
+
+extension SetupScanState: AnalyticsView {
+     var route: [String] {
+         guard let error = error else { return [] }
+         
+         switch error {
+          case .idCardInteraction(let idCardInteractionError):
+             return ["idCardInteraction"] // + idCardInteractionError.route
+          case .unexpectedEvent(let eIDInteractionEvent):
+             return ["unexpectedEvent"] //+ eIDInteractionEvent.route
+          }
+     }
+ }
 
 enum SetupScanAction: Equatable {
     case onAppear

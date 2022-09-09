@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import Analytics
 
 enum SetupScreenState: Equatable {
     case intro
@@ -12,6 +13,33 @@ enum SetupScreenState: Equatable {
     case error(ScanErrorState)
     case missingPINLetter
 }
+
+extension SetupScreenState: AnalyticsView {
+     var route: [String] {
+         switch self {
+         case .intro:
+             return ["intro"]
+         case .transportPINIntro:
+             return ["transportPINIntro"]
+         case .transportPIN:
+             return ["transportPIN"]
+         case .personalPINIntro:
+             return ["personalPINIntro"]
+         case .personalPIN:
+             return ["personalPIN"]
+         case .scan(let state):
+             return ["scan"] + state.route
+         case .done:
+             return ["done"]
+         case .incorrectTransportPIN:
+             return ["incorrectTransportPIN"]
+         case .error(let state):
+             return ["error"] + state.route
+         case .missingPINLetter:
+             return ["missingPINLetter"]
+         }
+     }
+ }
 
 enum SetupScreenAction: Equatable {
     case intro(SetupIntroAction)

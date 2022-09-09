@@ -1,10 +1,24 @@
 import ComposableArchitecture
+import Analytics
 
 enum ScreenState: Equatable {
     case home(HomeState)
     case setupCoordinator(SetupCoordinatorState)
     case identificationCoordinator(IdentificationCoordinatorState)
 }
+
+extension ScreenState: AnalyticsView {
+     var route: [String] {
+         switch self {
+         case .home(let state):
+             return state.route
+         case .setupCoordinator(let state):
+             return ["setup"] + state.route
+         case .identificationCoordinator(let state):
+             return ["identification"] + state.route
+         }
+     }
+ }
 
 enum ScreenAction: Equatable {
     case home(HomeAction)
