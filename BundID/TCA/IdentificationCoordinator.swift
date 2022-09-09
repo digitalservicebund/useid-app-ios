@@ -92,6 +92,7 @@ enum IdentificationCoordinatorAction: Equatable, IndexedRouterAction {
     case confirmEnd
     case afterConfirmEnd
     case dismissAlert
+    case dismiss
 #if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -227,6 +228,9 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 return .none
             case .dismissAlert:
                 state.alert = nil
+                return .none
+            case .dismiss:
+                state.routes.dismiss()
                 return .none
             default:
                 return .none

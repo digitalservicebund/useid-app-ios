@@ -29,12 +29,30 @@ struct CoordinatorState: Equatable, IndexedRouterState {
         guard url.hasPrefix("eid://") else { return .none }
         
         tokenURL = url
+        
+        let screen: ScreenState
         if environment.storageManager.setupCompleted {
-            routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: url)))
+            screen = .identificationCoordinator(IdentificationCoordinatorState(tokenURL: url))
         } else {
-            routes.presentSheet(.setupCoordinator(SetupCoordinatorState(tokenURL: tokenURL)))
+            screen = .setupCoordinator(SetupCoordinatorState(tokenURL: url))
         }
-        return .none
+        
+        // In case setup or ident is shown, dismiss any shown sheets that screens
+        // Afterwards dismiss setup or ident and show new flow
+        if case .sheet(.identificationCoordinator, embedInNavigationView: _, onDismiss: _) = routes.last {
+            return .concatenate(
+                Effect(value: .routeAction(routes.count - 1, action: .identificationCoordinator(.dismiss))),
+                dismiss(show: screen, environment: environment)
+            )
+        } else if case .sheet(.setupCoordinator, embedInNavigationView: _, onDismiss: _) = routes.last {
+            return .concatenate(
+                Effect(value: .routeAction(routes.count - 1, action: .setupCoordinator(.dismiss))),
+                dismiss(show: screen, environment: environment)
+            )
+        } else {
+            routes.presentSheet(screen)
+            return .none
+        }
     }
     
     mutating func handleAppStartWithoutURL(environment: AppEnvironment) -> Effect<CoordinatorAction, Never> {
@@ -44,6 +62,15 @@ struct CoordinatorState: Equatable, IndexedRouterState {
             routes.presentSheet(.setupCoordinator(SetupCoordinatorState()))
             return .none
         }
+    }
+    
+    private func dismiss(show screen: Screen, environment: AppEnvironment) -> Effect<CoordinatorAction, Never> {
+        return Effect.routeWithDelaysIfUnsupported(routes) {
+            $0.dismiss()
+            $0.presentSheet(screen)
+        }
+        .delay(for: 0.65, scheduler: environment.mainQueue)
+        .eraseToEffect()
     }
 }
 
@@ -136,7 +163,7 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
         )
 )
 #if DEBUG
-.debug()
+    .debug()
 #endif
 
 struct CoordinatorView: View {

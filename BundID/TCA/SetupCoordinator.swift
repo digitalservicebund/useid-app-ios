@@ -47,6 +47,7 @@ enum SetupCoordinatorAction: Equatable, IndexedRouterAction {
     case confirmEnd
     case afterConfirmEnd
     case dismissAlert
+    case dismiss
 }
 
 let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorAction, AppEnvironment> = setupScreenReducer
@@ -109,6 +110,9 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
                 return .none
             case .dismissAlert:
                 state.alert = nil
+                return .none
+            case .dismiss:
+                state.routes.dismiss()
                 return .none
             default:
                 break
