@@ -266,6 +266,7 @@ struct IdentificationCoordinatorView: View {
                                 then: ScanError.init)
                     }
                 }
+                .navigationBarHidden(false)
                 .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
             }
             .interactiveDismissDisabled(viewStore.needsEndConfirmation) {

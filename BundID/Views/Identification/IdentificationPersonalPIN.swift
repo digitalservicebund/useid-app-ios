@@ -47,6 +47,7 @@ struct IdentificationPersonalPIN: View {
                     Text(L10n.Identification.PersonalPIN.title)
                         .font(.bundLargeTitle)
                         .foregroundColor(.blackish)
+                        .fixedSize(horizontal: false, vertical: true)
                     VStack {
                         Spacer()
                         PINEntryView(pin: viewStore.binding(\.$enteredPIN),

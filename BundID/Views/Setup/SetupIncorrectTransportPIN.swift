@@ -94,6 +94,7 @@ struct SetupIncorrectTransportPIN: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
+            .navigationBarHidden(false)
             .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
         }
         .interactiveDismissDisabled {

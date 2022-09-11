@@ -62,7 +62,9 @@ struct ScanError: View {
                            primaryButton: .init(title: L10n.ScanError.close,
                                                 action: viewStore.retry ? .retry : .end))
                 .interactiveDismissDisabled(!viewStore.retry)
-            }.navigationBarBackButtonHidden(true)
+            }
+            .navigationBarBackButtonHidden(true)
+            .navigationBarHidden(false)
         }
     }
 }

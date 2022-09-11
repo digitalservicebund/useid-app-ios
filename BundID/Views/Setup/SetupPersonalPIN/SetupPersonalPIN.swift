@@ -34,6 +34,7 @@ struct SetupPersonalPIN: View {
                                 Text(L10n.FirstTimeUser.PersonalPIN.confirmation)
                                     .font(.bundBody)
                                     .foregroundColor(.blackish)
+                                    .fixedSize(horizontal: false, vertical: true)
                                 PINEntryView(pin: viewStore.binding(\.$enteredPIN2),
                                              maxDigits: 6,
                                              groupEvery: 3,

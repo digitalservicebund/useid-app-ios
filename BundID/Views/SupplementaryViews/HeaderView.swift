@@ -35,6 +35,7 @@ struct HeaderView: View {
             Text(title)
                 .font(.bundLargeTitle)
                 .foregroundColor(.blackish)
+				.fixedSize(horizontal: false, vertical: true)
             if let infoBoxContent = infoBoxContent {
                 InfoBox(content: infoBoxContent)
             }
@@ -42,6 +43,7 @@ struct HeaderView: View {
                 Markdown(message)
                     .markdownStyle(MarkdownStyle(font: .bundBody))
                     .foregroundColor(.blackish)
+					.fixedSize(horizontal: false, vertical: true)
             }
             if let imageMeta = imageMeta {
                 imageMeta.image

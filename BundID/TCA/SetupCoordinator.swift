@@ -170,6 +170,7 @@ struct SetupCoordinatorView: View {
                     }
                 }
                 .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
+                .navigationBarHidden(false)
             }
             .interactiveDismissDisabled(viewStore.needsEndConfirmation) {
                 viewStore.send(.end)

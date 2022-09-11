@@ -127,6 +127,7 @@ struct IdentificationIncorrectPersonalPIN: View {
                 .padding(.horizontal)
             }
             .navigationBarTitleDisplayMode(.inline)
+            .navigationBarHidden(false)
             .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
         }
         .interactiveDismissDisabled {
