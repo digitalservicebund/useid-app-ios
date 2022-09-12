@@ -68,7 +68,6 @@ struct IdentificationPersonalPIN: View {
                     }
                     Spacer()
                 }
-                .navigationBarTitleDisplayMode(.inline)
                 .onAppear {
                     viewStore.send(.onAppear)
                 }
@@ -76,6 +75,7 @@ struct IdentificationPersonalPIN: View {
             .padding(.horizontal)
         }
         .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(false)
     }
 }
 
