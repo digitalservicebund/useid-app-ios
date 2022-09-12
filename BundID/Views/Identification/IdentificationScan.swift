@@ -132,10 +132,9 @@ extension IdentificationScanState {
         case .cardRemoved:
             authenticationSuccessful = false
             return .none
-        case .processCompletedSuccessfullyWithRedirect(let urlString) where authenticationSuccessful:
+        case .processCompletedSuccessfullyWithRedirect(let urlString):
             return Effect(value: .identifiedSuccessfullyWithRedirect(request, redirectURL: urlString))
-        case .processCompletedSuccessfullyWithoutRedirect,
-                .processCompletedSuccessfullyWithRedirect:
+        case .processCompletedSuccessfullyWithoutRedirect:
             isScanning = false
             scanAvailable = false
             return Effect(value: .error(ScanErrorState(errorType: .unexpectedEvent(event), retry: scanAvailable)))
