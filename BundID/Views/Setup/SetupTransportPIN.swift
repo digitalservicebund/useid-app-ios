@@ -63,6 +63,7 @@ struct SetupTransportPIN: View {
             .padding(.horizontal)
         }
         .navigationBarTitleDisplayMode(.inline)
+#if DEBUG && !PREVIEW
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("\(Image(systemName: "arrow.left.and.right")) \(digits == 5 ? "6" : "5")") {
@@ -70,6 +71,7 @@ struct SetupTransportPIN: View {
                 }
             }
         }
+#endif
     }
 }
 
