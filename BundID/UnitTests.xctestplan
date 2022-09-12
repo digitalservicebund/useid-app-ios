@@ -28,6 +28,13 @@
         "identifier" : "E1AAACEF28378C0E00A51183",
         "name" : "BundIDTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Analytics",
+        "identifier" : "AnalyticsTests",
+        "name" : "AnalyticsTests"
+      }
     }
   ],
   "version" : 1
