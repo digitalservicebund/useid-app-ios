@@ -72,7 +72,7 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
         case .cardBlocked:
             return Effect(value: .error(ScanErrorState(errorType: .cardBlocked, retry: false)))
         default:
-            return Effect(value: .error(ScanErrorState(errorType: .idCardInteraction(error), retry: true)))
+            return Effect(value: .error(ScanErrorState(errorType: .idCardInteraction(error), retry: false)))
         }
     case .wrongPIN:
         return .none
