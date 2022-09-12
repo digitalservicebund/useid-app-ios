@@ -111,7 +111,7 @@ final class IdentificationScanTests: XCTestCase {
         store.receive(.wrongPIN(remainingAttempts: 2))
     }
     
-    func testshowNFCInfo() {
+    func testShowNFCInfo() {
         let request = EIDAuthenticationRequest.preview
         let pin = "123456"
         let pinCallback = PINCallback(id: UUID(number: 0)) { _ in }
