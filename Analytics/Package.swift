@@ -8,10 +8,10 @@ let package = Package(
     products: [
         .library(
             name: "Analytics",
-            targets: ["Analytics"]),
+            targets: ["Analytics"])
     ],
     dependencies: [
-        .package(url: "https://github.com/digitalservicebund/matomo-sdk-ios", branch: "develop"),
+        .package(url: "https://github.com/digitalservicebund/matomo-sdk-ios", branch: "develop")
     ],
     targets: [
         .target(
@@ -19,6 +19,6 @@ let package = Package(
             dependencies: [.product(name: "MatomoTracker", package: "matomo-sdk-ios")]),
         .testTarget(
             name: "AnalyticsTests",
-            dependencies: ["Analytics"]),
+            dependencies: ["Analytics"])
     ]
 )
