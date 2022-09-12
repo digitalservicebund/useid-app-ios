@@ -8,6 +8,10 @@ public final class MatomoAnalyticsClient: AnalyticsClient {
     private var lastRoute: [String]?
     private var lastActivity: Date?
     
+    private var sessionLength: TimeInterval {
+        abs(lastActivity?.timeIntervalSinceNow ?? .infinity)
+    }
+    
     public convenience init(siteId: String, baseURL: URL) {
         self.init(tracker: MatomoTracker(siteId: siteId, baseURL: baseURL))
     }
@@ -42,7 +46,7 @@ public final class MatomoAnalyticsClient: AnalyticsClient {
     
     private func updateSession() {
         defer { lastActivity = Date() }
-        guard abs(lastActivity?.timeIntervalSinceNow ?? .infinity) > sessionTimeout else { return }
+        guard sessionLength > sessionTimeout else { return }
         
         tracker.reset()
     }
