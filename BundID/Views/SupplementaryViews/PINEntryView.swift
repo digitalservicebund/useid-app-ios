@@ -12,49 +12,39 @@ public struct PINEntryView: View {
     var doneConfiguration: DoneConfiguration?
     
     public var body: some View {
-        VStack(spacing: 10) {
-            ZStack {
-                textField
-                pinCharacter
-                    .accessibilityHidden(true)
-                    .allowsHitTesting(false)
-            }
+        ZStack {
+            textField
+            pinCharacter
+                .accessibilityHidden(true)
+                .allowsHitTesting(false)
         }
     }
     
     @ViewBuilder
     private var pinCharacter: some View {
-        HStack(spacing: 20) {
+        HStack(spacing: 0) {
             Spacer()
+            
             ForEach(0..<maxDigits, id: \.self) { index in
-                VStack(spacing: 0) {
-                    if showPIN {
-                        Text(pinCharacter(at: index))
-                            .font(.custom("BundesSans", size: 26).bold())
+                CharacterView(showPIN: showPIN, pin: pin, index: index)
+                    .background(VStack {
+                        Spacer()
+                        Rectangle()
                             .foregroundColor(.blackish)
-                            .animation(.none)
-                    } else {
-                        Image(systemName: "circle.fill")
-                            .resizable()
-                            .frame(width: 16, height: 16)
-                            .padding(EdgeInsets(top: 4, leading: 0, bottom: 8, trailing: 0))
-                            .foregroundColor(.blackish)
-                            .opacity(index >= pin.count ? 0.0 : 1.0)
-                            .animation(.linear(duration: 0.05))
-                    }
-                    Rectangle()
-                        .foregroundColor(.blackish)
-                        .frame(height: 1)
-                }
+                            .frame(height: 1)
+                            .frame(minWidth: 28)
+                    })
+                    .frame(maxWidth: .infinity)
+                
                 if let groupEvery = groupEvery, (index + 1) % groupEvery == 0, (index + 1) < maxDigits {
                     Spacer(minLength: 8)
                 }
             }
+            
             Spacer()
         }
         .padding(.vertical)
         .background(RoundedRectangle(cornerRadius: 10).foregroundColor(backgroundColor))
-        .padding(.horizontal)
         .accessibilityHidden(true)
         .accessibilityElement(children: .ignore)
     }
@@ -66,11 +56,40 @@ public struct PINEntryView: View {
                      showPIN: showPIN,
                      isFirstResponder: $shouldBeFocused,
                      doneConfiguration: doneConfiguration)
-            .accentColor(.clear)
-            .foregroundColor(.clear)
-            .keyboardType(.numberPad)
-            .accessibilityLabel(label)
-            .accessibilityValue(pin.map(String.init).joined(separator: " "))
+        .accentColor(.clear)
+        .foregroundColor(.clear)
+        .keyboardType(.numberPad)
+        .accessibilityLabel(label)
+        .accessibilityValue(pin.map(String.init).joined(separator: " "))
+        .frame(height: 1)
+    }
+}
+
+private struct CharacterView: View {
+    var showPIN: Bool
+    var pin: String
+    var index: Int
+    
+    var body: some View {
+        if showPIN {
+            Text(pinCharacter(at: index))
+                .font(.bundLargeTitle)
+                .foregroundColor(.blackish)
+                .animation(.none)
+        } else {
+            Image(systemName: "circle.fill")
+                .resizable()
+                .frame(width: 16, height: 16)
+                .padding(EdgeInsets(top: 4, leading: 0, bottom: 8, trailing: 0))
+                .foregroundColor(.blackish)
+                .opacity(circleOpacity)
+                .animation(.linear(duration: 0.05), value: circleOpacity)
+        }
+        
+    }
+    
+    private var circleOpacity: Double {
+        index >= pin.count ? 0.0 : 1.0
     }
     
     private func pinCharacter(at index: Int) -> String {
