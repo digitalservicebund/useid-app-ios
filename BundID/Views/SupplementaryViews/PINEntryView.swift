@@ -82,14 +82,9 @@ private struct CharacterView: View {
                 .frame(width: 16, height: 16)
                 .padding(EdgeInsets(top: 4, leading: 0, bottom: 8, trailing: 0))
                 .foregroundColor(.blackish)
-                .opacity(circleOpacity)
-                .animation(.linear(duration: 0.05), value: circleOpacity)
+                .opacity(index >= pin.count ? 0.0 : 1.0)
+                .animation(.none)
         }
-        
-    }
-    
-    private var circleOpacity: Double {
-        index >= pin.count ? 0.0 : 1.0
     }
     
     private func pinCharacter(at index: Int) -> String {
