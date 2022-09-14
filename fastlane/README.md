@@ -103,13 +103,13 @@ Build Production
 
 Deliver Production
 
-### ios commitVersion
+### ios bumpVersion
 
 ```sh
-[bundle exec] fastlane ios commitVersion
+[bundle exec] fastlane ios bumpVersion
 ```
 
-Commit new version
+Bump version
 
 ### ios updateAppVersion
 
@@ -117,15 +117,7 @@ Commit new version
 [bundle exec] fastlane ios updateAppVersion
 ```
 
-Update App Version
-
-### ios getGitBranch
-
-```sh
-[bundle exec] fastlane ios getGitBranch
-```
-
-Get git branch name
+Update app version
 
 ----
 

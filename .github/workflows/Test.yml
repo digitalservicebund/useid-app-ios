@@ -2,10 +2,7 @@ name: Tests on pull requests and release candidates
 on: 
     pull_request:
       branches-ignore:
-        - 'preview/**'
-    push:
-      branches:
-        - 'preview/**'
+        - 'release'
       
 concurrency: 
   group: ${{ github.head_ref || github.ref }} # Cancel old runs if they have not finished yet

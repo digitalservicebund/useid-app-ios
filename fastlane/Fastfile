@@ -110,19 +110,13 @@ platform :ios do
 
   desc 'Trigger Preview'
   lane :preview do |options|
-    options['tag_prefix'] = 'preview-'
+    ensure_git_status_clean
     buildPreview(options)
-    commitVersion(options)
     deliverPreview(options)
   end
 
   desc 'Build Preview'
   lane :buildPreview do |options|
-    ensure_git_status_clean
-
-    updateAppVersion
-    increment_build_number
-
     build_app(
       project: "#{PROJECT_FILENAME}.xcodeproj",
       configuration: 'Release Preview',
@@ -159,19 +153,13 @@ platform :ios do
 
   desc 'Trigger Production'
   lane :production do |options|
-    options['tag_prefix'] = ''
+    ensure_git_status_clean
     buildProduction(options)
-    commitVersion(options)
     deliverProduction(options)
   end
 
   desc 'Build Production'
   lane :buildProduction do |options|
-    ensure_git_status_clean
-
-    updateAppVersion
-    increment_build_number
-
     build_app(
       project: "#{PROJECT_FILENAME}.xcodeproj",
       configuration: 'Release Production',
@@ -206,22 +194,32 @@ platform :ios do
     )
   end
 
-  desc 'Commit new version'
-  lane :commitVersion do |options|
-    version = getAppVersion
-    build_number = get_build_number
+  desc 'Bump version'
+  lane :bumpVersion do |options|
+    bumpBuildNumber = ENV['BUMP_BUILD_NUMBER'] || options[:bumpBuildNumber] || false
+    version = ENV['VERSION'] || options[:version]
+    
+    oldTag = "#{getAppVersion}-#{get_build_number}"
+    updateAppVersion(version: version) unless version.nil? || version.empty?
+    increment_build_number unless bumpBuildNumber.nil? || !bumpBuildNumber
+    newTag = "#{getAppVersion}-#{get_build_number}"
+
+    puts "Writing new tag #{newTag} to github env: #{ENV['GITHUB_ENV']}"
+    sh("echo 'GIT_TAG=#{newTag}' >> #{ENV['GITHUB_ENV']}")
+
+    return if oldTag == newTag
 
     commit_version_bump(xcodeproj: "#{PROJECT_FILENAME}.xcodeproj")
-    tag = "#{options['tag_prefix']}#{version}-#{build_number}"
-    add_git_tag(tag: tag)
-    push_to_git_remote(tags: false, push_options: ["tag #{tag}"])
+    add_git_tag(tag: newTag)
+    push_to_git_remote(tags: false, push_options: ["tag #{newTag}"])
   end
 
-  desc 'Update App Version'
+  desc 'Update app version'
   lane :updateAppVersion do |options|
-    new_app_version = getGitBranch
-    
-    puts "Updating App version from git branch name: #{new_app_version}"
+    new_app_version = options[:version]
+    return if new_app_version.nil? || new_app_version.empty?
+
+    puts "Updating to app version: #{new_app_version}"
     rel_path = options[:rel_path] || '../'
     
     project = Xcodeproj::Project.open("#{rel_path}BundID.xcodeproj")
@@ -233,10 +231,5 @@ platform :ios do
     project.save
 
     puts "Saved project. Returning #{getAppVersion}"
-  end
-
-  desc "Get git branch name"
-  lane :getGitBranch do |options|
-    git_branch.gsub(/^.*[\\\/]/, '')
   end
 end
