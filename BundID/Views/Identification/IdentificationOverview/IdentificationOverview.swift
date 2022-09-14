@@ -1,7 +1,6 @@
 import SwiftUI
 import ComposableArchitecture
 import TCACoordinators
-import Analytics
 
 struct IdentificationOverviewLoadedState: Identifiable, Equatable {
     let id: UUID
@@ -84,10 +83,10 @@ let identificationOverviewReducer = Reducer<IdentificationOverviewState, Identif
             return Effect(value: .loading(.identify))
         case .loading(.failure(let error)):
             state = .error(error)
-            return Effect.fireAndForget {
-                let event = AnalyticsEvent(category: "identification", action: "loadingFailed", name: "attributes")
-                environment.analytics.track(event: event)
-            }
+            return .trackEvent(category: "identification",
+                               action: "loadingFailed",
+                               name: "attributes",
+                               analytics: environment.analytics)
         case .loading(.done(let request, let callback)):
             state = .loaded(IdentificationOverviewLoadedState(id: environment.uuidFactory(),
                                                               request: request,

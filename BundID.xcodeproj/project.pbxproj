@@ -17,6 +17,7 @@
 		D2A6773828B4DD5D0033373E /* Array+SafeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */; };
 		D2AD47AF28C73B7400863D43 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2AD47AE28C73B7400863D43 /* Launch Screen.storyboard */; };
 		D2B76A7A28BE4B93000B442D /* Analytics in Frameworks */ = {isa = PBXBuildFile; productRef = D2B76A7928BE4B93000B442D /* Analytics */; };
+		D2B7BCFB28D2108900318B9F /* Effects.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7BCFA28D2108900318B9F /* Effects.swift */; };
 		D2C5915028CB86570048D379 /* MissingPINLetterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C5914F28CB86570048D379 /* MissingPINLetterTests.swift */; };
 		E10BB69B28AF83DD007EF50C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1AB87AA2825238D00C7FC94 /* Localizable.strings */; };
 		E10BB69C28AF83E1007EF50C /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
@@ -171,6 +172,7 @@
 		D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+SafeTests.swift"; sourceTree = "<group>"; };
 		D2AD47AE28C73B7400863D43 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		D2B596F528B8E41A0042BE32 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D2B7BCFA28D2108900318B9F /* Effects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Effects.swift; sourceTree = "<group>"; };
 		D2C5914F28CB86570048D379 /* MissingPINLetterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPINLetterTests.swift; sourceTree = "<group>"; };
 		E110400C281C389C004BA03E /* SetupIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntro.swift; sourceTree = "<group>"; };
 		E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUITestHelper.swift; sourceTree = "<group>"; };
@@ -396,11 +398,12 @@
 			children = (
 				E16708B0283D4EAC001A1637 /* AppEnvironment.swift */,
 				E11EB2AA2853A8B6008B4042 /* Coordinator.swift */,
+				D2B7BCFA28D2108900318B9F /* Effects.swift */,
+				E1F39DD928588AB000D8D907 /* IdentificationCoordinator.swift */,
+				E1F39DDB28588B0100D8D907 /* IdentificationScreens.swift */,
 				E16708B4283D4F25001A1637 /* Screens.swift */,
 				E16708B2283D4ED2001A1637 /* SetupCoordinator.swift */,
 				E11EB2AC2853A8EA008B4042 /* SetupScreens.swift */,
-				E1F39DD928588AB000D8D907 /* IdentificationCoordinator.swift */,
-				E1F39DDB28588B0100D8D907 /* IdentificationScreens.swift */,
 			);
 			path = TCA;
 			sourceTree = "<group>";
@@ -959,6 +962,7 @@
 				E1CD8E88281FF62F008ADA2A /* Colors.swift in Sources */,
 				E11EB2AB2853A8B6008B4042 /* Coordinator.swift in Sources */,
 				E5E69D872812FB7A00A3B66A /* IDTask.swift in Sources */,
+				D2B7BCFB28D2108900318B9F /* Effects.swift in Sources */,
 				E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */,
 				E1DA8463286DD45800710DD9 /* IdentificationDone.swift in Sources */,
 				E1D307B02833A2500088DAFF /* SetupPersonalPIN.swift in Sources */,

@@ -2,7 +2,6 @@ import SwiftUI
 import ComposableArchitecture
 import Combine
 import Lottie
-import Analytics
 
 enum SetupScanError: Error, Equatable {
     case idCardInteraction(IDCardInteractionError)
@@ -68,10 +67,10 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         publisher = environment.idInteractionManager.changePIN(nfcMessages: .setup)
 #endif
         return .concatenate(
-            Effect.fireAndForget {
-                let event = AnalyticsEvent(category: "firstTimeUser", action: "buttonPressed", name: "scan")
-                environment.analytics.track(event: event)
-            },
+            .trackEvent(category: "firstTimeUser",
+                        action: "buttonPressed",
+                        name: "scan",
+                        analytics: environment.analytics),
             publisher
                 .receive(on: environment.mainQueue)
                 .catchToEffect(SetupScanAction.scanEvent)
@@ -107,10 +106,10 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
                                  message: TextState(L10n.HelpNFC.body),
                                  dismissButton: .cancel(TextState(L10n.General.ok),
                                                         action: .send(.dismissAlert)))
-        return .fireAndForget {
-            let event = AnalyticsEvent(category: "firstTimeUser", action: "alertShown", name: "NFCInfo")
-            environment.analytics.track(event: event)
-        }
+        return .trackEvent(category: "firstTimeUser",
+                           action: "alertShown",
+                           name: "NFCInfo",
+                           analytics: environment.analytics)
     case .showHelp:
         return .none
     case .dismissAlert:

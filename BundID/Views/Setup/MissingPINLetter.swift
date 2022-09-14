@@ -1,6 +1,5 @@
 import SwiftUI
 import ComposableArchitecture
-import Analytics
 
 struct MissingPINLetterState: Equatable {}
 
@@ -11,12 +10,10 @@ enum MissingPINLetterAction: Equatable {
 let missingPINLetterReducer = Reducer<MissingPINLetterState, MissingPINLetterAction, AppEnvironment> { _, action, environment in
     switch action {
     case .openExternalLink:
-        return .fireAndForget {
-            let event = AnalyticsEvent(category: "firstTimeUser",
-                                       action: "externalLinkOpened",
-                                       name: "PINLetter")
-            environment.analytics.track(event: event)
-        }
+        return .trackEvent(category: "firstTimeUser",
+                           action: "externalLinkOpened",
+                           name: "PINLetter",
+                           analytics: environment.analytics)
     }
 }
 

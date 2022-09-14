@@ -26,6 +26,7 @@ class SetupCoordinatorTests: XCTestCase {
                                      idInteractionManager: mockIDInteractionManager,
                                      storageManager: MockStorageManagerType(),
                                      analytics: MockAnalyticsClient(),
+                                     urlOpener: { _ in },
                                      debugIDInteractionManager: DebugIDInteractionManager())
     }
     

@@ -12,10 +12,13 @@ final class IdentificationDoneTests: XCTestCase {
     var mockAnalyticsClient: MockAnalyticsClient!
     var environment: AppEnvironment!
     
+    var openedURL: URL?
+    
     override func setUp() {
         scheduler = DispatchQueue.test
         mockAnalyticsClient = MockAnalyticsClient()
-        environment = AppEnvironment.mocked(analytics: mockAnalyticsClient)
+        environment = AppEnvironment.mocked(analytics: mockAnalyticsClient,
+                                            urlOpener: { self.openedURL = $0})
         
         stub(mockAnalyticsClient) {
             $0.track(view: any()).thenDoNothing()
@@ -23,8 +26,12 @@ final class IdentificationDoneTests: XCTestCase {
         }
     }
     
+    override func tearDown() {
+        openedURL = nil
+    }
+    
     func testContinueToServiceEvent() {
-        let redirectUrl = URL(string: "localhost")!
+        let redirectUrl = URL(string: "https://example.com/adsf/qwerty")!
         
         let store = TestStore(
             initialState: IdentificationDoneState(request: .preview, redirectURL: redirectUrl.absoluteString),
@@ -32,11 +39,13 @@ final class IdentificationDoneTests: XCTestCase {
             environment: environment
         )
         
-        store.send(IdentificationDoneAction.openURL(redirectUrl))
+        store.send(.openURL(redirectUrl))
         
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification",
                                                                 action: "buttonPressed",
                                                                 name: "continueToService"))
+        
+        XCTAssertEqual(redirectUrl, openedURL)
     }
     
 }

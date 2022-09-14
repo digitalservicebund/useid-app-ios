@@ -2,7 +2,6 @@ import SwiftUI
 import ComposableArchitecture
 import Combine
 import Lottie
-import Analytics
 
 enum IdentificationScanError: Error, Equatable {
     case idCardInteraction(IDCardInteractionError)
@@ -54,10 +53,11 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
         guard !state.isScanning else { return .none }
         state.pinCallback(state.pin)
         state.isScanning = true
-        return Effect.fireAndForget {
-            let event = AnalyticsEvent(category: "identification", action: "buttonPressed", name: "scan")
-            environment.analytics.track(event: event)
-        }
+        
+        return .trackEvent(category: "identification",
+                           action: "buttonPressed",
+                           name: "scan",
+                           analytics: environment.analytics)
 #if PREVIEW
     case .runDebugSequence:
         return .none
@@ -91,10 +91,11 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
                                         message: TextState(L10n.HelpNFC.body),
                                         dismissButton: .cancel(TextState(L10n.General.ok),
                                                                action: .send(.dismissNFCInfo)))
-        return .fireAndForget {
-            let event = AnalyticsEvent(category: "identification", action: "alertShown", name: "NFCInfo")
-            environment.analytics.track(event: event)
-        }
+        
+        return .trackEvent(category: "identification",
+                           action: "alertShown",
+                           name: "NFCInfo",
+                           analytics: environment.analytics)
     case .showHelp:
         return .none
     case .dismissNFCInfo:

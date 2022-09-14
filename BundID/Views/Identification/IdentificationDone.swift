@@ -1,7 +1,6 @@
 import Foundation
 import SwiftUI
 import ComposableArchitecture
-import Analytics
 
 struct IdentificationDoneState: Equatable {
     var request: EIDAuthenticationRequest
@@ -20,11 +19,13 @@ enum IdentificationDoneAction: Equatable {
 let identificationDoneReducer = Reducer<IdentificationDoneState, IdentificationDoneAction, AppEnvironment> { _, action, environment in
     switch action {
     case .openURL(let url):
-        UIApplication.shared.open(url)
-        return .fireAndForget {
-            let event = AnalyticsEvent(category: "identification", action: "buttonPressed", name: "continueToService")
-            environment.analytics.track(event: event)
-        }
+        return Effect.concatenate(
+            .openURL(url, urlOpener: environment.urlOpener),
+            .trackEvent(category: "identification",
+                        action: "buttonPressed",
+                        name: "continueToService",
+                        analytics: environment.analytics)
+        )
     default:
         return .none
     }
