@@ -1,0 +1,11 @@
+name: Release
+on: [workflow_dispatch]
+
+jobs:
+  none:
+    runs-on: self-hosted
+    steps:
+      - name: Ensure on release branch
+        run: |
+          echo "Ensuring current branch $GITHUB_REF is 'release' branch…"
+          [[ $GITHUB_REF -eq 'refs/heads/release' ]]
