@@ -1,4 +1,4 @@
-# 1. SwiftGen for Strings and Assets
+# 2. SwiftGen for Strings and Assets
 
 Date: 2022-08-30
 
