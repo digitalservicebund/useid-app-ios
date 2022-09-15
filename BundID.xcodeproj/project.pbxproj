@@ -716,10 +716,9 @@
 			};
 			buildConfigurationList = E5CEB275281041330076B9FE /* Build configuration list for PBXProject "BundID" */;
 			compatibilityVersion = "Xcode 13.0";
-			developmentRegion = en;
+			developmentRegion = de;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				de,
 			);
 			mainGroup = E5CEB271281041330076B9FE;
