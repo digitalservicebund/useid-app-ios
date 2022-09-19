@@ -6,5 +6,5 @@ enum IDCardInteractionError: Error, Equatable {
     case unexpectedReadAttribute(String)
     case cardBlocked
     case cardDeactivated
-    case processFailed(resultCode: ActivationResultCode)
+    case processFailed(resultCode: ActivationResultCode, redirectURL: String?)
 }

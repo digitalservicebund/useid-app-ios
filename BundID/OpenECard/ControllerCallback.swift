@@ -13,17 +13,16 @@ class ControllerCallback: NSObject, ControllerCallbackType {
     }
     
     func onAuthenticationCompletion(_ result: (NSObjectProtocol & ActivationResultProtocol)!) {
-        switch result.getCode() {
-        case .OK:
+        switch (result.getCode(), result.getProcessResultMinor()) {
+        case (.OK, _):
             subject.send(.processCompletedSuccessfullyWithoutRedirect)
             subject.send(completion: .finished)
-        case .REDIRECT:
+        case (.REDIRECT, nil):
             subject.send(.processCompletedSuccessfullyWithRedirect(url: result.getRedirectUrl()))
             subject.send(completion: .finished)
-        case .INTERRUPTED:
-            break
         default:
-            subject.send(completion: .failure(.processFailed(resultCode: result.getCode())))
+            subject.send(completion: .failure(.processFailed(resultCode: result.getCode(),
+                                                             redirectURL: result.getRedirectUrl())))
         }
     }
 }
