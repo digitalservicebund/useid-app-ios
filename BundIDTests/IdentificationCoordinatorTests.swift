@@ -40,7 +40,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         store.receive(.routeAction(0, action: .overview(.loading(.idInteractionEvent(.success(.requestAuthenticationRequestConfirmation(request, closure)))))))
         
         store.receive(.routeAction(0, action: .overview(.loading(.done(request, callback))))) {
-            $0.states = [
+            $0.routes = [
                 .sheet(.overview(.loaded(.init(id: UUID(number: 1), request: request, handler: callback))))
             ]
         }
@@ -62,7 +62,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         
         let pinCallback = PINCallback(id: UUID(number: 1), callback: { pin in })
         store.send(.routeAction(0, action: .overview(.loaded(.callbackReceived(request, pinCallback))))) {
-            $0.states.append(.push(.personalPIN(IdentificationPersonalPINState(request: request, callback: pinCallback))))
+            $0.routes.append(.push(.personalPIN(IdentificationPersonalPINState(request: request, callback: pinCallback))))
         }
     }
     
@@ -80,7 +80,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         
         store.send(.routeAction(0, action: .personalPIN(.done(request: request, pin: "123456", pinCallback: callback)))) {
             $0.pin = "123456"
-            $0.states.append(.push(.scan(IdentificationScanState(request: request, pin: "123456", pinCallback: callback))))
+            $0.routes.append(.push(.scan(IdentificationScanState(request: request, pin: "123456", pinCallback: callback))))
         }
     }
     
@@ -118,9 +118,9 @@ class IdentificationCoordinatorTests: XCTestCase {
             environment: environment)
         
         store.send(.routeAction(0, action: .scan(.identifiedSuccessfullyWithRedirect(request, redirectURL: "https://example.com")))) {
-            guard case .scan(var scanState) = $0.states[0].screen else { return XCTFail("Unexpected state") }
+            guard case .scan(var scanState) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
             scanState.isScanning = false
-            $0.states = [.root(.scan(scanState)), .push(.done(.init(request: request, redirectURL: "https://example.com")))]
+            $0.routes = [.root(.scan(scanState)), .push(.done(.init(request: request, redirectURL: "https://example.com")))]
         }
     }
     
@@ -140,7 +140,7 @@ class IdentificationCoordinatorTests: XCTestCase {
             environment: environment)
         
         store.send(.routeAction(0, action: .scan(.wrongPIN(remainingAttempts: 2)))) {
-            $0.states.append(.sheet(.incorrectPersonalPIN(.init(error: .incorrect, remainingAttempts: 2))))
+            $0.routes.append(.sheet(.incorrectPersonalPIN(.init(error: .incorrect, remainingAttempts: 2))))
         }
     }
     
@@ -161,7 +161,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         
         let errorState = ScanErrorState(errorType: .cardBlocked, retry: false)
         store.send(.routeAction(0, action: .scan(.error(errorState)))) {
-            $0.states.append(.sheet(.error(errorState)))
+            $0.routes.append(.sheet(.error(errorState)))
         }
     }
     
@@ -182,12 +182,12 @@ class IdentificationCoordinatorTests: XCTestCase {
             environment: environment)
         
         store.send(.routeAction(1, action: .incorrectPersonalPIN(.done(pin: "112233")))) {
-            guard case .scan(var scanState) = $0.states[0].screen else { return XCTFail("Unexpected state") }
+            guard case .scan(var scanState) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
             $0.attempt += 1
             $0.pin = "112233"
             scanState.attempt = $0.attempt
             scanState.pin = $0.pin!
-            $0.states = [.root(.scan(scanState))]
+            $0.routes = [.root(.scan(scanState))]
         }
     }
     
@@ -233,7 +233,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         )
         
         store.send(.routeAction(1, action: .incorrectPersonalPIN(IdentificationIncorrectPersonalPINAction.confirmEnd))) {
-            $0.states.removeLast()
+            $0.routes.removeLast()
         }
         
         scheduler.advance(by: 0.65)

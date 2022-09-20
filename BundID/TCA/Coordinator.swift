@@ -5,26 +5,7 @@ import Analytics
 
 struct CoordinatorState: Equatable, IndexedRouterState {
     var tokenURL: String?
-    var states: [Route<ScreenState>]
-    
-    var routes: [Route<ScreenState>] {
-        get {
-            states.map {
-                $0.map { screenState in
-                    switch screenState {
-                    case .home(var state):
-                        state.tokenURL = tokenURL
-                        return .home(state)
-                    default:
-                        return screenState
-                    }
-                }
-            }
-        }
-        set {
-            states = newValue
-        }
-    }
+    var routes: [Route<ScreenState>]
     
     mutating func handleURL(_ url: String, environment: AppEnvironment) -> Effect<CoordinatorAction, Never> {
         guard url.hasPrefix("eid://") else { return .none }
@@ -127,10 +108,6 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                         state.routes.dismiss()
                         return .none
                     }
-                case .setupCoordinator(.afterConfirmEnd),
-                        .identificationCoordinator(.afterConfirmEnd):
-                    state.routes.dismiss()
-                    return .none
                 case .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification))):
                     if let tokenURL = state.tokenURL {
                         return Effect.routeWithDelaysIfUnsupported(state.routes) {
@@ -141,30 +118,28 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                         state.routes.dismiss()
                         return .none
                     }
-                case .setupCoordinator(.routeAction(_, action: .done(.done))):
-                    state.routes.dismiss()
-                    return .none
-                case .home(.triggerIdentification(tokenURL: let tokenURL)):
+#if PREVIEW
+                case .home(.triggerIdentification):
+                    let tokenURL = state.tokenURL ?? demoTokenURL
                     state.routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
                     return .none
-                case .identificationCoordinator(.routeAction(_, action: .overview(.cancel))),
-                        .identificationCoordinator(.routeAction(_, action: .scan(.end))),
-                        .identificationCoordinator(.routeAction(_, action: .done(.close))):
-                    state.routes.dismiss()
-                    return .none
+#endif
                 case .identificationCoordinator(.routeAction(_, action: .scan(.identifiedSuccessfullyWithoutRedirect))),
                         .identificationCoordinator(.routeAction(_, action: .scan(.identifiedSuccessfullyWithRedirect))),
                         .setupCoordinator(.routeAction(_, action: .scan(.scannedSuccessfully))):
                     environment.storageManager.updateSetupCompleted(true)
                     return .none
-                case .identificationCoordinator(.routeAction(_, action: .done(.openURL(let url)))):
+                case .identificationCoordinator(.routeAction(_, action: .overview(.cancel))),
+                        .identificationCoordinator(.routeAction(_, action: .scan(.end))),
+                        .identificationCoordinator(.routeAction(_, action: .done(.close))),
+                        .identificationCoordinator(.routeAction(_, action: .done(.openURL))),
+                        .identificationCoordinator(.confirmEnd),
+                        .identificationCoordinator(.afterConfirmEnd),
+                        .setupCoordinator(.confirmEnd),
+                        .setupCoordinator(.routeAction(_, action: .done(.done))),
+                        .setupCoordinator(.afterConfirmEnd):
                     state.routes.dismiss()
-                    return .none
-                case .setupCoordinator(.confirmEnd):
-                    state.routes.dismiss()
-                    return .none
-                case .identificationCoordinator(.confirmEnd):
-                    state.routes.dismiss()
+                    state.tokenURL = nil
                     return .none
                 default:
                     return .none
@@ -186,7 +161,6 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
             return .none
         }
     }
-
 )
 #if DEBUG
     .debug()

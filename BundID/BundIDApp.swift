@@ -91,9 +91,7 @@ struct BundIDApp: App {
         
         let coordinatorState = CoordinatorState(
             tokenURL: tokenURL,
-            states: [
-                .root(.home(homeState), embedInNavigationView: false)
-            ]
+            routes: [.root(.home(homeState), embedInNavigationView: false)]
         )
         
         store = Store(

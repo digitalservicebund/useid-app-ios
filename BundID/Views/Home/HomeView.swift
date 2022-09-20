@@ -5,7 +5,6 @@ import Analytics
 struct HomeState: Equatable {
     var appVersion: String
     var buildNumber: Int
-    var tokenURL: String?
     
     var versionInfo: String {
         let appVersion = "\(appVersion) - \(buildNumber)"
@@ -18,14 +17,16 @@ struct HomeState: Equatable {
 }
 
 extension HomeState: AnalyticsView {
-     var route: [String] {
+    var route: [String] {
         []
-     }
- }
+    }
+}
 
 enum HomeAction: Equatable {
     case triggerSetup
-    case triggerIdentification(tokenURL: String)
+#if PREVIEW
+    case triggerIdentification
+#endif
 }
 
 struct HomeView: View {
@@ -69,14 +70,15 @@ struct HomeView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .padding(.bottom, 20)
+            
+            Text(L10n.Home.Header.title)
+                .font(.bundLargeTitle)
+                .padding(.bottom, 8)
+                .padding(.horizontal, 36)
 #if PREVIEW
-            WithViewStore(store) { viewStore in
-                title.onTapGesture {
-                    viewStore.send(.triggerIdentification(tokenURL: viewStore.tokenURL ?? demoTokenURL))
+                .onTapGesture {
+                    ViewStore(store.stateless).send(.triggerIdentification)
                 }
-            }
-#else
-            title
 #endif
             Text(L10n.Home.Header.infoText)
                 .multilineTextAlignment(.center)
@@ -84,14 +86,6 @@ struct HomeView: View {
                 .padding(.bottom, 20)
                 .font(.bundCustom(size: 20, relativeTo: .body))
         }
-    }
-    
-    @ViewBuilder
-    var title: some View {
-        Text(L10n.Home.Header.title)
-            .font(.bundLargeTitle)
-            .padding(.bottom, 8)
-            .padding(.horizontal, 36)
     }
     
     @ViewBuilder
