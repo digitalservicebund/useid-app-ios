@@ -53,7 +53,7 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
     func run(card: inout Card, subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>) -> [IdentifyDebugSequence] {
         switch self {
         case .loadError:
-            subject.send(completion: .failure(.processFailed(resultCode: .DEPENDING_HOST_UNREACHABLE)))
+            subject.send(completion: .failure(.processFailed(resultCode: .DEPENDING_HOST_UNREACHABLE, redirectURL: nil)))
             return []
         case .requestAuthorization:
             subject.send(.requestAuthenticationRequestConfirmation(EIDAuthenticationRequest.preview, { _ in
@@ -103,7 +103,7 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             
             return [.identifySuccessfullyWithRedirect, .runPINError(remainingAttempts: card.remainingAttempts), .cancel]
         case .runNFCError:
-            subject.send(completion: .failure(.processFailed(resultCode: .INTERNAL_ERROR)))
+            subject.send(completion: .failure(.processFailed(resultCode: .INTERNAL_ERROR, redirectURL: nil)))
             return [.cancel]
         case .runCardSuspended:
             subject.send(.requestPINAndCAN({ _, _ in }))
@@ -202,7 +202,7 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
             
             return ChangePINDebugSequence.defaultActions(card: card)
         case .runNFCError:
-            subject.send(completion: .failure(.processFailed(resultCode: .INTERNAL_ERROR)))
+            subject.send(completion: .failure(.processFailed(resultCode: .INTERNAL_ERROR, redirectURL: nil)))
             return ChangePINDebugSequence.defaultActions(card: card)
         case .runCardSuspended:
             subject.send(.requestCANAndChangedPIN(pinCallback: { _, _, _ in }))

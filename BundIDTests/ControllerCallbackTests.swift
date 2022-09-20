@@ -1,12 +1,6 @@
-//
-//  ControllerCallbackTests.swift
-//  BundIDTests
-//
-//  Created by Andreas Ganske on 19.09.22.
-//
-
 import XCTest
 import Cuckoo
+import Combine
 import OpenEcard
 
 @testable import BundID
@@ -43,25 +37,31 @@ class MockActivationResult: NSObject, ActivationResultProtocol {
 }
 
 final class ControllerCallbackTests: XCTestCase {
-
+    private var cancellables = Set<AnyCancellable>()
+    
+    override func tearDown() async throws {
+        cancellables.removeAll()
+    }
+    
     func testOKActivationCode() throws {
         
         let activationResult = MockActivationResult(code: .OK)
-            
+        
         let controllerCallback = ControllerCallback()
-            
+        
         let completionExpectation = expectation(description: "Expect complection")
         let valueExpectation = expectation(description: "Expect value")
-        let cancellable = controllerCallback.publisher.sink { completion in
+        controllerCallback.publisher.sink { completion in
             completionExpectation.fulfill()
             XCTAssertEqual(completion, .finished)
         } receiveValue: { value in
             valueExpectation.fulfill()
             XCTAssertEqual(value, .processCompletedSuccessfullyWithoutRedirect)
         }
+        .store(in: &cancellables)
         
         controllerCallback.onAuthenticationCompletion(activationResult)
-            
+        
         wait(for: [completionExpectation, valueExpectation], timeout: 0.5)
     }
     
@@ -74,13 +74,15 @@ final class ControllerCallbackTests: XCTestCase {
         
         let completionExpectation = expectation(description: "Expect complection")
         let valueExpectation = expectation(description: "Expect value")
-        let cancellable = controllerCallback.publisher.sink { completion in
+        
+        controllerCallback.publisher.sink { completion in
             completionExpectation.fulfill()
             XCTAssertEqual(completion, .finished)
         } receiveValue: { value in
             valueExpectation.fulfill()
             XCTAssertEqual(value, .processCompletedSuccessfullyWithRedirect(url: redirectUrl))
         }
+        .store(in: &cancellables)
         
         controllerCallback.onAuthenticationCompletion(activationResult)
         
@@ -98,22 +100,45 @@ final class ControllerCallbackTests: XCTestCase {
         ]
         
         for activationResultCode in allActivationResultCodes {
-            let activationResult = MockActivationResult(redirectUrl: "", code: activationResultCode)
+            let activationResult = MockActivationResult(code: activationResultCode)
             
             let controllerCallback = ControllerCallback()
             
             let exp = expectation(description: "Expect complection")
-            let cancellable = controllerCallback.publisher.sink { completion in
+            controllerCallback.publisher.sink { completion in
                 exp.fulfill()
-                XCTAssertEqual(completion, .failure(.processFailed(resultCode: activationResultCode)))
+                XCTAssertEqual(completion, .failure(.processFailed(resultCode: activationResultCode, redirectURL: nil)))
             } receiveValue: { _ in
                 XCTFail("Should not receive any value")
             }
+            .store(in: &cancellables)
             
             controllerCallback.onAuthenticationCompletion(activationResult)
             
             wait(for: [exp], timeout: 0.1)
         }
     }
-
+    
+    func testFailureRedirect() throws {
+        let minor = "http://www.bsi.bund.de/ecard/api/1.1/resultminor/ifdl/common#invalidSlotHandle"
+        let redirectUrl = "https://redirect.url"
+        let activationResult = MockActivationResult(redirectUrl: redirectUrl,
+                                                    code: .REDIRECT,
+                                                    processResultMinor: minor)
+        
+        let controllerCallback = ControllerCallback()
+        let completionExpectation = expectation(description: "Expect complection")
+        
+        controllerCallback.publisher.sink { completion in
+            completionExpectation.fulfill()
+            XCTAssertEqual(completion, .failure(.processFailed(resultCode: .REDIRECT, redirectURL: redirectUrl)))
+        } receiveValue: { value in
+            XCTFail("Should not receive any value")
+        }
+        .store(in: &cancellables)
+        
+        controllerCallback.onAuthenticationCompletion(activationResult)
+        
+        wait(for: [completionExpectation], timeout: 0.5)
+    }
 }
