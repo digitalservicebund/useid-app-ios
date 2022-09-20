@@ -59,7 +59,7 @@
 "firstTimeUser_scan_progress_title" = "Ausweis nicht bewegen";
 "firstTimeUser_scan_scan" = "Jetzt übertragen";
 "firstTimeUser_scan_scanningCard" = "Ausweis wird geprüft";
-"firstTimeUser_scan_scanSuccess" = "PIN erfolgreich übertragen";
+"firstTimeUser_scan_scanSuccess" = "Übertragung erfolgreich";
 "firstTimeUser_scan_title" = "Übertragen Sie Ihre neue PIN auf den Ausweis.";
 "firstTimeUser_transportPIN_body" = "Die 5-stellige Transport-PIN finden Sie in Ihrem PIN-Brief.";
 "firstTimeUser_transportPIN_continue" = "Weiter";
@@ -132,7 +132,7 @@
 "scanError_cardDeactivated_title" = "Für Ihren Ausweis ist die Online-Ausweisfunktion nicht aktiviert.";
 "scanError_cardSuspended_body" = "#### Warum ist Ihr Ausweis gesperrt?\n\nDa Sie Ihre persönliche Ausweis-PIN zwei Mal falsch eingegeben haben, wurde Ihr Ausweis gesperrt.\n\n#### Was können Sie tun?\n\nWir arbeiten daran, Ihnen eine Lösung in der App anzubieten.\n\nIn der Zwischenzeit können Sie Ihren Ausweis mit Ihrer 6-stelligen CAN in Kombination mit Ihrer persönlichen Ausweis-PIN in der AusweisApp2 entsperren. Ihre 6-stellige CAN finden Sie auf der Vorderseite Ihres Ausweis.\n\nAlternativ können Sie im Bürgeramt Ihre persönliche Ausweis-PIN neu vergeben, sollten Sie diese vergessen haben.";
 "scanError_cardSuspended_title" = "Ihr Ausweis ist gesperrt.";
-"scanError_cardUnreadable_body" = "Folgende Dokumente bieten die Funktion an: Deutscher Personalausweis, Elektronischer Aufenthaltstitel, eID-Karte für Bürgerinnen und Bürger der Europäischen Union und des Europäischer Wirtschaftsraum.\n\nWenn Sie eines der oben genannten Dokumente benutzen und das Problem weiter auftritt, versuchen Sie diese Schritte:\n\n- Entfernen Sie die Karte von Ihrem Smartphone und legen Sie sie erneut an das Smartphone.\n- Wenn Sie eine sehr dicke Handyhülle haben, versuchen Sie, die Hülle zu entfernen.";
+"scanError_cardUnreadable_body" = "Folgende deutsche Dokumente bieten die Funktion an: Personalausweis, elektronischer Aufenthaltstitel und die eID-Karte für Bürgerinnen und Bürger:innen:innen der Europäischen Union und des Europäischen Wirtschaftsraums.\n\nWenn Sie eines der oben genannten Dokumente benutzen und das Problem weiter auftritt, versuchen Sie diese Schritte:\n\n- Entfernen Sie die Karte von Ihrem Smartphone und legen Sie sie erneut an das Smartphone.\n- Wenn Sie eine sehr dicke Handyhülle haben, versuchen Sie, die Hülle zu entfernen.\n\n- Stellen Sie sicher, dass Sie mit dem Internet verbunden sind.";
 "scanError_cardUnreadable_title" = "Ihr Ausweis wurde nicht erkannt.";
 "scanError_close" = "Schließen";
 "scanError_unknown_body" = "Ein unbekannter Fehler ist aufgetreten.";
