@@ -7,6 +7,9 @@ struct IdentificationOverviewLoadedState: Identifiable, Equatable {
     let request: EIDAuthenticationRequest
     var handler: IdentifiableCallback<FlaggedAttributes>
     
+    // used when going back to the overview screen when we already received a pin handler
+    var pinHandler: PINCallback?
+    
     var requiredReadAttributes: IdentifiedArrayOf<IDCardAttribute> {
         let requiredAttributes = request.readAttributes.compactMap { (key: IDCardAttribute, isRequired: Bool) in
             isRequired ? key : nil
@@ -50,7 +53,7 @@ enum IdentificationOverviewLoadedAction: Equatable {
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case moreInfo
     case callbackReceived(EIDAuthenticationRequest, PINCallback)
-    case done
+    case confirm
     case failure(IdentifiableError)
 }
 

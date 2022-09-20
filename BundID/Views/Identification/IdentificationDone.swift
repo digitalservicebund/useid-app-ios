@@ -43,5 +43,6 @@ struct IdentificationDone: View {
                                             action: viewStore.hasValidURL ? .openURL(URL(string: viewStore.redirectURL)!) : .close))
             .navigationBarBackButtonHidden(true)
         }
+        .navigationBarHidden(false)
     }
 }

@@ -4,18 +4,21 @@ import SwiftUI
 let identificationOverviewLoadedReducer = Reducer<IdentificationOverviewLoadedState, IdentificationOverviewLoadedAction, AppEnvironment> { state, action, environment in
     switch action {
     case .idInteractionEvent(.success(.requestPIN(remainingAttempts: nil, pinCallback: let handler))):
-        return Effect(value: .callbackReceived(state.request, PINCallback(id: environment.uuidFactory(), callback: handler)))
+        let pinHandler = PINCallback(id: environment.uuidFactory(), callback: handler)
+        state.pinHandler = pinHandler
+        return Effect(value: .callbackReceived(state.request, pinHandler))
     case .idInteractionEvent(.failure(let error)):
         return Effect(value: .failure(IdentifiableError(error)))
     case .idInteractionEvent:
         return .none
-    case .done:
-        var dict: [IDCardAttribute: Bool] = [:]
-        for attribute in state.requiredReadAttributes {
-            dict[attribute] = true
+    case .confirm:
+        if let pinHandler = state.pinHandler {
+            return Effect(value: .callbackReceived(state.request, pinHandler))
+        } else {
+            let dict = Dictionary(uniqueKeysWithValues: state.requiredReadAttributes.map { ($0, true) })
+            state.handler(dict)
+            return .none
         }
-        state.handler(dict)
-        return .none
     case .failure:
         return .none
     case .callbackReceived:
@@ -46,7 +49,7 @@ struct IdentificationOverviewLoaded: View {
                     }
                 }
                 DialogButtons(store: store.stateless,
-                              primary: .init(title: L10n.Identification.AttributeConsent.continue, action: .done))
+                              primary: .init(title: L10n.Identification.AttributeConsent.continue, action: .confirm))
             }
             .navigationBarTitleDisplayMode(.inline)
         }

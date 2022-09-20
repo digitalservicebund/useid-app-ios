@@ -74,7 +74,6 @@ struct IdentificationPersonalPIN: View {
             }
             .padding(.horizontal)
         }
-        .navigationBarBackButtonHidden(true)
         .navigationBarHidden(false)
     }
 }
