@@ -4,13 +4,10 @@ import SwiftUI
 import Analytics
 
 struct CoordinatorState: Equatable, IndexedRouterState {
-    var tokenURL: String?
     var routes: [Route<ScreenState>]
     
     mutating func handleURL(_ url: String, environment: AppEnvironment) -> Effect<CoordinatorAction, Never> {
         guard url.hasPrefix("eid://") else { return .none }
-        
-        tokenURL = url
         
         let screen: ScreenState
         if environment.storageManager.setupCompleted {
@@ -37,7 +34,7 @@ struct CoordinatorState: Equatable, IndexedRouterState {
         }
     }
     
-    mutating func handleAppStartWithoutURL(environment: AppEnvironment) -> Effect<CoordinatorAction, Never> {
+    mutating func handleAppStart(environment: AppEnvironment) -> Effect<CoordinatorAction, Never> {
         if environment.storageManager.setupCompleted {
             return .none
         } else {
@@ -63,28 +60,42 @@ extension Array: AnalyticsView where Element == Route<ScreenState> {
 }
 
 enum CoordinatorAction: Equatable, IndexedRouterAction {
-    case openURL(URL)
+    case openURL(String)
     case onAppear
     case didEnterBackground
     case routeAction(Int, action: ScreenAction)
     case updateRoutes([Route<ScreenState>])
 }
 
-let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironment> = .combine(
-    Reducer { state, action, environment in
-        switch action {
-        case .openURL(let url):
-            let tokenURL = url.absoluteString
-            return state.handleURL(tokenURL, environment: environment)
-        case .onAppear:
-            guard let tokenURL = state.tokenURL else {
-                return state.handleAppStartWithoutURL(environment: environment)
-            }
-            return state.handleURL(tokenURL, environment: environment)
-        default:
-            return .none
+private let trackingReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironment> = Reducer { state, action, environment in
+    switch action {
+    case .routeAction, .onAppear:
+        let routes = state.routes
+        return .fireAndForget {
+            environment.analytics.track(view: routes)
         }
-    },
+    case .didEnterBackground:
+        return .fireAndForget {
+            environment.analytics.dispatch()
+        }
+    default:
+        return .none
+    }
+}
+
+private let tokenReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironment> = Reducer { state, action, environment in
+    switch action {
+    case .openURL(let url):
+        return state.handleURL(url, environment: environment)
+    case .onAppear:
+        return state.handleAppStart(environment: environment)
+    default:
+        return .none
+    }
+}
+
+let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironment> = .combine(
+    tokenReducer,
     screenReducer
         .forEachIndexedRoute(environment: { $0 })
         .withRouteReducer(
@@ -93,13 +104,13 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                 
                 switch routeAction {
                 case .home(.triggerSetup):
-                    state.routes.presentSheet(.setupCoordinator(SetupCoordinatorState()))
+                    state.routes.presentSheet(.setupCoordinator(SetupCoordinatorState(tokenURL: nil)))
                     return .trackEvent(category: "firstTimeUser",
                                        action: "buttonPressed",
                                        name: "start",
                                        analytics: environment.analytics)
-                case .setupCoordinator(.routeAction(_, action: .intro(.chooseSetupAlreadyDone))):
-                    if let tokenURL = state.tokenURL {
+                case .setupCoordinator(.routeAction(_, action: .intro(.chooseSkipSetup(let tokenURL)))):
+                    if let tokenURL = tokenURL {
                         return Effect.routeWithDelaysIfUnsupported(state.routes) {
                             $0.dismiss()
                             $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
@@ -108,19 +119,13 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                         state.routes.dismiss()
                         return .none
                     }
-                case .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification))):
-                    if let tokenURL = state.tokenURL {
-                        return Effect.routeWithDelaysIfUnsupported(state.routes) {
-                            $0.dismiss()
-                            $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
-                        }
-                    } else {
-                        state.routes.dismiss()
-                        return .none
+                case .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification(let tokenURL)))):
+                    return Effect.routeWithDelaysIfUnsupported(state.routes) {
+                        $0.dismiss()
+                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
                     }
 #if PREVIEW
-                case .home(.triggerIdentification):
-                    let tokenURL = state.tokenURL ?? demoTokenURL
+                case .home(.triggerIdentification(let tokenURL)):
                     state.routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
                     return .none
 #endif
@@ -139,31 +144,16 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                         .setupCoordinator(.routeAction(_, action: .done(.done))),
                         .setupCoordinator(.afterConfirmEnd):
                     state.routes.dismiss()
-                    state.tokenURL = nil
                     return .none
                 default:
                     return .none
                 }
             }
         ),
-    Reducer { state, action, environment in
-        switch action {
-        case .routeAction, .onAppear:
-            let routes = state.routes
-            return .fireAndForget {
-                environment.analytics.track(view: routes)
-            }
-        case .didEnterBackground:
-            return .fireAndForget {
-                environment.analytics.dispatch()
-            }
-        default:
-            return .none
-        }
-    }
+    trackingReducer
 )
 #if DEBUG
-    .debug()
+.debug()
 #endif
 
 struct CoordinatorView: View {

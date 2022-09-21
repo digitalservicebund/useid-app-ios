@@ -51,7 +51,7 @@ final class CoordinatorTests: XCTestCase {
             $0.routes.append(.sheet(.setupCoordinator(SetupCoordinatorState(tokenURL: nil)), embedInNavigationView: false))
         }
     }
-
+    
     func testOpenEIDURLWithUnfinishedSetup() {
         let home = Route.root(ScreenState.home(HomeState(appVersion: "1.0.0", buildNumber: 1)))
         let store = TestStore(initialState: CoordinatorState(routes: [home]),
@@ -63,8 +63,7 @@ final class CoordinatorTests: XCTestCase {
         }
         
         let tokenURLString = "eid://example.org"
-        store.send(.openURL(URL(string: tokenURLString)!)) {
-            $0.tokenURL = tokenURLString
+        store.send(.openURL(tokenURLString)) {
             $0.routes = [home, .sheet(.setupCoordinator(SetupCoordinatorState(tokenURL: tokenURLString)), embedInNavigationView: false)]
         }
     }
@@ -80,8 +79,7 @@ final class CoordinatorTests: XCTestCase {
         }
         
         let tokenURLString = "eid://example.org"
-        store.send(.openURL(URL(string: tokenURLString)!)) {
-            $0.tokenURL = tokenURLString
+        store.send(.openURL(tokenURLString)) {
             $0.routes = [home, .sheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURLString)), embedInNavigationView: false)]
         }
     }
@@ -91,7 +89,7 @@ final class CoordinatorTests: XCTestCase {
                               reducer: coordinatorReducer,
                               environment: environment)
         
-        store.send(.openURL(URL(string: "https://example.org")!))
+        store.send(.openURL("https://example.org"))
         
     }
     
@@ -101,22 +99,21 @@ final class CoordinatorTests: XCTestCase {
                               reducer: coordinatorReducer,
                               environment: environment)
         
-        store.send(.routeAction(1, action: .setupCoordinator(.routeAction(0, action: .intro(.chooseSetupAlreadyDone))))) {
+        store.send(.routeAction(1, action: .setupCoordinator(.routeAction(0, action: .intro(.chooseSkipSetup(tokenURL: nil)))))) {
             $0.routes.removeLast()
         }
     }
-
+    
     func testAbortSetupWithTokenURL() {
         let tokenURL = "eid://example.org"
-        let store = TestStore(initialState: CoordinatorState(tokenURL: tokenURL,
-                                                             routes: [
-                                                                .root(.home(HomeState(appVersion: "1.0.0", buildNumber: 1))),
-                                                                .sheet(.setupCoordinator(SetupCoordinatorState()))
-                                                             ]),
+        let store = TestStore(initialState: CoordinatorState(routes: [
+            .root(.home(HomeState(appVersion: "1.0.0", buildNumber: 1))),
+            .sheet(.setupCoordinator(SetupCoordinatorState()))
+        ]),
                               reducer: coordinatorReducer,
                               environment: environment)
         
-        store.send(.routeAction(1, action: .setupCoordinator(.routeAction(0, action: .intro(.chooseSetupAlreadyDone)))))
+        store.send(.routeAction(1, action: .setupCoordinator(.routeAction(0, action: .intro(.chooseSkipSetup(tokenURL: tokenURL))))))
         
         let newRoutes: [Route<ScreenState>] = [
             .root(.home(HomeState(appVersion: "1.0.0", buildNumber: 1))),
@@ -130,17 +127,15 @@ final class CoordinatorTests: XCTestCase {
     
     func testRememberSetupWasFinishedAfterScanningSuccessfully() {
         let tokenURL = "eid://example.org"
-        
         var setupCoordinatorState = SetupCoordinatorState(transportPIN: "12345",
                                                           states: [
-                                                            .root(.intro),
+                                                            .root(.intro(.init(tokenURL: tokenURL))),
                                                             .push(.scan(.init(transportPIN: "12345", newPIN: "123456")))
                                                           ])
-        let store = TestStore(initialState: CoordinatorState(tokenURL: tokenURL,
-                                                             routes: [
-                                                                .root(.home(HomeState(appVersion: "1.0.0", buildNumber: 1))),
-                                                                .sheet(.setupCoordinator(setupCoordinatorState)),
-                                                             ]),
+        let store = TestStore(initialState: CoordinatorState(routes: [
+            .root(.home(HomeState(appVersion: "1.0.0", buildNumber: 1))),
+            .sheet(.setupCoordinator(setupCoordinatorState)),
+        ]),
                               reducer: coordinatorReducer,
                               environment: environment)
         
@@ -162,17 +157,16 @@ final class CoordinatorTests: XCTestCase {
         var identificationCoordinatorState = IdentificationCoordinatorState(tokenURL: tokenURL,
                                                                             pin: "123456",
                                                                             states: [
-            .root(.scan(IdentificationScanState(request: .preview,
-                                                pin: "123456",
-                                                pinCallback: PINCallback(id: UUID(number: 1),
-                                                                         callback: { _ in }))))
-        ])
+                                                                                .root(.scan(IdentificationScanState(request: .preview,
+                                                                                                                    pin: "123456",
+                                                                                                                    pinCallback: PINCallback(id: UUID(number: 1),
+                                                                                                                                             callback: { _ in }))))
+                                                                            ])
         
-        let store = TestStore(initialState: CoordinatorState(tokenURL: tokenURL,
-                                                             routes: [
-                                                                .root(.home(HomeState(appVersion: "1.0.0", buildNumber: 1))),
-                                                                .sheet(.identificationCoordinator(identificationCoordinatorState)),
-                                                             ]),
+        let store = TestStore(initialState: CoordinatorState(routes: [
+            .root(.home(HomeState(appVersion: "1.0.0", buildNumber: 1))),
+            .sheet(.identificationCoordinator(identificationCoordinatorState)),
+        ]),
                               reducer: coordinatorReducer,
                               environment: environment)
         

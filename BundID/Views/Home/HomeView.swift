@@ -25,7 +25,7 @@ extension HomeState: AnalyticsView {
 enum HomeAction: Equatable {
     case triggerSetup
 #if PREVIEW
-    case triggerIdentification
+    case triggerIdentification(tokenURL: String)
 #endif
 }
 
@@ -77,7 +77,7 @@ struct HomeView: View {
                 .padding(.horizontal, 36)
 #if PREVIEW
                 .onTapGesture {
-                    ViewStore(store.stateless).send(.triggerIdentification)
+                    ViewStore(store.stateless).send(.triggerIdentification(tokenURL: demoTokenURL))
                 }
 #endif
             Text(L10n.Home.Header.infoText)

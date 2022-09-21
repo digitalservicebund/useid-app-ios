@@ -2,7 +2,7 @@ import ComposableArchitecture
 import Analytics
 
 enum SetupScreenState: Equatable {
-    case intro
+    case intro(SetupIntroState)
     case transportPINIntro
     case transportPIN(SetupTransportPINState)
     case personalPINIntro

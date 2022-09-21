@@ -28,6 +28,9 @@ struct SetupCoordinatorState: Equatable, IndexedRouterState {
                         scanState.transportPIN = transportPIN
                         scanState.attempt = attempt
                         return .scan(scanState)
+                    case .intro(var state):
+                        state.tokenURL = tokenURL
+                        return .intro(state)
                     default:
                         return setupScreenState
                     }
@@ -38,7 +41,7 @@ struct SetupCoordinatorState: Equatable, IndexedRouterState {
             states = newValue
         }
     }
-    var states: [Route<SetupScreenState>] = [.root(.intro)]
+    var states: [Route<SetupScreenState>] = [.root(.intro(.init(tokenURL: nil)))]
 }
 
 extension SetupCoordinatorState: AnalyticsView {
@@ -62,13 +65,13 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
     .withRouteReducer(
         Reducer { state, action, environment in
             switch action {
-            case .routeAction(_, .intro(.chooseSetupNotDoneYet)):
+            case .routeAction(_, .intro(.chooseStartSetup)):
                 state.routes.push(.transportPINIntro)
             case .routeAction(_, .transportPINIntro(.choosePINLetterAvailable)):
                 state.routes.push(.transportPIN(SetupTransportPINState()))
             case .routeAction(_, .transportPINIntro(.choosePINLetterMissing)):
                 state.routes.push(.missingPINLetter(MissingPINLetterState()))
-            case .routeAction(_, .intro(.chooseSetupAlreadyDone)):
+            case .routeAction(_, .intro(.chooseSkipSetup)):
                 print("Not implemented")
             case .routeAction(_, .transportPIN(.done(let transportPIN))):
                 state.transportPIN = transportPIN

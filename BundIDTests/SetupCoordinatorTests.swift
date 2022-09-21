@@ -32,23 +32,26 @@ class SetupCoordinatorTests: XCTestCase {
     
     func testEndTriggersConfirmation() {
         let store = TestStore(
-            initialState: SetupCoordinatorState(states: [ .root(.intro) ]),
+            initialState: SetupCoordinatorState(states: [ .root(.intro(.init(tokenURL: nil))) ]),
             reducer: setupCoordinatorReducer,
             environment: environment
         )
         
         store.send(.end) {
-            $0.alert = AlertState(title: .init(verbatim: L10n.FirstTimeUser.ConfirmEnd.title), message: .init(verbatim: L10n.FirstTimeUser.ConfirmEnd.message), primaryButton: .destructive(.init(verbatim: L10n.FirstTimeUser.ConfirmEnd.confirm), action: .send(.confirmEnd)), secondaryButton: .cancel(.init(verbatim: L10n.FirstTimeUser.ConfirmEnd.deny)))
+            $0.alert = AlertState(title: .init(verbatim: L10n.FirstTimeUser.ConfirmEnd.title),
+                                  message: .init(verbatim: L10n.FirstTimeUser.ConfirmEnd.message),
+                                  primaryButton: .destructive(.init(verbatim: L10n.FirstTimeUser.ConfirmEnd.confirm), action: .send(.confirmEnd)),
+                                  secondaryButton: .cancel(.init(verbatim: L10n.FirstTimeUser.ConfirmEnd.deny)))
         }
     }
     
     func testMissingPINLetterNavigation() {
-        let store = TestStore(initialState: SetupCoordinatorState(states: [.root(.intro), .push(.transportPINIntro)]),
+        let store = TestStore(initialState: SetupCoordinatorState(states: [.root(.intro(.init(tokenURL: nil))), .push(.transportPINIntro)]),
                               reducer: setupCoordinatorReducer,
                               environment: environment)
         
         store.send(.routeAction(0, action: .transportPINIntro(.choosePINLetterMissing))) {
-            $0.routes = [.root(.intro), .push(.transportPINIntro), .push(.missingPINLetter(.init()))]
+            $0.routes = [.root(.intro(.init(tokenURL: nil))), .push(.transportPINIntro), .push(.missingPINLetter(.init()))]
         }
     }
 }

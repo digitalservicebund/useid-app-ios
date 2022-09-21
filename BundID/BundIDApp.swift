@@ -26,6 +26,7 @@ struct BundIDApp: App {
 #endif
             options.tracesSampleRate = 1.0
         }
+        
         let userDefaults = UserDefaults.standard
         let mainQueue = DispatchQueue.main.eraseToAnyScheduler()
         let environment: AppEnvironment
@@ -80,22 +81,12 @@ struct BundIDApp: App {
         )
 #endif
         
-#if PREVIEW
-        let tokenURL: String? = CommandLine.arguments.contains(LaunchArgument.useDemoTokenURL) ? demoTokenURL : nil
-#else
-        let tokenURL: String? = nil
-#endif
-        
-        let homeState = HomeState(appVersion: Bundle.main.version,
-                                  buildNumber: Bundle.main.buildNumber)
-        
-        let coordinatorState = CoordinatorState(
-            tokenURL: tokenURL,
-            routes: [.root(.home(homeState), embedInNavigationView: false)]
-        )
-        
         store = Store(
-            initialState: coordinatorState,
+            initialState: CoordinatorState(
+                routes: [
+                    .root(.home(HomeState(appVersion: Bundle.main.version, buildNumber: Bundle.main.buildNumber)))
+                ]
+            ),
             reducer: coordinatorReducer,
             environment: environment
         )
@@ -105,10 +96,17 @@ struct BundIDApp: App {
         WindowGroup {
             CoordinatorView(store: store)
                 .onOpenURL { url in
-                    ViewStore(store.stateless).send(.openURL(url))
+                    ViewStore(store.stateless).send(.openURL(url.absoluteString))
                 }
                 .onAppear {
-                    ViewStore(store.stateless).send(.onAppear)
+                    let viewStore = ViewStore(store.stateless)
+                    viewStore.send(.onAppear)
+                    
+#if PREVIEW
+                    if CommandLine.arguments.contains(LaunchArgument.useDemoTokenURL) {
+                        viewStore.send(.openURL(demoTokenURL))
+                    }
+#endif
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
                     ViewStore(store.stateless).send(.didEnterBackground)
