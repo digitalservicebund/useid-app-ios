@@ -14,6 +14,10 @@ default_platform(:ios)
 
 PROJECT_FILENAME = "BundID"
 
+def to_boolean(str)
+  str.downcase == 'true' || str == '1'
+end
+
 platform :ios do
 
   before_all do
@@ -196,18 +200,24 @@ platform :ios do
 
   desc 'Bump version'
   lane :bumpVersion do |options|
-    bumpBuildNumber = ENV['BUMP_BUILD_NUMBER'] || options[:bumpBuildNumber] || false
-    version = ENV['VERSION'] || options[:version]
+    bumpBuildNumber = to_boolean(ENV['BUMP_BUILD_NUMBER'] || options[:bumpBuildNumber] || 'false')
+    version = ENV['VERSION'] || options[:version] || ''
+
+    puts "Bumping version with version:#{version} bumpBuildNumber:#{bumpBuildNumber}"
     
     oldTag = "#{getAppVersion}-#{get_build_number}"
-    updateAppVersion(version: version) unless version.nil? || version.empty?
-    increment_build_number unless bumpBuildNumber.nil? || !bumpBuildNumber
+    unless version.empty?
+      updateAppVersion(version: version)
+    end
+    if bumpBuildNumber
+      increment_build_number
+    end
     newTag = "#{getAppVersion}-#{get_build_number}"
+
+    next if oldTag == newTag
 
     puts "Writing new tag #{newTag} to github env: #{ENV['GITHUB_ENV']}"
     sh("echo 'GIT_TAG=#{newTag}' >> #{ENV['GITHUB_ENV']}")
-
-    return if oldTag == newTag
 
     commit_version_bump(xcodeproj: "#{PROJECT_FILENAME}.xcodeproj")
     add_git_tag(tag: newTag)
