@@ -135,7 +135,7 @@ struct SetupCoordinatorView: View {
     let store: Store<SetupCoordinatorState, SetupCoordinatorAction>
     
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: \.needsEndConfirmation) { viewStore in
             NavigationView {
                 TCARouter(store) { screen in
                     SwitchStore(screen) {
@@ -182,7 +182,7 @@ struct SetupCoordinatorView: View {
                 .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
                 .navigationBarHidden(false)
             }
-            .interactiveDismissDisabled(viewStore.needsEndConfirmation) {
+            .interactiveDismissDisabled(viewStore.state) {
                 viewStore.send(.end)
             }
         }
