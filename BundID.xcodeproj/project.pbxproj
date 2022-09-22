@@ -53,7 +53,6 @@
 		E14C21B428B8FB8F00192338 /* AppEnvironment+Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C21B328B8FB8F00192338 /* AppEnvironment+Tests.swift */; };
 		E14C21B628B90BF500192338 /* StorageKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C21B528B90BF500192338 /* StorageKey.swift */; };
 		E14C21B728B90BF500192338 /* StorageKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C21B528B90BF500192338 /* StorageKey.swift */; };
-		E15211DF28DCF6070086112C /* FlowStacks in Frameworks */ = {isa = PBXBuildFile; productRef = E15211DE28DCF6070086112C /* FlowStacks */; };
 		E156DD02287EF9C200C88914 /* XCUITestDeeplinking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E156DD01287EF9C200C88914 /* XCUITestDeeplinking.swift */; };
 		E15776A0286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */; };
 		E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */ = {isa = PBXBuildFile; productRef = E15C22FF2850F5A8005CCBB9 /* OpenEcard */; };
@@ -307,7 +306,6 @@
 				E16708AA283D1076001A1637 /* TCACoordinators in Frameworks */,
 				E144EBD628C63A31009B4900 /* MarkdownUI in Frameworks */,
 				E1BC3D8628B7E919007A7B39 /* LicensePlistViewController in Frameworks */,
-				E15211DF28DCF6070086112C /* FlowStacks in Frameworks */,
 				D2B76A7A28BE4B93000B442D /* Analytics in Frameworks */,
 				E13925CA28411D4C00161F5C /* Lottie in Frameworks */,
 				E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */,
@@ -694,7 +692,6 @@
 				E1BC3D8528B7E919007A7B39 /* LicensePlistViewController */,
 				D2B76A7928BE4B93000B442D /* Analytics */,
 				E144EBD528C63A31009B4900 /* MarkdownUI */,
-				E15211DE28DCF6070086112C /* FlowStacks */,
 			);
 			productName = BundID;
 			productReference = E5CEB27A281041330076B9FE /* BundID.app */;
@@ -739,7 +736,6 @@
 				E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */,
 				E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
-				E15211DD28DCF6070086112C /* XCRemoteSwiftPackageReference "FlowStacks" */,
 			);
 			productRefGroup = E5CEB27B281041330076B9FE /* Products */;
 			projectDirPath = "";
@@ -1716,14 +1712,6 @@
 				minimumVersion = 1.0.0;
 			};
 		};
-		E15211DD28DCF6070086112C /* XCRemoteSwiftPackageReference "FlowStacks" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/DavidKmn/FlowStacks.git";
-			requirement = {
-				branch = "fix/ios-16-view-navigation-pub";
-				kind = branch;
-			};
-		};
 		E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TICESoftware/open-ecard-ios";
@@ -1774,11 +1762,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */;
 			productName = MarkdownUI;
-		};
-		E15211DE28DCF6070086112C /* FlowStacks */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E15211DD28DCF6070086112C /* XCRemoteSwiftPackageReference "FlowStacks" */;
-			productName = FlowStacks;
 		};
 		E15C22FF2850F5A8005CCBB9 /* OpenEcard */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -30,10 +30,10 @@
     {
       "identity" : "flowstacks",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/DavidKmn/FlowStacks.git",
+      "location" : "https://github.com/johnpatrickmorgan/FlowStacks",
       "state" : {
-        "branch" : "fix/ios-16-view-navigation-pub",
-        "revision" : "f5d4da6482d2f259c2c7f43a654374eabf99d9ba"
+        "revision" : "99b0c0d8ca33a916479521e533dad04a006f6e06",
+        "version" : "0.2.5"
       }
     },
     {
