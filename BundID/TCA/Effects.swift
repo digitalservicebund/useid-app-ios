@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import Foundation
 import Analytics
 
 // MARK: Open URL
