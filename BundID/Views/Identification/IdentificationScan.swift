@@ -75,12 +75,11 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
             return Effect(value: .error(ScanErrorState(errorType: .idCardInteraction(error), retry: false)))
         }
     case .wrongPIN:
+        state.isScanning = false
         return .none
     case .identifiedSuccessfullyWithoutRedirect:
-        state.isScanning = false
         return .none
     case .identifiedSuccessfullyWithRedirect:
-        state.isScanning = false
         return .none
     case .error:
         return .none
@@ -123,11 +122,14 @@ extension IdentificationScanState {
             isScanning = false
             scanAvailable = false
             return Effect(value: .error(ScanErrorState(errorType: .cardSuspended, retry: scanAvailable)))
-        case .authenticationStarted,
+        case .requestCardInsertion,
+                .authenticationStarted,
                 .cardInteractionComplete,
                 .cardRecognized:
+            isScanning = true
             return .none
         case .authenticationSuccessful:
+            isScanning = true
             authenticationSuccessful = true
             return .none
         case .cardRemoved:
@@ -136,7 +138,6 @@ extension IdentificationScanState {
         case .processCompletedSuccessfullyWithRedirect(let urlString):
             return Effect(value: .identifiedSuccessfullyWithRedirect(request, redirectURL: urlString))
         case .processCompletedSuccessfullyWithoutRedirect:
-            isScanning = false
             scanAvailable = false
             return Effect(value: .error(ScanErrorState(errorType: .unexpectedEvent(event), retry: scanAvailable)))
         default:

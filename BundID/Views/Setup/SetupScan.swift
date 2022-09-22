@@ -96,8 +96,10 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         state.isScanning = false
         return .cancel(id: CancelId.self)
     case .error:
+        state.isScanning = false
         return .cancel(id: CancelId.self)
     case .wrongTransportPIN:
+        state.isScanning = false
         return .cancel(id: CancelId.self)
     case .scannedSuccessfully:
         return .cancel(id: CancelId.self)
@@ -123,24 +125,29 @@ extension SetupScanState {
         switch event {
         case .authenticationStarted:
             print("Authentication started")
+            isScanning = true
         case .requestCardInsertion(let messageCallback):
-            self.showProgressCaption = false
+            showProgressCaption = false
+            isScanning = true
             messageCallback(L10n.FirstTimeUser.Scan.scanningCard)
-        case .cardInteractionComplete: print("Card interaction complete.")
-        case .cardRecognized: print("Card recognized.")
+        case .cardInteractionComplete:
+            print("Card interaction complete.")
+        case .cardRecognized:
+            print("Card recognized.")
+            isScanning = true
         case .cardRemoved:
-            self.showProgressCaption = true
+            showProgressCaption = true
             print("Card removed.")
         case .processCompletedSuccessfullyWithoutRedirect:
             return Effect(value: .scannedSuccessfully)
         case .pinManagementStarted: print("PIN Management started.")
-        case .requestChangedPIN(let remainingAttempts, let pinCallback):
-            print("Providing changed PIN with \(String(describing: remainingAttempts)) remaining attempts.")
-            let remainingAttemptsBefore = self.remainingAttempts
-            self.remainingAttempts = remainingAttempts
+        case .requestChangedPIN(let newRemainingAttempts, let pinCallback):
+            print("Providing changed PIN with \(String(describing: newRemainingAttempts)) remaining attempts.")
+            let remainingAttemptsBefore = remainingAttempts
+            remainingAttempts = newRemainingAttempts
             
             // This is our signal that the user canceled (for now)
-            guard let remainingAttempts = remainingAttempts else {
+            guard let remainingAttempts = newRemainingAttempts else {
                 return Effect(value: .cancelScan)
             }
             
