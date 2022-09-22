@@ -32,6 +32,7 @@ struct SetupDone: View {
                        primaryButton: viewStore.primaryButton)
         }
         .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(false)
     }
     
 }
