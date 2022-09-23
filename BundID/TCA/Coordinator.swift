@@ -7,8 +7,6 @@ struct CoordinatorState: Equatable, IndexedRouterState {
     var routes: [Route<ScreenState>]
     
     mutating func handleURL(_ url: String, environment: AppEnvironment) -> Effect<CoordinatorAction, Never> {
-        guard url.hasPrefix("eid://") else { return .none }
-        
         let screen: ScreenState
         if environment.storageManager.setupCompleted {
             screen = .identificationCoordinator(IdentificationCoordinatorState(tokenURL: url))

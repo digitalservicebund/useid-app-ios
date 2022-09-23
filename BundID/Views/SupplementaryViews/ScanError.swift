@@ -47,7 +47,7 @@ struct ScanErrorState: Equatable {
     
     var primaryButton: DialogButtons<ScanErrorAction>.ButtonConfiguration {
         if retry {
-            return .init(title: L10n.ScanError.close,  action: .retry)
+            return .init(title: L10n.ScanError.close, action: .retry)
         } else if case .idCardInteraction(.processFailed(_, let urlString)) = errorType,
                   let url = urlString.flatMap(URL.init(string:)) {
             return .init(title: L10n.ScanError.redirect, action: .end(redirectURL: url))
@@ -70,7 +70,7 @@ enum ScanErrorAction: Equatable {
 let scanErrorReducer = Reducer<ScanErrorState, ScanErrorAction, AppEnvironment> { _, action, environment in
     switch action {
     case .end(let redirectURL):
-        guard let redirectURL else { return .none }
+        guard let redirectURL = redirectURL else { return .none }
         return .openURL(redirectURL, urlOpener: environment.urlOpener)
     default:
         return .none

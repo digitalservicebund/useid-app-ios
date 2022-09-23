@@ -84,15 +84,6 @@ final class CoordinatorTests: XCTestCase {
         }
     }
     
-    func testOpenOtherURL() {
-        let store = TestStore(initialState: CoordinatorState(routes: [.root(.home(HomeState(appVersion: "1.0.0", buildNumber: 1)))]),
-                              reducer: coordinatorReducer,
-                              environment: environment)
-        
-        store.send(.openURL("https://example.org"))
-        
-    }
-    
     func testAbortSetup() {
         let store = TestStore(initialState: CoordinatorState(routes: [.root(.home(HomeState(appVersion: "1.0.0", buildNumber: 1))),
                                                                       .sheet(.setupCoordinator(SetupCoordinatorState()))]),

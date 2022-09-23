@@ -176,6 +176,7 @@
 		D2B596F528B8E41A0042BE32 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		D2B7BCFA28D2108900318B9F /* Effects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Effects.swift; sourceTree = "<group>"; };
 		D2C5914F28CB86570048D379 /* MissingPINLetterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPINLetterTests.swift; sourceTree = "<group>"; };
+		D2ED120F28DDFF3700EC95F2 /* BundIDRelease Production.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "BundIDRelease Production.entitlements"; sourceTree = "<group>"; };
 		D2FD741028DDF63000C7C5E7 /* ScanErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanErrorTests.swift; sourceTree = "<group>"; };
 		E110400C281C389C004BA03E /* SetupIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntro.swift; sourceTree = "<group>"; };
 		E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUITestHelper.swift; sourceTree = "<group>"; };
@@ -588,6 +589,7 @@
 				E13925BF2841105A00161F5C /* Types */,
 				E1AB879B2822835E00C7FC94 /* Views */,
 				E5CEB29428104F920076B9FE /* BundID.entitlements */,
+				D2ED120F28DDFF3700EC95F2 /* BundIDRelease Production.entitlements */,
 				E5CEB295281050BE0076B9FE /* Info.plist */,
 				D2AD47AE28C73B7400863D43 /* Launch Screen.storyboard */,
 				E128E0BB28898D3400C5195F /* AppDelegate.swift */,
@@ -1606,7 +1608,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = BundID/BundID.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "BundID/BundIDRelease Production.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 27;
