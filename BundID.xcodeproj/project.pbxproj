@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D201402728C5E6FD0002A054 /* InfoBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D201402628C5E6FD0002A054 /* InfoBox.swift */; };
+		D201402728C5E6FD0002A054 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = D201402628C5E6FD0002A054 /* Box.swift */; };
 		D21E682028BCEB0A0055EBFE /* Assets+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21E681F28BCEB0A0055EBFE /* Assets+Generated.swift */; };
 		D245421828CB9E68002600C9 /* IdentificationOverviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D245421728CB9E68002600C9 /* IdentificationOverviewTests.swift */; };
 		D28D27FF28B7A91B008DA310 /* MissingPINLetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */; };
@@ -19,6 +19,7 @@
 		D2B76A7A28BE4B93000B442D /* Analytics in Frameworks */ = {isa = PBXBuildFile; productRef = D2B76A7928BE4B93000B442D /* Analytics */; };
 		D2B7BCFB28D2108900318B9F /* Effects.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7BCFA28D2108900318B9F /* Effects.swift */; };
 		D2C5915028CB86570048D379 /* MissingPINLetterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C5914F28CB86570048D379 /* MissingPINLetterTests.swift */; };
+		D2FD741128DDF63000C7C5E7 /* ScanErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FD741028DDF63000C7C5E7 /* ScanErrorTests.swift */; };
 		E10BB69B28AF83DD007EF50C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1AB87AA2825238D00C7FC94 /* Localizable.strings */; };
 		E10BB69C28AF83E1007EF50C /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
 		E110400D281C389C004BA03E /* SetupIntro.swift in Sources */ = {isa = PBXBuildFile; fileRef = E110400C281C389C004BA03E /* SetupIntro.swift */; };
@@ -162,7 +163,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D201402628C5E6FD0002A054 /* InfoBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoBox.swift; sourceTree = "<group>"; };
+		D201402628C5E6FD0002A054 /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
 		D21E681F28BCEB0A0055EBFE /* Assets+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Assets+Generated.swift"; sourceTree = "<group>"; };
 		D245421728CB9E68002600C9 /* IdentificationOverviewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewTests.swift; sourceTree = "<group>"; };
 		D28BC72228BE0A44003C012C /* Analytics */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Analytics; sourceTree = "<group>"; };
@@ -175,6 +176,7 @@
 		D2B596F528B8E41A0042BE32 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		D2B7BCFA28D2108900318B9F /* Effects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Effects.swift; sourceTree = "<group>"; };
 		D2C5914F28CB86570048D379 /* MissingPINLetterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPINLetterTests.swift; sourceTree = "<group>"; };
+		D2FD741028DDF63000C7C5E7 /* ScanErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanErrorTests.swift; sourceTree = "<group>"; };
 		E110400C281C389C004BA03E /* SetupIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntro.swift; sourceTree = "<group>"; };
 		E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUITestHelper.swift; sourceTree = "<group>"; };
 		E11EB2AA2853A8B6008B4042 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
@@ -416,17 +418,17 @@
 		E16708B8283D7C47001A1637 /* SupplementaryViews */ = {
 			isa = PBXGroup;
 			children = (
+				E144EBD728C63A4D009B4900 /* AboutView.swift */,
+				D201402628C5E6FD0002A054 /* Box.swift */,
 				E17604D0287E24F1007DFA10 /* DebugMenu.swift */,
 				E16708B9283D7CA1001A1637 /* DialogButtons.swift */,
 				E16708B6283D7C2B001A1637 /* DialogView.swift */,
 				E1AB8799282281C400C7FC94 /* HeaderView.swift */,
-				D201402628C5E6FD0002A054 /* InfoBox.swift */,
 				E13925CE28411E2300161F5C /* LottieView.swift */,
 				E1CD8E9428215971008ADA2A /* PINEntryView.swift */,
 				E1AB87A3282413A700C7FC94 /* PINTextField.swift */,
 				E1EB9FF928B5288A007FF467 /* ScanBody.swift */,
 				F43622A62850D6C9008AEBB9 /* ScanError.swift */,
-				E144EBD728C63A4D009B4900 /* AboutView.swift */,
 			);
 			path = SupplementaryViews;
 			sourceTree = "<group>";
@@ -456,6 +458,7 @@
 			children = (
 				E14C21B328B8FB8F00192338 /* AppEnvironment+Tests.swift */,
 				D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */,
+				E12B424728D8AB440032D65D /* ControllerCallbackTests.swift */,
 				E13F9E44288853950088E955 /* CoordinatorTests.swift */,
 				E13925BD28410FE200161F5C /* Generated */,
 				E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */,
@@ -466,11 +469,11 @@
 				E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */,
 				E135D6AB28B76A3500A32862 /* Matchable+UseID.swift */,
 				D2C5914F28CB86570048D379 /* MissingPINLetterTests.swift */,
+				D2FD741028DDF63000C7C5E7 /* ScanErrorTests.swift */,
 				E135D6A928B7696400A32862 /* SetupCoordinatorTests.swift */,
 				E1AAACF228378C0E00A51183 /* SetupPersonalPINTests.swift */,
 				E149B15B2840F636002C1139 /* SetupScanTests.swift */,
 				E13F9E3C288802500088E955 /* UUID+InitFromNumber.swift */,
-				E12B424728D8AB440032D65D /* ControllerCallbackTests.swift */,
 			);
 			path = BundIDTests;
 			sourceTree = "<group>";
@@ -889,6 +892,7 @@
 				E13925C42841111100161F5C /* GeneratedMocks.swift in Sources */,
 				E13F9E45288853950088E955 /* CoordinatorTests.swift in Sources */,
 				D2A6773828B4DD5D0033373E /* Array+SafeTests.swift in Sources */,
+				D2FD741128DDF63000C7C5E7 /* ScanErrorTests.swift in Sources */,
 				E14C21B428B8FB8F00192338 /* AppEnvironment+Tests.swift in Sources */,
 				E1AAACF328378C0E00A51183 /* SetupPersonalPINTests.swift in Sources */,
 				E13F9E43288835350088E955 /* IdentificationCoordinatorStateTests.swift in Sources */,
@@ -925,7 +929,7 @@
 				D28D280328B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift in Sources */,
 				E5E69D852812FB6100A3B66A /* IDCardInteractionError.swift in Sources */,
 				E1EFB5C62858EB2A005C38C6 /* Shape+Fill.swift in Sources */,
-				D201402728C5E6FD0002A054 /* InfoBox.swift in Sources */,
+				D201402728C5E6FD0002A054 /* Box.swift in Sources */,
 				E12CB30428494B0B0039FD56 /* OpenECardTypes.swift in Sources */,
 				E1EFB5C22858EAA2005C38C6 /* IdentificationOverviewLoaded.swift in Sources */,
 				E593E2682816847900154EB0 /* EIDAuthenticationRequest.swift in Sources */,

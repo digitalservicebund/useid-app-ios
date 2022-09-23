@@ -44,11 +44,37 @@ struct ScanErrorState: Equatable {
             return L10n.ScanError.CardUnreadable.body
         }
     }
+    
+    var primaryButton: DialogButtons<ScanErrorAction>.ButtonConfiguration {
+        if retry {
+            return .init(title: L10n.ScanError.close,  action: .retry)
+        } else if case .idCardInteraction(.processFailed(_, let urlString)) = errorType,
+                  let url = urlString.flatMap(URL.init(string:)) {
+            return .init(title: L10n.ScanError.redirect, action: .end(redirectURL: url))
+        } else {
+            return .init(title: L10n.ScanError.close, action: .end(redirectURL: nil))
+        }
+    }
+    
+    var boxContent: BoxContent? {
+        guard !retry else { return  nil }
+        return .init(title: L10n.ScanError.Box.title, message: L10n.ScanError.Box.body, style: .error)
+    }
 }
 
 enum ScanErrorAction: Equatable {
-    case end
+    case end(redirectURL: URL?)
     case retry
+}
+
+let scanErrorReducer = Reducer<ScanErrorState, ScanErrorAction, AppEnvironment> { _, action, environment in
+    switch action {
+    case .end(let redirectURL):
+        guard let redirectURL else { return .none }
+        return .openURL(redirectURL, urlOpener: environment.urlOpener)
+    default:
+        return .none
+    }
 }
 
 extension ScanErrorType: AnalyticsView {
@@ -76,9 +102,9 @@ struct ScanError: View {
             WithViewStore(store) { viewStore in
                 DialogView(store: store.stateless,
                            title: viewStore.title,
+                           boxContent: viewStore.boxContent,
                            message: viewStore.markdown,
-                           primaryButton: .init(title: L10n.ScanError.close,
-                                                action: viewStore.retry ? .retry : .end))
+                           primaryButton: viewStore.primaryButton)
                 .interactiveDismissDisabled(!viewStore.retry)
             }
             .navigationBarBackButtonHidden(true)
@@ -90,14 +116,14 @@ struct ScanError: View {
 struct SetupError_Previews: PreviewProvider {
     static var previews: some View {
         ScanError(store: Store(initialState: .init(errorType: .cardDeactivated, retry: false),
-                                reducer: .empty,
-                                environment: AppEnvironment.preview))
+                               reducer: .empty,
+                               environment: AppEnvironment.preview))
         ScanError(store: Store(initialState: .init(errorType: .cardSuspended, retry: false),
-                                reducer: .empty,
-                                environment: AppEnvironment.preview))
+                               reducer: .empty,
+                               environment: AppEnvironment.preview))
         ScanError(store: Store(initialState: .init(errorType: .cardBlocked, retry: false),
-                                reducer: .empty,
-                                environment: AppEnvironment.preview))
+                               reducer: .empty,
+                               environment: AppEnvironment.preview))
         ScanError(store: Store(initialState: .init(errorType: .unexpectedEvent(.cardRemoved), retry: true),
                                reducer: .empty,
                                environment: AppEnvironment.preview))

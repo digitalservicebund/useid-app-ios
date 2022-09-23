@@ -82,5 +82,11 @@ let identificationScreenReducer = Reducer<IdentificationScreenState, Identificat
             state: /IdentificationScreenState.done,
             action: /IdentificationScreenAction.done,
             environment: { $0 }
+        ),
+    scanErrorReducer
+        .pullback(
+            state: /IdentificationScreenState.error,
+            action: /IdentificationScreenAction.error,
+            environment: { $0 }
         )
 )

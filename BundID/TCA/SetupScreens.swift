@@ -84,5 +84,11 @@ let setupScreenReducer = Reducer<SetupScreenState, SetupScreenAction, AppEnviron
             state: /SetupScreenState.missingPINLetter,
             action: /SetupScreenAction.missingPINLetter,
             environment: { $0 }
+        ),
+    scanErrorReducer
+        .pullback(
+            state: /SetupScreenState.error,
+            action: /SetupScreenAction.error,
+            environment: { $0 }
         )
 )

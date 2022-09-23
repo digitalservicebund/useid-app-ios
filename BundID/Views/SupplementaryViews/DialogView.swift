@@ -4,8 +4,8 @@ import ComposableArchitecture
 struct DialogView<Action>: View {
     var store: Store<Void, Action>
     var title: String
+    var boxContent: BoxContent?
     var message: String?
-    var infoBoxContent: InfoBoxContent?
     var imageMeta: ImageMeta?
     var secondaryButton: DialogButtons<Action>.ButtonConfiguration?
     var primaryButton: DialogButtons<Action>.ButtonConfiguration?
@@ -14,8 +14,8 @@ struct DialogView<Action>: View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
                 HeaderView(title: title,
+                           boxContent: boxContent,
                            message: message,
-                           infoBoxContent: infoBoxContent,
                            imageMeta: imageMeta)
             }
             DialogButtons(store: store,

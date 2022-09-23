@@ -26,8 +26,8 @@ struct LinkMeta {
 
 struct HeaderView: View {
     var title: String
+    var boxContent: BoxContent?
     var message: String?
-    var infoBoxContent: InfoBoxContent?
     var imageMeta: ImageMeta?
     
     var body: some View {
@@ -36,8 +36,8 @@ struct HeaderView: View {
                 .font(.bundLargeTitle)
                 .foregroundColor(.blackish)
 				.fixedSize(horizontal: false, vertical: true)
-            if let infoBoxContent = infoBoxContent {
-                InfoBox(content: infoBoxContent)
+            if let boxContent = boxContent {
+                Box(content: boxContent)
             }
             if let message = message {
                 Markdown(message)

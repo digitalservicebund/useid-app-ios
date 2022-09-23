@@ -35,7 +35,7 @@ extension Color {
     static let green100: Color = Color(0xE8F7F0)
     static let green800: Color = Color(0x006538)
     
-    static let yellow300: Color = Color(0xF9EC9E)
+    static let yellow200: Color = Color(0xFFF9D2)
     static let yellow600: Color = Color(0xF2DC5D)
     
     static let red200: Color = Color(0xF9E5EC)
