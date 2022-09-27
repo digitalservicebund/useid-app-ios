@@ -13,11 +13,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>lld</string>
 			<key>zero</key>
-			<string>Sie haben keine Versuche mehr</string>
+			<string>You have no more attempts.</string>
 			<key>one</key>
-			<string>Sie haben noch einen Versuch</string>
+			<string>You have one more attempt.</string>
 			<key>other</key>
-			<string>Sie haben noch %lld Versuche</string>
+			<string>You still have %lld attempts.</string>
 		</dict>
 	</dict>
 	<key>identification_personalPIN_error_incorrect_remainingAttempts%lld</key>
@@ -31,11 +31,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>lld</string>
 			<key>zero</key>
-			<string>Sie haben keine Versuche mehr.</string>
+			<string>You have no more attempts.</string>
 			<key>one</key>
-			<string>Sie haben noch einen Versuch.</string>
+			<string>You have one more attempt.</string>
 			<key>other</key>
-			<string>Sie haben noch %lld Versuche.</string>
+			<string>You still have %lld attempts.</string>
 		</dict>
 	</dict>
 </dict>
