@@ -59,7 +59,7 @@
 "firstTimeUser_scan_progress_title" = "Ausweis nicht bewegen";
 "firstTimeUser_scan_scan" = "Jetzt übertragen";
 "firstTimeUser_scan_scanningCard" = "Ausweis wird geprüft";
-"firstTimeUser_scan_scanSuccess" = "Übertragung erfolgreich";
+"firstTimeUser_scan_scanSuccess" = "Datenübertragung erfolgreich";
 "firstTimeUser_scan_title" = "Übertragen Sie Ihre neue PIN auf den Ausweis.";
 "firstTimeUser_transportPIN_body" = "Die 5-stellige Transport-PIN finden Sie in Ihrem PIN-Brief.";
 "firstTimeUser_transportPIN_continue" = "Weiter";
@@ -114,7 +114,7 @@
 "identification_personalPIN_title" = "Geben Sie die persönliche PIN Ihres Ausweises ein";
 "identification_scan_message" = "Halten Sie Ihren Ausweis dicht an die Rückseite des Smartphones. Die App nutzt die NFC-Sensoren in Smartphone und Ausweis, um Ihre PIN zu überprüfen und die benötigten Daten abzurufen.";
 "identification_scan_scan" = "Jetzt Daten abrufen";
-"identification_scan_scanSuccess" = "Übertragung erfolgreich";
+"identification_scan_scanSuccess" = "Datenübertragung erfolgreich";
 "identification_scan_title" = "Rufen Sie die Daten von Ihrem Ausweis ab.";
 "identification_scan_unexpectedError_close" = "Schließen";
 "identification_scan_unexpectedError_message" = "Ein unerwarteter Fehler ist aufgetreten. Bitte kehren Sie zur Webseite zurück und wiederholen Sie den Vorgang.";
