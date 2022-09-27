@@ -2,6 +2,7 @@ import ComposableArchitecture
 import TCACoordinators
 import SwiftUI
 import Analytics
+import Sentry
 
 struct CoordinatorState: Equatable, IndexedRouterState {
     var routes: [Route<ScreenState>]
@@ -69,6 +70,12 @@ private let trackingReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnv
     switch action {
     case .routeAction, .onAppear:
         let routes = state.routes
+        
+        let breadcrumb = Breadcrumb()
+        breadcrumb.level = .info
+        breadcrumb.category = routes.route.joined(separator: "/")
+        SentrySDK.addBreadcrumb(crumb: breadcrumb)
+        
         return .fireAndForget {
             environment.analytics.track(view: routes)
         }

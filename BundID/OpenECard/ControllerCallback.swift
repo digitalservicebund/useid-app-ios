@@ -22,7 +22,8 @@ class ControllerCallback: NSObject, ControllerCallbackType {
             subject.send(completion: .finished)
         default:
             subject.send(completion: .failure(.processFailed(resultCode: result.getCode(),
-                                                             redirectURL: result.getRedirectUrl())))
+                                                             redirectURL: result.getRedirectUrl(),
+                                                             resultMinor: result.getProcessResultMinor())))
         }
     }
 }

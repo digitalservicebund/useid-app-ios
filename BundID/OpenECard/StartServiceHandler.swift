@@ -52,7 +52,6 @@ extension StartServiceHandler: StartServiceHandlerProtocol {
     }
     
     func onFailure(_ response: (NSObjectProtocol & ServiceErrorResponseProtocol)!) {
-        print("Failure: \(response.errorDescription)")
         activationController?.cancelOngoingAuthentication()
         subject.send(completion: .failure(.frameworkError(message: response.errorDescription)))
     }

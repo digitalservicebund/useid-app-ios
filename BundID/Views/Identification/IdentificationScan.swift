@@ -2,6 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 import Combine
 import Lottie
+import Sentry
 
 enum IdentificationScanError: Error, Equatable {
     case idCardInteraction(IDCardInteractionError)
@@ -65,6 +66,10 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
     case .idInteractionEvent(.success(let event)):
         return state.handle(event: event, environment: environment)
     case .idInteractionEvent(.failure(let error)):
+        if let redactedError = RedactedIDCardInteractionError(error) {
+            SentrySDK.capture(error: redactedError)
+        }
+        
         state.isScanning = false
         switch error {
         case .cardDeactivated:
@@ -107,7 +112,6 @@ extension IdentificationScanState {
     mutating func handle(event: EIDInteractionEvent, environment: AppEnvironment) -> Effect<IdentificationScanAction, Never> {
         switch event {
         case .requestPIN(remainingAttempts: let remainingAttempts, pinCallback: let callback):
-            
             pinCallback = PINCallback(id: environment.uuidFactory(), callback: callback)
             isScanning = false
             scanAvailable = true

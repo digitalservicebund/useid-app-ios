@@ -43,3 +43,43 @@ enum EIDInteractionEvent: Equatable {
         }
     }
 }
+
+enum RedactedEIDInteractionEventError: Error, Equatable {
+    case requestCardInsertion
+    case cardInteractionComplete
+    case cardRecognized
+    case cardRemoved
+    case requestCAN
+    case requestPIN
+    case requestPINAndCAN
+    case requestPUK
+    case processCompletedSuccessfullyWithoutRedirect
+    case processCompletedSuccessfullyWithRedirect
+    case authenticationStarted
+    case requestAuthenticationRequestConfirmation
+    case authenticationSuccessful
+    case pinManagementStarted
+    case requestChangedPIN
+    case requestCANAndChangedPIN
+    
+    init(_ eIDInteractionEvent: EIDInteractionEvent) {
+        switch eIDInteractionEvent {
+        case .requestCardInsertion: self = .requestCardInsertion
+        case .cardInteractionComplete: self = .cardInteractionComplete
+        case .cardRecognized: self = .cardRecognized
+        case .cardRemoved: self = .cardRemoved
+        case .requestCAN: self = .requestCAN
+        case .requestPIN: self = .requestPIN
+        case .requestPINAndCAN: self = .requestPINAndCAN
+        case .requestPUK: self = .requestPUK
+        case .processCompletedSuccessfullyWithoutRedirect: self = .processCompletedSuccessfullyWithoutRedirect
+        case .processCompletedSuccessfullyWithRedirect: self = .processCompletedSuccessfullyWithRedirect
+        case .authenticationStarted: self = .authenticationStarted
+        case .requestAuthenticationRequestConfirmation: self = .requestAuthenticationRequestConfirmation
+        case .authenticationSuccessful: self = .authenticationSuccessful
+        case .pinManagementStarted: self = .pinManagementStarted
+        case .requestChangedPIN: self = .requestChangedPIN
+        case .requestCANAndChangedPIN: self = .requestCANAndChangedPIN
+        }
+    }
+}

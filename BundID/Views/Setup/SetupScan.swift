@@ -2,6 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 import Combine
 import Lottie
+import Sentry
 
 enum SetupScanError: Error, Equatable {
     case idCardInteraction(IDCardInteractionError)
@@ -77,6 +78,10 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
                 .cancellable(id: CancelId.self, cancelInFlight: true)
         )
     case .scanEvent(.failure(let error)):
+        if let redactedError = RedactedIDCardInteractionError(error) {
+            SentrySDK.capture(error: redactedError)
+        }
+        
         state.isScanning = false
         
         switch error {
@@ -165,6 +170,7 @@ extension SetupScanState {
             print("PUK requested, so card is blocked. Callback not implemented yet.")
             return Effect(value: .error(ScanErrorState(errorType: .cardBlocked, retry: false)))
         default:
+            SentrySDK.capture(error: RedactedEIDInteractionEventError(event))
             print("Received unexpected event.")
             return Effect(value: .error(ScanErrorState(errorType: .unexpectedEvent(event), retry: true)))
         }

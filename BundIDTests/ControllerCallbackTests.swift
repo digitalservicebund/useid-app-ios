@@ -107,7 +107,7 @@ final class ControllerCallbackTests: XCTestCase {
             let exp = expectation(description: "Expect complection")
             controllerCallback.publisher.sink { completion in
                 exp.fulfill()
-                XCTAssertEqual(completion, .failure(.processFailed(resultCode: activationResultCode, redirectURL: nil)))
+                XCTAssertEqual(completion, .failure(.processFailed(resultCode: activationResultCode, redirectURL: nil, resultMinor: nil)))
             } receiveValue: { _ in
                 XCTFail("Should not receive any value")
             }
@@ -131,7 +131,9 @@ final class ControllerCallbackTests: XCTestCase {
         
         controllerCallback.publisher.sink { completion in
             completionExpectation.fulfill()
-            XCTAssertEqual(completion, .failure(.processFailed(resultCode: .REDIRECT, redirectURL: redirectUrl)))
+            XCTAssertEqual(completion, .failure(.processFailed(resultCode: .REDIRECT,
+                                                               redirectURL: redirectUrl,
+                                                               resultMinor: minor)))
         } receiveValue: { value in
             XCTFail("Should not receive any value")
         }

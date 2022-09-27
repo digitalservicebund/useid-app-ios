@@ -71,8 +71,6 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
                 state.routes.push(.transportPIN(SetupTransportPINState()))
             case .routeAction(_, .transportPINIntro(.choosePINLetterMissing)):
                 state.routes.push(.missingPINLetter(MissingPINLetterState()))
-            case .routeAction(_, .intro(.chooseSkipSetup)):
-                print("Not implemented")
             case .routeAction(_, .transportPIN(.done(let transportPIN))):
                 state.transportPIN = transportPIN
                 state.routes.push(.personalPINIntro)
