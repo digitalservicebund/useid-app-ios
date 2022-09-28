@@ -110,4 +110,20 @@ final class ScanErrorStateTests: XCTestCase {
         XCTAssertEqual(state.boxContent?.title, L10n.ScanError.Box.title)
         XCTAssertEqual(state.boxContent?.message, L10n.ScanError.Box.body)
     }
+    
+    func testBoxWithCardBlocked() {
+        let state = ScanErrorState(errorType: .idCardInteraction(.cardBlocked), retry: false)
+        XCTAssertNil(state.boxContent)
+        
+        let cardInteractionState = ScanErrorState(errorType: .cardBlocked, retry: false)
+        XCTAssertNil(cardInteractionState.boxContent)
+    }
+    
+    func testBoxWithCardDeactivated() {
+        let state = ScanErrorState(errorType: .idCardInteraction(.cardDeactivated), retry: false)
+        XCTAssertNil(state.boxContent)
+        
+        let cardInteractionState = ScanErrorState(errorType: .cardDeactivated, retry: false)
+        XCTAssertNil(cardInteractionState.boxContent)
+    }
 }

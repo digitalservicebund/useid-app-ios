@@ -57,8 +57,14 @@ struct ScanErrorState: Equatable {
     }
     
     var boxContent: BoxContent? {
-        guard !retry else { return  nil }
-        return .init(title: L10n.ScanError.Box.title, message: L10n.ScanError.Box.body, style: .error)
+        guard !retry else { return nil}
+        
+        switch errorType {
+        case .cardDeactivated, .cardSuspended, .cardBlocked, .help, .idCardInteraction(.cardDeactivated), .idCardInteraction(.cardBlocked):
+            return nil
+        case .idCardInteraction, .unexpectedEvent:
+            return .init(title: L10n.ScanError.Box.title, message: L10n.ScanError.Box.body, style: .error)
+        }
     }
 }
 
