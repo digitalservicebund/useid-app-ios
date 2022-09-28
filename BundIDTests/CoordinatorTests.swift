@@ -11,6 +11,7 @@ final class CoordinatorTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var mockAnalyticsClient: MockAnalyticsClient!
+    var mockIssueTracker: MockIssueTracker!
     var environment: AppEnvironment!
     var uuidCount = 0
     
@@ -26,14 +27,21 @@ final class CoordinatorTests: XCTestCase {
     override func setUp() {
         scheduler = DispatchQueue.test
         mockAnalyticsClient = MockAnalyticsClient()
+        mockIssueTracker = MockIssueTracker()
         environment = AppEnvironment.mocked(uuidFactory: uuidFactory,
                                             idInteractionManager: mockIDInteractionManager,
                                             storageManager: mockStorageManager,
-                                            analytics: mockAnalyticsClient)
+                                            analytics: mockAnalyticsClient,
+                                            issueTracker: mockIssueTracker)
         
         stub(mockAnalyticsClient) {
             $0.track(view: any()).thenDoNothing()
             $0.track(event: any()).thenDoNothing()
+        }
+        
+        stub(mockIssueTracker) {
+            $0.addBreadcrumb(crumb: any()).thenDoNothing()
+            $0.capture(error: any()).thenDoNothing()
         }
     }
     

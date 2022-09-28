@@ -44,7 +44,7 @@ enum EIDInteractionEvent: Equatable {
     }
 }
 
-enum RedactedEIDInteractionEventError: Error, Equatable {
+enum RedactedEIDInteractionEventError: CustomNSError {
     case requestCardInsertion
     case cardInteractionComplete
     case cardRecognized
@@ -81,5 +81,9 @@ enum RedactedEIDInteractionEventError: Error, Equatable {
         case .requestChangedPIN: self = .requestChangedPIN
         case .requestCANAndChangedPIN: self = .requestCANAndChangedPIN
         }
+    }
+    
+    var errorUserInfo: [String: Any] {
+        [NSDebugDescriptionErrorKey: "\(self)"]
     }
 }

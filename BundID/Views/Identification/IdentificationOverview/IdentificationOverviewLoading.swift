@@ -34,9 +34,7 @@ let identificationOverviewLoadingReducer = Reducer<IdentificationOverviewLoading
     case .idInteractionEvent(.success(.requestAuthenticationRequestConfirmation(let request, let handler))):
         return Effect(value: .done(request, IdentifiableCallback(id: environment.uuidFactory(), callback: handler)))
     case .idInteractionEvent(.failure(let error)):
-        if let redacted = RedactedIDCardInteractionError(error) {
-            SentrySDK.capture(error: redacted)
-        }
+        RedactedIDCardInteractionError(error).flatMap(environment.issueTracker.capture(error:))
         return Effect(value: .failure(IdentifiableError(error)))
     case .idInteractionEvent:
         return .none

@@ -9,7 +9,7 @@ enum IDCardInteractionError: Error, Equatable {
     case processFailed(resultCode: ActivationResultCode, redirectURL: String?, resultMinor: String?)
 }
 
-enum RedactedIDCardInteractionError: Error, Equatable {
+enum RedactedIDCardInteractionError: CustomNSError, Hashable {
     case frameworkError
     case unexpectedReadAttribute
     case processFailed(resultCode: ActivationResultCode, resultMinor: String?)
@@ -24,6 +24,15 @@ enum RedactedIDCardInteractionError: Error, Equatable {
             self = .processFailed(resultCode: resultCode, resultMinor: resultMinor)
         default:
             return nil
+        }
+    }
+    
+    var errorUserInfo: [String: Any] {
+        switch self {
+        case .frameworkError, .unexpectedReadAttribute:
+            return [NSDebugDescriptionErrorKey: "\(self)"]
+        case .processFailed(let resultCode, let resultMinor):
+            return [NSDebugDescriptionErrorKey: "processFailed(resultCode: \(resultCode.rawValue), resultMinor: \(String(describing: resultMinor))"]
         }
     }
 }

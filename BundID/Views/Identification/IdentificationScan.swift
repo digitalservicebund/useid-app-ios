@@ -66,9 +66,7 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
     case .idInteractionEvent(.success(let event)):
         return state.handle(event: event, environment: environment)
     case .idInteractionEvent(.failure(let error)):
-        if let redactedError = RedactedIDCardInteractionError(error) {
-            SentrySDK.capture(error: redactedError)
-        }
+        RedactedIDCardInteractionError(error).flatMap(environment.issueTracker.capture(error:))
         
         state.isScanning = false
         switch error {

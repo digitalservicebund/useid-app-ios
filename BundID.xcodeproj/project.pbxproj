@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D201402728C5E6FD0002A054 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = D201402628C5E6FD0002A054 /* Box.swift */; };
+		D20EE42628E421AE0063537E /* IssueTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20EE42528E421AE0063537E /* IssueTracker.swift */; };
 		D21E682028BCEB0A0055EBFE /* Assets+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21E681F28BCEB0A0055EBFE /* Assets+Generated.swift */; };
 		D245421828CB9E68002600C9 /* IdentificationOverviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D245421728CB9E68002600C9 /* IdentificationOverviewTests.swift */; };
 		D28D27FF28B7A91B008DA310 /* MissingPINLetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */; };
@@ -164,6 +165,7 @@
 
 /* Begin PBXFileReference section */
 		D201402628C5E6FD0002A054 /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
+		D20EE42528E421AE0063537E /* IssueTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTracker.swift; sourceTree = "<group>"; };
 		D21E681F28BCEB0A0055EBFE /* Assets+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Assets+Generated.swift"; sourceTree = "<group>"; };
 		D245421728CB9E68002600C9 /* IdentificationOverviewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewTests.swift; sourceTree = "<group>"; };
 		D28BC72228BE0A44003C012C /* Analytics */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Analytics; sourceTree = "<group>"; };
@@ -387,16 +389,17 @@
 			isa = PBXGroup;
 			children = (
 				E1AAACE728350FD500A51183 /* Array+Safe.swift */,
-				E1AAACEA2836668200A51183 /* ShakeEffect.swift */,
-				E16708BB283D824D001A1637 /* Scheduler+Animation.swift */,
-				E16708BD283E666A001A1637 /* Store+Empty.swift */,
-				E12CB309284A2C700039FD56 /* InteractiveDismissableView.swift */,
-				E1F39DD7285791BD00D8D907 /* IdentifiableError.swift */,
-				E1EFB5C52858EB2A005C38C6 /* Shape+Fill.swift */,
-				E1FFDF0B2875C7E9006DFE03 /* UUID+Zero.swift */,
-				E1F2F3D628770F28004C8D4B /* IdentifiableCallback.swift */,
 				E13F9E4028882A9C0088E955 /* Bundle+Version.swift */,
+				E1F2F3D628770F28004C8D4B /* IdentifiableCallback.swift */,
+				E1F39DD7285791BD00D8D907 /* IdentifiableError.swift */,
+				E12CB309284A2C700039FD56 /* InteractiveDismissableView.swift */,
+				D20EE42528E421AE0063537E /* IssueTracker.swift */,
+				E16708BB283D824D001A1637 /* Scheduler+Animation.swift */,
+				E1AAACEA2836668200A51183 /* ShakeEffect.swift */,
+				E1EFB5C52858EB2A005C38C6 /* Shape+Fill.swift */,
 				E14C21B528B90BF500192338 /* StorageKey.swift */,
+				E16708BD283E666A001A1637 /* Store+Empty.swift */,
+				E1FFDF0B2875C7E9006DFE03 /* UUID+Zero.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -965,6 +968,7 @@
 				E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */,
 				E144EBD828C63A4D009B4900 /* AboutView.swift in Sources */,
 				E1F39DD8285791BD00D8D907 /* IdentifiableError.swift in Sources */,
+				D20EE42628E421AE0063537E /* IssueTracker.swift in Sources */,
 				E1EFB5C8285A365E005C38C6 /* IdentificationAbout.swift in Sources */,
 				F43622A72850D6C9008AEBB9 /* ScanError.swift in Sources */,
 				E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */,

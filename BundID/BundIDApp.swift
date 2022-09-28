@@ -53,6 +53,7 @@ struct BundIDApp: App {
                 storageManager: storageManager,
                 analytics: MatomoAnalyticsClient(siteId: "2", baseURL: matomoUrl),
                 urlOpener: { UIApplication.shared.open($0) },
+                issueTracker: SentryIssueTracker(),
                 debugIDInteractionManager: idInteractionManager
             )
         } else {
@@ -65,6 +66,7 @@ struct BundIDApp: App {
                 storageManager: storageManager,
                 analytics: MatomoAnalyticsClient(siteId: "2", baseURL: matomoUrl),
                 urlOpener: { UIApplication.shared.open($0) },
+                issueTracker: SentryIssueTracker(),
                 debugIDInteractionManager: DebugIDInteractionManager()
             )
         }
@@ -77,7 +79,8 @@ struct BundIDApp: App {
             idInteractionManager: idInteractionManager,
             storageManager: storageManager,
             analytics: MatomoAnalyticsClient(siteId: "3", baseURL: matomoUrl),
-            urlOpener: { UIApplication.shared.open($0) }
+            urlOpener: { UIApplication.shared.open($0) },
+            issueTracker: SentryIssueTracker()
         )
 #endif
         

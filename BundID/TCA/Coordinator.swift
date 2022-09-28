@@ -71,13 +71,9 @@ private let trackingReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnv
     case .routeAction, .onAppear:
         let routes = state.routes
         
-        let breadcrumb = Breadcrumb()
-        breadcrumb.level = .info
-        breadcrumb.category = routes.route.joined(separator: "/")
-        SentrySDK.addBreadcrumb(crumb: breadcrumb)
-        
         return .fireAndForget {
             environment.analytics.track(view: routes)
+            environment.issueTracker.addViewBreadcrumb(view: routes)
         }
     case .didEnterBackground:
         return .fireAndForget {

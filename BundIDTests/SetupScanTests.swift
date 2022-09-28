@@ -11,19 +11,27 @@ class SetupScanTests: XCTestCase {
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var environment: AppEnvironment!
     var mockAnalyticsClient: MockAnalyticsClient!
+    var mockIssueTracker: MockIssueTracker!
     
     var mockIDInteractionManager = MockIDInteractionManagerType()
     
     override func setUp() {
         mockAnalyticsClient = MockAnalyticsClient()
+        mockIssueTracker = MockIssueTracker()
         scheduler = DispatchQueue.test
         environment = AppEnvironment.mocked(mainQueue: scheduler.eraseToAnyScheduler(),
                                             idInteractionManager: mockIDInteractionManager,
-                                            analytics: mockAnalyticsClient)
+                                            analytics: mockAnalyticsClient,
+                                            issueTracker: mockIssueTracker)
         
         stub(mockAnalyticsClient) {
             $0.track(view: any()).thenDoNothing()
             $0.track(event: any()).thenDoNothing()
+        }
+        
+        stub(mockIssueTracker) {
+            $0.addBreadcrumb(crumb: any()).thenDoNothing()
+            $0.capture(error: any()).thenDoNothing()
         }
     }
     

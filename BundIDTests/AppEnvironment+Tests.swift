@@ -11,7 +11,8 @@ extension AppEnvironment {
                        storageManager: StorageManagerType? = nil,
                        analytics: AnalyticsClient? = nil,
                        debugIDInteractionManager: DebugIDInteractionManager? = nil,
-                       urlOpener: @escaping (URL) -> Void = { _ in }) -> AppEnvironment {
+                       urlOpener: @escaping (URL) -> Void = { _ in },
+                       issueTracker: IssueTracker? = nil) -> AppEnvironment {
         let queue = mainQueue ?? DispatchQueue.test.eraseToAnyScheduler()
         return AppEnvironment(mainQueue: queue,
                               uuidFactory: uuidFactory ?? UUID.init,
@@ -19,6 +20,7 @@ extension AppEnvironment {
                               storageManager: storageManager ?? StorageManager(),
                               analytics: analytics ?? MockAnalyticsClient(),
                               urlOpener: urlOpener,
+                              issueTracker: issueTracker ?? MockIssueTracker(),
                               debugIDInteractionManager: debugIDInteractionManager ?? DebugIDInteractionManager())
     }
 }

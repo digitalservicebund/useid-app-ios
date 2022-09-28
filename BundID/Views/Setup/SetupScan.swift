@@ -78,10 +78,7 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
                 .cancellable(id: CancelId.self, cancelInFlight: true)
         )
     case .scanEvent(.failure(let error)):
-        if let redactedError = RedactedIDCardInteractionError(error) {
-            SentrySDK.capture(error: redactedError)
-        }
-        
+        RedactedIDCardInteractionError(error).flatMap(environment.issueTracker.capture(error:))
         state.isScanning = false
         
         switch error {
@@ -170,7 +167,7 @@ extension SetupScanState {
             print("PUK requested, so card is blocked. Callback not implemented yet.")
             return Effect(value: .error(ScanErrorState(errorType: .cardBlocked, retry: false)))
         default:
-            SentrySDK.capture(error: RedactedEIDInteractionEventError(event))
+            environment.issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             print("Received unexpected event.")
             return Effect(value: .error(ScanErrorState(errorType: .unexpectedEvent(event), retry: true)))
         }

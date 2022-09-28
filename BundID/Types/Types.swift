@@ -3,6 +3,7 @@
 import Foundation
 import OpenEcard
 import Combine
+import Sentry
 
 protocol IDInteractionManagerType {
     func identify(tokenURL: String, nfcMessages: NFCMessages) -> EIDInteractionPublisher
@@ -25,4 +26,9 @@ protocol ContextManagerType: ContextManagerProtocol {
 protocol StorageManagerType {
     var setupCompleted: Bool { get }
     func updateSetupCompleted(_ newValue: Bool)
+}
+
+protocol IssueTracker {
+    func addBreadcrumb(crumb: Breadcrumb)
+    func capture(error: CustomNSError)
 }

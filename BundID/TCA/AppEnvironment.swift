@@ -10,6 +10,7 @@ struct AppEnvironment {
     let storageManager: StorageManagerType
     let analytics: AnalyticsClient
     let urlOpener: (URL) -> Void
+    let issueTracker: IssueTracker
     
 #if PREVIEW
     let debugIDInteractionManager: DebugIDInteractionManager
@@ -21,6 +22,7 @@ struct AppEnvironment {
         storageManager: StorageManager(),
         analytics: MatomoAnalyticsClient(siteId: "1", baseURL: URL(string: "https://localhost/matomo.php")!),
         urlOpener: { _ in },
+        issueTracker: SentryIssueTracker(),
         debugIDInteractionManager: DebugIDInteractionManager()
     )
 #else
@@ -30,7 +32,8 @@ struct AppEnvironment {
         idInteractionManager: MockIDInteractionManager(queue: DispatchQueue.main.eraseToAnyScheduler()),
         storageManager: StorageManager(),
         analytics: MatomoAnalyticsClient(siteId: "1", baseURL: URL(string: "https://localhost/matomo.php")!),
-        urlOpener: { _ in }
+        urlOpener: { _ in },
+        issueTracker: SentryIssueTracker()
     )
 #endif
 }
