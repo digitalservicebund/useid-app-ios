@@ -92,7 +92,7 @@
 "identification_confirmEnd_message" = "Möchten Sie das Ausweisen beenden?";
 "identification_confirmEnd_title" = "Ausweisen beenden?";
 "identification_done_body" = "Machen Sie weiter bei »%@«.";
-"identification_done_continue" = "Weiter zum Anbieter";
+"identification_done_continue" = "Weiter zum Diensteanbieter";
 "identification_done_title" = "Sie haben sich erfolgreich ausgewiesen.";
 "identification_end" = "Abbrechen";
 "identification_fetchMetadata_loadingData" = "Daten werden geladen";
@@ -135,7 +135,7 @@
 "scanError_cardUnreadable_body" = "Folgende deutsche Dokumente bieten die Funktion an: Personalausweis, elektronischer Aufenthaltstitel und die eID-Karte für Bürgerinnen und Bürger:innen:innen der Europäischen Union und des Europäischen Wirtschaftsraums.\n\nWenn Sie eines der oben genannten Dokumente benutzen und das Problem weiter auftritt, versuchen Sie diese Schritte:\n\n- Entfernen Sie die Karte von Ihrem Smartphone und legen Sie sie erneut an das Smartphone.\n- Wenn Sie eine sehr dicke Handyhülle haben, versuchen Sie, die Hülle zu entfernen.\n\n- Stellen Sie sicher, dass Sie mit dem Internet verbunden sind.";
 "scanError_cardUnreadable_title" = "Ihr Ausweis wurde nicht erkannt.";
 "scanError_close" = "Schließen";
-"scanError_redirect" = "Zurück zum Anbieter";
+"scanError_redirect" = "Zurück zum Diensteanbieter";
 "scanError_box_title" = "Ausweisprozess erneut starten";
 "scanError_box_body" = "Aufgrund eines Fehlers müssen Sie den Ausweisprozess erneut starten.";
 "scanError_unknown_body" = "Ein unbekannter Fehler ist aufgetreten.";
