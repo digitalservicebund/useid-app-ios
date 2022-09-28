@@ -69,7 +69,7 @@
 "general_ok" = "OK";
 "helpNFC_body" = "NFC stands for Near Field Communication. The technology enables the contact-free exchange of data over very short distances. It is also used, for example, when paying with a smartphone at the supermarket checkout.";
 "helpNFC_title" = "How does the NFC technology work?";
-"home_header_infoText" = "Open the provider's website on your smartphone and press the button \"Identify with BundesIdent\".";
+"home_header_infoText" = "Open the provider's website on your smartphone and press the button \"Mit BundesIdent ausweisen\".";
 "home_header_title" = "Identify";
 "home_more_accessibilityStatement" = "Accessibility Statement";
 "home_more_imprint" = "Imprint";
