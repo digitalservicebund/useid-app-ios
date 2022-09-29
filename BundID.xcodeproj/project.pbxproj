@@ -332,6 +332,87 @@
 			name = Packages;
 			sourceTree = "<group>";
 		};
+		D2D2DA7928E5A9B600240CDF /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		D2D2DA7A28E5A9C500240CDF /* OpenECard */ = {
+			isa = PBXGroup;
+			children = (
+				E12B424728D8AB440032D65D /* ControllerCallbackTests.swift */,
+			);
+			path = OpenECard;
+			sourceTree = "<group>";
+		};
+		D2D2DA7B28E5A9D500240CDF /* TCA */ = {
+			isa = PBXGroup;
+			children = (
+				E13F9E3A2886F3420088E955 /* IdentificationCoordinatorTests.swift */,
+				E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */,
+				E135D6A928B7696400A32862 /* SetupCoordinatorTests.swift */,
+				E13F9E44288853950088E955 /* CoordinatorTests.swift */,
+			);
+			path = TCA;
+			sourceTree = "<group>";
+		};
+		D2D2DA7C28E5AA2300240CDF /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		D2D2DA7D28E5B5BD00240CDF /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D2D2DA8128E5B6EF00240CDF /* SupplementaryViews */,
+				D2D2DA8028E5B6D400240CDF /* Setup */,
+				D2D2DA7E28E5B5C800240CDF /* Identification */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D2D2DA7E28E5B5C800240CDF /* Identification */ = {
+			isa = PBXGroup;
+			children = (
+				D2D2DA7F28E5B5E700240CDF /* IdentificationOverview */,
+				D29E53B828CF14FC0029AB4D /* IdentificationDoneTests.swift */,
+				E13F9E3E288804140088E955 /* IdentificationScanTests.swift */,
+			);
+			path = Identification;
+			sourceTree = "<group>";
+		};
+		D2D2DA7F28E5B5E700240CDF /* IdentificationOverview */ = {
+			isa = PBXGroup;
+			children = (
+				D245421728CB9E68002600C9 /* IdentificationOverviewTests.swift */,
+			);
+			path = IdentificationOverview;
+			sourceTree = "<group>";
+		};
+		D2D2DA8028E5B6D400240CDF /* Setup */ = {
+			isa = PBXGroup;
+			children = (
+				D2C5914F28CB86570048D379 /* MissingPINLetterTests.swift */,
+				E1AAACF228378C0E00A51183 /* SetupPersonalPINTests.swift */,
+				E149B15B2840F636002C1139 /* SetupScanTests.swift */,
+			);
+			path = Setup;
+			sourceTree = "<group>";
+		};
+		D2D2DA8128E5B6EF00240CDF /* SupplementaryViews */ = {
+			isa = PBXGroup;
+			children = (
+				D2FD741028DDF63000C7C5E7 /* ScanErrorTests.swift */,
+			);
+			path = SupplementaryViews;
+			sourceTree = "<group>";
+		};
 		E13925BD28410FE200161F5C /* Generated */ = {
 			isa = PBXGroup;
 			children = (
@@ -460,24 +541,15 @@
 		E1AAACF128378C0E00A51183 /* BundIDTests */ = {
 			isa = PBXGroup;
 			children = (
-				E14C21B328B8FB8F00192338 /* AppEnvironment+Tests.swift */,
-				D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */,
-				E12B424728D8AB440032D65D /* ControllerCallbackTests.swift */,
-				E13F9E44288853950088E955 /* CoordinatorTests.swift */,
 				E13925BD28410FE200161F5C /* Generated */,
-				E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */,
-				E13F9E3A2886F3420088E955 /* IdentificationCoordinatorTests.swift */,
-				D29E53B828CF14FC0029AB4D /* IdentificationDoneTests.swift */,
-				D245421728CB9E68002600C9 /* IdentificationOverviewTests.swift */,
-				E13F9E3E288804140088E955 /* IdentificationScanTests.swift */,
-				E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */,
-				E135D6AB28B76A3500A32862 /* Matchable+UseID.swift */,
-				D2C5914F28CB86570048D379 /* MissingPINLetterTests.swift */,
-				D2FD741028DDF63000C7C5E7 /* ScanErrorTests.swift */,
-				E135D6A928B7696400A32862 /* SetupCoordinatorTests.swift */,
-				E1AAACF228378C0E00A51183 /* SetupPersonalPINTests.swift */,
-				E149B15B2840F636002C1139 /* SetupScanTests.swift */,
+				D2D2DA7928E5A9B600240CDF /* Helpers */,
+				D2D2DA7C28E5AA2300240CDF /* Managers */,
+				D2D2DA7A28E5A9C500240CDF /* OpenECard */,
+				D2D2DA7B28E5A9D500240CDF /* TCA */,
+				D2D2DA7D28E5B5BD00240CDF /* Views */,
+				E14C21B328B8FB8F00192338 /* AppEnvironment+Tests.swift */,
 				E13F9E3C288802500088E955 /* UUID+InitFromNumber.swift */,
+				E135D6AB28B76A3500A32862 /* Matchable+UseID.swift */,
 			);
 			path = BundIDTests;
 			sourceTree = "<group>";
