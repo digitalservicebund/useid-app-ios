@@ -38,7 +38,7 @@
 "firstTimeUser_intro_title" = "Haben Sie Ihren Online-Ausweis bereits eingerichtet?";
 "firstTimeUser_intro_skipSetup" = "Bereits eingerichtet";
 "firstTimeUser_missingPINLetter_body" = "Wir arbeiten noch an dieser Funktion.\n\nWeitere Informationen über den PIN-Rücksetzbrief finden Sie unter\n\n**[www.pin-ruecksetzbrief-bestellen.de ↗](https://www.pin-ruecksetzbrief-bestellen.de)**";
-"firstTimeUser_missingPINLetter_title" = "PIN-Rücksetzbrief bestellen";
+"firstTimeUser_missingPINLetter_title" = "PIN-Rücksetzbrief bestellen.";
 "firstTimeUser_personalPIN_body" = "Merken Sie sich Ihre persönliche Ausweis-PIN gut. Sie benötigen diese jedes Mal, wenn Sie die Online-Ausweisfunktion in Zukunft nutzen.";
 "firstTimeUser_personalPIN_confirmation" = "PIN zum Bestätigen wiederholen";
 "firstTimeUser_personalPIN_error_mismatch_body" = "Versuchen Sie es erneut.";
@@ -69,7 +69,7 @@
 "general_ok" = "OK";
 "helpNFC_body" = "NFC steht für Near Field Communication. Die Technik ermöglicht den kontaktlosen Austausch von Daten über sehr kurze Strecken. Sie wird bspw. auch beim Bezahlen mit dem Smartphone an der Supermarktkasse verwendet.";
 "helpNFC_title" = "Wie funktioniert die NFC-Technologie?";
-"home_header_infoText" = "Öffnen Sie auf ihrem Smartphone die Internetseite vom Diensteanbieter und drücken Sie auf den Button »Mit BundesIdent ausweisen«";
+"home_header_infoText" = "Öffnen Sie auf Ihrem Smartphone die Internetseite vom Diensteanbieter und drücken Sie auf den Button »Mit BundesIdent ausweisen«";
 "home_header_title" = "Ausweisen";
 "home_more_accessibilityStatement" = "Barrierefreiheitserklärung";
 "home_more_imprint" = "Impressum";
