@@ -1,7 +1,6 @@
 import SwiftUI
 import ComposableArchitecture
 import Combine
-import Lottie
 import Sentry
 
 enum SetupScanError: Error, Equatable {
@@ -10,13 +9,10 @@ enum SetupScanError: Error, Equatable {
 }
 
 struct SetupScanState: Equatable {
-    var isScanning: Bool = false
-    var scanAvailable: Bool = true
-    var showProgressCaption: Bool = false
     var transportPIN: String
     var newPIN: String
+    var shared: SharedScanState = SharedScanState()
     var remainingAttempts: Int?
-    var attempt = 0
     var alert: AlertState<SetupScanAction>?
 #if PREVIEW
     var availableDebugActions: [ChangePINDebugSequence] = []
@@ -25,15 +21,13 @@ struct SetupScanState: Equatable {
 
 enum SetupScanAction: Equatable {
     case onAppear
-    case startScan
+    case shared(SharedScanAction)
     case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case wrongTransportPIN(remainingAttempts: Int)
     case error(ScanErrorState)
     case cancelScan
     case scannedSuccessfully
-    case showNFCInfo
     case dismissAlert
-    case showHelp
 #if PREVIEW
     case runDebugSequence(ChangePINDebugSequence)
 #endif
@@ -51,9 +45,11 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
 #endif
     case .onAppear:
         return .none
-    case .startScan:
-        guard !state.isScanning else { return .none }
-        state.isScanning = true
+    case .shared(.startScan):
+        state.shared.showInstructions = false
+        
+        guard !state.shared.isScanning else { return .none }
+        state.shared.isScanning = true
         
         let publisher: EIDInteractionPublisher
 #if PREVIEW
@@ -79,34 +75,34 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         )
     case .scanEvent(.failure(let error)):
         RedactedIDCardInteractionError(error).flatMap(environment.issueTracker.capture(error:))
-        state.isScanning = false
+        state.shared.isScanning = false
         
         switch error {
         case .cardDeactivated:
-            state.scanAvailable = false
-            return Effect(value: .error(ScanErrorState(errorType: .cardDeactivated, retry: state.scanAvailable)))
+            state.shared.scanAvailable = false
+            return Effect(value: .error(ScanErrorState(errorType: .cardDeactivated, retry: state.shared.scanAvailable)))
         case .cardBlocked:
-            state.scanAvailable = false
-            return Effect(value: .error(ScanErrorState(errorType: .cardBlocked, retry: state.scanAvailable)))
+            state.shared.scanAvailable = false
+            return Effect(value: .error(ScanErrorState(errorType: .cardBlocked, retry: state.shared.scanAvailable)))
         default:
-            state.scanAvailable = true
-            return Effect(value: .error(ScanErrorState(errorType: .idCardInteraction(error), retry: state.scanAvailable)))
+            state.shared.scanAvailable = true
+            return Effect(value: .error(ScanErrorState(errorType: .idCardInteraction(error), retry: state.shared.scanAvailable)))
         }
     case .scanEvent(.success(let event)):
         return state.handle(event: event, environment: environment)
     case .cancelScan:
-        state.isScanning = false
+        state.shared.isScanning = false
         return .cancel(id: CancelId.self)
     case .error:
-        state.isScanning = false
+        state.shared.isScanning = false
         return .cancel(id: CancelId.self)
     case .wrongTransportPIN:
-        state.isScanning = false
+        state.shared.isScanning = false
         return .cancel(id: CancelId.self)
     case .scannedSuccessfully:
         environment.storageManager.updateSetupCompleted(true)
         return .cancel(id: CancelId.self)
-    case .showNFCInfo:
+    case .shared(.showNFCInfo):
         state.alert = AlertState(title: TextState(L10n.HelpNFC.title),
                                  message: TextState(L10n.HelpNFC.body),
                                  dismissButton: .cancel(TextState(L10n.General.ok),
@@ -115,7 +111,7 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
                            action: "alertShown",
                            name: "NFCInfo",
                            analytics: environment.analytics)
-    case .showHelp:
+    case .shared(.showHelp):
         return .none
     case .dismissAlert:
         state.alert = nil
@@ -128,18 +124,19 @@ extension SetupScanState {
         switch event {
         case .authenticationStarted:
             print("Authentication started")
-            isScanning = true
+            shared.isScanning = true
         case .requestCardInsertion(let messageCallback):
-            showProgressCaption = false
-            isScanning = true
+            shared.showProgressCaption = nil
+            shared.isScanning = true
             messageCallback(L10n.FirstTimeUser.Scan.scanningCard)
         case .cardInteractionComplete:
             print("Card interaction complete.")
         case .cardRecognized:
             print("Card recognized.")
-            isScanning = true
+            shared.isScanning = true
         case .cardRemoved:
-            showProgressCaption = true
+            shared.showProgressCaption = ProgressCaption(title: L10n.FirstTimeUser.Scan.Progress.title,
+                                                         body: L10n.FirstTimeUser.Scan.Progress.body)
             print("Card removed.")
         case .processCompletedSuccessfullyWithoutRedirect:
             return Effect(value: .scannedSuccessfully)
@@ -180,65 +177,56 @@ struct SetupScan: View {
     
     var store: Store<SetupScanState, SetupScanAction>
     
+    init(store: Store<SetupScanState, SetupScanAction>) {
+        self.store = store
+    }
+    
     var body: some View {
-        WithViewStore(store) { viewStore in
-            VStack(alignment: .leading, spacing: 0) {
-                ScrollView {
-                    LottieView(name: Asset.animationIdScan.name,
-                               backgroundColor: Color(0xEBEFF2),
-                               accessiblityLabel: L10n.Scan.animationAccessibilityLabel)
-                        .aspectRatio(540.0 / 367.0, contentMode: .fit)
-                    
-                    if viewStore.isScanning {
-                        VStack {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: Color.blue900))
-                                .scaleEffect(3)
-                                .frame(maxWidth: .infinity)
-                                .padding(50)
-                            if viewStore.showProgressCaption {
-                                VStack(spacing: 24) {
-                                    Text(L10n.FirstTimeUser.Scan.Progress.title)
-                                        .font(.bundTitle)
-                                        .foregroundColor(.blackish)
-                                    Text(L10n.FirstTimeUser.Scan.Progress.body)
-                                        .font(.bundBody)
-                                        .foregroundColor(.blackish)
-                                }
-                                .padding(.bottom, 50)
-                            }
-                        }
-                    } else {
-                        ScanBody(title: L10n.FirstTimeUser.Scan.title,
-                                 message: L10n.FirstTimeUser.Scan.body,
-                                 buttonTitle: L10n.FirstTimeUser.Scan.scan,
-                                 buttonTapped: { viewStore.send(.startScan) },
-                                 nfcInfoTapped: { viewStore.send(.showNFCInfo) },
-                                 helpTapped: { viewStore.send(.showHelp) })
-                        .disabled(!viewStore.scanAvailable)
-                    }
-                }
-            }.onChange(of: viewStore.state.attempt, perform: { _ in
-                viewStore.send(.startScan)
-            })
+        SharedScan(store: store.scope(state: \.shared, action: SetupScanAction.shared),
+                   instructionsTitle: L10n.FirstTimeUser.ScanInstructions.title,
+                   instructionsBody: L10n.FirstTimeUser.ScanInstructions.body,
+                   instructionsScanButtonTitle: L10n.FirstTimeUser.Scan.scan,
+                   scanTitle: L10n.FirstTimeUser.Scan.title,
+                   scanBody: L10n.FirstTimeUser.Scan.body,
+                   scanButton: L10n.FirstTimeUser.Scan.scan)
             .onAppear {
-                viewStore.send(.onAppear)
+                ViewStore(store).send(.onAppear)
             }
 #if PREVIEW
             .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: SetupScanAction.runDebugSequence)
 #endif
-        }
-        .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
+            .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
     }
 }
 
 struct SetupScan_Previews: PreviewProvider {
-    static var previews: some View {
-        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
-        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
-        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
-        NavigationView {
-            SetupScan(store: Store(initialState: SetupScanState(isScanning: true, showProgressCaption: false, transportPIN: "12345", newPIN: "123456"), reducer: .empty, environment: AppEnvironment.preview))
+    
+    static var previewReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> { state, action, _ in
+        switch action {
+        case .shared(.startScan):
+            state.shared.showInstructions.toggle()
+            state.shared.isScanning.toggle()
+            return .none
+        default:
+            return .none
         }
+    }
+    
+    static var previews: some View {
+        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"), reducer: previewReducer, environment: AppEnvironment.preview))
+            .previewDisplayName("Instructions")
+        NavigationView {
+            SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345",
+                                                                newPIN: "123456",
+                                                                shared: SharedScanState(isScanning: true,
+                                                                                        showProgressCaption: ProgressCaption(title: L10n.FirstTimeUser.Scan.Progress.title,
+                                                                                                                             body: L10n.FirstTimeUser.Scan.Progress.body),
+                                                                                        showInstructions: false)),
+                                   reducer: .empty,
+                                   environment: AppEnvironment.preview))
+            .previewDisplayName("Scanning")
+        }
+        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456", shared: SharedScanState(showInstructions: false)), reducer: previewReducer, environment: AppEnvironment.preview))
+            .previewDisplayName("Rescan")
     }
 }

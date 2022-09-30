@@ -192,7 +192,7 @@ class IdentificationCoordinatorTests: XCTestCase {
             guard case .scan(var scanState) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
             $0.attempt += 1
             $0.pin = "112233"
-            scanState.attempt = $0.attempt
+            scanState.shared.attempt = $0.attempt
             scanState.pin = $0.pin!
             $0.routes = [.root(.scan(scanState))]
         }

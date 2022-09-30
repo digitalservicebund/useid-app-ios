@@ -84,8 +84,9 @@ class SetupScanTests: XCTestCase {
             }
         }
         
-        store.send(.startScan) {
-            $0.isScanning = true
+        store.send(.shared(.startScan)) {
+            $0.shared.isScanning = true
+            $0.shared.showInstructions = false
         }
         
         scheduler.advance()
@@ -100,10 +101,11 @@ class SetupScanTests: XCTestCase {
         }
         
         store.receive(.scanEvent(.success(.cardRemoved))) {
-            $0.showProgressCaption = true
+            $0.shared.showProgressCaption = ProgressCaption(title: L10n.FirstTimeUser.Scan.Progress.title,
+                                                            body: L10n.FirstTimeUser.Scan.Progress.body)
         }
         store.receive(.scanEvent(.success(.requestCardInsertion(cardInsertionCallback)))) {
-            $0.showProgressCaption = false
+            $0.shared.showProgressCaption = nil
         }
         store.receive(.scanEvent(.success(.cardRecognized)))
         store.receive(.scanEvent(.success(.cardInteractionComplete)))
@@ -132,14 +134,15 @@ class SetupScanTests: XCTestCase {
             }
         }
         
-        store.send(.startScan) {
-            $0.isScanning = true
+        store.send(.shared(.startScan)) {
+            $0.shared.isScanning = true
+            $0.shared.showInstructions = false
         }
         
         scheduler.advance()
         
         store.receive(.scanEvent(.failure(.frameworkError(message: "Fail")))) {
-            $0.isScanning = false
+            $0.shared.isScanning = false
         }
         
         store.receive(.error(ScanErrorState(errorType: .idCardInteraction(.frameworkError(message: "Fail")), retry: true)))
@@ -150,7 +153,7 @@ class SetupScanTests: XCTestCase {
                               reducer: setupScanReducer,
                               environment: environment)
         
-        store.send(.showNFCInfo) {
+        store.send(.shared(.showNFCInfo)) {
             $0.alert = AlertState(title: TextState(L10n.HelpNFC.title),
                                   message: TextState(L10n.HelpNFC.body),
                                   dismissButton: .cancel(TextState(L10n.General.ok),
@@ -178,8 +181,9 @@ class SetupScanTests: XCTestCase {
         }
         
         
-        store.send(.startScan) {
-            $0.isScanning = true
+        store.send(.shared(.startScan)) {
+            $0.shared.isScanning = true
+            $0.shared.showInstructions = false
         }
         
         scheduler.advance()

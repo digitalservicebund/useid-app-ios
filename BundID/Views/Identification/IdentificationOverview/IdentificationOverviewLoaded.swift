@@ -38,6 +38,7 @@ struct IdentificationOverviewLoaded: View {
                     VStack(alignment: .leading, spacing: 0) {
                         HeaderView(title: L10n.Identification.AttributeConsent.title(viewStore.request.subject),
                                    message: L10n.Identification.AttributeConsent.body)
+                        .padding(.horizontal)
                         
                         attributesBox
                         

@@ -26,7 +26,7 @@ struct SetupCoordinatorState: Equatable, IndexedRouterState {
                     switch setupScreenState {
                     case .scan(var scanState):
                         scanState.transportPIN = transportPIN
-                        scanState.attempt = attempt
+                        scanState.shared.attempt = attempt
                         return .scan(scanState)
                     case .intro(var state):
                         state.tokenURL = tokenURL
@@ -82,7 +82,7 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
                 state.routes.push(.done(SetupDoneState(tokenURL: state.tokenURL)))
             case .routeAction(_, action: .scan(.error(let errorState))):
                 state.routes.presentSheet(.error(errorState))
-            case .routeAction(_, action: .scan(.showHelp)):
+            case .routeAction(_, action: .scan(.shared(.showHelp))):
                 state.routes.presentSheet(.error(ScanErrorState(errorType: .help, retry: true)))
             case .routeAction(_, action: .error(.retry)):
                 state.routes.dismiss()

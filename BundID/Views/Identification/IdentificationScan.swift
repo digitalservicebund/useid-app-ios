@@ -14,31 +14,29 @@ struct IdentificationScanState: Equatable, IDInteractionHandler {
     
     var pin: String
     var pinCallback: PINCallback
-    var attempt = 0
-    var isScanning: Bool = false
-    var scanAvailable: Bool = true
+    
+    var shared: SharedScanState = SharedScanState()
+    
     var authenticationSuccessful = false
-    var nfcInfoAlert: AlertState<IdentificationScanAction>?
+    var alert: AlertState<IdentificationScanAction>?
 #if PREVIEW
     var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
     
     func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationScanAction? {
-        return .idInteractionEvent(event)
+        return .scanEvent(event)
     }
 }
 
 enum IdentificationScanAction: Equatable {
     case onAppear
-    case startScan
-    case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
+    case shared(SharedScanAction)
+    case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case wrongPIN(remainingAttempts: Int)
     case identifiedSuccessfully(redirectURL: URL)
     case error(ScanErrorState)
     case end
-    case showNFCInfo
-    case dismissNFCInfo
-    case showHelp
+    case dismissAlert
 #if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -46,21 +44,23 @@ enum IdentificationScanAction: Equatable {
 
 let identificationScanReducer = Reducer<IdentificationScanState, IdentificationScanAction, AppEnvironment> { state, action, environment in
     switch action {
-    case .startScan:
-        guard !state.isScanning else { return .none }
+    case .shared(.startScan):
+        state.shared.showInstructions = false
+        
+        guard !state.shared.isScanning else { return .none }
         state.pinCallback(state.pin)
-        state.isScanning = true
+        state.shared.isScanning = true
         
         return .trackEvent(category: "identification",
                            action: "buttonPressed",
                            name: "scan",
                            analytics: environment.analytics)
-    case .idInteractionEvent(.success(let event)):
+    case .scanEvent(.success(let event)):
         return state.handle(event: event, environment: environment)
-    case .idInteractionEvent(.failure(let error)):
+    case .scanEvent(.failure(let error)):
         RedactedIDCardInteractionError(error).flatMap(environment.issueTracker.capture(error:))
         
-        state.isScanning = false
+        state.shared.isScanning = false
         switch error {
         case .cardDeactivated:
             return Effect(value: .error(ScanErrorState(errorType: .cardDeactivated, retry: false)))
@@ -70,7 +70,7 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
             return Effect(value: .error(ScanErrorState(errorType: .idCardInteraction(error), retry: false)))
         }
     case .wrongPIN:
-        state.isScanning = false
+        state.shared.isScanning = false
         return .none
     case .identifiedSuccessfully(let redirectURL):
         environment.storageManager.updateSetupCompleted(true)
@@ -78,18 +78,18 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
         return .concatenate(.trackEvent(category: "identification", action: "success", analytics: environment.analytics),
                             .openURL(redirectURL, urlOpener: environment.urlOpener),
                             Effect(value: .end))
-    case .showNFCInfo:
-        state.nfcInfoAlert = AlertState(title: TextState(L10n.HelpNFC.title),
+    case .shared(.showNFCInfo):
+        state.alert = AlertState(title: TextState(L10n.HelpNFC.title),
                                         message: TextState(L10n.HelpNFC.body),
                                         dismissButton: .cancel(TextState(L10n.General.ok),
-                                                               action: .send(.dismissNFCInfo)))
+                                                               action: .send(.dismissAlert)))
         
         return .trackEvent(category: "identification",
                            action: "alertShown",
                            name: "NFCInfo",
                            analytics: environment.analytics)
-    case .dismissNFCInfo:
-        state.nfcInfoAlert = nil
+    case .dismissAlert:
+        state.alert = nil
         return .none
     default:
         return .none
@@ -101,8 +101,8 @@ extension IdentificationScanState {
         switch event {
         case .requestPIN(remainingAttempts: let remainingAttempts, pinCallback: let callback):
             pinCallback = PINCallback(id: environment.uuidFactory(), callback: callback)
-            isScanning = false
-            scanAvailable = true
+            shared.isScanning = false
+            shared.scanAvailable = true
             
             // This is our signal that the user canceled (for now)
             guard let remainingAttempts = remainingAttempts else {
@@ -111,17 +111,17 @@ extension IdentificationScanState {
             
             return Effect(value: .wrongPIN(remainingAttempts: remainingAttempts))
         case .requestPINAndCAN:
-            isScanning = false
-            scanAvailable = false
-            return Effect(value: .error(ScanErrorState(errorType: .cardSuspended, retry: scanAvailable)))
+            shared.isScanning = false
+            shared.scanAvailable = false
+            return Effect(value: .error(ScanErrorState(errorType: .cardSuspended, retry: shared.scanAvailable)))
         case .requestCardInsertion,
                 .authenticationStarted,
                 .cardInteractionComplete,
                 .cardRecognized:
-            isScanning = true
+            shared.isScanning = true
             return .none
         case .authenticationSuccessful:
-            isScanning = true
+            shared.isScanning = true
             authenticationSuccessful = true
             return .none
         case .cardRemoved:
@@ -130,8 +130,8 @@ extension IdentificationScanState {
         case .processCompletedSuccessfullyWithRedirect(let redirect):
             return Effect(value: .identifiedSuccessfully(redirectURL: redirect))
         case .processCompletedSuccessfullyWithoutRedirect:
-            scanAvailable = false
-            return Effect(value: .error(ScanErrorState(errorType: .unexpectedEvent(event), retry: scanAvailable)))
+            shared.scanAvailable = false
+            return Effect(value: .error(ScanErrorState(errorType: .unexpectedEvent(event), retry: shared.scanAvailable)))
         default:
             return .none
         }
@@ -143,50 +143,36 @@ struct IdentificationScan: View {
     var store: Store<IdentificationScanState, IdentificationScanAction>
     
     var body: some View {
-        WithViewStore(store) { viewStore in
-            VStack(alignment: .leading, spacing: 0) {
-                ScrollView {
-                    LottieView(name: Asset.animationIdScan.name,
-                               backgroundColor: Color(0xEBEFF2),
-                               accessiblityLabel: L10n.Scan.animationAccessibilityLabel)
-                    .aspectRatio(540.0 / 367.0, contentMode: .fit)
-                    
-                    if viewStore.isScanning {
-                        VStack {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: Color.blue900))
-                                .scaleEffect(3)
-                                .frame(maxWidth: .infinity)
-                                .padding(50)
-                        }
-                    } else {
-                        ScanBody(title: L10n.Identification.Scan.title,
-                                 message: L10n.Identification.Scan.message,
-                                 buttonTitle: L10n.Identification.Scan.scan,
-                                 buttonTapped: { viewStore.send(.startScan) },
-                                 nfcInfoTapped: { viewStore.send(.showNFCInfo) },
-                                 helpTapped: { viewStore.send(.showHelp) })
-                        .disabled(!viewStore.scanAvailable)
-                    }
-                }
-            }.onChange(of: viewStore.state.attempt, perform: { _ in
-                viewStore.send(.startScan)
-            })
-            .onAppear {
-                viewStore.send(.onAppear)
-            }
+        SharedScan(store: store.scope(state: \.shared, action: IdentificationScanAction.shared),
+                   instructionsTitle: L10n.Identification.ScanInstructions.title,
+                   instructionsBody: L10n.Identification.ScanInstructions.body,
+                   instructionsScanButtonTitle: L10n.Identification.Scan.scan,
+                   scanTitle: L10n.Identification.Scan.title,
+                   scanBody: L10n.Identification.Scan.message,
+                   scanButton: L10n.Identification.Scan.scan)
+        .onAppear {
+            ViewStore(store).send(.onAppear)
         }
         .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(false)
 #if PREVIEW
         .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: IdentificationScanAction.runDebugSequence)
 #endif
-        .alert(store.scope(state: \.nfcInfoAlert), dismiss: .dismissNFCInfo)
+        .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
     }
 }
 
 struct IdentificationScan_Previews: PreviewProvider {
     static var previews: some View {
-        IdentificationScan(store: Store(initialState: IdentificationScanState(request: .preview, pin: "123456", pinCallback: PINCallback(id: .zero, callback: { _ in })), reducer: .empty, environment: AppEnvironment.preview))
-        IdentificationScan(store: Store(initialState: IdentificationScanState(request: .preview, pin: "123456", pinCallback: PINCallback(id: .zero, callback: { _ in }), isScanning: true), reducer: .empty, environment: AppEnvironment.preview))
+        IdentificationScan(store: Store(initialState: IdentificationScanState(request: .preview,
+                                                                              pin: "123456",
+                                                                              pinCallback: PINCallback(id: .zero, callback: { _ in })),
+                                        reducer: .empty,
+                                        environment: AppEnvironment.preview))
+        IdentificationScan(store: Store(initialState: IdentificationScanState(request: .preview,
+                                                                              pin: "123456",
+                                                                              pinCallback: PINCallback(id: .zero, callback: { _ in }), shared: SharedScanState(isScanning: true)),
+                                        reducer: .empty,
+                                        environment: AppEnvironment.preview))
     }
 }

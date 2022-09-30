@@ -53,7 +53,6 @@ struct HeaderView: View {
                     .padding(.vertical, 10)
             }
         }
-        .padding(.horizontal)
     }
     
     func attributed(message: String) -> AttributedString {

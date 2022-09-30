@@ -2,10 +2,14 @@ import SwiftUI
 
 struct ScanBody: View {
     
+    struct ButtonConfiguration {
+        let title: String
+        let action: () -> Void
+    }
+    
     let title: String
     let message: String
-    let buttonTitle: String
-    let buttonTapped: () -> Void
+    let primaryButton: ButtonConfiguration?
     let nfcInfoTapped: () -> Void
     let helpTapped: () -> Void
     
@@ -14,9 +18,10 @@ struct ScanBody: View {
             Text(title)
                 .font(.bundLargeTitle)
                 .foregroundColor(.blackish)
-            Button(buttonTitle,
-                   action: buttonTapped)
-            .buttonStyle(BundButtonStyle(isPrimary: true))
+            if let primaryButton = primaryButton {
+                Button(primaryButton.title, action: primaryButton.action)
+                .buttonStyle(BundButtonStyle(isPrimary: true))
+            }
             Text(message)
                 .font(.bundBody)
                 .foregroundColor(.blackish)

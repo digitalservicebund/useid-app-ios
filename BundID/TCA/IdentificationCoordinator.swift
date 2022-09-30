@@ -43,7 +43,7 @@ struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
                         return .overview(state)
                     case .scan(var state):
                         state.pin = pin!
-                        state.attempt = attempt
+                        state.shared.attempt = attempt
 #if PREVIEW
                         state.availableDebugActions = availableDebugActions
 #endif
@@ -197,7 +197,7 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
             case .routeAction(_, action: .scan(.error(let errorState))):
                 state.routes.presentSheet(.error(errorState))
                 return .none
-            case .routeAction(_, action: .scan(.showHelp)):
+            case .routeAction(_, action: .scan(.shared(.showHelp))):
                 state.routes.presentSheet(.error(ScanErrorState(errorType: .help, retry: true)))
                 return .none
             case .routeAction(_, action: .error(.retry)):

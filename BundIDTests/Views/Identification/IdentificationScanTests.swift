@@ -46,7 +46,7 @@ final class IdentificationScanTests: XCTestCase {
             initialState: IdentificationScanState(request: request,
                                                   pin: pin,
                                                   pinCallback: pinCallback,
-                                                  isScanning: false),
+                                                  shared: SharedScanState(isScanning: false)),
             reducer: identificationScanReducer,
             environment: environment
         )
@@ -61,7 +61,10 @@ final class IdentificationScanTests: XCTestCase {
         let pinCallback = PINCallback(id: UUID(number: 0)) { pin in
             
         }
-        let store = TestStore(initialState: IdentificationScanState(request: request, pin: pin, pinCallback: pinCallback, isScanning: true),
+        let store = TestStore(initialState: IdentificationScanState(request: request,
+                                                                    pin: pin,
+                                                                    pinCallback: pinCallback,
+                                                                    shared: SharedScanState(isScanning: true)),
                               reducer: identificationScanReducer,
                               environment: environment)
         
@@ -77,13 +80,13 @@ final class IdentificationScanTests: XCTestCase {
         let store = TestStore(initialState: IdentificationScanState(request: request,
                                                                     pin: pin,
                                                                     pinCallback: pinCallback,
-                                                                    isScanning: true),
+                                                                    shared: SharedScanState(isScanning: true)),
                               reducer: identificationScanReducer,
                               environment: environment)
         
         let newCallback = { (_: String) in }
-        store.send(.idInteractionEvent(.success(.requestPIN(remainingAttempts: nil, pinCallback: newCallback)))) {
-            $0.isScanning = false
+        store.send(.scanEvent(.success(.requestPIN(remainingAttempts: nil, pinCallback: newCallback)))) {
+            $0.shared.isScanning = false
             $0.pinCallback = PINCallback(id: UUID(number: 0), callback: newCallback)
         }
     }
@@ -98,13 +101,13 @@ final class IdentificationScanTests: XCTestCase {
         let store = TestStore(initialState: IdentificationScanState(request: request,
                                                                     pin: pin,
                                                                     pinCallback: pinCallback,
-                                                                    isScanning: true),
+                                                                    shared: SharedScanState(isScanning: true)),
                               reducer: identificationScanReducer,
                               environment: environment)
         
         let newCallback = { (_: String) in }
-        store.send(.idInteractionEvent(.success(.requestPIN(remainingAttempts: 2, pinCallback: newCallback)))) {
-            $0.isScanning = false
+        store.send(.scanEvent(.success(.requestPIN(remainingAttempts: 2, pinCallback: newCallback)))) {
+            $0.shared.isScanning = false
             $0.pinCallback = PINCallback(id: UUID(number: 0), callback: newCallback)
         }
         
@@ -119,15 +122,15 @@ final class IdentificationScanTests: XCTestCase {
         let store = TestStore(initialState: IdentificationScanState(request: request,
                                                                     pin: pin,
                                                                     pinCallback: pinCallback,
-                                                                    isScanning: false),
+                                                                    shared: SharedScanState(isScanning: false)),
                               reducer: identificationScanReducer,
                               environment: environment)
         
-        store.send(.showNFCInfo) {
-            $0.nfcInfoAlert = AlertState(title: TextState(L10n.HelpNFC.title),
-                                         message: TextState(L10n.HelpNFC.body),
-                                         dismissButton: .cancel(TextState(L10n.General.ok),
-                                                                action: .send(.dismissNFCInfo)))
+        store.send(.shared(.showNFCInfo)) {
+            $0.alert = AlertState(title: TextState(L10n.HelpNFC.title),
+                                  message: TextState(L10n.HelpNFC.body),
+                                  dismissButton: .cancel(TextState(L10n.General.ok),
+                                                         action: .send(.dismissAlert)))
         }
         
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification",
@@ -143,12 +146,13 @@ final class IdentificationScanTests: XCTestCase {
         let store = TestStore(initialState: IdentificationScanState(request: request,
                                                                     pin: pin,
                                                                     pinCallback: pinCallback,
-                                                                    isScanning: false),
+                                                                    shared: SharedScanState(isScanning: false)),
                               reducer: identificationScanReducer,
                               environment: environment)
         
-        store.send(.startScan) {
-            $0.isScanning = true
+        store.send(.shared(.startScan)) {
+            $0.shared.isScanning = true
+            $0.shared.showInstructions = false
         }
         
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification",
