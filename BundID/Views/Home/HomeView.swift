@@ -141,8 +141,9 @@ struct HomeView: View {
                 }
                 listDivider
                 NavigationLink {
+                    // Use NSLocalizedString here, as SwiftGen has problems with the single % sign we have in that text.
                     AboutView(title: L10n.Accessibility.title,
-                              markdown: L10n.Accessibility.text)
+                              markdown: NSLocalizedString("accessibility_text", comment: ""))
                 } label: {
                     Text(L10n.Home.More.accessibilityStatement)
                         .frame(maxWidth: .infinity, alignment: .leading)
