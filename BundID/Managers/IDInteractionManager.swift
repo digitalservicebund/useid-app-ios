@@ -16,7 +16,7 @@ class IDInteractionManager: IDInteractionManagerType {
         self.openEcard = openEcard
     }
     
-    func identify(tokenURL: String, nfcMessages: NFCMessages = .identification) -> EIDInteractionPublisher {
+    func identify(tokenURL: URL, nfcMessages: NFCMessages = .identification) -> EIDInteractionPublisher {
         start(startServiceHandler: StartServiceHandler(task: .eac(tokenURL: tokenURL)),
               nfcMessages: nfcMessages)
     }

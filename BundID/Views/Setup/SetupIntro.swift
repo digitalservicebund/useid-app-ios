@@ -2,12 +2,12 @@ import SwiftUI
 import ComposableArchitecture
 
 enum SetupIntroAction: Equatable {
-    case chooseSkipSetup(tokenURL: String?)
+    case chooseSkipSetup(tokenURL: URL?)
     case chooseStartSetup
 }
 
 struct SetupIntroState: Equatable {
-    var tokenURL: String?
+    var tokenURL: URL?
 }
 
 struct SetupIntro: View {

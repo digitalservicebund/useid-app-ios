@@ -6,3 +6,4 @@ import Analytics
 
 extension NFCMessages: Matchable {}
 extension AnalyticsEvent: Matchable {}
+extension URL: Matchable {}

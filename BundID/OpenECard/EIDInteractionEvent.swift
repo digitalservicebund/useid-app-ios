@@ -10,7 +10,7 @@ enum EIDInteractionEvent: Equatable {
     case requestPINAndCAN((_ pin: String, _ can: String) -> Void)
     case requestPUK((String) -> Void)
     case processCompletedSuccessfullyWithoutRedirect
-    case processCompletedSuccessfullyWithRedirect(url: String)
+    case processCompletedSuccessfullyWithRedirect(url: URL)
     case authenticationStarted
     case requestAuthenticationRequestConfirmation(EIDAuthenticationRequest, (FlaggedAttributes) -> Void)
     case authenticationSuccessful

@@ -6,7 +6,7 @@ import Combine
 import Sentry
 
 protocol IDInteractionManagerType {
-    func identify(tokenURL: String, nfcMessages: NFCMessages) -> EIDInteractionPublisher
+    func identify(tokenURL: URL, nfcMessages: NFCMessages) -> EIDInteractionPublisher
     func changePIN(nfcMessages: NFCMessages) -> EIDInteractionPublisher
 }
 

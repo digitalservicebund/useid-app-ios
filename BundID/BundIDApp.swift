@@ -99,7 +99,7 @@ struct BundIDApp: App {
         WindowGroup {
             CoordinatorView(store: store)
                 .onOpenURL { url in
-                    ViewStore(store.stateless).send(.openURL(url.absoluteString))
+                    ViewStore(store.stateless).send(.openURL(url))
                 }
                 .onAppear {
                     let viewStore = ViewStore(store.stateless)

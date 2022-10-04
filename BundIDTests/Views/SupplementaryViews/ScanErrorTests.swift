@@ -54,7 +54,7 @@ final class ScanErrorReducerTests: XCTestCase {
     func testReducerOpensRedirectURL() {
         let store = TestStore(
             initialState: ScanErrorState(errorType: .idCardInteraction(.processFailed(resultCode: .BAD_REQUEST,
-                                                                                      redirectURL: redirectURL.absoluteString,
+                                                                                      redirectURL: redirectURL,
                                                                                       resultMinor: nil)),
                                          retry: false),
             reducer: scanErrorReducer,
@@ -79,7 +79,7 @@ final class ScanErrorStateTests: XCTestCase {
     
     func testRedirectErrorPrimaryButton() {
         let state = ScanErrorState(errorType: .idCardInteraction(.processFailed(resultCode: .CLIENT_ERROR,
-                                                                                redirectURL: redirectURL.absoluteString,
+                                                                                redirectURL: redirectURL,
                                                                                 resultMinor: nil)),
                                    retry: false)
         
@@ -103,7 +103,7 @@ final class ScanErrorStateTests: XCTestCase {
     
     func testBoxWithoutRetry() {
         let state = ScanErrorState(errorType: .idCardInteraction(.processFailed(resultCode: .CLIENT_ERROR,
-                                                                                redirectURL: redirectURL.absoluteString,
+                                                                                redirectURL: redirectURL,
                                                                                 resultMinor: nil)),
                                    retry: false)
         

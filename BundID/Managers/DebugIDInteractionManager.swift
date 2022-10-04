@@ -71,7 +71,7 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             subject.send(.cardRecognized)
             subject.send(.cardInteractionComplete)
             subject.send(.authenticationSuccessful)
-            subject.send(.processCompletedSuccessfullyWithRedirect(url: "https://example.org"))
+            subject.send(.processCompletedSuccessfullyWithRedirect(url: URL(string: "https://example.org")!))
             subject.send(completion: .finished)
             return []
         case .missingRedirect:
@@ -222,16 +222,15 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
 }
 
 class DebugIDInteractionManager: IDInteractionManagerType {
-    
     private var subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>?
     private var card: Card = Card(remainingAttempts: 3)
     
-    func debuggableIdentify(tokenURL: String) -> DebuggableInteraction<IdentifyDebugSequence> {
+    func debuggableIdentify(tokenURL: URL) -> DebuggableInteraction<IdentifyDebugSequence> {
         return DebuggableInteraction(publisher: identify(tokenURL: tokenURL, nfcMessages: .identification),
                                      sequence: [.loadError, .requestAuthorization])
     }
     
-    func identify(tokenURL: String, nfcMessages: NFCMessages) -> EIDInteractionPublisher {
+    func identify(tokenURL: URL, nfcMessages: NFCMessages) -> EIDInteractionPublisher {
         let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
         self.subject = subject
         

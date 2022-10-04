@@ -2,7 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct SetupDoneState: Equatable {
-    var tokenURL: String?
+    var tokenURL: URL?
     
     var primaryButton: DialogButtons<SetupDoneAction>.ButtonConfiguration {
         guard let tokenURL = tokenURL else {
@@ -17,7 +17,7 @@ struct SetupDoneState: Equatable {
 
 enum SetupDoneAction: Equatable {
     case done
-    case triggerIdentification(tokenURL: String)
+    case triggerIdentification(tokenURL: URL)
 }
 
 struct SetupDone: View {

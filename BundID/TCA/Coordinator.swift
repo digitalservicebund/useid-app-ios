@@ -7,7 +7,7 @@ import Sentry
 struct CoordinatorState: Equatable, IndexedRouterState {
     var routes: [Route<ScreenState>]
     
-    mutating func handleURL(_ url: String, environment: AppEnvironment) -> Effect<CoordinatorAction, Never> {
+    mutating func handleURL(_ url: URL, environment: AppEnvironment) -> Effect<CoordinatorAction, Never> {
         let screen: ScreenState
         if environment.storageManager.setupCompleted {
             screen = .identificationCoordinator(IdentificationCoordinatorState(tokenURL: url))
@@ -59,7 +59,7 @@ extension Array: AnalyticsView where Element == Route<ScreenState> {
 }
 
 enum CoordinatorAction: Equatable, IndexedRouterAction {
-    case openURL(String)
+    case openURL(URL)
     case onAppear
     case didEnterBackground
     case routeAction(Int, action: ScreenAction)

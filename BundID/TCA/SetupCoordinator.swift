@@ -8,7 +8,7 @@ import Analytics
 struct SetupCoordinatorState: Equatable, IndexedRouterState {
     var transportPIN: String = ""
     var attempt: Int = 0
-    var tokenURL: String?
+    var tokenURL: URL?
     var needsEndConfirmation: Bool {
         routes.contains {
             switch $0.screen {

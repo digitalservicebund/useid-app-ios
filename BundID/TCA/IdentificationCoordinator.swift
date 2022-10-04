@@ -12,7 +12,7 @@ protocol IDInteractionHandler {
 }
 
 struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
-    var tokenURL: String
+    var tokenURL: URL
     var pin: String?
     var attempt: Int = 0
     var authenticationSuccessful = false
@@ -84,7 +84,7 @@ extension IdentificationCoordinatorState: AnalyticsView {
  }
 
 extension IdentificationCoordinatorState {
-    init(tokenURL: String) {
+    init(tokenURL: URL) {
         self.tokenURL = tokenURL
         self.states = [.root(.overview(.loading(IdentificationOverviewLoadingState())))]
     }

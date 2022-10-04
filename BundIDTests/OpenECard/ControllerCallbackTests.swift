@@ -67,8 +67,8 @@ final class ControllerCallbackTests: XCTestCase {
     
     func testRedirectActivationCode() throws {
         
-        let redirectUrl = "https://redirect.url"
-        let activationResult = MockActivationResult(redirectUrl: redirectUrl, code: .REDIRECT)
+        let redirectURL = URL(string: "https://redirect.url")!
+        let activationResult = MockActivationResult(redirectUrl: redirectURL.absoluteString, code: .REDIRECT)
         
         let controllerCallback = ControllerCallback()
         
@@ -80,7 +80,7 @@ final class ControllerCallbackTests: XCTestCase {
             XCTAssertEqual(completion, .finished)
         } receiveValue: { value in
             valueExpectation.fulfill()
-            XCTAssertEqual(value, .processCompletedSuccessfullyWithRedirect(url: redirectUrl))
+            XCTAssertEqual(value, .processCompletedSuccessfullyWithRedirect(url: redirectURL))
         }
         .store(in: &cancellables)
         
@@ -121,8 +121,8 @@ final class ControllerCallbackTests: XCTestCase {
     
     func testFailureRedirect() throws {
         let minor = "http://www.bsi.bund.de/ecard/api/1.1/resultminor/ifdl/common#invalidSlotHandle"
-        let redirectUrl = "https://redirect.url"
-        let activationResult = MockActivationResult(redirectUrl: redirectUrl,
+        let redirectURL = URL(string: "https://redirect.url")!
+        let activationResult = MockActivationResult(redirectUrl: redirectURL.absoluteString,
                                                     code: .REDIRECT,
                                                     processResultMinor: minor)
         
@@ -132,7 +132,7 @@ final class ControllerCallbackTests: XCTestCase {
         controllerCallback.publisher.sink { completion in
             completionExpectation.fulfill()
             XCTAssertEqual(completion, .failure(.processFailed(resultCode: .REDIRECT,
-                                                               redirectURL: redirectUrl,
+                                                               redirectURL: redirectURL,
                                                                resultMinor: minor)))
         } receiveValue: { value in
             XCTFail("Should not receive any value")

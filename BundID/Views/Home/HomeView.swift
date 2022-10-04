@@ -25,7 +25,7 @@ extension HomeState: AnalyticsView {
 enum HomeAction: Equatable {
     case triggerSetup
 #if PREVIEW
-    case triggerIdentification(tokenURL: String)
+    case triggerIdentification(tokenURL: URL)
 #endif
 }
 

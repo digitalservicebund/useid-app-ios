@@ -33,7 +33,7 @@ enum IdentificationScanAction: Equatable {
     case startScan
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case wrongPIN(remainingAttempts: Int)
-    case identifiedSuccessfully(redirectURL: String)
+    case identifiedSuccessfully(redirectURL: URL)
     case error(ScanErrorState)
     case end
     case showNFCInfo
@@ -75,16 +75,9 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
     case .identifiedSuccessfully(let redirectURL):
         environment.storageManager.updateSetupCompleted(true)
         
-        let endEffect = Effect<IdentificationScanAction, Never>(value: .end)
-        let trackingEffect = Effect<IdentificationScanAction, Never>.trackEvent(category: "identification",
-                                                                                action: "success",
-                                                                                analytics: environment.analytics)
-        
-        if let url = URL(string: redirectURL) {
-            return .concatenate(.openURL(url, urlOpener: environment.urlOpener), trackingEffect, endEffect)
-        } else {
-            return .concatenate(trackingEffect, endEffect)
-        }
+        return .concatenate(.trackEvent(category: "identification", action: "success", analytics: environment.analytics),
+                            .openURL(redirectURL, urlOpener: environment.urlOpener),
+                            Effect(value: .end))
     case .showNFCInfo:
         state.nfcInfoAlert = AlertState(title: TextState(L10n.HelpNFC.title),
                                         message: TextState(L10n.HelpNFC.body),

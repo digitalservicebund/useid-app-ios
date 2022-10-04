@@ -123,7 +123,7 @@ class IdentificationCoordinatorTests: XCTestCase {
             reducer: identificationCoordinatorReducer,
             environment: environment)
         
-        store.send(.routeAction(0, action: .scan(.identifiedSuccessfully(redirectURL: redirect.absoluteString))))
+        store.send(.routeAction(0, action: .scan(.identifiedSuccessfully(redirectURL: redirect))))
         store.receive(.routeAction(0, action: IdentificationScreenAction.scan(IdentificationScanAction.end)))
         
         XCTAssertEqual(redirect, openedURL)

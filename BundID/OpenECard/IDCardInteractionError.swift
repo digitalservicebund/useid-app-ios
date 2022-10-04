@@ -6,7 +6,7 @@ enum IDCardInteractionError: Error, Equatable {
     case unexpectedReadAttribute(String)
     case cardBlocked
     case cardDeactivated
-    case processFailed(resultCode: ActivationResultCode, redirectURL: String?, resultMinor: String?)
+    case processFailed(resultCode: ActivationResultCode, redirectURL: URL?, resultMinor: String?)
 }
 
 enum RedactedIDCardInteractionError: CustomNSError, Hashable {

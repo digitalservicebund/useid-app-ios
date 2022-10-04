@@ -42,7 +42,7 @@ extension StartServiceHandler: StartServiceHandlerProtocol {
     func onSuccess(_ source: (NSObjectProtocol & ActivationSourceProtocol)!) {
         switch task {
         case .eac(let tokenURL):
-            activationController = source.eacFactory().create(tokenURL,
+            activationController = source.eacFactory().create(tokenURL.absoluteString,
                                                               withActivation: controllerCallback,
                                                               with: eacInteraction)
         case .pinManagement:
