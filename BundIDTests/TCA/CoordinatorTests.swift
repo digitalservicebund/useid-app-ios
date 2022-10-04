@@ -124,64 +124,6 @@ final class CoordinatorTests: XCTestCase {
         }
     }
     
-    func testRememberSetupWasFinishedAfterScanningSuccessfully() {
-        let tokenURL = "eid://example.org"
-        var setupCoordinatorState = SetupCoordinatorState(transportPIN: "12345",
-                                                          states: [
-                                                            .root(.intro(.init(tokenURL: tokenURL))),
-                                                            .push(.scan(.init(transportPIN: "12345", newPIN: "123456")))
-                                                          ])
-        let store = TestStore(initialState: CoordinatorState(routes: [
-            .root(.home(HomeState(appVersion: "1.0.0", buildNumber: 1))),
-            .sheet(.setupCoordinator(setupCoordinatorState)),
-        ]),
-                              reducer: coordinatorReducer,
-                              environment: environment)
-        
-        stub(mockStorageManager) {
-            $0.updateSetupCompleted(any()).thenDoNothing()
-        }
-        
-        store.send(.routeAction(1, action: .setupCoordinator(.routeAction(1, action: .scan(.scannedSuccessfully))))) {
-            setupCoordinatorState.routes.push(.done(SetupDoneState()))
-            $0.routes[1] = .sheet(.setupCoordinator(setupCoordinatorState))
-        }
-        
-        verify(mockStorageManager).updateSetupCompleted(true)
-    }
-    
-    func testRememberSetupWasFinishedAfterIdentifyingSuccessfully() {
-        let tokenURL = "eid://example.org"
-        
-        var identificationCoordinatorState = IdentificationCoordinatorState(tokenURL: tokenURL,
-                                                                            pin: "123456",
-                                                                            states: [
-                                                                                .root(.scan(IdentificationScanState(request: .preview,
-                                                                                                                    pin: "123456",
-                                                                                                                    pinCallback: PINCallback(id: UUID(number: 1),
-                                                                                                                                             callback: { _ in }))))
-                                                                            ])
-        
-        let store = TestStore(initialState: CoordinatorState(routes: [
-            .root(.home(HomeState(appVersion: "1.0.0", buildNumber: 1))),
-            .sheet(.identificationCoordinator(identificationCoordinatorState)),
-        ]),
-                              reducer: coordinatorReducer,
-                              environment: environment)
-        
-        stub(mockStorageManager) {
-            $0.updateSetupCompleted(any()).thenDoNothing()
-        }
-        
-        let redirectURL = "https://example.org"
-        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(0, action: .scan(.identifiedSuccessfullyWithRedirect(.preview, redirectURL: redirectURL)))))) {
-            identificationCoordinatorState.routes.push(.done(IdentificationDoneState(request: .preview, redirectURL: redirectURL)))
-            $0.routes[1] = .sheet(.identificationCoordinator(identificationCoordinatorState))
-        }
-        
-        verify(mockStorageManager).updateSetupCompleted(true)
-    }
-    
     func testTriggerSetup() {
         let root = Route<ScreenState>.root(.home(HomeState(appVersion: "1.0.0", buildNumber: 1)))
         let store = TestStore(initialState: CoordinatorState(routes: [root]),

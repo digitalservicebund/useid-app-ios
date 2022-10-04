@@ -130,15 +130,8 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                     state.routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
                     return .none
 #endif
-                case .identificationCoordinator(.routeAction(_, action: .scan(.identifiedSuccessfullyWithoutRedirect))),
-                        .identificationCoordinator(.routeAction(_, action: .scan(.identifiedSuccessfullyWithRedirect))),
-                        .setupCoordinator(.routeAction(_, action: .scan(.scannedSuccessfully))):
-                    environment.storageManager.updateSetupCompleted(true)
-                    return .none
                 case .identificationCoordinator(.routeAction(_, action: .overview(.cancel))),
                         .identificationCoordinator(.routeAction(_, action: .scan(.end))),
-                        .identificationCoordinator(.routeAction(_, action: .done(.close))),
-                        .identificationCoordinator(.routeAction(_, action: .done(.openURL))),
                         .identificationCoordinator(.confirmEnd),
                         .identificationCoordinator(.afterConfirmEnd),
                         .setupCoordinator(.confirmEnd),

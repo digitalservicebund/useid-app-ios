@@ -8,10 +8,12 @@ import Combine
 class IdentificationCoordinatorTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
+    var mockIDInteractionManager: MockIDInteractionManagerType!
+    var mockStorageManager: MockStorageManagerType!
+    
+    var openedURL: URL?
     var environment: AppEnvironment!
     var uuidCount = 0
-    
-    var mockIDInteractionManager = MockIDInteractionManagerType()
     
     func uuidFactory() -> UUID {
         let currentCount = self.uuidCount
@@ -20,10 +22,22 @@ class IdentificationCoordinatorTests: XCTestCase {
     }
     
     override func setUp() {
+        mockIDInteractionManager = MockIDInteractionManagerType()
+        mockStorageManager = MockStorageManagerType()
         scheduler = DispatchQueue.test
         environment = AppEnvironment.mocked(mainQueue: scheduler.eraseToAnyScheduler(),
                                             uuidFactory: uuidFactory,
-                                            idInteractionManager: mockIDInteractionManager)
+                                            idInteractionManager: mockIDInteractionManager,
+                                            storageManager: mockStorageManager,
+                                            urlOpener: { self.openedURL = $0 })
+        
+        stub(mockStorageManager) {
+            when($0.updateSetupCompleted(any())).thenDoNothing()
+        }
+    }
+    
+    override func tearDown() {
+        openedURL = nil
     }
     
     func testOverviewLoadingSuccess() throws {
@@ -84,7 +98,8 @@ class IdentificationCoordinatorTests: XCTestCase {
         }
     }
     
-    func testScanToDoneWithoutRedirect() throws {
+    func testScanSuccess() throws {
+        let redirect = URL(string: "https://example.com")!
         let pin = "123456"
         let request = EIDAuthenticationRequest.preview
         let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
@@ -99,29 +114,11 @@ class IdentificationCoordinatorTests: XCTestCase {
             reducer: identificationCoordinatorReducer,
             environment: environment)
         
-        store.send(.routeAction(0, action: .scan(.identifiedSuccessfullyWithoutRedirect(request))))
-    }
-    
-    func testScanToDoneWithRedirect() throws {
-        let pin = "123456"
-        let request = EIDAuthenticationRequest.preview
-        let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
-        let store = TestStore(
-            initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
-                                                         pin: pin,
-                                                         states: [
-                                                            .root(.scan(.init(request: request,
-                                                                              pin: pin,
-                                                                              pinCallback: callback)))
-                                                         ]),
-            reducer: identificationCoordinatorReducer,
-            environment: environment)
+        store.send(.routeAction(0, action: .scan(.identifiedSuccessfully(redirectURL: redirect.absoluteString))))
+        store.receive(.routeAction(0, action: IdentificationScreenAction.scan(IdentificationScanAction.end)))
         
-        store.send(.routeAction(0, action: .scan(.identifiedSuccessfullyWithRedirect(request, redirectURL: "https://example.com")))) {
-            guard case .scan(var scanState) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
-            scanState.isScanning = false
-            $0.routes = [.root(.scan(scanState)), .push(.done(.init(request: request, redirectURL: "https://example.com")))]
-        }
+        XCTAssertEqual(redirect, openedURL)
+        verify(mockStorageManager).updateSetupCompleted(true)
     }
     
     func testScanToIncorrectPIN() throws {
@@ -254,7 +251,11 @@ class IdentificationCoordinatorTests: XCTestCase {
         )
         
         store.send(.end) {
-            $0.alert = AlertState(title: .init(verbatim: L10n.Identification.ConfirmEnd.title), message: .init(verbatim: L10n.Identification.ConfirmEnd.message), primaryButton: .destructive(.init(verbatim: L10n.Identification.ConfirmEnd.confirm), action: .send(.confirmEnd)), secondaryButton: .cancel(.init(verbatim: L10n.Identification.ConfirmEnd.deny)))
+            $0.alert = AlertState(title: .init(verbatim: L10n.Identification.ConfirmEnd.title),
+                                  message: .init(verbatim: L10n.Identification.ConfirmEnd.message),
+                                  primaryButton: .destructive(.init(verbatim: L10n.Identification.ConfirmEnd.confirm),
+                                                              action: .send(.confirmEnd)),
+                                  secondaryButton: .cancel(.init(verbatim: L10n.Identification.ConfirmEnd.deny)))
         }
     }
 }

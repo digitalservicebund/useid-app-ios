@@ -156,9 +156,6 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                     fatalError("TODO: This should be handled be sent to error tracking and silently ignored.")
                 }
                 return Effect(value: localAction)
-            case .routeAction(_, action: .scan(.identifiedSuccessfullyWithRedirect(let request, let urlString))):
-                state.routes.push(.done(IdentificationDoneState(request: request, redirectURL: urlString)))
-                return .none
             case .routeAction(_, action: .incorrectPersonalPIN(.done(let pin))):
                 state.pin = pin
                 state.attempt += 1
@@ -231,8 +228,6 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                                                                      action: .send(.confirmEnd)),
                                          secondaryButton: .cancel(TextState(verbatim: L10n.Identification.ConfirmEnd.deny)))
                 return .none
-            case .confirmEnd:
-                return .none
             case .dismissAlert:
                 state.alert = nil
                 return .none
@@ -265,9 +260,6 @@ struct IdentificationCoordinatorView: View {
                         CaseLet(state: /IdentificationScreenState.scan,
                                 action: IdentificationScreenAction.scan,
                                 then: IdentificationScan.init)
-                        CaseLet(state: /IdentificationScreenState.done,
-                                action: IdentificationScreenAction.done,
-                                then: IdentificationDone.init)
                         CaseLet(state: /IdentificationScreenState.error,
                                 action: IdentificationScreenAction.error,
                                 then: ScanError.init)

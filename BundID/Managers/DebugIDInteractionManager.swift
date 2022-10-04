@@ -32,8 +32,8 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
     case runCardDeactivated
     case runCardBlocked
     case loadError
-    case identifySuccessfullyWithRedirect
-    case identifySuccessfullyWithoutRedirect
+    case identifySuccessfully
+    case missingRedirect
     
     var id: String {
         switch self {
@@ -45,8 +45,8 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
         case .runCardDeactivated: return "runCardDeactivated"
         case .runCardBlocked: return "runCardBlocked"
         case .loadError: return "loadError"
-        case .identifySuccessfullyWithRedirect: return "identifySuccessfullyWithRedirect"
-        case .identifySuccessfullyWithoutRedirect: return "identifySuccessfullyWithoutRedirect"
+        case .identifySuccessfully: return "identifySuccessfully"
+        case .missingRedirect: return "missingRedirect"
         }
     }
     
@@ -62,11 +62,11 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
                     subject.send(.requestCardInsertion({ _ in }))
                 }))
             }))
-            return [.identifySuccessfullyWithRedirect, .identifySuccessfullyWithoutRedirect, .runPINError(remainingAttempts: card.remainingAttempts), .runCardBlocked, .runCardSuspended, .runCardDeactivated, .cancel]
+            return [.identifySuccessfully, .missingRedirect, .runPINError(remainingAttempts: card.remainingAttempts), .runCardBlocked, .runCardSuspended, .runCardDeactivated, .cancel]
         case .cancel:
             subject.send(.requestPIN(remainingAttempts: nil, pinCallback: { _ in }))
-            return [.identifySuccessfullyWithRedirect, .runPINError(remainingAttempts: card.remainingAttempts), .runCardBlocked, .runCardSuspended, .runCardDeactivated, .cancel]
-        case .identifySuccessfullyWithRedirect:
+            return [.identifySuccessfully, .runPINError(remainingAttempts: card.remainingAttempts), .runCardBlocked, .runCardSuspended, .runCardDeactivated, .cancel]
+        case .identifySuccessfully:
             card.remainingAttempts = 3
             subject.send(.cardRecognized)
             subject.send(.cardInteractionComplete)
@@ -74,7 +74,7 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             subject.send(.processCompletedSuccessfullyWithRedirect(url: "https://example.org"))
             subject.send(completion: .finished)
             return []
-        case .identifySuccessfullyWithoutRedirect:
+        case .missingRedirect:
             card.remainingAttempts = 3
             subject.send(.cardRecognized)
             subject.send(.cardInteractionComplete)
@@ -101,7 +101,7 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
                 subject.send(completion: .failure(.cardBlocked))
             }
             
-            return [.identifySuccessfullyWithRedirect, .runPINError(remainingAttempts: card.remainingAttempts), .cancel]
+            return [.identifySuccessfully, .runPINError(remainingAttempts: card.remainingAttempts), .cancel]
         case .runNFCError:
             subject.send(completion: .failure(.processFailed(resultCode: .INTERNAL_ERROR, redirectURL: nil, resultMinor: nil)))
             return [.cancel]

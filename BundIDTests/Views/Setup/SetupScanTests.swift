@@ -12,15 +12,18 @@ class SetupScanTests: XCTestCase {
     var environment: AppEnvironment!
     var mockAnalyticsClient: MockAnalyticsClient!
     var mockIssueTracker: MockIssueTracker!
-    
-    var mockIDInteractionManager = MockIDInteractionManagerType()
+    var mockStorageManager: MockStorageManagerType!
+    var mockIDInteractionManager: MockIDInteractionManagerType!
     
     override func setUp() {
         mockAnalyticsClient = MockAnalyticsClient()
         mockIssueTracker = MockIssueTracker()
         scheduler = DispatchQueue.test
+        mockStorageManager = MockStorageManagerType()
+        mockIDInteractionManager = MockIDInteractionManagerType()
         environment = AppEnvironment.mocked(mainQueue: scheduler.eraseToAnyScheduler(),
                                             idInteractionManager: mockIDInteractionManager,
+                                            storageManager: mockStorageManager,
                                             analytics: mockAnalyticsClient,
                                             issueTracker: mockIssueTracker)
         
@@ -32,6 +35,10 @@ class SetupScanTests: XCTestCase {
         stub(mockIssueTracker) {
             $0.addBreadcrumb(crumb: any()).thenDoNothing()
             $0.capture(error: any()).thenDoNothing()
+        }
+        
+        stub(mockStorageManager) {
+            when($0.updateSetupCompleted(true)).thenDoNothing()
         }
     }
     
@@ -103,6 +110,8 @@ class SetupScanTests: XCTestCase {
         store.receive(.scanEvent(.success(.processCompletedSuccessfullyWithoutRedirect)))
         
         store.receive(.scannedSuccessfully)
+        
+        verify(mockStorageManager).updateSetupCompleted(true)
         
         self.wait(for: [cardInsertionExpectation, requestChangedPINExpectation], timeout: 0.0)
     }

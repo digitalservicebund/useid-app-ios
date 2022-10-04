@@ -33,8 +33,7 @@ enum IdentificationScanAction: Equatable {
     case startScan
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case wrongPIN(remainingAttempts: Int)
-    case identifiedSuccessfullyWithRedirect(EIDAuthenticationRequest, redirectURL: String)
-    case identifiedSuccessfullyWithoutRedirect(EIDAuthenticationRequest)
+    case identifiedSuccessfully(redirectURL: String)
     case error(ScanErrorState)
     case end
     case showNFCInfo
@@ -46,10 +45,7 @@ enum IdentificationScanAction: Equatable {
 }
 
 let identificationScanReducer = Reducer<IdentificationScanState, IdentificationScanAction, AppEnvironment> { state, action, environment in
-    
     switch action {
-    case .onAppear:
-        return .none
     case .startScan:
         guard !state.isScanning else { return .none }
         state.pinCallback(state.pin)
@@ -59,10 +55,6 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
                            action: "buttonPressed",
                            name: "scan",
                            analytics: environment.analytics)
-#if PREVIEW
-    case .runDebugSequence:
-        return .none
-#endif
     case .idInteractionEvent(.success(let event)):
         return state.handle(event: event, environment: environment)
     case .idInteractionEvent(.failure(let error)):
@@ -80,14 +72,14 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
     case .wrongPIN:
         state.isScanning = false
         return .none
-    case .identifiedSuccessfullyWithoutRedirect:
-        return .none
-    case .identifiedSuccessfullyWithRedirect:
-        return .none
-    case .error:
-        return .none
-    case .end:
-        return .none
+    case .identifiedSuccessfully(let redirectURL):
+        environment.storageManager.updateSetupCompleted(true)
+        
+        if let url = URL(string: redirectURL) {
+            return .concatenate(.openURL(url, urlOpener: environment.urlOpener), Effect(value: .end))
+        } else {
+            return Effect(value: .end)
+        }
     case .showNFCInfo:
         state.nfcInfoAlert = AlertState(title: TextState(L10n.HelpNFC.title),
                                         message: TextState(L10n.HelpNFC.body),
@@ -98,10 +90,10 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
                            action: "alertShown",
                            name: "NFCInfo",
                            analytics: environment.analytics)
-    case .showHelp:
-        return .none
     case .dismissNFCInfo:
         state.nfcInfoAlert = nil
+        return .none
+    default:
         return .none
     }
 }
@@ -137,8 +129,8 @@ extension IdentificationScanState {
         case .cardRemoved:
             authenticationSuccessful = false
             return .none
-        case .processCompletedSuccessfullyWithRedirect(let urlString):
-            return Effect(value: .identifiedSuccessfullyWithRedirect(request, redirectURL: urlString))
+        case .processCompletedSuccessfullyWithRedirect(let redirect):
+            return Effect(value: .identifiedSuccessfully(redirectURL: redirect))
         case .processCompletedSuccessfullyWithoutRedirect:
             scanAvailable = false
             return Effect(value: .error(ScanErrorState(errorType: .unexpectedEvent(event), retry: scanAvailable)))

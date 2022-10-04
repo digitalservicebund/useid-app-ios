@@ -14,7 +14,6 @@
 		D28D27FF28B7A91B008DA310 /* MissingPINLetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */; };
 		D28D280228B7A9F5008DA310 /* SetupDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D280028B7A9F5008DA310 /* SetupDone.swift */; };
 		D28D280328B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D280128B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift */; };
-		D29E53B928CF14FC0029AB4D /* IdentificationDoneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29E53B828CF14FC0029AB4D /* IdentificationDoneTests.swift */; };
 		D2A6773828B4DD5D0033373E /* Array+SafeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */; };
 		D2AD47AF28C73B7400863D43 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2AD47AE28C73B7400863D43 /* Launch Screen.storyboard */; };
 		D2B76A7A28BE4B93000B442D /* Analytics in Frameworks */ = {isa = PBXBuildFile; productRef = D2B76A7928BE4B93000B442D /* Analytics */; };
@@ -99,7 +98,6 @@
 		E1CD8E93282156F2008ADA2A /* SetupTransportPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E92282156F2008ADA2A /* SetupTransportPIN.swift */; };
 		E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E9428215971008ADA2A /* PINEntryView.swift */; };
 		E1D307B02833A2500088DAFF /* SetupPersonalPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D307AF2833A2500088DAFF /* SetupPersonalPIN.swift */; };
-		E1DA8463286DD45800710DD9 /* IdentificationDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DA8462286DD45800710DD9 /* IdentificationDone.swift */; };
 		E1EB9FFA28B5288A007FF467 /* ScanBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EB9FF928B5288A007FF467 /* ScanBody.swift */; };
 		E1EFB5C22858EAA2005C38C6 /* IdentificationOverviewLoaded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */; };
 		E1EFB5C42858EB0F005C38C6 /* IdentificationOverviewLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C32858EB0F005C38C6 /* IdentificationOverviewLoading.swift */; };
@@ -172,7 +170,6 @@
 		D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissingPINLetter.swift; sourceTree = "<group>"; };
 		D28D280028B7A9F5008DA310 /* SetupDone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupDone.swift; sourceTree = "<group>"; };
 		D28D280128B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupIncorrectTransportPIN.swift; sourceTree = "<group>"; };
-		D29E53B828CF14FC0029AB4D /* IdentificationDoneTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationDoneTests.swift; sourceTree = "<group>"; };
 		D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+SafeTests.swift"; sourceTree = "<group>"; };
 		D2AD47AE28C73B7400863D43 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		D2B596F528B8E41A0042BE32 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -254,7 +251,6 @@
 		E1CD8E92282156F2008ADA2A /* SetupTransportPIN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupTransportPIN.swift; sourceTree = "<group>"; };
 		E1CD8E9428215971008ADA2A /* PINEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINEntryView.swift; sourceTree = "<group>"; };
 		E1D307AF2833A2500088DAFF /* SetupPersonalPIN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupPersonalPIN.swift; sourceTree = "<group>"; };
-		E1DA8462286DD45800710DD9 /* IdentificationDone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationDone.swift; sourceTree = "<group>"; };
 		E1EB9FF928B5288A007FF467 /* ScanBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanBody.swift; sourceTree = "<group>"; };
 		E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoaded.swift; sourceTree = "<group>"; };
 		E1EFB5C32858EB0F005C38C6 /* IdentificationOverviewLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoading.swift; sourceTree = "<group>"; };
@@ -461,7 +457,6 @@
 				E1EFB5D4285C7D81005C38C6 /* IdentificationPersonalPIN.swift */,
 				E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */,
 				E1C2D8B928620E2B000E0F5B /* IdentificationScan.swift */,
-				E1DA8462286DD45800710DD9 /* IdentificationDone.swift */,
 			);
 			path = Identification;
 			sourceTree = "<group>";
@@ -962,7 +957,6 @@
 				E12B424828D8AB440032D65D /* ControllerCallbackTests.swift in Sources */,
 				D2C5915028CB86570048D379 /* MissingPINLetterTests.swift in Sources */,
 				E135D6AC28B76A3500A32862 /* Matchable+UseID.swift in Sources */,
-				D29E53B928CF14FC0029AB4D /* IdentificationDoneTests.swift in Sources */,
 				E12CB30628494BD70039FD56 /* IDInteractionManagerTests.swift in Sources */,
 				E135D6AA28B7696400A32862 /* SetupCoordinatorTests.swift in Sources */,
 				E13F9E3B2886F3420088E955 /* IdentificationCoordinatorTests.swift in Sources */,
@@ -1054,7 +1048,6 @@
 				E5E69D872812FB7A00A3B66A /* IDTask.swift in Sources */,
 				D2B7BCFB28D2108900318B9F /* Effects.swift in Sources */,
 				E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */,
-				E1DA8463286DD45800710DD9 /* IdentificationDone.swift in Sources */,
 				E1D307B02833A2500088DAFF /* SetupPersonalPIN.swift in Sources */,
 				E16708B5283D4F25001A1637 /* Screens.swift in Sources */,
 				D21E682028BCEB0A0055EBFE /* Assets+Generated.swift in Sources */,

@@ -8,7 +8,6 @@ enum IdentificationScreenState: Equatable, IDInteractionHandler {
     case incorrectPersonalPIN(IdentificationIncorrectPersonalPINState)
     case scan(IdentificationScanState)
     case error(ScanErrorState)
-    case done(IdentificationDoneState)
     
     func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationScreenAction? {
         switch self {
@@ -33,8 +32,6 @@ extension IdentificationScreenState: AnalyticsView {
             return ["scan"]
         case .personalPIN:
             return ["personalPIN"]
-        case .done:
-            return ["done"]
         case .incorrectPersonalPIN:
             return ["incorrectPersonalPIN"]
         case .error(let state):
@@ -49,7 +46,6 @@ enum IdentificationScreenAction: Equatable {
     case incorrectPersonalPIN(IdentificationIncorrectPersonalPINAction)
     case scan(IdentificationScanAction)
     case error(ScanErrorAction)
-    case done(IdentificationDoneAction)
 }
 
 let identificationScreenReducer = Reducer<IdentificationScreenState, IdentificationScreenAction, AppEnvironment>.combine(
@@ -75,12 +71,6 @@ let identificationScreenReducer = Reducer<IdentificationScreenState, Identificat
         .pullback(
             state: /IdentificationScreenState.scan,
             action: /IdentificationScreenAction.scan,
-            environment: { $0 }
-        ),
-    identificationDoneReducer
-        .pullback(
-            state: /IdentificationScreenState.done,
-            action: /IdentificationScreenAction.done,
             environment: { $0 }
         ),
     scanErrorReducer

@@ -125,11 +125,7 @@ final class BundIDUITests: XCTestCase {
         app.buttons[L10n.Identification.Scan.scan].tap()
         
         app.navigationBars.buttons["Debug"].wait().tap()
-        app.buttons["identifySuccessfullyWithRedirect"].wait().tap()
-        
-        app.staticTexts[L10n.Identification.Done.title].assertExistence()
-        
-        app.buttons[L10n.Identification.Done.continue].wait().tap()
+        app.buttons["identifySuccessfully"].wait().tap()
         
         app.buttons[L10n.Home.startSetup].assertExistence()
         
