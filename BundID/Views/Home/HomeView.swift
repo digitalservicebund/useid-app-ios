@@ -35,7 +35,9 @@ struct HomeView: View {
     var body: some View {
         NavigationView {
             ScrollView(showsIndicators: false) {
-                VStack(spacing: 16) {
+                VStack(spacing: 0) {
+                    overscrollBackground
+                    
                     headerView
                         .padding(.bottom)
                         .background(Color.blue200)
@@ -43,7 +45,8 @@ struct HomeView: View {
                     VStack(spacing: 16) {
                         HStack {
                             Text(L10n.Home.More.title)
-                                .font(.bundTitle)
+                                .font(.bundLargeTitle)
+                                .padding(.top)
                             Spacer()
                         }
                         setupActionView
@@ -51,7 +54,8 @@ struct HomeView: View {
                         Spacer(minLength: 0)
                         WithViewStore(store) { viewStore in
                             Text(L10n.Home.version(viewStore.state.versionInfo))
-                                .font(.bundCaption2)
+                                .font(.bundCaption1)
+                                .foregroundColor(.gray900)
                                 .padding(.bottom)
                         }
                     }
@@ -64,12 +68,12 @@ struct HomeView: View {
     }
     
     @ViewBuilder
-    var headerView: some View {
+    private var headerView: some View {
         VStack(spacing: 0) {
             ImageMeta(asset: Asset.abstractWidget).image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .padding(.bottom, 20)
+                .padding(EdgeInsets(top: 60, leading: 24, bottom: 20, trailing: 24))
             
             Text(L10n.Home.Header.title)
                 .font(.bundLargeTitle)
@@ -89,36 +93,25 @@ struct HomeView: View {
     }
     
     @ViewBuilder
-    var setupActionView: some View {
-        ZStack {
+    private var setupActionView: some View {
+        VStack {
             ImageMeta(asset: Asset.eiDs).image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .padding()
-            VStack {
-                Spacer(minLength: 160)
-                Button {
-                    ViewStore(store.stateless).send(.triggerSetup)
-                } label: {
-                    Text(L10n.Home.startSetup)
-                }
-                .padding()
-                .buttonStyle(BundButtonStyle(isPrimary: true))
+            Button(L10n.Home.startSetup) {
+                ViewStore(store.stateless).send(.triggerSetup)
             }
+            .buttonStyle(BundButtonStyle(isPrimary: true))
+            .offset(y: -20)
+            .padding(.bottom, -20)
+            
         }
-        .background(
-            RoundedRectangle(cornerRadius: 14)
-                .foregroundColor(.white)
-                .shadow(color: .black.opacity(0.04), radius: 32, x: 0, y: 4)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 14)
-                .stroke(Color.gray300, lineWidth: 1)
-        )
+        .padding()
+        .grouped()
     }
     
     @ViewBuilder
-    var listView: some View {
+    private var listView: some View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading, spacing: 0) {
                 NavigationLink {
@@ -173,22 +166,24 @@ struct HomeView: View {
         }
         .buttonStyle(.plain)
         .font(.bundBody)
-        .background(
-            RoundedRectangle(cornerRadius: 14)
-                .foregroundColor(.white)
-                .shadow(color: .black.opacity(0.04), radius: 32, x: 0, y: 4)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 14)
-                .stroke(Color.gray300, lineWidth: 1)
-        )
+        .foregroundColor(.blackish)
+        .grouped()
     }
     
     @ViewBuilder
-    var listDivider: some View {
+    private var listDivider: some View {
         Divider()
             .foregroundColor(.gray300)
             .padding(.vertical, 16)
+    }
+    
+    @ViewBuilder
+    private var overscrollBackground: some View {
+        let height = 1000.0
+        Color.blue200
+            .frame(height: height)
+            .offset(y: -height)
+            .padding(.bottom, -height)
     }
 }
 
@@ -198,5 +193,26 @@ struct HomeView_Previews: PreviewProvider {
                                                       buildNumber: 42),
                               reducer: .empty,
                               environment: AppEnvironment.preview))
+    }
+}
+
+private struct Grouped: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundColor(.white)
+                    .shadow(color: .black.opacity(0.04), radius: 32, x: 0, y: 4)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.gray300, lineWidth: 1)
+            )
+    }
+}
+
+private extension View {
+    func grouped() -> some View {
+        modifier(Grouped())
     }
 }
