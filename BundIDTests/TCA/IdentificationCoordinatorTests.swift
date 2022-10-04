@@ -2,6 +2,7 @@ import XCTest
 import ComposableArchitecture
 import Cuckoo
 import Combine
+import Analytics
 
 @testable import BundID
 
@@ -10,6 +11,7 @@ class IdentificationCoordinatorTests: XCTestCase {
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var mockIDInteractionManager: MockIDInteractionManagerType!
     var mockStorageManager: MockStorageManagerType!
+    var mockAnalyticsClient: MockAnalyticsClient!
     
     var openedURL: URL?
     var environment: AppEnvironment!
@@ -25,14 +27,21 @@ class IdentificationCoordinatorTests: XCTestCase {
         mockIDInteractionManager = MockIDInteractionManagerType()
         mockStorageManager = MockStorageManagerType()
         scheduler = DispatchQueue.test
+        mockAnalyticsClient = MockAnalyticsClient()
         environment = AppEnvironment.mocked(mainQueue: scheduler.eraseToAnyScheduler(),
                                             uuidFactory: uuidFactory,
                                             idInteractionManager: mockIDInteractionManager,
                                             storageManager: mockStorageManager,
+                                            analytics: mockAnalyticsClient,
                                             urlOpener: { self.openedURL = $0 })
         
         stub(mockStorageManager) {
             when($0.updateSetupCompleted(any())).thenDoNothing()
+        }
+        
+        stub(mockAnalyticsClient) {
+            $0.track(view: any()).thenDoNothing()
+            $0.track(event: any()).thenDoNothing()
         }
     }
     
@@ -119,6 +128,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         
         XCTAssertEqual(redirect, openedURL)
         verify(mockStorageManager).updateSetupCompleted(true)
+        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification", action: "success"))
     }
     
     func testScanToIncorrectPIN() throws {

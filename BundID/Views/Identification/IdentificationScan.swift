@@ -75,10 +75,15 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
     case .identifiedSuccessfully(let redirectURL):
         environment.storageManager.updateSetupCompleted(true)
         
+        let endEffect = Effect<IdentificationScanAction, Never>(value: .end)
+        let trackingEffect = Effect<IdentificationScanAction, Never>.trackEvent(category: "identification",
+                                                                                action: "success",
+                                                                                analytics: environment.analytics)
+        
         if let url = URL(string: redirectURL) {
-            return .concatenate(.openURL(url, urlOpener: environment.urlOpener), Effect(value: .end))
+            return .concatenate(.openURL(url, urlOpener: environment.urlOpener), trackingEffect, endEffect)
         } else {
-            return Effect(value: .end)
+            return .concatenate(trackingEffect, endEffect)
         }
     case .showNFCInfo:
         state.nfcInfoAlert = AlertState(title: TextState(L10n.HelpNFC.title),
@@ -151,7 +156,7 @@ struct IdentificationScan: View {
                     LottieView(name: Asset.animationIdScan.name,
                                backgroundColor: Color(0xEBEFF2),
                                accessiblityLabel: L10n.Scan.animationAccessibilityLabel)
-                        .aspectRatio(540.0 / 367.0, contentMode: .fit)
+                    .aspectRatio(540.0 / 367.0, contentMode: .fit)
                     
                     if viewStore.isScanning {
                         VStack {
@@ -168,7 +173,7 @@ struct IdentificationScan: View {
                                  buttonTapped: { viewStore.send(.startScan) },
                                  nfcInfoTapped: { viewStore.send(.showNFCInfo) },
                                  helpTapped: { viewStore.send(.showHelp) })
-                            .disabled(!viewStore.scanAvailable)
+                        .disabled(!viewStore.scanAvailable)
                     }
                 }
             }.onChange(of: viewStore.state.attempt, perform: { _ in
