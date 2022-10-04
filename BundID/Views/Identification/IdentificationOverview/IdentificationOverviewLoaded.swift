@@ -79,6 +79,6 @@ struct IdentificationOverviewLoaded: View {
         )
         .shadow(color: .black.opacity(0.08), radius: 20, x: 0, y: 10)
         .padding(.horizontal)
-        .padding(.bottom, 24)
+        .padding(.vertical, 24)
     }
 }
