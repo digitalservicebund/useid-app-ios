@@ -23,7 +23,7 @@
 "cardInteraction_provideCard" = "Place your ID on top close to the upper back side of the device.";
 "firstTimeUser_confirmEnd_confirm" = "End";
 "firstTimeUser_confirmEnd_deny" = "Cancel";
-"firstTimeUser_confirmEnd_message" = "Do you want to cancel setup of the online ID card function?\n\nYou can restart the setup later.";
+"firstTimeUser_confirmEnd_message" = "Do you want to cancel the setup of the online ID card function? \n\nYou can restart the setup later.";
 "firstTimeUser_confirmEnd_title" = "End setup?";
 "firstTimeUser_done_close" = "Finalize setup";
 "firstTimeUser_done_identify" = "Identify yourself now";
