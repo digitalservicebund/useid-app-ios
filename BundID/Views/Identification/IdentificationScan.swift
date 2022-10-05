@@ -1,7 +1,6 @@
 import SwiftUI
 import ComposableArchitecture
 import Combine
-import Lottie
 import Sentry
 
 enum IdentificationScanError: Error, Equatable {
