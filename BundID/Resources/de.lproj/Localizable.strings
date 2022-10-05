@@ -15,12 +15,12 @@
 "cardAttribute_dg17" = "Adresse";
 "cardAttribute_dg19" = "Nebenbestimmungen I";
 "cardAttribute_restrictedIdentification" = "Anbieter- und kartenspezifische Kennung";
-"cardInteraction_cardConnected" = "Ausweis verbunden";
+"cardInteraction_cardConnected" = "Ausweis nicht bewegen.";
 "cardInteraction_cardRecognized" = "Ausweis erkannt";
 "cardInteraction_error_default" = "Fehler beim Lesen aufgetreten";
 "cardInteraction_error_tagLost" = "Karte wurde entfernt";
 "cardInteraction_error_timeout" = "Zeitlimit erreicht";
-"cardInteraction_provideCard" = "Platzieren Sie Ihren Ausweis oben dicht an die obere Geräterückseite.";
+"cardInteraction_provideCard" = "Halten Sie Ihren Ausweis dicht an die obere Rückseite des iPhones.";
 "firstTimeUser_confirmEnd_confirm" = "Beenden";
 "firstTimeUser_confirmEnd_deny" = "Abbrechen";
 "firstTimeUser_confirmEnd_message" = "Möchten Sie die Einrichtung der Online-Ausweisfunktion abbrechen?\n\nSie können die Einrichtung später erneut starten.";
@@ -111,7 +111,7 @@
 "identification_personalPIN_title" = "Geben Sie die persönliche PIN Ihres Ausweises ein.";
 "identification_scan_message" = "Halten Sie Ihren Ausweis dicht an die Rückseite des Smartphones. Die App nutzt die NFC-Sensoren in Smartphone und Ausweis, um Ihre PIN zu überprüfen und die benötigten Daten abzurufen.";
 "identification_scan_scan" = "Jetzt Daten abrufen";
-"identification_scan_scanSuccess" = "Datenübertragung erfolgreich";
+"identification_scan_scanSuccess" = "Erfolgreich ausgewiesen.";
 "identification_scan_title" = "Rufen Sie die Daten von Ihrem Ausweis ab.";
 "identification_scan_unexpectedError_close" = "Schließen";
 "identification_scan_unexpectedError_message" = "Ein unerwarteter Fehler ist aufgetreten. Bitte kehren Sie zur Webseite zurück und wiederholen Sie den Vorgang.";
