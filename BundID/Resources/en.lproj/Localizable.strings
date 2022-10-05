@@ -15,12 +15,12 @@
 "cardAttribute_dg17" = "Address";
 "cardAttribute_dg19" = "Ancillary provisions I";
 "cardAttribute_restrictedIdentification" = "Provider and card-specific identifier";
-"cardInteraction_cardConnected" = "ID card connected";
+"cardInteraction_cardConnected" = "Do not move the ID card.";
 "cardInteraction_cardRecognized" = "ID card recognized";
 "cardInteraction_error_default" = "Error occurred while reading";
 "cardInteraction_error_tagLost" = "Card has been removed";
 "cardInteraction_error_timeout" = "Time limit reached";
-"cardInteraction_provideCard" = "Place your ID on top close to the upper back side of the device.";
+"cardInteraction_provideCard" = "Hold your ID card on top close to the upper back side of the iPhone.";
 "firstTimeUser_confirmEnd_confirm" = "End";
 "firstTimeUser_confirmEnd_deny" = "Cancel";
 "firstTimeUser_confirmEnd_message" = "Do you want to cancel the setup of the online ID card function? \n\nYou can restart the setup later.";
