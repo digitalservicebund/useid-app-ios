@@ -91,9 +91,6 @@
 "identification_confirmEnd_deny" = "Cancel";
 "identification_confirmEnd_message" = "Do you want to stop the identification process?";
 "identification_confirmEnd_title" = "End identification process?";
-"identification_done_body" = "Continue at \"%@\".";
-"identification_done_continue" = "Continue to the provider";
-"identification_done_title" = "You have successfully identified yourself.";
 "identification_end" = "Cancel";
 "identification_fetchMetadata_loadingData" = "Data is being loaded";
 "identification_fetchMetadata_pleaseWait" = "One moment please…";
