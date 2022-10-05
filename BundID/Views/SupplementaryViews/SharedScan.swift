@@ -1,6 +1,6 @@
 import SwiftUI
 import ComposableArchitecture
-import Lottie
+import AVKit
 
 struct ProgressCaption: Equatable {
     var title: String
@@ -33,7 +33,7 @@ struct SharedScan: View {
     var scanButton: String
     
     @Namespace var namespace
-    @State var animationSyncTime: AnimationProgressTime = 0
+    @State var animationSyncTime: CMTime = CMTime(seconds: 0.0, preferredTimescale: 1000)
     
     init(store: Store<SharedScanState, SharedScanAction>,
          instructionsTitle: String,
@@ -63,7 +63,7 @@ struct SharedScan: View {
                                      nfcInfoTapped: { viewStore.send(.showNFCInfo) },
                                      helpTapped: { viewStore.send(.showHelp) })
                             
-                            scanAnimation(syncedTime: .init(get: { 0.0 },
+                            scanAnimation(syncedTime: .init(get: { animationSyncTime },
                                                             set: { animationSyncTime = $0 }))
                             .padding([.horizontal, .bottom])
                         }
@@ -120,11 +120,10 @@ struct SharedScan: View {
         }
     }
     
-    func scanAnimation(syncedTime: Binding<AnimationProgressTime>) -> some View {
-        LottieView(name: Asset.animationIdScan.name,
-                   backgroundColor: Color(0xEBEFF2),
-                   accessiblityLabel: L10n.Scan.animationAccessibilityLabel,
-                   syncedTime: syncedTime)
+    func scanAnimation(syncedTime: Binding<CMTime>) -> some View {
+        LoopingPlayer(fileURL: Bundle.main.url(forResource: "scanAnimation",
+                                               withExtension: "mp4")!,
+                      syncedTime: syncedTime)
         .aspectRatio(540.0 / 367.0, contentMode: .fit)
         .matchedGeometryEffect(id: "scanAnimation", in: namespace)
     }
