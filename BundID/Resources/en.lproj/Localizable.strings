@@ -56,10 +56,10 @@
 "firstTimeUser_pinLetter_letterPresent" = "Yes, the PIN letter is available";
 "firstTimeUser_scan_body" = "Almost there! In the next step, hold your ID close to the top back side of the iPhone. The app uses NFC sensors in the iPhone and ID card to assign the new PIN to your ID card.";
 "firstTimeUser_scan_progress_body" = "Step 1 completed.\nStep 2 is being performed.";
-"firstTimeUser_scan_progress_title" = "Do not move the ID card";
+"firstTimeUser_scan_progress_title" = "Do not move the ID card.";
 "firstTimeUser_scan_scan" = "Make transfer now";
 "firstTimeUser_scan_scanningCard" = "ID card is checked";
-"firstTimeUser_scan_scanSuccess" = "Data transfer successful";
+"firstTimeUser_scan_scanSuccess" = "Successfully transferred personal PIN.";
 "firstTimeUser_scan_title" = "Transfer your new PIN to the ID card.";
 "firstTimeUser_transportPIN_body" = "You will find the 5-digit transport PIN in your PIN letter.";
 "firstTimeUser_transportPIN_continue" = "Next";
@@ -111,7 +111,7 @@
 "identification_personalPIN_title" = "Enter the personal PIN for your ID card.";
 "identification_scan_message" = "Hold your ID card close to the back side of the smartphone. The app uses NFC sensors in the smartphone and ID card to verify your PIN and retrieve the required data.";
 "identification_scan_scan" = "Retrieve data now";
-"identification_scan_scanSuccess" = "Data transfer successful";
+"identification_scan_scanSuccess" = "Identification successful.";
 "identification_scan_title" = "Retrieve the data from your ID card.";
 "identification_scan_unexpectedError_close" = "Close";
 "identification_scan_unexpectedError_message" = "An unexpected error has occurred. Please return to the website and try again.";
