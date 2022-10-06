@@ -54,13 +54,15 @@ platform :ios do
   lane :test_without_building do | options |
     begin
       testPlan = options[:testplan] || "AllTests"
+      device = options[:device] || "iPhone 14"
+      
       run_tests(
         scheme: "BundID",
         derived_data_path: "./DerivedData",
         cloned_source_packages_path: '.swift-packages',
         test_without_building: true,
         testplan: testPlan,
-        devices: ["iPhone 13"],
+        devices: [device],
         skip_detect_devices: true,
         prelaunch_simulator: false,
         skip_package_dependencies_resolution: true,
@@ -72,7 +74,8 @@ platform :ios do
         concurrent_workers: 7,
         output_style: "raw",
         output_types: "",
-        number_of_retries: 0
+        number_of_retries: 0,
+        ensure_devices_found: true
       )
     rescue
       UI.user_error!("Tests did fail, please check logs above or BundID.xcresult.zip")
