@@ -59,7 +59,7 @@
 "firstTimeUser_scan_progress_title" = "Do not move the ID card.";
 "firstTimeUser_scan_scan" = "Make transfer now";
 "firstTimeUser_scan_scanningCard" = "ID card is checked";
-"firstTimeUser_scan_scanSuccess" = "Successfully transferred personal PIN.";
+"firstTimeUser_scan_scanSuccess" = "Data transfer successful.";
 "firstTimeUser_scan_title" = "Transfer your new PIN to the ID card.";
 "firstTimeUser_transportPIN_body" = "You will find the 5-digit transport PIN in your PIN letter.";
 "firstTimeUser_transportPIN_continue" = "Next";
