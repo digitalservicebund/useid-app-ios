@@ -37,7 +37,7 @@
 "firstTimeUser_intro_startSetup" = "Set up online ID card now";
 "firstTimeUser_intro_title" = "Have you already set up your online ID card?";
 "firstTimeUser_intro_skipSetup" = "Already set up";
-"firstTimeUser_missingPINLetter_body" = "We are still working on this feature. \n\nFor more information about the PIN reset letter, please visit\n\n**[www.pin-ruecksetzbrief-bestellen.de](https://www.pin-ruecksetzbrief-bestellen.de)**";
+"firstTimeUser_missingPINLetter_body" = "We are still working on this feature.\n\nFor more information about the PIN reset letter, please visit\n\n**[www.pin-ruecksetzbrief-bestellen.de ↗](https://www.pin-ruecksetzbrief-bestellen.de)**";
 "firstTimeUser_missingPINLetter_title" = "Order PIN reset letter.";
 "firstTimeUser_personalPIN_body" = "Make sure you remember your personal ID PIN. You will need it every time you use the online ID function in the future.";
 "firstTimeUser_personalPIN_confirmation" = "Repeat PIN to confirm";
