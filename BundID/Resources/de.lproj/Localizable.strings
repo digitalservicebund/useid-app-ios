@@ -59,7 +59,7 @@
 "firstTimeUser_scan_progress_title" = "Ausweis nicht bewegen.";
 "firstTimeUser_scan_scan" = "Jetzt übertragen";
 "firstTimeUser_scan_scanningCard" = "Ausweis nicht bewegen.";
-"firstTimeUser_scan_scanSuccess" = "Persönliche Ausweis-PIN erfolgreich übertragen.";
+"firstTimeUser_scan_scanSuccess" = "Datenübertragung erfolgreich.";
 "firstTimeUser_scan_title" = "Übertragen Sie Ihre neue PIN auf den Ausweis.";
 "firstTimeUser_scanInstructions_title" = "So übertragen Sie Ihre neue PIN auf den Ausweis.";
 "firstTimeUser_scanInstructions_body" = "Fast geschafft! Halten Sie im nächsten Schritt Ihren Ausweis dicht an die obere Rückseite des iPhones. Die App nutzt die NFC-Sensoren in iPhone und Ausweis, um Ihrem Ausweis die neue PIN zuzuordnen.";
