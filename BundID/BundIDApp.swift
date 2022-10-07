@@ -109,6 +109,12 @@ struct BundIDApp: App {
                     if CommandLine.arguments.contains(LaunchArgument.useDemoTokenURL) {
                         viewStore.send(.openURL(demoTokenURL))
                     }
+                    
+                    if CommandLine.arguments.contains(LaunchArgument.uiTesting) {
+                        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                        windowScene?.windows.first?.layer.speed = 100
+                        UIView.setAnimationsEnabled(false)
+                    }
 #endif
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
