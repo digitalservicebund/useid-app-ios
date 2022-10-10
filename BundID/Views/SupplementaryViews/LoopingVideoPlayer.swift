@@ -85,7 +85,7 @@ class CustomVideoPlayer: UIView {
 
 struct LoopingPlayer_Previews: PreviewProvider {
     static var previews: some View {
-        LoopingPlayer(fileURL: Bundle.main.url(forResource: "scanAnimation",
+        LoopingPlayer(fileURL: Bundle.main.url(forResource: "animation_id-scan_800X544",
                                                withExtension: "mp4")!,
                       syncedTime: .constant(CMTime(seconds: 2.0, preferredTimescale: 1000)))
     }

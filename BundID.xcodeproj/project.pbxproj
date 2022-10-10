@@ -21,7 +21,6 @@
 		D2C5915028CB86570048D379 /* MissingPINLetterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C5914F28CB86570048D379 /* MissingPINLetterTests.swift */; };
 		D2FD741128DDF63000C7C5E7 /* ScanErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FD741028DDF63000C7C5E7 /* ScanErrorTests.swift */; };
 		E101325128EDDD7E006875F8 /* LoopingVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E101325028EDDD7E006875F8 /* LoopingVideoPlayer.swift */; };
-		E101325228EDDE38006875F8 /* scanAnimation.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E101324F28EDDD62006875F8 /* scanAnimation.mp4 */; };
 		E106614C28EC8C0C00CA2DB9 /* SharedScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E106614B28EC8C0C00CA2DB9 /* SharedScan.swift */; };
 		E10BB69B28AF83DD007EF50C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1AB87AA2825238D00C7FC94 /* Localizable.strings */; };
 		E10BB69C28AF83E1007EF50C /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
@@ -76,6 +75,7 @@
 		E1A769FD28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A769FC28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift */; };
 		E1A769FF28B940C6001E1F04 /* LaunchArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A769FE28B940C6001E1F04 /* LaunchArgument.swift */; };
 		E1A76A0028B940C6001E1F04 /* LaunchArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A769FE28B940C6001E1F04 /* LaunchArgument.swift */; };
+		E1AA677328F40C6900F0B0E4 /* animation_id-scan_800X544.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E1AA677228F40C6900F0B0E4 /* animation_id-scan_800X544.mp4 */; };
 		E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACE728350FD500A51183 /* Array+Safe.swift */; };
 		E1AAACEB2836668200A51183 /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACEA2836668200A51183 /* ShakeEffect.swift */; };
 		E1AAACF328378C0E00A51183 /* SetupPersonalPINTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AAACF228378C0E00A51183 /* SetupPersonalPINTests.swift */; };
@@ -178,7 +178,6 @@
 		D2C5914F28CB86570048D379 /* MissingPINLetterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPINLetterTests.swift; sourceTree = "<group>"; };
 		D2ED120F28DDFF3700EC95F2 /* BundIDRelease Production.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "BundIDRelease Production.entitlements"; sourceTree = "<group>"; };
 		D2FD741028DDF63000C7C5E7 /* ScanErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanErrorTests.swift; sourceTree = "<group>"; };
-		E101324F28EDDD62006875F8 /* scanAnimation.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = scanAnimation.mp4; sourceTree = "<group>"; };
 		E101325028EDDD7E006875F8 /* LoopingVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingVideoPlayer.swift; sourceTree = "<group>"; };
 		E106614B28EC8C0C00CA2DB9 /* SharedScan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedScan.swift; sourceTree = "<group>"; };
 		E110400C281C389C004BA03E /* SetupIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntro.swift; sourceTree = "<group>"; };
@@ -230,6 +229,7 @@
 		E19D26B0282557B00005B111 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E1A769FC28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+LaunchArguments.swift"; sourceTree = "<group>"; };
 		E1A769FE28B940C6001E1F04 /* LaunchArgument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchArgument.swift; sourceTree = "<group>"; };
+		E1AA677228F40C6900F0B0E4 /* animation_id-scan_800X544.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "animation_id-scan_800X544.mp4"; sourceTree = "<group>"; };
 		E1AAACE728350FD500A51183 /* Array+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Safe.swift"; sourceTree = "<group>"; };
 		E1AAACEA2836668200A51183 /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
 		E1AAACF028378C0E00A51183 /* BundIDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BundIDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -600,6 +600,7 @@
 				E19D26B1282557B00005B111 /* Localizable.stringsdict */,
 				E1CD8E8B281FFCC1008ADA2A /* BundesSans-DTP-Bold.otf */,
 				E1CD8E8A281FFCC1008ADA2A /* BundesSans-DTP-Regular.otf */,
+				E1AA677228F40C6900F0B0E4 /* animation_id-scan_800X544.mp4 */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -668,7 +669,6 @@
 				E5CEB27D281041330076B9FE /* BundIDApp.swift */,
 				E1A769FE28B940C6001E1F04 /* LaunchArgument.swift */,
 				E5CEB281281041340076B9FE /* Assets.xcassets */,
-				E101324F28EDDD62006875F8 /* scanAnimation.mp4 */,
 				E1AAACFD2837C41700A51183 /* AllTests.xctestplan */,
 				E18E224228534A8500221DB1 /* UITests.xctestplan */,
 				E18E22322853496B00221DB1 /* UnitTests.xctestplan */,
@@ -851,12 +851,12 @@
 			files = (
 				E1AB87AC2825238D00C7FC94 /* Localizable.strings in Resources */,
 				E1EFB5D0285C794A005C38C6 /* InfoPlist.strings in Resources */,
+				E1AA677328F40C6900F0B0E4 /* animation_id-scan_800X544.mp4 in Resources */,
 				E1CD8E8C281FFCC1008ADA2A /* BundesSans-DTP-Regular.otf in Resources */,
 				E5CEB285281041340076B9FE /* Preview Assets.xcassets in Resources */,
 				E5CEB282281041340076B9FE /* Assets.xcassets in Resources */,
 				D2AD47AF28C73B7400863D43 /* Launch Screen.storyboard in Resources */,
 				E1CD8E8D281FFCC1008ADA2A /* BundesSans-DTP-Bold.otf in Resources */,
-				E101325228EDDE38006875F8 /* scanAnimation.mp4 in Resources */,
 				E1BC3D8128B7E73B007A7B39 /* Licenses in Resources */,
 				E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */,
 				E1BC3D8228B7E73B007A7B39 /* Licenses.plist in Resources */,

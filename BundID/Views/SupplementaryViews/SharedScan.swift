@@ -121,7 +121,7 @@ struct SharedScan: View {
     }
     
     func scanAnimation(syncedTime: Binding<CMTime>) -> some View {
-        LoopingPlayer(fileURL: Bundle.main.url(forResource: "scanAnimation",
+        LoopingPlayer(fileURL: Bundle.main.url(forResource: "animation_id-scan_800X544",
                                                withExtension: "mp4")!,
                       syncedTime: syncedTime)
         .aspectRatio(540.0 / 367.0, contentMode: .fit)
