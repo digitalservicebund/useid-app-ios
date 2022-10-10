@@ -14,11 +14,17 @@ extension XCUIElement {
     }
     
     func waitAndTypeText(_ text: String, timeout: TimeInterval = 5, file: StaticString = #filePath, line: UInt = #line) {
-        assertExistence(file: file, line: line)
+        assertExistence(timeout: timeout, file: file, line: line)
         if !hasFocus {
             print("Element \(self) does not have focus yet. Tapping it to hopefully get focus. This should be investigated. \(file):\(line)")
             tap()
         }
+        
+        // Delete any existing text. (Perform delete once too often to make sure focus is correctly given.)
+        let existing = value as? String ?? ""
+        typeText(Array(repeating: XCUIKeyboardKey.delete.rawValue, count: existing.count + 1).joined())
+    
+        // Type new text
         typeText(text)
     }
     
