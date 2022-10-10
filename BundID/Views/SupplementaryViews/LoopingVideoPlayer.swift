@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 import AVKit
 
 struct LoopingPlayer: UIViewRepresentable {
@@ -61,6 +62,7 @@ struct LoopingPlayer: UIViewRepresentable {
 class CustomVideoPlayer: UIView {
     
     private var playerLayer = AVPlayerLayer()
+    private var cancellables = Set<AnyCancellable>()
     
     init(player: AVPlayer) {
         super.init(frame: .zero)
@@ -70,6 +72,13 @@ class CustomVideoPlayer: UIView {
         playerLayer.contentsGravity = .resizeAspect
         
         layer.addSublayer(playerLayer)
+        
+        NotificationCenter.default
+            .publisher(for: UIApplication.didBecomeActiveNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { _ in player.play() }
+            .store(in: &cancellables)
+        
     }
     
     override func layoutSubviews() {
