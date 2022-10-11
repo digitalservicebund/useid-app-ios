@@ -69,7 +69,7 @@
 "general_ok" = "OK";
 "helpNFC_body" = "NFC stands for Near Field Communication. The technology enables the contact-free exchange of data over very short distances. It is also used, for example, when paying with a smartphone at the supermarket checkout.";
 "helpNFC_title" = "How the NFC technology works";
-"home_header_infoText" = "Open the provider's website on your smartphone and press the button \"Mit BundesIdent ausweisen\".";
+"home_header_infoText" = "Open the provider's website on your smartphone and press the button “Mit BundesIdent ausweisen”.";
 "home_header_title" = "Identify";
 "home_more_accessibilityStatement" = "Accessibility Statement";
 "home_more_imprint" = "Imprint";
@@ -82,7 +82,7 @@
 "identification_attributeConsent_body" = "The service would like to access the following data from your ID card:";
 "identification_attributeConsent_continue" = "Grant release";
 "identification_attributeConsent_moreInfo" = "More information";
-"identification_attributeConsent_title" = "Grant release for %@";
+"identification_attributeConsent_title" = "Grant release for “%@”.";
 "identification_attributeConsentInfo_issuer" = "Issuer of the authorization certificate";
 "identification_attributeConsentInfo_provider" = "Provider";
 "identification_attributeConsentInfo_providerInfo" = "Provider information";
