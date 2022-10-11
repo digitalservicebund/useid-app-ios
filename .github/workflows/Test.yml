@@ -17,9 +17,9 @@ jobs:
           echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Restore Dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache-dependencies
         env:
           cache-name: cache-dependencies
@@ -34,7 +34,7 @@ jobs:
       - name: Brew bundle
         run: ./native_arch.sh brew bundle --no-lock
       - name: Save Dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         env:
           cache-name: cache-dependencies
@@ -53,9 +53,9 @@ jobs:
           echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
-        uses: actions/checkout@v2       
+        uses: actions/checkout@v3       
       - name: Restore Dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-dependencies
         with:
@@ -67,7 +67,7 @@ jobs:
         run: bundle exec fastlane lint
       - name: Archive swiftlint report
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: swiftlint-${{ github.sha }}
           path: swiftlint.html
@@ -81,9 +81,9 @@ jobs:
           echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
-        uses: actions/checkout@v2            
+        uses: actions/checkout@v3          
       - name: Restore Dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-dependencies
         with:
@@ -94,7 +94,7 @@ jobs:
       - name: Build
         run: bundle exec fastlane build_for_testing
       - name: Save DerivedData and SwiftPM folder
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-derived-data
         with:
@@ -103,7 +103,7 @@ jobs:
             .swift-packages
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
       - name: Save test_output folder
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-test-output
         with:
@@ -119,9 +119,9 @@ jobs:
           echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
-        uses: actions/checkout@v2          
+        uses: actions/checkout@v3       
       - name: Restore Dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-dependencies
         with:
@@ -130,7 +130,7 @@ jobs:
             .bundle
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
       - name: Restore DerivedData and SwiftPM folder
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-derived-data
         with:
@@ -139,7 +139,7 @@ jobs:
             .swift-packages
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
       - name: Restore test_output folder
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-test-output
         with:
@@ -152,7 +152,7 @@ jobs:
             bundle exec fastlane test_without_building testplan:UnitTests device:"iPhone 14"
       - name: Archive xcresult
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: xcresult-${{ github.sha }}
           path: fastlane/test_output/BundID.xcresult.zip
@@ -169,9 +169,9 @@ jobs:
           echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
-        uses: actions/checkout@v2          
+        uses: actions/checkout@v3
       - name: Restore Dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-dependencies
         with:
@@ -180,7 +180,7 @@ jobs:
             .bundle
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
       - name: Restore DerivedData and SwiftPM folder
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-derived-data
         with:
@@ -189,7 +189,7 @@ jobs:
             .swift-packages
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
       - name: Restore test_output folder
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-test-output
         with:
@@ -202,7 +202,7 @@ jobs:
             bundle exec fastlane test_without_building testplan:UITests device:"${{ matrix.device }}"
       - name: Archive xcresult
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: xcresult-${{ github.sha }}
           path: fastlane/test_output/BundID.xcresult.zip

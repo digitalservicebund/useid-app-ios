@@ -25,11 +25,11 @@ jobs:
           echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Restore Dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache-dependencies
         env:
           cache-name: cache-dependencies
@@ -44,7 +44,7 @@ jobs:
       - name: Brew bundle
         run: ./native_arch.sh brew bundle --no-lock
       - name: Save Dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         env:
           cache-name: cache-dependencies
@@ -65,9 +65,9 @@ jobs:
           echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
-        uses: actions/checkout@v2            
+        uses: actions/checkout@v3        
       - name: Restore Dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache-dependencies
         env:
           cache-name: cache-dependencies
@@ -100,11 +100,11 @@ jobs:
           echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
-        uses: actions/checkout@v2     
+        uses: actions/checkout@v3
         with:
           ref: ${{ needs.bumpVersion.outputs.gitTag }}
       - name: Restore Dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache-dependencies
         env:
           cache-name: cache-dependencies
@@ -183,11 +183,11 @@ jobs:
           echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
-        uses: actions/checkout@v2    
+        uses: actions/checkout@v3
         with:
           ref: ${{ needs.bumpVersion.outputs.gitTag }}     
       - name: Restore Dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache-dependencies
         env:
           cache-name: cache-dependencies
