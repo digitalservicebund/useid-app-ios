@@ -166,7 +166,7 @@ final class BundIDUITests: XCTestCase {
         
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
         
-        app.buttons[L10n.Scan.helpScanning].tap()
+        app.buttons[L10n.Scan.helpScanning].wait().tap()
         
         app.staticTexts[L10n.ScanError.CardUnreadable.title].assertExistence()
         app.buttons[L10n.ScanError.close].tap()
