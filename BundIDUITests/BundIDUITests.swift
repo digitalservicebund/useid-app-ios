@@ -170,8 +170,7 @@ final class BundIDUITests: XCTestCase {
         
         app.staticTexts[L10n.ScanError.CardUnreadable.title].assertExistence()
         app.buttons[L10n.ScanError.close].tap()
-        
-        app.buttons[L10n.Identification.Scan.scan].assertExistence()
-        app.buttons[L10n.Identification.Scan.scan].tap()
+
+        app.buttons[L10n.Identification.Scan.scan].wait().tap()
     }
 }
