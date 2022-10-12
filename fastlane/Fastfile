@@ -13,6 +13,7 @@
 default_platform(:ios)
 
 PROJECT_FILENAME = "BundesIdent"
+SCHEME_NAME = "BundesIdent"
 
 def to_boolean(str)
   str.downcase == 'true' || str == '1'
@@ -40,7 +41,7 @@ platform :ios do
   lane :build_for_testing do
     scan(
       project: "#{PROJECT_FILENAME}.xcodeproj",
-      scheme: 'BundesIdent',
+      scheme: SCHEME_NAME,
       cloned_source_packages_path: '.swift-packages',
       xcpretty_args: '--color',
       build_for_testing: true,
@@ -57,7 +58,7 @@ platform :ios do
       device = options[:device] || "iPhone 14"
       
       run_tests(
-        scheme: "BundesIdent",
+        scheme: SCHEME_NAME,
         derived_data_path: "./DerivedData",
         cloned_source_packages_path: '.swift-packages',
         test_without_building: true,
@@ -78,7 +79,7 @@ platform :ios do
         ensure_devices_found: true
       )
     rescue
-      UI.user_error!("Tests did fail, please check logs above or BundesIdent.xcresult.zip")
+      UI.user_error!("Tests did fail, please check logs above or #{SCHEME_NAME}.xcresult.zip")
     ensure
       trainer(
         output_directory: "fastlane/test_output/",
@@ -88,8 +89,8 @@ platform :ios do
       )
 
       zip(
-        path: "fastlane/test_output/BundesIdent.xcresult",
-        output_path: "fastlane/test_output/BundesIdent.xcresult.zip",
+        path: "fastlane/test_output/#{SCHEME_NAME}.xcresult",
+        output_path: "fastlane/test_output/#{SCHEME_NAME}.xcresult.zip",
         verbose: false
       )
     end
@@ -128,7 +129,7 @@ platform :ios do
       project: "#{PROJECT_FILENAME}.xcodeproj",
       configuration: 'Release Preview',
       clean: true,
-      scheme: 'BundesIdent',
+      scheme: SCHEME_NAME,
       cloned_source_packages_path: '.swift-packages',
       export_method: 'app-store',
       export_options: {
@@ -171,7 +172,7 @@ platform :ios do
       project: "#{PROJECT_FILENAME}.xcodeproj",
       configuration: 'Release Production',
       clean: true,
-      scheme: 'BundesIdent',
+      scheme: SCHEME_NAME,
       cloned_source_packages_path: '.swift-packages',
       export_method: 'app-store',
       export_options: {
@@ -235,7 +236,7 @@ platform :ios do
     puts "Updating to app version: #{new_app_version}"
     rel_path = options[:rel_path] || '../'
     
-    project = Xcodeproj::Project.open("#{rel_path}BundesIdent.xcodeproj")
+    project = Xcodeproj::Project.open("#{rel_path}#{PROJECT_FILENAME}.xcodeproj")
     project.build_configuration_list.build_configurations.each do |build_configuration|
       puts "Bumping version of #{build_configuration} from \
             #{build_configuration.build_settings['MARKETING_VERSION']} to #{new_app_version}"
