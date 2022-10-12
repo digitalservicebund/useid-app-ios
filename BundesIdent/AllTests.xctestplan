@@ -1,0 +1,61 @@
+{
+  "configurations" : [
+    {
+      "id" : "6BDD15A2-E170-4D81-B064-11523825E6BC",
+      "name" : "Configuration",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:BundesIdent.xcodeproj",
+          "identifier" : "E5CEB279281041330076B9FE",
+          "name" : "BundesIdent"
+        },
+        {
+          "containerPath" : "container:Analytics",
+          "identifier" : "Analytics",
+          "name" : "Analytics"
+        }
+      ]
+    },
+    "language" : "de",
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:BundesIdent.xcodeproj",
+      "identifier" : "E5CEB279281041330076B9FE",
+      "name" : "BundesIdent"
+    },
+    "testExecutionOrdering" : "random"
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:BundesIdent.xcodeproj",
+        "identifier" : "E1AAACEF28378C0E00A51183",
+        "name" : "BundesIdentTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:BundesIdent.xcodeproj",
+        "identifier" : "E18E2236285349D200221DB1",
+        "name" : "BundesIdentUITests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Analytics",
+        "identifier" : "AnalyticsTests",
+        "name" : "AnalyticsTests"
+      }
+    }
+  ],
+  "version" : 1
+}

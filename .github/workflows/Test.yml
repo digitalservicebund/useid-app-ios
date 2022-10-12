@@ -155,7 +155,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: xcresult-${{ github.sha }}
-          path: fastlane/test_output/BundID.xcresult.zip
+          path: fastlane/test_output/BundesIdent.xcresult.zip
 
   runUITests:
     runs-on: self-hosted
@@ -205,4 +205,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: xcresult-${{ github.sha }}
-          path: fastlane/test_output/BundID.xcresult.zip
+          path: fastlane/test_output/BundesIdent.xcresult.zip

@@ -1,0 +1,41 @@
+{
+  "configurations" : [
+    {
+      "id" : "155D900A-12DD-4D00-BEC8-C7E97CD7E3BE",
+      "name" : "Configuration 1",
+      "options" : {
+        "language" : "de"
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:BundesIdent.xcodeproj",
+          "identifier" : "E5CEB279281041330076B9FE",
+          "name" : "BundesIdent"
+        }
+      ]
+    },
+    "testExecutionOrdering" : "random"
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:BundesIdent.xcodeproj",
+        "identifier" : "E1AAACEF28378C0E00A51183",
+        "name" : "BundesIdentTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Analytics",
+        "identifier" : "AnalyticsTests",
+        "name" : "AnalyticsTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -118,12 +118,10 @@ Temporary Items
 .apdisk
 
 # Application specific files to ignore
-BundID/OpenECard/OpenEcard.framework/
-BundID/OpenECard/OpenEcard.xcframework
-BundID/Generated
+BundesIdent/Generated
 .swift-packages
 swiftlint.html
-BundIDTests/Generated
+BundesIdentTests/Generated
 
 .bundle
 vendor

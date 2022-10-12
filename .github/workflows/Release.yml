@@ -165,7 +165,7 @@ jobs:
         uses: actions/upload-artifact@v3
         if: ${{ always() }}
         with:
-          name: UseID.xcarchive.zip
+          name: BundesIdent.xcarchive.zip
           path: artifacts/*.xcarchive.zip
           if-no-files-found: error
       - name: Clean up keychain and provisioning profile
@@ -248,7 +248,7 @@ jobs:
         uses: actions/upload-artifact@v3
         if: ${{ always() }}
         with:
-          name: UseID-Preview.xcarchive.zip
+          name: BundesIdent-Preview.xcarchive.zip
           path: artifacts/*.xcarchive.zip
           if-no-files-found: error
       - name: Clean up keychain and provisioning profile

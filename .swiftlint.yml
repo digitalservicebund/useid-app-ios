@@ -44,6 +44,6 @@ excluded:
   - .swift-packages
   - fastlane
   - vendor
-  - BundIDTests
+  - BundesIdentTests
 
 allow_zero_lintable_files: true

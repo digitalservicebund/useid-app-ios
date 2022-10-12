@@ -1,15 +1,15 @@
 strings:
   inputs:
-    - BundID/Resources/de.lproj
+    - BundesIdent/Resources/de.lproj
   outputs:
     - templateName: structured-swift5
-      output: BundID/Generated/LocalizedStrings+Generated.swift
+      output: BundesIdent/Generated/LocalizedStrings+Generated.swift
   options:
     separator: "_"
 xcassets:
-  - inputs: BundID/Assets.xcassets
+  - inputs: BundesIdent/Assets.xcassets
     outputs:
       - templateName: swift5
-        output: BundID/Generated/Assets+Generated.swift
+        output: BundesIdent/Generated/Assets+Generated.swift
         params:
           enumName: Asset
