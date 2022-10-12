@@ -210,7 +210,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         
         let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
         stub(mockIDInteractionManager) {
-            $0.identify(tokenURL: demoTokenURL, nfcMessages: NFCMessages.identification).thenReturn(subject.eraseToAnyPublisher())
+            $0.identify(tokenURL: demoTokenURL, nfcMessagesProvider: any()).thenReturn(subject.eraseToAnyPublisher())
         }
         
         store.send(.routeAction(0, action: .overview(.loading(.identify))))

@@ -226,11 +226,11 @@ class DebugIDInteractionManager: IDInteractionManagerType {
     private var card: Card = Card(remainingAttempts: 3)
     
     func debuggableIdentify(tokenURL: URL) -> DebuggableInteraction<IdentifyDebugSequence> {
-        return DebuggableInteraction(publisher: identify(tokenURL: tokenURL, nfcMessages: .identification),
+        return DebuggableInteraction(publisher: identify(tokenURL: tokenURL, nfcMessagesProvider: IdentificationNFCMessageProvider(nfcMessages: .identification)),
                                      sequence: [.loadError, .requestAuthorization])
     }
     
-    func identify(tokenURL: URL, nfcMessages: NFCMessages) -> EIDInteractionPublisher {
+    func identify(tokenURL: URL, nfcMessagesProvider: (NSObjectProtocol & NFCConfigProtocol)) -> EIDInteractionPublisher {
         let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
         self.subject = subject
         
@@ -242,11 +242,11 @@ class DebugIDInteractionManager: IDInteractionManagerType {
     }
     
     func debuggableChangePIN() -> DebuggableInteraction<ChangePINDebugSequence> {
-        return DebuggableInteraction(publisher: changePIN(nfcMessages: .setup),
+        return DebuggableInteraction(publisher: changePIN(nfcMessagesProvider: SetupNFCMessageProvider()),
                                      sequence: ChangePINDebugSequence.defaultActions(card: card))
     }
     
-    func changePIN(nfcMessages: NFCMessages) -> EIDInteractionPublisher {
+    func changePIN(nfcMessagesProvider: (NSObjectProtocol & NFCConfigProtocol)) -> EIDInteractionPublisher {
         let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
         self.subject = subject
         

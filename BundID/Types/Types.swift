@@ -5,9 +5,11 @@ import OpenEcard
 import Combine
 import Sentry
 
+typealias NFCConfigType = NSObjectProtocol & NFCConfigProtocol
+
 protocol IDInteractionManagerType {
-    func identify(tokenURL: URL, nfcMessages: NFCMessages) -> EIDInteractionPublisher
-    func changePIN(nfcMessages: NFCMessages) -> EIDInteractionPublisher
+    func identify(tokenURL: URL, nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher
+    func changePIN(nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher
 }
 
 protocol OpenEcardType: OpenEcardProtocol {

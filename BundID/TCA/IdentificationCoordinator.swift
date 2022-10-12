@@ -169,10 +169,10 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                     state.availableDebugActions = debuggableInteraction.sequence
                     publisher = debuggableInteraction.publisher
                 } else {
-                    publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL, nfcMessages: .identification)
+                    publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL, nfcMessagesProvider: IdentificationNFCMessageProvider())
                 }
 #else
-                publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL, nfcMessages: .identification)
+                publisher = environment.idInteractionManager.identify(tokenURL: state.tokenURL, nfcMessagesProvider: IdentificationNFCMessageProvider())
 #endif
                 return publisher
                     .receive(on: environment.mainQueue)

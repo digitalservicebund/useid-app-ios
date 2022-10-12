@@ -58,10 +58,10 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
             state.availableDebugActions = debuggableInteraction.sequence
             publisher = debuggableInteraction.publisher
         } else {
-            publisher = environment.idInteractionManager.changePIN(nfcMessages: .setup)
+            publisher = environment.idInteractionManager.changePIN(nfcMessagesProvider: SetupNFCMessageProvider())
         }
 #else
-        publisher = environment.idInteractionManager.changePIN(nfcMessages: .setup)
+        publisher = environment.idInteractionManager.changePIN(nfcMessagesProvider: SetupNFCMessageProvider())
 #endif
         return .concatenate(
             .trackEvent(category: "firstTimeUser",
@@ -125,10 +125,9 @@ extension SetupScanState {
         case .authenticationStarted:
             print("Authentication started")
             shared.isScanning = true
-        case .requestCardInsertion(let messageCallback):
+        case .requestCardInsertion:
             shared.showProgressCaption = nil
             shared.isScanning = true
-            messageCallback(L10n.FirstTimeUser.Scan.scanningCard)
         case .cardInteractionComplete:
             print("Card interaction complete.")
         case .cardRecognized:

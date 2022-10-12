@@ -3,8 +3,6 @@ import Combine
 import OpenEcard
 import CombineSchedulers
 
-typealias NFCConfigType = NSObjectProtocol & NFCConfigProtocol
-
 extension OpenEcardImp: OpenEcardType {}
 
 class IDInteractionManager: IDInteractionManagerType {
@@ -16,19 +14,16 @@ class IDInteractionManager: IDInteractionManagerType {
         self.openEcard = openEcard
     }
     
-    func identify(tokenURL: URL, nfcMessages: NFCMessages = .identification) -> EIDInteractionPublisher {
-        start(startServiceHandler: StartServiceHandler(task: .eac(tokenURL: tokenURL)),
-              nfcMessages: nfcMessages)
+    func identify(tokenURL: URL, nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher {
+        start(startServiceHandler: StartServiceHandler(task: .eac(tokenURL: tokenURL)), nfcMessagesProvider: nfcMessagesProvider)
     }
     
-    func changePIN(nfcMessages: NFCMessages = NFCMessages.setup) -> EIDInteractionPublisher {
-        start(startServiceHandler: StartServiceHandler(task: .pinManagement),
-              nfcMessages: nfcMessages)
+    func changePIN(nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher {
+        start(startServiceHandler: StartServiceHandler(task: .pinManagement), nfcMessagesProvider: nfcMessagesProvider)
     }
     
-    private func start(startServiceHandler: StartServiceHandler, nfcMessages: NFCMessages) -> EIDInteractionPublisher {
-        let nfcMessageProvider = NFCMessageProvider(nfcMessages: nfcMessages)
-        let context = openEcard.context(nfcMessageProvider)!
+    private func start(startServiceHandler: StartServiceHandler, nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher {
+        let context = openEcard.context(nfcMessagesProvider)!
         context.initializeContext(startServiceHandler)
         self.context = context
         return startServiceHandler.publisher

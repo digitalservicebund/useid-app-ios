@@ -49,12 +49,7 @@ class SetupScanTests: XCTestCase {
                               reducer: setupScanReducer,
                               environment: environment)
         
-        let cardInsertionExpectation = self.expectation(description: "requestCardInsertion callback")
-        cardInsertionExpectation.expectedFulfillmentCount = 2
-        
-        let cardInsertionCallback: (String) -> Void = { _ in
-            cardInsertionExpectation.fulfill()
-        }
+        let cardInsertionCallback: (String) -> Void = { _ in }
         
         let requestChangedPINExpectation = self.expectation(description: "requestCardInsertion callback")
         let pinCallback: (String, String) -> Void = { actualOldPIN, actualNewPIN in
@@ -65,7 +60,7 @@ class SetupScanTests: XCTestCase {
         
         let queue = scheduler!
         stub(mockIDInteractionManager) { mock in
-            mock.changePIN(nfcMessages: NFCMessages.setup).then { _ in
+            mock.changePIN(nfcMessagesProvider: any()).then { _ in
                 let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
                 queue.schedule {
                     subject.send(.authenticationStarted)
@@ -115,7 +110,7 @@ class SetupScanTests: XCTestCase {
         
         verify(mockStorageManager).updateSetupCompleted(true)
         
-        self.wait(for: [cardInsertionExpectation, requestChangedPINExpectation], timeout: 0.0)
+        self.wait(for: [requestChangedPINExpectation], timeout: 0.0)
     }
     
     func testScanFail() throws {
@@ -125,7 +120,7 @@ class SetupScanTests: XCTestCase {
         
         let queue = scheduler!
         stub(mockIDInteractionManager) { mock in
-            mock.changePIN(nfcMessages: NFCMessages.setup).then { _ in
+            mock.changePIN(nfcMessagesProvider: any()).then { _ in
                 let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
                 queue.schedule {
                     subject.send(completion: .failure(.frameworkError(message: "Fail")))
@@ -171,7 +166,7 @@ class SetupScanTests: XCTestCase {
                               environment: environment)
         
         stub(mockIDInteractionManager) { mock in
-            mock.changePIN(nfcMessages: NFCMessages.setup).then { _ in
+            mock.changePIN(nfcMessagesProvider: any()).then { _ in
                 let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
                 self.scheduler.schedule {
                     subject.send(completion: .finished)
