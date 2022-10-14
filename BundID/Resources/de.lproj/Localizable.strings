@@ -74,7 +74,7 @@
 "general_ok" = "OK";
 "helpNFC_body" = "NFC steht für Near Field Communication. Die Technik ermöglicht den kontaktlosen Austausch von Daten über sehr kurze Strecken. Sie wird bspw. auch beim Bezahlen mit dem Smartphone an der Supermarktkasse verwendet.";
 "helpNFC_title" = "So funktioniert die NFC-Technologie";
-"home_header_infoText" = "Öffnen Sie auf Ihrem Smartphone die Internetseite vom Diensteanbieter und drücken Sie auf den Button »Mit BundesIdent ausweisen«.";
+"home_header_infoText" = "Öffnen Sie auf Ihrem iPhone die Internetseite vom Diensteanbieter und drücken Sie auf den Button »Mit BundesIdent ausweisen«.";
 "home_header_title" = "Ausweisen";
 "home_more_accessibilityStatement" = "Barrierefreiheitserklärung";
 "home_more_imprint" = "Impressum";
