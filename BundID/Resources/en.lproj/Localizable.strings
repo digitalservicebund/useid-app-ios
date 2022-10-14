@@ -72,7 +72,7 @@
 "general_ok" = "OK";
 "helpNFC_body" = "NFC stands for Near Field Communication. The technology enables the contact-free exchange of data over very short distances. It is also used, for example, when paying with a smartphone at the supermarket checkout.";
 "helpNFC_title" = "How the NFC technology works";
-"home_header_infoText" = "Open the provider's website on your smartphone and press the button “Mit BundesIdent ausweisen”.";
+"home_header_infoText" = "Open the provider's website on your iPhone and press the button “Mit BundesIdent ausweisen”.";
 "home_header_title" = "Identify";
 "home_more_accessibilityStatement" = "Accessibility Statement";
 "home_more_imprint" = "Imprint";
@@ -148,3 +148,4 @@
 "firstTimeUser_scanInstructions_body" = "Almost there! In the next step, hold your ID close to the top back side of the iPhone. The app uses NFC sensors in the iPhone and ID card to assign the new PIN to your ID card.";
 "identification_scanInstructions_body" = "In the next step, hold your ID card close to the back of the iPhone. The app uses the NFC sensors in the iPhone and ID card to check your PIN and retrieve the required data.";
 "identification_scanInstructions_title" = "How to retrieve data from your ID card.";
+"firstTimeUser_scanInstructions_title" = "How to transfer your new PIN to the ID card.";
