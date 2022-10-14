@@ -83,7 +83,7 @@ let identificationOverviewReducer = Reducer<IdentificationOverviewState, Identif
         switch action {
         case .error(.retry):
             state = .loading(IdentificationOverviewLoadingState())
-            return Effect(value: .loading(.identify))
+            return .none
         case .loading(.failure(let error)):
             state = .error(error)
             return .trackEvent(category: "identification",
