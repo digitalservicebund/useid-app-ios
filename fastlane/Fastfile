@@ -131,7 +131,7 @@ platform :ios do
       clean: true,
       scheme: SCHEME_NAME,
       cloned_source_packages_path: '.swift-packages',
-      xcconfig: 'BundID/Preview.xcconfig',
+      xcconfig: "#{SCHEME_NAME}/Preview.xcconfig",
       export_method: 'app-store',
       export_options: {
         provisioningProfiles: { 
@@ -175,7 +175,7 @@ platform :ios do
       clean: true,
       scheme: SCHEME_NAME,
       cloned_source_packages_path: '.swift-packages',
-      xcconfig: 'BundID/Release.xcconfig',
+      xcconfig: "#{SCHEME_NAME}/Release.xcconfig",
       export_method: 'app-store',
       export_options: {
         provisioningProfiles: { 
