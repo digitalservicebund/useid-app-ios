@@ -37,11 +37,25 @@ See the corresponding [readme](fastlane/README.md) for more information about ou
 
 Open the project file with Xcode and hit ⌘+R to run the project. Or hit ⌘+U to run all unit and UI tests.
 
+## Contributing
 
-# License
+Everyone is welcome to contribute the development of this project. You can contribute by opening pull request,
+providing documentation or answering questions or giving feedback. Please always follow the guidelines and our
+[Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Contributing code
+
+Open a pull request with your changes and it will be reviewed by someone from the team. When you submit a pull request,
+you declare that you have the right to license your contribution to the DigitalService and the community.
+By submitting the patch, you agree that your contributions are licensed under the GPLv3 license.
+
+Please make sure that your changes have been tested before submitting a pull request.
+
+
+## License
 
 This project is licensed under the [GNU General Public License v3 (GPLv3)](LICENSE).
 
-# Localization
+## Localization
 
 This project uses [Weblate](https://hosted.weblate.org/engage/useid/) for localization.
