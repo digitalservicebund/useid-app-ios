@@ -120,8 +120,6 @@ struct BundesIdentApp: App {
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
                     ViewStore(store.stateless).send(.didEnterBackground)
                 }
-                .accentColor(Color(asset: Asset.accentColor))
         }
-        
     }
 }

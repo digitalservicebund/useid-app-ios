@@ -180,6 +180,7 @@ struct SetupCoordinatorView: View {
                 .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
                 .navigationBarHidden(false)
             }
+            .accentColor(Asset.accentColor.swiftUIColor)
             .interactiveDismissDisabled(viewStore.state) {
                 viewStore.send(.end)
             }

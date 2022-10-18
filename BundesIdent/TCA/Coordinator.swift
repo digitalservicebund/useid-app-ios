@@ -167,5 +167,6 @@ struct CoordinatorView: View {
                         then: IdentificationCoordinatorView.init)
             }
         }
+        .accentColor(Asset.accentColor.swiftUIColor)
     }
 }

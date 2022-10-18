@@ -268,6 +268,7 @@ struct IdentificationCoordinatorView: View {
                 .navigationBarHidden(false)
                 .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
             }
+            .accentColor(Asset.accentColor.swiftUIColor)
             .interactiveDismissDisabled(viewStore.needsEndConfirmation) {
                 viewStore.send(.end)
             }
