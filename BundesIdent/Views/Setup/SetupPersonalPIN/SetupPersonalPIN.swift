@@ -2,13 +2,9 @@ import SwiftUI
 import Combine
 import ComposableArchitecture
 
-enum SetupPersonalPINError {
-    case mismatch
-}
-
 struct SetupPersonalPIN: View {
-    
     var store: Store<SetupPersonalPINState, SetupPersonalPINAction>
+    @FocusState private var focusedField: SetupPersonalPINState.Field?
     
     var body: some View {
         ScrollView {
@@ -23,11 +19,12 @@ struct SetupPersonalPIN: View {
                                      groupEvery: 3,
                                      showPIN: false,
                                      label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.first,
-                                     shouldBeFocused: viewStore.binding(\.$focusPIN1),
                                      backgroundColor: .gray100,
                                      doneConfiguration: nil)
+                        .focused($focusedField, equals: .pin1)
                         .font(.bundTitle)
                         .modifier(Shake(animatableData: CGFloat(viewStore.remainingAttempts)))
+                        
                         if viewStore.showPIN2 {
                             VStack {
                                 Spacer(minLength: 40)
@@ -40,9 +37,9 @@ struct SetupPersonalPIN: View {
                                              groupEvery: 3,
                                              showPIN: false,
                                              label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.second,
-                                             shouldBeFocused: viewStore.binding(\.$focusPIN2),
                                              backgroundColor: .gray100,
                                              doneConfiguration: nil)
+                                .focused($focusedField, equals: .pin2)
                                 .font(.bundTitle)
                                 .modifier(Shake(animatableData: CGFloat(viewStore.remainingAttempts)))
                                 Spacer()
@@ -57,6 +54,7 @@ struct SetupPersonalPIN: View {
                     }
                     Spacer()
                 }
+                .synchronize(viewStore.binding(\.$focusedField), $focusedField)
                 .navigationBarTitleDisplayMode(.inline)
                 .onAppear {
                     viewStore.send(.onAppear)
@@ -70,7 +68,9 @@ struct SetupPersonalPIN: View {
 struct SetupPersonalPIN_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            SetupPersonalPIN(store: Store(initialState: SetupPersonalPINState(enteredPIN1: "12345"), reducer: .empty, environment: AppEnvironment.preview))
+            SetupPersonalPIN(store: Store(initialState: SetupPersonalPINState(enteredPIN1: "12345"),
+                                          reducer: .empty,
+                                          environment: AppEnvironment.preview))
         }
         .previewDevice("iPhone 12")
     }

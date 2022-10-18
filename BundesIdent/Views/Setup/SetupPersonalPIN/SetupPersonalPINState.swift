@@ -3,13 +3,21 @@ import Combine
 import ComposableArchitecture
 
 struct SetupPersonalPINState: Equatable {
-    @BindableState var enteredPIN1: String = ""
-    @BindableState var enteredPIN2: String = ""
-    var showPIN2: Bool = false
-    @BindableState var focusPIN1: Bool = true
-    @BindableState var focusPIN2: Bool = false
+    enum Field: String, Hashable {
+        case pin1
+        case pin2
+    }
+    
+    enum SetupPersonalPINError: Hashable {
+        case mismatch
+    }
+    
+    @BindableState var enteredPIN1 = ""
+    @BindableState var enteredPIN2 = ""
+    var showPIN2 = false
+    @BindableState var focusedField: Field?
     var error: SetupPersonalPINError?
-    var remainingAttempts: Int = 0
+    var remainingAttempts = 0
     
     mutating func handlePIN1Change(_ enteredPIN1: String) -> Effect<SetupPersonalPINAction, Never> {
         if !enteredPIN1.isEmpty {
@@ -23,7 +31,7 @@ struct SetupPersonalPINState: Equatable {
         }
         
         if enteredPIN1.count == 6 {
-            focusPIN2 = true
+            focusedField = .pin2
         }
         
         return .none
@@ -56,6 +64,7 @@ struct SetupPersonalPINState: Equatable {
 
 enum SetupPersonalPINAction: BindableAction, Equatable {
     case onAppear
+    case focus(SetupPersonalPINState.Field)
     case done(pin: String)
     case reset
     case binding(BindingAction<SetupPersonalPINState>)
@@ -64,21 +73,28 @@ enum SetupPersonalPINAction: BindableAction, Equatable {
 let setupPersonalPINReducer = Reducer<SetupPersonalPINState, SetupPersonalPINAction, AppEnvironment> { state, action, environment in
     switch action {
     case .onAppear:
-        return .none
+        let effect = Effect<SetupPersonalPINAction, Never>(value: .focus(.pin1))
+        if #available(iOS 16, *) {
+            return effect
+        } else {
+            // On iOS 15, setting a focus state only works after a short delay
+            return effect.delay(for: 0.75, scheduler: environment.mainQueue).eraseToEffect()
+        }
     case .binding(\.$enteredPIN1):
         return state.handlePIN1Change(state.enteredPIN1)
     case .binding(\.$enteredPIN2):
         return state.handlePIN2Change(state.enteredPIN2, environment: environment)
-    case .binding:
-        return .none
     case .reset:
         state.error = .mismatch
         state.showPIN2 = false
         state.enteredPIN2 = ""
         state.enteredPIN1 = ""
-        state.focusPIN1 = true
+        state.focusedField = .pin1
         return .none
-    case .done:
+    case .focus(let field):
+        state.focusedField = field
+        return .none
+    default:
         return .none
     }
 }.binding()

@@ -5,8 +5,7 @@ import TCACoordinators
 import IdentifiedCollections
 
 struct SetupTransportPINState: Equatable {
-    @BindableState var enteredPIN: String = ""
-    @BindableState var focusTextField: Bool = true
+    @BindableState var enteredPIN = ""
 }
 
 enum SetupTransportPINAction: BindableAction, Equatable {
@@ -19,13 +18,10 @@ let setupTransportPINReducer = Reducer<SetupTransportPINState, SetupTransportPIN
 }.binding()
 
 struct SetupTransportPIN: View {
-    
     let store: Store<SetupTransportPINState, SetupTransportPINAction>
-    @State var digits = 5
     
-    init(store: Store<SetupTransportPINState, SetupTransportPINAction>) {
-        self.store = store
-    }
+    @State private var digits = 5
+    @FocusState private var pinEntryFocused: Bool
     
     var body: some View {
         ScrollView {
@@ -45,22 +41,23 @@ struct SetupTransportPIN: View {
                         PINEntryView(pin: viewStore.binding(\.$enteredPIN),
                                      maxDigits: digits,
                                      label: L10n.FirstTimeUser.TransportPIN.textFieldLabel,
-                                     shouldBeFocused: viewStore.binding(\.$focusTextField),
                                      doneConfiguration: DoneConfiguration(enabled: viewStore.enteredPIN.count == digits,
                                                                           title: L10n.FirstTimeUser.TransportPIN.continue,
                                                                           handler: { pin in
                             viewStore.send(.done(transportPIN: pin))
                         }))
+                        .focused($pinEntryFocused)
                         .font(.bundTitle)
                         .background(Color.white.cornerRadius(10))
                         .padding(40)
-                        // Focus: iOS 15 only
-                        // Done button above keyboard: iOS 15 only
                     }
                 }
                 
             }
             .padding(.horizontal)
+        }
+        .focusOnAppear {
+            pinEntryFocused = true
         }
         .navigationBarTitleDisplayMode(.inline)
 #if DEBUG && !PREVIEW

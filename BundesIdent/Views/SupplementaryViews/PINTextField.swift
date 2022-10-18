@@ -19,14 +19,12 @@ struct PINTextField: UIViewRepresentable {
     @Binding var text: String
     var maxLength: Int
     var showPIN: Bool
-    @Binding var isFirstResponder: Bool
     var doneConfiguration: DoneConfiguration?
-    
-    init(text: Binding<String>, maxLength: Int = 5, showPIN: Bool = true, isFirstResponder: Binding<Bool>, doneConfiguration: DoneConfiguration?) {
+
+    init(text: Binding<String>, maxLength: Int = 5, showPIN: Bool = true, doneConfiguration: DoneConfiguration?) {
         self._text = text
         self.maxLength = maxLength
         self.showPIN = showPIN
-        self._isFirstResponder = isFirstResponder
         self.doneConfiguration = doneConfiguration
     }
     
@@ -71,12 +69,6 @@ struct PINTextField: UIViewRepresentable {
         }
         
         context.coordinator.maxLength = maxLength
-        
-        switch (isFirstResponder, uiView.isFirstResponder) {
-        case (true, false): uiView.becomeFirstResponder()
-        case (false, true): uiView.resignFirstResponder()
-        default: break
-        }
     }
     
     func findDoneButton(_ textField: UITextField) -> UIBarButtonItem? {
@@ -84,18 +76,16 @@ struct PINTextField: UIViewRepresentable {
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator($text, isFirstResponder: $isFirstResponder, maxLength: maxLength)
+        Coordinator($text, maxLength: maxLength)
     }
     
     class Coordinator: NSObject, UITextFieldDelegate {
         
-        var text: Binding<String>
-        var isFirstResponder: Binding<Bool>
+        let text: Binding<String>
         var maxLength: Int
         
-        init(_ text: Binding<String>, isFirstResponder: Binding<Bool>, maxLength: Int) {
+        init(_ text: Binding<String>, maxLength: Int) {
             self.text = text
-            self.isFirstResponder = isFirstResponder
             self.maxLength = maxLength
         }
         
@@ -113,14 +103,6 @@ struct PINTextField: UIViewRepresentable {
             let text = existingText ?? ""
             let isAtLimit = text.count + newText.count <= limit
             return isAtLimit
-        }
-        
-        public func textFieldDidBeginEditing(_ textField: UITextField) {
-            self.isFirstResponder.wrappedValue = true
-        }
-        
-        public func textFieldDidEndEditing(_ textField: UITextField) {
-            self.isFirstResponder.wrappedValue = false
         }
     }
 }

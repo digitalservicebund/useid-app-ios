@@ -7,7 +7,6 @@ public struct PINEntryView: View {
     var groupEvery: Int?
     var showPIN = true
     var label: String = ""
-    @Binding var shouldBeFocused: Bool
     var backgroundColor: Color = .clear
     var doneConfiguration: DoneConfiguration?
     
@@ -54,7 +53,6 @@ public struct PINEntryView: View {
         PINTextField(text: $pin,
                      maxLength: maxDigits,
                      showPIN: showPIN,
-                     isFirstResponder: $shouldBeFocused,
                      doneConfiguration: doneConfiguration)
         .accentColor(.clear)
         .foregroundColor(.clear)

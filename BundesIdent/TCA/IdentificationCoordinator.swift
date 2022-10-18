@@ -271,6 +271,7 @@ struct IdentificationCoordinatorView: View {
             .interactiveDismissDisabled(viewStore.needsEndConfirmation) {
                 viewStore.send(.end)
             }
+            .ignoresSafeArea(.keyboard)
         }
     }
 }

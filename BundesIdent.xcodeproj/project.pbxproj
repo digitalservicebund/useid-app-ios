@@ -11,6 +11,7 @@
 		D20EE42628E421AE0063537E /* IssueTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20EE42528E421AE0063537E /* IssueTracker.swift */; };
 		D21E682028BCEB0A0055EBFE /* Assets+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21E681F28BCEB0A0055EBFE /* Assets+Generated.swift */; };
 		D245421828CB9E68002600C9 /* IdentificationOverviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D245421728CB9E68002600C9 /* IdentificationOverviewTests.swift */; };
+		D278AC9A28FD388100BD0528 /* View+Synchronize.swift in Sources */ = {isa = PBXBuildFile; fileRef = D278AC9928FD388100BD0528 /* View+Synchronize.swift */; };
 		D28D27FF28B7A91B008DA310 /* MissingPINLetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */; };
 		D28D280228B7A9F5008DA310 /* SetupDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D280028B7A9F5008DA310 /* SetupDone.swift */; };
 		D28D280328B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28D280128B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift */; };
@@ -18,6 +19,7 @@
 		D2AD47AF28C73B7400863D43 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2AD47AE28C73B7400863D43 /* Launch Screen.storyboard */; };
 		D2B76A7A28BE4B93000B442D /* Analytics in Frameworks */ = {isa = PBXBuildFile; productRef = D2B76A7928BE4B93000B442D /* Analytics */; };
 		D2B7BCFB28D2108900318B9F /* Effects.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7BCFA28D2108900318B9F /* Effects.swift */; };
+		D2C1F47428FD5267009709F2 /* View+FocusOnAppear.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C1F47328FD5267009709F2 /* View+FocusOnAppear.swift */; };
 		D2C5915028CB86570048D379 /* MissingPINLetterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C5914F28CB86570048D379 /* MissingPINLetterTests.swift */; };
 		D2FD741128DDF63000C7C5E7 /* ScanErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FD741028DDF63000C7C5E7 /* ScanErrorTests.swift */; };
 		E101325128EDDD7E006875F8 /* LoopingVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E101325028EDDD7E006875F8 /* LoopingVideoPlayer.swift */; };
@@ -167,6 +169,7 @@
 		D20EE42528E421AE0063537E /* IssueTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueTracker.swift; sourceTree = "<group>"; };
 		D21E681F28BCEB0A0055EBFE /* Assets+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Assets+Generated.swift"; sourceTree = "<group>"; };
 		D245421728CB9E68002600C9 /* IdentificationOverviewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewTests.swift; sourceTree = "<group>"; };
+		D278AC9928FD388100BD0528 /* View+Synchronize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Synchronize.swift"; sourceTree = "<group>"; };
 		D28BC72228BE0A44003C012C /* Analytics */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Analytics; sourceTree = "<group>"; };
 		D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissingPINLetter.swift; sourceTree = "<group>"; };
 		D28D280028B7A9F5008DA310 /* SetupDone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupDone.swift; sourceTree = "<group>"; };
@@ -175,6 +178,7 @@
 		D2AD47AE28C73B7400863D43 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		D2B596F528B8E41A0042BE32 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		D2B7BCFA28D2108900318B9F /* Effects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Effects.swift; sourceTree = "<group>"; };
+		D2C1F47328FD5267009709F2 /* View+FocusOnAppear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+FocusOnAppear.swift"; sourceTree = "<group>"; };
 		D2C5914F28CB86570048D379 /* MissingPINLetterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingPINLetterTests.swift; sourceTree = "<group>"; };
 		D2ED120F28DDFF3700EC95F2 /* BundesIdentRelease Production.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "BundesIdentRelease Production.entitlements"; sourceTree = "<group>"; };
 		D2FD741028DDF63000C7C5E7 /* ScanErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanErrorTests.swift; sourceTree = "<group>"; };
@@ -477,6 +481,8 @@
 				E14C21B528B90BF500192338 /* StorageKey.swift */,
 				E16708BD283E666A001A1637 /* Store+Empty.swift */,
 				E1FFDF0B2875C7E9006DFE03 /* UUID+Zero.swift */,
+				D2C1F47328FD5267009709F2 /* View+FocusOnAppear.swift */,
+				D278AC9928FD388100BD0528 /* View+Synchronize.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -785,7 +791,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1400;
-				LastUpgradeCheck = 1330;
+				LastUpgradeCheck = 1400;
 				TargetAttributes = {
 					E18E2236285349D200221DB1 = {
 						CreatedOnToolsVersion = 14.0;
@@ -980,6 +986,7 @@
 				E12CB30A284A2C700039FD56 /* InteractiveDismissableView.swift in Sources */,
 				E15776A0286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift in Sources */,
 				E5E69D832812FB4500A3B66A /* EIDInteractionEvent.swift in Sources */,
+				D278AC9A28FD388100BD0528 /* View+Synchronize.swift in Sources */,
 				E110400D281C389C004BA03E /* SetupIntro.swift in Sources */,
 				E1AB879E282283AB00C7FC94 /* Fonts.swift in Sources */,
 				E16708BC283D824D001A1637 /* Scheduler+Animation.swift in Sources */,
@@ -1022,6 +1029,7 @@
 				E17604D1287E24F1007DFA10 /* DebugMenu.swift in Sources */,
 				E13F9E4128882A9C0088E955 /* Bundle+Version.swift in Sources */,
 				E593E2742816866200154EB0 /* EACInteraction.swift in Sources */,
+				D2C1F47428FD5267009709F2 /* View+FocusOnAppear.swift in Sources */,
 				E1AAACFB2837B9A200A51183 /* SetupPersonalPINState.swift in Sources */,
 				E101325128EDDD7E006875F8 /* LoopingVideoPlayer.swift in Sources */,
 				E1CD8E93282156F2008ADA2A /* SetupTransportPIN.swift in Sources */,

@@ -39,6 +39,7 @@ let identificationPersonalPINReducer = Reducer<IdentificationPersonalPINState, I
 struct IdentificationPersonalPIN: View {
     
     var store: Store<IdentificationPersonalPINState, IdentificationPersonalPINAction>
+    @FocusState private var pinEntryFocused: Bool
     
     var body: some View {
         ScrollView {
@@ -55,7 +56,6 @@ struct IdentificationPersonalPIN: View {
                                      groupEvery: 3,
                                      showPIN: false,
                                      label: L10n.Identification.PersonalPIN.textFieldLabel,
-                                     shouldBeFocused: .constant(true),
                                      backgroundColor: .gray100,
                                      doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                           title: L10n.Identification.PersonalPIN.continue,
@@ -64,6 +64,7 @@ struct IdentificationPersonalPIN: View {
                                                  pin: pin,
                                                  pinCallback: viewStore.callback))
                         }))
+                        .focused($pinEntryFocused)
                         .font(.bundTitle)
                     }
                     Spacer()
@@ -75,6 +76,9 @@ struct IdentificationPersonalPIN: View {
             .padding(.horizontal)
         }
         .navigationBarHidden(false)
+        .focusOnAppear {
+            pinEntryFocused = true
+        }
     }
 }
 

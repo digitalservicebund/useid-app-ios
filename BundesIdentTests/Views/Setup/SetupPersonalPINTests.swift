@@ -30,14 +30,14 @@ class SetupPersonalPINViewModelTests: XCTestCase {
         store.send(.binding(.set(\.$enteredPIN1, "123456"))) { state in
             state.enteredPIN1 = "123456"
             state.showPIN2 = true
-            state.focusPIN2 = true
+            state.focusedField = .pin2
         }
     }
     
     func testCorrectPIN2() throws {
         let store = TestStore(initialState: SetupPersonalPINState(enteredPIN1: "123456",
-                                                                          enteredPIN2: "12345",
-                                                                          showPIN2: true),
+                                                                  enteredPIN2: "12345",
+                                                                  showPIN2: true),
                               reducer: setupPersonalPINReducer,
                               environment: environment)
         store.send(.binding(.set(\.$enteredPIN2, "123456"))) { state in
@@ -45,11 +45,11 @@ class SetupPersonalPINViewModelTests: XCTestCase {
         }
         store.receive(.done(pin: "123456"))
     }
-
+    
     func testMismatchingPIN2() throws {
         let store = TestStore(initialState: SetupPersonalPINState(enteredPIN1: "123456",
-                                                                          enteredPIN2: "98765",
-                                                                          showPIN2: true),
+                                                                  enteredPIN2: "98765",
+                                                                  showPIN2: true),
                               reducer: setupPersonalPINReducer,
                               environment: environment)
         store.send(.binding(.set(\.$enteredPIN2, "987654"))) { state in
@@ -64,7 +64,7 @@ class SetupPersonalPINViewModelTests: XCTestCase {
             state.showPIN2 = false
             state.enteredPIN2 = ""
             state.enteredPIN1 = ""
-            state.focusPIN1 = true
+            state.focusedField = .pin1
         }
         
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "firstTimeUser",
@@ -74,12 +74,26 @@ class SetupPersonalPINViewModelTests: XCTestCase {
     
     func testTypingWhileShowingError() throws {
         let store = TestStore(initialState: SetupPersonalPINState(enteredPIN1: "",
-                                                                          error: .mismatch),
+                                                                  error: .mismatch),
                               reducer: setupPersonalPINReducer,
                               environment: environment)
         store.send(.binding(.set(\.$enteredPIN1, "1"))) { state in
             state.enteredPIN1 = "1"
             state.error = nil
+        }
+    }
+    
+    func testOnAppear() throws {
+        let store = TestStore(initialState: SetupPersonalPINState(),
+                              reducer: setupPersonalPINReducer,
+                              environment: environment)
+        
+        store.send(.onAppear)
+        
+        scheduler.advance(by: 1)
+        
+        store.receive(.focus(.pin1)) { state in
+            state.focusedField = .pin1
         }
     }
 }

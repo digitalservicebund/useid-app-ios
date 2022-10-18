@@ -56,6 +56,7 @@ let setupIncorrectTransportPINReducer = Reducer<SetupIncorrectTransportPINState,
 struct SetupIncorrectTransportPIN: View {
     
     let store: Store<SetupIncorrectTransportPINState, SetupIncorrectTransportPINAction>
+    @FocusState private var pinEntryFocused: Bool
     
     var body: some View {
         NavigationView {
@@ -76,12 +77,12 @@ struct SetupIncorrectTransportPIN: View {
                                 PINEntryView(pin: viewStore.binding(\.$enteredPIN),
                                              maxDigits: viewStore.maxDigits,
                                              label: L10n.FirstTimeUser.IncorrectTransportPIN.textFieldLabel,
-                                             shouldBeFocused: viewStore.binding(\.$focusTextField),
                                              doneConfiguration: DoneConfiguration(enabled: viewStore.enteredPIN.count == viewStore.maxDigits,
                                                                                   title: L10n.FirstTimeUser.IncorrectTransportPIN.continue,
                                                                                   handler: { pin in
                                     viewStore.send(.done(transportPIN: pin))
                                 }))
+                                .focused($pinEntryFocused)
                                 .font(.bundTitle)
                                 .background(Color.white.cornerRadius(10))
                                 .padding(40)
@@ -127,6 +128,9 @@ struct SetupIncorrectTransportPIN: View {
         }
         .interactiveDismissDisabled {
             ViewStore(store.stateless).send(.end)
+        }
+        .focusOnAppear {
+            pinEntryFocused = true
         }
     }
 }
