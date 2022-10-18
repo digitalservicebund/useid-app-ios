@@ -25,6 +25,7 @@ final class BundesIdentUITests: XCTestCase {
         let pin2TextField = app.secureTextFields[L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.second]
         pin2TextField.wait().tap()
         pin2TextField.waitAndTypeText("123456")
+        app.buttons[L10n.FirstTimeUser.PersonalPIN.continue].wait().tap()
         
         app.buttons[L10n.FirstTimeUser.Scan.scan].wait().tap()
         
@@ -72,6 +73,8 @@ final class BundesIdentUITests: XCTestCase {
         let pin2TextField = app.secureTextFields[L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.second]
         pin2TextField.wait().tap()
         pin2TextField.waitAndTypeText("123456")
+        
+        app.buttons[L10n.FirstTimeUser.PersonalPIN.continue].wait().tap()
         
         app.buttons[L10n.FirstTimeUser.Scan.scan].wait().tap()
         

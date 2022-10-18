@@ -20,7 +20,11 @@ struct SetupPersonalPIN: View {
                                      showPIN: false,
                                      label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.first,
                                      backgroundColor: .gray100,
-                                     doneConfiguration: nil)
+                                     doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
+                                                                          title: L10n.FirstTimeUser.PersonalPIN.continue,
+                                                                          handler: { _ in
+                            viewStore.send(.done(pin: viewStore.enteredPIN1))
+                        }))
                         .focused($focusedField, equals: .pin1)
                         .font(.bundTitle)
                         .modifier(Shake(animatableData: CGFloat(viewStore.remainingAttempts)))
@@ -38,7 +42,11 @@ struct SetupPersonalPIN: View {
                                              showPIN: false,
                                              label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.second,
                                              backgroundColor: .gray100,
-                                             doneConfiguration: nil)
+                                             doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
+                                                                                  title: L10n.FirstTimeUser.PersonalPIN.continue,
+                                                                                  handler: { _ in
+                                    viewStore.send(.done(pin: viewStore.enteredPIN1))
+                                }))
                                 .focused($focusedField, equals: .pin2)
                                 .font(.bundTitle)
                                 .modifier(Shake(animatableData: CGFloat(viewStore.remainingAttempts)))

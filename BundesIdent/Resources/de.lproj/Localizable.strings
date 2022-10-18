@@ -42,6 +42,7 @@
 "firstTimeUser_personalPIN_error_mismatch_title" = "PINs stimmen nicht überein";
 "firstTimeUser_personalPIN_textFieldLabel_first" = "Persönliche PIN, sechsstellig";
 "firstTimeUser_personalPIN_textFieldLabel_second" = "Persönliche PIN bestätigen, sechsstellig";
+"firstTimeUser_personalPIN_continue" = "Weiter";
 "firstTimeUser_personalPIN_title" = "Vergeben Sie nun Ihre persönliche Ausweis-PIN.";
 "firstTimeUser_personalPINIntro_continue" = "Persönliche Ausweis–PIN vergeben";
 "firstTimeUser_personalPINIntro_info_body" = "Sie benötigen diese jedes Mal, wenn Sie die Online-Ausweisfunktion in Zukunft nutzen.";

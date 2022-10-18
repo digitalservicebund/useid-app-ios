@@ -43,7 +43,6 @@ class SetupPersonalPINViewModelTests: XCTestCase {
         store.send(.binding(.set(\.$enteredPIN2, "123456"))) { state in
             state.enteredPIN2 = "123456"
         }
-        store.receive(.done(pin: "123456"))
     }
     
     func testMismatchingPIN2() throws {

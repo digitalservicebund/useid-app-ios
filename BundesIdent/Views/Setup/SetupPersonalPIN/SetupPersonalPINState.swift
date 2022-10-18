@@ -19,13 +19,17 @@ struct SetupPersonalPINState: Equatable {
     var error: SetupPersonalPINError?
     var remainingAttempts = 0
     
+    var doneButtonEnabled: Bool {
+        enteredPIN1.count == 6 && enteredPIN2 == enteredPIN1
+    }
+    
     mutating func handlePIN1Change(_ enteredPIN1: String) -> Effect<SetupPersonalPINAction, Never> {
         if !enteredPIN1.isEmpty {
             withAnimation {
                 error = nil
             }
         }
-
+        
         withAnimation {
             showPIN2 = enteredPIN1.count >= 6 || !enteredPIN2.isEmpty
         }
@@ -58,7 +62,7 @@ struct SetupPersonalPINState: Equatable {
             )
         }
         
-        return Effect(value: .done(pin: enteredPIN2))
+        return .none
     }
 }
 
