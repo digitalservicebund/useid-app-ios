@@ -25,7 +25,9 @@ extension XCUIElement {
         typeText(Array(repeating: XCUIKeyboardKey.delete.rawValue, count: existing.count + 1).joined())
     
         // Type new text
-        typeText(text)
+        for char in text {
+            typeText("\(char)")
+        }
     }
     
     func assertExistence(timeout: TimeInterval = 5, file: StaticString = #filePath, line: UInt = #line) {
