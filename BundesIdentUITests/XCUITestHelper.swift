@@ -19,12 +19,8 @@ extension XCUIElement {
             print("Element \(self) does not have focus yet. Tapping it to hopefully get focus. This should be investigated. \(file):\(line)")
             tap()
         }
-        
-        // Delete any existing text. (Perform delete once too often to make sure focus is correctly given.)
-        let existing = value as? String ?? ""
-        typeText(Array(repeating: XCUIKeyboardKey.delete.rawValue, count: existing.count + 1).joined())
     
-        // Type new text
+        // Type new text as individual characters to work around issue not having fully typed in text sometimes
         for char in text {
             typeText("\(char)")
         }
