@@ -147,7 +147,9 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
     trackingReducer
 )
 #if DEBUG
-.debug()
+.debug { environment in
+    DebugEnvironment(printer: { environment.logger.debug("\($0)") })
+}
 #endif
 
 struct CoordinatorView: View {

@@ -1,6 +1,7 @@
 import Foundation
 import CombineSchedulers
 import Analytics
+import OSLog
 
 @testable import BundesIdent
 
@@ -21,6 +22,7 @@ extension AppEnvironment {
                               analytics: analytics ?? MockAnalyticsClient(),
                               urlOpener: urlOpener,
                               issueTracker: issueTracker ?? MockIssueTracker(),
+                              logger: Logger(),
                               debugIDInteractionManager: debugIDInteractionManager ?? DebugIDInteractionManager())
     }
 }

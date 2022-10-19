@@ -4,6 +4,7 @@ import Combine
 import Analytics
 import UIKit
 import OpenEcard
+import OSLog
 
 struct AppEnvironment {
     let mainQueue: AnySchedulerOf<DispatchQueue>
@@ -13,6 +14,7 @@ struct AppEnvironment {
     let analytics: AnalyticsClient
     let urlOpener: (URL) -> Void
     let issueTracker: IssueTracker
+    let logger: Logger
     
 #if PREVIEW
     let debugIDInteractionManager: DebugIDInteractionManager
@@ -25,6 +27,7 @@ struct AppEnvironment {
         analytics: LogAnalyticsClient(),
         urlOpener: { _ in },
         issueTracker: SentryIssueTracker(),
+        logger: Logger(category: "preview"),
         debugIDInteractionManager: DebugIDInteractionManager()
     )
 #else
@@ -35,7 +38,8 @@ struct AppEnvironment {
         storageManager: StorageManager(),
         analytics: LogAnalyticsClient(),
         urlOpener: { _ in },
-        issueTracker: SentryIssueTracker()
+        issueTracker: SentryIssueTracker(),
+        logger: Logger(category: "preview")
     )
 #endif
     
@@ -45,6 +49,8 @@ struct AppEnvironment {
         let storageManager = StorageManager(userDefaults: userDefaults)
         let environment: AppEnvironment
         let analytics: AnalyticsClient
+        let logger = Logger()
+        let issueTracker = SentryIssueTracker()
         
 #if DEBUG
         analytics = LogAnalyticsClient()
@@ -63,11 +69,12 @@ struct AppEnvironment {
                 storageManager: storageManager,
                 analytics: analytics,
                 urlOpener: { UIApplication.shared.open($0) },
-                issueTracker: SentryIssueTracker(),
+                issueTracker: issueTracker,
+                logger: logger,
                 debugIDInteractionManager: idInteractionManager
             )
         } else {
-            let idInteractionManager = IDInteractionManager(openEcard: OpenEcardImp())
+            let idInteractionManager = IDInteractionManager(issueTracker: issueTracker)
             
             environment = AppEnvironment(
                 mainQueue: mainQueue,
@@ -76,12 +83,13 @@ struct AppEnvironment {
                 storageManager: storageManager,
                 analytics: analytics,
                 urlOpener: { UIApplication.shared.open($0) },
-                issueTracker: SentryIssueTracker(),
+                issueTracker: issueTracker,
+                logger: logger,
                 debugIDInteractionManager: DebugIDInteractionManager()
             )
         }
 #else
-        let idInteractionManager = IDInteractionManager(openEcard: OpenEcardImp())
+        let idInteractionManager = IDInteractionManager(issueTracker: issueTracker)
         
         environment = AppEnvironment(
             mainQueue: mainQueue,
@@ -90,7 +98,8 @@ struct AppEnvironment {
             storageManager: storageManager,
             analytics: analytics,
             urlOpener: { UIApplication.shared.open($0) },
-            issueTracker: SentryIssueTracker()
+            issueTracker: issueTracker,
+            logger: logger
         )
 #endif
         return environment

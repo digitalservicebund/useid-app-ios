@@ -123,25 +123,26 @@ extension SetupScanState {
     mutating func handle(event: EIDInteractionEvent, environment: AppEnvironment) -> Effect<SetupScanAction, Never> {
         switch event {
         case .authenticationStarted:
-            print("Authentication started")
+            environment.logger.info("Authentication started.")
             shared.isScanning = true
         case .requestCardInsertion:
             shared.showProgressCaption = nil
             shared.isScanning = true
         case .cardInteractionComplete:
-            print("Card interaction complete.")
+            environment.logger.info("Card interaction complete.")
         case .cardRecognized:
-            print("Card recognized.")
+            environment.logger.info("Card recognized.")
             shared.isScanning = true
         case .cardRemoved:
             shared.showProgressCaption = ProgressCaption(title: L10n.FirstTimeUser.Scan.Progress.title,
                                                          body: L10n.FirstTimeUser.Scan.Progress.body)
-            print("Card removed.")
+            environment.logger.info("Card removed.")
         case .processCompletedSuccessfullyWithoutRedirect:
             return Effect(value: .scannedSuccessfully)
-        case .pinManagementStarted: print("PIN Management started.")
+        case .pinManagementStarted:
+            environment.logger.info("PIN Management started.")
         case .requestChangedPIN(let newRemainingAttempts, let pinCallback):
-            print("Providing changed PIN with \(String(describing: newRemainingAttempts)) remaining attempts.")
+            environment.logger.info("Providing changed PIN with \(String(describing: newRemainingAttempts)) remaining attempts.")
             let remainingAttemptsBefore = remainingAttempts
             remainingAttempts = newRemainingAttempts
             
@@ -158,14 +159,14 @@ extension SetupScanState {
             
             pinCallback(transportPIN, newPIN)
         case .requestCANAndChangedPIN:
-            print("CAN to change PIN requested, so card is suspended. Callback not implemented yet.")
+            environment.logger.info("CAN to change PIN requested, so card is suspended. Callback not implemented yet.")
             return Effect(value: .error(ScanErrorState(errorType: .cardSuspended, retry: false)))
         case .requestPUK:
-            print("PUK requested, so card is blocked. Callback not implemented yet.")
+            environment.logger.info("PUK requested, so card is blocked. Callback not implemented yet.")
             return Effect(value: .error(ScanErrorState(errorType: .cardBlocked, retry: false)))
         default:
             environment.issueTracker.capture(error: RedactedEIDInteractionEventError(event))
-            print("Received unexpected event.")
+            environment.logger.error("Received unexpected event.")
             return Effect(value: .error(ScanErrorState(errorType: .unexpectedEvent(event), retry: true)))
         }
         return .none

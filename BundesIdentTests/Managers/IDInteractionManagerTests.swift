@@ -34,7 +34,7 @@ class IDInteractionManagerTests: XCTestCase {
             $0.initializeContext(any()).thenDoNothing()
         }
         
-        let interactionManager = IDInteractionManager(openEcard: mockOpenEcard)
+        let interactionManager = IDInteractionManager(openEcard: mockOpenEcard, issueTracker: MockIssueTracker())
         
         _ = interactionManager.changePIN(nfcMessagesProvider: SetupNFCMessageProvider())
         
@@ -57,7 +57,7 @@ class IDInteractionManagerTests: XCTestCase {
             $0.initializeContext(any()).thenDoNothing()
         }
         
-        let interactionManager = IDInteractionManager(openEcard: mockOpenEcard)
+        let interactionManager = IDInteractionManager(openEcard: mockOpenEcard, issueTracker: MockIssueTracker())
         
         let tokenURL = URL(string: "eid://tokenURL.org")!
         _ = interactionManager.identify(tokenURL: tokenURL, nfcMessagesProvider: IdentificationNFCMessageProvider())

@@ -2,6 +2,7 @@ import Foundation
 import Combine
 import OpenEcard
 import CombineSchedulers
+import OSLog
 
 extension OpenEcardImp: OpenEcardType {}
 
@@ -9,9 +10,11 @@ class IDInteractionManager: IDInteractionManagerType {
     
     private let openEcard: OpenEcardProtocol
     private var context: ContextManagerProtocol?
+    private let issueTracker: IssueTracker
     
-    init(openEcard: OpenEcardProtocol = OpenEcardImp()) {
+    init(openEcard: OpenEcardProtocol = OpenEcardImp(), issueTracker: IssueTracker) {
         self.openEcard = openEcard
+        self.issueTracker = issueTracker
     }
     
     func identify(tokenURL: URL, nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher {
@@ -27,12 +30,12 @@ class IDInteractionManager: IDInteractionManagerType {
         context.initializeContext(startServiceHandler)
         self.context = context
         return startServiceHandler.publisher
-            .handleEvents(receiveCompletion: { [context] _ in
+            .handleEvents(receiveCompletion: { [context, issueTracker] _ in
                 startServiceHandler.cancel()
-                context.terminateContext(StopServiceHandler())
-            }, receiveCancel: { [context] in
+                context.terminateContext(StopServiceHandler(issueTracker: issueTracker))
+            }, receiveCancel: { [context, issueTracker] in
                 startServiceHandler.cancel()
-                context.terminateContext(StopServiceHandler())
+                context.terminateContext(StopServiceHandler(issueTracker: issueTracker))
             }).eraseToAnyPublisher()
     }
 }

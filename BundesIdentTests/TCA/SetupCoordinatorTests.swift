@@ -7,11 +7,8 @@ import Combine
 
 class SetupCoordinatorTests: XCTestCase {
     
-    var scheduler: TestSchedulerOf<DispatchQueue>!
     var environment: AppEnvironment!
     var uuidCount = 0
-    
-    var mockIDInteractionManager = MockIDInteractionManagerType()
     
     func uuidFactory() -> UUID {
         let currentCount = self.uuidCount
@@ -20,15 +17,7 @@ class SetupCoordinatorTests: XCTestCase {
     }
     
     override func setUp() {
-        scheduler = DispatchQueue.test
-        environment = AppEnvironment(mainQueue: scheduler.eraseToAnyScheduler(),
-                                     uuidFactory: uuidFactory,
-                                     idInteractionManager: mockIDInteractionManager,
-                                     storageManager: MockStorageManagerType(),
-                                     analytics: MockAnalyticsClient(),
-                                     urlOpener: { _ in },
-                                     issueTracker: MockIssueTracker(),
-                                     debugIDInteractionManager: DebugIDInteractionManager())
+        environment = AppEnvironment.mocked(uuidFactory: uuidFactory)
     }
     
     func testEndTriggersConfirmation() {
