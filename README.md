@@ -47,7 +47,7 @@ providing documentation or answering questions or giving feedback. Please always
 
 Open a pull request with your changes and it will be reviewed by someone from the team. When you submit a pull request,
 you declare that you have the right to license your contribution to the DigitalService and the community.
-By submitting the patch, you agree that your contributions are licensed under the GPLv3 license.
+By submitting the patch, you agree that your contributions are licensed under the [European Union Public Licence (EUPL) v1.2](https://eupl.eu/1.2/en/).
 
 Please make sure that your changes have been tested before submitting a pull request.
 
