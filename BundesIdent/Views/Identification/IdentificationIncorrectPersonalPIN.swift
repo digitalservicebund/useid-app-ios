@@ -117,7 +117,7 @@ struct IdentificationIncorrectPersonalPIN: View {
                             Button {
                                 ViewStore(store.stateless).send(.end)
                             } label: {
-                                Text(verbatim: L10n.FirstTimeUser.IncorrectTransportPIN.end)
+                                Text(verbatim: L10n.General.cancel)
                             }
                         }
                     }

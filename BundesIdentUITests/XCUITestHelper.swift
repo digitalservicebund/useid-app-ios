@@ -43,6 +43,11 @@ extension XCUIElement {
 }
 
 extension XCUIApplication {
+    
+    var backButton: XCUIElement {
+        navigationBars.buttons.element(boundBy: 0)
+    }
+    
     func hasVisible(element: XCUIElement) -> Bool {
         frame.contains(element.frame)
     }

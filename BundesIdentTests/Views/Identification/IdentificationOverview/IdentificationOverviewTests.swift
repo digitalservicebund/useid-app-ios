@@ -40,7 +40,7 @@ final class IdentificationOverviewTests: XCTestCase {
         )
         
         store.send(IdentificationOverviewAction.loading(.failure(error))) {
-            $0 = .error(error)
+            $0 = .error(IdentificationOverviewErrorState(error: error))
         }
         
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification",

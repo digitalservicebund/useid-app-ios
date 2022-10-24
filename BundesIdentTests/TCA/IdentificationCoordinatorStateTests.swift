@@ -39,7 +39,7 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
         struct SomeError: Error { }
         let state = IdentificationCoordinatorState(tokenURL: demoTokenURL,
                                                    states: [
-                                                    .root(.overview(.error(IdentifiableError(SomeError()))))
+                                                    .root(.overview(.error(IdentificationOverviewErrorState(error: IdentifiableError(SomeError())))))
                                                    ])
         
         let effect = state.transformToLocalInteractionHandler(event: .failure(.cardBlocked))
@@ -52,7 +52,7 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
         let state = IdentificationCoordinatorState(tokenURL: demoTokenURL,
                                                    states: [
                                                     .root(.overview(.loading(IdentificationOverviewLoadingState()))),
-                                                    .push(.overview(.error(IdentifiableError(SomeError()))))
+                                                    .push(.overview(.error(IdentificationOverviewErrorState(error: IdentifiableError(SomeError())))))
                                                    ])
         
         let effect = state.transformToLocalInteractionHandler(event: .failure(.cardBlocked))

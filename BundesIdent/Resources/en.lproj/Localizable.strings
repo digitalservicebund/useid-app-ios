@@ -27,7 +27,6 @@
 "firstTimeUser_done_title" = "You have successfully set up your online ID card.";
 "firstTimeUser_incorrectTransportPIN_body" = "Enter your 5-digit transport PIN from the PIN letter.";
 "firstTimeUser_incorrectTransportPIN_continue" = "Next";
-"firstTimeUser_incorrectTransportPIN_end" = "Cancel setup";
 "firstTimeUser_incorrectTransportPIN_textFieldLabel" = "Transport PIN, five digits";
 "firstTimeUser_incorrectTransportPIN_title" = "Incorrect transport PIN";
 "firstTimeUser_intro_body" = "In the setup, you set your personal ID PIN.";
@@ -68,6 +67,7 @@
 "firstTimeUser_transportPIN_continue" = "Next";
 "firstTimeUser_transportPIN_textFieldLabel" = "Transport PIN, five digits";
 "firstTimeUser_transportPIN_title" = "Enter the transport PIN.";
+"general_back" = "Back";
 "general_cancel" = "Cancel";
 "general_ok" = "OK";
 "helpNFC_body" = "NFC stands for Near Field Communication. The technology enables the contact-free exchange of data over very short distances. It is also used, for example, when paying with a smartphone at the supermarket checkout.";

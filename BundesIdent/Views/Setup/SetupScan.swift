@@ -189,13 +189,14 @@ struct SetupScan: View {
                    scanTitle: L10n.FirstTimeUser.Scan.title,
                    scanBody: L10n.FirstTimeUser.Scan.body,
                    scanButton: L10n.FirstTimeUser.Scan.scan)
-            .onAppear {
-                ViewStore(store).send(.onAppear)
-            }
+        .interactiveDismissDisabled()
+        .onAppear {
+            ViewStore(store).send(.onAppear)
+        }
 #if PREVIEW
-            .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: SetupScanAction.runDebugSequence)
+        .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: SetupScanAction.runDebugSequence)
 #endif
-            .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
+        .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
     }
 }
 

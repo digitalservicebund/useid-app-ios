@@ -33,6 +33,7 @@ struct SetupDone: View {
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(false)
+        .interactiveDismissDisabled()
     }
     
 }

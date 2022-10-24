@@ -3,7 +3,14 @@ import SwiftUI
 import Sentry
 
 struct IdentificationOverviewLoadingState: Equatable {
-    var onAppearCalled = false
+    var onAppearCalled: Bool
+    var canGoBackToSetupIntro: Bool
+    
+    init(onAppearCalled: Bool = false, canGoBackToSetupIntro: Bool = false) {
+        self.onAppearCalled = onAppearCalled
+        self.canGoBackToSetupIntro = canGoBackToSetupIntro
+    }
+    
 #if PREVIEW
     var availableDebugActions: [IdentifyDebugSequence] = []
 #endif

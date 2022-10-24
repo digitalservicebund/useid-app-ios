@@ -60,6 +60,7 @@ struct SetupTransportPIN: View {
             pinEntryFocused = true
         }
         .navigationBarTitleDisplayMode(.inline)
+        .interactiveDismissDisabled()
 #if DEBUG && !PREVIEW
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {

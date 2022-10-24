@@ -27,7 +27,6 @@
 "firstTimeUser_done_title" = "Sie haben Ihren Online-Ausweis erfolgreich eingerichtet.";
 "firstTimeUser_incorrectTransportPIN_body" = "Geben Sie Ihre 5-stellige Transport-PIN aus dem PIN-Brief ein.";
 "firstTimeUser_incorrectTransportPIN_continue" = "Weiter";
-"firstTimeUser_incorrectTransportPIN_end" = "Einrichtung abbrechen";
 "firstTimeUser_incorrectTransportPIN_textFieldLabel" = "Transport-PIN, fünfstellig";
 "firstTimeUser_incorrectTransportPIN_title" = "Falsche Transport-PIN";
 "firstTimeUser_intro_body" = "Bei der Einrichtung haben Sie Ihre persönliche Ausweis-PIN festgelegt.";
@@ -71,6 +70,7 @@
 "firstTimeUser_transportPIN_continue" = "Weiter";
 "firstTimeUser_transportPIN_textFieldLabel" = "Transport-PIN, fünfstellig";
 "firstTimeUser_transportPIN_title" = "Geben Sie die Transport-PIN ein.";
+"general_back" = "Zurück";
 "general_cancel" = "Abbrechen";
 "general_ok" = "OK";
 "helpNFC_body" = "NFC steht für Near Field Communication. Die Technik ermöglicht den kontaktlosen Austausch von Daten über sehr kurze Strecken. Sie wird bspw. auch beim Bezahlen mit dem Smartphone an der Supermarktkasse verwendet.";

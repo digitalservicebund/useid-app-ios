@@ -12,6 +12,7 @@ struct SetupIntroState: Equatable {
 
 struct SetupIntro: View {
     let store: Store<SetupIntroState, SetupIntroAction>
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -23,6 +24,13 @@ struct SetupIntro: View {
                                               action: .chooseSkipSetup(tokenURL: viewStore.tokenURL)),
                        primaryButton: .init(title: L10n.FirstTimeUser.Intro.startSetup,
                                             action: .chooseStartSetup))
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(L10n.General.cancel) {
+                        dismiss()
+                    }
+                }
+            }
         }
     }
 }

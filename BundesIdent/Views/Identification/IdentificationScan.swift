@@ -34,7 +34,8 @@ enum IdentificationScanAction: Equatable {
     case wrongPIN(remainingAttempts: Int)
     case identifiedSuccessfully(redirectURL: URL)
     case error(ScanErrorState)
-    case end
+    case cancelIdentification
+    case dismiss
     case dismissAlert
 #if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
@@ -76,7 +77,7 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
         
         return .concatenate(.trackEvent(category: "identification", action: "success", analytics: environment.analytics),
                             .openURL(redirectURL, urlOpener: environment.urlOpener),
-                            Effect(value: .end))
+                            Effect(value: .dismiss))
     case .shared(.showNFCInfo):
         state.alert = AlertState(title: TextState(L10n.HelpNFC.title),
                                         message: TextState(L10n.HelpNFC.body),
@@ -87,6 +88,13 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
                            action: "alertShown",
                            name: "NFCInfo",
                            analytics: environment.analytics)
+    case .cancelIdentification:
+        state.alert = AlertState(title: TextState(verbatim: L10n.Identification.ConfirmEnd.title),
+                                 message: TextState(verbatim: L10n.Identification.ConfirmEnd.message),
+                                 primaryButton: .destructive(TextState(verbatim: L10n.Identification.ConfirmEnd.confirm),
+                                                             action: .send(.dismiss)),
+                                 secondaryButton: .cancel(TextState(verbatim: L10n.Identification.ConfirmEnd.deny)))
+        return .none
     case .dismissAlert:
         state.alert = nil
         return .none
@@ -153,7 +161,13 @@ struct IdentificationScan: View {
             ViewStore(store).send(.onAppear)
         }
         .navigationBarBackButtonHidden(true)
-        .navigationBarHidden(false)
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button(L10n.General.cancel) {
+                    ViewStore(store).send(.cancelIdentification)
+                }
+            }
+        }
 #if PREVIEW
         .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: IdentificationScanAction.runDebugSequence)
 #endif

@@ -6,17 +6,9 @@ import SwiftUI
 import Analytics
 
 struct SetupCoordinatorState: Equatable, IndexedRouterState {
-    var transportPIN: String = ""
-    var attempt: Int = 0
+    var transportPIN: String
+    var attempt: Int
     var tokenURL: URL?
-    var needsEndConfirmation: Bool {
-        routes.contains {
-            switch $0.screen {
-            case .transportPIN: return true
-            default: return false
-            }
-        }
-    }
     var alert: AlertState<SetupCoordinatorAction>?
     
     var routes: [Route<SetupScreenState>] {
@@ -41,7 +33,16 @@ struct SetupCoordinatorState: Equatable, IndexedRouterState {
             states = newValue
         }
     }
-    var states: [Route<SetupScreenState>] = [.root(.intro(.init(tokenURL: nil)))]
+    
+    var states: [Route<SetupScreenState>]
+    
+    init(transportPIN: String = "", attempt: Int = 0, tokenURL: URL? = nil, alert: AlertState<SetupCoordinatorAction>? = nil, states: [Route<SetupScreenState>]? = nil) {
+        self.transportPIN = transportPIN
+        self.attempt = attempt
+        self.tokenURL = tokenURL
+        self.alert = alert
+        self.states = states ?? [.root(.intro(.init(tokenURL: tokenURL)))]
+    }
 }
 
 extension SetupCoordinatorState: AnalyticsView {
@@ -133,58 +134,53 @@ struct SetupCoordinatorView: View {
     let store: Store<SetupCoordinatorState, SetupCoordinatorAction>
     
     var body: some View {
-        WithViewStore(store, observe: \.needsEndConfirmation) { viewStore in
-            NavigationView {
-                TCARouter(store) { screen in
-                    SwitchStore(screen) {
-                        CaseLet(state: /SetupScreenState.intro,
-                                action: SetupScreenAction.intro,
-                                then: SetupIntro.init)
-                        CaseLet(state: /SetupScreenState.transportPINIntro,
-                                action: SetupScreenAction.transportPINIntro,
-                                then: SetupTransportPINIntro.init)
-                        CaseLet(state: /SetupScreenState.transportPIN,
-                                action: SetupScreenAction.transportPIN,
-                                then: SetupTransportPIN.init)
-                        CaseLet(state: /SetupScreenState.personalPINIntro,
-                                action: SetupScreenAction.personalPINIntro,
-                                then: SetupPersonalPINIntro.init)
-                        CaseLet(state: /SetupScreenState.personalPIN,
-                                action: SetupScreenAction.personalPIN,
-                                then: SetupPersonalPIN.init)
-                        CaseLet(state: /SetupScreenState.scan,
-                                action: SetupScreenAction.scan,
-                                then: SetupScan.init)
-                        CaseLet(state: /SetupScreenState.done,
-                                action: SetupScreenAction.done,
-                                then: SetupDone.init)
-                        CaseLet(state: /SetupScreenState.error,
-                                action: SetupScreenAction.error,
-                                then: ScanError.init)
-                        CaseLet(state: /SetupScreenState.incorrectTransportPIN,
-                                action: SetupScreenAction.incorrectTransportPIN,
-                                then: SetupIncorrectTransportPIN.init)
-                        Default {
-                            // There is a maximum case let statements allowed per switch store view.
-                            // This works around this issue by nesting a second switch store inside the default case.
-                            // For more information see: https://github.com/pointfreeco/swift-composable-architecture/issues/602
-                            SwitchStore(screen) {
-                                CaseLet(state: /SetupScreenState.missingPINLetter,
-                                        action: SetupScreenAction.missingPINLetter,
-                                        then: MissingPINLetter.init)
-                            }
+        NavigationView {
+            TCARouter(store) { screen in
+                SwitchStore(screen) {
+                    CaseLet(state: /SetupScreenState.intro,
+                            action: SetupScreenAction.intro,
+                            then: SetupIntro.init)
+                    CaseLet(state: /SetupScreenState.transportPINIntro,
+                            action: SetupScreenAction.transportPINIntro,
+                            then: SetupTransportPINIntro.init)
+                    CaseLet(state: /SetupScreenState.transportPIN,
+                            action: SetupScreenAction.transportPIN,
+                            then: SetupTransportPIN.init)
+                    CaseLet(state: /SetupScreenState.personalPINIntro,
+                            action: SetupScreenAction.personalPINIntro,
+                            then: SetupPersonalPINIntro.init)
+                    CaseLet(state: /SetupScreenState.personalPIN,
+                            action: SetupScreenAction.personalPIN,
+                            then: SetupPersonalPIN.init)
+                    CaseLet(state: /SetupScreenState.scan,
+                            action: SetupScreenAction.scan,
+                            then: SetupScan.init)
+                    CaseLet(state: /SetupScreenState.done,
+                            action: SetupScreenAction.done,
+                            then: SetupDone.init)
+                    CaseLet(state: /SetupScreenState.error,
+                            action: SetupScreenAction.error,
+                            then: ScanError.init)
+                    CaseLet(state: /SetupScreenState.incorrectTransportPIN,
+                            action: SetupScreenAction.incorrectTransportPIN,
+                            then: SetupIncorrectTransportPIN.init)
+                    Default {
+                        // There is a maximum case let statements allowed per switch store view.
+                        // This works around this issue by nesting a second switch store inside the default case.
+                        // For more information see: https://github.com/pointfreeco/swift-composable-architecture/issues/602
+                        SwitchStore(screen) {
+                            CaseLet(state: /SetupScreenState.missingPINLetter,
+                                    action: SetupScreenAction.missingPINLetter,
+                                    then: MissingPINLetter.init)
                         }
-                        
                     }
+                    
                 }
-                .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
-                .navigationBarHidden(false)
             }
-            .accentColor(Asset.accentColor.swiftUIColor)
-            .interactiveDismissDisabled(viewStore.state) {
-                viewStore.send(.end)
-            }
+            .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
+            .navigationBarHidden(false)
         }
+        .accentColor(Asset.accentColor.swiftUIColor)
         .ignoresSafeArea(.keyboard)
     }
 }

@@ -70,6 +70,7 @@ struct SetupPersonalPIN: View {
             }
             .padding(.horizontal)
         }
+        .interactiveDismissDisabled()
     }
 }
 

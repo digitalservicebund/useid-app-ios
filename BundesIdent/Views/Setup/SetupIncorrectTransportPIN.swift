@@ -20,6 +20,7 @@ struct SetupIncorrectTransportPINState: Equatable {
 
 enum SetupIncorrectTransportPINAction: BindableAction, Equatable {
     case done(transportPIN: String)
+    case swipeToDismiss
     case end
     case confirmEnd
     case dismissAlert
@@ -32,7 +33,8 @@ enum SetupIncorrectTransportPINAction: BindableAction, Equatable {
 
 let setupIncorrectTransportPINReducer = Reducer<SetupIncorrectTransportPINState, SetupIncorrectTransportPINAction, AppEnvironment> { state, action, _ in
     switch action {
-    case .end:
+    case .swipeToDismiss,
+            .end:
         state.alert = AlertState(title: TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.title),
                                  message: TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.message),
                                  primaryButton: .destructive(TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.confirm),
@@ -102,7 +104,7 @@ struct SetupIncorrectTransportPIN: View {
                                     Button {
                                         viewStore.send(.end)
                                     } label: {
-                                        Text(verbatim: L10n.FirstTimeUser.IncorrectTransportPIN.end)
+                                        Text(verbatim: L10n.General.cancel)
                                     }
                                 }
                             }
@@ -127,7 +129,7 @@ struct SetupIncorrectTransportPIN: View {
             .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
         }
         .interactiveDismissDisabled {
-            ViewStore(store.stateless).send(.end)
+            ViewStore(store.stateless).send(.swipeToDismiss)
         }
         .focusOnAppear {
             pinEntryFocused = true

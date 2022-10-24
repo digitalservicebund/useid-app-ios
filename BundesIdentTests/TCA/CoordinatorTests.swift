@@ -116,7 +116,7 @@ final class CoordinatorTests: XCTestCase {
         
         let newRoutes: [Route<ScreenState>] = [
             .root(.home(HomeState(appVersion: "1.0.0", buildNumber: 1))),
-            .sheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
+            .sheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL, canGoBackToSetupIntro: true)))
         ]
         
         store.receive(.updateRoutes(newRoutes)) {

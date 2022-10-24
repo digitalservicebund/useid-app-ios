@@ -124,7 +124,7 @@ class IdentificationCoordinatorTests: XCTestCase {
             environment: environment)
         
         store.send(.routeAction(0, action: .scan(.identifiedSuccessfully(redirectURL: redirect))))
-        store.receive(.routeAction(0, action: IdentificationScreenAction.scan(IdentificationScanAction.end)))
+        store.receive(.routeAction(0, action: IdentificationScreenAction.scan(IdentificationScanAction.dismiss)))
         
         XCTAssertEqual(redirect, openedURL)
         verify(mockStorageManager).updateSetupCompleted(true)
@@ -239,6 +239,32 @@ class IdentificationCoordinatorTests: XCTestCase {
             environment: environment
         )
         
+        store.send(.routeAction(1, action: .incorrectPersonalPIN(IdentificationIncorrectPersonalPINAction.end))) {
+            guard case .incorrectPersonalPIN(var incorrectPersonalPINState) = $0.routes[1].screen else { return XCTFail("Unexpected state") }
+            incorrectPersonalPINState.alert = AlertState(title: .init(verbatim: L10n.Identification.ConfirmEnd.title),
+                                  message: .init(verbatim: L10n.Identification.ConfirmEnd.message),
+                                  primaryButton: .destructive(.init(verbatim: L10n.Identification.ConfirmEnd.confirm),
+                                                              action: .send(.confirmEnd)),
+                                  secondaryButton: .cancel(.init(verbatim: L10n.Identification.ConfirmEnd.deny)))
+            $0.routes[1].screen = .incorrectPersonalPIN(incorrectPersonalPINState)
+        }
+    }
+    
+    func testConfirmEndOnIncorrectPIN() {
+        let pin = "123456"
+        let request = EIDAuthenticationRequest.preview
+        let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
+        let store = TestStore(
+            initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
+                                                         pin: pin,
+                                                         states: [
+                                                            .root(.scan(IdentificationScanState(request: request, pin: pin, pinCallback: callback))),
+                                                            .sheet(.incorrectPersonalPIN(IdentificationIncorrectPersonalPINState(remainingAttempts: 2)))
+                                                         ]),
+            reducer: identificationCoordinatorReducer,
+            environment: environment
+        )
+        
         store.send(.routeAction(1, action: .incorrectPersonalPIN(IdentificationIncorrectPersonalPINAction.confirmEnd))) {
             $0.routes.removeLast()
         }
@@ -248,7 +274,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         store.receive(.afterConfirmEnd)
     }
     
-    func testEndTriggersConfirmation() {
+    func testSwipeToDismissTriggersConfirmation() {
         let pin = "123456"
         let store = TestStore(
             initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
@@ -260,11 +286,11 @@ class IdentificationCoordinatorTests: XCTestCase {
             environment: environment
         )
         
-        store.send(.end) {
+        store.send(.swipeToDismiss) {
             $0.alert = AlertState(title: .init(verbatim: L10n.Identification.ConfirmEnd.title),
                                   message: .init(verbatim: L10n.Identification.ConfirmEnd.message),
                                   primaryButton: .destructive(.init(verbatim: L10n.Identification.ConfirmEnd.confirm),
-                                                              action: .send(.confirmEnd)),
+                                                              action: .send(.dismiss)),
                                   secondaryButton: .cancel(.init(verbatim: L10n.Identification.ConfirmEnd.deny)))
         }
     }

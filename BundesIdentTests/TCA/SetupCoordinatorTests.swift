@@ -22,7 +22,7 @@ class SetupCoordinatorTests: XCTestCase {
     
     func testEndTriggersConfirmation() {
         let store = TestStore(
-            initialState: SetupCoordinatorState(states: [ .root(.intro(.init(tokenURL: nil))) ]),
+            initialState: SetupCoordinatorState(),
             reducer: setupCoordinatorReducer,
             environment: environment
         )

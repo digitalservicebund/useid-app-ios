@@ -11,20 +11,23 @@ protocol IDInteractionHandler {
     func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> LocalAction?
 }
 
+enum SwipeToDismissState {
+    case block
+    case allow
+    case allowAfterConfirmation
+}
+
 struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
     var tokenURL: URL
     var pin: String?
     var attempt: Int = 0
     var authenticationSuccessful = false
     
-    var needsEndConfirmation: Bool {
-        routes.contains {
-            switch $0.screen {
-            case .personalPIN: return true
-            default: return false
-            }
-        }
+    var swipeToDismiss: SwipeToDismissState {
+        guard let lastScreen = states.last?.screen else { return .allow }
+        return lastScreen.swipeToDismissState
     }
+    
     var alert: AlertState<IdentificationCoordinatorAction>?
 
 #if PREVIEW
@@ -84,9 +87,9 @@ extension IdentificationCoordinatorState: AnalyticsView {
  }
 
 extension IdentificationCoordinatorState {
-    init(tokenURL: URL) {
+    init(tokenURL: URL, canGoBackToSetupIntro: Bool = false) {
         self.tokenURL = tokenURL
-        self.states = [.root(.overview(.loading(IdentificationOverviewLoadingState())))]
+        self.states = [.root(.overview(.loading(IdentificationOverviewLoadingState(canGoBackToSetupIntro: canGoBackToSetupIntro))))]
     }
 }
 
@@ -95,11 +98,11 @@ enum IdentificationCoordinatorAction: Equatable, IndexedRouterAction {
     case updateRoutes([Route<IdentificationScreenState>])
     case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case scanError(ScanErrorState)
-    case end
-    case confirmEnd
+    case swipeToDismiss
     case afterConfirmEnd
     case dismissAlert
     case dismiss
+    case back(tokenURL: URL)
 #if PREVIEW
     case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -161,6 +164,8 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 state.attempt += 1
                 state.routes.dismiss()
                 return .none
+            case .routeAction(_, action: .overview(.back)):
+                return Effect(value: .back(tokenURL: state.tokenURL))
             case .routeAction(_, action: .overview(.loading(.identify))):
                 let publisher: EIDInteractionPublisher
 #if PREVIEW
@@ -203,7 +208,8 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
             case .routeAction(_, action: .error(.retry)):
                 state.routes.dismiss()
                 return .none
-            case .routeAction(_, action: .error(.end)):
+            case .routeAction(_, action: .error(.end)),
+                    .routeAction(_, action: .incorrectPersonalPIN(.confirmEnd)):
                 state.routes.dismiss()
                 
                 // Dismissing two sheets at the same time from different coordinators is not well supported.
@@ -211,28 +217,30 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 return Effect(value: .afterConfirmEnd)
                     .delay(for: 0.65, scheduler: environment.mainQueue)
                     .eraseToEffect()
-                
-            case .routeAction(let index, action: .incorrectPersonalPIN(.confirmEnd)):
-                state.routes.dismiss()
-                
-                // Dismissing two sheets at the same time from different coordinators is not well supported.
-                // Waiting for 0.65s (as TCACoordinators does) fixes this temporarily.
-                return Effect(value: .afterConfirmEnd)
-                    .delay(for: 0.65, scheduler: environment.mainQueue)
-                    .eraseToEffect()
-                
-            case .end:
+            
+            case .routeAction(_, action: .overview(.end)):
                 state.alert = AlertState(title: TextState(verbatim: L10n.Identification.ConfirmEnd.title),
                                          message: TextState(verbatim: L10n.Identification.ConfirmEnd.message),
                                          primaryButton: .destructive(TextState(verbatim: L10n.Identification.ConfirmEnd.confirm),
-                                                                     action: .send(.confirmEnd)),
+                                                                     action: .send(.dismiss)),
                                          secondaryButton: .cancel(TextState(verbatim: L10n.Identification.ConfirmEnd.deny)))
                 return .none
+            case .swipeToDismiss:
+                switch state.swipeToDismiss {
+                case .allow:
+                    return .none
+                case .block:
+                    return .none
+                case .allowAfterConfirmation:
+                    state.alert = AlertState(title: TextState(verbatim: L10n.Identification.ConfirmEnd.title),
+                                             message: TextState(verbatim: L10n.Identification.ConfirmEnd.message),
+                                             primaryButton: .destructive(TextState(verbatim: L10n.Identification.ConfirmEnd.confirm),
+                                                                         action: .send(.dismiss)),
+                                             secondaryButton: .cancel(TextState(verbatim: L10n.Identification.ConfirmEnd.deny)))
+                    return .none
+                }
             case .dismissAlert:
                 state.alert = nil
-                return .none
-            case .dismiss:
-                state.routes.dismiss()
                 return .none
             default:
                 return .none
@@ -265,14 +273,13 @@ struct IdentificationCoordinatorView: View {
                                 then: ScanError.init)
                     }
                 }
-                .navigationBarHidden(false)
-                .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
             }
             .accentColor(Asset.accentColor.swiftUIColor)
-            .interactiveDismissDisabled(viewStore.needsEndConfirmation) {
-                viewStore.send(.end)
-            }
             .ignoresSafeArea(.keyboard)
+            .alert(store.scope(state: \.alert), dismiss: IdentificationCoordinatorAction.dismissAlert)
+            .interactiveDismissDisabled(viewStore.swipeToDismiss != .allow) {
+                viewStore.send(IdentificationCoordinatorAction.swipeToDismiss)
+            }
         }
     }
 }

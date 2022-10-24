@@ -10,7 +10,7 @@ struct CoordinatorState: Equatable, IndexedRouterState {
     mutating func handleURL(_ url: URL, environment: AppEnvironment) -> Effect<CoordinatorAction, Never> {
         let screen: ScreenState
         if environment.storageManager.setupCompleted {
-            screen = .identificationCoordinator(IdentificationCoordinatorState(tokenURL: url))
+            screen = .identificationCoordinator(IdentificationCoordinatorState(tokenURL: url, canGoBackToSetupIntro: false))
         } else {
             screen = .setupCoordinator(SetupCoordinatorState(tokenURL: url))
         }
@@ -110,11 +110,17 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                                        action: "buttonPressed",
                                        name: "start",
                                        analytics: environment.analytics)
+                case .identificationCoordinator(.back(let tokenURL)):
+                    return Effect.routeWithDelaysIfUnsupported(state.routes) {
+                        $0.dismiss()
+                        $0.presentSheet(.setupCoordinator(SetupCoordinatorState(tokenURL: tokenURL)))
+                    }
                 case .setupCoordinator(.routeAction(_, action: .intro(.chooseSkipSetup(let tokenURL)))):
                     if let tokenURL = tokenURL {
                         return Effect.routeWithDelaysIfUnsupported(state.routes) {
                             $0.dismiss()
-                            $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
+                            $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL,
+                                                                                                      canGoBackToSetupIntro: true)))
                         }
                     } else {
                         state.routes.dismiss()
@@ -123,17 +129,16 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                 case .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification(let tokenURL)))):
                     return Effect.routeWithDelaysIfUnsupported(state.routes) {
                         $0.dismiss()
-                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
+                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL,
+                                                                                                  canGoBackToSetupIntro: false)))
                     }
 #if PREVIEW
                 case .home(.triggerIdentification(let tokenURL)):
-                    state.routes.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL)))
-                    return .none
+                    return Effect(value: .openURL(tokenURL))
 #endif
-                case .identificationCoordinator(.routeAction(_, action: .overview(.cancel))),
-                        .identificationCoordinator(.routeAction(_, action: .scan(.end))),
-                        .identificationCoordinator(.confirmEnd),
+                case .identificationCoordinator(.dismiss),
                         .identificationCoordinator(.afterConfirmEnd),
+                        .identificationCoordinator(.routeAction(_, action: .scan(.dismiss))),
                         .setupCoordinator(.confirmEnd),
                         .setupCoordinator(.routeAction(_, action: .done(.done))),
                         .setupCoordinator(.afterConfirmEnd):

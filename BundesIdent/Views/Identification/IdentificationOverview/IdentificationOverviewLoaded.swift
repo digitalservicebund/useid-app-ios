@@ -1,6 +1,39 @@
 import ComposableArchitecture
 import SwiftUI
 
+struct IdentificationOverviewLoadedState: Identifiable, Equatable {
+    let id: UUID
+    let request: EIDAuthenticationRequest
+    var handler: IdentifiableCallback<FlaggedAttributes>
+    let canGoBackToSetupIntro: Bool
+    
+    // used when going back to the overview screen when we already received a pin handler
+    var pinHandler: PINCallback?
+    
+    init(id: UUID, request: EIDAuthenticationRequest, handler: IdentifiableCallback<FlaggedAttributes>, canGoBackToSetupIntro: Bool = false, pinHandler: PINCallback? = nil) {
+        self.id = id
+        self.request = request
+        self.handler = handler
+        self.canGoBackToSetupIntro = canGoBackToSetupIntro
+        self.pinHandler = pinHandler
+    }
+    
+    var requiredReadAttributes: IdentifiedArrayOf<IDCardAttribute> {
+        let requiredAttributes = request.readAttributes.compactMap { (key: IDCardAttribute, isRequired: Bool) in
+            isRequired ? key : nil
+        }
+        return IdentifiedArrayOf(uniqueElements: requiredAttributes)
+    }
+}
+
+enum IdentificationOverviewLoadedAction: Equatable {
+    case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
+    case moreInfo
+    case callbackReceived(EIDAuthenticationRequest, PINCallback)
+    case confirm
+    case failure(IdentifiableError)
+}
+
 let identificationOverviewLoadedReducer = Reducer<IdentificationOverviewLoadedState, IdentificationOverviewLoadedAction, AppEnvironment> { state, action, environment in
     switch action {
     case .idInteractionEvent(.success(.requestPIN(remainingAttempts: nil, pinCallback: let handler))):
