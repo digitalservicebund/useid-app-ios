@@ -85,7 +85,7 @@
 "home_more_title" = "Mehr";
 "home_startSetup" = "Online-Ausweis einrichten";
 "home_version" = "Version %@";
-"identification_attributeConsent_body" = "Der Service möchte auf folgende Daten von Ihrem Ausweis zugreifen:";
+"identification_attributeConsent_body" = "Der Diensteanbieter möchte auf folgende Daten von Ihrem Ausweis zugreifen:";
 "identification_attributeConsent_continue" = "Freigabe erteilen";
 "identification_attributeConsent_moreInfo" = "Weitere Informationen";
 "identification_attributeConsent_title" = "Freigabe erteilen für »%@«.";
