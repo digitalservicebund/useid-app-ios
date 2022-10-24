@@ -82,7 +82,7 @@
 "home_more_title" = "More";
 "home_startSetup" = "Set up online ID card";
 "home_version" = "Version %@";
-"identification_attributeConsent_body" = "The service would like to access the following data from your ID card:";
+"identification_attributeConsent_body" = "The service provider would like to access the following data from your ID card:";
 "identification_attributeConsent_continue" = "Grant release";
 "identification_attributeConsent_moreInfo" = "More information";
 "identification_attributeConsent_title" = "Grant release for “%@”.";
