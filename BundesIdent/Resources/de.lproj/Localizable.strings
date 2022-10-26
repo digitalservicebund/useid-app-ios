@@ -44,8 +44,8 @@
 "firstTimeUser_personalPIN_continue" = "Weiter";
 "firstTimeUser_personalPIN_title" = "Vergeben Sie nun Ihre persönliche Ausweis-PIN.";
 "firstTimeUser_personalPINIntro_continue" = "Persönliche Ausweis–PIN vergeben";
-"firstTimeUser_personalPINIntro_info_body" = "Sie benötigen diese jedes Mal, wenn Sie die Online-Ausweisfunktion in Zukunft nutzen.";
-"firstTimeUser_personalPINIntro_info_title" = "Persönliche Ausweis–PIN gut merken";
+"firstTimeUser_personalPINIntro_info_body" = "Vergeben Sie eine PIN, die nicht leicht zu erraten ist.";
+"firstTimeUser_personalPINIntro_info_title" = "Geburtsdatum nicht als PIN nutzen";
 "firstTimeUser_personalPINIntro_title" = "Vergeben Sie nun Ihre persönliche Ausweis-PIN.";
 "firstTimeUser_pinLetter_body" = "Den PIN-Brief haben Sie nach der Beantragung des Ausweises per Post erhalten.";
 "firstTimeUser_pinLetter_requestLetter" = "Nein, PIN-Rücksetzbrief bestellen";
