@@ -59,7 +59,7 @@ class IDInteractionManagerTests: XCTestCase {
         
         let interactionManager = IDInteractionManager(openEcard: mockOpenEcard, issueTracker: MockIssueTracker())
         
-        let tokenURL = URL(string: "eid://tokenURL.org")!
+        let tokenURL = URL(string: "bundesident://tokenURL.org")!
         _ = interactionManager.identify(tokenURL: tokenURL, nfcMessagesProvider: IdentificationNFCMessageProvider())
         
         let argumentCaptor = ArgumentCaptor<NSObjectProtocol & StartServiceHandlerProtocol>()

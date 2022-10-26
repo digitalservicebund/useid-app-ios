@@ -70,7 +70,7 @@ final class CoordinatorTests: XCTestCase {
             $0.setupCompleted.get.thenReturn(false)
         }
         
-        let tokenURLString = URL(string: "eid://example.org")!
+        let tokenURLString = URL(string: "bundesident://example.org")!
         store.send(.openURL(tokenURLString)) {
             $0.routes = [home, .sheet(.setupCoordinator(SetupCoordinatorState(tokenURL: tokenURLString)), embedInNavigationView: false)]
         }
@@ -86,7 +86,7 @@ final class CoordinatorTests: XCTestCase {
             $0.setupCompleted.get.thenReturn(true)
         }
         
-        let tokenURLString = URL(string: "eid://example.org")!
+        let tokenURLString = URL(string: "bundesident://example.org")!
         store.send(.openURL(tokenURLString)) {
             $0.routes = [home, .sheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURLString)), embedInNavigationView: false)]
         }
@@ -104,7 +104,7 @@ final class CoordinatorTests: XCTestCase {
     }
     
     func testAbortSetupWithTokenURL() {
-        let tokenURL = URL(string: "eid://example.org")!
+        let tokenURL = URL(string: "bundesident://example.org")!
         let store = TestStore(initialState: CoordinatorState(routes: [
             .root(.home(HomeState(appVersion: "1.0.0", buildNumber: 1))),
             .sheet(.setupCoordinator(SetupCoordinatorState()))

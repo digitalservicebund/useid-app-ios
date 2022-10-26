@@ -9,7 +9,7 @@
 			<string>Viewer</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>eid</string>
+				<string>bundesident</string>
 			</array>
 		</dict>
 	</array>
