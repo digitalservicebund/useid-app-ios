@@ -15,6 +15,8 @@ struct BundesIdentApp: App {
         let config = AppConfig(bundle: Bundle.main)
         SentrySDK.start(configureOptions: config.configureSentry)
         
+        config.configureAudio()
+        
         let userDefaults = UserDefaults.standard
         if CommandLine.arguments.contains(LaunchArgument.resetUserDefaults) {
             userDefaults.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)

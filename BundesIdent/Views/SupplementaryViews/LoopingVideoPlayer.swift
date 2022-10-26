@@ -17,6 +17,7 @@ struct LoopingPlayer: UIViewRepresentable {
         
         let view = CustomVideoPlayer(player: player)
         
+        player.isMuted = true
         player.seek(to: syncedTime, toleranceBefore: shortTime, toleranceAfter: shortTime) { _ in
             player.play()
         }

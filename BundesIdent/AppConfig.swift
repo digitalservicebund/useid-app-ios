@@ -1,11 +1,14 @@
 import Foundation
+import AVFAudio
 import Sentry
 
 protocol AppConfigType {
     var sentryDSN: String { get }
-    func configureSentry(_ options: Options)
     var matomoSiteID: String { get }
     var matomoURL: URL { get }
+    
+    func configureSentry(_ options: Options)
+    func configureAudio()
 }
 
 struct AppConfig: AppConfigType {
@@ -41,5 +44,10 @@ struct AppConfig: AppConfigType {
         options.debug = true
 #endif
         options.tracesSampleRate = 1.0
+    }
+    
+    func configureAudio() {
+        try? AVAudioSession.sharedInstance()
+            .setCategory(.ambient, options: [.mixWithOthers])
     }
 }
