@@ -73,7 +73,7 @@ final class IdentificationUITests: XCTestCase {
         
         app.buttons[L10n.Identification.FetchMetadataError.retry].wait().tap()
         
-        app.staticTexts[L10n.Identification.FetchMetadata.loadingData].assertExistence()
+        app.staticTexts[L10n.Identification.FetchMetadata.pleaseWait].assertExistence()
     }
     
     func testIdentificationScanHelp() throws {

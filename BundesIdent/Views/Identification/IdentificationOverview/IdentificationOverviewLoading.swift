@@ -70,9 +70,6 @@ struct IdentificationOverviewLoading: View {
                 Text(L10n.Identification.FetchMetadata.pleaseWait)
                     .font(.bundBody)
                     .foregroundColor(.blackish)
-                Text(L10n.Identification.FetchMetadata.loadingData)
-                    .font(.bundBody)
-                    .foregroundColor(.blackish)
             }
             .padding(.bottom, 50)
         }
