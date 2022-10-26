@@ -95,7 +95,7 @@
 "identification_confirmEnd_message" = "Do you want to stop the identification process?";
 "identification_confirmEnd_title" = "End identification process?";
 "identification_end" = "Cancel";
-"identification_fetchMetadata_loadingData" = "Data is being loaded";
+"identification_fetchMetadata_loadingData" = " ";
 "identification_fetchMetadata_pleaseWait" = "Loading";
 "identification_fetchMetadataError_body" = "Please try again. Make sure that you are connected to the Internet.";
 "identification_fetchMetadataError_retry" = "Try again";
