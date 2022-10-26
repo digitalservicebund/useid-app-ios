@@ -99,7 +99,7 @@
 "identification_confirmEnd_title" = "Ausweisen beenden?";
 "identification_end" = "Abbrechen";
 "identification_fetchMetadata_loadingData" = "Daten werden geladen";
-"identification_fetchMetadata_pleaseWait" = "Einen Moment bitte…";
+"identification_fetchMetadata_pleaseWait" = "Laden";
 "identification_fetchMetadataError_body" = "Bitte versuchen Sie es erneut. Stellen Sie dabei sicher, dass Sie mit dem Internet verbunden sind.";
 "identification_fetchMetadataError_retry" = "Erneut versuchen";
 "identification_fetchMetadataError_title" = "Es ist ein Fehler aufgetreten.";
