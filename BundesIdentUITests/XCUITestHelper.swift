@@ -49,7 +49,8 @@ extension XCUIApplication {
     }
     
     func hasVisible(element: XCUIElement) -> Bool {
-        frame.contains(element.frame)
+        let safeFrame = CGRect(x: frame.minX, y: frame.minY, width: frame.width, height: frame.height - 34)
+        return safeFrame.contains(element.frame)
     }
     
     func scrollElementIntoVisibility(_ element: XCUIElement, maxSwipeActions: Int = 10) {
