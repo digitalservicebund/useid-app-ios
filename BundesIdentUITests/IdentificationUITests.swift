@@ -37,7 +37,7 @@ final class IdentificationUITests: XCTestCase {
         
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
         
-        app.buttons[L10n.Identification.Scan.scan].tap()
+        app.buttons[L10n.Identification.Scan.scan].wait().tap()
         
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["identifySuccessfully"].wait().tap()
@@ -97,7 +97,7 @@ final class IdentificationUITests: XCTestCase {
         app.buttons[L10n.Scan.helpScanning].wait().tap()
         
         app.staticTexts[L10n.ScanError.CardUnreadable.title].assertExistence()
-        app.buttons[L10n.ScanError.close].tap()
+        app.buttons[L10n.ScanError.close].wait().tap()
 
         app.buttons[L10n.Identification.Scan.scan].wait().tap()
     }
