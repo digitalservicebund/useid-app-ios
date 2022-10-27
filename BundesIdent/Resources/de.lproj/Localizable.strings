@@ -35,7 +35,7 @@
 "firstTimeUser_intro_skipSetup" = "Bereits eingerichtet";
 "firstTimeUser_missingPINLetter_body" = "Wir arbeiten noch an dieser Funktion.\n\nWeitere Informationen über den PIN-Rücksetzbrief finden Sie unter:\n\n**[www.pin-ruecksetzbrief-bestellen.de ↗](https://www.pin-ruecksetzbrief-bestellen.de)**";
 "firstTimeUser_missingPINLetter_title" = "PIN-Rücksetzbrief bestellen.";
-"firstTimeUser_personalPIN_body" = "Merken Sie sich Ihre persönliche Ausweis-PIN gut. Sie benötigen diese jedes Mal, wenn Sie die Online-Ausweisfunktion in Zukunft nutzen.";
+"firstTimeUser_personalPIN_body" = "Nutzen Sie nicht Ihr Geburtsdatum als Ihre PIN. Vergeben Sie eine PIN, die nicht leicht zu erraten ist.";
 "firstTimeUser_personalPIN_confirmation" = "PIN zum Bestätigen wiederholen";
 "firstTimeUser_personalPIN_error_mismatch_body" = "Versuchen Sie es erneut.";
 "firstTimeUser_personalPIN_error_mismatch_title" = "PINs stimmen nicht überein";
@@ -44,8 +44,8 @@
 "firstTimeUser_personalPIN_continue" = "Weiter";
 "firstTimeUser_personalPIN_title" = "Vergeben Sie nun Ihre persönliche Ausweis-PIN.";
 "firstTimeUser_personalPINIntro_continue" = "Persönliche Ausweis–PIN vergeben";
-"firstTimeUser_personalPINIntro_info_body" = "Vergeben Sie eine PIN, die nicht leicht zu erraten ist.";
-"firstTimeUser_personalPINIntro_info_title" = "Geburtsdatum nicht als PIN nutzen";
+"firstTimeUser_personalPINIntro_info_body" = "Sie benötigen diese jedes Mal, wenn Sie die Online-Ausweisfunktion in Zukunft nutzen.";
+"firstTimeUser_personalPINIntro_info_title" = "Persönliche Ausweis–PIN gut merken";
 "firstTimeUser_personalPINIntro_title" = "Vergeben Sie nun Ihre persönliche Ausweis-PIN.";
 "firstTimeUser_pinLetter_body" = "Den PIN-Brief haben Sie nach der Beantragung des Ausweises per Post erhalten.";
 "firstTimeUser_pinLetter_requestLetter" = "Nein, PIN-Rücksetzbrief bestellen";
