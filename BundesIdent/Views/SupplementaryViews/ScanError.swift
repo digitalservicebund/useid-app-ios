@@ -110,7 +110,7 @@ struct ScanError: View {
                            boxContent: viewStore.boxContent,
                            message: viewStore.markdown,
                            primaryButton: viewStore.primaryButton)
-                .interactiveDismissDisabled(!viewStore.retry)
+                .interactiveDismissDisabled(true)
             }
             .navigationBarBackButtonHidden(true)
             .navigationBarHidden(false)
