@@ -89,7 +89,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         }
     }
     
-    func testPINEntryToScan() throws {
+    func testPINEntryToScanFirstTime() throws {
         let request = EIDAuthenticationRequest.preview
         let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let store = TestStore(
@@ -101,9 +101,40 @@ class IdentificationCoordinatorTests: XCTestCase {
             reducer: identificationCoordinatorReducer,
             environment: environment)
         
+        stub(mockStorageManager) {
+            $0.identifiedOnce.get.thenReturn(false)
+        }
+        
         store.send(.routeAction(0, action: .personalPIN(.done(request: request, pin: "123456", pinCallback: callback)))) {
             $0.pin = "123456"
             $0.routes.append(.push(.scan(IdentificationScanState(request: request, pin: "123456", pinCallback: callback))))
+        }
+    }
+    
+    func testPINEntryToScanAfterIdentifyingOnce() throws {
+        let request = EIDAuthenticationRequest.preview
+        let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
+        let store = TestStore(
+            initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
+                                                         states: [
+                                                            .root(.personalPIN(.init(request: request,
+                                                                                     callback: callback)))
+                                                         ]),
+            reducer: identificationCoordinatorReducer,
+            environment: environment)
+        
+        stub(mockStorageManager) {
+            $0.identifiedOnce.get.thenReturn(true)
+        }
+        
+        store.send(.routeAction(0, action: .personalPIN(.done(request: request, pin: "123456", pinCallback: callback)))) {
+            $0.pin = "123456"
+            $0.routes.append(.push(.scan(IdentificationScanState(
+                request: request,
+                pin: "123456",
+                pinCallback: callback,
+                shared: SharedScanState(showInstructions: false)
+            ))))
         }
     }
     
@@ -123,11 +154,17 @@ class IdentificationCoordinatorTests: XCTestCase {
             reducer: identificationCoordinatorReducer,
             environment: environment)
         
+        stub(mockStorageManager) {
+            $0.identifiedOnce.get.thenReturn(false)
+            $0.identifiedOnce.set(any()).thenDoNothing()
+        }
+        
         store.send(.routeAction(0, action: .scan(.identifiedSuccessfully(redirectURL: redirect))))
         store.receive(.routeAction(0, action: IdentificationScreenAction.scan(IdentificationScanAction.dismiss)))
         
         XCTAssertEqual(redirect, openedURL)
         verify(mockStorageManager).setupCompleted.set(true)
+        verify(mockStorageManager).identifiedOnce.set(true)
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification", action: "success"))
     }
     

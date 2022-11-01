@@ -23,14 +23,17 @@ struct UserDefault<T> {
 
 enum StorageKey: String {
     case setupCompleted
+    case identifiedOnce
 }
 
 class StorageManager: StorageManagerType {
     
     @UserDefault var setupCompleted: Bool
+    @UserDefault var identifiedOnce: Bool
     
     init(userDefaults: UserDefaults = .standard) {
         _setupCompleted = UserDefault(userDefaults: userDefaults, key: .setupCompleted, defaultValue: false)
+        _identifiedOnce = UserDefault(userDefaults: userDefaults, key: .identifiedOnce, defaultValue: false)
     }
     
 }

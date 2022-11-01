@@ -44,6 +44,12 @@ enum IdentificationScanAction: Equatable {
 
 let identificationScanReducer = Reducer<IdentificationScanState, IdentificationScanAction, AppEnvironment> { state, action, environment in
     switch action {
+    case .onAppear:
+        if !state.shared.showInstructions {
+            return Effect(value: .shared(.startScan))
+        } else {
+            return .none
+        }
     case .shared(.startScan):
         state.shared.showInstructions = false
         
@@ -74,6 +80,7 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
         return .none
     case .identifiedSuccessfully(let redirectURL):
         environment.storageManager.setupCompleted = true
+        environment.storageManager.identifiedOnce = true
         
         return .concatenate(.trackEvent(category: "identification", action: "success", analytics: environment.analytics),
                             .openURL(redirectURL, urlOpener: environment.urlOpener),

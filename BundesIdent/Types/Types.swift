@@ -27,6 +27,7 @@ protocol ContextManagerType: ContextManagerProtocol {
 
 protocol StorageManagerType: AnyObject {
     var setupCompleted: Bool { get set }
+    var identifiedOnce: Bool { get set }
 }
 
 protocol IssueTracker {

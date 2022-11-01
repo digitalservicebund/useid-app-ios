@@ -196,7 +196,8 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 state.routes.push(
                     .scan(IdentificationScanState(request: request,
                                                   pin: pin,
-                                                  pinCallback: pinCallback))
+                                                  pinCallback: pinCallback,
+                                                  shared: SharedScanState(showInstructions: !environment.storageManager.identifiedOnce)))
                 )
                 return .none
             case .routeAction(_, action: .scan(.error(let errorState))):
