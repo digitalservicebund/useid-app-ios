@@ -95,18 +95,17 @@ struct HomeView: View {
     @ViewBuilder
     private var setupActionView: some View {
         VStack {
-            ImageMeta(asset: Asset.eiDs).image
+            ImageMeta(asset: Asset.setupPINLetterEId).image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
             Button(L10n.Home.startSetup) {
                 ViewStore(store.stateless).send(.triggerSetup)
             }
             .buttonStyle(BundButtonStyle(isPrimary: true))
-            .offset(y: -20)
-            .padding(.bottom, -20)
-            
+            .offset(y: -60)
+            .padding(.bottom, -40)
+            .padding(.horizontal)
         }
-        .padding()
         .grouped()
     }
     
