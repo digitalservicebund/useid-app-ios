@@ -1,19 +1,36 @@
 import Foundation
 
-struct StorageManager: StorageManagerType {
+@propertyWrapper
+struct UserDefault<T> {
     
-    private var userDefaults: UserDefaults
+    let userDefaults: UserDefaults
+    let key: StorageKey
+    let defaultValue: T
     
-    var setupCompleted: Bool {
-        userDefaults.bool(forKey: StorageKey.setupCompleted.rawValue)
+    init(userDefaults: UserDefaults = UserDefaults.standard,
+         key: StorageKey,
+         defaultValue: T) {
+        self.userDefaults = userDefaults
+        self.key = key
+        self.defaultValue = defaultValue
     }
     
-    func updateSetupCompleted(_ newValue: Bool) {
-        userDefaults.set(newValue, forKey: StorageKey.setupCompleted.rawValue)
+    var wrappedValue: T {
+        get { return userDefaults.object(forKey: key.rawValue) as? T ?? defaultValue }
+        set { userDefaults.set(newValue, forKey: key.rawValue) }
     }
+}
+
+enum StorageKey: String {
+    case setupCompleted
+}
+
+class StorageManager: StorageManagerType {
+    
+    @UserDefault var setupCompleted: Bool
     
     init(userDefaults: UserDefaults = .standard) {
-        self.userDefaults = userDefaults
+        _setupCompleted = UserDefault(userDefaults: userDefaults, key: .setupCompleted, defaultValue: false)
     }
     
 }

@@ -38,7 +38,7 @@ class SetupScanTests: XCTestCase {
         }
         
         stub(mockStorageManager) {
-            when($0.updateSetupCompleted(true)).thenDoNothing()
+            when($0.setupCompleted.set(true)).thenDoNothing()
         }
     }
     
@@ -108,7 +108,7 @@ class SetupScanTests: XCTestCase {
         
         store.receive(.scannedSuccessfully)
         
-        verify(mockStorageManager).updateSetupCompleted(true)
+        verify(mockStorageManager).setupCompleted.set(true)
         
         self.wait(for: [requestChangedPINExpectation], timeout: 0.0)
     }

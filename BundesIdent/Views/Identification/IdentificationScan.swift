@@ -73,7 +73,7 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
         state.shared.isScanning = false
         return .none
     case .identifiedSuccessfully(let redirectURL):
-        environment.storageManager.updateSetupCompleted(true)
+        environment.storageManager.setupCompleted = true
         
         return .concatenate(.trackEvent(category: "identification", action: "success", analytics: environment.analytics),
                             .openURL(redirectURL, urlOpener: environment.urlOpener),

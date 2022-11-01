@@ -100,7 +100,7 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         state.shared.isScanning = false
         return .cancel(id: CancelId.self)
     case .scannedSuccessfully:
-        environment.storageManager.updateSetupCompleted(true)
+        environment.storageManager.setupCompleted = true
         return .cancel(id: CancelId.self)
     case .shared(.showNFCInfo):
         state.alert = AlertState(title: TextState(L10n.HelpNFC.title),

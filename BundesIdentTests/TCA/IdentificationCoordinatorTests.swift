@@ -36,7 +36,7 @@ class IdentificationCoordinatorTests: XCTestCase {
                                             urlOpener: { self.openedURL = $0 })
         
         stub(mockStorageManager) {
-            when($0.updateSetupCompleted(any())).thenDoNothing()
+            when($0.setupCompleted.set(any())).thenDoNothing()
         }
         
         stub(mockAnalyticsClient) {
@@ -127,7 +127,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         store.receive(.routeAction(0, action: IdentificationScreenAction.scan(IdentificationScanAction.dismiss)))
         
         XCTAssertEqual(redirect, openedURL)
-        verify(mockStorageManager).updateSetupCompleted(true)
+        verify(mockStorageManager).setupCompleted.set(true)
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification", action: "success"))
     }
     
