@@ -3,4 +3,5 @@ enum LaunchArgument {
     static let useDemoTokenURL = "-UseDemoTokenURL"
     static let resetUserDefaults = "-ResetUserDefaults"
     static let setupCompleted = "-SetupCompleted"
+    static let identifiedOnce = "-IdentifiedOnce"
 }

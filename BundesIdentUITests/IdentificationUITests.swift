@@ -12,7 +12,7 @@ final class IdentificationUITests: XCTestCase {
         app.staticTexts[L10n.FirstTimeUser.Intro.title].assertExistence()
     }
     
-    func testIdentificationHappyPath() throws {
+    func testIdentificationShowAttributeDetails() throws {
         let app = XCUIApplication()
         app.launchWithDefaultArguments()
         app.launchWithSetupCompleted()
@@ -28,6 +28,19 @@ final class IdentificationUITests: XCTestCase {
         
         app.staticTexts[L10n.Identification.AttributeConsentInfo.terms].assertExistence()
         app.navigationBars.buttons.firstMatch.wait().tap()
+    }
+    
+    func testIdentificationHappyPath() throws {
+        let app = XCUIApplication()
+        app.launchWithDefaultArguments()
+        app.launchWithSetupCompleted()
+        app.launchWithDemoTokenURL()
+        app.launch()
+        
+        app.navigationBars.buttons["Debug"].wait().tap()
+        app.buttons["requestAuthorization"].wait().tap()
+        
+        app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
         
         app.buttons[L10n.Identification.AttributeConsent.continue].wait().tap()
         
@@ -48,9 +61,39 @@ final class IdentificationUITests: XCTestCase {
         XCTAssertEqual(safari.state, .runningForeground)
     }
     
+    func testIdentificationHappyPathSkippingInstructions() throws {
+        let app = XCUIApplication()
+        app.launchWithDefaultArguments()
+        app.launchWithSetupCompleted()
+        app.launchWithDemoTokenURL()
+        app.launchWithIdentifiedOnce()
+        app.launch()
+        
+        app.navigationBars.buttons["Debug"].wait().tap()
+        app.buttons["requestAuthorization"].wait().tap()
+        
+        app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
+        
+        app.buttons[L10n.Identification.AttributeConsent.continue].wait().tap()
+        
+        let pinTextField = app.secureTextFields[L10n.Identification.PersonalPIN.textFieldLabel]
+        pinTextField.wait().tap()
+        pinTextField.waitAndTypeText("123456")
+        
+        app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
+        
+        app.navigationBars.buttons["Debug"].wait().tap()
+        app.buttons["identifySuccessfully"].wait().tap()
+        
+        app.buttons[L10n.Home.startSetup].assertExistence()
+        
+        let safari = XCUIApplication(bundleIdentifier: SafariIdentifiers.bundleId.rawValue)
+        XCTAssertEqual(safari.state, .runningForeground)
+    }
+    
     func testIdentificationOverviewBackToSetupIntro() throws {
         let app = XCUIApplication()
-        app.launchWithResetUserDefaults()
+        app.launchWithDefaultArguments()
         app.launchWithDemoTokenURL()
         app.launch()
         

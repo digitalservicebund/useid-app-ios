@@ -26,6 +26,10 @@ struct BundesIdentApp: App {
             userDefaults.set(true, forKey: StorageKey.setupCompleted.rawValue)
         }
         
+        if CommandLine.arguments.contains(LaunchArgument.identifiedOnce) {
+            userDefaults.set(true, forKey: StorageKey.identifiedOnce.rawValue)
+        }
+        
         let environment = AppEnvironment.live(appConfig: config)
         store = Store(
             initialState: CoordinatorState(

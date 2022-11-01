@@ -10,11 +10,16 @@ extension XCUIApplication {
         launchArguments.append(LaunchArgument.setupCompleted)
     }
     
+    func launchWithIdentifiedOnce() {
+        launchArguments.append(LaunchArgument.identifiedOnce)
+    }
+    
     func launchWithDemoTokenURL() {
         launchArguments.append(LaunchArgument.useDemoTokenURL)
     }
     
     func launchWithDefaultArguments() {
         launchArguments.append(LaunchArgument.uiTesting)
+        launchWithResetUserDefaults()
     }
 }

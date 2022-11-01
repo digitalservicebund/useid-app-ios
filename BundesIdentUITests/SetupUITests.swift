@@ -5,7 +5,6 @@ final class SetupUITests: XCTestCase {
     func testFirstTimeUserHappyPath() throws {
         let app = XCUIApplication()
         app.launchWithDefaultArguments()
-        app.launchWithResetUserDefaults()
         app.launch()
         
         app.buttons[L10n.FirstTimeUser.Intro.startSetup].wait().tap()
