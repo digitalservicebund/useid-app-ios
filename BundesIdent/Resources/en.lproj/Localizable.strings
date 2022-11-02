@@ -145,6 +145,6 @@
 "scanError_box_title" = "Restart identification process";
 "scanError_box_body" = "Due to an error, you need to restart the identification process.";
 "firstTimeUser_scanInstructions_body" = "Almost there! In the next step, hold your ID close to the top back side of the iPhone. The app uses NFC sensors in the iPhone and ID card to transfer your new PIN to the ID card.";
-"identification_scanInstructions_body" = "Almost there! In the next step, hold your ID card close to the back of the iPhone. The app uses the NFC sensors in the iPhone and ID card to check your PIN and retrieve the required data.";
+"identification_scanInstructions_body" = "In the next step, hold your ID card close to the back of the iPhone. The app uses the NFC sensors in the iPhone and ID card to check your PIN and retrieve the required data.";
 "identification_scanInstructions_title" = "How to retrieve data from your ID card.";
 "firstTimeUser_scanInstructions_title" = "How to transfer your new PIN to the ID card.";
