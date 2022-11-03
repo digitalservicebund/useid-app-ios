@@ -44,7 +44,7 @@ struct CoordinatorState: Equatable, IndexedRouterState {
     
     private func dismiss(show screen: Screen, environment: AppEnvironment) -> Effect<CoordinatorAction, Never> {
         return Effect.routeWithDelaysIfUnsupported(routes) {
-            $0.dismiss()
+            $0.dismissAll()
             $0.presentSheet(screen)
         }
         .delay(for: 0.65, scheduler: environment.mainQueue)

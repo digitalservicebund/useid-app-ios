@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/johnpatrickmorgan/FlowStacks",
       "state" : {
-        "revision" : "99b0c0d8ca33a916479521e533dad04a006f6e06",
-        "version" : "0.2.5"
+        "revision" : "8d1bc577fcab0c09d599f1f2f6747db2d15f84f4",
+        "version" : "0.3.0"
       }
     },
     {
@@ -149,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/johnpatrickmorgan/TCACoordinators.git",
       "state" : {
-        "revision" : "d44cce852aae359a40b92d4468791acc23803fb8",
-        "version" : "0.2.1"
+        "revision" : "587eb47428c3f6f7618c1c186b6e7ee9ef5e7f54",
+        "version" : "0.2.3"
       }
     },
     {

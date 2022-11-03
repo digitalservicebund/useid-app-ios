@@ -36,8 +36,9 @@
 "firstTimeUser_missingPINLetter_body" = "Wir arbeiten noch an dieser Funktion.\n\nWeitere Informationen über den PIN-Rücksetzbrief finden Sie unter:\n\n**[www.pin-ruecksetzbrief-bestellen.de ↗](https://www.pin-ruecksetzbrief-bestellen.de)**";
 "firstTimeUser_missingPINLetter_title" = "PIN-Rücksetzbrief bestellen.";
 "firstTimeUser_personalPIN_body" = "Nutzen Sie nicht Ihr Geburtsdatum als Ihre PIN. Vergeben Sie eine PIN, die nicht leicht zu erraten ist.";
-"firstTimeUser_personalPIN_confirmation" = "PIN zum Bestätigen wiederholen";
-"firstTimeUser_personalPIN_error_mismatch_body" = "Versuchen Sie es erneut.";
+"firstTimeUser_personalPIN_confirmation_title" = "Bestätigen Sie ihre persönliche Ausweis-PIN";
+"firstTimeUser_personalPIN_confirmation_body" = "Nutzen Sie nicht Ihr Geburtsdatum als Ihre PIN. Vergeben Sie eine PIN, die nicht leicht zu erraten ist.";
+"firstTimeUser_personalPIN_error_mismatch_retry" = "Erneut versuchen";
 "firstTimeUser_personalPIN_error_mismatch_title" = "PINs stimmen nicht überein";
 "firstTimeUser_personalPIN_textFieldLabel_first" = "Persönliche PIN, sechsstellig";
 "firstTimeUser_personalPIN_textFieldLabel_second" = "Persönliche PIN bestätigen, sechsstellig";

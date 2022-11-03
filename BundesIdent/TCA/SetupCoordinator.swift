@@ -76,8 +76,13 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
                 state.transportPIN = transportPIN
                 state.routes.push(.personalPINIntro)
             case .routeAction(_, .personalPINIntro(.continue)):
-                state.routes.push(.personalPIN(SetupPersonalPINState()))
-            case .routeAction(_, action: .personalPIN(.done(pin: let pin))):
+                state.routes.push(.personalPINInput(SetupPersonalPINInputState()))
+            case .routeAction(_, action: .personalPINInput(.done(pin: let pin))):
+                state.routes.push(.personalPINConfirm(SetupPersonalPINConfirmState(enteredPIN1: pin)))
+            case .routeAction(_, action: .personalPINConfirm(.confirmMismatch)):
+                state.routes.pop()
+            case .routeAction(_, action: .personalPINConfirm(.done(pin: let pin))):
+                state.routes.pop()
                 state.routes.push(.scan(SetupScanState(transportPIN: state.transportPIN, newPIN: pin)))
             case .routeAction(_, action: .scan(.scannedSuccessfully)):
                 state.routes.push(.done(SetupDoneState(tokenURL: state.tokenURL)))
@@ -121,7 +126,7 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
                 state.alert = nil
                 return .none
             case .dismiss:
-                state.routes.dismiss()
+                state.routes.dismissAll()
                 return .none
             default:
                 break
@@ -149,9 +154,9 @@ struct SetupCoordinatorView: View {
                     CaseLet(state: /SetupScreenState.personalPINIntro,
                             action: SetupScreenAction.personalPINIntro,
                             then: SetupPersonalPINIntro.init)
-                    CaseLet(state: /SetupScreenState.personalPIN,
-                            action: SetupScreenAction.personalPIN,
-                            then: SetupPersonalPIN.init)
+                    CaseLet(state: /SetupScreenState.personalPINInput,
+                            action: SetupScreenAction.personalPINInput,
+                            then: SetupPersonalPINInput.init)
                     CaseLet(state: /SetupScreenState.scan,
                             action: SetupScreenAction.scan,
                             then: SetupScan.init)
@@ -172,6 +177,9 @@ struct SetupCoordinatorView: View {
                             CaseLet(state: /SetupScreenState.missingPINLetter,
                                     action: SetupScreenAction.missingPINLetter,
                                     then: MissingPINLetter.init)
+                            CaseLet(state: /SetupScreenState.personalPINConfirm,
+                                    action: SetupScreenAction.personalPINConfirm,
+                                    then: SetupPersonalPINConfirm.init)
                         }
                     }
                     

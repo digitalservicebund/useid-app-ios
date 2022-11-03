@@ -36,8 +36,8 @@
 "firstTimeUser_missingPINLetter_body" = "We are still working on this feature.\n\nFor more information about the PIN reset letter, please visit:\n\n**[www.pin-ruecksetzbrief-bestellen.de ↗](https://www.pin-ruecksetzbrief-bestellen.de)**";
 "firstTimeUser_missingPINLetter_title" = "Order PIN reset letter.";
 "firstTimeUser_personalPIN_body" = "Do not use your birthday as your personal ID PIN. Assign a PIN that is not easy to guess.";
-"firstTimeUser_personalPIN_confirmation" = "Repeat PIN to confirm";
-"firstTimeUser_personalPIN_error_mismatch_body" = "Try again.";
+"firstTimeUser_personalPIN_confirmation" = "Confirm your personal PIN";
+"firstTimeUser_personalPIN_error_mismatch_retry" = "Try again";
 "firstTimeUser_personalPIN_error_mismatch_title" = "PINs do not match";
 "firstTimeUser_personalPIN_textFieldLabel_first" = "Personal PIN, six digits";
 "firstTimeUser_personalPIN_textFieldLabel_second" = "Confirm personal PIN, six digits";

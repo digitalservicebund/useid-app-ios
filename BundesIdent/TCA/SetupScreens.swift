@@ -6,7 +6,8 @@ enum SetupScreenState: Equatable {
     case transportPINIntro
     case transportPIN(SetupTransportPINState)
     case personalPINIntro
-    case personalPIN(SetupPersonalPINState)
+    case personalPINInput(SetupPersonalPINInputState)
+    case personalPINConfirm(SetupPersonalPINConfirmState)
     case scan(SetupScanState)
     case done(SetupDoneState)
     case incorrectTransportPIN(SetupIncorrectTransportPINState)
@@ -25,8 +26,10 @@ extension SetupScreenState: AnalyticsView {
             return ["transportPIN"]
         case .personalPINIntro:
             return ["personalPINIntro"]
-        case .personalPIN:
-            return ["personalPIN"]
+        case .personalPINInput:
+            return ["personalPINInput"]
+        case .personalPINConfirm:
+            return ["personalPINConfirm"]
         case .scan:
             return ["scan"]
         case .done:
@@ -46,7 +49,8 @@ enum SetupScreenAction: Equatable {
     case transportPINIntro(SetupTransportPINIntroAction)
     case transportPIN(SetupTransportPINAction)
     case personalPINIntro(SetupPersonalPINIntroAction)
-    case personalPIN(SetupPersonalPINAction)
+    case personalPINInput(SetupPersonalPINInputAction)
+    case personalPINConfirm(SetupPersonalPINConfirmAction)
     case scan(SetupScanAction)
     case done(SetupDoneAction)
     case incorrectTransportPIN(SetupIncorrectTransportPINAction)
@@ -61,11 +65,16 @@ let setupScreenReducer = Reducer<SetupScreenState, SetupScreenAction, AppEnviron
             action: /SetupScreenAction.transportPIN,
             environment: { $0 }
         ),
-    setupPersonalPINReducer
+    setupPersonalPINInputReducer
         .pullback(
-            state: /SetupScreenState.personalPIN,
-            action: /SetupScreenAction.personalPIN,
+            state: /SetupScreenState.personalPINInput,
+            action: /SetupScreenAction.personalPINInput,
             environment: { $0 }
+        ),
+    setupPersonalPINConfirmReducer
+        .pullback(state: /SetupScreenState.personalPINConfirm,
+                  action: /SetupScreenAction.personalPINConfirm,
+                  environment: { $0 }
         ),
     setupScanReducer
         .pullback(
