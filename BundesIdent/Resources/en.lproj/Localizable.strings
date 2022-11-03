@@ -29,7 +29,7 @@
 "firstTimeUser_incorrectTransportPIN_continue" = "Next";
 "firstTimeUser_incorrectTransportPIN_textFieldLabel" = "Transport PIN, five digits";
 "firstTimeUser_incorrectTransportPIN_title" = "Entered incorrect transport PIN.";
-"firstTimeUser_intro_body" = "In the setup, you set your personal ID PIN.";
+"firstTimeUser_intro_body" = "In the setup, you set your personal 6-digit ID PIN.";
 "firstTimeUser_intro_startSetup" = "Set up online ID card now";
 "firstTimeUser_intro_title" = "Have you already set up your online ID card?";
 "firstTimeUser_intro_skipSetup" = "Already set up";
