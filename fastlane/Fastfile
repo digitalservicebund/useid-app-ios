@@ -108,7 +108,6 @@ platform :ios do
       executable: "swiftlint",
       mode: :lint,
       output_file: "swiftlint.html",
-      config_file: ".swiftlint.yml",
       strict: true,
       quiet: true,
       no_cache: false,
