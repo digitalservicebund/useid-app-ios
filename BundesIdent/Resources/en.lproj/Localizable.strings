@@ -28,8 +28,8 @@
 "firstTimeUser_incorrectTransportPIN_body" = "Enter your 5-digit transport PIN from the PIN letter.";
 "firstTimeUser_incorrectTransportPIN_continue" = "Next";
 "firstTimeUser_incorrectTransportPIN_textFieldLabel" = "Transport PIN, five digits";
-"firstTimeUser_incorrectTransportPIN_title" = "Incorrect transport PIN";
-"firstTimeUser_intro_body" = "In the setup, you set your personal ID PIN.";
+"firstTimeUser_incorrectTransportPIN_title" = "Entered incorrect transport PIN.";
+"firstTimeUser_intro_body" = "In the setup, you set your personal 6-digit ID PIN.";
 "firstTimeUser_intro_startSetup" = "Set up online ID card now";
 "firstTimeUser_intro_title" = "Have you already set up your online ID card?";
 "firstTimeUser_intro_skipSetup" = "Already set up";
@@ -50,7 +50,7 @@
 "firstTimeUser_pinLetter_requestLetter" = "No, order PIN reset letter";
 "firstTimeUser_pinLetter_title" = "Do you still have your PIN letter?";
 "firstTimeUser_pinLetter_letterPresent" = "Yes, the PIN letter is available";
-"firstTimeUser_scan_body" = "Almost there! In the next step, hold your ID close to the top back side of the iPhone. The app uses NFC sensors in the iPhone and ID card to assign the new PIN to your ID card.";
+"firstTimeUser_scan_body" = "The app uses NFC sensors in the iPhone and ID card to transfer your new PIN to the ID card.";
 "firstTimeUser_scan_cardConnected_first" = "Do not move the ID card.";
 "firstTimeUser_scan_cardConnected_second" = "Do not move the ID card.";
 "firstTimeUser_scan_cardRecognized_first" = "Do not move the ID card.";
@@ -59,10 +59,10 @@
 "firstTimeUser_scan_progress_title" = "Do not move the ID card.";
 "firstTimeUser_scan_provideCard_first" = "Hold your ID card on top close to the upper back side of the iPhone.";
 "firstTimeUser_scan_provideCard_second" = "Do not move the ID card.";
-"firstTimeUser_scan_scan" = "Make transfer now";
+"firstTimeUser_scan_scan" = "Transfer new PIN";
 "firstTimeUser_scan_scanSuccess_first" = "Do not move the ID card.";
 "firstTimeUser_scan_scanSuccess_second" = "Data transfer successful.";
-"firstTimeUser_scan_title" = "Transfer your new PIN to the ID card.";
+"firstTimeUser_scan_title" = "Hold your ID close to the top back side of the smartphone.";
 "firstTimeUser_transportPIN_body" = "You will find the 5-digit transport PIN in your PIN letter.";
 "firstTimeUser_transportPIN_continue" = "Next";
 "firstTimeUser_transportPIN_textFieldLabel" = "Transport PIN, five digits";
@@ -144,7 +144,7 @@
 "scanError_redirect" = "Back to provider";
 "scanError_box_title" = "Restart identification process";
 "scanError_box_body" = "Due to an error, you need to restart the identification process.";
-"firstTimeUser_scanInstructions_body" = "Almost there! In the next step, hold your ID close to the top back side of the iPhone. The app uses NFC sensors in the iPhone and ID card to assign the new PIN to your ID card.";
+"firstTimeUser_scanInstructions_body" = "Almost there! In the next step, hold your ID close to the top back side of the iPhone. The app uses NFC sensors in the iPhone and ID card to transfer your new PIN to the ID card.";
 "identification_scanInstructions_body" = "In the next step, hold your ID card close to the back of the iPhone. The app uses the NFC sensors in the iPhone and ID card to check your PIN and retrieve the required data.";
 "identification_scanInstructions_title" = "How to retrieve data from your ID card.";
 "firstTimeUser_scanInstructions_title" = "How to transfer your new PIN to the ID card.";
