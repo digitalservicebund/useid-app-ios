@@ -17,7 +17,7 @@
 "cardAttribute_restrictedIdentification" = "Anbieter- und kartenspezifische Kennung";
 "cardInteraction_error_default" = "Fehler beim Lesen aufgetreten";
 "cardInteraction_error_tagLost" = "Karte wurde entfernt";
-"cardInteraction_error_timeout" = "Zeitlimit erreicht";
+"cardInteraction_error_timeout" = "Kein Ausweis erkannt.";
 "firstTimeUser_confirmEnd_confirm" = "Beenden";
 "firstTimeUser_confirmEnd_deny" = "Abbrechen";
 "firstTimeUser_confirmEnd_message" = "Möchten Sie die Einrichtung der Online-Ausweisfunktion abbrechen?\n\nSie können die Einrichtung später erneut starten.";
