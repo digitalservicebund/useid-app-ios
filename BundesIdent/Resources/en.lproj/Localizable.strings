@@ -62,7 +62,7 @@
 "firstTimeUser_scan_scan" = "Transfer new PIN";
 "firstTimeUser_scan_scanSuccess_first" = "Do not move the ID card.";
 "firstTimeUser_scan_scanSuccess_second" = "Data transfer successful.";
-"firstTimeUser_scan_title" = "Hold your ID close to the top back side of the smartphone.";
+"firstTimeUser_scan_title" = "Hold your ID card close to the upper back of the smartphone.";
 "firstTimeUser_transportPIN_body" = "You will find the 5-digit transport PIN in your PIN letter.";
 "firstTimeUser_transportPIN_continue" = "Next";
 "firstTimeUser_transportPIN_textFieldLabel" = "Transport PIN, five digits";
@@ -114,7 +114,7 @@
 "identification_scan_cardConnected" = "Do not move the ID card.";
 "identification_scan_cardRecognized" = "Do not move the ID card.";
 "identification_scan_message" = "Hold your ID card close to the back side of the smartphone. The app uses NFC sensors in the smartphone and ID card to verify your PIN and retrieve the required data.";
-"identification_scan_provideCard" = "Hold your ID card on top close to the upper back side of the iPhone.";
+"identification_scan_provideCard" = "Hold your ID card close to the upper back of the iPhone.";
 "identification_scan_scan" = "Retrieve data now";
 "identification_scan_scanSuccess" = "Identification successful.";
 "identification_scan_title" = "Retrieve the data from your ID card.";
