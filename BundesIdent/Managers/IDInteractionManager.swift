@@ -5,13 +5,10 @@ import CombineSchedulers
 import OSLog
 import AusweisApp2SDKWrapper
 
-extension OpenEcardImp: OpenEcardType {}
-
 class IDInteractionManager: IDInteractionManagerType {
     
-    private let issueTracker: IssueTracker
-    
     private let workflowController: WorkflowController
+    private let issueTracker: IssueTracker
     
     init(workflowController: WorkflowController = AA2SDKWrapper.workflowController, issueTracker: IssueTracker) {
         self.issueTracker = issueTracker

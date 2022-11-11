@@ -80,6 +80,7 @@
 		E13F9E45288853950088E955 /* CoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E44288853950088E955 /* CoordinatorTests.swift */; };
 		E144EBD628C63A31009B4900 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = E144EBD528C63A31009B4900 /* MarkdownUI */; };
 		E144EBD828C63A4D009B4900 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E144EBD728C63A4D009B4900 /* AboutView.swift */; };
+		E1494267291E8A750059703B /* IDLoneosInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1494266291E8A750059703B /* IDLoneosInteractionManager.swift */; };
 		E149B15C2840F636002C1139 /* SetupScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E149B15B2840F636002C1139 /* SetupScanTests.swift */; };
 		E14C21B228B8BF9100192338 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C21B128B8BF9100192338 /* StorageManager.swift */; };
 		E1531DC429AE4994008D5185 /* AlertState+Confirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1531DC329AE4994008D5185 /* AlertState+Confirmation.swift */; };
@@ -280,6 +281,7 @@
 		E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCoordinatorStateTests.swift; sourceTree = "<group>"; };
 		E13F9E44288853950088E955 /* CoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorTests.swift; sourceTree = "<group>"; };
 		E144EBD728C63A4D009B4900 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		E1494266291E8A750059703B /* IDLoneosInteractionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDLoneosInteractionManager.swift; sourceTree = "<group>"; };
 		E149B15B2840F636002C1139 /* SetupScanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScanTests.swift; sourceTree = "<group>"; };
 		E14C21B128B8BF9100192338 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		E1531DC329AE4994008D5185 /* AlertState+Confirmation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AlertState+Confirmation.swift"; sourceTree = "<group>"; };
@@ -787,6 +789,7 @@
 				E1DF0995294A0FF300199761 /* PreviewIDInteractionManager.swift */,
 				E14C21B128B8BF9100192338 /* StorageManager.swift */,
 				43363E0829B01D4900E9FA23 /* ABTester.swift */,
+				E1494266291E8A750059703B /* IDLoneosInteractionManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1212,6 +1215,7 @@
 				E1DF0996294A0FF300199761 /* PreviewIDInteractionManager.swift in Sources */,
 				E1B0F5AA29829D8900143B82 /* SetupCANCoordinator.swift in Sources */,
 				E1A769FF28B940C6001E1F04 /* LaunchArgument.swift in Sources */,
+				E1494267291E8A750059703B /* IDLoneosInteractionManager.swift in Sources */,
 				E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */,
 				B9DF15642913CCF1004E15E9 /* SetupPersonalPinConfirm.swift in Sources */,
 				E1EFB5C42858EB0F005C38C6 /* IdentificationOverviewLoading.swift in Sources */,
