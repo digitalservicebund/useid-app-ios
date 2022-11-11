@@ -15,7 +15,7 @@
 "cardAttribute_dg17" = "Address";
 "cardAttribute_dg19" = "Ancillary provisions I";
 "cardAttribute_restrictedIdentification" = "Provider and card-specific identifier";
-"cardInteraction_error_default" = "Error occurred while reading";
+"cardInteraction_error_default" = "An error has occurred.";
 "cardInteraction_error_tagLost" = "Card has been removed";
 "cardInteraction_error_timeout" = "No ID card recognized.";
 "firstTimeUser_confirmEnd_confirm" = "End";
