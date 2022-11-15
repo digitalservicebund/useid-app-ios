@@ -45,6 +45,7 @@ struct PINTextField: UIViewRepresentable {
             let doneButton = UIBarButtonItem(title: doneConfiguration.title,
                                              image: nil,
                                              primaryAction: UIAction(handler: { _ in doneConfiguration.handler(text) }))
+            doneButton.style = .done
             doneButton.isEnabled = doneConfiguration.enabled
             toolBar.setItems([spacer, doneButton], animated: false)
             textField.inputAccessoryView = toolBar

@@ -36,6 +36,10 @@ extension Font {
     }
 }
 
+extension UIFont {
+    static let bundNavigationBar: UIFont = .init(name: bundFontName, size: 18)!
+}
+
 extension MarkdownStyle.Font {
     
     /// 18pt – regular
