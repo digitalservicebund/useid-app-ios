@@ -50,13 +50,12 @@ class SetupPersonalPINViewModelTests: XCTestCase {
         store.send(.binding(.set(\.$enteredPIN2, "987654"))) { state in
             state.enteredPIN2 = "987654"
         }
+        
+        store.send(.checkPINs)
         store.receive(.mismatchError) { state in
             state.alert = AlertState(title: TextState(verbatim: L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.title),
                                      message: nil,
                                      buttons: [.default(TextState(L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.retry), action: .send(.confirmMismatch))])
         }
-        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "firstTimeUser",
-                                                                action: "errorShown",
-                                                                name: "personalPINMismatch"))
     }
 }

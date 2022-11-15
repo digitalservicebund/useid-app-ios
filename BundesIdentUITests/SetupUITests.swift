@@ -112,6 +112,8 @@ final class SetupUITests: XCTestCase {
         pin2TextField.wait().tap()
         pin2TextField.waitAndTypeText("222222")
         
+        app.buttons[L10n.FirstTimeUser.PersonalPIN.continue].wait().tap()
+        
         app.alerts.staticTexts[L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.title].assertExistence()
         app.alerts.buttons[L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.retry].tap()
         

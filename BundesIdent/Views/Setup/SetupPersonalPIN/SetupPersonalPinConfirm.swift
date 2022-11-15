@@ -23,7 +23,7 @@ struct SetupPersonalPINConfirm: View {
                                          doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                               title: L10n.FirstTimeUser.PersonalPIN.continue,
                                                                               handler: { _ in
-                                viewStore.send(.done(pin: viewStore.enteredPIN1))
+                                viewStore.send(.checkPINs)
                             }))
                             .focused($pinEntryFocused)
                             .font(.bundTitle)
