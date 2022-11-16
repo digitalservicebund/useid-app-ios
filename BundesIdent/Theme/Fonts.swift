@@ -37,7 +37,22 @@ extension Font {
 }
 
 extension UIFont {
-    static let bundNavigationBar: UIFont = .init(name: bundFontName, size: 18)!
+    convenience init(descriptor: UIFontDescriptor) {
+        self.init(descriptor: descriptor, size: descriptor.pointSize)
+    }
+    static var bundNavigationBar: UIFont {
+        var descriptor = UIFontDescriptor(name: bundFontName, size: 17)
+        if UIAccessibility.isBoldTextEnabled {
+            descriptor = descriptor.withSymbolicTraits(.traitBold)!
+        }
+        return UIFontMetrics(forTextStyle: .body).scaledFont(for: .init(descriptor: descriptor))
+    }
+    
+    static var bundNavigationBarBold: UIFont {
+        var descriptor = UIFontDescriptor(name: bundFontName, size: 17)
+        descriptor = descriptor.withSymbolicTraits(.traitBold)!
+        return UIFontMetrics(forTextStyle: .body).scaledFont(for: .init(descriptor: descriptor))
+    }
 }
 
 extension MarkdownStyle.Font {
