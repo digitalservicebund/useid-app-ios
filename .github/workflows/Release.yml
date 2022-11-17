@@ -22,7 +22,7 @@ jobs:
           [[ "$GITHUB_REF" == "refs/heads/release" ]]
       - name: Setup shell
         run: |
-          echo "~/.rbenv/shims" >> $GITHUB_PATH
+          eval "$(rbenv init -)"
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -62,7 +62,7 @@ jobs:
     steps:
       - name: Setup shell
         run: |
-          echo "~/.rbenv/shims" >> $GITHUB_PATH
+          eval "$(rbenv init -)"
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3        
@@ -97,7 +97,7 @@ jobs:
     steps:
       - name: Setup shell
         run: |
-          echo "~/.rbenv/shims" >> $GITHUB_PATH
+          eval "$(rbenv init -)"
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -180,7 +180,7 @@ jobs:
     steps:
       - name: Setup shell
         run: |
-          echo "~/.rbenv/shims" >> $GITHUB_PATH
+          eval "$(rbenv init -)"
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3
