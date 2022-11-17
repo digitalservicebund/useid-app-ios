@@ -389,7 +389,8 @@ final class IdentificationUITests: XCTestCase {
         app.buttons["runCANError"].wait().tap()
         
         let matchingButtons = app.navigationBars.buttons.matching(identifier: L10n.Identification.Can.IncorrectInput.back)
-                matchingButtons.element(boundBy: 0).tap()
+        matchingButtons.element(boundBy: 0).tap()
+        
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
         
         canTextField.wait().tap()

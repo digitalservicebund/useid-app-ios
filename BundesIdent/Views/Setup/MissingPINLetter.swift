@@ -1,24 +1,29 @@
 import SwiftUI
 import ComposableArchitecture
+import Analytics
 
-struct MissingPINLetterState: Equatable {}
+struct MissingPINLetter: ReducerProtocol {
+    @Dependency(\.analytics) var analytics: AnalyticsClient
+    
+    struct State: Equatable {}
 
-enum MissingPINLetterAction: Equatable {
-    case openExternalLink
-}
-
-let missingPINLetterReducer = Reducer<MissingPINLetterState, MissingPINLetterAction, AppEnvironment> { _, action, environment in
-    switch action {
-    case .openExternalLink:
-        return .trackEvent(category: "firstTimeUser",
-                           action: "externalLinkOpened",
-                           name: "PINLetter",
-                           analytics: environment.analytics)
+    enum Action: Equatable {
+        case openExternalLink
+    }
+    
+    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+        switch action {
+        case .openExternalLink:
+            return .trackEvent(category: "firstTimeUser",
+                               action: "externalLinkOpened",
+                               name: "PINLetter",
+                               analytics: analytics)
+        }
     }
 }
 
-struct MissingPINLetter: View {
-    let store: Store<MissingPINLetterState, MissingPINLetterAction>
+struct MissingPINLetterView: View {
+    let store: Store<MissingPINLetter.State, MissingPINLetter.Action>
     
     var body: some View {
         DialogView(store: store.stateless,
@@ -34,8 +39,7 @@ struct MissingPINLetter: View {
 
 struct MissingPINLetter_Previews: PreviewProvider {
     static var previews: some View {
-        MissingPINLetter(store: Store(initialState: MissingPINLetterState(),
-                                      reducer: .empty,
-                                      environment: AppEnvironment.preview))
+        MissingPINLetterView(store: Store(initialState: MissingPINLetter.State(),
+                                      reducer: MissingPINLetter()))
     }
 }

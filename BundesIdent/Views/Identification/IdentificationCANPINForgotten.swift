@@ -2,26 +2,25 @@ import SwiftUI
 import Foundation
 import ComposableArchitecture
 
-struct IdentificationCANPINForgottenState: Equatable {
-    let request: EIDAuthenticationRequest
-    var pinCANCallback: PINCANCallback
-}
+struct IdentificationCANPINForgotten: ReducerProtocol {
+    struct State: Equatable {
+        let request: EIDAuthenticationRequest
+        var pinCANCallback: PINCANCallback
+    }
 
-enum IdentificationCANPINForgottenAction: Equatable {
-    case orderNewPIN
-    case showCANIntro(EIDAuthenticationRequest, PINCANCallback)
-    case end
-}
-
-var identificationCanPINForgottenReducer = Reducer<IdentificationCANPINForgottenState, IdentificationCANPINForgottenAction, AppEnvironment> { _, action, _ in
-    switch action {
-    default:
+    enum Action: Equatable {
+        case orderNewPIN
+        case showCANIntro(EIDAuthenticationRequest, PINCANCallback)
+        case end
+    }
+    
+    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         return .none
     }
 }
 
-struct IdentificationCANPINForgotten: View {
-    var store: Store<IdentificationCANPINForgottenState, IdentificationCANPINForgottenAction>
+struct IdentificationCANPINForgottenView: View {
+    var store: Store<IdentificationCANPINForgotten.State, IdentificationCANPINForgotten.Action>
     var body: some View {
             WithViewStore(store) { viewStore in
                 DialogView(store: store.stateless, title: L10n.Identification.Can.PinForgotten.title,
@@ -45,6 +44,9 @@ struct IdentificationCANPINForgotten: View {
 
 struct IdentificationCANPINForgotten_Previews: PreviewProvider {
     static var previews: some View {
-        IdentificationCANPINForgotten(store: .init(initialState: .init(request: .preview, pinCANCallback: PINCANCallback(id: UUID(), callback: { _, _ in })), reducer: identificationCanPINForgottenReducer, environment: AppEnvironment.preview))
+        IdentificationCANPINForgottenView(store: .init(initialState: .init(request: .preview,
+                                                                           pinCANCallback: PINCANCallback(id: UUID(),
+                                                                                                          callback: { _, _ in })),
+                                                       reducer: IdentificationCANPINForgotten()))
     }
 }

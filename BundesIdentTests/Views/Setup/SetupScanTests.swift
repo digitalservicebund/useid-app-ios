@@ -6,10 +6,10 @@ import Analytics
 
 @testable import BundesIdent
 
+
 class SetupScanTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
-    var environment: AppEnvironment!
     var mockAnalyticsClient: MockAnalyticsClient!
     var mockIssueTracker: MockIssueTracker!
     var mockStorageManager: MockStorageManagerType!
@@ -21,11 +21,6 @@ class SetupScanTests: XCTestCase {
         scheduler = DispatchQueue.test
         mockStorageManager = MockStorageManagerType()
         mockIDInteractionManager = MockIDInteractionManagerType()
-        environment = AppEnvironment.mocked(mainQueue: scheduler.eraseToAnyScheduler(),
-                                            idInteractionManager: mockIDInteractionManager,
-                                            storageManager: mockStorageManager,
-                                            analytics: mockAnalyticsClient,
-                                            issueTracker: mockIssueTracker)
         
         stub(mockAnalyticsClient) {
             $0.track(view: any()).thenDoNothing()
@@ -45,10 +40,12 @@ class SetupScanTests: XCTestCase {
     func testChangePINSuccess() throws {
         let oldPIN = "12345"
         let newPIN = "123456"
-        let store = TestStore(initialState: SetupScanState(transportPIN: oldPIN, newPIN: newPIN),
-                              reducer: setupScanReducer,
-                              environment: environment)
-        
+        let store = TestStore(initialState: SetupScan.State(transportPIN: oldPIN, newPIN: newPIN),
+                              reducer: SetupScan())
+        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
+        store.dependencies.analytics = mockAnalyticsClient
+        store.dependencies.storageManager = mockStorageManager
         let cardInsertionCallback: (String) -> Void = { _ in }
         
         let requestChangedPINExpectation = self.expectation(description: "requestCardInsertion callback")
@@ -114,10 +111,13 @@ class SetupScanTests: XCTestCase {
     }
     
     func testScanFail() throws {
-        let store = TestStore(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"),
-                              reducer: setupScanReducer,
-                              environment: environment)
-        
+        let store = TestStore(initialState: SetupScan.State(transportPIN: "12345", newPIN: "123456"),
+                              reducer: SetupScan())
+        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
+        store.dependencies.analytics = mockAnalyticsClient
+        store.dependencies.issueTracker = mockIssueTracker
+
         let queue = scheduler!
         stub(mockIDInteractionManager) { mock in
             mock.changePIN(nfcMessagesProvider: any()).then { _ in
@@ -140,14 +140,14 @@ class SetupScanTests: XCTestCase {
             $0.shared.isScanning = false
         }
         
-        store.receive(.error(ScanErrorState(errorType: .idCardInteraction(.frameworkError(message: "Fail")), retry: true)))
+        store.receive(.error(ScanError.State(errorType: .idCardInteraction(.frameworkError(message: "Fail")), retry: true)))
     }
     
     func testShowNFCInfo() {
-        let store = TestStore(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"),
-                              reducer: setupScanReducer,
-                              environment: environment)
-        
+        let store = TestStore(initialState: SetupScan.State(transportPIN: "12345", newPIN: "123456"),
+                              reducer: SetupScan())
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
+        store.dependencies.analytics = mockAnalyticsClient
         store.send(.shared(.showNFCInfo)) {
             $0.alert = AlertState(title: TextState(L10n.HelpNFC.title),
                                   message: TextState(L10n.HelpNFC.body),
@@ -161,10 +161,11 @@ class SetupScanTests: XCTestCase {
     }
     
     func testStartScanTracking() {
-        let store = TestStore(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"),
-                              reducer: setupScanReducer,
-                              environment: environment)
-        
+        let store = TestStore(initialState: SetupScan.State(transportPIN: "12345", newPIN: "123456"),
+                              reducer: SetupScan())
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
+        store.dependencies.analytics = mockAnalyticsClient
+        store.dependencies.idInteractionManager = mockIDInteractionManager
         stub(mockIDInteractionManager) { mock in
             mock.changePIN(nfcMessagesProvider: any()).then { _ in
                 let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()

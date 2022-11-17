@@ -6,58 +6,63 @@ enum PersonalPINError: Equatable {
     case incorrect
 }
 
-struct IdentificationIncorrectPersonalPINState: Equatable {
-    @BindableState var enteredPIN: String = ""
-    var error: PersonalPINError?
-    var remainingAttempts: Int
-    @BindableState var alert: AlertState<IdentificationIncorrectPersonalPINAction>?
-    
-    var doneButtonEnabled: Bool {
-        return enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
-    }
-    
-    mutating func handlePINChange(_ enteredPIN: String) -> Effect<IdentificationIncorrectPersonalPINAction, Never> {
-        if !enteredPIN.isEmpty {
-            withAnimation {
-                error = nil
-            }
+struct IdentificationIncorrectPersonalPIN: ReducerProtocol {
+    struct State: Equatable {
+        @BindableState var enteredPIN: String = ""
+        var error: PersonalPINError?
+        var remainingAttempts: Int
+        @BindableState var alert: AlertState<IdentificationIncorrectPersonalPIN.Action>?
+        
+        var doneButtonEnabled: Bool {
+            return enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
         }
         
-        return .none
+        mutating func handlePINChange(_ enteredPIN: String) -> Effect<IdentificationIncorrectPersonalPIN.Action, Never> {
+            if !enteredPIN.isEmpty {
+                withAnimation {
+                    error = nil
+                }
+            }
+            
+            return .none
+        }
     }
-}
-
-enum IdentificationIncorrectPersonalPINAction: BindableAction, Equatable {
-    case onAppear
-    case done(pin: String)
-    case end
-    case confirmEnd
-    case dismissAlert
-    case binding(BindingAction<IdentificationIncorrectPersonalPINState>)
-}
-
-let identificationIncorrectPersonalPINReducer = Reducer<IdentificationIncorrectPersonalPINState, IdentificationIncorrectPersonalPINAction, AppEnvironment> { state, action, _ in
-    switch action {
-    case .binding(\.$enteredPIN):
-        return state.handlePINChange(state.enteredPIN)
-    case .end:
-        state.alert = AlertState(title: TextState(verbatim: L10n.Identification.ConfirmEnd.title),
-                                 message: TextState(verbatim: L10n.Identification.ConfirmEnd.message),
-                                 primaryButton: .destructive(TextState(verbatim: L10n.Identification.ConfirmEnd.confirm),
-                                                             action: .send(.confirmEnd)),
-                                 secondaryButton: .cancel(TextState(verbatim: L10n.Identification.ConfirmEnd.deny)))
-        return .none
-    case .dismissAlert:
-        state.alert = nil
-        return .none
-    default:
-        return .none
-    }
-}.binding()
-
-struct IdentificationIncorrectPersonalPIN: View {
     
-    var store: Store<IdentificationIncorrectPersonalPINState, IdentificationIncorrectPersonalPINAction>
+    enum Action: BindableAction, Equatable {
+        case onAppear
+        case done(pin: String)
+        case end
+        case confirmEnd
+        case dismissAlert
+        case binding(BindingAction<IdentificationIncorrectPersonalPIN.State>)
+    }
+    
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        Reduce { state, action in
+            switch action {
+            case .binding(\.$enteredPIN):
+                return state.handlePINChange(state.enteredPIN)
+            case .end:
+                state.alert = AlertState(title: TextState(verbatim: L10n.Identification.ConfirmEnd.title),
+                                         message: TextState(verbatim: L10n.Identification.ConfirmEnd.message),
+                                         primaryButton: .destructive(TextState(verbatim: L10n.Identification.ConfirmEnd.confirm),
+                                                                     action: .send(.confirmEnd)),
+                                         secondaryButton: .cancel(TextState(verbatim: L10n.Identification.ConfirmEnd.deny)))
+                return .none
+            case .dismissAlert:
+                state.alert = nil
+                return .none
+            default:
+                return .none
+            }
+        }
+    }
+}
+
+struct IdentificationIncorrectPersonalPINView: View {
+    
+    var store: Store<IdentificationIncorrectPersonalPIN.State, IdentificationIncorrectPersonalPIN.Action>
     @FocusState private var pinEntryFocused: Bool
     
     var body: some View {
@@ -140,19 +145,17 @@ struct IdentificationIncorrectPersonalPIN: View {
 struct IdentificationIncorrectPersonalPIN_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationIncorrectPersonalPIN(store: Store(initialState: IdentificationIncorrectPersonalPINState(enteredPIN: "",
+            IdentificationIncorrectPersonalPINView(store: Store(initialState: IdentificationIncorrectPersonalPIN.State(enteredPIN: "",
                                                                                                                   error: .incorrect,
                                                                                                                   remainingAttempts: 2),
-                                                            reducer: .empty,
-                                                            environment: AppEnvironment.preview))
+                                                            reducer: IdentificationIncorrectPersonalPIN()))
         }
         .previewDevice("iPhone 12")
         NavigationView {
-            IdentificationIncorrectPersonalPIN(store: Store(initialState: IdentificationIncorrectPersonalPINState(enteredPIN: "12",
+            IdentificationIncorrectPersonalPINView(store: Store(initialState: IdentificationIncorrectPersonalPIN.State(enteredPIN: "12",
                                                                                                                   error: nil,
                                                                                                                   remainingAttempts: 2),
-                                                            reducer: .empty,
-                                                            environment: AppEnvironment.preview))
+                                                            reducer: IdentificationIncorrectPersonalPIN()))
         }
         .previewDevice("iPhone 12")
     }

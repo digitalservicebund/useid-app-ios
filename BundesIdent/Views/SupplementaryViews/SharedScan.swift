@@ -7,24 +7,46 @@ struct ProgressCaption: Equatable {
     var body: String
 }
 
-struct SharedScanState: Equatable {
-    var isScanning: Bool = false
-    var scanAvailable: Bool = true
-    var showProgressCaption: ProgressCaption?
-    var showInstructions: Bool = true
-    var attempt = 0
-    var cardRecognized: Bool = false
-}
+struct SharedScan: ReducerProtocol {
+    @Dependency(\.context) var context
+    struct State: Equatable {
+        var isScanning: Bool = false
+        var scanAvailable: Bool = true
+        var showProgressCaption: ProgressCaption?
+        var showInstructions: Bool = true
+        var attempt = 0
+        var cardRecognized: Bool = false
+    }
 
-enum SharedScanAction: Equatable {
-    case startScan
-    case showNFCInfo
-    case showHelp
-}
-
-struct SharedScan: View {
+    enum Action: Equatable {
+        case startScan
+        case showNFCInfo
+        case showHelp
+    }
     
-    var store: Store<SharedScanState, SharedScanAction>
+    var body: some ReducerProtocol<State, Action> {
+        if context == .preview {
+            Reduce(preview())
+        }
+    }
+    
+    func preview() -> some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .startScan:
+                state.showInstructions.toggle()
+                state.isScanning.toggle()
+                return .none
+            default:
+                return .none
+            }
+        }
+    }
+}
+
+struct SharedScanView: View {
+    
+    var store: Store<SharedScan.State, SharedScan.Action>
     
     var instructionsTitle: String
     var instructionsBody: String
@@ -36,7 +58,7 @@ struct SharedScan: View {
     @Namespace var namespace
     @State var animationSyncTime: CMTime = CMTime(seconds: 0.0, preferredTimescale: 1000)
     
-    init(store: Store<SharedScanState, SharedScanAction>,
+    init(store: Store<SharedScan.State, SharedScan.Action>,
          instructionsTitle: String,
          instructionsBody: String,
          instructionsScanButtonTitle: String,
@@ -131,25 +153,13 @@ struct SharedScan: View {
 }
 
 struct SharedScan_Previews: PreviewProvider {
-    
-    static var store: Store<SharedScanState, SharedScanAction> = Store(initialState: SharedScanState(),
-                                                                       reducer: previewReducer,
-                                                                       environment: AppEnvironment.preview)
-    
-    static var previewReducer = Reducer<SharedScanState, SharedScanAction, AppEnvironment> { state, action, _ in
-        switch action {
-        case .startScan:
-            state.showInstructions.toggle()
-            state.isScanning.toggle()
-            return .none
-        default:
-            return .none
-        }
-    }
-    
+
+    static var store: Store<SharedScan.State, SharedScan.Action> = Store(initialState: SharedScan.State(),
+                                                                       reducer: SharedScan())
+
     static var previews: some View {
         NavigationView {
-            SharedScan(store: store,
+            SharedScanView(store: store,
                        instructionsTitle: "instructionsTitle",
                        instructionsBody: "instructionsBody",
                        instructionsScanButtonTitle: "instructionsScanButtonTitle",

@@ -10,20 +10,10 @@ import TCACoordinators
 final class IdentificationOverviewTests: XCTestCase {
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var mockAnalyticsClient: MockAnalyticsClient!
-    var environment: AppEnvironment!
-    var uuidCount = 0
-    
-    func uuidFactory() -> UUID {
-        let currentCount = self.uuidCount
-        self.uuidCount += 1
-        return UUID(number: currentCount)
-    }
     
     override func setUp() {
         scheduler = DispatchQueue.test
         mockAnalyticsClient = MockAnalyticsClient()
-        environment = AppEnvironment.mocked(uuidFactory: uuidFactory,
-                                            analytics: mockAnalyticsClient)
         
         stub(mockAnalyticsClient) {
             $0.track(view: any()).thenDoNothing()
@@ -34,12 +24,10 @@ final class IdentificationOverviewTests: XCTestCase {
     func testLoadingFailure() {
         let error = IdentifiableError(NSError(domain: "", code: 0))
         let store = TestStore(
-            initialState: IdentificationOverviewState.loading(.init()),
-            reducer: identificationOverviewReducer,
-            environment: environment
-        )
-        
-        store.send(IdentificationOverviewAction.loading(.failure(error))) {
+            initialState: IdentificationOverview.State.loading(.init()),
+            reducer: IdentificationOverview())
+        store.dependencies.analytics = mockAnalyticsClient
+        store.send(IdentificationOverview.Action.loading(.failure(error))) {
             $0 = .error(IdentificationOverviewErrorState(error: error))
         }
         
@@ -50,15 +38,13 @@ final class IdentificationOverviewTests: XCTestCase {
     
     func testLoadingSuccess() {
         let store = TestStore(
-            initialState: IdentificationOverviewState.loading(.init()),
-            reducer: identificationOverviewReducer,
-            environment: environment
-        )
-        
+            initialState: IdentificationOverview.State.loading(.init()),
+            reducer: IdentificationOverview())
+        store.dependencies.uuid = .incrementing
         let request = EIDAuthenticationRequest.preview
         let handler: (FlaggedAttributes) -> Void = { attributes in }
         
-        store.send(IdentificationOverviewAction.loading(.idInteractionEvent(.success(.requestAuthenticationRequestConfirmation(request, handler)))))
+        store.send(IdentificationOverview.Action.loading(.idInteractionEvent(.success(.requestAuthenticationRequestConfirmation(request, handler)))))
         
         let callback = IdentifiableCallback(id: UUID(number: 0), callback: handler)
         store.receive(.loading(.done(request, callback))) {
@@ -79,14 +65,12 @@ final class IdentificationOverviewTests: XCTestCase {
         
         let identifiableCallback = IdentifiableCallback(id: UUID(number: 0), callback: callback)
         
-        let loadedState = IdentificationOverviewLoadedState(id: UUID(number: 0), request: request, handler: identifiableCallback)
+        let loadedState = IdentificationOverviewLoaded.State(id: UUID(number: 0), request: request, handler: identifiableCallback)
         let store = TestStore(
-            initialState: IdentificationOverviewState.loaded(loadedState),
-            reducer: identificationOverviewReducer,
-            environment: environment
-        )
+            initialState: IdentificationOverview.State.loaded(loadedState),
+            reducer: IdentificationOverview())
         
-        store.send(IdentificationOverviewAction.loaded(.confirm))
+        store.send(IdentificationOverview.Action.loaded(.confirm))
         
         wait(for: [callbackExpectation], timeout: 1.0)
     }
@@ -99,17 +83,15 @@ final class IdentificationOverviewTests: XCTestCase {
         
         let identifiableCallback = IdentifiableCallback(id: UUID(number: 0), callback: callback)
         
-        let loadedState = IdentificationOverviewLoadedState(id: UUID(number: 0), request: request, handler: identifiableCallback)
+        let loadedState = IdentificationOverviewLoaded.State(id: UUID(number: 0), request: request, handler: identifiableCallback)
         let store = TestStore(
-            initialState: IdentificationOverviewState.loaded(loadedState),
-            reducer: identificationOverviewReducer,
-            environment: environment
-        )
-        
+            initialState: IdentificationOverview.State.loaded(loadedState),
+            reducer: IdentificationOverview())
+        store.dependencies.uuid = .incrementing
         let pinCallback: (String) -> Void = { _ in }
         let identifiablePINCallback = PINCallback(id: UUID(number: 0), callback: pinCallback)
-        store.send(IdentificationOverviewAction.loaded(.idInteractionEvent(.success(.requestPIN(remainingAttempts: nil, pinCallback: pinCallback))))) {
-            let newLoadedState = IdentificationOverviewLoadedState(
+        store.send(IdentificationOverview.Action.loaded(.idInteractionEvent(.success(.requestPIN(remainingAttempts: nil, pinCallback: pinCallback))))) {
+            let newLoadedState = IdentificationOverviewLoaded.State(
                 id: UUID(number: 0),
                 request: request,
                 handler: identifiableCallback,
@@ -133,19 +115,17 @@ final class IdentificationOverviewTests: XCTestCase {
         let pinCallback: (String) -> Void = { _ in }
         let identifiablePINCallback = PINCallback(id: UUID(number: 0), callback: pinCallback)
         
-        let loadedState = IdentificationOverviewLoadedState(
+        let loadedState = IdentificationOverviewLoaded.State(
             id: UUID(number: 0),
             request: request,
             handler: identifiableCallback,
             pinHandler: identifiablePINCallback
         )
         let store = TestStore(
-            initialState: IdentificationOverviewState.loaded(loadedState),
-            reducer: identificationOverviewReducer,
-            environment: environment
-        )
+            initialState: IdentificationOverview.State.loaded(loadedState),
+            reducer: IdentificationOverview())
         
-        store.send(IdentificationOverviewAction.loaded(.confirm))
+        store.send(IdentificationOverview.Action.loaded(.confirm))
         
         store.receive(.loaded(.callbackReceived(request, identifiablePINCallback)))
     }

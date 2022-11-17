@@ -2,149 +2,70 @@ import SwiftUI
 import ComposableArchitecture
 import Combine
 import Sentry
+import Analytics
+import OSLog
 
-enum SetupScanError: Error, Equatable {
-    case idCardInteraction(IDCardInteractionError)
-    case unexpectedEvent(EIDInteractionEvent)
-}
-
-struct SetupScanState: Equatable {
-    var transportPIN: String
-    var newPIN: String
-    var shared: SharedScanState = SharedScanState()
-    var remainingAttempts: Int?
-    var alert: AlertState<SetupScanAction>?
+struct SetupScan: ReducerProtocol {
+    @Dependency(\.idInteractionManager) var idInteractionManager
+    @Dependency(\.analytics) var analytics
+    @Dependency(\.issueTracker) var issueTracker
+    @Dependency(\.mainQueue) var mainQueue
+    @Dependency(\.logger) var logger
+    @Dependency(\.storageManager) var storageManager
 #if PREVIEW
-    var availableDebugActions: [ChangePINDebugSequence] = []
+    @Dependency(\.debugIDInteractionManager) var debugIDInteractionManager
 #endif
-}
-
-enum SetupScanAction: Equatable {
-    case onAppear
-    case shared(SharedScanAction)
-    case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
-    case wrongTransportPIN(remainingAttempts: Int)
-    case error(ScanErrorState)
-    case cancelScan
-    case scannedSuccessfully
-    case dismissAlert
-#if PREVIEW
-    case runDebugSequence(ChangePINDebugSequence)
-#endif
-}
-
-let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> { state, action, environment in
     
-    enum CancelId {}
-    
-    switch action {
+    struct State: Equatable {
+        var transportPIN: String
+        var newPIN: String
+        var shared: SharedScan.State = SharedScan.State()
+        var remainingAttempts: Int?
+        var alert: AlertState<SetupScan.Action>?
 #if PREVIEW
-    case .runDebugSequence(let debugSequence):
-        state.availableDebugActions = environment.debugIDInteractionManager.runChangePIN(debugSequence: debugSequence)
-        return .none
+        var availableDebugActions: [ChangePINDebugSequence] = []
 #endif
-    case .onAppear:
-        return .none
-    case .shared(.startScan):
-        state.shared.showInstructions = false
-        
-        guard !state.shared.isScanning else { return .none }
-        state.shared.isScanning = true
-        
-        let publisher: EIDInteractionPublisher
-#if PREVIEW
-        if MOCK_OPENECARD {
-            let debuggableInteraction = environment.debugIDInteractionManager.debuggableChangePIN()
-            state.availableDebugActions = debuggableInteraction.sequence
-            publisher = debuggableInteraction.publisher
-        } else {
-            publisher = environment.idInteractionManager.changePIN(nfcMessagesProvider: SetupNFCMessageProvider())
-        }
-#else
-        publisher = environment.idInteractionManager.changePIN(nfcMessagesProvider: SetupNFCMessageProvider())
-#endif
-        return .concatenate(
-            .trackEvent(category: "firstTimeUser",
-                        action: "buttonPressed",
-                        name: "scan",
-                        analytics: environment.analytics),
-            publisher
-                .receive(on: environment.mainQueue)
-                .catchToEffect(SetupScanAction.scanEvent)
-                .cancellable(id: CancelId.self, cancelInFlight: true)
-        )
-    case .scanEvent(.failure(let error)):
-        RedactedIDCardInteractionError(error).flatMap(environment.issueTracker.capture(error:))
-        state.shared.isScanning = false
-        
-        switch error {
-        case .cardDeactivated:
-            state.shared.scanAvailable = false
-            return Effect(value: .error(ScanErrorState(errorType: .cardDeactivated, retry: state.shared.scanAvailable)))
-        case .cardBlocked:
-            state.shared.scanAvailable = false
-            return Effect(value: .error(ScanErrorState(errorType: .cardBlocked, retry: state.shared.scanAvailable)))
-        default:
-            state.shared.scanAvailable = true
-            return Effect(value: .error(ScanErrorState(errorType: .idCardInteraction(error), retry: state.shared.scanAvailable)))
-        }
-    case .scanEvent(.success(let event)):
-        return state.handle(event: event, environment: environment)
-    case .cancelScan:
-        state.shared.isScanning = false
-        return .cancel(id: CancelId.self)
-    case .error:
-        state.shared.isScanning = false
-        return .cancel(id: CancelId.self)
-    case .wrongTransportPIN:
-        state.shared.isScanning = false
-        return .cancel(id: CancelId.self)
-    case .scannedSuccessfully:
-        environment.storageManager.setupCompleted = true
-        return .cancel(id: CancelId.self)
-    case .shared(.showNFCInfo):
-        state.alert = AlertState(title: TextState(L10n.HelpNFC.title),
-                                 message: TextState(L10n.HelpNFC.body),
-                                 dismissButton: .cancel(TextState(L10n.General.ok),
-                                                        action: .send(.dismissAlert)))
-        return .trackEvent(category: "firstTimeUser",
-                           action: "alertShown",
-                           name: "NFCInfo",
-                           analytics: environment.analytics)
-    case .shared(.showHelp):
-        return .none
-    case .dismissAlert:
-        state.alert = nil
-        return .none
     }
-}
-
-extension SetupScanState {
-    mutating func handle(event: EIDInteractionEvent, environment: AppEnvironment) -> Effect<SetupScanAction, Never> {
+    
+    enum Action: Equatable {
+        case onAppear
+        case shared(SharedScan.Action)
+        case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
+        case wrongTransportPIN(remainingAttempts: Int)
+        case error(ScanError.State)
+        case cancelScan
+        case scannedSuccessfully
+        case dismissAlert
+#if PREVIEW
+        case runDebugSequence(ChangePINDebugSequence)
+#endif
+    }
+    
+    func handle(state: inout State, event: EIDInteractionEvent) -> Effect<SetupScan.Action, Never> {
         switch event {
         case .authenticationStarted:
-            environment.logger.info("Authentication started.")
-            shared.isScanning = true
+            logger.info("Authentication started.")
+            state.shared.isScanning = true
         case .requestCardInsertion:
-            shared.showProgressCaption = nil
-            shared.isScanning = true
+            state.shared.showProgressCaption = nil
+            state.shared.isScanning = true
         case .cardInteractionComplete:
-            environment.logger.info("Card interaction complete.")
+            logger.info("Card interaction complete.")
         case .cardRecognized:
-            environment.logger.info("Card recognized.")
-            shared.isScanning = true
+            logger.info("Card recognized.")
+            state.shared.isScanning = true
         case .cardRemoved:
-            shared.showProgressCaption = ProgressCaption(title: L10n.FirstTimeUser.Scan.Progress.title,
+            state.shared.showProgressCaption = ProgressCaption(title: L10n.FirstTimeUser.Scan.Progress.title,
                                                          body: L10n.FirstTimeUser.Scan.Progress.body)
-            environment.logger.info("Card removed.")
+            logger.info("Card removed.")
         case .processCompletedSuccessfullyWithoutRedirect:
             return Effect(value: .scannedSuccessfully)
         case .pinManagementStarted:
-            environment.logger.info("PIN Management started.")
+            logger.info("PIN Management started.")
         case .requestChangedPIN(let newRemainingAttempts, let pinCallback):
-            environment.logger.info("Providing changed PIN with \(String(describing: newRemainingAttempts)) remaining attempts.")
-            let remainingAttemptsBefore = remainingAttempts
-            remainingAttempts = newRemainingAttempts
+            logger.info("Providing changed PIN with \(String(describing: newRemainingAttempts)) remaining attempts.")
+            let remainingAttemptsBefore = state.remainingAttempts
+            state.remainingAttempts = newRemainingAttempts
             
             // This is our signal that the user canceled (for now)
             guard let remainingAttempts = newRemainingAttempts else {
@@ -157,32 +78,122 @@ extension SetupScanState {
                 return Effect(value: .wrongTransportPIN(remainingAttempts: remainingAttempts))
             }
             
-            pinCallback(transportPIN, newPIN)
+            pinCallback(state.transportPIN, state.newPIN)
         case .requestCANAndChangedPIN:
-            environment.logger.info("CAN to change PIN requested, so card is suspended. Callback not implemented yet.")
-            return Effect(value: .error(ScanErrorState(errorType: .cardSuspended, retry: false)))
+            logger.info("CAN to change PIN requested, so card is suspended. Callback not implemented yet.")
+            return Effect(value: .error(ScanError.State(errorType: .cardSuspended, retry: false)))
         case .requestPUK:
-            environment.logger.info("PUK requested, so card is blocked. Callback not implemented yet.")
-            return Effect(value: .error(ScanErrorState(errorType: .cardBlocked, retry: false)))
+            logger.info("PUK requested, so card is blocked. Callback not implemented yet.")
+            return Effect(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
         default:
-            environment.issueTracker.capture(error: RedactedEIDInteractionEventError(event))
-            environment.logger.error("Received unexpected event.")
-            return Effect(value: .error(ScanErrorState(errorType: .unexpectedEvent(event), retry: true)))
+            issueTracker.capture(error: RedactedEIDInteractionEventError(event))
+            logger.error("Received unexpected event.")
+            return Effect(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))
         }
         return .none
     }
+    
+    enum CancelId {}
+    
+    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+            switch action {
+#if PREVIEW
+            case .runDebugSequence(let debugSequence):
+                state.availableDebugActions = debugIDInteractionManager.runChangePIN(debugSequence: debugSequence)
+                return .none
+#endif
+            case .onAppear:
+                return .none
+            case .shared(.startScan):
+                state.shared.showInstructions = false
+                
+                guard !state.shared.isScanning else { return .none }
+                state.shared.isScanning = true
+                
+                let publisher: EIDInteractionPublisher
+#if PREVIEW
+                if MOCK_OPENECARD {
+                    let debuggableInteraction = debugIDInteractionManager.debuggableChangePIN()
+                    state.availableDebugActions = debuggableInteraction.sequence
+                    publisher = debuggableInteraction.publisher
+                } else {
+                    publisher = idInteractionManager.changePIN(nfcMessagesProvider: SetupNFCMessageProvider())
+                }
+#else
+                publisher = idInteractionManager.changePIN(nfcMessagesProvider: SetupNFCMessageProvider())
+#endif
+                return .concatenate(
+                    .trackEvent(category: "firstTimeUser",
+                                action: "buttonPressed",
+                                name: "scan",
+                                analytics: analytics),
+                    publisher
+                        .receive(on: mainQueue)
+                        .catchToEffect(SetupScan.Action.scanEvent)
+                        .cancellable(id: CancelId.self, cancelInFlight: true)
+                )
+            case .scanEvent(.failure(let error)):
+                RedactedIDCardInteractionError(error).flatMap(issueTracker.capture(error:))
+                state.shared.isScanning = false
+                
+                switch error {
+                case .cardDeactivated:
+                    state.shared.scanAvailable = false
+                    return Effect(value: .error(ScanError.State(errorType: .cardDeactivated, retry: state.shared.scanAvailable)))
+                case .cardBlocked:
+                    state.shared.scanAvailable = false
+                    return Effect(value: .error(ScanError.State(errorType: .cardBlocked, retry: state.shared.scanAvailable)))
+                default:
+                    state.shared.scanAvailable = true
+                    return Effect(value: .error(ScanError.State(errorType: .idCardInteraction(error), retry: state.shared.scanAvailable)))
+                }
+            case .scanEvent(.success(let event)):
+                return self.handle(state: &state, event: event)
+            case .cancelScan:
+                state.shared.isScanning = false
+                return .cancel(id: CancelId.self)
+            case .error:
+                state.shared.isScanning = false
+                return .cancel(id: CancelId.self)
+            case .wrongTransportPIN:
+                state.shared.isScanning = false
+                return .cancel(id: CancelId.self)
+            case .scannedSuccessfully:
+                storageManager.setupCompleted = true
+                return .cancel(id: CancelId.self)
+            case .shared(.showNFCInfo):
+                state.alert = AlertState(title: TextState(L10n.HelpNFC.title),
+                                         message: TextState(L10n.HelpNFC.body),
+                                         dismissButton: .cancel(TextState(L10n.General.ok),
+                                                                action: .send(.dismissAlert)))
+                return .trackEvent(category: "firstTimeUser",
+                                   action: "alertShown",
+                                   name: "NFCInfo",
+                                   analytics: analytics)
+            case .shared(.showHelp):
+                return .none
+            case .dismissAlert:
+                state.alert = nil
+                return .none
+            }
+    }
 }
 
-struct SetupScan: View {
+enum SetupScanError: Error, Equatable {
+    case idCardInteraction(IDCardInteractionError)
+    case unexpectedEvent(EIDInteractionEvent)
+}
+
+struct SetupScanView: View {
     
-    var store: Store<SetupScanState, SetupScanAction>
+    var store: Store<SetupScan.State, SetupScan.Action>
     
-    init(store: Store<SetupScanState, SetupScanAction>) {
+    init(store: Store<SetupScan.State, SetupScan.Action>) {
         self.store = store
     }
     
     var body: some View {
-        SharedScan(store: store.scope(state: \.shared, action: SetupScanAction.shared),
+        SharedScanView(store: store.scope(state: \.shared, action: SetupScan.Action.shared),
                    instructionsTitle: L10n.FirstTimeUser.ScanInstructions.title,
                    instructionsBody: L10n.FirstTimeUser.ScanInstructions.body,
                    instructionsScanButtonTitle: L10n.FirstTimeUser.Scan.scan,
@@ -194,40 +205,8 @@ struct SetupScan: View {
             ViewStore(store).send(.onAppear)
         }
 #if PREVIEW
-        .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: SetupScanAction.runDebugSequence)
+        .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: SetupScan.Action.runDebugSequence)
 #endif
         .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
-    }
-}
-
-struct SetupScan_Previews: PreviewProvider {
-    
-    static var previewReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> { state, action, _ in
-        switch action {
-        case .shared(.startScan):
-            state.shared.showInstructions.toggle()
-            state.shared.isScanning.toggle()
-            return .none
-        default:
-            return .none
-        }
-    }
-    
-    static var previews: some View {
-        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456"), reducer: previewReducer, environment: AppEnvironment.preview))
-            .previewDisplayName("Instructions")
-        NavigationView {
-            SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345",
-                                                                newPIN: "123456",
-                                                                shared: SharedScanState(isScanning: true,
-                                                                                        showProgressCaption: ProgressCaption(title: L10n.FirstTimeUser.Scan.Progress.title,
-                                                                                                                             body: L10n.FirstTimeUser.Scan.Progress.body),
-                                                                                        showInstructions: false)),
-                                   reducer: .empty,
-                                   environment: AppEnvironment.preview))
-            .previewDisplayName("Scanning")
-        }
-        SetupScan(store: Store(initialState: SetupScanState(transportPIN: "12345", newPIN: "123456", shared: SharedScanState(showInstructions: false)), reducer: previewReducer, environment: AppEnvironment.preview))
-            .previewDisplayName("Rescan")
     }
 }

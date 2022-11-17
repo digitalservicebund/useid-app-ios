@@ -1,30 +1,29 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct IdentificationCANInputState: Equatable {
-    @BindableState var enteredCAN: String = ""
-    let request: EIDAuthenticationRequest
-    var pinCANCallback: PINCANCallback
-    var pushesToPINEntry: Bool
-    var doneButtonEnabled: Bool {
-        return enteredCAN.count == Constants.CAN_DIGIT_COUNT
+struct IdentificationCANInput: ReducerProtocol {
+    struct State: Equatable {
+        @BindableState var enteredCAN: String = ""
+        let request: EIDAuthenticationRequest
+        var pinCANCallback: PINCANCallback
+        var pushesToPINEntry: Bool
+        var doneButtonEnabled: Bool {
+            return enteredCAN.count == Constants.CAN_DIGIT_COUNT
+        }
+    }
+    
+    enum Action: Equatable, BindableAction {
+        case done(can: String, request: EIDAuthenticationRequest, pinCANCallback: PINCANCallback, pushesToPINEntry: Bool)
+        case binding(BindingAction<IdentificationCANInput.State>)
+    }
+    
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
     }
 }
 
-enum IdentificationCANInputAction: Equatable, BindableAction {
-    case done(can: String, request: EIDAuthenticationRequest, pinCANCallback: PINCANCallback, pushesToPINEntry: Bool)
-    case binding(BindingAction<IdentificationCANInputState>)
-}
-
-var identificationCANInputReducer = Reducer<IdentificationCANInputState, IdentificationCANInputAction, AppEnvironment>.init { _, action, _ in
-    switch action {
-    default:
-        return .none
-    }
-}.binding()
-
-struct IdentificationCANInput: View {
-    var store: Store<IdentificationCANInputState, IdentificationCANInputAction>
+struct IdentificationCANInputView: View {
+    var store: Store<IdentificationCANInput.State, IdentificationCANInput.Action>
     @FocusState private var pinEntryFocused: Bool
     
     var body: some View {
@@ -67,9 +66,7 @@ struct IdentificationCANInput: View {
 struct IdentificationCANInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationCANInput(store: .init(initialState: .init(request: .preview, pinCANCallback: .init(id: UUID(), callback: { _, _ in }), pushesToPINEntry: true),
-                                                reducer: identificationCANInputReducer,
-                                                environment: AppEnvironment.preview))
+            IdentificationCANInputView(store: .init(initialState: .init(request: .preview, pinCANCallback: .init(id: UUID(), callback: { _, _ in }), pushesToPINEntry: true), reducer: IdentificationCANInput()))
         }
         .previewDevice("iPhone 12")
     }

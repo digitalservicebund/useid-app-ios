@@ -9,25 +9,11 @@ import Analytics
 final class IdentificationCANScanTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
-    var environment: AppEnvironment!
-    var uuidCount = 0
     var mockAnalyticsClient: MockAnalyticsClient!
-    
-    var mockIDInteractionManager = MockIDInteractionManagerType()
-    
-    func uuidFactory() -> UUID {
-        let currentCount = self.uuidCount
-        self.uuidCount += 1
-        return UUID(number: currentCount)
-    }
     
     override func setUp() {
         mockAnalyticsClient = MockAnalyticsClient()
         scheduler = DispatchQueue.test
-        environment = AppEnvironment.mocked(mainQueue: scheduler.eraseToAnyScheduler(),
-                                            uuidFactory: uuidFactory,
-                                            idInteractionManager: mockIDInteractionManager,
-                                            analytics: mockAnalyticsClient)
         
         stub(mockAnalyticsClient) {
             $0.track(view: any()).thenDoNothing()
@@ -42,15 +28,14 @@ final class IdentificationCANScanTests: XCTestCase {
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
         let store = TestStore(
-            initialState: IdentificationCANScanState(request: request,
+            initialState: IdentificationCANScan.State(request: request,
                                                   pin: pin,
                                                   can: can,
                                                      pinCANCallback: pinCANCallback,
-                                                  shared: SharedScanState(isScanning: false, showInstructions: false)),
-            reducer: identificationCANScanReducer,
-            environment: environment
+                                                  shared: SharedScan.State(isScanning: false, showInstructions: false)),
+            reducer: IdentificationCANScan()
         )
-        
+        store.dependencies.analytics = mockAnalyticsClient
         store.send(.onAppear)
         store.receive(.shared(.startScan)) {
             $0.shared.isScanning = true
@@ -63,13 +48,12 @@ final class IdentificationCANScanTests: XCTestCase {
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
-        let store = TestStore(initialState: IdentificationCANScanState(request: request,
+        let store = TestStore(initialState: IdentificationCANScan.State(request: request,
                                                                        pin: pin,
                                                                        can: can,
                                                                        pinCANCallback: pinCANCallback,
-                                                                       shared: SharedScanState(isScanning: true, showInstructions: false)),
-                              reducer: identificationCANScanReducer,
-                              environment: environment)
+                                                                       shared: SharedScan.State(isScanning: true, showInstructions: false)),
+                              reducer: IdentificationCANScan())
         
         store.send(.onAppear)
     }
@@ -80,14 +64,13 @@ final class IdentificationCANScanTests: XCTestCase {
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
-        let store = TestStore(initialState: IdentificationCANScanState(request: request,
+        let store = TestStore(initialState: IdentificationCANScan.State(request: request,
                                                                        pin: pin,
                                                                        can: can,
                                                                        pinCANCallback: pinCANCallback,
-                                                                       shared: SharedScanState(isScanning: true, showInstructions: false)),
-                              reducer: identificationCANScanReducer,
-                              environment: environment)
-        
+                                                                       shared: SharedScan.State(isScanning: true, showInstructions: false)),
+                              reducer: IdentificationCANScan())
+        store.dependencies.uuid = .incrementing
         let newCallback = { (_: String, _: String) in }
         store.send(.scanEvent(.success(.requestPINAndCAN(newCallback)))) {
             $0.shared.isScanning = false
@@ -101,14 +84,13 @@ final class IdentificationCANScanTests: XCTestCase {
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
-        let store = TestStore(initialState: IdentificationCANScanState(request: request,
+        let store = TestStore(initialState: IdentificationCANScan.State(request: request,
                                                                        pin: pin,
                                                                        can: can,
                                                                        pinCANCallback: pinCANCallback,
-                                                                       shared: SharedScanState(isScanning: true, showInstructions: false)),
-                              reducer: identificationCANScanReducer,
-                              environment: environment)
-        
+                                                                       shared: SharedScan.State(isScanning: true, showInstructions: false)),
+                              reducer: IdentificationCANScan())
+        store.dependencies.uuid = .incrementing
         let newCallback = { (_: String, _: String) in }
         store.send(.scanEvent(.success(.requestPINAndCAN(newCallback)))) {
             $0.shared.isScanning = false
@@ -121,14 +103,13 @@ final class IdentificationCANScanTests: XCTestCase {
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
-        let store = TestStore(initialState: IdentificationCANScanState(request: request,
+        let store = TestStore(initialState: IdentificationCANScan.State(request: request,
                                                                        pin: pin,
                                                                        can: can,
                                                                        pinCANCallback: pinCANCallback,
-                                                                       shared: SharedScanState(isScanning: false, showInstructions: false)),
-                              reducer: identificationCANScanReducer,
-                              environment: environment)
-        
+                                                                       shared: SharedScan.State(isScanning: false, showInstructions: false)),
+                              reducer: IdentificationCANScan())
+        store.dependencies.analytics = mockAnalyticsClient
         store.send(.shared(.showNFCInfo)) {
             $0.alert = AlertState(title: TextState(L10n.HelpNFC.title),
                                   message: TextState(L10n.HelpNFC.body),
@@ -146,14 +127,13 @@ final class IdentificationCANScanTests: XCTestCase {
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
-        let store = TestStore(initialState: IdentificationCANScanState(request: request,
+        let store = TestStore(initialState: IdentificationCANScan.State(request: request,
                                                                        pin: pin,
                                                                        can: can,
                                                                        pinCANCallback: pinCANCallback,
-                                                                       shared: SharedScanState(isScanning: false, showInstructions: false)),
-                              reducer: identificationCANScanReducer,
-                              environment: environment)
-        
+                                                                       shared: SharedScan.State(isScanning: false, showInstructions: false)),
+                              reducer: IdentificationCANScan())
+        store.dependencies.analytics = mockAnalyticsClient
         store.send(.shared(.startScan)) {
             $0.shared.isScanning = true
             $0.shared.showInstructions = false

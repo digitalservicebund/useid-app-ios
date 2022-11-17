@@ -1,17 +1,23 @@
 import SwiftUI
 import ComposableArchitecture
 
-enum SetupIntroAction: Equatable {
-    case chooseSkipSetup(tokenURL: URL?)
-    case chooseStartSetup
+struct SetupIntro: ReducerProtocol {
+    enum Action: Equatable {
+        case chooseSkipSetup(tokenURL: URL?)
+        case chooseStartSetup
+    }
+
+    struct State: Equatable {
+        var tokenURL: URL?
+    }
+    
+    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+        return .none
+    }
 }
 
-struct SetupIntroState: Equatable {
-    var tokenURL: URL?
-}
-
-struct SetupIntro: View {
-    let store: Store<SetupIntroState, SetupIntroAction>
+struct SetupIntroView: View {
+    let store: Store<SetupIntro.State, SetupIntro.Action>
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -39,16 +45,14 @@ struct SetupIntro: View {
 struct SetupIntro_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            SetupIntro(store: Store(initialState: SetupIntroState(tokenURL: nil),
-                                    reducer: .empty,
-                                    environment: AppEnvironment.preview))
+            SetupIntroView(store: Store(initialState: SetupIntro.State(tokenURL: nil),
+                                    reducer: SetupIntro()))
         }
         .previewDevice("iPhone SE (2nd generation)")
         
         NavigationView {
-            SetupIntro(store: Store(initialState: SetupIntroState(tokenURL: nil),
-                                    reducer: .empty,
-                                    environment: AppEnvironment.preview))
+            SetupIntroView(store: Store(initialState: SetupIntro.State(tokenURL: nil),
+                                    reducer: SetupIntro()))
         }
         .previewDevice("iPhone 12")
     }

@@ -5,91 +5,85 @@ import IdentifiedCollections
 import SwiftUI
 import Analytics
 
-struct SetupCoordinatorState: Equatable, IndexedRouterState {
-    var transportPIN: String
-    var attempt: Int
-    var tokenURL: URL?
-    var alert: AlertState<SetupCoordinatorAction>?
-    
-    var routes: [Route<SetupScreenState>] {
-        get {
-            states.map {
-                $0.map { setupScreenState in
-                    switch setupScreenState {
-                    case .scan(var scanState):
-                        scanState.transportPIN = transportPIN
-                        scanState.shared.attempt = attempt
-                        return .scan(scanState)
-                    case .intro(var state):
-                        state.tokenURL = tokenURL
-                        return .intro(state)
-                    default:
-                        return setupScreenState
+struct SetupCoordinator: ReducerProtocol {
+    @Dependency(\.mainQueue) var mainQueue
+    struct State: Equatable, IndexedRouterState {
+        var transportPIN: String
+        var attempt: Int
+        var tokenURL: URL?
+        var alert: AlertState<Action>?
+        
+        var routes: [Route<SetupScreen.State>] {
+            get {
+                states.map {
+                    $0.map { setupScreenState in
+                        switch setupScreenState {
+                        case .scan(var scanState):
+                            scanState.transportPIN = transportPIN
+                            scanState.shared.attempt = attempt
+                            return .scan(scanState)
+                        case .intro(var state):
+                            state.tokenURL = tokenURL
+                            return .intro(state)
+                        default:
+                            return setupScreenState
+                        }
                     }
                 }
             }
+            set {
+                states = newValue
+            }
         }
-        set {
-            states = newValue
+        
+        var states: [Route<SetupScreen.State>]
+        
+        init(transportPIN: String = "", attempt: Int = 0, tokenURL: URL? = nil, alert: AlertState<SetupCoordinator.Action>? = nil, states: [Route<SetupScreen.State>]? = nil) {
+            self.transportPIN = transportPIN
+            self.attempt = attempt
+            self.tokenURL = tokenURL
+            self.alert = alert
+            self.states = states ?? [.root(.intro(.init(tokenURL: tokenURL)))]
         }
     }
     
-    var states: [Route<SetupScreenState>]
-    
-    init(transportPIN: String = "", attempt: Int = 0, tokenURL: URL? = nil, alert: AlertState<SetupCoordinatorAction>? = nil, states: [Route<SetupScreenState>]? = nil) {
-        self.transportPIN = transportPIN
-        self.attempt = attempt
-        self.tokenURL = tokenURL
-        self.alert = alert
-        self.states = states ?? [.root(.intro(.init(tokenURL: tokenURL)))]
+    enum Action: Equatable, IndexedRouterAction {
+        case routeAction(Int, action: SetupScreen.Action)
+        case updateRoutes([Route<SetupScreen.State>])
+        case end
+        case confirmEnd
+        case afterConfirmEnd
+        case dismissAlert
+        case dismiss
     }
-}
-
-extension SetupCoordinatorState: AnalyticsView {
-     var route: [String] {
-         states.last?.screen.route ?? []
-     }
- }
-
-enum SetupCoordinatorAction: Equatable, IndexedRouterAction {
-    case routeAction(Int, action: SetupScreenAction)
-    case updateRoutes([Route<SetupScreenState>])
-    case end
-    case confirmEnd
-    case afterConfirmEnd
-    case dismissAlert
-    case dismiss
-}
-
-let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorAction, AppEnvironment> = setupScreenReducer
-    .forEachIndexedRoute(environment: { $0 })
-    .withRouteReducer(
-        Reducer { state, action, environment in
+    
+    var body: some ReducerProtocol<State, Action> {
+        return Reduce<State, Action> { state, action in
             switch action {
             case .routeAction(_, .intro(.chooseStartSetup)):
                 state.routes.push(.transportPINIntro)
             case .routeAction(_, .transportPINIntro(.choosePINLetterAvailable)):
-                state.routes.push(.transportPIN(SetupTransportPINState()))
+                state.routes.push(.transportPIN(SetupTransportPIN.State()))
             case .routeAction(_, .transportPINIntro(.choosePINLetterMissing)):
-                state.routes.push(.missingPINLetter(MissingPINLetterState()))
+                state.routes.push(.missingPINLetter(MissingPINLetter.State()))
             case .routeAction(_, .transportPIN(.done(let transportPIN))):
                 state.transportPIN = transportPIN
                 state.routes.push(.personalPINIntro)
             case .routeAction(_, .personalPINIntro(.continue)):
-                state.routes.push(.personalPINInput(SetupPersonalPINInputState()))
+                state.routes.push(.personalPINInput(SetupPersonalPINInput.State()))
             case .routeAction(_, action: .personalPINInput(.done(pin: let pin))):
-                state.routes.push(.personalPINConfirm(SetupPersonalPINConfirmState(enteredPIN1: pin)))
+                state.routes.push(.personalPINConfirm(SetupPersonalPINConfirm.State(enteredPIN1: pin)))
             case .routeAction(_, action: .personalPINConfirm(.confirmMismatch)):
                 state.routes.pop()
             case .routeAction(_, action: .personalPINConfirm(.done(pin: let pin))):
                 state.routes.pop()
-                state.routes.push(.scan(SetupScanState(transportPIN: state.transportPIN, newPIN: pin)))
+                state.routes.push(.scan(SetupScan.State(transportPIN: state.transportPIN, newPIN: pin)))
             case .routeAction(_, action: .scan(.scannedSuccessfully)):
-                state.routes.push(.done(SetupDoneState(tokenURL: state.tokenURL)))
+                state.routes.push(.done(SetupDone.State(tokenURL: state.tokenURL)))
             case .routeAction(_, action: .scan(.error(let errorState))):
                 state.routes.presentSheet(.error(errorState))
             case .routeAction(_, action: .scan(.shared(.showHelp))):
-                state.routes.presentSheet(.error(ScanErrorState(errorType: .help, retry: true)))
+                state.routes.presentSheet(.error(ScanError.State(errorType: .help, retry: true)))
             case .routeAction(_, action: .error(.retry)):
                 state.routes.dismiss()
             case .routeAction(_, action: .error(.end)):
@@ -98,17 +92,17 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
                 // Dismissing two sheets at the same time from different coordinators is not well supported.
                 // Waiting for 0.65s (as TCACoordinators does) fixes this temporarily.
                 return Effect(value: .afterConfirmEnd)
-                    .delay(for: 0.65, scheduler: environment.mainQueue)
+                    .delay(for: 0.65, scheduler: mainQueue)
                     .eraseToEffect()
             case .routeAction(_, action: .scan(.wrongTransportPIN(remainingAttempts: let remainingAttempts))):
-                state.routes.presentSheet(.incorrectTransportPIN(SetupIncorrectTransportPINState(remainingAttempts: remainingAttempts)))
+                state.routes.presentSheet(.incorrectTransportPIN(SetupIncorrectTransportPIN.State(remainingAttempts: remainingAttempts)))
             case .routeAction(let index, action: .incorrectTransportPIN(.confirmEnd)):
                 state.routes.dismiss()
                 
                 // Dismissing two sheets at the same time from different coordinators is not well supported.
                 // Waiting for 0.65s (as TCACoordinators does) fixes this temporarily.
                 return Effect(value: .afterConfirmEnd)
-                    .delay(for: 0.65, scheduler: environment.mainQueue)
+                    .delay(for: 0.65, scheduler: mainQueue)
                     .eraseToEffect()
             case .routeAction(_, action: .incorrectTransportPIN(.done(let transportPIN))):
                 state.transportPIN = transportPIN
@@ -132,54 +126,57 @@ let setupCoordinatorReducer: Reducer<SetupCoordinatorState, SetupCoordinatorActi
                 break
             }
             return .none
+        }.forEachRoute {
+            SetupScreen()
         }
-    )
+    }
+}
 
 struct SetupCoordinatorView: View {
-    let store: Store<SetupCoordinatorState, SetupCoordinatorAction>
+    let store: Store<SetupCoordinator.State, SetupCoordinator.Action>
     
     var body: some View {
         NavigationView {
             TCARouter(store) { screen in
                 SwitchStore(screen) {
-                    CaseLet(state: /SetupScreenState.intro,
-                            action: SetupScreenAction.intro,
-                            then: SetupIntro.init)
-                    CaseLet(state: /SetupScreenState.transportPINIntro,
-                            action: SetupScreenAction.transportPINIntro,
-                            then: SetupTransportPINIntro.init)
-                    CaseLet(state: /SetupScreenState.transportPIN,
-                            action: SetupScreenAction.transportPIN,
-                            then: SetupTransportPIN.init)
-                    CaseLet(state: /SetupScreenState.personalPINIntro,
-                            action: SetupScreenAction.personalPINIntro,
-                            then: SetupPersonalPINIntro.init)
-                    CaseLet(state: /SetupScreenState.personalPINInput,
-                            action: SetupScreenAction.personalPINInput,
-                            then: SetupPersonalPINInput.init)
-                    CaseLet(state: /SetupScreenState.scan,
-                            action: SetupScreenAction.scan,
-                            then: SetupScan.init)
-                    CaseLet(state: /SetupScreenState.done,
-                            action: SetupScreenAction.done,
-                            then: SetupDone.init)
-                    CaseLet(state: /SetupScreenState.error,
-                            action: SetupScreenAction.error,
-                            then: ScanError.init)
-                    CaseLet(state: /SetupScreenState.incorrectTransportPIN,
-                            action: SetupScreenAction.incorrectTransportPIN,
-                            then: SetupIncorrectTransportPIN.init)
+                    CaseLet(state: /SetupScreen.State.intro,
+                            action: SetupScreen.Action.intro,
+                            then: SetupIntroView.init)
+                    CaseLet(state: /SetupScreen.State.transportPINIntro,
+                            action: SetupScreen.Action.transportPINIntro,
+                            then: SetupTransportPINIntroView.init)
+                    CaseLet(state: /SetupScreen.State.transportPIN,
+                            action: SetupScreen.Action.transportPIN,
+                            then: SetupTransportPINView.init)
+                    CaseLet(state: /SetupScreen.State.personalPINIntro,
+                            action: SetupScreen.Action.personalPINIntro,
+                            then: SetupPersonalPINIntroView.init)
+                    CaseLet(state: /SetupScreen.State.personalPINInput,
+                            action: SetupScreen.Action.personalPINInput,
+                            then: SetupPersonalPINInputView.init)
+                    CaseLet(state: /SetupScreen.State.scan,
+                            action: SetupScreen.Action.scan,
+                            then: SetupScanView.init)
+                    CaseLet(state: /SetupScreen.State.done,
+                            action: SetupScreen.Action.done,
+                            then: SetupDoneView.init)
+                    CaseLet(state: /SetupScreen.State.error,
+                            action: SetupScreen.Action.error,
+                            then: ScanErrorView.init)
+                    CaseLet(state: /SetupScreen.State.incorrectTransportPIN,
+                            action: SetupScreen.Action.incorrectTransportPIN,
+                            then: SetupIncorrectTransportPINView.init)
                     Default {
                         // There is a maximum case let statements allowed per switch store view.
                         // This works around this issue by nesting a second switch store inside the default case.
                         // For more information see: https://github.com/pointfreeco/swift-composable-architecture/issues/602
                         SwitchStore(screen) {
-                            CaseLet(state: /SetupScreenState.missingPINLetter,
-                                    action: SetupScreenAction.missingPINLetter,
-                                    then: MissingPINLetter.init)
-                            CaseLet(state: /SetupScreenState.personalPINConfirm,
-                                    action: SetupScreenAction.personalPINConfirm,
-                                    then: SetupPersonalPINConfirm.init)
+                            CaseLet(state: /SetupScreen.State.missingPINLetter,
+                                    action: SetupScreen.Action.missingPINLetter,
+                                    then: MissingPINLetterView.init)
+                            CaseLet(state: /SetupScreen.State.personalPINConfirm,
+                                    action: SetupScreen.Action.personalPINConfirm,
+                                    then: SetupPersonalPINConfirmView.init)
                         }
                     }
                     
@@ -190,5 +187,11 @@ struct SetupCoordinatorView: View {
         }
         .accentColor(Asset.accentColor.swiftUIColor)
         .ignoresSafeArea(.keyboard)
+    }
+}
+
+extension SetupCoordinator.State: AnalyticsView {
+    var route: [String] {
+        states.last?.screen.route ?? []
     }
 }

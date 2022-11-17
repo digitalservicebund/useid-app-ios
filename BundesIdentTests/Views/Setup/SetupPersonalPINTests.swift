@@ -8,14 +8,11 @@ import Analytics
 class SetupPersonalPINViewModelTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
-    var environment: AppEnvironment!
     var mockAnalyticsClient: MockAnalyticsClient!
     
     override func setUp() {
         scheduler = DispatchQueue.test
         mockAnalyticsClient = MockAnalyticsClient()
-        environment = AppEnvironment.mocked(mainQueue: scheduler.eraseToAnyScheduler(), analytics: mockAnalyticsClient)
-        
         stub(mockAnalyticsClient) {
             $0.track(view: any()).thenDoNothing()
             $0.track(event: any()).thenDoNothing()
@@ -23,9 +20,8 @@ class SetupPersonalPINViewModelTests: XCTestCase {
     }
     
     func testCompletePIN1() throws {
-        let store = TestStore(initialState: SetupPersonalPINInputState(enteredPIN: "12345"),
-                              reducer: setupPersonalPINInputReducer,
-                              environment: environment)
+        let store = TestStore(initialState: SetupPersonalPINInput.State(enteredPIN: "12345"),
+                              reducer: SetupPersonalPINInput())
         
         store.send(.binding(.set(\.$enteredPIN, "123456"))) { state in
             state.enteredPIN = "123456"
@@ -33,20 +29,19 @@ class SetupPersonalPINViewModelTests: XCTestCase {
     }
     
     func testCorrectPIN2() throws {
-        let store = TestStore(initialState: SetupPersonalPINConfirmState(enteredPIN1: "123456",
+        let store = TestStore(initialState: SetupPersonalPINConfirm.State(enteredPIN1: "123456",
                                                                   enteredPIN2: "12345"),
-                              reducer: setupPersonalPINConfirmReducer,
-                              environment: environment)
+                              reducer: SetupPersonalPINConfirm())
         store.send(.binding(.set(\.$enteredPIN2, "123456"))) { state in
             state.enteredPIN2 = "123456"
         }
     }
     
     func testMismatchingPIN2() throws {
-        let store = TestStore(initialState: SetupPersonalPINConfirmState(enteredPIN1: "123456",
+        let store = TestStore(initialState: SetupPersonalPINConfirm.State(enteredPIN1: "123456",
                                                                   enteredPIN2: "98765"),
-                              reducer: setupPersonalPINConfirmReducer,
-                              environment: environment)
+                              reducer: SetupPersonalPINConfirm())
+        store.dependencies.analytics = mockAnalyticsClient
         store.send(.binding(.set(\.$enteredPIN2, "987654"))) { state in
             state.enteredPIN2 = "987654"
         }

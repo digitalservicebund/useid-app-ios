@@ -5,7 +5,7 @@ enum SetupPersonalPINIntroAction: Equatable {
     case `continue`
 }
 
-struct SetupPersonalPINIntro: View {
+struct SetupPersonalPINIntroView: View {
     var store: Store<Void, SetupPersonalPINIntroAction>
     
     var body: some View {

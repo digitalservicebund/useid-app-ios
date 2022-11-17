@@ -1,68 +1,70 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct IdentificationOverviewLoadedState: Identifiable, Equatable {
-    let id: UUID
-    let request: EIDAuthenticationRequest
-    var handler: IdentifiableCallback<FlaggedAttributes>
-    let canGoBackToSetupIntro: Bool
-    
-    // used when going back to the overview screen when we already received a pin handler
-    var pinHandler: PINCallback?
-    
-    init(id: UUID, request: EIDAuthenticationRequest, handler: IdentifiableCallback<FlaggedAttributes>, canGoBackToSetupIntro: Bool = false, pinHandler: PINCallback? = nil) {
-        self.id = id
-        self.request = request
-        self.handler = handler
-        self.canGoBackToSetupIntro = canGoBackToSetupIntro
-        self.pinHandler = pinHandler
-    }
-    
-    var requiredReadAttributes: IdentifiedArrayOf<IDCardAttribute> {
-        let requiredAttributes = request.readAttributes.compactMap { (key: IDCardAttribute, isRequired: Bool) in
-            isRequired ? key : nil
+struct IdentificationOverviewLoaded: ReducerProtocol {
+    @Dependency(\.uuid) var uuid
+    struct State: Identifiable, Equatable {
+        let id: UUID
+        let request: EIDAuthenticationRequest
+        var handler: IdentifiableCallback<FlaggedAttributes>
+        let canGoBackToSetupIntro: Bool
+        
+        // used when going back to the overview screen when we already received a pin handler
+        var pinHandler: PINCallback?
+        
+        init(id: UUID, request: EIDAuthenticationRequest, handler: IdentifiableCallback<FlaggedAttributes>, canGoBackToSetupIntro: Bool = false, pinHandler: PINCallback? = nil) {
+            self.id = id
+            self.request = request
+            self.handler = handler
+            self.canGoBackToSetupIntro = canGoBackToSetupIntro
+            self.pinHandler = pinHandler
         }
-        return IdentifiedArrayOf(uniqueElements: requiredAttributes)
+        
+        var requiredReadAttributes: IdentifiedArrayOf<IDCardAttribute> {
+            let requiredAttributes = request.readAttributes.compactMap { (key: IDCardAttribute, isRequired: Bool) in
+                isRequired ? key : nil
+            }
+            return IdentifiedArrayOf(uniqueElements: requiredAttributes)
+        }
     }
-}
-
-enum IdentificationOverviewLoadedAction: Equatable {
-    case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
-    case moreInfo
-    case callbackReceived(EIDAuthenticationRequest, PINCallback)
-    case confirm
-    case failure(IdentifiableError)
-}
-
-let identificationOverviewLoadedReducer = Reducer<IdentificationOverviewLoadedState, IdentificationOverviewLoadedAction, AppEnvironment> { state, action, environment in
-    switch action {
-    case .idInteractionEvent(.success(.requestPIN(remainingAttempts: nil, pinCallback: let handler))):
-        let pinHandler = PINCallback(id: environment.uuidFactory(), callback: handler)
-        state.pinHandler = pinHandler
-        return Effect(value: .callbackReceived(state.request, pinHandler))
-    case .idInteractionEvent(.failure(let error)):
-        return Effect(value: .failure(IdentifiableError(error)))
-    case .idInteractionEvent:
-        return .none
-    case .confirm:
-        if let pinHandler = state.pinHandler {
+    
+    enum Action: Equatable {
+        case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
+        case moreInfo
+        case callbackReceived(EIDAuthenticationRequest, PINCallback)
+        case confirm
+        case failure(IdentifiableError)
+    }
+    
+    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+        switch action {
+        case .idInteractionEvent(.success(.requestPIN(remainingAttempts: nil, pinCallback: let handler))):
+            let pinHandler = PINCallback(id: uuid.callAsFunction(), callback: handler)
+            state.pinHandler = pinHandler
             return Effect(value: .callbackReceived(state.request, pinHandler))
-        } else {
-            let dict = Dictionary(uniqueKeysWithValues: state.requiredReadAttributes.map { ($0, true) })
-            state.handler(dict)
+        case .idInteractionEvent(.failure(let error)):
+            return Effect(value: .failure(IdentifiableError(error)))
+        case .idInteractionEvent:
+            return .none
+        case .confirm:
+            if let pinHandler = state.pinHandler {
+                return Effect(value: .callbackReceived(state.request, pinHandler))
+            } else {
+                let dict = Dictionary(uniqueKeysWithValues: state.requiredReadAttributes.map { ($0, true) })
+                state.handler(dict)
+                return .none
+            }
+        case .failure:
+            return .none
+        case .callbackReceived:
+            return .none
+        case .moreInfo:
             return .none
         }
-    case .failure:
-        return .none
-    case .callbackReceived:
-        return .none
-    case .moreInfo:
-        return .none
     }
 }
-
-struct IdentificationOverviewLoaded: View {
-    var store: Store<IdentificationOverviewLoadedState, IdentificationOverviewLoadedAction>
+struct IdentificationOverviewLoadedView: View {
+    var store: Store<IdentificationOverviewLoaded.State, IdentificationOverviewLoaded.Action>
     
     var body: some View {
         WithViewStore(store) { viewStore in
