@@ -1,28 +1,34 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct SetupDoneState: Equatable {
-    var tokenURL: URL?
-    
-    var primaryButton: DialogButtons<SetupDoneAction>.ButtonConfiguration {
-        guard let tokenURL = tokenURL else {
-            return .init(title: L10n.FirstTimeUser.Done.close,
-                         action: .done)
-        }
+struct SetupDone: ReducerProtocol {
+    struct State: Equatable {
+        var tokenURL: URL?
         
-        return .init(title: L10n.FirstTimeUser.Done.identify,
-                     action: .triggerIdentification(tokenURL: tokenURL))
+        var primaryButton: DialogButtons<SetupDone.Action>.ButtonConfiguration {
+            guard let tokenURL = tokenURL else {
+                return .init(title: L10n.FirstTimeUser.Done.close,
+                             action: .done)
+            }
+            
+            return .init(title: L10n.FirstTimeUser.Done.identify,
+                         action: .triggerIdentification(tokenURL: tokenURL))
+        }
+    }
+
+    enum Action: Equatable {
+        case done
+        case triggerIdentification(tokenURL: URL)
+    }
+    
+    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+        return .none
     }
 }
 
-enum SetupDoneAction: Equatable {
-    case done
-    case triggerIdentification(tokenURL: URL)
-}
-
-struct SetupDone: View {
+struct SetupDoneView: View {
     
-    var store: Store<SetupDoneState, SetupDoneAction>
+    var store: Store<SetupDone.State, SetupDone.Action>
     
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -40,6 +46,6 @@ struct SetupDone: View {
 
 struct SetupDone_Previews: PreviewProvider {
     static var previews: some View {
-        SetupDone(store: Store(initialState: SetupDoneState(), reducer: .empty, environment: AppEnvironment.preview))
+        SetupDoneView(store: Store(initialState: SetupDone.State(), reducer: SetupDone()))
     }
 }

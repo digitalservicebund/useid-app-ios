@@ -2,33 +2,31 @@ import SwiftUI
 import Combine
 import ComposableArchitecture
 
-struct IdentificationPersonalPINState: Equatable {
-    
-    var request: EIDAuthenticationRequest
-    var callback: PINCallback
-    @BindableState var enteredPIN: String = ""
-    
-    var doneButtonEnabled: Bool {
-        return enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
+struct IdentificationPersonalPIN: ReducerProtocol {
+    struct State: Equatable {
+        var request: EIDAuthenticationRequest
+        var callback: PINCallback
+        @BindableState var enteredPIN: String = ""
+        
+        var doneButtonEnabled: Bool {
+            return enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
+        }
+    }
+
+    enum Action: BindableAction, Equatable {
+        case onAppear
+        case done(request: EIDAuthenticationRequest, pin: String, pinCallback: PINCallback)
+        case binding(BindingAction<IdentificationPersonalPIN.State>)
+    }
+
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
     }
 }
 
-enum IdentificationPersonalPINAction: BindableAction, Equatable {
-    case onAppear
-    case done(request: EIDAuthenticationRequest, pin: String, pinCallback: PINCallback)
-    case binding(BindingAction<IdentificationPersonalPINState>)
-}
-
-let identificationPersonalPINReducer = Reducer<IdentificationPersonalPINState, IdentificationPersonalPINAction, AppEnvironment> { _, action, _ in
-    switch action {
-    default:
-        return .none
-    }
-}.binding()
-
-struct IdentificationPersonalPIN: View {
+struct IdentificationPersonalPINView: View {
     
-    var store: Store<IdentificationPersonalPINState, IdentificationPersonalPINAction>
+    var store: Store<IdentificationPersonalPIN.State, IdentificationPersonalPIN.Action>
     @FocusState private var pinEntryFocused: Bool
     
     var body: some View {
@@ -75,15 +73,13 @@ struct IdentificationPersonalPIN: View {
 struct IdentificationPersonalPIN_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationPersonalPIN(store: Store(initialState: IdentificationPersonalPINState(request: .preview, callback: PINCallback(id: UUID(), callback: { _ in }), enteredPIN: "12345"),
-                                                   reducer: .empty,
-                                                   environment: AppEnvironment.preview))
+            IdentificationPersonalPINView(store: Store(initialState: IdentificationPersonalPIN.State(request: .preview, callback: PINCallback(id: UUID(), callback: { _ in }), enteredPIN: "12345"),
+                                                   reducer: IdentificationPersonalPIN()))
         }
         .previewDevice("iPhone 12")
         NavigationView {
-            IdentificationPersonalPIN(store: Store(initialState: IdentificationPersonalPINState(request: .preview, callback: PINCallback(id: UUID(), callback: { _ in })),
-                                                   reducer: .empty,
-                                                   environment: AppEnvironment.preview))
+            IdentificationPersonalPINView(store: Store(initialState: IdentificationPersonalPIN.State(request: .preview, callback: PINCallback(id: UUID(), callback: { _ in })),
+                                                   reducer: IdentificationPersonalPIN()))
         }
         .previewDevice("iPhone 12")
     }

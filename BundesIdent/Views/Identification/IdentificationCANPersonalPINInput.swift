@@ -1,28 +1,28 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct IdentificationCANPersonalPINInputState: Equatable {
-    @BindableState var enteredPIN: String = ""
-    let request: EIDAuthenticationRequest
-    var doneButtonEnabled: Bool {
-        return enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
+struct IdentificationCANPersonalPINInput: ReducerProtocol {
+    struct State: Equatable {
+        @BindableState var enteredPIN: String = ""
+        let request: EIDAuthenticationRequest
+        var pinCANCallback: PINCANCallback
+        var doneButtonEnabled: Bool {
+            return enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
+        }
+    }
+
+    enum Action: Equatable, BindableAction {
+        case done(pin: String, request: EIDAuthenticationRequest, pinCANCallback: PINCANCallback)
+        case binding(BindingAction<IdentificationCANPersonalPINInput.State>)
+    }
+    
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
     }
 }
 
-enum IdentificationCANPersonalPINInputAction: Equatable, BindableAction {
-    case done(pin: String, request: EIDAuthenticationRequest)
-    case binding(BindingAction<IdentificationCANPersonalPINInputState>)
-}
-
-var identificationCANPersonalPINInputReducer = Reducer<IdentificationCANPersonalPINInputState, IdentificationCANPersonalPINInputAction, AppEnvironment>.init { _, action, _ in
-    switch action {
-    default:
-        return .none
-    }
-}.binding()
-
-struct IdentificationCANPersonalPINInput: View {
-    var store: Store<IdentificationCANPersonalPINInputState, IdentificationCANPersonalPINInputAction>
+struct IdentificationCANPersonalPINInputView: View {
+    var store: Store<IdentificationCANPersonalPINInput.State, IdentificationCANPersonalPINInput.Action>
     @FocusState private var pinEntryFocused: Bool
     
     var body: some View {
@@ -43,7 +43,7 @@ struct IdentificationCANPersonalPINInput: View {
                                          doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                               title: L10n.Identification.PersonalPIN.continue,
                                                                               handler: { pin in
-                                viewStore.send(.done(pin: pin, request: viewStore.request))
+                                viewStore.send(.done(pin: pin, request: viewStore.request, pinCANCallback: viewStore.pinCANCallback))
                             }))
                             .focused($pinEntryFocused)
                             .headingL()
@@ -75,9 +75,8 @@ struct IdentificationCANPersonalPINInput: View {
 struct IdentificationCANPersonalPINInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationCANPersonalPINInput(store: .init(initialState: .init(request: .preview),
-                                                           reducer: identificationCANPersonalPINInputReducer,
-                                                           environment: AppEnvironment.preview))
+            IdentificationCANPersonalPINInputView(store: .init(initialState: .init(request: .preview, pinCANCallback: .init(id: UUID(), callback: { _, _ in })),
+                                                           reducer: IdentificationCANPersonalPINInput()))
         }
         .previewDevice("iPhone 12")
     }

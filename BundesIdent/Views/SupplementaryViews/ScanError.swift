@@ -11,74 +11,77 @@ enum ScanErrorType: Equatable {
     case unexpectedEvent(EIDInteractionEvent)
 }
 
-struct ScanErrorState: Equatable {
-    var errorType: ScanErrorType
-    var retry: Bool
-    
-    var title: String {
-        switch errorType {
-        case .cardDeactivated:
-            return L10n.ScanError.CardDeactivated.title
-        case .cardSuspended:
-            return L10n.ScanError.CardSuspended.title
-        case .cardBlocked:
-            return L10n.ScanError.CardBlocked.title
-        case .idCardInteraction,
-                .unexpectedEvent,
-                .help:
-            return L10n.ScanError.CardUnreadable.title
-        }
-    }
-    
-    var markdown: String {
-        switch errorType {
-        case .cardDeactivated:
-            return L10n.ScanError.CardDeactivated.body
-        case .cardSuspended:
-            return L10n.ScanError.CardSuspended.body
-        case .cardBlocked:
-            return L10n.ScanError.CardBlocked.body
-        case .idCardInteraction,
-                .unexpectedEvent,
-                .help:
-            return L10n.ScanError.CardUnreadable.body
-        }
-    }
-    
-    var primaryButton: DialogButtons<ScanErrorAction>.ButtonConfiguration {
-        if retry {
-            return .init(title: L10n.ScanError.close, action: .retry)
-        } else if case .idCardInteraction(.processFailed(_, let url, _)) = errorType, let url = url {
-            return .init(title: L10n.ScanError.redirect, action: .end(redirectURL: url))
-        } else {
-            return .init(title: L10n.ScanError.close, action: .end(redirectURL: nil))
-        }
-    }
-    
-    var boxContent: BoxContent? {
-        guard !retry else { return nil}
+struct ScanError: ReducerProtocol {
+    @Dependency(\.urlOpener) var urlOpener
+    struct State: Equatable {
+        var errorType: ScanErrorType
+        var retry: Bool
         
-        switch errorType {
-        case .cardDeactivated, .cardSuspended, .cardBlocked, .help, .idCardInteraction(.cardDeactivated), .idCardInteraction(.cardBlocked):
-            return nil
-        case .idCardInteraction, .unexpectedEvent:
-            return .init(title: L10n.ScanError.Box.title, message: L10n.ScanError.Box.body, style: .error)
+        var title: String {
+            switch errorType {
+            case .cardDeactivated:
+                return L10n.ScanError.CardDeactivated.title
+            case .cardSuspended:
+                return L10n.ScanError.CardSuspended.title
+            case .cardBlocked:
+                return L10n.ScanError.CardBlocked.title
+            case .idCardInteraction,
+                    .unexpectedEvent,
+                    .help:
+                return L10n.ScanError.CardUnreadable.title
+            }
+        }
+        
+        var markdown: String {
+            switch errorType {
+            case .cardDeactivated:
+                return L10n.ScanError.CardDeactivated.body
+            case .cardSuspended:
+                return L10n.ScanError.CardSuspended.body
+            case .cardBlocked:
+                return L10n.ScanError.CardBlocked.body
+            case .idCardInteraction,
+                    .unexpectedEvent,
+                    .help:
+                return L10n.ScanError.CardUnreadable.body
+            }
+        }
+        
+        var primaryButton: DialogButtons<ScanError.Action>.ButtonConfiguration {
+            if retry {
+                return .init(title: L10n.ScanError.close, action: .retry)
+            } else if case .idCardInteraction(.processFailed(_, let url, _)) = errorType, let url = url {
+                return .init(title: L10n.ScanError.redirect, action: .end(redirectURL: url))
+            } else {
+                return .init(title: L10n.ScanError.close, action: .end(redirectURL: nil))
+            }
+        }
+        
+        var boxContent: BoxContent? {
+            guard !retry else { return nil}
+            
+            switch errorType {
+            case .cardDeactivated, .cardSuspended, .cardBlocked, .help, .idCardInteraction(.cardDeactivated), .idCardInteraction(.cardBlocked):
+                return nil
+            case .idCardInteraction, .unexpectedEvent:
+                return .init(title: L10n.ScanError.Box.title, message: L10n.ScanError.Box.body, style: .error)
+            }
         }
     }
-}
-
-enum ScanErrorAction: Equatable {
-    case end(redirectURL: URL?)
-    case retry
-}
-
-let scanErrorReducer = Reducer<ScanErrorState, ScanErrorAction, AppEnvironment> { _, action, environment in
-    switch action {
-    case .end(let redirectURL):
-        guard let redirectURL = redirectURL else { return .none }
-        return .openURL(redirectURL, urlOpener: environment.urlOpener)
-    default:
-        return .none
+    
+    enum Action: Equatable {
+        case end(redirectURL: URL?)
+        case retry
+    }
+    
+    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+        switch action {
+        case .end(let redirectURL):
+            guard let redirectURL = redirectURL else { return .none }
+            return .openURL(redirectURL, urlOpener: urlOpener)
+        default:
+            return .none
+        }
     }
 }
 
@@ -99,8 +102,8 @@ extension ScanErrorType: AnalyticsView {
     }
 }
 
-struct ScanError: View {
-    var store: Store<ScanErrorState, ScanErrorAction>
+struct ScanErrorView: View {
+    var store: Store<ScanError.State, ScanError.Action>
     
     var body: some View {
         NavigationView {
@@ -120,17 +123,13 @@ struct ScanError: View {
 
 struct SetupError_Previews: PreviewProvider {
     static var previews: some View {
-        ScanError(store: Store(initialState: .init(errorType: .cardDeactivated, retry: false),
-                               reducer: .empty,
-                               environment: AppEnvironment.preview))
-        ScanError(store: Store(initialState: .init(errorType: .cardSuspended, retry: false),
-                               reducer: .empty,
-                               environment: AppEnvironment.preview))
-        ScanError(store: Store(initialState: .init(errorType: .cardBlocked, retry: false),
-                               reducer: .empty,
-                               environment: AppEnvironment.preview))
-        ScanError(store: Store(initialState: .init(errorType: .unexpectedEvent(.cardRemoved), retry: true),
-                               reducer: .empty,
-                               environment: AppEnvironment.preview))
+        ScanErrorView(store: Store(initialState: .init(errorType: .cardDeactivated, retry: false),
+                               reducer: ScanError()))
+        ScanErrorView(store: Store(initialState: .init(errorType: .cardSuspended, retry: false),
+                               reducer: ScanError()))
+        ScanErrorView(store: Store(initialState: .init(errorType: .cardBlocked, retry: false),
+                               reducer: ScanError()))
+        ScanErrorView(store: Store(initialState: .init(errorType: .unexpectedEvent(.cardRemoved), retry: true),
+                               reducer: ScanError()))
     }
 }

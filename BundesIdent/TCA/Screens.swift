@@ -1,13 +1,30 @@
 import ComposableArchitecture
 import Analytics
 
-enum ScreenState: Equatable {
-    case home(HomeState)
-    case setupCoordinator(SetupCoordinatorState)
-    case identificationCoordinator(IdentificationCoordinatorState)
+struct Screen: ReducerProtocol {
+    enum State: Equatable {
+        case home(Home.State)
+        case setupCoordinator(SetupCoordinator.State)
+        case identificationCoordinator(IdentificationCoordinator.State)
+    }
+    
+    enum Action: Equatable {
+        case home(Home.Action)
+        case setupCoordinator(SetupCoordinator.Action)
+        case identificationCoordinator(IdentificationCoordinator.Action)
+    }
+    
+    var body: some ReducerProtocol<State, Action> {
+        Scope(state: /State.setupCoordinator, action: /Action.setupCoordinator) {
+            SetupCoordinator()
+        }
+        Scope(state: /State.identificationCoordinator, action: /Action.identificationCoordinator) {
+            IdentificationCoordinator()
+        }
+    }
 }
 
-extension ScreenState: AnalyticsView {
+extension Screen.State: AnalyticsView {
      var route: [String] {
          switch self {
          case .home(let state):
@@ -19,24 +36,3 @@ extension ScreenState: AnalyticsView {
          }
      }
  }
-
-enum ScreenAction: Equatable {
-    case home(HomeAction)
-    case setupCoordinator(SetupCoordinatorAction)
-    case identificationCoordinator(IdentificationCoordinatorAction)
-}
-
-let screenReducer = Reducer<ScreenState, ScreenAction, AppEnvironment>.combine(
-    setupCoordinatorReducer
-        .pullback(
-            state: /ScreenState.setupCoordinator,
-            action: /ScreenAction.setupCoordinator,
-            environment: { $0 }
-        ),
-    identificationCoordinatorReducer
-        .pullback(
-            state: /ScreenState.identificationCoordinator,
-            action: /ScreenAction.identificationCoordinator,
-            environment: { $0 }
-        )
-)

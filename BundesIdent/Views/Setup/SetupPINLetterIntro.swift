@@ -6,7 +6,7 @@ enum SetupTransportPINIntroAction: Equatable {
     case choosePINLetterMissing
 }
 
-struct SetupTransportPINIntro: View {
+struct SetupTransportPINIntroView: View {
     
     var store: Store<Void, SetupTransportPINIntroAction>
     
@@ -24,12 +24,12 @@ struct SetupTransportPINIntro: View {
 struct SetupTransportPINIntro_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            SetupTransportPINIntro(store: .empty)
+            SetupTransportPINIntroView(store: .empty)
         }
         .environment(\.sizeCategory, .extraExtraExtraLarge)
         .previewDevice("iPhone SE (2nd generation)")
         NavigationView {
-            SetupTransportPINIntro(store: .empty)
+            SetupTransportPINIntroView(store: .empty)
         }
         .previewDevice("iPhone 12")
     }

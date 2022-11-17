@@ -2,35 +2,41 @@ import SwiftUI
 import ComposableArchitecture
 import Analytics
 
-struct HomeState: Equatable {
-    var appVersion: String
-    var buildNumber: Int
-    
-    var versionInfo: String {
-        let appVersion = "\(appVersion) - \(buildNumber)"
+struct Home: ReducerProtocol {
+    struct State: Equatable {
+        var appVersion: String
+        var buildNumber: Int
+        
+        var versionInfo: String {
+            let appVersion = "\(appVersion) - \(buildNumber)"
 #if PREVIEW
-        return "\(appVersion) (PREVIEW)"
+            return "\(appVersion) (PREVIEW)"
 #else
-        return appVersion
+            return appVersion
 #endif
+        }
+    }
+    
+    enum Action: Equatable {
+        case triggerSetup
+#if PREVIEW
+        case triggerIdentification(tokenURL: URL)
+#endif
+    }
+    
+    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+        return .none
     }
 }
 
-extension HomeState: AnalyticsView {
+extension Home.State: AnalyticsView {
     var route: [String] {
         []
     }
 }
 
-enum HomeAction: Equatable {
-    case triggerSetup
-#if PREVIEW
-    case triggerIdentification(tokenURL: URL)
-#endif
-}
-
 struct HomeView: View {
-    let store: Store<HomeState, HomeAction>
+    let store: Store<Home.State, Home.Action>
     
     var body: some View {
         NavigationView {
@@ -187,10 +193,9 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(store: Store(initialState: HomeState(appVersion: "1.2.3",
+        HomeView(store: Store(initialState: Home.State(appVersion: "1.2.3",
                                                       buildNumber: 42),
-                              reducer: .empty,
-                              environment: AppEnvironment.preview))
+                              reducer: Home()))
     }
 }
 

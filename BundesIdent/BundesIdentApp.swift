@@ -9,7 +9,7 @@ import Analytics
 struct BundesIdentApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    var store: Store<CoordinatorState, CoordinatorAction>
+    var store: Store<Coordinator.State, Coordinator.Action>
     
     init() {
         let config = AppConfig(bundle: Bundle.main)
@@ -30,15 +30,19 @@ struct BundesIdentApp: App {
             userDefaults.set(true, forKey: StorageKey.identifiedOnce.rawValue)
         }
         
-        let environment = AppEnvironment.live(appConfig: config)
+#if DEBUG
+        AnalyticsKey.liveValue = LogAnalyticsClient()
+#else
+        AnalyticsKey.liveValue = MatomoAnalyticsClient(siteId: config.matomoSiteID, baseURL: config.matomoURL)
+#endif
+        
         store = Store(
-            initialState: CoordinatorState(
+            initialState: Coordinator.State(
                 routes: [
-                    .root(.home(HomeState(appVersion: Bundle.main.version, buildNumber: Bundle.main.buildNumber)))
+                    .root(.home(Home.State(appVersion: Bundle.main.version, buildNumber: Bundle.main.buildNumber)))
                 ]
             ),
-            reducer: coordinatorReducer,
-            environment: environment
+            reducer: Coordinator()
         )
     }
     

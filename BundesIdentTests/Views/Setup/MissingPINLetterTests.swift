@@ -10,12 +10,10 @@ import TCACoordinators
 class MissingPINLetterTests: XCTestCase {
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var mockAnalyticsClient: MockAnalyticsClient!
-    var environment: AppEnvironment!
     
     override func setUp() {
         scheduler = DispatchQueue.test
         mockAnalyticsClient = MockAnalyticsClient()
-        environment = AppEnvironment.mocked(analytics: mockAnalyticsClient)
         
         stub(mockAnalyticsClient) {
             $0.track(view: any()).thenDoNothing()
@@ -25,11 +23,9 @@ class MissingPINLetterTests: XCTestCase {
 
     func testOpenMissingPINLetterEvent() {
         let store = TestStore(
-            initialState: MissingPINLetterState(),
-            reducer: missingPINLetterReducer,
-            environment: environment
-        )
-        
+            initialState: MissingPINLetter.State(),
+            reducer: MissingPINLetter())
+        store.dependencies.analytics = mockAnalyticsClient
         store.send(.openExternalLink)
         
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "firstTimeUser",

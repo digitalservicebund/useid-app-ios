@@ -1,33 +1,39 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct IdentificationCANIncorrectInputState: Equatable {
-    @BindableState var enteredCAN: String = ""
-    let request: EIDAuthenticationRequest
+struct IdentificationCANIncorrectInput: ReducerProtocol {
+    struct State: Equatable {
+        @BindableState var enteredCAN: String = ""
+        let request: EIDAuthenticationRequest
+        var pinCANCallback: PINCANCallback
+        
+        var doneButtonEnabled: Bool {
+            return enteredCAN.count == Constants.CAN_DIGIT_COUNT
+        }
+    }
+
+    enum Action: Equatable, BindableAction {
+        case done(can: String)
+        case triggerEnd
+        case end(EIDAuthenticationRequest, PINCANCallback)
+        case binding(BindingAction<IdentificationCANIncorrectInput.State>)
+    }
     
-    var doneButtonEnabled: Bool {
-        return enteredCAN.count == Constants.CAN_DIGIT_COUNT
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        Reduce { state, action in
+            switch action {
+            case .triggerEnd:
+                return Effect(value: .end(state.request, state.pinCANCallback))
+            default:
+                return .none
+            }
+        }
     }
 }
 
-enum IdentificationCANIncorrectInputAction: Equatable, BindableAction {
-    case done(can: String)
-    case triggerEnd
-    case end(EIDAuthenticationRequest)
-    case binding(BindingAction<IdentificationCANIncorrectInputState>)
-}
-
-var identificationCANIncorrectInputReducer = Reducer<IdentificationCANIncorrectInputState, IdentificationCANIncorrectInputAction, AppEnvironment>.init { state, action, _ in
-    switch action {
-    case .triggerEnd:
-        return Effect(value: .end(state.request))
-    default:
-        return .none
-    }
-}.binding()
-
-struct IdentificationCANIncorrectInput: View {
-    var store: Store<IdentificationCANIncorrectInputState, IdentificationCANIncorrectInputAction>
+struct IdentificationCANIncorrectInputView: View {
+    var store: Store<IdentificationCANIncorrectInput.State, IdentificationCANIncorrectInput.Action>
     @FocusState private var pinEntryFocused: Bool
     
     var body: some View {
@@ -94,9 +100,8 @@ struct IdentificationCANIncorrectInput: View {
 struct IdentificationCANIncorrectInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationCANIncorrectInput(store: .init(initialState: .init(request: .preview),
-                                                         reducer: identificationCANIncorrectInputReducer,
-                                                         environment: AppEnvironment.preview))
+            IdentificationCANIncorrectInputView(store: .init(initialState: .init(request: .preview, pinCANCallback: PINCANCallback(id: UUID(), callback: { _, _ in })),
+                                                         reducer: IdentificationCANIncorrectInput()))
         }
         .previewDevice("iPhone 12")
     }

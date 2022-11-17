@@ -5,8 +5,8 @@ import XCTest
 final class IdentificationCoordinatorStateTests: XCTestCase {
 
     func testTransformToLocalInteractionHandlerSingleState() throws {
-        let subState = IdentificationOverviewLoadingState()
-        let state = IdentificationCoordinatorState(tokenURL: demoTokenURL, states: [.root(.overview(.loading(subState)))])
+        let subState = IdentificationOverviewLoading.State()
+        let state = IdentificationCoordinator.State(tokenURL: demoTokenURL, states: [.root(.overview(.loading(subState)))])
         
         let effect = state.transformToLocalInteractionHandler(event: .failure(.cardBlocked))
         
@@ -19,10 +19,10 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
     
     func testTransformToLocalInteractionHandlerLastState() throws {
 
-        let state = IdentificationCoordinatorState(tokenURL: demoTokenURL,
+        let state = IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                    states: [
-                                                    .root(.overview(.loading(IdentificationOverviewLoadingState()))),
-                                                    .push(.overview(.loading(IdentificationOverviewLoadingState())))
+                                                    .root(.overview(.loading(IdentificationOverviewLoading.State()))),
+                                                    .push(.overview(.loading(IdentificationOverviewLoading.State())))
                                                    ])
         
         let effect = state.transformToLocalInteractionHandler(event: .failure(.cardBlocked))
@@ -37,7 +37,7 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
     func testNoTransformToLocalInteractionHandler() throws {
         
         struct SomeError: Error { }
-        let state = IdentificationCoordinatorState(tokenURL: demoTokenURL,
+        let state = IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                    states: [
                                                     .root(.overview(.error(IdentificationOverviewErrorState(error: IdentifiableError(SomeError())))))
                                                    ])
@@ -49,9 +49,9 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
     func testNotLastTransformToLocalInteractionHandler() throws {
         
         struct SomeError: Error { }
-        let state = IdentificationCoordinatorState(tokenURL: demoTokenURL,
+        let state = IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                    states: [
-                                                    .root(.overview(.loading(IdentificationOverviewLoadingState()))),
+                                                    .root(.overview(.loading(IdentificationOverviewLoading.State()))),
                                                     .push(.overview(.error(IdentificationOverviewErrorState(error: IdentifiableError(SomeError())))))
                                                    ])
         
