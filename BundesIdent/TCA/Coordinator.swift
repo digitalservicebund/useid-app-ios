@@ -139,6 +139,7 @@ let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironm
                 case .identificationCoordinator(.dismiss),
                         .identificationCoordinator(.afterConfirmEnd),
                         .identificationCoordinator(.routeAction(_, action: .scan(.dismiss))),
+                        .identificationCoordinator(.routeAction(_, action: .canScan(.dismiss))),
                         .setupCoordinator(.confirmEnd),
                         .setupCoordinator(.routeAction(_, action: .done(.done))),
                         .setupCoordinator(.afterConfirmEnd):

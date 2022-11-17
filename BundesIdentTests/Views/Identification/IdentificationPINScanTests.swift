@@ -6,7 +6,7 @@ import Analytics
 
 @testable import BundesIdent
 
-final class IdentificationScanTests: XCTestCase {
+final class IdentificationPINScanTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var environment: AppEnvironment!
@@ -35,7 +35,7 @@ final class IdentificationScanTests: XCTestCase {
         }
     }
     
-    func testOnAppearDoesNotTriggerScanning() throws {
+    func testOnAppearDoesNotTriggerScanningWhenInstructionsShown() throws {
         
         let request = EIDAuthenticationRequest.preview
         let pin = "123456"
@@ -46,7 +46,7 @@ final class IdentificationScanTests: XCTestCase {
             initialState: IdentificationScanState(request: request,
                                                   pin: pin,
                                                   pinCallback: pinCallback,
-                                                  shared: SharedScanState(isScanning: false)),
+                                                  shared: SharedScanState(isScanning: false, showInstructions: true)),
             reducer: identificationScanReducer,
             environment: environment
         )

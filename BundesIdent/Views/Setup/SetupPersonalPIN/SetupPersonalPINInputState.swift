@@ -6,7 +6,7 @@ struct SetupPersonalPINInputState: Equatable {
     @BindableState var enteredPIN = ""
     
     var doneButtonEnabled: Bool {
-        enteredPIN.count == 6
+        enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
     }
 }
 

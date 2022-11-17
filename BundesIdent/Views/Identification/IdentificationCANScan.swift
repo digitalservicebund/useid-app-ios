@@ -3,37 +3,33 @@ import ComposableArchitecture
 import Combine
 import Sentry
 
-enum IdentificationScanError: Error, Equatable {
-    case idCardInteraction(IDCardInteractionError)
-    case unexpectedEvent(EIDInteractionEvent)
-}
-
-struct IdentificationScanState: Equatable, IDInteractionHandler {
+struct IdentificationCANScanState: Equatable, IDInteractionHandler {
     let request: EIDAuthenticationRequest
     
     var pin: String
-    var pinCallback: PINCallback
+    var can: String
+    var pinCANCallback: PINCANCallback
     var shared: SharedScanState = SharedScanState()
     
     var authenticationSuccessful = false
-    var alert: AlertState<IdentificationScanAction>?
+    var alert: AlertState<IdentificationCANScanAction>?
 #if PREVIEW
     var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
     
-    func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationScanAction? {
+    func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationCANScanAction? {
         return .scanEvent(event)
     }
 }
 
-enum IdentificationScanAction: Equatable {
+enum IdentificationCANScanAction: Equatable {
     case onAppear
     case shared(SharedScanAction)
     case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
     case wrongPIN(remainingAttempts: Int)
     case identifiedSuccessfully(redirectURL: URL)
     case requestPINAndCAN(EIDAuthenticationRequest, PINCANCallback)
-    case requestCAN(EIDAuthenticationRequest, PINCallback)
+    case requestCAN
     case error(ScanErrorState)
     case cancelIdentification
     case dismiss
@@ -43,7 +39,7 @@ enum IdentificationScanAction: Equatable {
 #endif
 }
 
-let identificationScanReducer = Reducer<IdentificationScanState, IdentificationScanAction, AppEnvironment> { state, action, environment in
+let identificationCANScanReducer = Reducer<IdentificationCANScanState, IdentificationCANScanAction, AppEnvironment> { state, action, environment in
     switch action {
     case .onAppear:
         guard !state.shared.showInstructions, !state.shared.isScanning else {
@@ -51,20 +47,18 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
         }
         return Effect(value: .shared(.startScan))
     case .shared(.startScan):
-        state.shared.showInstructions = false
-        
         guard !state.shared.isScanning else { return .none }
-        state.pinCallback(state.pin)
+        state.pinCANCallback((state.pin, state.can))
         state.shared.isScanning = true
-        
         return .trackEvent(category: "identification",
                            action: "buttonPressed",
-                           name: "scan",
+                           name: "canScan",
                            analytics: environment.analytics)
     case .scanEvent(.success(let event)):
         return state.handle(event: event, environment: environment)
     case .scanEvent(.failure(let error)):
         RedactedIDCardInteractionError(error).flatMap(environment.issueTracker.capture(error:))
+        
         state.shared.isScanning = false
         switch error {
         case .cardDeactivated:
@@ -109,41 +103,31 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
     }
 }
 
-extension IdentificationScanState {
-    mutating func handle(event: EIDInteractionEvent, environment: AppEnvironment) -> Effect<IdentificationScanAction, Never> {
+extension IdentificationCANScanState {
+    mutating func handle(event: EIDInteractionEvent, environment: AppEnvironment) -> Effect<IdentificationCANScanAction, Never> {
         switch event {
-        case .requestPIN(remainingAttempts: let remainingAttempts, pinCallback: let callback):
-            let callbackId = environment.uuidFactory()
-            pinCallback = PINCallback(id: callbackId, callback: callback)
+        case .requestPINAndCAN(let callback):
+            environment.logger.info("Request PIN and CAN")
+            pinCANCallback = PINCANCallback(id: environment.uuidFactory(), callback: callback)
             shared.isScanning = false
             shared.scanAvailable = true
-            
-            // This is our signal that the user canceled (for now)
-            guard let remainingAttempts = remainingAttempts else {
-                environment.logger.info("Identification cancelled")
+            if !shared.cardRecognized {
                 return .none
             }
-            environment.logger.info("PIN request: \(callbackId)")
-            return Effect(value: .wrongPIN(remainingAttempts: remainingAttempts))
-        case .requestPINAndCAN(let callback):
-            let callbackId = environment.uuidFactory()
-            let pinCANCallback = PINCANCallback(id: callbackId, callback: callback)
-            environment.logger.info("PIN and CAN request: \(callbackId)")
-            shared.isScanning = false
-            shared.scanAvailable = true
             return Effect(value: .requestPINAndCAN(request, pinCANCallback))
-                .delay(for: 0.65, scheduler: environment.mainQueue) // this delay is here to fix a bug where this particular screen was presented incorrectly
-                .eraseToEffect()
         case .authenticationStarted:
             environment.logger.info("Authentication started.")
             shared.isScanning = true
         case .cardInteractionComplete:
             environment.logger.info("Card interaction complete.")
         case .requestCardInsertion:
+            environment.logger.info("Request Card insertion.")
             shared.isScanning = true
+            shared.cardRecognized = false
         case .cardRecognized:
             environment.logger.info("Card recognized.")
             shared.isScanning = true
+            shared.cardRecognized = true
         case .authenticationSuccessful:
             environment.logger.info("Authentication succesful.")
             shared.isScanning = true
@@ -152,13 +136,13 @@ extension IdentificationScanState {
             environment.logger.info("Card removed.")
             authenticationSuccessful = false
         case .processCompletedSuccessfullyWithRedirect(let redirect):
-            environment.logger.info("Authentication successfully with redirect.")
+            environment.logger.info("Process Completed Successfully With Redirect")
             return Effect(value: .identifiedSuccessfully(redirectURL: redirect))
         case .processCompletedSuccessfullyWithoutRedirect:
             shared.scanAvailable = false
             environment.issueTracker.capture(error: RedactedEIDInteractionEventError(.processCompletedSuccessfullyWithoutRedirect))
             environment.logger.error("Received unexpected event.")
-            return Effect(value: .error(ScanErrorState(errorType: .unexpectedEvent(.processCompletedSuccessfullyWithoutRedirect), retry: shared.scanAvailable)))
+            return Effect(value: .error(ScanErrorState(errorType: .unexpectedEvent(event), retry: shared.scanAvailable)))
         default:
             environment.issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             environment.logger.error("Received unexpected event.")
@@ -168,12 +152,12 @@ extension IdentificationScanState {
     }
 }
 
-struct IdentificationScan: View {
+struct IdentificationCANScan: View {
     
-    var store: Store<IdentificationScanState, IdentificationScanAction>
+    var store: Store<IdentificationCANScanState, IdentificationCANScanAction>
     
     var body: some View {
-        SharedScan(store: store.scope(state: \.shared, action: IdentificationScanAction.shared),
+        SharedScan(store: store.scope(state: \.shared, action: IdentificationCANScanAction.shared),
                    instructionsTitle: L10n.Identification.ScanInstructions.title,
                    instructionsBody: L10n.Identification.ScanInstructions.body,
                    instructionsScanButtonTitle: L10n.Identification.Scan.scan,
@@ -192,23 +176,26 @@ struct IdentificationScan: View {
             }
         }
 #if PREVIEW
-        .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: IdentificationScanAction.runDebugSequence)
+        .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: IdentificationCANScanAction.runDebugSequence)
 #endif
         .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
     }
 }
 
-struct IdentificationScan_Previews: PreviewProvider {
+struct IdentificationCANScan_Previews: PreviewProvider {
     static var previews: some View {
-        IdentificationScan(store: Store(initialState: IdentificationScanState(request: .preview,
-                                                                              pin: "123456",
-                                                                              pinCallback: PINCallback(id: .zero, callback: { _ in })),
-                                        reducer: .empty,
-                                        environment: AppEnvironment.preview))
-        IdentificationScan(store: Store(initialState: IdentificationScanState(request: .preview,
-                                                                              pin: "123456",
-                                                                              pinCallback: PINCallback(id: .zero, callback: { _ in }), shared: SharedScanState(isScanning: true)),
-                                        reducer: .empty,
-                                        environment: AppEnvironment.preview))
+        IdentificationCANScan(store: Store(initialState: IdentificationCANScanState(request: .preview,
+                                                                                    pin: "123456",
+                                                                                    can: "123456",
+                                                                                    pinCANCallback: PINCANCallback(id: .zero, callback: { _, _ in })),
+                                           reducer: .empty,
+                                           environment: AppEnvironment.preview))
+        
+        IdentificationCANScan(store: Store(initialState: IdentificationCANScanState(request: .preview,
+                                                                                    pin: "123456",
+                                                                                    can: "123456",
+                                                                                    pinCANCallback: PINCANCallback(id: .zero, callback: { _, _ in }), shared: SharedScanState(isScanning: true)),
+                                           reducer: .empty,
+                                           environment: AppEnvironment.preview))
     }
 }

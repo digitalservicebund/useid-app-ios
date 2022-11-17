@@ -13,7 +13,7 @@ struct IdentificationIncorrectPersonalPINState: Equatable {
     @BindableState var alert: AlertState<IdentificationIncorrectPersonalPINAction>?
     
     var doneButtonEnabled: Bool {
-        return enteredPIN.count == 6
+        return enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
     }
     
     mutating func handlePINChange(_ enteredPIN: String) -> Effect<IdentificationIncorrectPersonalPINAction, Never> {
@@ -72,7 +72,7 @@ struct IdentificationIncorrectPersonalPIN: View {
                             Spacer()
                             WithViewStore(store) { viewStore in
                                 PINEntryView(pin: viewStore.binding(\.$enteredPIN),
-                                             maxDigits: 6,
+                                             maxDigits: Constants.PERSONAL_PIN_DIGIT_COUNT,
                                              groupEvery: 3,
                                              showPIN: false,
                                              label: L10n.Identification.PersonalPIN.textFieldLabel,

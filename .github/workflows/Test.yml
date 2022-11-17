@@ -165,7 +165,7 @@ jobs:
     needs: buildForTesting
     strategy:
       matrix:
-        device: ["iPhone 8", "iPhone 14"]
+        device: ["iPhone 14"]
     steps:
       - name: Setup shell
         run: |

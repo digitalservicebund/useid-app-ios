@@ -8,7 +8,7 @@ struct SetupPersonalPINConfirmState: Equatable {
     @BindableState var alert: AlertState<SetupPersonalPINConfirmAction>?
     
     var doneButtonEnabled: Bool {
-        enteredPIN2.count == 6
+        enteredPIN2.count == Constants.PERSONAL_PIN_DIGIT_COUNT
     }
 }
 
@@ -29,7 +29,7 @@ let setupPersonalPINConfirmReducer = Reducer<SetupPersonalPINConfirmState, Setup
                                  buttons: [.default(TextState(L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.retry), action: .send(.confirmMismatch))])
         return .none
     case .checkPINs:
-        guard state.enteredPIN2.count == 6 else { return .none }
+        guard state.enteredPIN2.count == Constants.PERSONAL_PIN_DIGIT_COUNT else { return .none }
         guard state.enteredPIN1 == state.enteredPIN2 else {
             return .concatenate(
                 .trackEvent(category: "firstTimeUser",

@@ -1,5 +1,6 @@
 import XCTest
 import ComposableArchitecture
+import TCACoordinators
 import Cuckoo
 import Combine
 import Analytics
@@ -279,10 +280,10 @@ class IdentificationCoordinatorTests: XCTestCase {
         store.send(.routeAction(1, action: .incorrectPersonalPIN(IdentificationIncorrectPersonalPINAction.end))) {
             guard case .incorrectPersonalPIN(var incorrectPersonalPINState) = $0.routes[1].screen else { return XCTFail("Unexpected state") }
             incorrectPersonalPINState.alert = AlertState(title: .init(verbatim: L10n.Identification.ConfirmEnd.title),
-                                  message: .init(verbatim: L10n.Identification.ConfirmEnd.message),
-                                  primaryButton: .destructive(.init(verbatim: L10n.Identification.ConfirmEnd.confirm),
-                                                              action: .send(.confirmEnd)),
-                                  secondaryButton: .cancel(.init(verbatim: L10n.Identification.ConfirmEnd.deny)))
+                                                         message: .init(verbatim: L10n.Identification.ConfirmEnd.message),
+                                                         primaryButton: .destructive(.init(verbatim: L10n.Identification.ConfirmEnd.confirm),
+                                                                                     action: .send(.confirmEnd)),
+                                                         secondaryButton: .cancel(.init(verbatim: L10n.Identification.ConfirmEnd.deny)))
             $0.routes[1].screen = .incorrectPersonalPIN(incorrectPersonalPINState)
         }
     }
@@ -331,4 +332,196 @@ class IdentificationCoordinatorTests: XCTestCase {
                                   secondaryButton: .cancel(.init(verbatim: L10n.Identification.ConfirmEnd.deny)))
         }
     }
+    
+    func testEnterIncorrectPINToPinForgotten() throws {
+        let pin = "123456"
+        let request = EIDAuthenticationRequest.preview
+        let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
+        let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
+        let store = TestStore(
+            initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
+                                                         pin: pin,
+                                                         states: [
+                                                            .root(.scan(.init(request: request,
+                                                                              pin: pin,
+                                                                              pinCallback: pinCallback))),
+                                                            .sheet(.incorrectPersonalPIN(IdentificationIncorrectPersonalPINState(enteredPIN: "112233", remainingAttempts: 2)))
+                                                         ]),
+            reducer: identificationCoordinatorReducer,
+            environment: environment)
+        
+        store.send(.routeAction(1, action: .incorrectPersonalPIN(.done(pin: "112233")))) {
+            guard case .scan(var scanState) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
+            $0.attempt += 1
+            $0.pin = "112233"
+            scanState.shared.attempt = $0.attempt
+            scanState.pin = $0.pin!
+            $0.routes = [.root(.scan(scanState))]
+        }
+        
+        store.send(.routeAction(0, action: .scan(.requestPINAndCAN(request, pinCANCallback)))) {
+            $0.routes.append(.push(.canPINForgotten(IdentificationCANPINForgottenState(request: request,
+                                                                                       pinCANCallback: pinCANCallback))))
+        }
+    }
+    
+    func testRequestPINAndCANFromImmediateThirdAttemptToCANIntro() throws {
+        let pin = "123456"
+        let request = EIDAuthenticationRequest.preview
+        let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
+        let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
+        let store = TestStore(
+            initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
+                                                         pin: pin,
+                                                         states: [
+                                                            .root(.personalPIN(.init(request: request, callback: pinCallback))),
+                                                            .push(.scan(.init(request: request, pin: pin, pinCallback: pinCallback)))
+                                                         ]),
+            reducer: identificationCoordinatorReducer,
+            environment: environment)
+        
+        store.send(.routeAction(1, action: .scan(.requestPINAndCAN(request, pinCANCallback))))
+        
+        let oldRoutes: [Route<IdentificationScreenState>] = [
+            .root(.personalPIN(.init(request: request, callback: pinCallback))),
+            .push(.scan(.init(request: request, pin: pin, pinCallback: pinCallback)))
+        ]
+        let newRoutes: [Route<IdentificationScreenState>] = [
+            .root(.personalPIN(.init(request: request, callback: pinCallback))),
+            .push(.scan(.init(request: request, pin: pin, pinCallback: pinCallback))),
+            .push(.canIntro(.init(request: request, pinCANCallback: pinCANCallback, shouldDismiss: true)))
+        ]
+        store.receive(.updateRoutes(oldRoutes))
+        store.receive(.updateRoutes(newRoutes)) {
+            $0.routes = newRoutes
+        }
+    }
+    
+    func testCANIntroFromImmediateThirdAttemptToCanScan() throws {
+        let pin = "123456"
+        let can = "123456"
+        let request = EIDAuthenticationRequest.preview
+        let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
+        let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
+        let store = TestStore(
+            initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
+                                                         pin: pin,
+                                                         states: [
+                                                            .root(.canIntro(IdentificationCANIntroState(request: request, pinCANCallback: pinCANCallback, shouldDismiss: true)))
+                                                         ]),
+            reducer: identificationCoordinatorReducer,
+            environment: environment)
+        
+        store.send(.routeAction(0, action: .canIntro(.showInput(request, pinCANCallback, true)))) {
+            $0.routes.append(.push(.canInput(IdentificationCANInputState(request: request, pinCANCallback: pinCANCallback, pushesToPINEntry: false))))
+        }
+        
+        store.send(.routeAction(1, action: .canInput(.done(can: can, request: request, pinCANCallback: pinCANCallback, pushesToPINEntry: false)))) {
+            $0.can = can
+            $0.routes.append(.push(
+                .canScan(IdentificationCANScanState(request: request,
+                                              pin: pin,
+                                              can: can,
+                                              pinCANCallback: pinCANCallback,
+                                              shared: SharedScanState(showInstructions: false)))))
+        }
+        
+        store.send(.routeAction(2, action: .canScan(.requestPINAndCAN(request, pinCANCallback)))) {
+            $0.routes.append(.sheet(.canIncorrectInput(.init(request: request, pinCANCallback: pinCANCallback))))
+        }
+        
+        store.send(.routeAction(3, action: .canIncorrectInput(.end(request, pinCANCallback)))) {
+            $0.routes = [.root(.canIntro(IdentificationCANIntroState(request: request,
+                                                                     pinCANCallback: pinCANCallback,
+                                                                     shouldDismiss: true)))]
+        }
+    }
+    
+    func testCanScanWrongCANToScan() throws {
+        let pin = "123456"
+        let can = "123456"
+        let enteredCan = "654321"
+        let request = EIDAuthenticationRequest.preview
+        let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
+        let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
+        let store = TestStore(
+            initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
+                                                         pin: pin,
+                                                         can: can,
+                                                         states: [
+                                                            .root(.canScan(.init(request: request,
+                                                                                 pin: pin,
+                                                                                 can: can,
+                                                                                 pinCANCallback: pinCANCallback)))
+                                                         ]),
+            reducer: identificationCoordinatorReducer,
+            environment: environment)
+        
+        store.send(.routeAction(0, action: .canScan(.requestPINAndCAN(request, pinCANCallback)))) {
+            $0.routes.append(.sheet(.canIncorrectInput(.init(request: request, pinCANCallback: pinCANCallback))))
+        }
+        
+        store.send(.routeAction(1, action: .canIncorrectInput(.done(can: enteredCan)))) {
+            guard case .canScan(var scanState) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
+            $0.attempt += 1
+            $0.can = enteredCan
+            scanState.shared.attempt = $0.attempt
+            scanState.can = $0.can!
+            $0.routes = [.root(.canScan(scanState))]
+        }
+    }
+    
+    func testCanScanBlocksCard() throws {
+        let pin = "123456"
+        let can = "123456"
+        let enteredCan = "654321"
+        let cardBlockedError = ScanErrorState(errorType: .cardBlocked, retry: false)
+        let request = EIDAuthenticationRequest.preview
+        let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
+        let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
+        let store = TestStore(
+            initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
+                                                         pin: pin,
+                                                         can: can,
+                                                         states: [
+                                                            .root(.canScan(.init(request: request,
+                                                                                 pin: pin,
+                                                                                 can: can,
+                                                                                 pinCANCallback: pinCANCallback)))
+                                                         ]),
+            reducer: identificationCoordinatorReducer,
+            environment: environment)
+        
+        store.send(.routeAction(0, action: .canScan(.error(cardBlockedError)))) {
+            $0.routes.append(.sheet(.error(cardBlockedError)))
+        }
+    }
+    
+    func testScanFromImmediateThirdAttemptPopsToCanIntro() throws {
+        let pin = "123456"
+        let can = "123456"
+        let request = EIDAuthenticationRequest.preview
+        let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
+        let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
+        let store = TestStore(
+            initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
+                                                         pin: pin,
+                                                         can: can,
+                                                         states: [
+                                                            .root(.canIntro(IdentificationCANIntroState(request: request, pinCANCallback: pinCANCallback, shouldDismiss: true))),
+                                                            .push(.canInput(IdentificationCANInputState(request: request, pinCANCallback: pinCANCallback, pushesToPINEntry: false))),
+                                                            .push(.canScan(IdentificationCANScanState(request: request, pin: pin, can: can, pinCANCallback: pinCANCallback, shared: SharedScanState(showInstructions: false)))),
+                                                            .sheet(.canIncorrectInput(IdentificationCANIncorrectInputState(request: request, pinCANCallback: pinCANCallback)))
+                                                         ]),
+            reducer: identificationCoordinatorReducer,
+            environment: environment)
+
+        store.send(.routeAction(3, action: .canIncorrectInput(.end(request, pinCANCallback)))) {
+            $0.routes = [.root(.canIntro(IdentificationCANIntroState(request: request,
+                                                                     pinCANCallback: pinCANCallback,
+                                                                     shouldDismiss: true)))]
+        }
+    }
 }
+
+

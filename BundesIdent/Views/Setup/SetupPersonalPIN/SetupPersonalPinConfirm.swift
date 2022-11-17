@@ -15,7 +15,7 @@ struct SetupPersonalPINConfirm: View {
                         Spacer()
                         VStack {
                             PINEntryView(pin: viewStore.binding(\.$enteredPIN2),
-                                         maxDigits: 6,
+                                         maxDigits: Constants.PERSONAL_PIN_DIGIT_COUNT,
                                          groupEvery: 3,
                                          showPIN: false,
                                          label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.second,

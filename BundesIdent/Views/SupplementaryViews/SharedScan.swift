@@ -13,6 +13,7 @@ struct SharedScanState: Equatable {
     var showProgressCaption: ProgressCaption?
     var showInstructions: Bool = true
     var attempt = 0
+    var cardRecognized: Bool = false
 }
 
 enum SharedScanAction: Equatable {
@@ -76,6 +77,7 @@ struct SharedScan: View {
                         if viewStore.isScanning {
                             VStack {
                                 ProgressView()
+                                    .accessibilityIdentifier("ScanProgressView")
                                     .progressViewStyle(CircularProgressViewStyle(tint: Color.blue900))
                                     .scaleEffect(3)
                                     .frame(maxWidth: .infinity)

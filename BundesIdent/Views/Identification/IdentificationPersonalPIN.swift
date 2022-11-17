@@ -9,11 +9,7 @@ struct IdentificationPersonalPINState: Equatable {
     @BindableState var enteredPIN: String = ""
     
     var doneButtonEnabled: Bool {
-        return enteredPIN.count == 6
-    }
-    
-    mutating func handlePINChange(_ enteredPIN: String) -> Effect<IdentificationPersonalPINAction, Never> {
-        return .none
+        return enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
     }
 }
 
@@ -23,15 +19,9 @@ enum IdentificationPersonalPINAction: BindableAction, Equatable {
     case binding(BindingAction<IdentificationPersonalPINState>)
 }
 
-let identificationPersonalPINReducer = Reducer<IdentificationPersonalPINState, IdentificationPersonalPINAction, AppEnvironment> { state, action, _ in
+let identificationPersonalPINReducer = Reducer<IdentificationPersonalPINState, IdentificationPersonalPINAction, AppEnvironment> { _, action, _ in
     switch action {
-    case .onAppear:
-        return .none
-    case .binding(\.$enteredPIN):
-        return state.handlePINChange(state.enteredPIN)
-    case .binding:
-        return .none
-    case .done:
+    default:
         return .none
     }
 }.binding()
@@ -52,7 +42,7 @@ struct IdentificationPersonalPIN: View {
                     VStack {
                         Spacer()
                         PINEntryView(pin: viewStore.binding(\.$enteredPIN),
-                                     maxDigits: 6,
+                                     maxDigits: Constants.PERSONAL_PIN_DIGIT_COUNT,
                                      groupEvery: 3,
                                      showPIN: false,
                                      label: L10n.Identification.PersonalPIN.textFieldLabel,

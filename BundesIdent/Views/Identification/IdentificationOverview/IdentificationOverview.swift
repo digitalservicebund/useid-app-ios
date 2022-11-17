@@ -45,6 +45,7 @@ enum IdentificationOverviewState: Equatable, IDInteractionHandler {
 }
 
 typealias PINCallback = IdentifiableCallback<String>
+typealias PINCANCallback = IdentifiableCallback<(String, String)>
 
 enum IdentificationOverviewAction: Equatable {
     case loading(IdentificationOverviewLoadingAction)

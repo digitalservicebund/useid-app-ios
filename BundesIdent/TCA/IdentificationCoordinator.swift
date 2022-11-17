@@ -17,9 +17,17 @@ enum SwipeToDismissState {
     case allowAfterConfirmation
 }
 
+enum IdentificationCoordinatorError: CustomNSError {
+    case pinNilWhenTriedScan
+    case canNilWhenTriedScan
+    case canIntroStateNotInRoutes
+    case noScreenToHandleEIDInteractionEvents
+}
+
 struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
     var tokenURL: URL
     var pin: String?
+    var can: String?
     var attempt: Int = 0
     var authenticationSuccessful = false
     
@@ -45,12 +53,26 @@ struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
 #endif
                         return .overview(state)
                     case .scan(var state):
-                        state.pin = pin!
+                        if let pin {
+                            state.pin = pin
+                        }
+                        
                         state.shared.attempt = attempt
 #if PREVIEW
                         state.availableDebugActions = availableDebugActions
 #endif
                         return .scan(state)
+                    case .canScan(var state):
+                        if let can, let pin {
+                            state.can = can
+                            state.pin = pin
+                        }
+                        
+                        state.shared.attempt = attempt
+#if PREVIEW
+                        state.availableDebugActions = availableDebugActions
+#endif
+                        return .canScan(state)
                     default:
                         return screenState
                     }
@@ -81,10 +103,10 @@ struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
 }
 
 extension IdentificationCoordinatorState: AnalyticsView {
-     var route: [String] {
-         states.last?.screen.route ?? []
-     }
- }
+    var route: [String] {
+        states.last?.screen.route ?? []
+    }
+}
 
 extension IdentificationCoordinatorState {
     init(tokenURL: URL, canGoBackToSetupIntro: Bool = false) {
@@ -156,7 +178,9 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 return .none
             case .idInteractionEvent(let result):
                 guard let localAction = state.transformToLocalInteractionHandler(event: result) else {
-                    fatalError("TODO: This should be handled be sent to error tracking and silently ignored.")
+                    environment.issueTracker.capture(error: IdentificationCoordinatorError.noScreenToHandleEIDInteractionEvents)
+                    environment.logger.error("No screen found to handle EIDInteractionEvents")
+                    return .none
                 }
                 return Effect(value: localAction)
             case .routeAction(_, action: .incorrectPersonalPIN(.done(let pin))):
@@ -185,7 +209,8 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                     .cancellable(id: CancelId.self, cancelInFlight: true)
 #if PREVIEW
             case .routeAction(_, action: .overview(.loading(.runDebugSequence(let sequence)))),
-                    .routeAction(_, action: .scan(.runDebugSequence(let sequence))):
+                    .routeAction(_, action: .scan(.runDebugSequence(let sequence))),
+                    .routeAction(_, action: .canScan(.runDebugSequence(let sequence))):
                 return Effect(value: .runDebugSequence(sequence))
 #endif
             case .routeAction(_, action: .overview(.loaded(.callbackReceived(let request, let callback)))):
@@ -200,10 +225,92 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                                                   shared: SharedScanState(showInstructions: !environment.storageManager.identifiedOnce)))
                 )
                 return .none
-            case .routeAction(_, action: .scan(.error(let errorState))):
+            case .routeAction(_, action: .scan(.error(let errorState))),
+                    .routeAction(_, action: .canScan(.error(let errorState))):
                 state.routes.presentSheet(.error(errorState))
                 return .none
-            case .routeAction(_, action: .scan(.shared(.showHelp))):
+            case .routeAction(_, action: .scan(.requestPINAndCAN(let request, let pinCANCallback))):
+                if state.attempt > 0 {
+                    state.routes.push(.canPINForgotten(IdentificationCANPINForgottenState(request: request, pinCANCallback: pinCANCallback)))
+                } else {
+                    return Effect.routeWithDelaysIfUnsupported(state.routes) {
+                        $0.push(.canIntro(.init(request: request, pinCANCallback: pinCANCallback, shouldDismiss: true)))
+                    }
+                }
+                return .none
+            case .routeAction(_, action: .canScan(.requestPINAndCAN(let request, let pinCANCallback))):
+                state.routes.presentSheet(.canIncorrectInput(.init(request: request, pinCANCallback: pinCANCallback)))
+                return .none
+            case .routeAction(_, action: .canPINForgotten(.end)):
+                return Effect(value: .swipeToDismiss)
+            case .routeAction(_, action: .canPINForgotten(.orderNewPIN)):
+                state.routes.push(.canOrderNewPIN(.init()))
+                return .none
+            case .routeAction(_, action: .canPINForgotten(.showCANIntro(let request, let pinCallback))):
+                state.routes.push(.canIntro(IdentificationCANIntroState(request: request, pinCANCallback: pinCallback, shouldDismiss: false)))
+                return .none
+            case .routeAction(_, action: .canIntro(.showInput(let request, let pinCallback, let shouldDismiss))):
+                state.routes.push(.canInput(IdentificationCANInputState(request: request, pinCANCallback: pinCallback, pushesToPINEntry: !shouldDismiss)))
+                return .none
+            case .routeAction(_, action: .canIntro(.end)):
+                return Effect(value: .swipeToDismiss)
+            case .routeAction(_, action: .canInput(.done(can: let can, request: let request, pinCANCallback: let pinCANCallback, pushesToPINEntry: let pushesToPINEntry))):
+                state.can = can
+                if pushesToPINEntry {
+                    state.routes.push(.canPersonalPINInput(IdentificationCANPersonalPINInputState(request: request, pinCANCallback: pinCANCallback)))
+                } else {
+                    guard let pin = state.pin else {
+                        environment.issueTracker.capture(error: IdentificationCoordinatorError.pinNilWhenTriedScan)
+                        environment.logger.error("PIN nil when tried to scan")
+                        return Effect(value: .dismiss)
+                    }
+                    state.routes.push(
+                        .canScan(IdentificationCANScanState(request: request,
+                                                            pin: pin,
+                                                            can: can,
+                                                            pinCANCallback: pinCANCallback,
+                                                            shared: SharedScanState(showInstructions: false)))
+                    )
+                }
+                
+                return .none
+            case .routeAction(_, action: .canPersonalPINInput(.done(pin: let pin, request: let request, pinCANCallback: let pinCANCallback))):
+                state.pin = pin
+                guard let can = state.can else {
+                    environment.issueTracker.capture(error: IdentificationCoordinatorError.canNilWhenTriedScan)
+                    environment.logger.error("CAN nil when tried to scan")
+                    return Effect(value: .dismiss)
+                }
+                state.routes.push(
+                    .canScan(IdentificationCANScanState(request: request,
+                                                        pin: pin,
+                                                        can: can,
+                                                        pinCANCallback: pinCANCallback,
+                                                        shared: SharedScanState(showInstructions: false)))
+                )
+                
+                return .none
+            case .routeAction(_, action: .canIncorrectInput(.end(let request, let pinCANCallback))):
+                state.routes.dismiss()
+                guard let index = state.routes.lastIndex(where: { state in
+                    if case .canIntro = state.screen {
+                        return true
+                    } else {
+                        return false
+                    }
+                }) else {
+                    environment.issueTracker.capture(error: IdentificationCoordinatorError.canIntroStateNotInRoutes)
+                    environment.logger.error("CanIntroState not found in routes")
+                    return Effect(value: .dismiss)
+                }
+                state.routes.popTo(index: index)
+                return .none
+            case .routeAction(_, action: .canIncorrectInput(.done(can: let can))):
+                state.routes.dismiss()
+                state.can = can
+                state.attempt += 1
+                return .none
+            case .routeAction(_, action: .scan(.shared(.showHelp))), .routeAction(_, action: .canScan(.shared(.showHelp))):
                 state.routes.presentSheet(.error(ScanErrorState(errorType: .help, retry: true)))
                 return .none
             case .routeAction(_, action: .error(.retry)):
@@ -272,6 +379,31 @@ struct IdentificationCoordinatorView: View {
                         CaseLet(state: /IdentificationScreenState.error,
                                 action: IdentificationScreenAction.error,
                                 then: ScanError.init)
+                        CaseLet(state: /IdentificationScreenState.canPINForgotten,
+                                action: IdentificationScreenAction.canPINForgotten,
+                                then: IdentificationCANPINForgotten.init)
+                        CaseLet(state: /IdentificationScreenState.canOrderNewPIN,
+                                action: IdentificationScreenAction.orderNewPIN,
+                                then: IdentificationCANOrderNewPIN.init)
+                        CaseLet(state: /IdentificationScreenState.canIntro,
+                                action: IdentificationScreenAction.canIntro,
+                                then: IdentificationCANIntro.init)
+                        CaseLet(state: /IdentificationScreenState.canInput,
+                                action: IdentificationScreenAction.canInput,
+                                then: IdentificationCANInput.init)
+                        Default {
+                            SwitchStore(screen) {
+                                CaseLet(state: /IdentificationScreenState.canPersonalPINInput,
+                                        action: IdentificationScreenAction.canPersonalPINInput,
+                                        then: IdentificationCANPersonalPINInput.init)
+                                CaseLet(state: /IdentificationScreenState.canIncorrectInput,
+                                        action: IdentificationScreenAction.canIncorrectInput,
+                                        then: IdentificationCANIncorrectInput.init)
+                                CaseLet(state: /IdentificationScreenState.canScan,
+                                        action: IdentificationScreenAction.canScan,
+                                        then: IdentificationCANScan.init)
+                            }
+                        }
                     }
                 }
             }

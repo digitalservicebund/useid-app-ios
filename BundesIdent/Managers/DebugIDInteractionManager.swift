@@ -23,10 +23,16 @@ struct Card {
     var remainingAttempts: Int = 3
 }
 
+enum CancelAction {
+    case pin
+    case can
+}
+
 enum IdentifyDebugSequence: Identifiable, Equatable {
-    case cancel
+    case cancelPINScan
+    case cancelCANScan
     case requestAuthorization
-    case runPINError(remainingAttempts: Int)
+    case runPINError(remainingAttempts: Int, cancelAction: CancelAction)
     case runNFCError
     case runCardSuspended
     case runCardDeactivated
@@ -34,12 +40,14 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
     case loadError
     case identifySuccessfully
     case missingRedirect
+    case runCANError
     
     var id: String {
         switch self {
-        case .cancel: return "cancel"
+        case .cancelPINScan: return "cancelPINScan"
+        case .cancelCANScan: return "cancelCANScan"
         case .requestAuthorization: return "requestAuthorization"
-        case .runPINError(let remainingAttempts): return "runPINError (\(remainingAttempts))"
+        case .runPINError(let remainingAttempts, _): return "runPINError (\(remainingAttempts))"
         case .runNFCError: return "runNFCError"
         case .runCardSuspended: return "runCardSuspended"
         case .runCardDeactivated: return "runCardDeactivated"
@@ -47,6 +55,7 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
         case .loadError: return "loadError"
         case .identifySuccessfully: return "identifySuccessfully"
         case .missingRedirect: return "missingRedirect"
+        case .runCANError: return "runCANError"
         }
     }
     
@@ -62,10 +71,19 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
                     subject.send(.requestCardInsertion({ _ in }))
                 }))
             }))
-            return [.identifySuccessfully, .missingRedirect, .runPINError(remainingAttempts: card.remainingAttempts), .runCardBlocked, .runCardSuspended, .runCardDeactivated, .cancel]
-        case .cancel:
-            subject.send(.requestPIN(remainingAttempts: nil, pinCallback: { _ in }))
-            return [.identifySuccessfully, .runPINError(remainingAttempts: card.remainingAttempts), .runCardBlocked, .runCardSuspended, .runCardDeactivated, .cancel]
+            return [.identifySuccessfully, .missingRedirect, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: .pin), .runCardBlocked, .runCardSuspended, .runCardDeactivated, .cancelPINScan]
+        case .cancelPINScan:
+            subject.send(.cardInteractionComplete)
+            subject.send(.requestPIN(remainingAttempts: nil, pinCallback: { _ in
+                subject.send(.requestCardInsertion({ _ in }))
+            }))
+            return [.identifySuccessfully, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: .pin), .runCardBlocked, .runCardSuspended, .runCardDeactivated, .cancelPINScan]
+        case .cancelCANScan:
+            subject.send(.cardInteractionComplete)
+            subject.send(.requestPINAndCAN({ _, _ in
+                subject.send(.requestCardInsertion({ _ in }))
+            }))
+            return [.identifySuccessfully, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: .can), .runCardDeactivated, .runCANError, .cancelCANScan]
         case .identifySuccessfully:
             card.remainingAttempts = 3
             subject.send(.cardRecognized)
@@ -82,9 +100,8 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             subject.send(.processCompletedSuccessfullyWithoutRedirect)
             subject.send(completion: .finished)
             return []
-        case .runPINError(remainingAttempts: let remainingAttempts):
+        case .runPINError(remainingAttempts: let remainingAttempts, cancelAction: let cancelAction):
             let callback = {
-                subject.send(.cardRemoved)
                 subject.send(.requestCardInsertion({ _ in }))
             }
             
@@ -92,22 +109,34 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             
             subject.send(.cardRecognized)
             subject.send(.cardInteractionComplete)
+            subject.send(.cardRemoved)
             
             if card.remainingAttempts >= 2 {
                 subject.send(.requestPIN(remainingAttempts: card.remainingAttempts, pinCallback: { _ in callback() }))
             } else if card.remainingAttempts == 1 {
-                subject.send(.requestPINAndCAN({ _, _ in }))
+                subject.send(.requestPINAndCAN({ _, _ in callback() }))
             } else {
                 subject.send(completion: .failure(.cardBlocked))
             }
             
-            return [.identifySuccessfully, .runPINError(remainingAttempts: card.remainingAttempts), .cancel]
+            let cancelDebugSequence: IdentifyDebugSequence
+            switch cancelAction {
+            case .pin: cancelDebugSequence = .cancelPINScan
+            case .can: cancelDebugSequence = .cancelCANScan
+            }
+            
+            return [.identifySuccessfully, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: cancelAction), .runCANError, cancelDebugSequence]
         case .runNFCError:
             subject.send(completion: .failure(.processFailed(resultCode: .INTERNAL_ERROR, redirectURL: nil, resultMinor: nil)))
-            return [.cancel]
+            return [.cancelCANScan, .cancelPINScan]
         case .runCardSuspended:
-            subject.send(.requestPINAndCAN({ _, _ in }))
-            return [.cancel]
+            let callback = {
+                subject.send(.cardRemoved)
+                subject.send(.requestCardInsertion({ _ in }))
+            }
+            card.remainingAttempts = 1
+            subject.send(.requestPINAndCAN({ _, _ in callback() }))
+            return [.cancelCANScan, .identifySuccessfully, .runCANError, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: .can)]
         case .runCardDeactivated:
             subject.send(.cardRecognized)
             subject.send(.cardInteractionComplete)
@@ -118,6 +147,14 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             subject.send(.cardInteractionComplete)
             subject.send(completion: .failure(.cardBlocked))
             return []
+        case .runCANError:
+            subject.send(.cardRecognized)
+            subject.send(.cardInteractionComplete)
+            subject.send(.requestPINAndCAN { _, _ in
+                subject.send(.requestCardInsertion { _ in })
+            })
+            subject.send(.cardRemoved)
+            return [.cancelCANScan, .identifySuccessfully, .runCANError, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: .can)]
         }
     }
 }
