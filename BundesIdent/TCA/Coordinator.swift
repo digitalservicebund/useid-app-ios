@@ -4,174 +4,192 @@ import SwiftUI
 import Analytics
 import Sentry
 
-struct CoordinatorState: Equatable, IndexedRouterState {
-    var routes: [Route<ScreenState>]
+struct Coordinator: ReducerProtocol {
+    @Dependency(\.idInteractionManager) var idInteractionManager
+    @Dependency(\.analytics) var analytics
+    @Dependency(\.issueTracker) var issueTracker
+    @Dependency(\.mainQueue) var mainQueue
+    @Dependency(\.logger) var logger
+    @Dependency(\.storageManager) var storageManager
+    struct State: Equatable, IndexedRouterState {
+        var routes: [Route<Screen.State>]
+    }
     
-    mutating func handleURL(_ url: URL, environment: AppEnvironment) -> Effect<CoordinatorAction, Never> {
-        let screen: ScreenState
-        if environment.storageManager.setupCompleted {
-            screen = .identificationCoordinator(IdentificationCoordinatorState(tokenURL: url, canGoBackToSetupIntro: false))
+    func handleAppStart(state: inout State) -> Effect<Coordinator.Action, Never> {
+        if storageManager.setupCompleted {
+            return .none
         } else {
-            screen = .setupCoordinator(SetupCoordinatorState(tokenURL: url))
+            state.routes.presentSheet(.setupCoordinator(SetupCoordinator.State()))
+            return .none
+        }
+    }
+    
+    func dismiss(state: inout State, show screen: State.Screen) -> Effect<Coordinator.Action, Never> {
+        return Effect.routeWithDelaysIfUnsupported(state.routes) {
+            $0.dismissAll()
+            $0.presentSheet(screen)
+        }
+        .delay(for: 0.65, scheduler: mainQueue)
+        .eraseToEffect()
+    }
+    
+    func handleURL(state: inout State, _ url: URL) -> Effect<Coordinator.Action, Never> {
+        let screen: Screen.State
+        if storageManager.setupCompleted {
+            screen = .identificationCoordinator(IdentificationCoordinator.State(tokenURL: url, canGoBackToSetupIntro: false))
+        } else {
+            screen = .setupCoordinator(SetupCoordinator.State(tokenURL: url))
         }
         
         // In case setup or ident is shown, dismiss any shown sheets that screens
         // Afterwards dismiss setup or ident and show new flow
-        if case .sheet(.identificationCoordinator, embedInNavigationView: _, onDismiss: _) = routes.last {
+        if case .sheet(.identificationCoordinator, embedInNavigationView: _, onDismiss: _) = state.routes.last {
             return .concatenate(
-                Effect(value: .routeAction(routes.count - 1, action: .identificationCoordinator(.dismiss))),
-                dismiss(show: screen, environment: environment)
+                Effect(value: .routeAction(state.routes.count - 1, action: .identificationCoordinator(.dismiss))),
+                dismiss(state: &state, show: screen)
             )
-        } else if case .sheet(.setupCoordinator, embedInNavigationView: _, onDismiss: _) = routes.last {
+        } else if case .sheet(.setupCoordinator, embedInNavigationView: _, onDismiss: _) = state.routes.last {
             return .concatenate(
-                Effect(value: .routeAction(routes.count - 1, action: .setupCoordinator(.dismiss))),
-                dismiss(show: screen, environment: environment)
+                Effect(value: .routeAction(state.routes.count - 1, action: .setupCoordinator(.dismiss))),
+                dismiss(state: &state, show: screen)
             )
         } else {
-            routes.presentSheet(screen)
+            state.routes.presentSheet(screen)
             return .none
         }
     }
     
-    mutating func handleAppStart(environment: AppEnvironment) -> Effect<CoordinatorAction, Never> {
-        if environment.storageManager.setupCompleted {
-            return .none
-        } else {
-            routes.presentSheet(.setupCoordinator(SetupCoordinatorState()))
+    enum Action: Equatable, IndexedRouterAction {
+        case openURL(URL)
+        case onAppear
+        case didEnterBackground
+        case routeAction(Int, action: Screen.Action)
+        case updateRoutes([Route<Screen.State>])
+    }
+    
+    var body: some ReducerProtocol<State, Action> {
+        Reduce(self.token)
+        Reduce { state, action in
+            guard case let .routeAction(_, action: routeAction) = action else { return .none }
+            switch routeAction {
+            case .home(.triggerSetup):
+                state.routes.presentSheet(.setupCoordinator(SetupCoordinator.State(tokenURL: nil)))
+                return .trackEvent(category: "firstTimeUser",
+                                   action: "buttonPressed",
+                                   name: "start",
+                                   analytics: analytics)
+            case .identificationCoordinator(.back(let tokenURL)):
+                return Effect.routeWithDelaysIfUnsupported(state.routes) {
+                    $0.dismiss()
+                    $0.presentSheet(.setupCoordinator(SetupCoordinator.State(tokenURL: tokenURL)))
+                }
+            case .setupCoordinator(.routeAction(_, action: .intro(.chooseSkipSetup(let tokenURL)))):
+                if let tokenURL = tokenURL {
+                    return Effect.routeWithDelaysIfUnsupported(state.routes) {
+                        $0.dismiss()
+                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(tokenURL: tokenURL,
+                                                                                                   canGoBackToSetupIntro: true)))
+                    }
+                } else {
+                    state.routes.dismiss()
+                    return .none
+                }
+            case .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification(let tokenURL)))):
+                return Effect.routeWithDelaysIfUnsupported(state.routes) {
+                    $0.dismiss()
+                    $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(tokenURL: tokenURL,
+                                                                                               canGoBackToSetupIntro: false)))
+                }
+#if PREVIEW
+            case .home(.triggerIdentification(let tokenURL)):
+                return Effect(value: .openURL(tokenURL))
+#endif
+            case .identificationCoordinator(.dismiss),
+                    .identificationCoordinator(.afterConfirmEnd),
+                    .identificationCoordinator(.routeAction(_, action: .scan(.dismiss))),
+                    .identificationCoordinator(.routeAction(_, action: .canScan(.dismiss))),
+                    .setupCoordinator(.confirmEnd),
+                    .setupCoordinator(.routeAction(_, action: .done(.done))),
+                    .setupCoordinator(.afterConfirmEnd):
+                state.routes.dismiss()
+                return .none
+            default:
+                return .none
+            }
+        }.forEachRoute {
+            Screen()
+        }
+#if DEBUG
+        ._printChanges(.log({ logger.debug("\($0)") }))
+#endif
+        Reduce(self.tracking)
+    }
+    
+    func tracking(state: inout State, action: Action) -> EffectTask<Action> {
+        switch action {
+        case .routeAction, .onAppear:
+            let routes = state.routes
+            
+            return .fireAndForget {
+                analytics.track(view: routes)
+                issueTracker.addViewBreadcrumb(view: routes)
+            }
+        case .didEnterBackground:
+            return .fireAndForget {
+                analytics.dispatch()
+            }
+        default:
             return .none
         }
     }
     
-    private func dismiss(show screen: Screen, environment: AppEnvironment) -> Effect<CoordinatorAction, Never> {
-        return Effect.routeWithDelaysIfUnsupported(routes) {
-            $0.dismissAll()
-            $0.presentSheet(screen)
+    func token(state: inout State, action: Action) -> EffectTask<Action> {
+        switch action {
+        case .openURL(let url):
+            return handleURL(state: &state, url)
+        case .onAppear:
+            return handleAppStart(state: &state)
+        default:
+            return .none
         }
-        .delay(for: 0.65, scheduler: environment.mainQueue)
-        .eraseToEffect()
     }
 }
 
-extension Array: AnalyticsView where Element == Route<ScreenState> {
+private extension _ReducerPrinter {
+    static func log(_ printLog: @escaping (String) -> Void) -> Self {
+        Self { receivedAction, oldState, newState in
+            @Dependency(\.context) var context
+            guard context != .preview else { return }
+            var target = ""
+            target.write("received action:\n")
+            CustomDump.customDump(receivedAction, to: &target, indent: 2)
+            target.write("\n")
+            target.write(diff(oldState, newState).map { "\($0)\n" } ?? "  (No state changes)\n")
+            printLog(target)
+        }
+    }
+}
+
+extension Array: AnalyticsView where Element == Route<Screen.State> {
     public var route: [String] {
         flatMap(\.screen.route)
     }
 }
 
-enum CoordinatorAction: Equatable, IndexedRouterAction {
-    case openURL(URL)
-    case onAppear
-    case didEnterBackground
-    case routeAction(Int, action: ScreenAction)
-    case updateRoutes([Route<ScreenState>])
-}
-
-private let trackingReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironment> = Reducer { state, action, environment in
-    switch action {
-    case .routeAction, .onAppear:
-        let routes = state.routes
-        
-        return .fireAndForget {
-            environment.analytics.track(view: routes)
-            environment.issueTracker.addViewBreadcrumb(view: routes)
-        }
-    case .didEnterBackground:
-        return .fireAndForget {
-            environment.analytics.dispatch()
-        }
-    default:
-        return .none
-    }
-}
-
-private let tokenReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironment> = Reducer { state, action, environment in
-    switch action {
-    case .openURL(let url):
-        return state.handleURL(url, environment: environment)
-    case .onAppear:
-        return state.handleAppStart(environment: environment)
-    default:
-        return .none
-    }
-}
-
-let coordinatorReducer: Reducer<CoordinatorState, CoordinatorAction, AppEnvironment> = .combine(
-    tokenReducer,
-    screenReducer
-        .forEachIndexedRoute(environment: { $0 })
-        .withRouteReducer(
-            Reducer { state, action, environment in
-                guard case let .routeAction(_, action: routeAction) = action else { return .none }
-                
-                switch routeAction {
-                case .home(.triggerSetup):
-                    state.routes.presentSheet(.setupCoordinator(SetupCoordinatorState(tokenURL: nil)))
-                    return .trackEvent(category: "firstTimeUser",
-                                       action: "buttonPressed",
-                                       name: "start",
-                                       analytics: environment.analytics)
-                case .identificationCoordinator(.back(let tokenURL)):
-                    return Effect.routeWithDelaysIfUnsupported(state.routes) {
-                        $0.dismiss()
-                        $0.presentSheet(.setupCoordinator(SetupCoordinatorState(tokenURL: tokenURL)))
-                    }
-                case .setupCoordinator(.routeAction(_, action: .intro(.chooseSkipSetup(let tokenURL)))):
-                    if let tokenURL = tokenURL {
-                        return Effect.routeWithDelaysIfUnsupported(state.routes) {
-                            $0.dismiss()
-                            $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL,
-                                                                                                      canGoBackToSetupIntro: true)))
-                        }
-                    } else {
-                        state.routes.dismiss()
-                        return .none
-                    }
-                case .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification(let tokenURL)))):
-                    return Effect.routeWithDelaysIfUnsupported(state.routes) {
-                        $0.dismiss()
-                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinatorState(tokenURL: tokenURL,
-                                                                                                  canGoBackToSetupIntro: false)))
-                    }
-#if PREVIEW
-                case .home(.triggerIdentification(let tokenURL)):
-                    return Effect(value: .openURL(tokenURL))
-#endif
-                case .identificationCoordinator(.dismiss),
-                        .identificationCoordinator(.afterConfirmEnd),
-                        .identificationCoordinator(.routeAction(_, action: .scan(.dismiss))),
-                        .identificationCoordinator(.routeAction(_, action: .canScan(.dismiss))),
-                        .setupCoordinator(.confirmEnd),
-                        .setupCoordinator(.routeAction(_, action: .done(.done))),
-                        .setupCoordinator(.afterConfirmEnd):
-                    state.routes.dismiss()
-                    return .none
-                default:
-                    return .none
-                }
-            }
-        ),
-    trackingReducer
-)
-#if DEBUG
-.debug { environment in
-    DebugEnvironment(printer: { environment.logger.debug("\($0)") })
-}
-#endif
-
 struct CoordinatorView: View {
-    let store: Store<CoordinatorState, CoordinatorAction>
+    let store: Store<Coordinator.State, Coordinator.Action>
     
     var body: some View {
         TCARouter(store) { screen in
             SwitchStore(screen) {
-                CaseLet(state: /ScreenState.home,
-                        action: ScreenAction.home,
+                CaseLet(state: /Screen.State.home,
+                        action: Screen.Action.home,
                         then: HomeView.init)
-                CaseLet(state: /ScreenState.setupCoordinator,
-                        action: ScreenAction.setupCoordinator,
+                CaseLet(state: /Screen.State.setupCoordinator,
+                        action: Screen.Action.setupCoordinator,
                         then: SetupCoordinatorView.init)
-                CaseLet(state: /ScreenState.identificationCoordinator,
-                        action: ScreenAction.identificationCoordinator,
+                CaseLet(state: /Screen.State.identificationCoordinator,
+                        action: Screen.Action.identificationCoordinator,
                         then: IdentificationCoordinatorView.init)
             }
         }

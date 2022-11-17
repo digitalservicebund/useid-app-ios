@@ -2,8 +2,37 @@ import SwiftUI
 import Combine
 import ComposableArchitecture
 
-struct SetupPersonalPINInput: View {
-    var store: Store<SetupPersonalPINInputState, SetupPersonalPINInputAction>
+struct SetupPersonalPINInput: ReducerProtocol {
+    struct State: Equatable {
+        @BindableState var enteredPIN = ""
+        var doneButtonEnabled: Bool {
+            enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
+        }
+    }
+    
+    enum Action: BindableAction, Equatable {
+        case done(pin: String)
+        case onAppear
+        case binding(BindingAction<State>)
+    }
+    
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        Reduce { state, action in
+            switch action {
+            case .onAppear:
+                state.enteredPIN = ""
+                return .none
+            default:
+                return .none
+            }
+            
+        }
+    }
+}
+
+struct SetupPersonalPINInputView: View {
+    var store: Store<SetupPersonalPINInput.State, SetupPersonalPINInput.Action>
     @FocusState private var pinEntryFocused: Bool
     
     var body: some View {
@@ -49,9 +78,8 @@ struct SetupPersonalPINInput: View {
 struct SetupPersonalPINInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            SetupPersonalPINInput(store: Store(initialState: SetupPersonalPINInputState(enteredPIN: "12345"),
-                                          reducer: .empty,
-                                          environment: AppEnvironment.preview))
+            SetupPersonalPINInputView(store: Store(initialState: SetupPersonalPINInput.State(enteredPIN: "12345"),
+                                          reducer: SetupPersonalPINInput()))
         }
         .previewDevice("iPhone 12")
     }

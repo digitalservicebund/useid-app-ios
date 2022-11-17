@@ -10,13 +10,12 @@ final class ScanErrorReducerTests: XCTestCase {
     let redirectURL = URL(string: "localhost")!
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
-    var environment: AppEnvironment!
-    
+    var urlOpener: ((URL) -> Void)!
     var openedURL: URL?
     
     override func setUp() {
         scheduler = DispatchQueue.test
-        environment = AppEnvironment.mocked(urlOpener: { self.openedURL = $0 })
+        urlOpener = { self.openedURL = $0 }
     }
     
     override func tearDown() {
@@ -25,9 +24,8 @@ final class ScanErrorReducerTests: XCTestCase {
     
     func testReducerRetry() {
         let store = TestStore(
-            initialState: ScanErrorState(errorType: .help, retry: true),
-            reducer: scanErrorReducer,
-            environment: environment
+            initialState: ScanError.State(errorType: .help, retry: true),
+            reducer: ScanError()
         )
         
         store.send(.retry)
@@ -38,13 +36,13 @@ final class ScanErrorReducerTests: XCTestCase {
     
     func testReducerWithoutRedirectURL() {
         let store = TestStore(
-            initialState: ScanErrorState(errorType: .idCardInteraction(.processFailed(resultCode: .INTERNAL_ERROR,
+            initialState: ScanError.State(errorType: .idCardInteraction(.processFailed(resultCode: .INTERNAL_ERROR,
                                                                                       redirectURL: nil,
                                                                                       resultMinor: nil)),
                                          retry: false),
-            reducer: scanErrorReducer,
-            environment: environment
+            reducer: ScanError()
         )
+        store.dependencies.urlOpener = urlOpener
         
         store.send(.end(redirectURL: nil))
         
@@ -53,16 +51,14 @@ final class ScanErrorReducerTests: XCTestCase {
     
     func testReducerOpensRedirectURL() {
         let store = TestStore(
-            initialState: ScanErrorState(errorType: .idCardInteraction(.processFailed(resultCode: .BAD_REQUEST,
+            initialState: ScanError.State(errorType: .idCardInteraction(.processFailed(resultCode: .BAD_REQUEST,
                                                                                       redirectURL: redirectURL,
                                                                                       resultMinor: nil)),
                                          retry: false),
-            reducer: scanErrorReducer,
-            environment: environment
+            reducer: ScanError()
         )
-        
+        store.dependencies.urlOpener = urlOpener
         store.send(.end(redirectURL: redirectURL))
-        
         XCTAssertEqual(openedURL, redirectURL)
     }
 }
@@ -71,14 +67,14 @@ final class ScanErrorStateTests: XCTestCase {
     let redirectURL = URL(string: "localhost")!
     
     func testStateRetryPrimaryButton() {
-        let state = ScanErrorState(errorType: .help, retry: true)
+        let state = ScanError.State(errorType: .help, retry: true)
         
         XCTAssertEqual(state.primaryButton.title, L10n.ScanError.close)
         XCTAssertEqual(state.primaryButton.action, .retry)
     }
     
     func testRedirectErrorPrimaryButton() {
-        let state = ScanErrorState(errorType: .idCardInteraction(.processFailed(resultCode: .CLIENT_ERROR,
+        let state = ScanError.State(errorType: .idCardInteraction(.processFailed(resultCode: .CLIENT_ERROR,
                                                                                 redirectURL: redirectURL,
                                                                                 resultMinor: nil)),
                                    retry: false)
@@ -90,19 +86,19 @@ final class ScanErrorStateTests: XCTestCase {
     }
     
     func testGenericErrorPrimaryButton() {
-        let state = ScanErrorState(errorType: .idCardInteraction(.frameworkError(message: nil)), retry: false)
+        let state = ScanError.State(errorType: .idCardInteraction(.frameworkError(message: nil)), retry: false)
         
         XCTAssertEqual(state.primaryButton.title, L10n.ScanError.close)
         XCTAssertEqual(state.primaryButton.action, .end(redirectURL: nil))
     }
     
     func testNoBoxWithRetry() {
-        let state = ScanErrorState(errorType: .help, retry: true)
+        let state = ScanError.State(errorType: .help, retry: true)
         XCTAssertNil(state.boxContent)
     }
     
     func testBoxWithoutRetry() {
-        let state = ScanErrorState(errorType: .idCardInteraction(.processFailed(resultCode: .CLIENT_ERROR,
+        let state = ScanError.State(errorType: .idCardInteraction(.processFailed(resultCode: .CLIENT_ERROR,
                                                                                 redirectURL: redirectURL,
                                                                                 resultMinor: nil)),
                                    retry: false)
@@ -112,18 +108,18 @@ final class ScanErrorStateTests: XCTestCase {
     }
     
     func testBoxWithCardBlocked() {
-        let state = ScanErrorState(errorType: .idCardInteraction(.cardBlocked), retry: false)
+        let state = ScanError.State(errorType: .idCardInteraction(.cardBlocked), retry: false)
         XCTAssertNil(state.boxContent)
         
-        let cardInteractionState = ScanErrorState(errorType: .cardBlocked, retry: false)
+        let cardInteractionState = ScanError.State(errorType: .cardBlocked, retry: false)
         XCTAssertNil(cardInteractionState.boxContent)
     }
     
     func testBoxWithCardDeactivated() {
-        let state = ScanErrorState(errorType: .idCardInteraction(.cardDeactivated), retry: false)
+        let state = ScanError.State(errorType: .idCardInteraction(.cardDeactivated), retry: false)
         XCTAssertNil(state.boxContent)
         
-        let cardInteractionState = ScanErrorState(errorType: .cardDeactivated, retry: false)
+        let cardInteractionState = ScanError.State(errorType: .cardDeactivated, retry: false)
         XCTAssertNil(cardInteractionState.boxContent)
     }
 }

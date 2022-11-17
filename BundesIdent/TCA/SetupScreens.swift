@@ -1,21 +1,65 @@
 import ComposableArchitecture
+import Foundation
 import Analytics
 
-enum SetupScreenState: Equatable {
-    case intro(SetupIntroState)
-    case transportPINIntro
-    case transportPIN(SetupTransportPINState)
-    case personalPINIntro
-    case personalPINInput(SetupPersonalPINInputState)
-    case personalPINConfirm(SetupPersonalPINConfirmState)
-    case scan(SetupScanState)
-    case done(SetupDoneState)
-    case incorrectTransportPIN(SetupIncorrectTransportPINState)
-    case error(ScanErrorState)
-    case missingPINLetter(MissingPINLetterState)
+struct SetupScreen: ReducerProtocol {
+    enum State: Equatable {
+        case intro(SetupIntro.State)
+        case transportPINIntro
+        case transportPIN(SetupTransportPIN.State)
+        case personalPINIntro
+        case personalPINInput(SetupPersonalPINInput.State)
+        case personalPINConfirm(SetupPersonalPINConfirm.State)
+        case scan(SetupScan.State)
+        case done(SetupDone.State)
+        case incorrectTransportPIN(SetupIncorrectTransportPIN.State)
+        case error(ScanError.State)
+        case missingPINLetter(MissingPINLetter.State)
+    }
+    
+    enum Action: Equatable {
+        case intro(SetupIntro.Action)
+        case transportPINIntro(SetupTransportPINIntroAction)
+        case transportPIN(SetupTransportPIN.Action)
+        case personalPINIntro(SetupPersonalPINIntroAction)
+        case personalPINInput(SetupPersonalPINInput.Action)
+        case personalPINConfirm(SetupPersonalPINConfirm.Action)
+        case scan(SetupScan.Action)
+        case done(SetupDone.Action)
+        case incorrectTransportPIN(SetupIncorrectTransportPIN.Action)
+        case error(ScanError.Action)
+        case missingPINLetter(MissingPINLetter.Action)
+    }
+    
+    var body: some ReducerProtocol<State, Action> {
+        Scope(state: /State.transportPIN, action: /Action.transportPIN) {
+            SetupTransportPIN()
+        }
+        Scope(state: /State.personalPINInput, action: /Action.personalPINInput) {
+            SetupPersonalPINInput()
+        }
+        Scope(state: /State.personalPINConfirm, action: /Action.personalPINConfirm) {
+            SetupPersonalPINConfirm()
+        }
+        Scope(state: /State.scan, action: /Action.scan) {
+            SetupScan()
+        }
+        Scope(state: /State.incorrectTransportPIN, action: /Action.incorrectTransportPIN) {
+            SetupIncorrectTransportPIN()
+        }
+
+        Scope(state: /State.missingPINLetter, action: /Action.missingPINLetter) {
+            MissingPINLetter()
+        }
+        
+        Scope(state: /State.error, action: /Action.error) {
+            ScanError()
+        }
+
+    }
 }
 
-extension SetupScreenState: AnalyticsView {
+extension SetupScreen.State: AnalyticsView {
     var route: [String] {
         switch self {
         case .intro:
@@ -43,61 +87,3 @@ extension SetupScreenState: AnalyticsView {
         }
     }
 }
-
-enum SetupScreenAction: Equatable {
-    case intro(SetupIntroAction)
-    case transportPINIntro(SetupTransportPINIntroAction)
-    case transportPIN(SetupTransportPINAction)
-    case personalPINIntro(SetupPersonalPINIntroAction)
-    case personalPINInput(SetupPersonalPINInputAction)
-    case personalPINConfirm(SetupPersonalPINConfirmAction)
-    case scan(SetupScanAction)
-    case done(SetupDoneAction)
-    case incorrectTransportPIN(SetupIncorrectTransportPINAction)
-    case error(ScanErrorAction)
-    case missingPINLetter(MissingPINLetterAction)
-}
-
-let setupScreenReducer = Reducer<SetupScreenState, SetupScreenAction, AppEnvironment>.combine(
-    setupTransportPINReducer
-        .pullback(
-            state: /SetupScreenState.transportPIN,
-            action: /SetupScreenAction.transportPIN,
-            environment: { $0 }
-        ),
-    setupPersonalPINInputReducer
-        .pullback(
-            state: /SetupScreenState.personalPINInput,
-            action: /SetupScreenAction.personalPINInput,
-            environment: { $0 }
-        ),
-    setupPersonalPINConfirmReducer
-        .pullback(state: /SetupScreenState.personalPINConfirm,
-                  action: /SetupScreenAction.personalPINConfirm,
-                  environment: { $0 }
-        ),
-    setupScanReducer
-        .pullback(
-            state: /SetupScreenState.scan,
-            action: /SetupScreenAction.scan,
-            environment: { $0 }
-        ),
-    setupIncorrectTransportPINReducer
-        .pullback(
-            state: /SetupScreenState.incorrectTransportPIN,
-            action: /SetupScreenAction.incorrectTransportPIN,
-            environment: { $0 }
-        ),
-    missingPINLetterReducer
-        .pullback(
-            state: /SetupScreenState.missingPINLetter,
-            action: /SetupScreenAction.missingPINLetter,
-            environment: { $0 }
-        ),
-    scanErrorReducer
-        .pullback(
-            state: /SetupScreenState.error,
-            action: /SetupScreenAction.error,
-            environment: { $0 }
-        )
-)

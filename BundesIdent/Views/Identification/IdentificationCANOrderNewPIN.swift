@@ -2,23 +2,18 @@ import ComposableArchitecture
 import SwiftUI
 import MarkdownUI
 
-struct IdentificationCANOrderNewPINState: Equatable {
+struct IdentificationCANOrderNewPIN: ReducerProtocol {
+    struct State: Equatable {}
     
-}
-
-enum IdentificationCANOrderNewPINAction: Equatable {
+    struct Action: Equatable {}
     
-}
-
-var identificationCANOrderNewPINReducer: Reducer<IdentificationCANOrderNewPINState, IdentificationCANOrderNewPINAction, AppEnvironment> = .init { _, action, _ in
-    switch action {
-    default:
+    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         return .none
     }
 }
 
-struct IdentificationCANOrderNewPIN: View {
-    var store: Store<IdentificationCANOrderNewPINState, IdentificationCANOrderNewPINAction>
+struct IdentificationCANOrderNewPINView: View {
+    var store: Store<IdentificationCANOrderNewPIN.State, IdentificationCANOrderNewPIN.Action>
     var body: some View {
             VStack(alignment: .leading, spacing: 0) {
                 ScrollView {
@@ -39,22 +34,21 @@ struct IdentificationCANOrderNewPIN: View {
                                 .padding(.vertical, 10)
                         }
                     }
-                    .padding(.horizontal)
                 }
+                .padding(.horizontal)
             }
-            .ignoresSafeArea(.keyboard)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarHidden(false)
-            .interactiveDismissDisabled(true)
+        .ignoresSafeArea(.keyboard)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarHidden(false)
+        .interactiveDismissDisabled(true)
     }
 }
 
 struct IdentificationCANOrderNewPIN_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationCANOrderNewPIN(store: .init(initialState: .init(),
-                                                   reducer: identificationCANOrderNewPINReducer,
-                                                   environment: AppEnvironment.preview))
+            IdentificationCANOrderNewPINView(store: Store(initialState: IdentificationCANOrderNewPIN.State(),
+                                                          reducer: IdentificationCANOrderNewPIN()))
         }
         .previewDevice("iPhone 12")
     }

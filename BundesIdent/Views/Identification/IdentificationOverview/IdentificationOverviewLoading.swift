@@ -2,62 +2,66 @@ import ComposableArchitecture
 import SwiftUI
 import Sentry
 
-struct IdentificationOverviewLoadingState: Equatable {
-    var onAppearCalled: Bool
-    var canGoBackToSetupIntro: Bool
+struct IdentificationOverviewLoading: ReducerProtocol {
+    @Dependency(\.uuid) var uuid
+    @Dependency(\.issueTracker) var issueTracker
     
-    init(onAppearCalled: Bool = false, canGoBackToSetupIntro: Bool = false) {
-        self.onAppearCalled = onAppearCalled
-        self.canGoBackToSetupIntro = canGoBackToSetupIntro
-    }
-    
-#if PREVIEW
-    var availableDebugActions: [IdentifyDebugSequence] = []
-#endif
-}
-
-enum IdentificationOverviewLoadingAction: Equatable {
-    case onAppear
-    case identify
-    case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
-    case done(EIDAuthenticationRequest, IdentifiableCallback<FlaggedAttributes>)
-    case failure(IdentifiableError)
-#if PREVIEW
-    case runDebugSequence(IdentifyDebugSequence)
-#endif
-}
-
-let identificationOverviewLoadingReducer = Reducer<IdentificationOverviewLoadingState, IdentificationOverviewLoadingAction, AppEnvironment> { state, action, environment in
-    switch action {
-    case .onAppear:
-        guard !state.onAppearCalled else {
-            return .none
-        }
-        state.onAppearCalled = true
+    struct State: Equatable {
+        var onAppearCalled: Bool
+        var canGoBackToSetupIntro: Bool
         
-        return Effect(value: .identify)
-    case .identify:
-        return .none
-    case .idInteractionEvent(.success(.requestAuthenticationRequestConfirmation(let request, let handler))):
-        return Effect(value: .done(request, IdentifiableCallback(id: environment.uuidFactory(), callback: handler)))
-    case .idInteractionEvent(.failure(let error)):
-        RedactedIDCardInteractionError(error).flatMap(environment.issueTracker.capture(error:))
-        return Effect(value: .failure(IdentifiableError(error)))
-    case .idInteractionEvent:
-        return .none
-    case .done:
-        return .none
-    case .failure:
-        return .none
+        init(onAppearCalled: Bool = false, canGoBackToSetupIntro: Bool = false) {
+            self.onAppearCalled = onAppearCalled
+            self.canGoBackToSetupIntro = canGoBackToSetupIntro
+        }
+        
 #if PREVIEW
-    case .runDebugSequence:
-        return .none
+        var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
     }
+    
+    enum Action: Equatable {
+        case onAppear
+        case identify
+        case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
+        case done(EIDAuthenticationRequest, IdentifiableCallback<FlaggedAttributes>)
+        case failure(IdentifiableError)
+#if PREVIEW
+        case runDebugSequence(IdentifyDebugSequence)
+#endif
+    }
+    
+    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+        switch action {
+        case .onAppear:
+            guard !state.onAppearCalled else {
+                return .none
+            }
+            state.onAppearCalled = true
+            
+            return Effect(value: .identify)
+        case .identify:
+            return .none
+        case .idInteractionEvent(.success(.requestAuthenticationRequestConfirmation(let request, let handler))):
+            return Effect(value: .done(request, IdentifiableCallback(id: uuid.callAsFunction(), callback: handler)))
+        case .idInteractionEvent(.failure(let error)):
+            RedactedIDCardInteractionError(error).flatMap(issueTracker.capture(error:))
+            return Effect(value: .failure(IdentifiableError(error)))
+        case .idInteractionEvent:
+            return .none
+        case .done:
+            return .none
+        case .failure:
+            return .none
+#if PREVIEW
+        case .runDebugSequence:
+            return .none
+#endif
+        }
+    }
 }
-
-struct IdentificationOverviewLoading: View {
-    var store: Store<IdentificationOverviewLoadingState, IdentificationOverviewLoadingAction>
+struct IdentificationOverviewLoadingView: View {
+    var store: Store<IdentificationOverviewLoading.State, IdentificationOverviewLoading.Action>
     
     var body: some View {
         VStack {
@@ -76,7 +80,7 @@ struct IdentificationOverviewLoading: View {
             ViewStore(store.stateless).send(.onAppear)
         }
 #if PREVIEW
-        .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: IdentificationOverviewLoadingAction.runDebugSequence)
+        .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: IdentificationOverviewLoading.Action.runDebugSequence)
 #endif
     }
 }
