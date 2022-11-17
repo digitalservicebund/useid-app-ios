@@ -10,11 +10,11 @@ concurrency:
 
 jobs:
   dependencies:
-    runs-on: self-hosted
+    runs-on: [self-hosted, ARM64]
     steps:
       - name: Setup shell
         run: |
-          echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+          echo "~/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -45,12 +45,12 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
 
   swiftLint:
-    runs-on: self-hosted
+    runs-on: [self-hosted, ARM64]
     needs: dependencies
     steps:
       - name: Setup shell
         run: |
-          echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+          echo "~/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3       
@@ -73,12 +73,12 @@ jobs:
           path: swiftlint.html
 
   buildForTesting:
-    runs-on: self-hosted
+    runs-on: [self-hosted, ARM64]
     needs: dependencies
     steps:
       - name: Setup shell
         run: |
-          echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+          echo "~/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3          
@@ -114,12 +114,12 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
 
   runUnitTests:
-    runs-on: self-hosted
+    runs-on: [self-hosted, ARM64]
     needs: buildForTesting
     steps:
       - name: Setup shell
         run: |
-          echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+          echo "~/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3       
@@ -161,7 +161,7 @@ jobs:
           path: fastlane/test_output/BundesIdent.xcresult.zip
 
   runUITests:
-    runs-on: self-hosted
+    runs-on: [self-hosted, ARM64]
     needs: buildForTesting
     strategy:
       matrix:
@@ -169,7 +169,7 @@ jobs:
     steps:
       - name: Setup shell
         run: |
-          echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+          echo "~/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3

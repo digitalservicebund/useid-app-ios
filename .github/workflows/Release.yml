@@ -14,7 +14,7 @@ on:
 
 jobs:
   dependencies:
-    runs-on: self-hosted
+    runs-on: [self-hosted, ARM64]
     steps:
       - name: Ensure on release branch
         run: |
@@ -22,7 +22,7 @@ jobs:
           [[ "$GITHUB_REF" == "refs/heads/release" ]]
       - name: Setup shell
         run: |
-          echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+          echo "~/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -55,14 +55,14 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
 
   bumpVersion:
-    runs-on: self-hosted
+    runs-on: [self-hosted, ARM64]
     needs: dependencies
     outputs:
       gitTag: ${{ steps.gitTag.outputs.gitTag }}
     steps:
       - name: Setup shell
         run: |
-          echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+          echo "~/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3        
@@ -92,12 +92,12 @@ jobs:
         run: echo "::set-output name=gitTag::${{ env.GIT_TAG }}"
           
   production:
-    runs-on: self-hosted
+    runs-on: [self-hosted, ARM64]
     needs: bumpVersion
     steps:
       - name: Setup shell
         run: |
-          echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+          echo "~/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -175,12 +175,12 @@ jobs:
           rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
 
   preview:
-    runs-on: self-hosted
+    runs-on: [self-hosted, ARM64]
     needs: bumpVersion
     steps:
       - name: Setup shell
         run: |
-          echo "/Users/ds-build-1/.rbenv/shims" >> $GITHUB_PATH
+          echo "~/.rbenv/shims" >> $GITHUB_PATH
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3
