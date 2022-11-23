@@ -150,3 +150,4 @@
 "firstTimeUser_scanInstructions_title" = "How to transfer your new PIN to the ID card.";
 "firstTimeUser_personalPIN_confirmation_title" = "Confirm your personal ID PIN.";
 "firstTimeUser_personalPIN_confirmation_body" = "Do not use your birthday as your PIN. Assign a PIN that is not easy to guess.";
+"firstTimeUser_personalPIN_continue" = "Next";
