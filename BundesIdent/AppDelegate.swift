@@ -27,7 +27,7 @@ extension AppDelegate {
     @objc
     private func setNavigationBarFont() {
         let standard = UINavigationBarAppearance()
-        standard.configureWithTransparentBackground()
+        standard.configureWithDefaultBackground()
         standard.titleTextAttributes = [.font: UIFont.bundNavigationBarBold]
         
         let button = UIBarButtonItemAppearance(style: .plain)
