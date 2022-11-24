@@ -18,6 +18,7 @@ struct ScanBody: View {
             Text(title)
                 .font(.bundLargeTitle)
                 .foregroundColor(.blackish)
+                .accessibilityAddTraits(.isHeader)
             if let primaryButton = primaryButton {
                 Button(primaryButton.title, action: primaryButton.action)
                 .buttonStyle(BundButtonStyle(isPrimary: true))

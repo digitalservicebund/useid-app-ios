@@ -34,7 +34,9 @@ struct SetupPersonalPINConfirm: View {
                     Spacer()
                 }
                 .focusOnAppear {
-                    pinEntryFocused = true
+                    if !UIAccessibility.isVoiceOverRunning {
+                        pinEntryFocused = true
+                    }
                 }
             }
             .padding(.horizontal)

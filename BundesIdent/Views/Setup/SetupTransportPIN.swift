@@ -29,6 +29,7 @@ struct SetupTransportPIN: View {
                 Text(L10n.FirstTimeUser.TransportPIN.title)
                     .font(.bundLargeTitle)
                     .foregroundColor(.blackish)
+                    .accessibilityAddTraits(.isHeader)
                 Text(L10n.FirstTimeUser.TransportPIN.body)
                     .font(.bundBody)
                     .foregroundColor(.blackish)
@@ -57,7 +58,9 @@ struct SetupTransportPIN: View {
             .padding(.horizontal)
         }
         .focusOnAppear {
-            pinEntryFocused = true
+            if !UIAccessibility.isVoiceOverRunning {
+                pinEntryFocused = true
+            }
         }
         .navigationBarTitleDisplayMode(.inline)
         .interactiveDismissDisabled()

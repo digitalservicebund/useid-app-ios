@@ -27,6 +27,7 @@ struct IdentificationCANOrderNewPIN: View {
                             .font(.bundLargeTitle)
                             .foregroundColor(.blackish)
                             .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityAddTraits(.isHeader)
                         Markdown(L10n.Identification.Can.OrderNewPin.body)
                             .markdownStyle(MarkdownStyle(font: .bundBody))
                             .foregroundColor(.blackish)

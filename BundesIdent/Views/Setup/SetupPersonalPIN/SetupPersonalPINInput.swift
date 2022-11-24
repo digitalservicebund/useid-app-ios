@@ -31,7 +31,9 @@ struct SetupPersonalPINInput: View {
                     Spacer()
                 }
                 .focusOnAppear {
-                    pinEntryFocused = true
+                    if !UIAccessibility.isVoiceOverRunning {
+                        pinEntryFocused = true
+                    }
                 }
                 .navigationBarTitleDisplayMode(.inline)
                 .onAppear {

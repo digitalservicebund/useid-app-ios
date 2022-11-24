@@ -84,7 +84,9 @@ struct IdentificationCANIncorrectInput: View {
                     }
                 }
                 .focusOnAppear {
-                    pinEntryFocused = true
+                    if !UIAccessibility.isVoiceOverRunning {
+                        pinEntryFocused = true
+                    }
                 }
                 .interactiveDismissDisabled(true, onAttemptToDismiss: {
                     ViewStore(store).send(.triggerEnd)

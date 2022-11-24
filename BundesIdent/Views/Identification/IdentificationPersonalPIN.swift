@@ -39,6 +39,7 @@ struct IdentificationPersonalPIN: View {
                         .font(.bundLargeTitle)
                         .foregroundColor(.blackish)
                         .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityAddTraits(.isHeader)
                     VStack {
                         Spacer()
                         PINEntryView(pin: viewStore.binding(\.$enteredPIN),
@@ -67,7 +68,9 @@ struct IdentificationPersonalPIN: View {
         }
         .navigationBarHidden(false)
         .focusOnAppear {
-            pinEntryFocused = true
+            if !UIAccessibility.isVoiceOverRunning {
+                pinEntryFocused = true
+            }
         }
     }
 }

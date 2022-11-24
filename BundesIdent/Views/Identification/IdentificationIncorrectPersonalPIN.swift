@@ -68,6 +68,7 @@ struct IdentificationIncorrectPersonalPIN: View {
                         Text(L10n.Identification.PersonalPIN.title)
                             .font(.bundLargeTitle)
                             .foregroundColor(.blackish)
+                            .accessibilityAddTraits(.isHeader)
                         VStack {
                             Spacer()
                             WithViewStore(store) { viewStore in
@@ -135,7 +136,9 @@ struct IdentificationIncorrectPersonalPIN: View {
             ViewStore(store.stateless).send(.end)
         }
         .focusOnAppear {
-            pinEntryFocused = true
+            if !UIAccessibility.isVoiceOverRunning {
+                pinEntryFocused = true
+            }
         }
     }
 }

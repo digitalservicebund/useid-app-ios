@@ -69,6 +69,7 @@ struct SetupIncorrectTransportPIN: View {
                             Text(L10n.FirstTimeUser.IncorrectTransportPIN.title)
                                 .font(.bundLargeTitle)
                                 .foregroundColor(.blackish)
+                                .accessibilityAddTraits(.isHeader)
                             Text(L10n.FirstTimeUser.IncorrectTransportPIN.body)
                                 .font(.bundBody)
                                 .foregroundColor(.blackish)
@@ -132,7 +133,9 @@ struct SetupIncorrectTransportPIN: View {
             ViewStore(store.stateless).send(.swipeToDismiss)
         }
         .focusOnAppear {
-            pinEntryFocused = true
+            if !UIAccessibility.isVoiceOverRunning {
+                pinEntryFocused = true
+            }
         }
     }
 }

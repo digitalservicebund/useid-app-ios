@@ -10,6 +10,7 @@ struct IdentificationAbout: View {
             VStack(alignment: .leading, spacing: 24) {
                 Text(request.subject)
                     .font(.bundLargeTitle)
+                    .accessibilityAddTraits(.isHeader)
                 
                 Text(L10n.Identification.AttributeConsentInfo.providerInfo)
                     .font(.bundTitle)

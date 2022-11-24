@@ -36,6 +36,7 @@ struct HeaderView: View {
                 .font(.bundLargeTitle)
                 .foregroundColor(.blackish)
 				.fixedSize(horizontal: false, vertical: true)
+                .accessibilityAddTraits(.isHeader)
             if let boxContent = boxContent {
                 Box(content: boxContent)
             }

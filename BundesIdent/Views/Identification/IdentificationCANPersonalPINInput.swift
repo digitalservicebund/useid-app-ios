@@ -33,6 +33,7 @@ struct IdentificationCANPersonalPINInput: View {
                     Text(L10n.Identification.PersonalPIN.title)
                         .font(.bundLargeTitle)
                         .foregroundColor(.blackish)
+                        .accessibilityAddTraits(.isHeader)
                     VStack {
                         Spacer()
                         WithViewStore(store) { viewStore in
@@ -67,7 +68,9 @@ struct IdentificationCANPersonalPINInput: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarHidden(false)
         .focusOnAppear {
-            pinEntryFocused = true
+            if !UIAccessibility.isVoiceOverRunning {
+                pinEntryFocused = true
+            }
         }
         .interactiveDismissDisabled(true)
     }

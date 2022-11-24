@@ -47,6 +47,7 @@ struct HomeView: View {
                             Text(L10n.Home.More.title)
                                 .font(.bundLargeTitle)
                                 .padding(.top)
+                                .accessibilityAddTraits(.isHeader)
                             Spacer()
                         }
                         setupActionView
@@ -79,6 +80,7 @@ struct HomeView: View {
                 .font(.bundLargeTitle)
                 .padding(.bottom, 8)
                 .padding(.horizontal, 36)
+                .accessibilityAddTraits(.isHeader)
 #if PREVIEW
                 .onTapGesture {
                     ViewStore(store.stateless).send(.triggerIdentification(tokenURL: demoTokenURL))

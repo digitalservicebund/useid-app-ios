@@ -56,7 +56,9 @@ struct IdentificationCANInput: View {
         }
         .navigationBarHidden(false)
         .focusOnAppear {
-            pinEntryFocused = true
+            if !UIAccessibility.isVoiceOverRunning {
+                pinEntryFocused = true
+            }
         }
         .interactiveDismissDisabled(true)
     }
