@@ -306,9 +306,9 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 state.routes.popTo(index: index)
                 return .none
             case .routeAction(_, action: .canIncorrectInput(.done(can: let can))):
-                state.routes.dismiss()
                 state.can = can
                 state.attempt += 1
+                state.routes.dismiss()
                 return .none
             case .routeAction(_, action: .scan(.shared(.showHelp))), .routeAction(_, action: .canScan(.shared(.showHelp))):
                 state.routes.presentSheet(.error(ScanErrorState(errorType: .help, retry: true)))

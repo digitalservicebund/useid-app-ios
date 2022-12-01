@@ -81,7 +81,7 @@ final class IdentificationUITests: XCTestCase {
         pinTextField.waitAndTypeText("123456")
         
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
-        XCTAssert(app.activityIndicators["ScanProgressView"].wait().exists)
+        app.activityIndicators["ScanProgressView"].assertExistence()
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["identifySuccessfully"].wait().tap()
         
@@ -200,7 +200,7 @@ final class IdentificationUITests: XCTestCase {
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        XCTAssert(app.activityIndicators["ScanProgressView"].wait().exists)
+        app.activityIndicators["ScanProgressView"].assertExistence()
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["runCANError"].wait().tap()
         
@@ -208,7 +208,7 @@ final class IdentificationUITests: XCTestCase {
         canTextField.waitAndTypeText("123456")
         
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        XCTAssert(app.activityIndicators["ScanProgressView"].wait().exists)
+        app.activityIndicators["ScanProgressView"].assertExistence()
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["runCANError"].wait().tap()
         
@@ -219,7 +219,7 @@ final class IdentificationUITests: XCTestCase {
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        XCTAssert(app.activityIndicators["ScanProgressView"].wait().exists)
+        app.activityIndicators["ScanProgressView"].assertExistence()
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["identifySuccessfully"].wait().tap()
         
@@ -249,7 +249,7 @@ final class IdentificationUITests: XCTestCase {
         pinTextField.waitAndTypeText("123456")
         
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
-        XCTAssert(app.activityIndicators["ScanProgressView"].wait().exists)
+        app.activityIndicators["ScanProgressView"].assertExistence()
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["runCardSuspended"].wait().tap()
         
@@ -286,7 +286,7 @@ final class IdentificationUITests: XCTestCase {
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        XCTAssert(app.activityIndicators["ScanProgressView"].wait().exists)
+        app.activityIndicators["ScanProgressView"].assertExistence()
         
         app.navigationBars.buttons[L10n.General.cancel].wait().tap()
         app.staticTexts[L10n.Home.Header.title].assertExistence()
@@ -321,7 +321,7 @@ final class IdentificationUITests: XCTestCase {
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        XCTAssert(app.activityIndicators["ScanProgressView"].wait().exists)
+        app.activityIndicators["ScanProgressView"].assertExistence()
         
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["cancelCANScan"].wait().tap()
@@ -377,20 +377,19 @@ final class IdentificationUITests: XCTestCase {
         pinTextField.wait().tap()
         pinTextField.waitAndTypeText("123456")
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
-        XCTAssert(app.activityIndicators["ScanProgressView"].wait().exists)
+        app.activityIndicators["ScanProgressView"].assertExistence()
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["runCANError"].wait().tap()
         
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.toolbars["Toolbar"].buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        XCTAssert(app.activityIndicators["ScanProgressView"].wait().exists)
+        app.activityIndicators["ScanProgressView"].assertExistence()
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["runCANError"].wait().tap()
         
         let matchingButtons = app.navigationBars.buttons.matching(identifier: L10n.Identification.Can.IncorrectInput.back)
-        matchingButtons.element(boundBy: 0).tap()
-        
+                matchingButtons.element(boundBy: 0).tap()
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
         
         canTextField.wait().tap()
@@ -399,7 +398,7 @@ final class IdentificationUITests: XCTestCase {
         pinTextField.wait().tap()
         pinTextField.waitAndTypeText("123456")
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
-        XCTAssert(app.activityIndicators["ScanProgressView"].wait().exists)
+        app.activityIndicators["ScanProgressView"].assertExistence()
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["runPINError (\(remainingAttempts))"].wait().tap()
         app.staticTexts[L10n.ScanError.CardBlocked.title].assertExistence()

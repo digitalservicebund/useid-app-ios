@@ -401,7 +401,6 @@ class IdentificationCoordinatorTests: XCTestCase {
         let pin = "123456"
         let can = "123456"
         let request = EIDAuthenticationRequest.preview
-        let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
         let store = TestStore(
             initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
@@ -442,7 +441,6 @@ class IdentificationCoordinatorTests: XCTestCase {
         let can = "123456"
         let enteredCan = "654321"
         let request = EIDAuthenticationRequest.preview
-        let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
         let store = TestStore(
             initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
@@ -477,7 +475,6 @@ class IdentificationCoordinatorTests: XCTestCase {
         let enteredCan = "654321"
         let cardBlockedError = ScanErrorState(errorType: .cardBlocked, retry: false)
         let request = EIDAuthenticationRequest.preview
-        let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
         let store = TestStore(
             initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,
@@ -501,7 +498,6 @@ class IdentificationCoordinatorTests: XCTestCase {
         let pin = "123456"
         let can = "123456"
         let request = EIDAuthenticationRequest.preview
-        let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
         let store = TestStore(
             initialState: IdentificationCoordinatorState(tokenURL: demoTokenURL,

@@ -115,7 +115,7 @@ final class SetupUITests: XCTestCase {
         app.buttons[L10n.FirstTimeUser.PersonalPIN.continue].wait().tap()
         
         app.alerts.staticTexts[L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.title].assertExistence()
-        app.alerts.buttons[L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.retry].tap()
+        app.alerts.buttons[L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.retry].wait().tap()
         
         app.staticTexts[L10n.FirstTimeUser.PersonalPIN.title].assertExistence()
         XCTAssertEqual(app.secureTextFields[L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.first].value as! String, "")
