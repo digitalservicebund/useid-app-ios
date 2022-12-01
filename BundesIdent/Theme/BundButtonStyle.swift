@@ -26,7 +26,7 @@ struct BundButtonStyle: ButtonStyle {
     
     private func titleColor(configuration: Configuration) -> Color {
         guard isEnabled else {
-            return .gray900
+            return .neutral900
         }
         
         if isPrimary {
@@ -74,7 +74,7 @@ struct BundTextButtonStyle: ButtonStyle {
     
     private func titleColor(configuration: Configuration) -> Color {
         guard isEnabled else {
-            return .gray900
+            return .neutral900
         }
         
         if configuration.isPressed {
@@ -90,7 +90,7 @@ private func backgroundColor(configuration: ButtonStyleConfiguration,
                              isPrimary: Bool,
                              isOnDark: Bool) -> Color {
     guard isEnabled else {
-        return .gray300
+        return .neutral300
     }
     
     if isPrimary {

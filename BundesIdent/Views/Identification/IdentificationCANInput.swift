@@ -40,7 +40,7 @@ struct IdentificationCANInput: View {
                                      groupEvery: 3,
                                      showPIN: false,
                                      label: L10n.Identification.Can.Input.canInputLabel,
-                                     backgroundColor: .gray100,
+                                     backgroundColor: .neutral100,
                                      doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                           title: L10n.Identification.Can.Input.continue,
                                                                           handler: { can in

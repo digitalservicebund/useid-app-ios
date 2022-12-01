@@ -19,7 +19,7 @@ struct SetupPersonalPINInput: View {
                                      groupEvery: 3,
                                      showPIN: false,
                                      label: L10n.FirstTimeUser.PersonalPIN.TextFieldLabel.first,
-                                     backgroundColor: .gray100,
+                                     backgroundColor: .neutral100,
                                      doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                           title: L10n.FirstTimeUser.PersonalPIN.continue,
                                                                           handler: { _ in

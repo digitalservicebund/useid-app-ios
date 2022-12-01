@@ -42,7 +42,7 @@ struct IdentificationCANPersonalPINInput: View {
                                          groupEvery: 3,
                                          showPIN: false,
                                          label: L10n.Identification.PersonalPIN.textFieldLabel,
-                                         backgroundColor: .gray100,
+                                         backgroundColor: .neutral100,
                                          doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                               title: L10n.Identification.PersonalPIN.continue,
                                                                               handler: { pin in

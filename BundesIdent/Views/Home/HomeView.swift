@@ -45,6 +45,7 @@ struct HomeView: View {
                     VStack(spacing: 16) {
                         HStack {
                             Text(L10n.Home.More.title)
+                                .headingXL()
                                 .font(.bundLargeTitle)
                                 .padding(.top)
                                 .accessibilityAddTraits(.isHeader)
@@ -56,7 +57,7 @@ struct HomeView: View {
                         WithViewStore(store) { viewStore in
                             Text(L10n.Home.version(viewStore.state.versionInfo))
                                 .font(.bundCaption1)
-                                .foregroundColor(.gray900)
+                                .foregroundColor(.neutral900)
                                 .padding(.bottom)
                         }
                     }
@@ -174,7 +175,7 @@ struct HomeView: View {
     @ViewBuilder
     private var listDivider: some View {
         Divider()
-            .foregroundColor(.gray300)
+            .foregroundColor(.neutral300)
             .padding(.vertical, 16)
     }
     
@@ -207,7 +208,7 @@ private struct Grouped: ViewModifier {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.gray300, lineWidth: 1)
+                    .stroke(Color.neutral300, lineWidth: 1)
             )
     }
 }

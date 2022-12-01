@@ -66,6 +66,7 @@
 		E149B15C2840F636002C1139 /* SetupScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E149B15B2840F636002C1139 /* SetupScanTests.swift */; };
 		E14C21B228B8BF9100192338 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C21B128B8BF9100192338 /* StorageManager.swift */; };
 		E14C21B428B8FB8F00192338 /* AppEnvironment+Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C21B328B8FB8F00192338 /* AppEnvironment+Tests.swift */; };
+		E1549985293924C9002180AC /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1549984293924C9002180AC /* Typography.swift */; };
 		E156DD02287EF9C200C88914 /* XCUITestDeeplinking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E156DD01287EF9C200C88914 /* XCUITestDeeplinking.swift */; };
 		E15776A0286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */; };
 		E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */ = {isa = PBXBuildFile; productRef = E15C22FF2850F5A8005CCBB9 /* OpenEcard */; };
@@ -238,6 +239,7 @@
 		E149B15B2840F636002C1139 /* SetupScanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScanTests.swift; sourceTree = "<group>"; };
 		E14C21B128B8BF9100192338 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		E14C21B328B8FB8F00192338 /* AppEnvironment+Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppEnvironment+Tests.swift"; sourceTree = "<group>"; };
+		E1549984293924C9002180AC /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
 		E156DD01287EF9C200C88914 /* XCUITestDeeplinking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUITestDeeplinking.swift; sourceTree = "<group>"; };
 		E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentificationIncorrectPersonalPIN.swift; sourceTree = "<group>"; };
 		E15D0EBB29095F740088EF4E /* IdentificationOverviewError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewError.swift; sourceTree = "<group>"; };
@@ -630,6 +632,7 @@
 				E1CD8E8E2820395F008ADA2A /* BundButtonStyle.swift */,
 				E1CD8E87281FF62F008ADA2A /* Colors.swift */,
 				E1AB879D282283AB00C7FC94 /* Fonts.swift */,
+				E1549984293924C9002180AC /* Typography.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -1125,6 +1128,7 @@
 				D2B7BCFB28D2108900318B9F /* Effects.swift in Sources */,
 				E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */,
 				E1D307B02833A2500088DAFF /* SetupPersonalPINInput.swift in Sources */,
+				E1549985293924C9002180AC /* Typography.swift in Sources */,
 				E16708B5283D4F25001A1637 /* Screens.swift in Sources */,
 				D21E682028BCEB0A0055EBFE /* Assets+Generated.swift in Sources */,
 				E5CEB27E281041330076B9FE /* BundesIdentApp.swift in Sources */,
