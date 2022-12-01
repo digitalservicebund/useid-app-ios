@@ -97,8 +97,10 @@ struct IdentificationOverviewLoaded: View {
                     ForEach(viewStore.requiredReadAttributes) { attribute in
                         HStack(spacing: 10) {
                             Text("•")
+                                .accessibilityHidden(true)
                             Text(attribute.localizedTitle)
                         }
+                        .accessibilityElement(children: .combine)
                     }
                 }
             }

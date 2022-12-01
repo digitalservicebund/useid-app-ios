@@ -128,6 +128,7 @@ struct SharedScan: View {
                       syncedTime: syncedTime)
         .aspectRatio(540.0 / 367.0, contentMode: .fit)
         .matchedGeometryEffect(id: "scanAnimation", in: namespace)
+        .accessibilityLabel(L10n.Scan.animationAccessibilityLabel)
     }
 }
 

@@ -16,6 +16,7 @@ struct LoopingPlayer: UIViewRepresentable {
         context.coordinator.player = player
         
         let view = CustomVideoPlayer(player: player)
+        view.isAccessibilityElement = true
         
         player.isMuted = true
         player.seek(to: syncedTime, toleranceBefore: shortTime, toleranceAfter: shortTime) { _ in
