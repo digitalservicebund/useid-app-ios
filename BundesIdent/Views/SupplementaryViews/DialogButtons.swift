@@ -44,7 +44,19 @@ enum DialogButtonsPreviewAction {
 struct DialogButtons_Previews: PreviewProvider {
     static var previews: some View {
         DialogButtons<DialogButtonsPreviewAction>(store: .empty,
+                                                  secondary: nil,
+                                                  primary: .init(title: "Primary", action: .primary))
+        .previewLayout(.sizeThatFits)
+        .previewDisplayName("Primary")
+        DialogButtons<DialogButtonsPreviewAction>(store: .empty,
+                                                  secondary: .init(title: "Secondary", action: .secondary),
+                                                  primary: nil)
+        .previewLayout(.sizeThatFits)
+        .previewDisplayName("Secondary")
+        DialogButtons<DialogButtonsPreviewAction>(store: .empty,
                                                   secondary: .init(title: "Secondary", action: .secondary),
                                                   primary: .init(title: "Primary", action: .primary))
+        .previewLayout(.sizeThatFits)
+        .previewDisplayName("Both")
     }
 }
