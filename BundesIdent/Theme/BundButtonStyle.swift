@@ -10,9 +10,8 @@ struct BundButtonStyle: ButtonStyle {
         HStack {
             Spacer()
             configuration.label
-                .font(Font.bundBodyBold)
+                .bodyLBold(color: titleColor(configuration: configuration))
                 .minimumScaleFactor(0.5)
-                .foregroundColor(titleColor(configuration: configuration))
             Spacer()
         }
         .padding()
@@ -60,11 +59,10 @@ struct BundTextButtonStyle: ButtonStyle {
     
     func makeBody(configuration: Configuration) -> some View {
         return configuration.label
-            .font(Font.bundBodyBold)
+            .bodyLBold(color: titleColor(configuration: configuration))
             .minimumScaleFactor(0.5)
             .padding(.horizontal, 10)
             .padding(.vertical, 8)
-            .foregroundColor(titleColor(configuration: configuration))
             .background(backgroundColor(configuration: configuration,
                                         isEnabled: isEnabled,
                                         isPrimary: false,

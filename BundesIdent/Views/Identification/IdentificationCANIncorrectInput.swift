@@ -52,16 +52,14 @@ struct IdentificationCANIncorrectInput: View {
                                     viewStore.send(.done(can: can))
                                 }))
                                 .focused($pinEntryFocused)
-                                .font(.bundTitle)
+                                .headingL()
                             }
                             
                             VStack(spacing: 3) {
                                 Text(L10n.Identification.Can.IncorrectInput.Error.Incorrect.body)
-                                    .font(.bundBodyBold)
-                                    .foregroundColor(.red900)
+                                    .bodyLBold(color: .red900)
                                 Text(L10n.Identification.Can.IncorrectInput.Error.Incorrect.title)
-                                    .font(.bundBody)
-                                    .foregroundColor(.blackish)
+                                    .bodyLRegular()
                                     .multilineTextAlignment(.center)
                             }
                             .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -74,13 +72,10 @@ struct IdentificationCANIncorrectInput: View {
                 .navigationBarHidden(false)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Button {
+                        Button(L10n.Identification.Can.IncorrectInput.back) {
                             ViewStore(store).send(.triggerEnd)
-                        } label: {
-                            Text(verbatim: L10n.Identification.Can.IncorrectInput.back)
-                                .foregroundColor(.blue800)
-                                .font(.bundBody)
                         }
+                        .bodyLRegular(color: .accentColor)
                     }
                 }
                 .focusOnAppear {

@@ -13,7 +13,7 @@ extension Color {
   }
 }
 
-extension Color {
+public extension Color {
     static let blue100: Color = Color(0xF2F6F8)
     static let blue200: Color = Color(0xE0F1FB)
     static let blue300: Color = Color(0xDCE8EF)

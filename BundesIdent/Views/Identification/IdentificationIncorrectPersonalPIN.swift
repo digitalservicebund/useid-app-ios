@@ -66,9 +66,7 @@ struct IdentificationIncorrectPersonalPIN: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
                         Text(L10n.Identification.PersonalPIN.title)
-                            .font(.bundLargeTitle)
-                            .foregroundColor(.blackish)
-                            .accessibilityAddTraits(.isHeader)
+                            .headingXL()
                         VStack {
                             Spacer()
                             WithViewStore(store) { viewStore in
@@ -84,7 +82,7 @@ struct IdentificationIncorrectPersonalPIN: View {
                                     viewStore.send(.done(pin: pin))
                                 }))
                                 .focused($pinEntryFocused)
-                                .font(.bundTitle)
+                                .headingL()
                             }
                         }
                         
@@ -93,18 +91,15 @@ struct IdentificationIncorrectPersonalPIN: View {
                                 if case .incorrect = viewStore.error {
                                     VStack(spacing: 3) {
                                         Text(L10n.Identification.PersonalPIN.Error.Incorrect.title)
-                                            .font(.bundBodyBold)
-                                            .foregroundColor(.red900)
+                                            .bodyLBold(color: .red900)
                                         Text(L10n.Identification.PersonalPIN.Error.Incorrect.body)
-                                            .font(.bundBody)
-                                            .foregroundColor(.blackish)
+                                            .bodyLRegular()
                                             .multilineTextAlignment(.center)
                                     }
                                     .transition(.move(edge: .bottom).combined(with: .opacity))
                                 }
                                 Text(L10n.Identification.PersonalPIN.Error.Incorrect.remainingAttemptsLld(viewStore.remainingAttempts))
-                                    .font(.bundBody)
-                                    .foregroundColor(.blackish)
+                                    .bodyLRegular()
                                     .multilineTextAlignment(.center)
                                     .transition(.move(edge: .bottom).combined(with: .opacity))
                             }
@@ -115,11 +110,10 @@ struct IdentificationIncorrectPersonalPIN: View {
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading) {
-                            Button {
+                            Button(L10n.General.cancel) {
                                 ViewStore(store.stateless).send(.end)
-                            } label: {
-                                Text(verbatim: L10n.General.cancel)
                             }
+                            .bodyLRegular(color: .accentColor)
                         }
                     }
                     .onAppear {

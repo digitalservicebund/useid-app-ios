@@ -34,11 +34,10 @@ struct IdentificationCANPINForgotten: View {
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
+                    Button(L10n.General.cancel) {
                         ViewStore(store.stateless).send(.end)
-                    } label: {
-                        Text(verbatim: L10n.General.cancel)
                     }
+                    .bodyLRegular(color: .accentColor)
                 }
             }
     }

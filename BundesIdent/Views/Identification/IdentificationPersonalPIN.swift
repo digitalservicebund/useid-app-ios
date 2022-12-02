@@ -36,10 +36,7 @@ struct IdentificationPersonalPIN: View {
             WithViewStore(store) { viewStore in
                 VStack(alignment: .leading, spacing: 24) {
                     Text(L10n.Identification.PersonalPIN.title)
-                        .font(.bundLargeTitle)
-                        .foregroundColor(.blackish)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .accessibilityAddTraits(.isHeader)
+                        .headingXL()
                     VStack {
                         Spacer()
                         PINEntryView(pin: viewStore.binding(\.$enteredPIN),
@@ -56,7 +53,7 @@ struct IdentificationPersonalPIN: View {
                                                  pinCallback: viewStore.callback))
                         }))
                         .focused($pinEntryFocused)
-                        .font(.bundTitle)
+                        .headingL()
                     }
                     Spacer()
                 }

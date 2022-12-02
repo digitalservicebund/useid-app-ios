@@ -47,7 +47,7 @@ struct IdentificationCANInput: View {
                             viewStore.send(.done(can: can, request: viewStore.request, pinCANCallback: viewStore.pinCANCallback, pushesToPINEntry: viewStore.pushesToPINEntry))
                         }))
                         .focused($pinEntryFocused)
-                        .font(.bundTitle)
+                        .headingL()
                     }
                     Spacer()
                 }

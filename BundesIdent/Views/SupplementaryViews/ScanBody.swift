@@ -16,16 +16,13 @@ struct ScanBody: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
             Text(title)
-                .font(.bundLargeTitle)
-                .foregroundColor(.blackish)
-                .accessibilityAddTraits(.isHeader)
+                .headingXL()
             if let primaryButton = primaryButton {
                 Button(primaryButton.title, action: primaryButton.action)
                 .buttonStyle(BundButtonStyle(isPrimary: true))
             }
             Text(message)
-                .font(.bundBody)
-                .foregroundColor(.blackish)
+                .bodyLRegular()
             VStack(alignment: .leading, spacing: 16) {
                 Button(L10n.Scan.helpNFC, action: nfcInfoTapped)
                     .buttonStyle(BundTextButtonStyle())

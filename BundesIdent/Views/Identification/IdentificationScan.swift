@@ -189,6 +189,7 @@ struct IdentificationScan: View {
                 Button(L10n.General.cancel) {
                     ViewStore(store).send(.cancelIdentification)
                 }
+                .bodyLRegular(color: .accentColor)
             }
         }
 #if PREVIEW

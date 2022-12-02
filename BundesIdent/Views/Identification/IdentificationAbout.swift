@@ -9,38 +9,36 @@ struct IdentificationAbout: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 Text(request.subject)
-                    .font(.bundLargeTitle)
-                    .accessibilityAddTraits(.isHeader)
+                    .headingXL()
                 
                 Text(L10n.Identification.AttributeConsentInfo.providerInfo)
-                    .font(.bundTitle)
+                    .headingL()
                 
                 Text(L10n.Identification.AttributeConsentInfo.provider)
-                    .font(.bundHeader)
+                    .headingM()
                 
                 VStack(alignment: .leading, spacing: 0) {
                     Text(request.subject)
                     Text(request.subjectURL)
                 }
-                .font(.bundBody)
+                .bodyLRegular()
                 
                 Text(L10n.Identification.AttributeConsentInfo.issuer)
-                    .font(.bundHeader)
+                    .headingM()
                 
                 VStack(alignment: .leading, spacing: 0) {
                     Text(request.issuer)
                     Text(request.issuerURL)
                 }
-                .font(.bundBody)
+                .bodyLRegular()
                 
                 Text(L10n.Identification.AttributeConsentInfo.terms)
-                    .font(.bundHeader)
+                    .headingM()
                 
                 Text(request.terms.description)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.bundBody)
+                    .bodyLRegular()
             }
-            .foregroundColor(.blackish)
             .padding(.horizontal)
         }
     }

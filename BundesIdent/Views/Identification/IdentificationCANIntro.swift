@@ -35,11 +35,10 @@ struct IdentificationCANIntro: View {
     
     @ViewBuilder
     func cancelButton(viewStore: ViewStore<IdentificationCANIntroState, IdentificationCANIntroAction>) -> some View {
-            Button {
-                ViewStore(store.stateless).send(.end)
-            } label: {
-                Text(verbatim: L10n.General.cancel)
-            }
+        Button(L10n.General.cancel) {
+            ViewStore(store.stateless).send(.end)
+        }
+        .bodyLRegular(color: .accentColor)
         
     }
 }

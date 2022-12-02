@@ -26,7 +26,7 @@ struct SetupPersonalPINInput: View {
                             viewStore.send(.done(pin: viewStore.enteredPIN))
                         }))
                         .focused($pinEntryFocused)
-                        .font(.bundTitle)
+                        .headingL()
                     }
                     Spacer()
                 }

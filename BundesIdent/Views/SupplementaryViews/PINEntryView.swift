@@ -71,8 +71,7 @@ private struct CharacterView: View {
     var body: some View {
         if showPIN {
             Text(pinCharacter(at: index))
-                .font(.bundLargeTitle)
-                .foregroundColor(.blackish)
+                .headingXL()
                 .animation(.none)
         } else {
             Image(systemName: "circle.fill")

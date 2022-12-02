@@ -106,7 +106,7 @@ struct IdentificationOverviewLoaded: View {
             }
             Spacer()
         }
-        .font(.bundBody)
+        .bodyLRegular()
         .padding(24)
         .background(
             RoundedRectangle(cornerRadius: 10, style: .continuous)

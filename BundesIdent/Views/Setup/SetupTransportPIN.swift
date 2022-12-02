@@ -27,12 +27,9 @@ struct SetupTransportPIN: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 Text(L10n.FirstTimeUser.TransportPIN.title)
-                    .font(.bundLargeTitle)
-                    .foregroundColor(.blackish)
-                    .accessibilityAddTraits(.isHeader)
+                    .headingXL()
                 Text(L10n.FirstTimeUser.TransportPIN.body)
-                    .font(.bundBody)
-                    .foregroundColor(.blackish)
+                    .bodyLRegular()
                 ZStack {
                     Image(decorative: Asset.transportPIN)
                         .resizable()
@@ -48,7 +45,7 @@ struct SetupTransportPIN: View {
                             viewStore.send(.done(transportPIN: pin))
                         }))
                         .focused($pinEntryFocused)
-                        .font(.bundTitle)
+                        .headingL()
                         .background(Color.white.cornerRadius(10))
                         .padding(40)
                     }

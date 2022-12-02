@@ -68,8 +68,7 @@ struct IdentificationOverviewLoading: View {
                 .padding(50)
             VStack(spacing: 24) {
                 Text(L10n.Identification.FetchMetadata.pleaseWait)
-                    .font(.bundBody)
-                    .foregroundColor(.blackish)
+                    .bodyLRegular()
             }
             .padding(.bottom, 50)
         }

@@ -118,6 +118,7 @@ struct IdentificationOverview: View {
                     Button(viewStore.canGoBackToSetupIntro ? L10n.General.back : L10n.Identification.end) {
                         ViewStore(store.stateless).send(viewStore.canGoBackToSetupIntro ? .back : .end)
                     }
+                    .bodyLRegular(color: .accentColor)
                 }
             }
         }

@@ -67,12 +67,9 @@ struct SetupIncorrectTransportPIN: View {
                     VStack(alignment: .leading, spacing: 24) {
                         WithViewStore(store) { viewStore in
                             Text(L10n.FirstTimeUser.IncorrectTransportPIN.title)
-                                .font(.bundLargeTitle)
-                                .foregroundColor(.blackish)
-                                .accessibilityAddTraits(.isHeader)
+                                .headingXL()
                             Text(L10n.FirstTimeUser.IncorrectTransportPIN.body)
-                                .font(.bundBody)
-                                .foregroundColor(.blackish)
+                                .bodyLRegular()
                             ZStack {
                                 Image(decorative: "Transport-PIN")
                                     .resizable()
@@ -86,15 +83,14 @@ struct SetupIncorrectTransportPIN: View {
                                     viewStore.send(.done(transportPIN: pin))
                                 }))
                                 .focused($pinEntryFocused)
-                                .font(.bundTitle)
+                                .headingL()
                                 .background(Color.white.cornerRadius(10))
                                 .padding(40)
                             }
                             VStack(spacing: 24) {
                                 VStack {
                                     Text(L10n.FirstTimeUser.IncorrectTransportPIN.remainingAttemptsLld(viewStore.remainingAttempts))
-                                        .font(.bundBody)
-                                        .foregroundColor(.blackish)
+                                        .bodyLRegular()
                                         .multilineTextAlignment(.center)
                                         .lineLimit(nil)
                                 }
@@ -102,11 +98,10 @@ struct SetupIncorrectTransportPIN: View {
                             .frame(maxWidth: .infinity)
                             .toolbar {
                                 ToolbarItem(placement: .navigationBarLeading) {
-                                    Button {
+                                    Button(L10n.General.cancel) {
                                         viewStore.send(.end)
-                                    } label: {
-                                        Text(verbatim: L10n.General.cancel)
                                     }
+                                    .bodyLRegular(color: .accentColor)
                                 }
                             }
                         }

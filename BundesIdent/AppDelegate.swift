@@ -33,6 +33,7 @@ extension AppDelegate {
         let button = UIBarButtonItemAppearance(style: .plain)
         button.normal.titleTextAttributes = [.font: UIFont.bundNavigationBar]
         standard.buttonAppearance = button
+        standard.backButtonAppearance = button
         
         let done = UIBarButtonItemAppearance(style: .done)
         done.normal.titleTextAttributes = [.font: UIFont.bundNavigationBar]

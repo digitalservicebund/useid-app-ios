@@ -46,7 +46,6 @@ struct HomeView: View {
                         HStack {
                             Text(L10n.Home.More.title)
                                 .headingXL()
-                                .font(.bundLargeTitle)
                                 .padding(.top)
                                 .accessibilityAddTraits(.isHeader)
                             Spacer()
@@ -56,8 +55,7 @@ struct HomeView: View {
                         Spacer(minLength: 0)
                         WithViewStore(store) { viewStore in
                             Text(L10n.Home.version(viewStore.state.versionInfo))
-                                .font(.bundCaption1)
-                                .foregroundColor(.neutral900)
+                                .captionL(color: .neutral900)
                                 .padding(.bottom)
                         }
                     }
@@ -78,20 +76,19 @@ struct HomeView: View {
                 .padding(EdgeInsets(top: 60, leading: 24, bottom: 20, trailing: 24))
             
             Text(L10n.Home.Header.title)
-                .font(.bundLargeTitle)
+                .headingXL()
                 .padding(.bottom, 8)
                 .padding(.horizontal, 36)
-                .accessibilityAddTraits(.isHeader)
 #if PREVIEW
                 .onTapGesture {
                     ViewStore(store.stateless).send(.triggerIdentification(tokenURL: demoTokenURL))
                 }
 #endif
             Text(L10n.Home.Header.infoText)
+                .font(.bundCustom(size: 20, relativeTo: .body))
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 36)
                 .padding(.bottom, 20)
-                .font(.bundCustom(size: 20, relativeTo: .body))
         }
     }
     
@@ -167,8 +164,7 @@ struct HomeView: View {
             .padding(24)
         }
         .buttonStyle(.plain)
-        .font(.bundBody)
-        .foregroundColor(.blackish)
+        .bodyLRegular()
         .grouped()
     }
     

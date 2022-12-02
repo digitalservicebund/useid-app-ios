@@ -85,11 +85,9 @@ struct SharedScan: View {
                                 if let progressCaption = viewStore.showProgressCaption {
                                     VStack(spacing: 24) {
                                         Text(progressCaption.title)
-                                            .font(.bundTitle)
-                                            .foregroundColor(.blackish)
+                                            .headingL()
                                         Text(progressCaption.body)
-                                            .font(.bundBody)
-                                            .foregroundColor(.blackish)
+                                            .bodyLRegular()
                                     }
                                     .padding(.bottom, 50)
                                 }

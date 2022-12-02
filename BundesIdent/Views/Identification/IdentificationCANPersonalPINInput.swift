@@ -31,9 +31,7 @@ struct IdentificationCANPersonalPINInput: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
                     Text(L10n.Identification.PersonalPIN.title)
-                        .font(.bundLargeTitle)
-                        .foregroundColor(.blackish)
-                        .accessibilityAddTraits(.isHeader)
+                        .headingXL()
                     VStack {
                         Spacer()
                         WithViewStore(store) { viewStore in
@@ -49,13 +47,12 @@ struct IdentificationCANPersonalPINInput: View {
                                 viewStore.send(.done(pin: pin, request: viewStore.request, pinCANCallback: viewStore.pinCANCallback))
                             }))
                             .focused($pinEntryFocused)
-                            .font(.bundTitle)
+                            .headingL()
                         }
                     }
                     
                     Text(L10n.Identification.PersonalPIN.Error.Incorrect.remainingAttemptsLld(1))
-                        .font(.bundBody)
-                        .foregroundColor(.blackish)
+                        .bodyLRegular()
                         .multilineTextAlignment(.center)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                     .frame(maxWidth: .infinity)

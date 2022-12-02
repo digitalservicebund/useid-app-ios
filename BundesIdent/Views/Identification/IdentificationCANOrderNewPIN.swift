@@ -24,10 +24,7 @@ struct IdentificationCANOrderNewPIN: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
                         Text(L10n.Identification.Can.OrderNewPin.title)
-                            .font(.bundLargeTitle)
-                            .foregroundColor(.blackish)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .accessibilityAddTraits(.isHeader)
+                            .headingXL()
                         Markdown(L10n.Identification.Can.OrderNewPin.body)
                             .markdownStyle(MarkdownStyle(font: .bundBody))
                             .foregroundColor(.blackish)

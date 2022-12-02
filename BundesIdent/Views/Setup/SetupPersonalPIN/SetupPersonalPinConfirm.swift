@@ -26,7 +26,7 @@ struct SetupPersonalPINConfirm: View {
                                 viewStore.send(.checkPINs)
                             }))
                             .focused($pinEntryFocused)
-                            .font(.bundTitle)
+                            .headingL()
                             Spacer()
                         }
                         .transition(.move(edge: .bottom).combined(with: .opacity))

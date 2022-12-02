@@ -33,10 +33,7 @@ struct HeaderView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
             Text(title)
-                .font(.bundLargeTitle)
-                .foregroundColor(.blackish)
-				.fixedSize(horizontal: false, vertical: true)
-                .accessibilityAddTraits(.isHeader)
+                .headingXL()
             if let boxContent = boxContent {
                 Box(content: boxContent)
             }

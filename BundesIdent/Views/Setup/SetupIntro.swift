@@ -26,12 +26,10 @@ struct SetupIntro: View {
                                             action: .chooseStartSetup))
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button {
+                    Button(L10n.General.cancel) {
                         dismiss()
-                    } label: {
-                        Text(L10n.General.cancel)
-                            .font(.bundBody)
                     }
+                    .bodyLRegular(color: .accentColor)
                 }
             }
         }
