@@ -132,7 +132,7 @@ extension IdentificationScanState {
             shared.isScanning = false
             shared.scanAvailable = true
             return Effect(value: .requestPINAndCAN(request, pinCANCallback))
-                .delay(for: 0.65, scheduler: environment.mainQueue) // this delay is here to fix a bug where this particular screen was presented incorrectly
+                .delay(for: 2, scheduler: environment.mainQueue) // this delay is here to fix a bug where this particular screen was presented incorrectly
                 .eraseToEffect()
         case .authenticationStarted:
             environment.logger.info("Authentication started.")

@@ -1,6 +1,6 @@
 import Foundation
 
-struct IdentifiableCallback<Parameter>: Identifiable, Equatable {
+class IdentifiableCallback<Parameter>: Identifiable, Equatable {
     
     let id: UUID
     private let callback: (Parameter) -> Void
@@ -12,11 +12,11 @@ struct IdentifiableCallback<Parameter>: Identifiable, Equatable {
         self.callback = callback
     }
     
-    static func == (lhs: Self, rhs: Self) -> Bool {
+    static func == (lhs: IdentifiableCallback, rhs: IdentifiableCallback) -> Bool {
         return lhs.id == rhs.id
     }
     
-    mutating func callAsFunction(_ value: Parameter) {
+    func callAsFunction(_ value: Parameter) {
         guard !called else {
             fatalError("Callback already called. Aborting.")
         }

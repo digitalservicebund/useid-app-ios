@@ -291,20 +291,26 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 
                 return .none
             case .routeAction(_, action: .canIncorrectInput(.end(let request, let pinCANCallback))):
-                state.routes.dismiss()
-                guard let index = state.routes.lastIndex(where: { state in
-                    if case .canIntro = state.screen {
-                        return true
-                    } else {
-                        return false
+                let enumeratedRoutes = state.routes.enumerated()
+                guard var (index, canIntroState) = enumeratedRoutes.reduce(nil, { partialResult, indexedRoute -> (Int, IdentificationCANIntroState)? in
+                    let route = indexedRoute.element
+                    switch route.screen {
+                    case .canIntro(let canIntroState): return (indexedRoute.offset, canIntroState)
+                    default: return partialResult
                     }
                 }) else {
                     environment.issueTracker.capture(error: IdentificationCoordinatorError.canIntroStateNotInRoutes)
                     environment.logger.error("CanIntroState not found in routes")
                     return Effect(value: .dismiss)
                 }
-                state.routes.popTo(index: index)
-                return .none
+                
+                canIntroState.pinCANCallback = pinCANCallback
+                state.routes[index].screen = .canIntro(canIntroState)
+                
+                return Effect.routeWithDelaysIfUnsupported(state.routes) {
+                    $0.dismiss()
+                    $0.popTo(index: index)
+                }
             case .routeAction(_, action: .canIncorrectInput(.done(can: let can))):
                 state.can = can
                 state.attempt += 1
