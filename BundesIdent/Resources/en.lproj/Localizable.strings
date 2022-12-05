@@ -116,7 +116,7 @@
 "identification_scan_message" = "Hold your ID card close to the back side of the smartphone. The app uses NFC sensors in the smartphone and ID card to verify your PIN and retrieve the required data.";
 "identification_scan_provideCard" = "Hold your ID card close to the upper back of the iPhone.";
 "identification_scan_scan" = "Retrieve data now";
-"identification_scan_scanSuccess" = "Identification successful.";
+"identification_scan_scanSuccess" = "Scanning completed successfully.";
 "identification_scan_title" = "Retrieve the data from your ID card.";
 "identification_scan_unexpectedError_close" = "Close";
 "identification_scan_unexpectedError_message" = "An unexpected error has occurred. Please return to the website and try again.";
