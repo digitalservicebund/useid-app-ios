@@ -120,7 +120,7 @@
 "identification_scan_message" = "Halten Sie Ihren Ausweis dicht an die Rückseite des Smartphones. Die App nutzt die NFC-Sensoren in Smartphone und Ausweis, um Ihre PIN zu überprüfen und die benötigten Daten abzurufen.";
 "identification_scan_provideCard" = "Halten Sie Ihren Ausweis dicht an die obere Rückseite des iPhones.";
 "identification_scan_scan" = "Jetzt Daten abrufen";
-"identification_scan_scanSuccess" = "Erfolgreich ausgewiesen.";
+"identification_scan_scanSuccess" = "Scannen erfolgreich abgeschloßen.";
 "identification_scan_title" = "Halten Sie Ihren Ausweis dicht an die obere Rückseite des Smartphones.";
 "identification_scan_unexpectedError_close" = "Schließen";
 "identification_scan_unexpectedError_message" = "Ein unerwarteter Fehler ist aufgetreten. Bitte kehren Sie zur Webseite zurück und wiederholen Sie den Vorgang.";
