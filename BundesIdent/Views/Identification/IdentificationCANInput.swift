@@ -5,7 +5,6 @@ struct IdentificationCANInput: ReducerProtocol {
     struct State: Equatable {
         @BindableState var enteredCAN: String = ""
         let request: EIDAuthenticationRequest
-        var pinCANCallback: PINCANCallback
         var pushesToPINEntry: Bool
         var doneButtonEnabled: Bool {
             return enteredCAN.count == Constants.CAN_DIGIT_COUNT
@@ -13,7 +12,7 @@ struct IdentificationCANInput: ReducerProtocol {
     }
     
     enum Action: Equatable, BindableAction {
-        case done(can: String, request: EIDAuthenticationRequest, pinCANCallback: PINCANCallback, pushesToPINEntry: Bool)
+        case done(can: String, request: EIDAuthenticationRequest, pushesToPINEntry: Bool)
         case binding(BindingAction<IdentificationCANInput.State>)
     }
     
@@ -43,7 +42,7 @@ struct IdentificationCANInputView: View {
                                      doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                           title: L10n.Identification.Can.Input.continue,
                                                                           handler: { can in
-                            viewStore.send(.done(can: can, request: viewStore.request, pinCANCallback: viewStore.pinCANCallback, pushesToPINEntry: viewStore.pushesToPINEntry))
+                            viewStore.send(.done(can: can, request: viewStore.request, pushesToPINEntry: viewStore.pushesToPINEntry))
                         }))
                         .focused($pinEntryFocused)
                         .headingL()
@@ -66,7 +65,7 @@ struct IdentificationCANInputView: View {
 struct IdentificationCANInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationCANInputView(store: .init(initialState: .init(request: .preview, pinCANCallback: .init(id: UUID(), callback: { _, _ in }), pushesToPINEntry: true), reducer: IdentificationCANInput()))
+            IdentificationCANInputView(store: .init(initialState: .init(request: .preview, pushesToPINEntry: true), reducer: IdentificationCANInput()))
         }
         .previewDevice("iPhone 12")
     }

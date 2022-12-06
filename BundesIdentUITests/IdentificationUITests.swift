@@ -254,6 +254,7 @@ final class IdentificationUITests: XCTestCase {
         app.buttons["runCardSuspended"].wait().tap()
         
         app.navigationBars.buttons[L10n.General.cancel].wait().tap()
+        app.buttons[L10n.Identification.ConfirmEnd.confirm].wait().tap()
         app.staticTexts[L10n.Home.Header.title].assertExistence()
     }
     
@@ -327,6 +328,41 @@ final class IdentificationUITests: XCTestCase {
         app.buttons["cancelCANScan"].wait().tap()
         
         app.buttons[L10n.Identification.Scan.scan].assertExistence()
+    }
+    
+    func testIdentificationPINForgottenDismissesAfterConfirmation() throws {
+        var remainingAttempts = 3
+        let app = XCUIApplication()
+        app.launchWithDefaultArguments()
+        app.launchWithSetupCompleted()
+        app.launchWithDemoTokenURL()
+        app.launchWithIdentifiedOnce()
+        app.launch()
+        
+        app.navigationBars.buttons["Debug"].wait().tap()
+        app.buttons["requestAuthorization"].wait().tap()
+        
+        app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
+        
+        app.buttons[L10n.Identification.AttributeConsent.continue].wait().tap()
+        
+        let pinTextField = app.secureTextFields[L10n.Identification.PersonalPIN.textFieldLabel]
+        pinTextField.wait().tap()
+        pinTextField.waitAndTypeText("123456")
+        app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
+        app.navigationBars.buttons["Debug"].wait().tap()
+        app.buttons["runPINError (\(remainingAttempts))"].wait().tap()
+        remainingAttempts -= 1
+        
+        pinTextField.wait().tap()
+        pinTextField.waitAndTypeText("123456")
+        app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
+        app.navigationBars.buttons["Debug"].wait().tap()
+        app.buttons["runPINError (\(remainingAttempts))"].wait().tap()
+        
+        app.navigationBars.buttons[L10n.General.cancel].wait().tap()
+        app.buttons[L10n.Identification.ConfirmEnd.confirm].wait().tap()
+        app.staticTexts[L10n.Home.Header.title].assertExistence()
     }
     
     func testIdentificationCANAfterTwoAttemptsToCardBlocked() throws {

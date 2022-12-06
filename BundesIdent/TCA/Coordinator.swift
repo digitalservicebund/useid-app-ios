@@ -105,9 +105,11 @@ struct Coordinator: ReducerProtocol {
                 return Effect(value: .openURL(tokenURL))
 #endif
             case .identificationCoordinator(.dismiss),
+                    .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.dismiss))),
                     .identificationCoordinator(.afterConfirmEnd),
+                    .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.afterConfirmEnd))),
                     .identificationCoordinator(.routeAction(_, action: .scan(.dismiss))),
-                    .identificationCoordinator(.routeAction(_, action: .canScan(.dismiss))),
+                    .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.dismiss))))),
                     .setupCoordinator(.confirmEnd),
                     .setupCoordinator(.routeAction(_, action: .done(.done))),
                     .setupCoordinator(.afterConfirmEnd):

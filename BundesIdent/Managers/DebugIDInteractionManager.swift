@@ -267,6 +267,11 @@ class DebugIDInteractionManager: IDInteractionManagerType {
                                      sequence: [.loadError, .requestAuthorization])
     }
     
+    func debuggableCANIdentify(tokenURL: URL) -> DebuggableInteraction<IdentifyDebugSequence> {
+        return DebuggableInteraction(publisher: identify(tokenURL: tokenURL, nfcMessagesProvider: IdentificationNFCMessageProvider(nfcMessages: .identification)),
+                                     sequence: [.cancelCANScan, .identifySuccessfully, .runCANError, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: .can)])
+    }
+    
     func identify(tokenURL: URL, nfcMessagesProvider: (NSObjectProtocol & NFCConfigProtocol)) -> EIDInteractionPublisher {
         let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
         self.subject = subject
