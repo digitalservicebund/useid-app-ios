@@ -5,7 +5,6 @@ struct IdentificationCANIncorrectInput: ReducerProtocol {
     struct State: Equatable {
         @BindableState var enteredCAN: String = ""
         let request: EIDAuthenticationRequest
-        var pinCANCallback: PINCANCallback
         
         var doneButtonEnabled: Bool {
             return enteredCAN.count == Constants.CAN_DIGIT_COUNT
@@ -15,7 +14,7 @@ struct IdentificationCANIncorrectInput: ReducerProtocol {
     enum Action: Equatable, BindableAction {
         case done(can: String)
         case triggerEnd
-        case end(EIDAuthenticationRequest, PINCANCallback)
+        case end(EIDAuthenticationRequest)
         case binding(BindingAction<IdentificationCANIncorrectInput.State>)
     }
     
@@ -24,7 +23,7 @@ struct IdentificationCANIncorrectInput: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .triggerEnd:
-                return Effect(value: .end(state.request, state.pinCANCallback))
+                return Effect(value: .end(state.request))
             default:
                 return .none
             }
@@ -100,7 +99,7 @@ struct IdentificationCANIncorrectInputView: View {
 struct IdentificationCANIncorrectInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationCANIncorrectInputView(store: .init(initialState: .init(request: .preview, pinCANCallback: PINCANCallback(id: UUID(), callback: { _, _ in })),
+            IdentificationCANIncorrectInputView(store: .init(initialState: .init(request: .preview),
                                                          reducer: IdentificationCANIncorrectInput()))
         }
         .previewDevice("iPhone 12")

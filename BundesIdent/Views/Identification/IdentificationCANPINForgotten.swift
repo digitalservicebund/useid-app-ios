@@ -5,12 +5,11 @@ import ComposableArchitecture
 struct IdentificationCANPINForgotten: ReducerProtocol {
     struct State: Equatable {
         let request: EIDAuthenticationRequest
-        var pinCANCallback: PINCANCallback
     }
 
     enum Action: Equatable {
         case orderNewPIN
-        case showCANIntro(EIDAuthenticationRequest, PINCANCallback)
+        case showCANIntro(EIDAuthenticationRequest)
         case end
     }
     
@@ -26,7 +25,7 @@ struct IdentificationCANPINForgottenView: View {
                 DialogView(store: store.stateless, title: L10n.Identification.Can.PinForgotten.title,
                            message: L10n.Identification.Can.PinForgotten.body,
                            imageMeta: ImageMeta(asset: Asset.idConfused, maxHeight: 230),
-                           secondaryButton: .init(title: L10n.Identification.Can.PinForgotten.retry, action: .showCANIntro(viewStore.request, viewStore.pinCANCallback)),
+                           secondaryButton: .init(title: L10n.Identification.Can.PinForgotten.retry, action: .showCANIntro(viewStore.request)),
                            primaryButton: .init(title: L10n.Identification.Can.PinForgotten.orderNewPin, action: .orderNewPIN))
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -44,9 +43,7 @@ struct IdentificationCANPINForgottenView: View {
 
 struct IdentificationCANPINForgotten_Previews: PreviewProvider {
     static var previews: some View {
-        IdentificationCANPINForgottenView(store: .init(initialState: .init(request: .preview,
-                                                                           pinCANCallback: PINCANCallback(id: UUID(),
-                                                                                                          callback: { _, _ in })),
+        IdentificationCANPINForgottenView(store: .init(initialState: .init(request: .preview),
                                                        reducer: IdentificationCANPINForgotten()))
     }
 }

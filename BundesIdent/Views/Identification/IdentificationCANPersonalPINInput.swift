@@ -5,14 +5,13 @@ struct IdentificationCANPersonalPINInput: ReducerProtocol {
     struct State: Equatable {
         @BindableState var enteredPIN: String = ""
         let request: EIDAuthenticationRequest
-        var pinCANCallback: PINCANCallback
         var doneButtonEnabled: Bool {
             return enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
         }
     }
 
     enum Action: Equatable, BindableAction {
-        case done(pin: String, request: EIDAuthenticationRequest, pinCANCallback: PINCANCallback)
+        case done(pin: String, request: EIDAuthenticationRequest)
         case binding(BindingAction<IdentificationCANPersonalPINInput.State>)
     }
     
@@ -43,7 +42,7 @@ struct IdentificationCANPersonalPINInputView: View {
                                          doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                               title: L10n.Identification.PersonalPIN.continue,
                                                                               handler: { pin in
-                                viewStore.send(.done(pin: pin, request: viewStore.request, pinCANCallback: viewStore.pinCANCallback))
+                                viewStore.send(.done(pin: pin, request: viewStore.request))
                             }))
                             .focused($pinEntryFocused)
                             .headingL()
@@ -75,7 +74,7 @@ struct IdentificationCANPersonalPINInputView: View {
 struct IdentificationCANPersonalPINInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationCANPersonalPINInputView(store: .init(initialState: .init(request: .preview, pinCANCallback: .init(id: UUID(), callback: { _, _ in })),
+            IdentificationCANPersonalPINInputView(store: .init(initialState: .init(request: .preview),
                                                            reducer: IdentificationCANPersonalPINInput()))
         }
         .previewDevice("iPhone 12")

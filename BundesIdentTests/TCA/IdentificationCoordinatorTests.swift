@@ -62,11 +62,11 @@ class IdentificationCoordinatorTests: XCTestCase {
         let callback = IdentifiableCallback<FlaggedAttributes>(id: UUID(number: 0), callback: closure)
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                         states: [
+                                                          states: [
                                                             .root(.overview(.loaded(.init(id: UUID(number: 0),
                                                                                           request: request,
                                                                                           handler: callback))))
-                                                         ]),
+                                                          ]),
             reducer: IdentificationCoordinator())
         
         let pinCallback = PINCallback(id: UUID(number: 1), callback: { pin in })
@@ -80,10 +80,10 @@ class IdentificationCoordinatorTests: XCTestCase {
         let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                         states: [
+                                                          states: [
                                                             .root(.personalPIN(.init(request: request,
                                                                                      callback: callback)))
-                                                         ]),
+                                                          ]),
             reducer: IdentificationCoordinator())
         store.dependencies.storageManager = mockStorageManager
         stub(mockStorageManager) {
@@ -101,10 +101,10 @@ class IdentificationCoordinatorTests: XCTestCase {
         let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                         states: [
+                                                          states: [
                                                             .root(.personalPIN(.init(request: request,
                                                                                      callback: callback)))
-                                                         ]),
+                                                          ]),
             reducer: IdentificationCoordinator())
         store.dependencies.storageManager = mockStorageManager
         stub(mockStorageManager) {
@@ -129,12 +129,12 @@ class IdentificationCoordinatorTests: XCTestCase {
         let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                         pin: pin,
-                                                         states: [
+                                                          pin: pin,
+                                                          states: [
                                                             .root(.scan(.init(request: request,
                                                                               pin: pin,
                                                                               pinCallback: callback)))
-                                                         ]),
+                                                          ]),
             reducer: IdentificationCoordinator())
         store.dependencies.urlOpener = urlOpener
         store.dependencies.storageManager = mockStorageManager
@@ -159,12 +159,12 @@ class IdentificationCoordinatorTests: XCTestCase {
         let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                         pin: pin,
-                                                         states: [
+                                                          pin: pin,
+                                                          states: [
                                                             .root(.scan(.init(request: request,
                                                                               pin: pin,
                                                                               pinCallback: callback)))
-                                                         ]),
+                                                          ]),
             reducer: IdentificationCoordinator())
         
         store.send(.routeAction(0, action: .scan(.wrongPIN(remainingAttempts: 2)))) {
@@ -178,12 +178,12 @@ class IdentificationCoordinatorTests: XCTestCase {
         let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                         pin: pin,
-                                                         states: [
+                                                          pin: pin,
+                                                          states: [
                                                             .root(.scan(.init(request: request,
                                                                               pin: pin,
                                                                               pinCallback: callback)))
-                                                         ]),
+                                                          ]),
             reducer: IdentificationCoordinator())
         
         let errorState = ScanError.State(errorType: .cardBlocked, retry: false)
@@ -198,13 +198,13 @@ class IdentificationCoordinatorTests: XCTestCase {
         let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                         pin: pin,
-                                                         states: [
+                                                          pin: pin,
+                                                          states: [
                                                             .root(.scan(.init(request: request,
                                                                               pin: pin,
                                                                               pinCallback: callback))),
                                                             .sheet(.incorrectPersonalPIN(IdentificationIncorrectPersonalPIN.State(enteredPIN: "112233", remainingAttempts: 2)))
-                                                         ]),
+                                                          ]),
             reducer: IdentificationCoordinator())
         
         store.send(.routeAction(1, action: .incorrectPersonalPIN(.done(pin: "112233")))) {
@@ -220,9 +220,9 @@ class IdentificationCoordinatorTests: XCTestCase {
     func testOverviewIdentify() {
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                         states: [
+                                                          states: [
                                                             .root(.overview(.loading(IdentificationOverviewLoading.State())))
-                                                         ]),
+                                                          ]),
             reducer: IdentificationCoordinator()
         )
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
@@ -249,11 +249,11 @@ class IdentificationCoordinatorTests: XCTestCase {
         let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                         pin: pin,
-                                                         states: [
+                                                          pin: pin,
+                                                          states: [
                                                             .root(.scan(IdentificationPINScan.State(request: request, pin: pin, pinCallback: callback))),
                                                             .sheet(.incorrectPersonalPIN(IdentificationIncorrectPersonalPIN.State(remainingAttempts: 2)))
-                                                         ]),
+                                                          ]),
             reducer: IdentificationCoordinator()
         )
         
@@ -274,11 +274,11 @@ class IdentificationCoordinatorTests: XCTestCase {
         let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                         pin: pin,
-                                                         states: [
+                                                          pin: pin,
+                                                          states: [
                                                             .root(.scan(IdentificationPINScan.State(request: request, pin: pin, pinCallback: callback))),
                                                             .sheet(.incorrectPersonalPIN(IdentificationIncorrectPersonalPIN.State(remainingAttempts: 2)))
-                                                         ]),
+                                                          ]),
             reducer: IdentificationCoordinator()
         )
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
@@ -295,10 +295,10 @@ class IdentificationCoordinatorTests: XCTestCase {
         let pin = "123456"
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                         pin: pin,
-                                                         states: [
+                                                          pin: pin,
+                                                          states: [
                                                             .root(.overview(.loading(IdentificationOverviewLoading.State()))),
-                                                         ]),
+                                                          ]),
             reducer: IdentificationCoordinator()
         )
         
@@ -318,13 +318,13 @@ class IdentificationCoordinatorTests: XCTestCase {
         let newPINCANCallback = PINCANCallback(id: UUID(number: 1), callback: { _, _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                         pin: pin,
-                                                         states: [
+                                                          pin: pin,
+                                                          states: [
                                                             .root(.scan(.init(request: request,
                                                                               pin: pin,
                                                                               pinCallback: pinCallback))),
                                                             .sheet(.incorrectPersonalPIN(IdentificationIncorrectPersonalPIN.State(enteredPIN: "112233", remainingAttempts: 2)))
-                                                         ]),
+                                                          ]),
             reducer: IdentificationCoordinator())
         
         store.send(.routeAction(1, action: .incorrectPersonalPIN(.done(pin: "112233")))) {
@@ -337,8 +337,12 @@ class IdentificationCoordinatorTests: XCTestCase {
         }
         
         store.send(.routeAction(0, action: .scan(.requestPINAndCAN(request, newPINCANCallback)))) {
-            $0.routes.append(.push(.canPINForgotten(IdentificationCANPINForgotten.State(request: request,
-                                                                                       pinCANCallback: newPINCANCallback))))
+            $0.routes.append(.push(.identificationCANCoordinator(.init(tokenURL: $0.tokenURL,
+                                                                       request: request,
+                                                                       pinCANCallback: newPINCANCallback,
+                                                                       pin: $0.pin!,
+                                                                       attempt: $0.attempt,
+                                                                       goToCanIntroScreen: false))))
         }
     }
     
@@ -349,169 +353,22 @@ class IdentificationCoordinatorTests: XCTestCase {
         let newPINCANCallback = PINCANCallback(id: UUID(number: 1), callback: { _, _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                         pin: pin,
-                                                         states: [
+                                                          pin: pin,
+                                                          states: [
                                                             .root(.personalPIN(.init(request: request, callback: pinCallback))),
                                                             .push(.scan(.init(request: request, pin: pin, pinCallback: pinCallback)))
-                                                         ]),
+                                                          ]),
             reducer: IdentificationCoordinator())
         
-        store.send(.routeAction(1, action: .scan(.requestPINAndCAN(request, newPINCANCallback))))
-        
-        let oldRoutes: [Route<IdentificationScreen.State>] = [
-            .root(.personalPIN(.init(request: request, callback: pinCallback))),
-            .push(.scan(.init(request: request, pin: pin, pinCallback: pinCallback)))
-        ]
-        let newRoutes: [Route<IdentificationScreen.State>] = [
-            .root(.personalPIN(.init(request: request, callback: pinCallback))),
-            .push(.scan(.init(request: request, pin: pin, pinCallback: pinCallback))),
-            .push(.canIntro(.init(request: request, pinCANCallback: newPINCANCallback, shouldDismiss: true)))
-        ]
-        store.receive(.updateRoutes(oldRoutes))
-        store.receive(.updateRoutes(newRoutes)) {
-            $0.routes = newRoutes
-        }
-    }
-    
-    func testCANIntroFromImmediateThirdAttemptToCanScan() throws {
-        let pin = "123456"
-        let can = "123456"
-        let request = EIDAuthenticationRequest.preview
-        let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
-        let store = TestStore(
-            initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                         pin: pin,
-                                                         states: [
-                                                            .root(.canIntro(IdentificationCANIntro.State(request: request, pinCANCallback: pinCANCallback, shouldDismiss: true)))
-                                                         ]),
-            reducer: IdentificationCoordinator())
-        
-        store.send(.routeAction(0, action: .canIntro(.showInput(request, pinCANCallback, true)))) {
-            $0.routes.append(.push(.canInput(IdentificationCANInput.State(request: request, pinCANCallback: pinCANCallback, pushesToPINEntry: false))))
+        store.send(.routeAction(1, action: .scan(.requestPINAndCAN(request, newPINCANCallback)))) {
+            $0.routes.append(.push(.identificationCANCoordinator(.init(tokenURL: $0.tokenURL,
+                                                                       request: request,
+                                                                       pinCANCallback: newPINCANCallback,
+                                                                       pin: $0.pin!,
+                                                                       attempt: $0.attempt,
+                                                                       goToCanIntroScreen: true))))
         }
         
-        store.send(.routeAction(1, action: .canInput(.done(can: can, request: request, pinCANCallback: pinCANCallback, pushesToPINEntry: false)))) {
-            $0.can = can
-            $0.routes.append(.push(
-                .canScan(IdentificationCANScan.State(request: request,
-                                              pin: pin,
-                                              can: can,
-                                              pinCANCallback: pinCANCallback,
-                                              shared: SharedScan.State(showInstructions: false)))))
-        }
-        let newPINCANCallback = PINCANCallback(id: UUID(number: 1), callback: { _, _ in })
-        store.send(.routeAction(2, action: .canScan(.requestPINAndCAN(request, newPINCANCallback)))) {
-            $0.routes.append(.sheet(.canIncorrectInput(.init(request: request, pinCANCallback: newPINCANCallback))))
-        }
-    }
-    
-    func testCanScanWrongCANToScan() throws {
-        let pin = "123456"
-        let can = "123456"
-        let enteredCan = "654321"
-        let request = EIDAuthenticationRequest.preview
-        let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
-        let store = TestStore(
-            initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                         pin: pin,
-                                                         can: can,
-                                                         states: [
-                                                            .root(.canScan(.init(request: request,
-                                                                                 pin: pin,
-                                                                                 can: can,
-                                                                                 pinCANCallback: pinCANCallback)))
-                                                         ]),
-            reducer: IdentificationCoordinator())
-        
-        store.send(.routeAction(0, action: .canScan(.requestPINAndCAN(request, pinCANCallback)))) {
-            $0.routes.append(.sheet(.canIncorrectInput(.init(request: request, pinCANCallback: pinCANCallback))))
-        }
-        
-        store.send(.routeAction(1, action: .canIncorrectInput(.done(can: enteredCan)))) {
-            guard case .canScan(var scanState) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
-            $0.attempt += 1
-            $0.can = enteredCan
-            scanState.shared.attempt = $0.attempt
-            scanState.can = $0.can!
-            $0.routes = [.root(.canScan(scanState))]
-        }
-    }
-    
-    func testCanScanBlocksCard() throws {
-        let pin = "123456"
-        let can = "123456"
-        let cardBlockedError = ScanError.State(errorType: .cardBlocked, retry: false)
-        let request = EIDAuthenticationRequest.preview
-        let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
-        let store = TestStore(
-            initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                         pin: pin,
-                                                         can: can,
-                                                         states: [
-                                                            .root(.canScan(.init(request: request,
-                                                                                 pin: pin,
-                                                                                 can: can,
-                                                                                 pinCANCallback: pinCANCallback)))
-                                                         ]),
-            reducer: IdentificationCoordinator())
-        
-        store.send(.routeAction(0, action: .canScan(.error(cardBlockedError)))) {
-            $0.routes.append(.sheet(.error(cardBlockedError)))
-        }
-    }
-    
-    @MainActor
-    func testScanFromImmediateThirdAttemptPopsToCanIntro() async throws {
-        let pin = "123456"
-        let can = "123456"
-        let request = EIDAuthenticationRequest.preview
-        let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
-        let newPINCANCallback = PINCANCallback(id: UUID(number: 1), callback: { _, _ in })
-        let store = TestStore(
-            initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                         pin: pin,
-                                                         can: can,
-                                                         states: [
-                                                            .root(.canIntro(IdentificationCANIntro.State(request: request, pinCANCallback: pinCANCallback, shouldDismiss: true))),
-                                                            .push(.canInput(IdentificationCANInput.State(request: request, pinCANCallback: pinCANCallback, pushesToPINEntry: false))),
-                                                            .push(.canScan(IdentificationCANScan.State(request: request, pin: pin, can: can, pinCANCallback: newPINCANCallback, shared: SharedScan.State(showInstructions: false)))),
-                                                            .sheet(.canIncorrectInput(IdentificationCANIncorrectInput.State(request: request, pinCANCallback: newPINCANCallback)))
-                                                         ]),
-            reducer: IdentificationCoordinator())
-
-        let routesWithUpdatedCANIntro: [Route<IdentificationScreen.State>] = [
-            .root(.canIntro(IdentificationCANIntro.State(request: request, pinCANCallback: newPINCANCallback, shouldDismiss: true))),
-            .push(.canInput(IdentificationCANInput.State(request: request, pinCANCallback: pinCANCallback, pushesToPINEntry: false))),
-            .push(.canScan(IdentificationCANScan.State(request: request, pin: pin, can: can, pinCANCallback: newPINCANCallback, shared: SharedScan.State(showInstructions: false)))),
-            .sheet(.canIncorrectInput(IdentificationCANIncorrectInput.State(request: request, pinCANCallback: newPINCANCallback)))
-        ]
-        
-        let routesWithSheetDismissed: [Route<IdentificationScreen.State>] = [
-            .root(.canIntro(IdentificationCANIntro.State(request: request, pinCANCallback: newPINCANCallback, shouldDismiss: true))),
-            .push(.canInput(IdentificationCANInput.State(request: request, pinCANCallback: pinCANCallback, pushesToPINEntry: false))),
-            .push(.canScan(IdentificationCANScan.State(request: request, pin: pin, can: can, pinCANCallback: newPINCANCallback, shared: SharedScan.State(showInstructions: false))))
-        ]
-        
-        let updatedRoutes: [Route<IdentificationScreen.State>] = [
-            .root(.canIntro(IdentificationCANIntro.State(request: request, pinCANCallback: newPINCANCallback, shouldDismiss: true)))
-        ]
-        
-        await store.send(.routeAction(3, action: .canIncorrectInput(.end(request, newPINCANCallback)))) {
-            $0.routes = routesWithUpdatedCANIntro
-        }
-
-        await store.receive(.updateRoutes(routesWithUpdatedCANIntro))
-
-        await store.receive(.updateRoutes(routesWithSheetDismissed)) {
-            $0.routes = routesWithSheetDismissed
-        }
-        
-        await store.receive(.updateRoutes(updatedRoutes)) {
-            $0.routes = updatedRoutes
-        }
- 
-        await store.finish()
     }
 }
-
 
