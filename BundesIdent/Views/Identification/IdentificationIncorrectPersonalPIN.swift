@@ -98,10 +98,6 @@ struct IdentificationIncorrectPersonalPIN: View {
                                     }
                                     .transition(.move(edge: .bottom).combined(with: .opacity))
                                 }
-                                Text(L10n.Identification.PersonalPIN.Error.Incorrect.remainingAttemptsLld(viewStore.remainingAttempts))
-                                    .bodyLRegular()
-                                    .multilineTextAlignment(.center)
-                                    .transition(.move(edge: .bottom).combined(with: .opacity))
                             }
                         }
                         .frame(maxWidth: .infinity)
