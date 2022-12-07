@@ -76,8 +76,8 @@ let identificationCANScanReducer = Reducer<IdentificationCANScanState, Identific
         environment.storageManager.identifiedOnce = true
         
         return .concatenate(.trackEvent(category: "identification", action: "success", analytics: environment.analytics),
-                            .openURL(redirectURL, urlOpener: environment.urlOpener),
-                            Effect(value: .dismiss))
+                            Effect(value: .dismiss),
+                            .openURL(redirectURL, urlOpener: environment.urlOpener))
     case .shared(.showNFCInfo):
         state.alert = AlertState(title: TextState(L10n.HelpNFC.title),
                                  message: TextState(L10n.HelpNFC.body),
