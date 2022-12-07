@@ -3,9 +3,10 @@ import ComposableArchitecture
 import Combine
 import Sentry
 
-enum IdentificationScanError: Error, Equatable {
+enum IdentificationScanError: Error, Equatable, CustomNSError {
     case idCardInteraction(IDCardInteractionError)
     case unexpectedEvent(EIDInteractionEvent)
+    case cancelAfterCardRecognized
 }
 
 struct IdentificationScanState: Equatable, IDInteractionHandler {
@@ -52,7 +53,7 @@ let identificationScanReducer = Reducer<IdentificationScanState, IdentificationS
         return Effect(value: .shared(.startScan))
     case .shared(.startScan):
         state.shared.showInstructions = false
-        
+        state.shared.cardRecognized = false
         guard !state.shared.isScanning else { return .none }
         state.pinCallback(state.pin)
         state.shared.isScanning = true
@@ -121,6 +122,9 @@ extension IdentificationScanState {
             // This is our signal that the user canceled (for now)
             guard let remainingAttempts = remainingAttempts else {
                 environment.logger.info("Identification cancelled")
+                if shared.cardRecognized {
+                    environment.issueTracker.capture(error: IdentificationScanError.cancelAfterCardRecognized)
+                }
                 return .none
             }
             environment.logger.info("PIN request: \(callbackId)")
@@ -143,6 +147,7 @@ extension IdentificationScanState {
             shared.isScanning = true
         case .cardRecognized:
             environment.logger.info("Card recognized.")
+            shared.cardRecognized = true
             shared.isScanning = true
         case .authenticationSuccessful:
             environment.logger.info("Authentication succesful.")

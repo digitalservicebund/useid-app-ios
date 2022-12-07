@@ -3,9 +3,10 @@ import ComposableArchitecture
 import Combine
 import Sentry
 
-enum SetupScanError: Error, Equatable {
+enum SetupScanError: Error, Equatable, CustomNSError {
     case idCardInteraction(IDCardInteractionError)
     case unexpectedEvent(EIDInteractionEvent)
+    case cancelAfterCardRecognized
 }
 
 struct SetupScanState: Equatable {
@@ -47,7 +48,7 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         return .none
     case .shared(.startScan):
         state.shared.showInstructions = false
-        
+        state.shared.cardRecognized = false
         guard !state.shared.isScanning else { return .none }
         state.shared.isScanning = true
         
@@ -92,6 +93,9 @@ let setupScanReducer = Reducer<SetupScanState, SetupScanAction, AppEnvironment> 
         return state.handle(event: event, environment: environment)
     case .cancelScan:
         state.shared.isScanning = false
+        if state.shared.cardRecognized {
+            environment.issueTracker.capture(error: SetupScanError.cancelAfterCardRecognized)
+        }
         return .cancel(id: CancelId.self)
     case .error:
         state.shared.isScanning = false
@@ -132,6 +136,7 @@ extension SetupScanState {
             environment.logger.info("Card interaction complete.")
         case .cardRecognized:
             environment.logger.info("Card recognized.")
+            shared.cardRecognized = true
             shared.isScanning = true
         case .cardRemoved:
             shared.showProgressCaption = ProgressCaption(title: L10n.FirstTimeUser.Scan.Progress.title,

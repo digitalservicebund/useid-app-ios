@@ -89,7 +89,10 @@ class SetupScanTests: XCTestCase {
         store.receive(.scanEvent(.success(.authenticationStarted)))
         store.receive(.scanEvent(.success(.requestCardInsertion(cardInsertionCallback))))
         
-        store.receive(.scanEvent(.success(.cardRecognized)))
+        store.receive(.scanEvent(.success(.cardRecognized))) {
+            $0.shared.cardRecognized = true
+        }
+        
         store.receive(.scanEvent(.success(.cardInteractionComplete)))
         store.receive(.scanEvent(.success(.requestChangedPIN(remainingAttempts: 3, pinCallback: pinCallback)))) {
             $0.remainingAttempts = 3
