@@ -21,6 +21,7 @@ enum IdentificationCoordinatorError: CustomNSError {
     case pinNilWhenTriedScan
     case canNilWhenTriedScan
     case canIntroStateNotInRoutes
+    case pinCANCallbackNilWhenTriedScan
     case noScreenToHandleEIDInteractionEvents
 }
 
@@ -28,6 +29,7 @@ struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
     var tokenURL: URL
     var pin: String?
     var can: String?
+    var pinCANCallback: PINCANCallback?
     var attempt: Int = 0
     var authenticationSuccessful = false
     
@@ -37,7 +39,7 @@ struct IdentificationCoordinatorState: Equatable, IndexedRouterState {
     }
     
     var alert: AlertState<IdentificationCoordinatorAction>?
-
+    
 #if PREVIEW
     var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
@@ -148,7 +150,7 @@ enum IdentificationCoordinatorAction: Equatable, IndexedRouterAction {
  .cardInteractionComplete
  .requestPIN(remainingAttempts: 3)
  .cardRemoved
-
+ 
  Card removed before process finished:
  .cardRecognized
  .authenticationSuccessful (optional)
@@ -230,38 +232,45 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 state.routes.presentSheet(.error(errorState))
                 return .none
             case .routeAction(_, action: .scan(.requestPINAndCAN(let request, let pinCANCallback))):
+                state.pinCANCallback = pinCANCallback
                 if state.attempt > 0 {
-                    state.routes.push(.canPINForgotten(IdentificationCANPINForgottenState(request: request, pinCANCallback: pinCANCallback)))
+                    state.routes.push(.canPINForgotten(IdentificationCANPINForgottenState(request: request)))
                 } else {
                     return Effect.routeWithDelaysIfUnsupported(state.routes) {
-                        $0.push(.canIntro(.init(request: request, pinCANCallback: pinCANCallback, shouldDismiss: true)))
+                        $0.push(.canIntro(.init(request: request, shouldDismiss: true)))
                     }
                 }
                 return .none
             case .routeAction(_, action: .canScan(.requestPINAndCAN(let request, let pinCANCallback))):
-                state.routes.presentSheet(.canIncorrectInput(.init(request: request, pinCANCallback: pinCANCallback)))
+                state.pinCANCallback = pinCANCallback
+                state.routes.presentSheet(.canIncorrectInput(.init(request: request)))
                 return .none
             case .routeAction(_, action: .canPINForgotten(.end)):
                 return Effect(value: .swipeToDismiss)
             case .routeAction(_, action: .canPINForgotten(.orderNewPIN)):
                 state.routes.push(.canOrderNewPIN(.init()))
                 return .none
-            case .routeAction(_, action: .canPINForgotten(.showCANIntro(let request, let pinCallback))):
-                state.routes.push(.canIntro(IdentificationCANIntroState(request: request, pinCANCallback: pinCallback, shouldDismiss: false)))
+            case .routeAction(_, action: .canPINForgotten(.showCANIntro(let request))):
+                state.routes.push(.canIntro(IdentificationCANIntroState(request: request, shouldDismiss: false)))
                 return .none
-            case .routeAction(_, action: .canIntro(.showInput(let request, let pinCallback, let shouldDismiss))):
-                state.routes.push(.canInput(IdentificationCANInputState(request: request, pinCANCallback: pinCallback, pushesToPINEntry: !shouldDismiss)))
+            case .routeAction(_, action: .canIntro(.showInput(let request, let shouldDismiss))):
+                state.routes.push(.canInput(IdentificationCANInputState(request: request, pushesToPINEntry: !shouldDismiss)))
                 return .none
             case .routeAction(_, action: .canIntro(.end)):
                 return Effect(value: .swipeToDismiss)
-            case .routeAction(_, action: .canInput(.done(can: let can, request: let request, pinCANCallback: let pinCANCallback, pushesToPINEntry: let pushesToPINEntry))):
+            case .routeAction(_, action: .canInput(.done(can: let can, request: let request, pushesToPINEntry: let pushesToPINEntry))):
                 state.can = can
                 if pushesToPINEntry {
-                    state.routes.push(.canPersonalPINInput(IdentificationCANPersonalPINInputState(request: request, pinCANCallback: pinCANCallback)))
+                    state.routes.push(.canPersonalPINInput(IdentificationCANPersonalPINInputState(request: request)))
                 } else {
                     guard let pin = state.pin else {
                         environment.issueTracker.capture(error: IdentificationCoordinatorError.pinNilWhenTriedScan)
                         environment.logger.error("PIN nil when tried to scan")
+                        return Effect(value: .dismiss)
+                    }
+                    guard let pinCANCallback = state.pinCANCallback else {
+                        environment.issueTracker.capture(error: IdentificationCoordinatorError.pinCANCallbackNilWhenTriedScan)
+                        environment.logger.error("PINCANCallback was nil when tried to scan")
                         return Effect(value: .dismiss)
                     }
                     state.routes.push(
@@ -274,11 +283,16 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 }
                 
                 return .none
-            case .routeAction(_, action: .canPersonalPINInput(.done(pin: let pin, request: let request, pinCANCallback: let pinCANCallback))):
+            case .routeAction(_, action: .canPersonalPINInput(.done(pin: let pin, request: let request))):
                 state.pin = pin
                 guard let can = state.can else {
                     environment.issueTracker.capture(error: IdentificationCoordinatorError.canNilWhenTriedScan)
                     environment.logger.error("CAN nil when tried to scan")
+                    return Effect(value: .dismiss)
+                }
+                guard let pinCANCallback = state.pinCANCallback else {
+                    environment.issueTracker.capture(error: IdentificationCoordinatorError.pinCANCallbackNilWhenTriedScan)
+                    environment.logger.error("PINCANCallback was nil when tried to scan")
                     return Effect(value: .dismiss)
                 }
                 state.routes.push(
@@ -290,23 +304,17 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 )
                 
                 return .none
-            case .routeAction(_, action: .canIncorrectInput(.end(let request, let pinCANCallback))):
-                let enumeratedRoutes = state.routes.enumerated()
-                guard var (index, canIntroState) = enumeratedRoutes.reduce(nil, { partialResult, indexedRoute -> (Int, IdentificationCANIntroState)? in
-                    let route = indexedRoute.element
-                    switch route.screen {
-                    case .canIntro(let canIntroState): return (indexedRoute.offset, canIntroState)
-                    default: return partialResult
+            case .routeAction(_, action: .canIncorrectInput(.end)):
+                guard let index = state.routes.firstIndex(where: { route in
+                    if case .canIntro = route.screen {
+                        return true
                     }
+                    return false
                 }) else {
                     environment.issueTracker.capture(error: IdentificationCoordinatorError.canIntroStateNotInRoutes)
                     environment.logger.error("CanIntroState not found in routes")
                     return Effect(value: .dismiss)
                 }
-                
-                canIntroState.pinCANCallback = pinCANCallback
-                state.routes[index].screen = .canIntro(canIntroState)
-                
                 return Effect.routeWithDelaysIfUnsupported(state.routes) {
                     $0.dismiss()
                     $0.popTo(index: index)
@@ -331,7 +339,7 @@ let identificationCoordinatorReducer: Reducer<IdentificationCoordinatorState, Id
                 return Effect(value: .afterConfirmEnd)
                     .delay(for: 0.65, scheduler: environment.mainQueue)
                     .eraseToEffect()
-            
+                
             case .routeAction(_, action: .overview(.end)):
                 state.alert = AlertState(title: TextState(verbatim: L10n.Identification.ConfirmEnd.title),
                                          message: TextState(verbatim: L10n.Identification.ConfirmEnd.message),

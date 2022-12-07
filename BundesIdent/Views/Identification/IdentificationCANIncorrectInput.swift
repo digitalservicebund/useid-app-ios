@@ -4,7 +4,6 @@ import ComposableArchitecture
 struct IdentificationCANIncorrectInputState: Equatable {
     @BindableState var enteredCAN: String = ""
     let request: EIDAuthenticationRequest
-    var pinCANCallback: PINCANCallback
     
     var doneButtonEnabled: Bool {
         return enteredCAN.count == Constants.CAN_DIGIT_COUNT
@@ -14,14 +13,14 @@ struct IdentificationCANIncorrectInputState: Equatable {
 enum IdentificationCANIncorrectInputAction: Equatable, BindableAction {
     case done(can: String)
     case triggerEnd
-    case end(EIDAuthenticationRequest, PINCANCallback)
+    case end(EIDAuthenticationRequest)
     case binding(BindingAction<IdentificationCANIncorrectInputState>)
 }
 
 var identificationCANIncorrectInputReducer = Reducer<IdentificationCANIncorrectInputState, IdentificationCANIncorrectInputAction, AppEnvironment>.init { state, action, _ in
     switch action {
     case .triggerEnd:
-        return Effect(value: .end(state.request, state.pinCANCallback))
+        return Effect(value: .end(state.request))
     default:
         return .none
     }
@@ -95,7 +94,7 @@ struct IdentificationCANIncorrectInput: View {
 struct IdentificationCANIncorrectInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationCANIncorrectInput(store: .init(initialState: .init(request: .preview, pinCANCallback: PINCANCallback(id: UUID(), callback: { _, _ in })),
+            IdentificationCANIncorrectInput(store: .init(initialState: .init(request: .preview),
                                                          reducer: identificationCANIncorrectInputReducer,
                                                          environment: AppEnvironment.preview))
         }

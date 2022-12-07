@@ -4,7 +4,6 @@ import ComposableArchitecture
 struct IdentificationCANInputState: Equatable {
     @BindableState var enteredCAN: String = ""
     let request: EIDAuthenticationRequest
-    var pinCANCallback: PINCANCallback
     var pushesToPINEntry: Bool
     var doneButtonEnabled: Bool {
         return enteredCAN.count == Constants.CAN_DIGIT_COUNT
@@ -12,7 +11,7 @@ struct IdentificationCANInputState: Equatable {
 }
 
 enum IdentificationCANInputAction: Equatable, BindableAction {
-    case done(can: String, request: EIDAuthenticationRequest, pinCANCallback: PINCANCallback, pushesToPINEntry: Bool)
+    case done(can: String, request: EIDAuthenticationRequest, pushesToPINEntry: Bool)
     case binding(BindingAction<IdentificationCANInputState>)
 }
 
@@ -44,7 +43,7 @@ struct IdentificationCANInput: View {
                                      doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                           title: L10n.Identification.Can.Input.continue,
                                                                           handler: { can in
-                            viewStore.send(.done(can: can, request: viewStore.request, pinCANCallback: viewStore.pinCANCallback, pushesToPINEntry: viewStore.pushesToPINEntry))
+                            viewStore.send(.done(can: can, request: viewStore.request, pushesToPINEntry: viewStore.pushesToPINEntry))
                         }))
                         .focused($pinEntryFocused)
                         .headingL()
@@ -67,7 +66,7 @@ struct IdentificationCANInput: View {
 struct IdentificationCANInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationCANInput(store: .init(initialState: .init(request: .preview, pinCANCallback: .init(id: UUID(), callback: { _, _ in }), pushesToPINEntry: true),
+            IdentificationCANInput(store: .init(initialState: .init(request: .preview, pushesToPINEntry: true),
                                                 reducer: identificationCANInputReducer,
                                                 environment: AppEnvironment.preview))
         }

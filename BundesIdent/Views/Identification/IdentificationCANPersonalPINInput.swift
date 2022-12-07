@@ -4,14 +4,13 @@ import ComposableArchitecture
 struct IdentificationCANPersonalPINInputState: Equatable {
     @BindableState var enteredPIN: String = ""
     let request: EIDAuthenticationRequest
-    var pinCANCallback: PINCANCallback
     var doneButtonEnabled: Bool {
         return enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
     }
 }
 
 enum IdentificationCANPersonalPINInputAction: Equatable, BindableAction {
-    case done(pin: String, request: EIDAuthenticationRequest, pinCANCallback: PINCANCallback)
+    case done(pin: String, request: EIDAuthenticationRequest)
     case binding(BindingAction<IdentificationCANPersonalPINInputState>)
 }
 
@@ -44,7 +43,7 @@ struct IdentificationCANPersonalPINInput: View {
                                          doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                               title: L10n.Identification.PersonalPIN.continue,
                                                                               handler: { pin in
-                                viewStore.send(.done(pin: pin, request: viewStore.request, pinCANCallback: viewStore.pinCANCallback))
+                                viewStore.send(.done(pin: pin, request: viewStore.request))
                             }))
                             .focused($pinEntryFocused)
                             .headingL()
@@ -76,7 +75,7 @@ struct IdentificationCANPersonalPINInput: View {
 struct IdentificationCANPersonalPINInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationCANPersonalPINInput(store: .init(initialState: .init(request: .preview, pinCANCallback: .init(id: UUID(), callback: { _, _ in })),
+            IdentificationCANPersonalPINInput(store: .init(initialState: .init(request: .preview),
                                                            reducer: identificationCANPersonalPINInputReducer,
                                                            environment: AppEnvironment.preview))
         }
