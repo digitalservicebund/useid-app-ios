@@ -19,7 +19,6 @@ enum SwipeToDismissState {
 
 enum IdentificationCoordinatorError: CustomNSError {
     case pinNilWhenTriedScan
-    case pinNilWhenPushingCanCoordinator
     case noScreenToHandleEIDInteractionEvents
 }
 
@@ -141,18 +140,13 @@ struct IdentificationCoordinator: ReducerProtocol {
                 state.routes.presentSheet(.error(errorState))
                 return .none
             case .routeAction(_, action: .scan(.requestPINAndCAN(let request, let pinCANCallback))):
-                guard let pin = state.pin else {
-                    issueTracker.capture(error: IdentificationCoordinatorError.pinNilWhenPushingCanCoordinator)
-                    logger.error("PIN nil when pushing CAN Coordinator")
-                    return Effect(value: .dismiss)
-                }
-
+                let pinIsUnchecked = state.attempt == 0
                 state.routes.push(.identificationCANCoordinator(.init(tokenURL: state.tokenURL,
                                                                       request: request,
                                                                       pinCANCallback: pinCANCallback,
-                                                                      pin: pin,
+                                                                      pin: pinIsUnchecked ? state.pin : nil,
                                                                       attempt: state.attempt,
-                                                                      goToCanIntroScreen: state.attempt == 0)))
+                                                                      goToCanIntroScreen: pinIsUnchecked)))
                 return .none
             case .routeAction(_, action: .scan(.shared(.showHelp))):
                 state.routes.presentSheet(.error(ScanError.State(errorType: .help, retry: true)))
