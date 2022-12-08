@@ -340,7 +340,7 @@ class IdentificationCoordinatorTests: XCTestCase {
             $0.routes.append(.push(.identificationCANCoordinator(.init(tokenURL: $0.tokenURL,
                                                                        request: request,
                                                                        pinCANCallback: newPINCANCallback,
-                                                                       pin: $0.pin!,
+                                                                       pin: nil,
                                                                        attempt: $0.attempt,
                                                                        goToCanIntroScreen: false))))
         }

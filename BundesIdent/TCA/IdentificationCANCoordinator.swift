@@ -8,6 +8,7 @@ import Analytics
 
 enum IdentificationCANCoordinatorError: CustomNSError {
     case canNilWhenTriedScan
+    case pinNilWhenTriedScan
     case canIntroStateNotInRoutes
     case pinCANCallbackNilWhenTriedScan
     case noScreenToHandleEIDInteractionEvents
@@ -18,7 +19,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
     @Dependency(\.logger) var logger
     @Dependency(\.mainQueue) var mainQueue
     struct State: Equatable, IndexedRouterState {
-        var pin: String
+        var pin: String?
         var can: String?
         var pinCANCallback: PINCANCallback
         var tokenURL: URL
@@ -81,14 +82,18 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                 state.can = can
                 if pushesToPINEntry {
                     state.routes.push(.canPersonalPINInput(IdentificationCANPersonalPINInput.State(request: request)))
-                } else {
+                } else if let pin = state.pin {
                     state.routes.push(
                         .canScan(IdentificationCANScan.State(request: request,
-                                                             pin: state.pin,
+                                                             pin: pin,
                                                              can: can,
                                                              pinCANCallback: state.pinCANCallback,
                                                              shared: SharedScan.State(showInstructions: false)))
                     )
+                } else {
+                    issueTracker.capture(error: IdentificationCANCoordinatorError.pinNilWhenTriedScan)
+                    logger.error("PIN nil when tried to scan")
+                    return Effect(value: .dismiss)
                 }
                 return .none
             case .routeAction(_, action: .canPersonalPINInput(.done(pin: let pin, request: let request))):
@@ -180,7 +185,7 @@ extension IdentificationCANCoordinator.State {
     init(tokenURL: URL,
          request: EIDAuthenticationRequest,
          pinCANCallback: PINCANCallback,
-         pin: String,
+         pin: String?,
          attempt: Int,
          goToCanIntroScreen: Bool) {
         self.pin = pin
@@ -205,7 +210,9 @@ extension IdentificationCANCoordinator.State {
                         if let can {
                             state.can = can
                         }
-                        state.pin = pin
+                        if let pin {
+                            state.pin = pin
+                        }
                         state.shared.attempt = attempt
                         return .canScan(state)
                     default:
