@@ -47,6 +47,14 @@ Runs unit tests without building
 
 Test
 
+### ios swiftformat
+
+```sh
+[bundle exec] fastlane ios swiftformat
+```
+
+SwiftFormat
+
 ### ios lint
 
 ```sh

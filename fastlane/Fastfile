@@ -102,6 +102,11 @@ platform :ios do
     test_without_building(options)
   end
 
+  desc 'SwiftFormat'
+  lane :swiftformat do
+    sh("swiftformat", "--lint", "../")
+  end
+
   desc 'Lint code'
   lane :lint do
     swiftlint(
