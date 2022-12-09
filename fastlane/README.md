@@ -47,13 +47,21 @@ Runs unit tests without building
 
 Test
 
+### ios checklocalizables
+
+```sh
+[bundle exec] fastlane ios checklocalizables
+```
+
+Check Localizable files are sorted
+
 ### ios swiftformatlint
 
 ```sh
 [bundle exec] fastlane ios swiftformatlint
 ```
 
-SwiftFormat
+Lint with SwiftFormat
 
 ### ios lint
 

@@ -102,6 +102,11 @@ platform :ios do
     test_without_building(options)
   end
 
+  desc 'Check Localizables are sorted'
+  lane :checklocalizables do
+    sh("../scripts/checksort.sh")
+  end
+
   desc 'Lint with SwiftFormat'
   lane :swiftformatlint do
     swiftformat( 
