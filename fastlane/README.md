@@ -47,10 +47,10 @@ Runs unit tests without building
 
 Test
 
-### ios swiftformat
+### ios swiftformatlint
 
 ```sh
-[bundle exec] fastlane ios swiftformat
+[bundle exec] fastlane ios swiftformatlint
 ```
 
 SwiftFormat
