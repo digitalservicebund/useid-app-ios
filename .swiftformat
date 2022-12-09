@@ -1,0 +1,10 @@
+#format options
+--patternlet inline
+--wraparguments before-first
+--wrapcollections before-first
+--ifdef outdent
+# file options
+--exclude **/Generated
+# rules
+--enable sortedSwitchCases
+--disable sortedImports,trailingCommas,trailingClosures,unusedArguments,wrapMultilineStatementBraces
