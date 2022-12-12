@@ -195,7 +195,7 @@ final class IdentificationUITests: XCTestCase {
         
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
         
-        let canTextField = app.secureTextFields[L10n.Identification.Can.Input.canInputLabel]
+        let canTextField = app.textFields[L10n.Identification.Can.Input.canInputLabel]
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
@@ -203,8 +203,9 @@ final class IdentificationUITests: XCTestCase {
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["runCANError"].wait().tap()
         
-        canTextField.wait().tap()
-        canTextField.waitAndTypeText("123456")
+        let incorrectCANTextField = app.textFields[L10n.Identification.Can.IncorrectInput.canInputLabel]
+        incorrectCANTextField.wait().tap()
+        incorrectCANTextField.waitAndTypeText("123456")
         
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
         app.activityIndicators["ScanProgressView"].assertExistence()
@@ -215,8 +216,8 @@ final class IdentificationUITests: XCTestCase {
         matchingButtons.element(boundBy: 0).tap()
         app.staticTexts[L10n.Identification.Can.Intro.title].assertExistence()
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
-        canTextField.wait().tap()
-        canTextField.waitAndTypeText("123456")
+        incorrectCANTextField.wait().tap()
+        incorrectCANTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
         app.activityIndicators["ScanProgressView"].assertExistence()
         app.navigationBars.buttons["Debug"].wait().tap()
@@ -282,7 +283,7 @@ final class IdentificationUITests: XCTestCase {
         
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
         
-        let canTextField = app.secureTextFields[L10n.Identification.Can.Input.canInputLabel]
+        let canTextField = app.textFields[L10n.Identification.Can.Input.canInputLabel]
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
@@ -317,7 +318,7 @@ final class IdentificationUITests: XCTestCase {
         
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
         
-        let canTextField = app.secureTextFields[L10n.Identification.Can.Input.canInputLabel]
+        let canTextField = app.textFields[L10n.Identification.Can.Input.canInputLabel]
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
@@ -404,7 +405,7 @@ final class IdentificationUITests: XCTestCase {
         app.buttons[L10n.Identification.Can.PinForgotten.retry].wait().tap()
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
         
-        let canTextField = app.secureTextFields[L10n.Identification.Can.Input.canInputLabel]
+        let canTextField = app.textFields[L10n.Identification.Can.Input.canInputLabel]
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.toolbars["Toolbar"].buttons[L10n.Identification.Can.Input.continue].wait().tap()
@@ -416,8 +417,9 @@ final class IdentificationUITests: XCTestCase {
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["runCANError"].wait().tap()
         
-        canTextField.wait().tap()
-        canTextField.waitAndTypeText("123456")
+        let incorrectCANTextField = app.textFields[L10n.Identification.Can.IncorrectInput.canInputLabel]
+        incorrectCANTextField.wait().tap()
+        incorrectCANTextField.waitAndTypeText("123456")
         app.toolbars["Toolbar"].buttons[L10n.Identification.Can.Input.continue].wait().tap()
         app.activityIndicators["ScanProgressView"].assertExistence()
         app.navigationBars.buttons["Debug"].wait().tap()
@@ -428,8 +430,8 @@ final class IdentificationUITests: XCTestCase {
         
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
         
-        canTextField.wait().tap()
-        canTextField.waitAndTypeText("123456")
+        incorrectCANTextField.wait().tap()
+        incorrectCANTextField.waitAndTypeText("123456")
         app.toolbars["Toolbar"].buttons[L10n.Identification.Can.Input.continue].wait().tap()
         pinTextField.wait().tap()
         pinTextField.waitAndTypeText("123456")

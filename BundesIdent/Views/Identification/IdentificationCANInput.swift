@@ -36,7 +36,7 @@ struct IdentificationCANInputView: View {
                         PINEntryView(pin: viewStore.binding(\.$enteredCAN),
                                      maxDigits: Constants.CAN_DIGIT_COUNT,
                                      groupEvery: 3,
-                                     showPIN: false,
+                                     showPIN: true,
                                      label: L10n.Identification.Can.Input.canInputLabel,
                                      backgroundColor: .neutral100,
                                      doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
