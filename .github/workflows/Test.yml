@@ -65,6 +65,28 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
       - name: Run swiftformat
         run: bundle exec fastlane swiftformat
+
+  checkLocalizables:
+    runs-on: [self-hosted, ARM64]
+    needs: dependencies
+    steps:
+      - name: Setup shell
+        run: |
+          eval "$(rbenv init -)"
+          eval "$(/opt/homebrew/bin/brew shellenv)"
+      - name: Check out repository code
+        uses: actions/checkout@v3       
+      - name: Restore Dependencies
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-dependencies
+        with:
+          path: |
+            vendor
+            .bundle
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
+      - name: Run checklocalizables
+        run: bundle exec fastlane checklocalizables
           
   swiftLint:
     runs-on: [self-hosted, ARM64]
