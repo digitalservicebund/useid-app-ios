@@ -11,6 +11,7 @@
 		B922901E294203360018D671 /* IdentificationCANCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B922901D294203360018D671 /* IdentificationCANCoordinatorTests.swift */; };
 		B92AC3B62934E8E000A0BF02 /* SetupTransportPINTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92AC3B52934E8E000A0BF02 /* SetupTransportPINTests.swift */; };
 		B945F5DD2938DC120043DF9A /* IdentificationCANScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B945F5DC2938DC120043DF9A /* IdentificationCANScanTests.swift */; };
+		B95E687729473791004D956B /* RouteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95E687629473791004D956B /* RouteTests.swift */; };
 		B95FAA8929278F74009BDAC9 /* IdentificationCANPersonalPINInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95FAA8829278F74009BDAC9 /* IdentificationCANPersonalPINInput.swift */; };
 		B95FAA8B2927A90D009BDAC9 /* IdentificationCANIncorrectInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95FAA8A2927A90D009BDAC9 /* IdentificationCANIncorrectInput.swift */; };
 		B974FD042926657200B338E5 /* IdentificationCANPINForgotten.swift in Sources */ = {isa = PBXBuildFile; fileRef = B974FD032926657200B338E5 /* IdentificationCANPINForgotten.swift */; };
@@ -186,6 +187,7 @@
 		B922901D294203360018D671 /* IdentificationCANCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANCoordinatorTests.swift; sourceTree = "<group>"; };
 		B92AC3B52934E8E000A0BF02 /* SetupTransportPINTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupTransportPINTests.swift; sourceTree = "<group>"; };
 		B945F5DC2938DC120043DF9A /* IdentificationCANScanTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentificationCANScanTests.swift; sourceTree = "<group>"; };
+		B95E687629473791004D956B /* RouteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteTests.swift; sourceTree = "<group>"; };
 		B95FAA8829278F74009BDAC9 /* IdentificationCANPersonalPINInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANPersonalPINInput.swift; sourceTree = "<group>"; };
 		B95FAA8A2927A90D009BDAC9 /* IdentificationCANIncorrectInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANIncorrectInput.swift; sourceTree = "<group>"; };
 		B974FD032926657200B338E5 /* IdentificationCANPINForgotten.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANPINForgotten.swift; sourceTree = "<group>"; };
@@ -395,6 +397,7 @@
 				E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */,
 				E135D6A928B7696400A32862 /* SetupCoordinatorTests.swift */,
 				E13F9E44288853950088E955 /* CoordinatorTests.swift */,
+				B95E687629473791004D956B /* RouteTests.swift */,
 			);
 			path = TCA;
 			sourceTree = "<group>";
@@ -941,6 +944,7 @@
 				"$(SRCROOT)/${PROJECT_NAME}/Types/Types.swift",
 				"$(SRCROOT)/${PROJECT_NAME}/OpenECard/ControllerCallback.swift",
 				"$(SRCROOT)/Analytics/Sources/Analytics/Analytics.swift",
+				"$(SRCROOT)/Analytics/Sources/Analytics/Matomo.swift",
 			);
 			name = "[Cuckoo] Generate mocks";
 			outputFileListPaths = (
@@ -1022,6 +1026,7 @@
 				B922901E294203360018D671 /* IdentificationCANCoordinatorTests.swift in Sources */,
 				B92AC3B62934E8E000A0BF02 /* SetupTransportPINTests.swift in Sources */,
 				D245421828CB9E68002600C9 /* IdentificationOverviewTests.swift in Sources */,
+				B95E687729473791004D956B /* RouteTests.swift in Sources */,
 				E13F9E3D288802500088E955 /* UUID+InitFromNumber.swift in Sources */,
 				E12B424828D8AB440032D65D /* ControllerCallbackTests.swift in Sources */,
 				D2C5915028CB86570048D379 /* MissingPINLetterTests.swift in Sources */,
