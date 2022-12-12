@@ -20,19 +20,19 @@ class MockActivationResult: NSObject, ActivationResultProtocol {
     }
     
     func getRedirectUrl() -> String! {
-        return redirectUrl
+        redirectUrl
     }
     
     func getCode() -> ActivationResultCode {
-        return code
+        code
     }
     
     func getErrorMessage() -> String! {
-        return errorMessage
+        errorMessage
     }
     
     func getProcessResultMinor() -> String! {
-        return processResultMinor
+        processResultMinor
     }
 }
 
@@ -44,7 +44,6 @@ final class ControllerCallbackTests: XCTestCase {
     }
     
     func testOKActivationCode() throws {
-        
         let activationResult = MockActivationResult(code: .OK)
         
         let controllerCallback = ControllerCallback()
@@ -66,7 +65,6 @@ final class ControllerCallbackTests: XCTestCase {
     }
     
     func testRedirectActivationCode() throws {
-        
         let redirectURL = URL(string: "https://redirect.url")!
         let activationResult = MockActivationResult(redirectUrl: redirectURL.absoluteString, code: .REDIRECT)
         
@@ -90,7 +88,6 @@ final class ControllerCallbackTests: XCTestCase {
     }
     
     func testAllOtherActivationResultsTriggerFailure() throws {
-        
         let allActivationResultCodes: [ActivationResultCode] = [
             .CLIENT_ERROR,
             .INTERRUPTED,

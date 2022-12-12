@@ -17,7 +17,7 @@ struct SetupTransportPINIntroView: View {
                    imageMeta: ImageMeta(asset: Asset.pinBrief, maxHeight: 300.0),
                    secondaryButton: .init(title: L10n.FirstTimeUser.PinLetter.requestLetter, action: .choosePINLetterMissing),
                    primaryButton: .init(title: L10n.FirstTimeUser.PinLetter.letterPresent, action: .choosePINLetterAvailable))
-        .interactiveDismissDisabled()
+            .interactiveDismissDisabled()
     }
 }
 

@@ -38,7 +38,7 @@ struct LoopingPlayer: UIViewRepresentable {
         return view
     }
     
-    func updateUIView(_ uiView: CustomVideoPlayer, context: Context) { }
+    func updateUIView(_ uiView: CustomVideoPlayer, context: Context) {}
     
     static func dismantleUIView(_ uiView: CustomVideoPlayer, coordinator: Coordinator) {
         coordinator.observerToken.flatMap { NotificationCenter.default.removeObserver($0) }
@@ -80,7 +80,6 @@ class CustomVideoPlayer: UIView {
             .receive(on: DispatchQueue.main)
             .sink { _ in player.play() }
             .store(in: &cancellables)
-        
     }
     
     override func layoutSubviews() {
@@ -89,6 +88,7 @@ class CustomVideoPlayer: UIView {
         playerLayer.removeAllAnimations()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

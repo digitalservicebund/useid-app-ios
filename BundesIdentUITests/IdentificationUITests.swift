@@ -168,7 +168,6 @@ final class IdentificationUITests: XCTestCase {
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["cancelPINScan"].wait().tap()
         app.buttons[L10n.Identification.Scan.scan].assertExistence()
-
     }
     
     func testIdentificationCANThirdAttemptToSuccessFullyIdentified() throws {
@@ -441,4 +440,5 @@ final class IdentificationUITests: XCTestCase {
         app.staticTexts[L10n.ScanError.CardBlocked.title].assertExistence()
     }
 }
+
 // swiftlint:enable type_body_length

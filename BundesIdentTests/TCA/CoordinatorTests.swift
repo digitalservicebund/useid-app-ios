@@ -32,7 +32,6 @@ final class CoordinatorTests: XCTestCase {
     }
     
     func testOpeningTheAppWithUnfinishedSetup() {
-        
         let store = TestStore(initialState: Coordinator.State(routes: [.root(.home(Home.State(appVersion: "1.0.0", buildNumber: 1)))]),
                               reducer: Coordinator())
         store.dependencies.analytics = mockAnalyticsClient
@@ -79,9 +78,11 @@ final class CoordinatorTests: XCTestCase {
     }
     
     func testAbortSetup() {
-        let store = TestStore(initialState: Coordinator.State(routes: [.root(.home(Home.State(appVersion: "1.0.0", buildNumber: 1))),
-                                                                      .sheet(.setupCoordinator(SetupCoordinator.State()))]),
-                              reducer: Coordinator())
+        let store = TestStore(initialState: Coordinator.State(routes: [
+            .root(.home(Home.State(appVersion: "1.0.0", buildNumber: 1))),
+            .sheet(.setupCoordinator(SetupCoordinator.State()))
+        ]),
+        reducer: Coordinator())
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.issueTracker = mockIssueTracker
         store.send(.routeAction(1, action: .setupCoordinator(.routeAction(0, action: .intro(.chooseSkipSetup(tokenURL: nil)))))) {
@@ -95,7 +96,7 @@ final class CoordinatorTests: XCTestCase {
             .root(.home(Home.State(appVersion: "1.0.0", buildNumber: 1))),
             .sheet(.setupCoordinator(SetupCoordinator.State()))
         ]),
-                              reducer: Coordinator())
+        reducer: Coordinator())
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.issueTracker = mockIssueTracker
         store.send(.routeAction(1, action: .setupCoordinator(.routeAction(0, action: .intro(.chooseSkipSetup(tokenURL: tokenURL))))))

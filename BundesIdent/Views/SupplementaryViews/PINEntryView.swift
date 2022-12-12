@@ -24,7 +24,7 @@ public struct PINEntryView: View {
         HStack(spacing: 0) {
             Spacer()
             
-            ForEach(0..<maxDigits, id: \.self) { index in
+            ForEach(0 ..< maxDigits, id: \.self) { index in
                 CharacterView(showPIN: showPIN, pin: pin, index: index)
                     .background(VStack {
                         Spacer()
@@ -35,7 +35,7 @@ public struct PINEntryView: View {
                     })
                     .frame(maxWidth: .infinity)
                 
-                if let groupEvery = groupEvery, (index + 1) % groupEvery == 0, (index + 1) < maxDigits {
+                if let groupEvery, (index + 1) % groupEvery == 0, (index + 1) < maxDigits {
                     Spacer(minLength: 8)
                 }
             }
@@ -54,12 +54,12 @@ public struct PINEntryView: View {
                      maxLength: maxDigits,
                      showPIN: showPIN,
                      doneConfiguration: doneConfiguration)
-        .accentColor(.clear)
-        .foregroundColor(.clear)
-        .keyboardType(.numberPad)
-        .accessibilityLabel(label)
-        .accessibilityValue(pin.map(String.init).joined(separator: " "))
-        .frame(height: 1)
+            .accentColor(.clear)
+            .foregroundColor(.clear)
+            .keyboardType(.numberPad)
+            .accessibilityLabel(label)
+            .accessibilityValue(pin.map(String.init).joined(separator: " "))
+            .frame(height: 1)
     }
 }
 
@@ -85,9 +85,9 @@ private struct CharacterView: View {
     }
     
     private func pinCharacter(at index: Int) -> String {
-        guard index < self.pin.count else {
+        guard index < pin.count else {
             return " "
         }
-        return String(self.pin[self.pin.index(self.pin.startIndex, offsetBy: index)])
+        return String(pin[pin.index(pin.startIndex, offsetBy: index)])
     }
 }

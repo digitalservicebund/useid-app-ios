@@ -23,7 +23,6 @@ struct IdentificationScreen: ReducerProtocol {
             case .identificationCANCoordinator(let state):
                 guard let localAction = state.transformToLocalInteractionHandler(event: event) else {
                     return nil
-                    
                 }
                 return .identificationCANCoordinator(localAction)
             default:

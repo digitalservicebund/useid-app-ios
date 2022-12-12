@@ -8,11 +8,11 @@ struct SetupIncorrectTransportPIN: ReducerProtocol {
     struct State: Equatable {
         var remainingAttempts: Int
         
-    #if DEBUG && !PREVIEW
+#if DEBUG && !PREVIEW
         var maxDigits: Int = 5
-    #else
+#else
         var maxDigits: Int { 5 }
-    #endif
+#endif
         
         @BindableState var enteredPIN: String = ""
         @BindableState var focusTextField: Bool = true
@@ -27,9 +27,9 @@ struct SetupIncorrectTransportPIN: ReducerProtocol {
         case dismissAlert
         case binding(BindingAction<SetupIncorrectTransportPIN.State>)
         
-    #if DEBUG && !PREVIEW
+#if DEBUG && !PREVIEW
         case toggleDigitCount
-    #endif
+#endif
     }
 
     var body: some ReducerProtocol<State, Action> {
@@ -37,14 +37,14 @@ struct SetupIncorrectTransportPIN: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .swipeToDismiss,
-                    .end:
+                 .end:
                 state.alert = AlertState(title: TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.title),
                                          message: TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.message),
                                          primaryButton: .destructive(TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.confirm),
                                                                      action: .send(.confirmEnd)),
                                          secondaryButton: .cancel(TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.deny)))
                 return .none
-        #if DEBUG && !PREVIEW
+#if DEBUG && !PREVIEW
             case .toggleDigitCount:
                 if state.maxDigits == 5 {
                     state.maxDigits = 6
@@ -52,11 +52,10 @@ struct SetupIncorrectTransportPIN: ReducerProtocol {
                     state.maxDigits = 5
                 }
                 return .none
-        #endif
+#endif
             default:
                 return .none
             }
-            
         }
     }
 }
@@ -86,12 +85,12 @@ struct SetupIncorrectTransportPINView: View {
                                              doneConfiguration: DoneConfiguration(enabled: viewStore.enteredPIN.count == viewStore.maxDigits,
                                                                                   title: L10n.FirstTimeUser.IncorrectTransportPIN.continue,
                                                                                   handler: { pin in
-                                    viewStore.send(.done(transportPIN: pin))
-                                }))
-                                .focused($pinEntryFocused)
-                                .headingL()
-                                .background(Color.white.cornerRadius(10))
-                                .padding(40)
+                                                                                      viewStore.send(.done(transportPIN: pin))
+                                                                                  }))
+                                                                                  .focused($pinEntryFocused)
+                                                                                  .headingL()
+                                                                                  .background(Color.white.cornerRadius(10))
+                                                                                  .padding(40)
                             }
                             VStack(spacing: 24) {
                                 VStack {
@@ -118,17 +117,17 @@ struct SetupIncorrectTransportPINView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(false)
 #if DEBUG && !PREVIEW
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    WithViewStore(store) { viewStore in
-                        Button("\(Image(systemName: "arrow.left.and.right")) \(viewStore.maxDigits == 5 ? "6" : "5")") {
-                            viewStore.send(.toggleDigitCount)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        WithViewStore(store) { viewStore in
+                            Button("\(Image(systemName: "arrow.left.and.right")) \(viewStore.maxDigits == 5 ? "6" : "5")") {
+                                viewStore.send(.toggleDigitCount)
+                            }
                         }
                     }
                 }
-            }
 #endif
-            .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
+                .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
         }
         .interactiveDismissDisabled {
             ViewStore(store.stateless).send(.swipeToDismiss)
@@ -145,16 +144,16 @@ struct SetupIncorrectTransportPIN_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             SetupIncorrectTransportPINView(store: Store(initialState: .init(remainingAttempts: 2),
-                                                    reducer: SetupIncorrectTransportPIN()))
+                                                        reducer: SetupIncorrectTransportPIN()))
         }
         .previewDevice("iPhone SE (2nd generation)")
         NavigationView {
             SetupIncorrectTransportPINView(store: Store(initialState: .init(remainingAttempts: 2, enteredPIN: "12345"),
-                                                    reducer: SetupIncorrectTransportPIN()))
+                                                        reducer: SetupIncorrectTransportPIN()))
         }
         NavigationView {
             SetupIncorrectTransportPINView(store: Store(initialState: .init(remainingAttempts: 1),
-                                                    reducer: SetupIncorrectTransportPIN()))
+                                                        reducer: SetupIncorrectTransportPIN()))
         }
         .previewDevice("iPhone 12")
     }

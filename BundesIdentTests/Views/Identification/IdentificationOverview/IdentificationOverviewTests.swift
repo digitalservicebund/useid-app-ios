@@ -25,7 +25,8 @@ final class IdentificationOverviewTests: XCTestCase {
         let error = IdentifiableError(NSError(domain: "", code: 0))
         let store = TestStore(
             initialState: IdentificationOverview.State.loading(.init()),
-            reducer: IdentificationOverview())
+            reducer: IdentificationOverview()
+        )
         store.dependencies.analytics = mockAnalyticsClient
         store.send(IdentificationOverview.Action.loading(.failure(error))) {
             $0 = .error(IdentificationOverviewErrorState(error: error))
@@ -39,7 +40,8 @@ final class IdentificationOverviewTests: XCTestCase {
     func testLoadingSuccess() {
         let store = TestStore(
             initialState: IdentificationOverview.State.loading(.init()),
-            reducer: IdentificationOverview())
+            reducer: IdentificationOverview()
+        )
         store.dependencies.uuid = .incrementing
         let request = EIDAuthenticationRequest.preview
         let handler: (FlaggedAttributes) -> Void = { attributes in }
@@ -68,7 +70,8 @@ final class IdentificationOverviewTests: XCTestCase {
         let loadedState = IdentificationOverviewLoaded.State(id: UUID(number: 0), request: request, handler: identifiableCallback)
         let store = TestStore(
             initialState: IdentificationOverview.State.loaded(loadedState),
-            reducer: IdentificationOverview())
+            reducer: IdentificationOverview()
+        )
         
         store.send(IdentificationOverview.Action.loaded(.confirm))
         
@@ -86,7 +89,8 @@ final class IdentificationOverviewTests: XCTestCase {
         let loadedState = IdentificationOverviewLoaded.State(id: UUID(number: 0), request: request, handler: identifiableCallback)
         let store = TestStore(
             initialState: IdentificationOverview.State.loaded(loadedState),
-            reducer: IdentificationOverview())
+            reducer: IdentificationOverview()
+        )
         store.dependencies.uuid = .incrementing
         let pinCallback: (String) -> Void = { _ in }
         let identifiablePINCallback = PINCallback(id: UUID(number: 0), callback: pinCallback)
@@ -123,7 +127,8 @@ final class IdentificationOverviewTests: XCTestCase {
         )
         let store = TestStore(
             initialState: IdentificationOverview.State.loaded(loadedState),
-            reducer: IdentificationOverview())
+            reducer: IdentificationOverview()
+        )
         
         store.send(IdentificationOverview.Action.loaded(.confirm))
         

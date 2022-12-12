@@ -7,7 +7,7 @@ struct IdentificationCANIncorrectInput: ReducerProtocol {
         let request: EIDAuthenticationRequest
         
         var doneButtonEnabled: Bool {
-            return enteredCAN.count == Constants.CAN_DIGIT_COUNT
+            enteredCAN.count == Constants.CAN_DIGIT_COUNT
         }
     }
 
@@ -37,62 +37,60 @@ struct IdentificationCANIncorrectInputView: View {
     
     var body: some View {
         NavigationView {
-                ScrollView {
-                    WithViewStore(store) { viewStore in
-                        VStack(alignment: .leading, spacing: 24) {
-                            HeaderView(title: L10n.Identification.Can.IncorrectInput.title,
-                                       message: L10n.Identification.Can.IncorrectInput.body)
-                            VStack {
-                                Spacer()
-                                PINEntryView(pin: viewStore.binding(\.$enteredCAN),
-                                             maxDigits: Constants.CAN_DIGIT_COUNT,
-                                             groupEvery: 3,
-                                             showPIN: false,
-                                             label: L10n.Identification.Can.IncorrectInput.canInputLabel,
-                                             backgroundColor: .neutral100,
-                                             doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
-                                                                                  title: L10n.Identification.Can.IncorrectInput.continue,
-                                                                                  handler: { can in
-                                    viewStore.send(.done(can: can))
-                                }))
-                                .focused($pinEntryFocused)
-                                .headingL()
-                            }
-                            
-                            VStack(spacing: 3) {
-                                Text(L10n.Identification.Can.IncorrectInput.Error.Incorrect.body)
-                                    .bodyLBold(color: .red900)
-                                Text(L10n.Identification.Can.IncorrectInput.Error.Incorrect.title)
-                                    .bodyLRegular()
-                                    .multilineTextAlignment(.center)
-                            }
-                            .transition(.move(edge: .bottom).combined(with: .opacity))
-                            .frame(maxWidth: .infinity)
+            ScrollView {
+                WithViewStore(store) { viewStore in
+                    VStack(alignment: .leading, spacing: 24) {
+                        HeaderView(title: L10n.Identification.Can.IncorrectInput.title,
+                                   message: L10n.Identification.Can.IncorrectInput.body)
+                        VStack {
                             Spacer()
+                            PINEntryView(pin: viewStore.binding(\.$enteredCAN),
+                                         maxDigits: Constants.CAN_DIGIT_COUNT,
+                                         groupEvery: 3,
+                                         showPIN: false,
+                                         label: L10n.Identification.Can.IncorrectInput.canInputLabel,
+                                         backgroundColor: .neutral100,
+                                         doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
+                                                                              title: L10n.Identification.Can.IncorrectInput.continue,
+                                                                              handler: { can in
+                                                                                  viewStore.send(.done(can: can))
+                                                                              }))
+                                                                              .focused($pinEntryFocused)
+                                                                              .headingL()
                         }
-                    }
-                    .padding(.horizontal)
-                }
-                .navigationBarHidden(false)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(L10n.Identification.Can.IncorrectInput.back) {
-                            ViewStore(store).send(.triggerEnd)
+                            
+                        VStack(spacing: 3) {
+                            Text(L10n.Identification.Can.IncorrectInput.Error.Incorrect.body)
+                                .bodyLBold(color: .red900)
+                            Text(L10n.Identification.Can.IncorrectInput.Error.Incorrect.title)
+                                .bodyLRegular()
+                                .multilineTextAlignment(.center)
                         }
-                        .bodyLRegular(color: .accentColor)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                        .frame(maxWidth: .infinity)
+                        Spacer()
                     }
                 }
-                .focusOnAppear {
-                    if !UIAccessibility.isVoiceOverRunning {
-                        pinEntryFocused = true
+                .padding(.horizontal)
+            }
+            .navigationBarHidden(false)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(L10n.Identification.Can.IncorrectInput.back) {
+                        ViewStore(store).send(.triggerEnd)
                     }
+                    .bodyLRegular(color: .accentColor)
                 }
-                .interactiveDismissDisabled(true, onAttemptToDismiss: {
-                    ViewStore(store).send(.triggerEnd)
-                })
-            
+            }
+            .focusOnAppear {
+                if !UIAccessibility.isVoiceOverRunning {
+                    pinEntryFocused = true
+                }
+            }
+            .interactiveDismissDisabled(true, onAttemptToDismiss: {
+                ViewStore(store).send(.triggerEnd)
+            })
         }
-        
     }
 }
 
@@ -100,7 +98,7 @@ struct IdentificationCANIncorrectInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             IdentificationCANIncorrectInputView(store: .init(initialState: .init(request: .preview),
-                                                         reducer: IdentificationCANIncorrectInput()))
+                                                             reducer: IdentificationCANIncorrectInput()))
         }
         .previewDevice("iPhone 12")
     }

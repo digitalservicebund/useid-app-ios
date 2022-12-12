@@ -6,7 +6,6 @@ import Analytics
 
 @testable import BundesIdent
 
-
 class SetupScanTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
@@ -48,7 +47,7 @@ class SetupScanTests: XCTestCase {
         store.dependencies.storageManager = mockStorageManager
         let cardInsertionCallback: (String) -> Void = { _ in }
         
-        let requestChangedPINExpectation = self.expectation(description: "requestCardInsertion callback")
+        let requestChangedPINExpectation = expectation(description: "requestCardInsertion callback")
         let pinCallback: (String, String) -> Void = { actualOldPIN, actualNewPIN in
             XCTAssertEqual(oldPIN, actualOldPIN)
             XCTAssertEqual(newPIN, actualNewPIN)
@@ -110,7 +109,7 @@ class SetupScanTests: XCTestCase {
         
         verify(mockStorageManager).setupCompleted.set(true)
         
-        self.wait(for: [requestChangedPINExpectation], timeout: 0.0)
+        wait(for: [requestChangedPINExpectation], timeout: 0.0)
     }
     
     func testScanFail() throws {
@@ -178,7 +177,6 @@ class SetupScanTests: XCTestCase {
                 return subject.eraseToAnyPublisher()
             }
         }
-        
         
         store.send(.shared(.startScan)) {
             $0.shared.isScanning = true

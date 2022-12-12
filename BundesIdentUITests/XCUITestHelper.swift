@@ -38,7 +38,7 @@ extension XCUIElement {
     }
     
     func longStaticText(containing text: String, file: StaticString = #filePath, line: UInt = #line) -> XCUIElement {
-        return staticTexts.element(matching: NSPredicate(format: "label CONTAINS[c] %@", text))
+        staticTexts.element(matching: NSPredicate(format: "label CONTAINS[c] %@", text))
     }
 }
 
@@ -56,7 +56,7 @@ extension XCUIApplication {
     func scrollElementIntoVisibility(_ element: XCUIElement, maxSwipeActions: Int = 10) {
         guard !hasVisible(element: element) else { return }
         
-        for _ in 0..<maxSwipeActions {
+        for _ in 0 ..< maxSwipeActions {
             swipeUp()
             
             if hasVisible(element: element) {

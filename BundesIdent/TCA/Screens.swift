@@ -25,14 +25,14 @@ struct Screen: ReducerProtocol {
 }
 
 extension Screen.State: AnalyticsView {
-     var route: [String] {
-         switch self {
-         case .home(let state):
-             return state.route
-         case .setupCoordinator(let state):
-             return ["firstTimeUser"] + state.route
-         case .identificationCoordinator(let state):
-             return ["identification"] + state.route
-         }
-     }
- }
+    var route: [String] {
+        switch self {
+        case .home(let state):
+            return state.route
+        case .setupCoordinator(let state):
+            return ["firstTimeUser"] + state.route
+        case .identificationCoordinator(let state):
+            return ["identification"] + state.route
+        }
+    }
+}

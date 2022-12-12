@@ -30,7 +30,7 @@ class SetupPersonalPINViewModelTests: XCTestCase {
     
     func testCorrectPIN2() throws {
         let store = TestStore(initialState: SetupPersonalPINConfirm.State(enteredPIN1: "123456",
-                                                                  enteredPIN2: "12345"),
+                                                                          enteredPIN2: "12345"),
                               reducer: SetupPersonalPINConfirm())
         store.send(.binding(.set(\.$enteredPIN2, "123456"))) { state in
             state.enteredPIN2 = "123456"
@@ -39,7 +39,7 @@ class SetupPersonalPINViewModelTests: XCTestCase {
     
     func testMismatchingPIN2() throws {
         let store = TestStore(initialState: SetupPersonalPINConfirm.State(enteredPIN1: "123456",
-                                                                  enteredPIN2: "98765"),
+                                                                          enteredPIN2: "98765"),
                               reducer: SetupPersonalPINConfirm())
         store.dependencies.analytics = mockAnalyticsClient
         store.send(.binding(.set(\.$enteredPIN2, "987654"))) { state in

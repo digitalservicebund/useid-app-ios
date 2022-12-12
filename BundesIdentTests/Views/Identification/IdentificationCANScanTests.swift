@@ -22,17 +22,16 @@ final class IdentificationCANScanTests: XCTestCase {
     }
     
     func testOnAppearDoesTriggerScanningWhenNotAlreadyScanning() throws {
-        
         let request = EIDAuthenticationRequest.preview
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
         let store = TestStore(
             initialState: IdentificationCANScan.State(request: request,
-                                                  pin: pin,
-                                                  can: can,
-                                                     pinCANCallback: pinCANCallback,
-                                                  shared: SharedScan.State(isScanning: false, showInstructions: false)),
+                                                      pin: pin,
+                                                      can: can,
+                                                      pinCANCallback: pinCANCallback,
+                                                      shared: SharedScan.State(isScanning: false, showInstructions: false)),
             reducer: IdentificationCANScan()
         )
         store.dependencies.analytics = mockAnalyticsClient
@@ -43,32 +42,30 @@ final class IdentificationCANScanTests: XCTestCase {
     }
     
     func testOnAppearIgnoredWhenAlreadyScanning() throws {
-        
         let request = EIDAuthenticationRequest.preview
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
         let store = TestStore(initialState: IdentificationCANScan.State(request: request,
-                                                                       pin: pin,
-                                                                       can: can,
-                                                                       pinCANCallback: pinCANCallback,
-                                                                       shared: SharedScan.State(isScanning: true, showInstructions: false)),
+                                                                        pin: pin,
+                                                                        can: can,
+                                                                        pinCANCallback: pinCANCallback,
+                                                                        shared: SharedScan.State(isScanning: true, showInstructions: false)),
                               reducer: IdentificationCANScan())
         
         store.send(.onAppear)
     }
     
     func testCancellation() throws {
-        
         let request = EIDAuthenticationRequest.preview
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
         let store = TestStore(initialState: IdentificationCANScan.State(request: request,
-                                                                       pin: pin,
-                                                                       can: can,
-                                                                       pinCANCallback: pinCANCallback,
-                                                                       shared: SharedScan.State(isScanning: true, showInstructions: false)),
+                                                                        pin: pin,
+                                                                        can: can,
+                                                                        pinCANCallback: pinCANCallback,
+                                                                        shared: SharedScan.State(isScanning: true, showInstructions: false)),
                               reducer: IdentificationCANScan())
         store.dependencies.uuid = .incrementing
         let newCallback = { (_: String, _: String) in }
@@ -79,16 +76,15 @@ final class IdentificationCANScanTests: XCTestCase {
     }
     
     func testWrongCAN() throws {
-        
         let request = EIDAuthenticationRequest.preview
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
         let store = TestStore(initialState: IdentificationCANScan.State(request: request,
-                                                                       pin: pin,
-                                                                       can: can,
-                                                                       pinCANCallback: pinCANCallback,
-                                                                       shared: SharedScan.State(isScanning: true, showInstructions: false)),
+                                                                        pin: pin,
+                                                                        can: can,
+                                                                        pinCANCallback: pinCANCallback,
+                                                                        shared: SharedScan.State(isScanning: true, showInstructions: false)),
                               reducer: IdentificationCANScan())
         store.dependencies.uuid = .incrementing
         let newCallback = { (_: String, _: String) in }
@@ -104,10 +100,10 @@ final class IdentificationCANScanTests: XCTestCase {
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
         let store = TestStore(initialState: IdentificationCANScan.State(request: request,
-                                                                       pin: pin,
-                                                                       can: can,
-                                                                       pinCANCallback: pinCANCallback,
-                                                                       shared: SharedScan.State(isScanning: false, showInstructions: false)),
+                                                                        pin: pin,
+                                                                        can: can,
+                                                                        pinCANCallback: pinCANCallback,
+                                                                        shared: SharedScan.State(isScanning: false, showInstructions: false)),
                               reducer: IdentificationCANScan())
         store.dependencies.analytics = mockAnalyticsClient
         store.send(.shared(.showNFCInfo)) {
@@ -128,10 +124,10 @@ final class IdentificationCANScanTests: XCTestCase {
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
         let store = TestStore(initialState: IdentificationCANScan.State(request: request,
-                                                                       pin: pin,
-                                                                       can: can,
-                                                                       pinCANCallback: pinCANCallback,
-                                                                       shared: SharedScan.State(isScanning: false, showInstructions: false)),
+                                                                        pin: pin,
+                                                                        can: can,
+                                                                        pinCANCallback: pinCANCallback,
+                                                                        shared: SharedScan.State(isScanning: false, showInstructions: false)),
                               reducer: IdentificationCANScan())
         store.dependencies.analytics = mockAnalyticsClient
         store.send(.shared(.startScan)) {

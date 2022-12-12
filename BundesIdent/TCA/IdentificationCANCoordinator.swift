@@ -59,7 +59,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
     enum CancelId {}
     
     var body: some ReducerProtocol<State, Action> {
-        return Reduce<State, Action> { state, action in
+        Reduce<State, Action> { state, action in
             switch action {
             case .routeAction(_, action: .canScan(.requestPINAndCAN(let request, let pinCANCallback))):
                 state.pinCANCallback = pinCANCallback
@@ -193,9 +193,9 @@ extension IdentificationCANCoordinator.State {
         self.tokenURL = tokenURL
         self.attempt = attempt
         if goToCanIntroScreen {
-            self.states = [.root(.canIntro(.init(request: request, shouldDismiss: true)))]
+            states = [.root(.canIntro(.init(request: request, shouldDismiss: true)))]
         } else {
-            self.states = [.root(.canPINForgotten(.init(request: request)))]
+            states = [.root(.canPINForgotten(.init(request: request)))]
         }
     }
 }

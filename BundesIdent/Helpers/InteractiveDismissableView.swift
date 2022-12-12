@@ -1,8 +1,8 @@
 import Foundation
 import SwiftUI
 
-extension View {
-    public func interactiveDismissDisabled(_ dismissDisabled: Bool = true, onAttemptToDismiss: (() -> Void)? = nil) -> some View {
+public extension View {
+    func interactiveDismissDisabled(_ dismissDisabled: Bool = true, onAttemptToDismiss: (() -> Void)? = nil) -> some View {
         InteractiveDismissableView(view: self, dismissDisabled: dismissDisabled, onAttemptToDismiss: onAttemptToDismiss)
     }
 }
@@ -18,6 +18,7 @@ class SubHostingController<T: View>: UIHostingController<T>, UIAdaptivePresentat
         super.init(rootView: rootView)
     }
     
+    @available(*, unavailable)
     required init(coder: NSCoder) {
         fatalError()
     }
@@ -28,7 +29,7 @@ class SubHostingController<T: View>: UIHostingController<T>, UIAdaptivePresentat
     }
     
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
-        return !dismissDisabled
+        !dismissDisabled
     }
     
     func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
@@ -54,5 +55,5 @@ struct InteractiveDismissableView<T: View>: UIViewControllerRepresentable {
         Coordinator()
     }
     
-    class Coordinator: NSObject { }
+    class Coordinator: NSObject {}
 }

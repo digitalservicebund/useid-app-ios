@@ -9,7 +9,7 @@ struct IdentificationPersonalPIN: ReducerProtocol {
         @BindableState var enteredPIN: String = ""
         
         var doneButtonEnabled: Bool {
-            return enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
+            enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
         }
     }
 
@@ -46,12 +46,12 @@ struct IdentificationPersonalPINView: View {
                                      doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                           title: L10n.Identification.PersonalPIN.continue,
                                                                           handler: { pin in
-                            viewStore.send(.done(request: viewStore.request,
-                                                 pin: pin,
-                                                 pinCallback: viewStore.callback))
-                        }))
-                        .focused($pinEntryFocused)
-                        .headingL()
+                                                                              viewStore.send(.done(request: viewStore.request,
+                                                                                                   pin: pin,
+                                                                                                   pinCallback: viewStore.callback))
+                                                                          }))
+                                                                          .focused($pinEntryFocused)
+                                                                          .headingL()
                     }
                     Spacer()
                 }
@@ -74,12 +74,12 @@ struct IdentificationPersonalPIN_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             IdentificationPersonalPINView(store: Store(initialState: IdentificationPersonalPIN.State(request: .preview, callback: PINCallback(id: UUID(), callback: { _ in }), enteredPIN: "12345"),
-                                                   reducer: IdentificationPersonalPIN()))
+                                                       reducer: IdentificationPersonalPIN()))
         }
         .previewDevice("iPhone 12")
         NavigationView {
             IdentificationPersonalPINView(store: Store(initialState: IdentificationPersonalPIN.State(request: .preview, callback: PINCallback(id: UUID(), callback: { _ in })),
-                                                   reducer: IdentificationPersonalPIN()))
+                                                       reducer: IdentificationPersonalPIN()))
         }
         .previewDevice("iPhone 12")
     }

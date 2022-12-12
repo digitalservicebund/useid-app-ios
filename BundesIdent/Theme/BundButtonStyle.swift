@@ -58,7 +58,7 @@ struct BundTextButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) var isEnabled: Bool
     
     func makeBody(configuration: Configuration) -> some View {
-        return configuration.label
+        configuration.label
             .bodyLBold(color: titleColor(configuration: configuration))
             .minimumScaleFactor(0.5)
             .padding(.horizontal, 10)

@@ -23,7 +23,7 @@ struct IdentificationPINScan: ReducerProtocol {
         
         var pin: String
         var pinCallback: PINCallback
-        var shared: SharedScan.State = SharedScan.State()
+        var shared: SharedScan.State = .init()
         
         var authenticationSuccessful = false
         var alert: AlertState<Action>?
@@ -32,7 +32,7 @@ struct IdentificationPINScan: ReducerProtocol {
 #endif
         
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
-            return .scanEvent(event)
+            .scanEvent(event)
         }
     }
     
@@ -128,7 +128,7 @@ struct IdentificationPINScan: ReducerProtocol {
             state.shared.scanAvailable = true
             
             // This is our signal that the user canceled (for now)
-            guard let remainingAttempts = remainingAttempts else {
+            guard let remainingAttempts else {
                 logger.info("Identification cancelled")
                 if state.shared.cardRecognized {
                     issueTracker.capture(error: IdentificationScanError.cancelAfterCardRecognized)
@@ -193,21 +193,21 @@ struct IdentificationPINScanView: View {
                        scanTitle: L10n.Identification.Scan.title,
                        scanBody: L10n.Identification.Scan.message,
                        scanButton: L10n.Identification.Scan.scan)
-        .onAppear {
-            ViewStore(store).send(.onAppear)
-        }
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button(L10n.General.cancel) {
-                    ViewStore(store).send(.cancelIdentification)
+            .onAppear {
+                ViewStore(store).send(.onAppear)
+            }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(L10n.General.cancel) {
+                        ViewStore(store).send(.cancelIdentification)
+                    }
                 }
             }
-        }
 #if PREVIEW
-        .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: IdentificationPINScan.Action.runDebugSequence)
+            .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: IdentificationPINScan.Action.runDebugSequence)
 #endif
-        .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
+            .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
     }
 }
 

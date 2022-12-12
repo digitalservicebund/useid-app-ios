@@ -16,7 +16,7 @@ public final class MatomoAnalyticsClient: AnalyticsClient {
         self.init(tracker: MatomoTracker(siteId: siteId, baseURL: baseURL))
     }
     
-    init(tracker: MatomoTrackerProtocol, sessionTimeout: TimeInterval = 1_800) {
+    init(tracker: MatomoTrackerProtocol, sessionTimeout: TimeInterval = 1800) {
         self.tracker = tracker
         self.sessionTimeout = sessionTimeout
     }

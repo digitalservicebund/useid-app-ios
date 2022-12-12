@@ -5,9 +5,9 @@ import OSLog
 extension AnalyticsEvent: CustomDebugStringConvertible {
     public var debugDescription: String {
         var baseDescription = "\(category) - \(action)"
-        if let name = name {
+        if let name {
             baseDescription.append(", name: \(name)")
-        } else if let value = value {
+        } else if let value {
             baseDescription.append(", value: \(value)")
         }
         return baseDescription
@@ -16,7 +16,7 @@ extension AnalyticsEvent: CustomDebugStringConvertible {
 
 extension AnalyticsView {
     var debugDescription: String {
-        return route.isEmpty ? "/" : route.joined(separator: "/")
+        route.isEmpty ? "/" : route.joined(separator: "/")
     }
 }
 

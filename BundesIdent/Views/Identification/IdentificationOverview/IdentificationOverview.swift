@@ -114,7 +114,7 @@ struct IdentificationOverviewView: View {
                                title: L10n.Identification.FetchMetadataError.title,
                                message: L10n.Identification.FetchMetadataError.body,
                                primaryButton: .init(title: L10n.Identification.FetchMetadataError.retry, action: .retry))
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
             }
             .toolbar {

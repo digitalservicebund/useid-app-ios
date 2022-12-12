@@ -17,7 +17,7 @@ class StopServiceHandler: NSObject, StopServiceHandlerProtocol {
     
     func onFailure(_ response: (NSObjectProtocol & ServiceErrorResponseProtocol)!) {
         issueTracker.capture(error: ServiceErrorResponseError(code: response.getStatusCode()))
-        logger.error("Failed to stop service. Reason: \( response.errorDescription)")
+        logger.error("Failed to stop service. Reason: \(response.errorDescription)")
     }
 }
 

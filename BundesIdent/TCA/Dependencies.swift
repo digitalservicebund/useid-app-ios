@@ -5,14 +5,14 @@ import OpenEcard
 import OSLog
 
 enum LoggerKey: DependencyKey {
-    static var liveValue: Logger = Logger()
-    static let previewValue: Logger = Logger(category: "preview")
-    static let testValue: Logger = Logger()
+    static var liveValue: Logger = .init()
+    static let previewValue: Logger = .init(category: "preview")
+    static let testValue: Logger = .init()
 }
 
 #if PREVIEW
 enum DebugInteractionManagerKey: DependencyKey {
-    static var liveValue: DebugIDInteractionManager = DebugIDInteractionManager()
+    static var liveValue: DebugIDInteractionManager = .init()
 }
 
 extension DependencyValues {

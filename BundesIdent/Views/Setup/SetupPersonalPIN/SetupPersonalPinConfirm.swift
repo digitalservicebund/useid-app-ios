@@ -42,7 +42,8 @@ struct SetupPersonalPINConfirm: ReducerProtocol {
                                     action: "errorShown",
                                     name: "personalPINMismatch",
                                     analytics: analytics),
-                        Effect(value: .mismatchError))
+                        Effect(value: .mismatchError)
+                    )
                 }
                 return Effect(value: .done(pin: state.enteredPIN1))
             default:
@@ -73,10 +74,10 @@ struct SetupPersonalPINConfirmView: View {
                                          doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                               title: L10n.FirstTimeUser.PersonalPIN.continue,
                                                                               handler: { _ in
-                                viewStore.send(.checkPINs)
-                            }))
-                            .focused($pinEntryFocused)
-                            .headingL()
+                                                                                  viewStore.send(.checkPINs)
+                                                                              }))
+                                                                              .focused($pinEntryFocused)
+                                                                              .headingL()
                             Spacer()
                         }
                         .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -101,7 +102,7 @@ struct SetupPersonalPINConfirm_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             SetupPersonalPINConfirmView(store: Store(initialState: SetupPersonalPINConfirm.State(enteredPIN1: "12345"),
-                                                 reducer: SetupPersonalPINConfirm()))
+                                                     reducer: SetupPersonalPINConfirm()))
         }
         .previewDevice("iPhone 12")
     }

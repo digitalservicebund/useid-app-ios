@@ -7,7 +7,7 @@ struct IdentificationCANInput: ReducerProtocol {
         let request: EIDAuthenticationRequest
         var pushesToPINEntry: Bool
         var doneButtonEnabled: Bool {
-            return enteredCAN.count == Constants.CAN_DIGIT_COUNT
+            enteredCAN.count == Constants.CAN_DIGIT_COUNT
         }
     }
     
@@ -42,10 +42,10 @@ struct IdentificationCANInputView: View {
                                      doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                           title: L10n.Identification.Can.Input.continue,
                                                                           handler: { can in
-                            viewStore.send(.done(can: can, request: viewStore.request, pushesToPINEntry: viewStore.pushesToPINEntry))
-                        }))
-                        .focused($pinEntryFocused)
-                        .headingL()
+                                                                              viewStore.send(.done(can: can, request: viewStore.request, pushesToPINEntry: viewStore.pushesToPINEntry))
+                                                                          }))
+                                                                          .focused($pinEntryFocused)
+                                                                          .headingL()
                     }
                     Spacer()
                 }

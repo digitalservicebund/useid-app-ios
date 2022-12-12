@@ -33,13 +33,12 @@ final class ScanErrorReducerTests: XCTestCase {
         XCTAssertNil(openedURL)
     }
     
-    
     func testReducerWithoutRedirectURL() {
         let store = TestStore(
             initialState: ScanError.State(errorType: .idCardInteraction(.processFailed(resultCode: .INTERNAL_ERROR,
-                                                                                      redirectURL: nil,
-                                                                                      resultMinor: nil)),
-                                         retry: false),
+                                                                                       redirectURL: nil,
+                                                                                       resultMinor: nil)),
+            retry: false),
             reducer: ScanError()
         )
         store.dependencies.urlOpener = urlOpener
@@ -52,9 +51,9 @@ final class ScanErrorReducerTests: XCTestCase {
     func testReducerOpensRedirectURL() {
         let store = TestStore(
             initialState: ScanError.State(errorType: .idCardInteraction(.processFailed(resultCode: .BAD_REQUEST,
-                                                                                      redirectURL: redirectURL,
-                                                                                      resultMinor: nil)),
-                                         retry: false),
+                                                                                       redirectURL: redirectURL,
+                                                                                       resultMinor: nil)),
+            retry: false),
             reducer: ScanError()
         )
         store.dependencies.urlOpener = urlOpener
@@ -75,14 +74,12 @@ final class ScanErrorStateTests: XCTestCase {
     
     func testRedirectErrorPrimaryButton() {
         let state = ScanError.State(errorType: .idCardInteraction(.processFailed(resultCode: .CLIENT_ERROR,
-                                                                                redirectURL: redirectURL,
-                                                                                resultMinor: nil)),
-                                   retry: false)
+                                                                                 redirectURL: redirectURL,
+                                                                                 resultMinor: nil)),
+        retry: false)
         
         XCTAssertEqual(state.primaryButton.title, L10n.ScanError.redirect)
         XCTAssertEqual(state.primaryButton.action, .end(redirectURL: redirectURL))
-        
-        
     }
     
     func testGenericErrorPrimaryButton() {
@@ -99,9 +96,9 @@ final class ScanErrorStateTests: XCTestCase {
     
     func testBoxWithoutRetry() {
         let state = ScanError.State(errorType: .idCardInteraction(.processFailed(resultCode: .CLIENT_ERROR,
-                                                                                redirectURL: redirectURL,
-                                                                                resultMinor: nil)),
-                                   retry: false)
+                                                                                 redirectURL: redirectURL,
+                                                                                 resultMinor: nil)),
+        retry: false)
         
         XCTAssertEqual(state.boxContent?.title, L10n.ScanError.Box.title)
         XCTAssertEqual(state.boxContent?.message, L10n.ScanError.Box.body)

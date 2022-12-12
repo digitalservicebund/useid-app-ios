@@ -25,7 +25,7 @@ struct Home: ReducerProtocol {
     }
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-        return .none
+        .none
     }
 }
 
@@ -194,7 +194,7 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView(store: Store(initialState: Home.State(appVersion: "1.2.3",
-                                                      buildNumber: 42),
+                                                       buildNumber: 42),
                               reducer: Home()))
     }
 }

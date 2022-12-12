@@ -14,21 +14,21 @@ struct DialogButtons<Action>: View {
     
     init(store: Store<Void, Action>, secondary: ButtonConfiguration? = nil, primary: ButtonConfiguration?) {
         self.store = store
-        self.secondaryButtonConfiguration = secondary
-        self.primaryButtonConfiguration = primary
+        secondaryButtonConfiguration = secondary
+        primaryButtonConfiguration = primary
     }
     
     var body: some View {
         VStack {
-            if let primaryButtonConfiguration = primaryButtonConfiguration {
+            if let primaryButtonConfiguration {
                 Button(primaryButtonConfiguration.title,
                        action: { ViewStore(store).send(primaryButtonConfiguration.action) })
-                .buttonStyle(BundButtonStyle(isPrimary: true))
+                    .buttonStyle(BundButtonStyle(isPrimary: true))
             }
-            if let secondaryButtonConfiguration = secondaryButtonConfiguration {
+            if let secondaryButtonConfiguration {
                 Button(secondaryButtonConfiguration.title,
                        action: { ViewStore(store).send(secondaryButtonConfiguration.action) })
-                .buttonStyle(BundButtonStyle(isPrimary: false))
+                    .buttonStyle(BundButtonStyle(isPrimary: false))
             }
         }
         .padding([.leading, .bottom, .trailing])
@@ -46,17 +46,17 @@ struct DialogButtons_Previews: PreviewProvider {
         DialogButtons<DialogButtonsPreviewAction>(store: .empty,
                                                   secondary: nil,
                                                   primary: .init(title: "Primary", action: .primary))
-        .previewLayout(.sizeThatFits)
-        .previewDisplayName("Primary")
+            .previewLayout(.sizeThatFits)
+            .previewDisplayName("Primary")
         DialogButtons<DialogButtonsPreviewAction>(store: .empty,
                                                   secondary: .init(title: "Secondary", action: .secondary),
                                                   primary: nil)
-        .previewLayout(.sizeThatFits)
-        .previewDisplayName("Secondary")
+            .previewLayout(.sizeThatFits)
+            .previewDisplayName("Secondary")
         DialogButtons<DialogButtonsPreviewAction>(store: .empty,
                                                   secondary: .init(title: "Secondary", action: .secondary),
                                                   primary: .init(title: "Primary", action: .primary))
-        .previewLayout(.sizeThatFits)
-        .previewDisplayName("Both")
+            .previewLayout(.sizeThatFits)
+            .previewDisplayName("Both")
     }
 }

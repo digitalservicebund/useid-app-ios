@@ -55,7 +55,6 @@ struct SetupScreen: ReducerProtocol {
         Scope(state: /State.error, action: /Action.error) {
             ScanError()
         }
-
     }
 }
 

@@ -63,6 +63,7 @@ struct IdentificationOverviewLoaded: ReducerProtocol {
         }
     }
 }
+
 struct IdentificationOverviewLoadedView: View {
     var store: Store<IdentificationOverviewLoaded.State, IdentificationOverviewLoaded.Action>
     
@@ -73,11 +74,11 @@ struct IdentificationOverviewLoadedView: View {
                     VStack(alignment: .leading, spacing: 0) {
                         HeaderView(title: L10n.Identification.AttributeConsent.title(viewStore.request.subject),
                                    message: L10n.Identification.AttributeConsent.body)
-                        .padding(.horizontal)
+                            .padding(.horizontal)
                         
                         attributesBox
                         
-                        NavigationLink.init(L10n.Identification.AttributeConsent.moreInfo) {
+                        NavigationLink(L10n.Identification.AttributeConsent.moreInfo) {
                             IdentificationAbout(request: viewStore.request)
                         }
                         .buttonStyle(BundTextButtonStyle())

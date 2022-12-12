@@ -18,7 +18,7 @@ enum IDCardAttribute: String, Equatable, Identifiable {
     case RESTRICTED_IDENTIFICATION
     case AGE_VERIFICATION
     
-    var id: String { self.rawValue }
+    var id: String { rawValue }
 }
 
 extension IDCardAttribute {

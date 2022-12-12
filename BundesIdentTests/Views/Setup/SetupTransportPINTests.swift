@@ -15,8 +15,8 @@ class SetupTransportPINViewModelTests: XCTestCase {
     
     func testCompletePIN() throws {
         let store = TestStore(
-          initialState: SetupTransportPIN.State(enteredPIN: ""),
-          reducer: SetupTransportPIN()
+            initialState: SetupTransportPIN.State(enteredPIN: ""),
+            reducer: SetupTransportPIN()
         )
         
         store.send(.binding(.set(\.$enteredPIN, "12345"))) { state in

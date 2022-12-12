@@ -17,9 +17,9 @@ struct ScanBody: View {
         VStack(alignment: .leading, spacing: 24) {
             Text(title)
                 .headingXL()
-            if let primaryButton = primaryButton {
+            if let primaryButton {
                 Button(primaryButton.title, action: primaryButton.action)
-                .buttonStyle(BundButtonStyle(isPrimary: true))
+                    .buttonStyle(BundButtonStyle(isPrimary: true))
             }
             Text(message)
                 .bodyLRegular()

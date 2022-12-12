@@ -6,7 +6,7 @@ struct IdentificationCANPersonalPINInput: ReducerProtocol {
         @BindableState var enteredPIN: String = ""
         let request: EIDAuthenticationRequest
         var doneButtonEnabled: Bool {
-            return enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
+            enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
         }
     }
 
@@ -42,10 +42,10 @@ struct IdentificationCANPersonalPINInputView: View {
                                          doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                               title: L10n.Identification.PersonalPIN.continue,
                                                                               handler: { pin in
-                                viewStore.send(.done(pin: pin, request: viewStore.request))
-                            }))
-                            .focused($pinEntryFocused)
-                            .headingL()
+                                                                                  viewStore.send(.done(pin: pin, request: viewStore.request))
+                                                                              }))
+                                                                              .focused($pinEntryFocused)
+                                                                              .headingL()
                         }
                     }
                     
@@ -53,7 +53,7 @@ struct IdentificationCANPersonalPINInputView: View {
                         .bodyLRegular()
                         .multilineTextAlignment(.center)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
-                    .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity)
                     Spacer()
                 }
                 .navigationBarTitleDisplayMode(.inline)
@@ -75,7 +75,7 @@ struct IdentificationCANPersonalPINInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             IdentificationCANPersonalPINInputView(store: .init(initialState: .init(request: .preview),
-                                                           reducer: IdentificationCANPersonalPINInput()))
+                                                               reducer: IdentificationCANPersonalPINInput()))
         }
         .previewDevice("iPhone 12")
     }

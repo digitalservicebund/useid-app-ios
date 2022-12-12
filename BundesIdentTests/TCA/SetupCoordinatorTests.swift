@@ -20,7 +20,8 @@ class SetupCoordinatorTests: XCTestCase {
     func testEndTriggersConfirmation() {
         let store = TestStore(
             initialState: SetupCoordinator.State(),
-            reducer: SetupCoordinator())
+            reducer: SetupCoordinator()
+        )
         
         store.send(.end) {
             $0.alert = AlertState(title: .init(verbatim: L10n.FirstTimeUser.ConfirmEnd.title),
@@ -44,13 +45,14 @@ class SetupCoordinatorTests: XCTestCase {
             .root(.intro(.init(tokenURL: nil))),
             .push(.transportPINIntro)
         ]),
-                              reducer: SetupCoordinator())
+        reducer: SetupCoordinator())
         
         store.send(.routeAction(0, action: .transportPINIntro(.choosePINLetterAvailable))) {
             $0.routes = [
                 .root(.intro(.init(tokenURL: nil))),
                 .push(.transportPINIntro),
-                .push(.transportPIN(.init()))]
+                .push(.transportPIN(.init()))
+            ]
         }
     }
     
@@ -59,7 +61,7 @@ class SetupCoordinatorTests: XCTestCase {
         let store = TestStore(initialState: SetupCoordinator.State(states: [
             .root(.transportPIN(.init()))
         ]),
-                              reducer: SetupCoordinator())
+        reducer: SetupCoordinator())
         
         store.send(.routeAction(0, action: .transportPIN(.done(transportPIN: transportPIN)))) {
             $0.transportPIN = transportPIN
@@ -75,7 +77,7 @@ class SetupCoordinatorTests: XCTestCase {
         let store = TestStore(initialState: SetupCoordinator.State(states: [
             .root(.personalPINIntro)
         ]),
-                              reducer: SetupCoordinator())
+        reducer: SetupCoordinator())
         
         store.send(.routeAction(0, action: .personalPINIntro(.continue))) {
             $0.routes = [
@@ -91,7 +93,7 @@ class SetupCoordinatorTests: XCTestCase {
         let store = TestStore(initialState: SetupCoordinator.State(states: [
             .root(.personalPINInput(.init()))
         ]),
-                              reducer: SetupCoordinator())
+        reducer: SetupCoordinator())
         
         store.send(.routeAction(0, action: .personalPINInput(.done(pin: pin)))) {
             $0.routes = [
@@ -107,7 +109,7 @@ class SetupCoordinatorTests: XCTestCase {
             .root(.personalPINInput(.init())),
             .push(.personalPINConfirm(.init(enteredPIN1: pin)))
         ]),
-                              reducer: SetupCoordinator())
+        reducer: SetupCoordinator())
         
         store.send(.routeAction(1, action: .personalPINConfirm(.confirmMismatch))) {
             $0.routes = [
@@ -120,10 +122,10 @@ class SetupCoordinatorTests: XCTestCase {
         let pin = "123456"
         let transportPIN = "12345"
         let store = TestStore(initialState: SetupCoordinator.State(transportPIN: transportPIN,
-                                                                  states: [
-            .root(.personalPINInput(.init())),
-            .push(.personalPINConfirm(.init(enteredPIN1: pin)))
-        ]),
+                                                                   states: [
+                                                                       .root(.personalPINInput(.init())),
+                                                                       .push(.personalPINConfirm(.init(enteredPIN1: pin)))
+                                                                   ]),
                               reducer: SetupCoordinator())
         
         store.send(.routeAction(1, action: .personalPINConfirm(.done(pin: pin)))) {
@@ -138,9 +140,9 @@ class SetupCoordinatorTests: XCTestCase {
         let pin = "123456"
         let transportPIN = "12345"
         let store = TestStore(initialState: SetupCoordinator.State(transportPIN: transportPIN,
-                                                                  states: [
-            .root(.scan(.init(transportPIN: transportPIN, newPIN: pin)))
-        ]),
+                                                                   states: [
+                                                                       .root(.scan(.init(transportPIN: transportPIN, newPIN: pin)))
+                                                                   ]),
                               reducer: SetupCoordinator())
         store.dependencies.storageManager = mockStorageManager
         
@@ -156,9 +158,9 @@ class SetupCoordinatorTests: XCTestCase {
         let pin = "123456"
         let transportPIN = "12345"
         let store = TestStore(initialState: SetupCoordinator.State(transportPIN: transportPIN,
-                                                                  states: [
-            .root(.scan(.init(transportPIN: transportPIN, newPIN: pin)))
-        ]),
+                                                                   states: [
+                                                                       .root(.scan(.init(transportPIN: transportPIN, newPIN: pin)))
+                                                                   ]),
                               reducer: SetupCoordinator())
         
         store.send(.routeAction(0, action: .scan(.error(.init(errorType: .help, retry: false))))) {
@@ -174,9 +176,9 @@ class SetupCoordinatorTests: XCTestCase {
         let transportPIN = "12345"
         var remainingAttempts = 3
         let store = TestStore(initialState: SetupCoordinator.State(transportPIN: transportPIN,
-                                                                  states: [
-            .root(.scan(.init(transportPIN: transportPIN, newPIN: pin)))
-        ]),
+                                                                   states: [
+                                                                       .root(.scan(.init(transportPIN: transportPIN, newPIN: pin)))
+                                                                   ]),
                               reducer: SetupCoordinator())
         
         store.send(.routeAction(0, action: .scan(.wrongTransportPIN(remainingAttempts: remainingAttempts)))) {
@@ -193,10 +195,10 @@ class SetupCoordinatorTests: XCTestCase {
         let newTransportPIN = "54321"
         var remainingAttempts = 3
         let store = TestStore(initialState: SetupCoordinator.State(transportPIN: transportPIN,
-                                                                  states: [
-            .root(.scan(.init(transportPIN: transportPIN, newPIN: pin))),
-            .sheet(.incorrectTransportPIN(.init(remainingAttempts: remainingAttempts)))
-        ]),
+                                                                   states: [
+                                                                       .root(.scan(.init(transportPIN: transportPIN, newPIN: pin))),
+                                                                       .sheet(.incorrectTransportPIN(.init(remainingAttempts: remainingAttempts)))
+                                                                   ]),
                               reducer: SetupCoordinator())
         
         store.send(.routeAction(1, action: .incorrectTransportPIN(.done(transportPIN: newTransportPIN)))) {

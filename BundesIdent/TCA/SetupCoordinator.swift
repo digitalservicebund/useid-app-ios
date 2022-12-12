@@ -58,7 +58,7 @@ struct SetupCoordinator: ReducerProtocol {
     }
     
     var body: some ReducerProtocol<State, Action> {
-        return Reduce<State, Action> { state, action in
+        Reduce<State, Action> { state, action in
             switch action {
             case .routeAction(_, .intro(.chooseStartSetup)):
                 state.routes.push(.transportPINIntro)
@@ -179,7 +179,6 @@ struct SetupCoordinatorView: View {
                                     then: SetupPersonalPINConfirmView.init)
                         }
                     }
-                    
                 }
             }
             .alert(store.scope(state: \.alert), dismiss: .dismissAlert)

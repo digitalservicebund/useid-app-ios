@@ -26,8 +26,8 @@ struct ScanError: ReducerProtocol {
             case .cardBlocked:
                 return L10n.ScanError.CardBlocked.title
             case .idCardInteraction,
-                    .unexpectedEvent,
-                    .help:
+                 .unexpectedEvent,
+                 .help:
                 return L10n.ScanError.CardUnreadable.title
             }
         }
@@ -41,8 +41,8 @@ struct ScanError: ReducerProtocol {
             case .cardBlocked:
                 return L10n.ScanError.CardBlocked.body
             case .idCardInteraction,
-                    .unexpectedEvent,
-                    .help:
+                 .unexpectedEvent,
+                 .help:
                 return L10n.ScanError.CardUnreadable.body
             }
         }
@@ -50,7 +50,7 @@ struct ScanError: ReducerProtocol {
         var primaryButton: DialogButtons<ScanError.Action>.ButtonConfiguration {
             if retry {
                 return .init(title: L10n.ScanError.close, action: .retry)
-            } else if case .idCardInteraction(.processFailed(_, let url, _)) = errorType, let url = url {
+            } else if case .idCardInteraction(.processFailed(_, let url, _)) = errorType, let url {
                 return .init(title: L10n.ScanError.redirect, action: .end(redirectURL: url))
             } else {
                 return .init(title: L10n.ScanError.close, action: .end(redirectURL: nil))
@@ -58,7 +58,7 @@ struct ScanError: ReducerProtocol {
         }
         
         var boxContent: BoxContent? {
-            guard !retry else { return nil}
+            guard !retry else { return nil }
             
             switch errorType {
             case .cardDeactivated, .cardSuspended, .cardBlocked, .help, .idCardInteraction(.cardDeactivated), .idCardInteraction(.cardBlocked):
@@ -77,7 +77,7 @@ struct ScanError: ReducerProtocol {
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .end(let redirectURL):
-            guard let redirectURL = redirectURL else { return .none }
+            guard let redirectURL else { return .none }
             return .openURL(redirectURL, urlOpener: urlOpener)
         default:
             return .none
@@ -113,7 +113,7 @@ struct ScanErrorView: View {
                            boxContent: viewStore.boxContent,
                            message: viewStore.markdown,
                            primaryButton: viewStore.primaryButton)
-                .interactiveDismissDisabled(true)
+                    .interactiveDismissDisabled(true)
             }
             .navigationBarBackButtonHidden(true)
             .navigationBarHidden(false)
@@ -124,12 +124,12 @@ struct ScanErrorView: View {
 struct SetupError_Previews: PreviewProvider {
     static var previews: some View {
         ScanErrorView(store: Store(initialState: .init(errorType: .cardDeactivated, retry: false),
-                               reducer: ScanError()))
+                                   reducer: ScanError()))
         ScanErrorView(store: Store(initialState: .init(errorType: .cardSuspended, retry: false),
-                               reducer: ScanError()))
+                                   reducer: ScanError()))
         ScanErrorView(store: Store(initialState: .init(errorType: .cardBlocked, retry: false),
-                               reducer: ScanError()))
+                                   reducer: ScanError()))
         ScanErrorView(store: Store(initialState: .init(errorType: .unexpectedEvent(.cardRemoved), retry: true),
-                               reducer: ScanError()))
+                                   reducer: ScanError()))
     }
 }

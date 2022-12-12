@@ -10,7 +10,7 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
         
         let effect = state.transformToLocalInteractionHandler(event: .failure(.cardBlocked))
         
-        guard let effect = effect else {
+        guard let effect else {
             return XCTFail("Effect should not be nil")
         }
         
@@ -18,16 +18,15 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
     }
     
     func testTransformToLocalInteractionHandlerLastState() throws {
-
         let state = IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                   states: [
-                                                    .root(.overview(.loading(IdentificationOverviewLoading.State()))),
-                                                    .push(.overview(.loading(IdentificationOverviewLoading.State())))
-                                                   ])
+                                                    states: [
+                                                        .root(.overview(.loading(IdentificationOverviewLoading.State()))),
+                                                        .push(.overview(.loading(IdentificationOverviewLoading.State())))
+                                                    ])
         
         let effect = state.transformToLocalInteractionHandler(event: .failure(.cardBlocked))
         
-        guard let effect = effect else {
+        guard let effect else {
             return XCTFail("Effect should not be nil")
         }
         
@@ -35,29 +34,27 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
     }
     
     func testNoTransformToLocalInteractionHandler() throws {
-        
-        struct SomeError: Error { }
+        struct SomeError: Error {}
         let state = IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                   states: [
-                                                    .root(.overview(.error(IdentificationOverviewErrorState(error: IdentifiableError(SomeError())))))
-                                                   ])
+                                                    states: [
+                                                        .root(.overview(.error(IdentificationOverviewErrorState(error: IdentifiableError(SomeError())))))
+                                                    ])
         
         let effect = state.transformToLocalInteractionHandler(event: .failure(.cardBlocked))
         XCTAssertNil(effect)
     }
     
     func testNotLastTransformToLocalInteractionHandler() throws {
-        
-        struct SomeError: Error { }
+        struct SomeError: Error {}
         let state = IdentificationCoordinator.State(tokenURL: demoTokenURL,
-                                                   states: [
-                                                    .root(.overview(.loading(IdentificationOverviewLoading.State()))),
-                                                    .push(.overview(.error(IdentificationOverviewErrorState(error: IdentifiableError(SomeError())))))
-                                                   ])
+                                                    states: [
+                                                        .root(.overview(.loading(IdentificationOverviewLoading.State()))),
+                                                        .push(.overview(.error(IdentificationOverviewErrorState(error: IdentifiableError(SomeError())))))
+                                                    ])
         
         let effect = state.transformToLocalInteractionHandler(event: .failure(.cardBlocked))
         
-        guard let effect = effect else {
+        guard let effect else {
             return XCTFail("Effect should not be nil")
         }
         

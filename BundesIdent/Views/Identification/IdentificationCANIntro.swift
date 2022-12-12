@@ -13,7 +13,7 @@ struct IdentificationCANIntro: ReducerProtocol {
     }
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-        return .none
+        .none
     }
 }
 
@@ -26,8 +26,8 @@ struct IdentificationCANIntroView: View {
                        imageMeta: ImageMeta(asset: Asset.idCan),
                        primaryButton: .init(title: L10n.Identification.Can.Intro.continue, action: .showInput(viewStore.request, viewStore.shouldDismiss)))
             
-            .navigationBarBackButtonHidden(viewStore.shouldDismiss)
-            .navigationBarItems(leading: viewStore.shouldDismiss ? cancelButton(viewStore: viewStore) : nil)
+                .navigationBarBackButtonHidden(viewStore.shouldDismiss)
+                .navigationBarItems(leading: viewStore.shouldDismiss ? cancelButton(viewStore: viewStore) : nil)
         }
     }
     
@@ -37,7 +37,6 @@ struct IdentificationCANIntroView: View {
             ViewStore(store.stateless).send(.end)
         }
         .bodyLRegular(color: .accentColor)
-        
     }
 }
 

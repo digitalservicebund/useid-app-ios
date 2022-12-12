@@ -19,7 +19,7 @@ struct SetupScan: ReducerProtocol {
     struct State: Equatable {
         var transportPIN: String
         var newPIN: String
-        var shared: SharedScan.State = SharedScan.State()
+        var shared: SharedScan.State = .init()
         var remainingAttempts: Int?
         var alert: AlertState<SetupScan.Action>?
 #if PREVIEW
@@ -57,7 +57,7 @@ struct SetupScan: ReducerProtocol {
             state.shared.isScanning = true
         case .cardRemoved:
             state.shared.showProgressCaption = ProgressCaption(title: L10n.FirstTimeUser.Scan.Progress.title,
-                                                         body: L10n.FirstTimeUser.Scan.Progress.body)
+                                                               body: L10n.FirstTimeUser.Scan.Progress.body)
             logger.info("Card removed.")
         case .processCompletedSuccessfullyWithoutRedirect:
             return Effect(value: .scannedSuccessfully)
@@ -74,7 +74,7 @@ struct SetupScan: ReducerProtocol {
             }
             
             // Wrong transport/personal PIN provided
-            if let remainingAttemptsBefore = remainingAttemptsBefore,
+            if let remainingAttemptsBefore,
                remainingAttempts < remainingAttemptsBefore {
                 return Effect(value: .wrongTransportPIN(remainingAttempts: remainingAttempts))
             }
@@ -97,89 +97,89 @@ struct SetupScan: ReducerProtocol {
     enum CancelId {}
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-            switch action {
+        switch action {
 #if PREVIEW
-            case .runDebugSequence(let debugSequence):
-                state.availableDebugActions = debugIDInteractionManager.runChangePIN(debugSequence: debugSequence)
-                return .none
+        case .runDebugSequence(let debugSequence):
+            state.availableDebugActions = debugIDInteractionManager.runChangePIN(debugSequence: debugSequence)
+            return .none
 #endif
-            case .onAppear:
-                return .none
-            case .shared(.startScan):
-                state.shared.showInstructions = false
-                state.shared.cardRecognized = false
-                guard !state.shared.isScanning else { return .none }
-                state.shared.isScanning = true
+        case .onAppear:
+            return .none
+        case .shared(.startScan):
+            state.shared.showInstructions = false
+            state.shared.cardRecognized = false
+            guard !state.shared.isScanning else { return .none }
+            state.shared.isScanning = true
                 
-                let publisher: EIDInteractionPublisher
+            let publisher: EIDInteractionPublisher
 #if PREVIEW
-                if MOCK_OPENECARD {
-                    let debuggableInteraction = debugIDInteractionManager.debuggableChangePIN()
-                    state.availableDebugActions = debuggableInteraction.sequence
-                    publisher = debuggableInteraction.publisher
-                } else {
-                    publisher = idInteractionManager.changePIN(nfcMessagesProvider: SetupNFCMessageProvider())
-                }
-#else
+            if MOCK_OPENECARD {
+                let debuggableInteraction = debugIDInteractionManager.debuggableChangePIN()
+                state.availableDebugActions = debuggableInteraction.sequence
+                publisher = debuggableInteraction.publisher
+            } else {
                 publisher = idInteractionManager.changePIN(nfcMessagesProvider: SetupNFCMessageProvider())
-#endif
-                return .concatenate(
-                    .trackEvent(category: "firstTimeUser",
-                                action: "buttonPressed",
-                                name: "scan",
-                                analytics: analytics),
-                    publisher
-                        .receive(on: mainQueue)
-                        .catchToEffect(SetupScan.Action.scanEvent)
-                        .cancellable(id: CancelId.self, cancelInFlight: true)
-                )
-            case .scanEvent(.failure(let error)):
-                RedactedIDCardInteractionError(error).flatMap(issueTracker.capture(error:))
-                state.shared.isScanning = false
-                
-                switch error {
-                case .cardDeactivated:
-                    state.shared.scanAvailable = false
-                    return Effect(value: .error(ScanError.State(errorType: .cardDeactivated, retry: state.shared.scanAvailable)))
-                case .cardBlocked:
-                    state.shared.scanAvailable = false
-                    return Effect(value: .error(ScanError.State(errorType: .cardBlocked, retry: state.shared.scanAvailable)))
-                default:
-                    state.shared.scanAvailable = true
-                    return Effect(value: .error(ScanError.State(errorType: .idCardInteraction(error), retry: state.shared.scanAvailable)))
-                }
-            case .scanEvent(.success(let event)):
-                return self.handle(state: &state, event: event)
-            case .cancelScan:
-                state.shared.isScanning = false
-                if state.shared.cardRecognized {
-                    issueTracker.capture(error: SetupScanError.cancelAfterCardRecognized)
-                }
-                return .cancel(id: CancelId.self)
-            case .error:
-                state.shared.isScanning = false
-                return .cancel(id: CancelId.self)
-            case .wrongTransportPIN:
-                state.shared.isScanning = false
-                return .cancel(id: CancelId.self)
-            case .scannedSuccessfully:
-                storageManager.setupCompleted = true
-                return .cancel(id: CancelId.self)
-            case .shared(.showNFCInfo):
-                state.alert = AlertState(title: TextState(L10n.HelpNFC.title),
-                                         message: TextState(L10n.HelpNFC.body),
-                                         dismissButton: .cancel(TextState(L10n.General.ok),
-                                                                action: .send(.dismissAlert)))
-                return .trackEvent(category: "firstTimeUser",
-                                   action: "alertShown",
-                                   name: "NFCInfo",
-                                   analytics: analytics)
-            case .shared(.showHelp):
-                return .none
-            case .dismissAlert:
-                state.alert = nil
-                return .none
             }
+#else
+            publisher = idInteractionManager.changePIN(nfcMessagesProvider: SetupNFCMessageProvider())
+#endif
+            return .concatenate(
+                .trackEvent(category: "firstTimeUser",
+                            action: "buttonPressed",
+                            name: "scan",
+                            analytics: analytics),
+                publisher
+                    .receive(on: mainQueue)
+                    .catchToEffect(SetupScan.Action.scanEvent)
+                    .cancellable(id: CancelId.self, cancelInFlight: true)
+            )
+        case .scanEvent(.failure(let error)):
+            RedactedIDCardInteractionError(error).flatMap(issueTracker.capture(error:))
+            state.shared.isScanning = false
+                
+            switch error {
+            case .cardDeactivated:
+                state.shared.scanAvailable = false
+                return Effect(value: .error(ScanError.State(errorType: .cardDeactivated, retry: state.shared.scanAvailable)))
+            case .cardBlocked:
+                state.shared.scanAvailable = false
+                return Effect(value: .error(ScanError.State(errorType: .cardBlocked, retry: state.shared.scanAvailable)))
+            default:
+                state.shared.scanAvailable = true
+                return Effect(value: .error(ScanError.State(errorType: .idCardInteraction(error), retry: state.shared.scanAvailable)))
+            }
+        case .scanEvent(.success(let event)):
+            return handle(state: &state, event: event)
+        case .cancelScan:
+            state.shared.isScanning = false
+            if state.shared.cardRecognized {
+                issueTracker.capture(error: SetupScanError.cancelAfterCardRecognized)
+            }
+            return .cancel(id: CancelId.self)
+        case .error:
+            state.shared.isScanning = false
+            return .cancel(id: CancelId.self)
+        case .wrongTransportPIN:
+            state.shared.isScanning = false
+            return .cancel(id: CancelId.self)
+        case .scannedSuccessfully:
+            storageManager.setupCompleted = true
+            return .cancel(id: CancelId.self)
+        case .shared(.showNFCInfo):
+            state.alert = AlertState(title: TextState(L10n.HelpNFC.title),
+                                     message: TextState(L10n.HelpNFC.body),
+                                     dismissButton: .cancel(TextState(L10n.General.ok),
+                                                            action: .send(.dismissAlert)))
+            return .trackEvent(category: "firstTimeUser",
+                               action: "alertShown",
+                               name: "NFCInfo",
+                               analytics: analytics)
+        case .shared(.showHelp):
+            return .none
+        case .dismissAlert:
+            state.alert = nil
+            return .none
+        }
     }
 }
 
@@ -199,19 +199,19 @@ struct SetupScanView: View {
     
     var body: some View {
         SharedScanView(store: store.scope(state: \.shared, action: SetupScan.Action.shared),
-                   instructionsTitle: L10n.FirstTimeUser.ScanInstructions.title,
-                   instructionsBody: L10n.FirstTimeUser.ScanInstructions.body,
-                   instructionsScanButtonTitle: L10n.FirstTimeUser.Scan.scan,
-                   scanTitle: L10n.FirstTimeUser.Scan.title,
-                   scanBody: L10n.FirstTimeUser.Scan.body,
-                   scanButton: L10n.FirstTimeUser.Scan.scan)
-        .interactiveDismissDisabled()
-        .onAppear {
-            ViewStore(store).send(.onAppear)
-        }
+                       instructionsTitle: L10n.FirstTimeUser.ScanInstructions.title,
+                       instructionsBody: L10n.FirstTimeUser.ScanInstructions.body,
+                       instructionsScanButtonTitle: L10n.FirstTimeUser.Scan.scan,
+                       scanTitle: L10n.FirstTimeUser.Scan.title,
+                       scanBody: L10n.FirstTimeUser.Scan.body,
+                       scanButton: L10n.FirstTimeUser.Scan.scan)
+            .interactiveDismissDisabled()
+            .onAppear {
+                ViewStore(store).send(.onAppear)
+            }
 #if PREVIEW
-        .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: SetupScan.Action.runDebugSequence)
+            .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: SetupScan.Action.runDebugSequence)
 #endif
-        .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
+            .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
     }
 }

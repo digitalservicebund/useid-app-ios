@@ -21,7 +21,7 @@ protocol OpenEcardType: OpenEcardProtocol {
 }
 
 protocol ContextManagerType: ContextManagerProtocol {
-    func initializeContext(_ handler: (NSObjectProtocol & StartServiceHandlerProtocol))
+    func initializeContext(_ handler: NSObjectProtocol & StartServiceHandlerProtocol)
     func terminateContext(_ handler: (NSObjectProtocol & StopServiceHandlerProtocol)!)
 }
 

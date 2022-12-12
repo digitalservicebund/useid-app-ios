@@ -11,7 +11,7 @@ extension ServiceErrorResponseProtocol {
     }
 }
 
-extension Array where Element == NSObjectProtocol & SelectableItemProtocol {
+extension [NSObjectProtocol & SelectableItemProtocol] {
     func mapToAttributeRequirements() throws -> FlaggedAttributes {
         let keyValuePairs: [(IDCardAttribute, Bool)] = try map { item in
             guard let attribute = IDCardAttribute(rawValue: item.getName()) else {
@@ -35,7 +35,7 @@ class SelectableItem: NSObject, SelectableItemProtocol {
     func getName() -> String! { attribute }
     func getText() -> String! { "" }
     func isChecked() -> Bool { checked }
-    func setChecked(_ checked: Bool) { }
+    func setChecked(_ checked: Bool) {}
     func isRequired() -> Bool { false }
 }
 

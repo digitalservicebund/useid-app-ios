@@ -25,7 +25,7 @@ struct Coordinator: ReducerProtocol {
     }
     
     func dismiss(state: inout State, show screen: State.Screen) -> Effect<Coordinator.Action, Never> {
-        return Effect.routeWithDelaysIfUnsupported(state.routes) {
+        Effect.routeWithDelaysIfUnsupported(state.routes) {
             $0.dismissAll()
             $0.presentSheet(screen)
         }
@@ -70,7 +70,7 @@ struct Coordinator: ReducerProtocol {
     var body: some ReducerProtocol<State, Action> {
         Reduce(self.token)
         Reduce { state, action in
-            guard case let .routeAction(_, action: routeAction) = action else { return .none }
+            guard case .routeAction(_, action: let routeAction) = action else { return .none }
             switch routeAction {
             case .home(.triggerSetup):
                 state.routes.presentSheet(.setupCoordinator(SetupCoordinator.State(tokenURL: nil)))
@@ -84,7 +84,7 @@ struct Coordinator: ReducerProtocol {
                     $0.presentSheet(.setupCoordinator(SetupCoordinator.State(tokenURL: tokenURL)))
                 }
             case .setupCoordinator(.routeAction(_, action: .intro(.chooseSkipSetup(let tokenURL)))):
-                if let tokenURL = tokenURL {
+                if let tokenURL {
                     return Effect.routeWithDelaysIfUnsupported(state.routes) {
                         $0.dismiss()
                         $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(tokenURL: tokenURL,
@@ -105,14 +105,14 @@ struct Coordinator: ReducerProtocol {
                 return Effect(value: .openURL(tokenURL))
 #endif
             case .identificationCoordinator(.dismiss),
-                    .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.dismiss))),
-                    .identificationCoordinator(.afterConfirmEnd),
-                    .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.afterConfirmEnd))),
-                    .identificationCoordinator(.routeAction(_, action: .scan(.dismiss))),
-                    .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.dismiss))))),
-                    .setupCoordinator(.confirmEnd),
-                    .setupCoordinator(.routeAction(_, action: .done(.done))),
-                    .setupCoordinator(.afterConfirmEnd):
+                 .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.dismiss))),
+                 .identificationCoordinator(.afterConfirmEnd),
+                 .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.afterConfirmEnd))),
+                 .identificationCoordinator(.routeAction(_, action: .scan(.dismiss))),
+                 .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.dismiss))))),
+                 .setupCoordinator(.confirmEnd),
+                 .setupCoordinator(.routeAction(_, action: .done(.done))),
+                 .setupCoordinator(.afterConfirmEnd):
                 state.routes.dismiss()
                 return .none
             default:
@@ -122,7 +122,7 @@ struct Coordinator: ReducerProtocol {
             Screen()
         }
 #if DEBUG
-        ._printChanges(.log({ logger.debug("\($0)") }))
+            ._printChanges(.log({ logger.debug("\($0)") }))
 #endif
         Reduce(self.tracking)
     }
@@ -172,7 +172,7 @@ private extension _ReducerPrinter {
     }
 }
 
-extension Array: AnalyticsView where Element == Route<Screen.State> {
+extension [Route<Screen.State>]: AnalyticsView {
     public var route: [String] {
         flatMap(\.screen.route)
     }

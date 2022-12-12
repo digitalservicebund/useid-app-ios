@@ -12,7 +12,7 @@ struct SetupIntro: ReducerProtocol {
     }
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-        return .none
+        .none
     }
 }
 
@@ -30,14 +30,14 @@ struct SetupIntroView: View {
                                               action: .chooseSkipSetup(tokenURL: viewStore.tokenURL)),
                        primaryButton: .init(title: L10n.FirstTimeUser.Intro.startSetup,
                                             action: .chooseStartSetup))
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(L10n.General.cancel) {
-                        dismiss()
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button(L10n.General.cancel) {
+                            dismiss()
+                        }
+                        .bodyLRegular(color: .accentColor)
                     }
-                    .bodyLRegular(color: .accentColor)
                 }
-            }
         }
     }
 }
@@ -46,13 +46,13 @@ struct SetupIntro_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             SetupIntroView(store: Store(initialState: SetupIntro.State(tokenURL: nil),
-                                    reducer: SetupIntro()))
+                                        reducer: SetupIntro()))
         }
         .previewDevice("iPhone SE (2nd generation)")
         
         NavigationView {
             SetupIntroView(store: Store(initialState: SetupIntro.State(tokenURL: nil),
-                                    reducer: SetupIntro()))
+                                        reducer: SetupIntro()))
         }
         .previewDevice("iPhone 12")
     }

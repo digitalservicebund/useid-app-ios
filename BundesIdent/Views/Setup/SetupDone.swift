@@ -6,7 +6,7 @@ struct SetupDone: ReducerProtocol {
         var tokenURL: URL?
         
         var primaryButton: DialogButtons<SetupDone.Action>.ButtonConfiguration {
-            guard let tokenURL = tokenURL else {
+            guard let tokenURL else {
                 return .init(title: L10n.FirstTimeUser.Done.close,
                              action: .done)
             }
@@ -22,7 +22,7 @@ struct SetupDone: ReducerProtocol {
     }
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-        return .none
+        .none
     }
 }
 

@@ -16,16 +16,16 @@ struct IdentificationCANScan: ReducerProtocol {
         var pin: String
         var can: String
         var pinCANCallback: PINCANCallback
-        var shared: SharedScan.State = SharedScan.State()
+        var shared: SharedScan.State = .init()
         
         var authenticationSuccessful = false
         var alert: AlertState<IdentificationCANScan.Action>?
-    #if PREVIEW
+#if PREVIEW
         var availableDebugActions: [IdentifyDebugSequence] = []
-    #endif
+#endif
         
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationCANScan.Action? {
-            return .scanEvent(event)
+            .scanEvent(event)
         }
     }
 
@@ -41,9 +41,9 @@ struct IdentificationCANScan: ReducerProtocol {
         case cancelIdentification
         case dismiss
         case dismissAlert
-    #if PREVIEW
+#if PREVIEW
         case runDebugSequence(IdentifyDebugSequence)
-    #endif
+#endif
     }
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
@@ -164,43 +164,43 @@ struct IdentificationCANScanView: View {
     
     var body: some View {
         SharedScanView(store: store.scope(state: \.shared, action: IdentificationCANScan.Action.shared),
-                   instructionsTitle: L10n.Identification.ScanInstructions.title,
-                   instructionsBody: L10n.Identification.ScanInstructions.body,
-                   instructionsScanButtonTitle: L10n.Identification.Scan.scan,
-                   scanTitle: L10n.Identification.Scan.title,
-                   scanBody: L10n.Identification.Scan.message,
-                   scanButton: L10n.Identification.Scan.scan)
-        .onAppear {
-            ViewStore(store).send(.onAppear)
-        }
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button(L10n.General.cancel) {
-                    ViewStore(store).send(.cancelIdentification)
-                }
-                .bodyLRegular(color: .accentColor)
+                       instructionsTitle: L10n.Identification.ScanInstructions.title,
+                       instructionsBody: L10n.Identification.ScanInstructions.body,
+                       instructionsScanButtonTitle: L10n.Identification.Scan.scan,
+                       scanTitle: L10n.Identification.Scan.title,
+                       scanBody: L10n.Identification.Scan.message,
+                       scanButton: L10n.Identification.Scan.scan)
+            .onAppear {
+                ViewStore(store).send(.onAppear)
             }
-        }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(L10n.General.cancel) {
+                        ViewStore(store).send(.cancelIdentification)
+                    }
+                    .bodyLRegular(color: .accentColor)
+                }
+            }
 #if PREVIEW
-        .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: IdentificationCANScan.Action.runDebugSequence)
+            .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: IdentificationCANScan.Action.runDebugSequence)
 #endif
-        .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
+            .alert(store.scope(state: \.alert), dismiss: .dismissAlert)
     }
 }
 
 struct IdentificationCANScan_Previews: PreviewProvider {
     static var previews: some View {
         IdentificationCANScanView(store: Store(initialState: IdentificationCANScan.State(request: .preview,
-                                                                                    pin: "123456",
-                                                                                    can: "123456",
-                                                                                    pinCANCallback: PINCANCallback(id: .zero, callback: { _, _ in })),
-                                           reducer: IdentificationCANScan()))
+                                                                                         pin: "123456",
+                                                                                         can: "123456",
+                                                                                         pinCANCallback: PINCANCallback(id: .zero, callback: { _, _ in })),
+                                               reducer: IdentificationCANScan()))
         
         IdentificationCANScanView(store: Store(initialState: IdentificationCANScan.State(request: .preview,
-                                                                                    pin: "123456",
-                                                                                    can: "123456",
-                                                                                    pinCANCallback: PINCANCallback(id: .zero, callback: { _, _ in }), shared: SharedScan.State(isScanning: true)),
-                                           reducer: IdentificationCANScan()))
+                                                                                         pin: "123456",
+                                                                                         can: "123456",
+                                                                                         pinCANCallback: PINCANCallback(id: .zero, callback: { _, _ in }), shared: SharedScan.State(isScanning: true)),
+                                               reducer: IdentificationCANScan()))
     }
 }

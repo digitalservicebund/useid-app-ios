@@ -2,8 +2,8 @@ import SwiftUI
 
 class CarretAtEndTextField: UITextField {
     override func closestPosition(to point: CGPoint) -> UITextPosition? {
-        let beginning = self.beginningOfDocument
-        let end = self.position(from: beginning, offset: self.text?.count ?? 0)
+        let beginning = beginningOfDocument
+        let end = position(from: beginning, offset: text?.count ?? 0)
         return end
     }
 }
@@ -22,7 +22,7 @@ struct PINTextField: UIViewRepresentable {
     var doneConfiguration: DoneConfiguration?
 
     init(text: Binding<String>, maxLength: Int = 5, showPIN: Bool = true, doneConfiguration: DoneConfiguration?) {
-        self._text = text
+        _text = text
         self.maxLength = maxLength
         self.showPIN = showPIN
         self.doneConfiguration = doneConfiguration
@@ -36,7 +36,7 @@ struct PINTextField: UIViewRepresentable {
         textField.textColor = .clear
         textField.backgroundColor = .clear
         
-        if let doneConfiguration = doneConfiguration {
+        if let doneConfiguration {
             let frame = CGRect(x: 0, y: 0, width: textField.frame.size.width, height: 44)
             let toolBar = UIToolbar(frame: frame)
             let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
@@ -65,7 +65,7 @@ struct PINTextField: UIViewRepresentable {
     
     func updateUIView(_ uiView: UITextField, context: Context) {
         uiView.text = text
-        if let doneConfiguration = doneConfiguration, let doneButton = findDoneButton(uiView) {
+        if let doneConfiguration, let doneButton = findDoneButton(uiView) {
             doneButton.isEnabled = doneConfiguration.enabled
         }
         
@@ -73,7 +73,7 @@ struct PINTextField: UIViewRepresentable {
     }
     
     func findDoneButton(_ textField: UITextField) -> UIBarButtonItem? {
-        return (textField.inputAccessoryView as? UIToolbar)?.items?[safe: 1]
+        (textField.inputAccessoryView as? UIToolbar)?.items?[safe: 1]
     }
     
     func makeCoordinator() -> Coordinator {
@@ -93,9 +93,9 @@ struct PINTextField: UIViewRepresentable {
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
             guard CharacterSet(charactersIn: "0123456789").isSuperset(of: CharacterSet(charactersIn: string)) else { return false }
             
-            return self.textLimit(existingText: textField.text,
-                                  newText: string,
-                                  limit: maxLength)
+            return textLimit(existingText: textField.text,
+                             newText: string,
+                             limit: maxLength)
         }
         
         private func textLimit(existingText: String?,

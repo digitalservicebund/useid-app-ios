@@ -26,7 +26,6 @@ struct SetupPersonalPINInput: ReducerProtocol {
             default:
                 return .none
             }
-            
         }
     }
 }
@@ -52,10 +51,10 @@ struct SetupPersonalPINInputView: View {
                                      doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                           title: L10n.FirstTimeUser.PersonalPIN.continue,
                                                                           handler: { _ in
-                            viewStore.send(.done(pin: viewStore.enteredPIN))
-                        }))
-                        .focused($pinEntryFocused)
-                        .headingL()
+                                                                              viewStore.send(.done(pin: viewStore.enteredPIN))
+                                                                          }))
+                                                                          .focused($pinEntryFocused)
+                                                                          .headingL()
                     }
                     Spacer()
                 }
@@ -79,7 +78,7 @@ struct SetupPersonalPINInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             SetupPersonalPINInputView(store: Store(initialState: SetupPersonalPINInput.State(enteredPIN: "12345"),
-                                          reducer: SetupPersonalPINInput()))
+                                                   reducer: SetupPersonalPINInput()))
         }
         .previewDevice("iPhone 12")
     }

@@ -14,7 +14,7 @@ struct IdentificationIncorrectPersonalPIN: ReducerProtocol {
         @BindableState var alert: AlertState<IdentificationIncorrectPersonalPIN.Action>?
         
         var doneButtonEnabled: Bool {
-            return enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
+            enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
         }
         
         mutating func handlePINChange(_ enteredPIN: String) -> Effect<IdentificationIncorrectPersonalPIN.Action, Never> {
@@ -84,10 +84,10 @@ struct IdentificationIncorrectPersonalPINView: View {
                                              doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                                   title: L10n.Identification.PersonalPIN.continue,
                                                                                   handler: { pin in
-                                    viewStore.send(.done(pin: pin))
-                                }))
-                                .focused($pinEntryFocused)
-                                .headingL()
+                                                                                      viewStore.send(.done(pin: pin))
+                                                                                  }))
+                                                                                  .focused($pinEntryFocused)
+                                                                                  .headingL()
                             }
                         }
                         
@@ -142,16 +142,16 @@ struct IdentificationIncorrectPersonalPIN_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             IdentificationIncorrectPersonalPINView(store: Store(initialState: IdentificationIncorrectPersonalPIN.State(enteredPIN: "",
-                                                                                                                  error: .incorrect,
-                                                                                                                  remainingAttempts: 2),
-                                                            reducer: IdentificationIncorrectPersonalPIN()))
+                                                                                                                       error: .incorrect,
+                                                                                                                       remainingAttempts: 2),
+                                                                reducer: IdentificationIncorrectPersonalPIN()))
         }
         .previewDevice("iPhone 12")
         NavigationView {
             IdentificationIncorrectPersonalPINView(store: Store(initialState: IdentificationIncorrectPersonalPIN.State(enteredPIN: "12",
-                                                                                                                  error: nil,
-                                                                                                                  remainingAttempts: 2),
-                                                            reducer: IdentificationIncorrectPersonalPIN()))
+                                                                                                                       error: nil,
+                                                                                                                       remainingAttempts: 2),
+                                                                reducer: IdentificationIncorrectPersonalPIN()))
         }
         .previewDevice("iPhone 12")
     }

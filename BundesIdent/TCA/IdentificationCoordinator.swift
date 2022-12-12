@@ -76,7 +76,7 @@ struct IdentificationCoordinator: ReducerProtocol {
     enum CancelId {}
     
     var body: some ReducerProtocol<State, Action> {
-        return Reduce<State, Action> { state, action in
+        Reduce<State, Action> { state, action in
             switch action {
 #if PREVIEW
             case .runDebugSequence(let debugSequence):
@@ -120,8 +120,8 @@ struct IdentificationCoordinator: ReducerProtocol {
                     .cancellable(id: CancelId.self, cancelInFlight: true)
 #if PREVIEW
             case .routeAction(_, action: .overview(.loading(.runDebugSequence(let sequence)))),
-                    .routeAction(_, action: .scan(.runDebugSequence(let sequence))),
-                    .routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.runDebugSequence(let sequence))))):
+                 .routeAction(_, action: .scan(.runDebugSequence(let sequence))),
+                 .routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.runDebugSequence(let sequence))))):
                 return Effect(value: .runDebugSequence(sequence))
 #endif
             case .routeAction(_, action: .overview(.loaded(.callbackReceived(let request, let callback)))):
@@ -155,7 +155,7 @@ struct IdentificationCoordinator: ReducerProtocol {
                 state.routes.dismiss()
                 return .none
             case .routeAction(_, action: .error(.end)),
-                    .routeAction(_, action: .incorrectPersonalPIN(.confirmEnd)):
+                 .routeAction(_, action: .incorrectPersonalPIN(.confirmEnd)):
                 state.routes.dismiss()
                 
                 // Dismissing two sheets at the same time from different coordinators is not well supported.
@@ -263,7 +263,7 @@ extension IdentificationCoordinator.State: AnalyticsView {
 extension IdentificationCoordinator.State {
     init(tokenURL: URL, canGoBackToSetupIntro: Bool = false) {
         self.tokenURL = tokenURL
-        self.states = [.root(.overview(.loading(IdentificationOverviewLoading.State(canGoBackToSetupIntro: canGoBackToSetupIntro))))]
+        states = [.root(.overview(.loading(IdentificationOverviewLoading.State(canGoBackToSetupIntro: canGoBackToSetupIntro))))]
     }
 }
 

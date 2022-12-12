@@ -13,7 +13,7 @@ class IdentifiableCallback<Parameter>: Identifiable, Equatable {
     }
     
     static func == (lhs: IdentifiableCallback, rhs: IdentifiableCallback) -> Bool {
-        return lhs.id == rhs.id
+        lhs.id == rhs.id
     }
     
     func callAsFunction(_ value: Parameter) {

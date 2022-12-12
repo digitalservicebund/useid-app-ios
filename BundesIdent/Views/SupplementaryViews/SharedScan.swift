@@ -56,7 +56,7 @@ struct SharedScanView: View {
     var scanButton: String
     
     @Namespace var namespace
-    @State var animationSyncTime: CMTime = CMTime(seconds: 0.0, preferredTimescale: 1000)
+    @State var animationSyncTime: CMTime = .init(seconds: 0.0, preferredTimescale: 1000)
     
     init(store: Store<SharedScan.State, SharedScan.Action>,
          instructionsTitle: String,
@@ -88,11 +88,10 @@ struct SharedScanView: View {
                             
                             scanAnimation(syncedTime: .init(get: { animationSyncTime },
                                                             set: { animationSyncTime = $0 }))
-                            .padding([.horizontal, .bottom])
+                                .padding([.horizontal, .bottom])
                         }
                         
                     } else {
-                        
                         scanAnimation(syncedTime: .init(get: { animationSyncTime },
                                                         set: { _ in }))
                         
@@ -123,7 +122,7 @@ struct SharedScanView: View {
                                                           action: { viewStore.send(.startScan) }),
                                      nfcInfoTapped: { viewStore.send(.showNFCInfo) },
                                      helpTapped: { viewStore.send(.showHelp) })
-                            .disabled(!viewStore.scanAvailable)
+                                .disabled(!viewStore.scanAvailable)
                         }
                     }
                 }
@@ -132,7 +131,7 @@ struct SharedScanView: View {
                                   secondary: nil,
                                   primary: .some(.init(title: scanButton,
                                                        action: .startScan)))
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
             }
             .animation(.default, value: viewStore.showInstructions)
@@ -146,26 +145,26 @@ struct SharedScanView: View {
         LoopingPlayer(fileURL: Bundle.main.url(forResource: "animation_id-scan_800X544",
                                                withExtension: "mp4")!,
                       syncedTime: syncedTime)
-        .aspectRatio(540.0 / 367.0, contentMode: .fit)
-        .matchedGeometryEffect(id: "scanAnimation", in: namespace)
-        .accessibilityLabel(L10n.Scan.animationAccessibilityLabel)
+            .aspectRatio(540.0 / 367.0, contentMode: .fit)
+            .matchedGeometryEffect(id: "scanAnimation", in: namespace)
+            .accessibilityLabel(L10n.Scan.animationAccessibilityLabel)
     }
 }
 
 struct SharedScan_Previews: PreviewProvider {
 
     static var store: Store<SharedScan.State, SharedScan.Action> = Store(initialState: SharedScan.State(),
-                                                                       reducer: SharedScan())
+                                                                         reducer: SharedScan())
 
     static var previews: some View {
         NavigationView {
             SharedScanView(store: store,
-                       instructionsTitle: "instructionsTitle",
-                       instructionsBody: "instructionsBody",
-                       instructionsScanButtonTitle: "instructionsScanButtonTitle",
-                       scanTitle: "scanTitle",
-                       scanBody: "scanBody",
-                       scanButton: "scanButton")
+                           instructionsTitle: "instructionsTitle",
+                           instructionsBody: "instructionsBody",
+                           instructionsScanButtonTitle: "instructionsScanButtonTitle",
+                           scanTitle: "scanTitle",
+                           scanBody: "scanBody",
+                           scanButton: "scanButton")
         }
     }
 }

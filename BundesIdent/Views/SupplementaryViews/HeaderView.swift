@@ -13,7 +13,7 @@ struct ImageMeta {
     }
     
     init(asset: ImageAsset, labelKey: String? = nil, maxHeight: CGFloat? = nil) {
-        self.name = asset.name
+        name = asset.name
         self.labelKey = labelKey
         self.maxHeight = maxHeight
     }
@@ -34,16 +34,16 @@ struct HeaderView: View {
         VStack(alignment: .leading, spacing: 24) {
             Text(title)
                 .headingXL()
-            if let boxContent = boxContent {
+            if let boxContent {
                 Box(content: boxContent)
             }
-            if let message = message {
+            if let message {
                 Markdown(message)
                     .markdownStyle(MarkdownStyle(font: .bundBody))
                     .foregroundColor(.blackish)
-					.fixedSize(horizontal: false, vertical: true)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            if let imageMeta = imageMeta {
+            if let imageMeta {
                 imageMeta.image
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -61,7 +61,7 @@ struct HeaderView: View {
 
 extension ImageMeta {
     var image: SwiftUI.Image {
-        if let labelKey = labelKey {
+        if let labelKey {
             return Image(name, label: Text(labelKey))
         } else {
             return Image(decorative: name)
@@ -74,6 +74,6 @@ struct HeaderView_Previews: PreviewProvider {
         HeaderView(title: L10n.FirstTimeUser.Intro.title,
                    message: L10n.FirstTimeUser.Intro.body,
                    imageMeta: ImageMeta(asset: Asset.pinBrief))
-        .previewLayout(.sizeThatFits)
+            .previewLayout(.sizeThatFits)
     }
 }

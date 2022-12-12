@@ -24,7 +24,8 @@ class MissingPINLetterTests: XCTestCase {
     func testOpenMissingPINLetterEvent() {
         let store = TestStore(
             initialState: MissingPINLetter.State(),
-            reducer: MissingPINLetter())
+            reducer: MissingPINLetter()
+        )
         store.dependencies.analytics = mockAnalyticsClient
         store.send(.openExternalLink)
         
