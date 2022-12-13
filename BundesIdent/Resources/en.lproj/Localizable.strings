@@ -38,7 +38,7 @@
 "firstTimeUser_personalPINIntro_continue" = "Assign personal ID PIN";
 "firstTimeUser_personalPINIntro_info_body" = "You will need this every time you use the online ID function in the future.";
 "firstTimeUser_personalPINIntro_info_title" = "Remember your personal ID PIN";
-"firstTimeUser_personalPINIntro_title" = "Now assign your personal ID PIN.";
+"firstTimeUser_personalPINIntro_title" = "Now assign your personal ID PIN.";
 "firstTimeUser_personalPIN_body" = "Do not use your birthday as your PIN. Assign a PIN that is not easy to guess.";
 "firstTimeUser_personalPIN_confirmation" = "Confirm your personal PIN";
 "firstTimeUser_personalPIN_confirmation_body" = "Do not use your birthday as your PIN. Assign a PIN that is not easy to guess.";
