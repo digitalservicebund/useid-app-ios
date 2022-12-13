@@ -1,5 +1,6 @@
 brew "swiftgen"
 brew "swiftlint"
+brew "swiftformat"
 
 tap "getsentry/tools"
 brew "getsentry/tools/sentry-cli"
