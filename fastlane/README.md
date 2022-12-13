@@ -53,7 +53,7 @@ Test
 [bundle exec] fastlane ios checklocalizables
 ```
 
-Check Localizable files are sorted
+Check Localizables are sorted
 
 ### ios swiftformatlint
 

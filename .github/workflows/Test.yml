@@ -43,52 +43,8 @@ jobs:
             vendor
             .bundle
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
-
-  swiftFormat:
-    runs-on: [self-hosted, ARM64]
-    needs: dependencies
-    steps:
-      - name: Setup shell
-        run: |
-          eval "$(rbenv init -)"
-          eval "$(/opt/homebrew/bin/brew shellenv)"
-      - name: Check out repository code
-        uses: actions/checkout@v3       
-      - name: Restore Dependencies
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-dependencies
-        with:
-          path: |
-            vendor
-            .bundle
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
-      - name: Run swiftformat
-        run: bundle exec fastlane swiftformat
-
-  checkLocalizables:
-    runs-on: [self-hosted, ARM64]
-    needs: dependencies
-    steps:
-      - name: Setup shell
-        run: |
-          eval "$(rbenv init -)"
-          eval "$(/opt/homebrew/bin/brew shellenv)"
-      - name: Check out repository code
-        uses: actions/checkout@v3       
-      - name: Restore Dependencies
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-dependencies
-        with:
-          path: |
-            vendor
-            .bundle
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
-      - name: Run checklocalizables
-        run: bundle exec fastlane checklocalizables
           
-  swiftLint:
+  lint:
     runs-on: [self-hosted, ARM64]
     needs: dependencies
     steps:
@@ -108,7 +64,10 @@ jobs:
             .bundle
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
       - name: Run swiftlint
-        run: bundle exec fastlane lint
+        run: |
+          bundle exec fastlane swiftformatlint
+          bundle exec fastlane checklocalizables
+          bundle exec fastlane lint
       - name: Archive swiftlint report
         if: failure()
         uses: actions/upload-artifact@v3
