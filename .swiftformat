@@ -6,6 +6,6 @@
 --wraparguments preserve
 --wrapcollections before-first
 # file options
---exclude **/Generated
+--exclude **/Generated,vendor
 # rules
 --disable sortedImports,trailingCommas,trailingClosures,unusedArguments,wrapMultilineStatementBraces
