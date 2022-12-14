@@ -89,7 +89,7 @@ extension IdentificationScreen.State: AnalyticsView {
         case .error(let state):
             return state.errorType.route
         case .identificationCANCoordinator(let state):
-            return ["CAN"] + state.route
+            return state.route
         }
     }
 }
