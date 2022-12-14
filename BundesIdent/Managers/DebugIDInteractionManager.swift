@@ -8,12 +8,6 @@ func processInfoContainsArgument(_ argument: String) -> Bool {
     ProcessInfo.processInfo.arguments.contains(argument)
 }
 
-#if targetEnvironment(simulator)
-let MOCK_OPENECARD = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil // Always mock except in unit tests
-#else
-let MOCK_OPENECARD = !processInfoContainsArgument("REAL_OPENECARD")
-#endif
-
 struct DebuggableInteraction<T> {
     var publisher: EIDInteractionPublisher
     var sequence: [T]
@@ -309,6 +303,8 @@ class DebugIDInteractionManager: IDInteractionManagerType {
 }
 #endif
 
+#if DEBUG || PREVIEW
+
 extension EIDAuthenticationRequest {
     static let preview = EIDAuthenticationRequest(
         issuer: "Issuer",
@@ -328,3 +324,5 @@ extension EIDAuthenticationRequest {
         ]
     )
 }
+
+#endif

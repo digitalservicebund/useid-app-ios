@@ -15,6 +15,9 @@ struct Screen: ReducerProtocol {
     }
     
     var body: some ReducerProtocol<State, Action> {
+        Scope(state: /State.home, action: /Action.home) {
+            Home()
+        }
         Scope(state: /State.setupCoordinator, action: /Action.setupCoordinator) {
             SetupCoordinator()
         }

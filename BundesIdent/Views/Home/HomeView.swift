@@ -3,9 +3,17 @@ import ComposableArchitecture
 import Analytics
 
 struct Home: ReducerProtocol {
+    #if PREVIEW
+    @Dependency(\.previewIDInteractionManager) var previewIDInteractionManager
+    #endif
+    
     struct State: Equatable {
         var appVersion: String
         var buildNumber: Int
+        
+        #if PREVIEW
+        var isDebugModeEnabled: Bool
+        #endif
         
         var versionInfo: String {
             let appVersion = "\(appVersion) - \(buildNumber)"
@@ -21,11 +29,27 @@ struct Home: ReducerProtocol {
         case triggerSetup
 #if PREVIEW
         case triggerIdentification(tokenURL: URL)
+        case setDebugModeEnabled(Bool)
 #endif
     }
     
-    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-        .none
+    var body: some ReducerProtocol<State, Action> {
+        Reduce<State, Action> { state, action in
+            switch action {
+#if PREVIEW
+            case .setDebugModeEnabled(let enabled):
+                #if targetEnvironment(simulator)
+                previewIDInteractionManager.isDebugModeEnabled = false
+                #else
+                previewIDInteractionManager.isDebugModeEnabled = enabled
+                #endif
+                state.isDebugModeEnabled = previewIDInteractionManager.isDebugModeEnabled
+                return .none
+#endif
+            default:
+                return .none
+            }
+        }
     }
 }
 
@@ -60,9 +84,14 @@ struct HomeView: View {
                         listView
                         Spacer(minLength: 0)
                         WithViewStore(store) { viewStore in
-                            Text(L10n.Home.version(viewStore.state.versionInfo))
-                                .captionL(color: .neutral900)
-                                .padding(.bottom)
+                            VStack {
+                                Text(L10n.Home.version(viewStore.versionInfo))
+                                    .captionL(color: .neutral900)
+                                    .padding(.bottom)
+#if PREVIEW
+                                Toggle("DEBUG MODE", isOn: viewStore.binding(get: \.isDebugModeEnabled, send: Home.Action.setDebugModeEnabled))
+#endif
+                            }
                         }
                     }
                     .padding(.horizontal, 24)
@@ -193,9 +222,16 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
+#if PREVIEW
+        HomeView(store: Store(initialState: Home.State(appVersion: "1.2.3",
+                                                       buildNumber: 42,
+                                                       isDebugModeEnabled: false),
+                              reducer: Home()))
+#else
         HomeView(store: Store(initialState: Home.State(appVersion: "1.2.3",
                                                        buildNumber: 42),
                               reducer: Home()))
+#endif
     }
 }
 

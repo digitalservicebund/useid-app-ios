@@ -11,21 +11,23 @@ enum LoggerKey: DependencyKey {
 }
 
 #if PREVIEW
-enum DebugInteractionManagerKey: DependencyKey {
-    static var liveValue: DebugIDInteractionManager = .init()
+enum PreviewIDInteractionManagerKey: DependencyKey {
+    static var liveValue: PreviewIDInteractionManager = .init(realIDInteractionManager: IDInteractionManager(issueTracker: SentryIssueTracker()),
+                                                              debugIDInteractionManager: DebugIDInteractionManager())
 }
 
 extension DependencyValues {
-    var debugIDInteractionManager: DebugIDInteractionManager {
-        get { self[DebugInteractionManagerKey.self] }
-        set { self[DebugInteractionManagerKey.self] = newValue }
+    var previewIDInteractionManager: PreviewIDInteractionManager {
+        get { self[PreviewIDInteractionManagerKey.self] }
+        set { self[PreviewIDInteractionManagerKey.self] = newValue }
     }
 }
 #endif
 
 enum IDInteractionManagerKey: DependencyKey {
 #if PREVIEW
-    static var liveValue: IDInteractionManagerType = MOCK_OPENECARD ? DebugIDInteractionManager() : IDInteractionManager(issueTracker: SentryIssueTracker())
+    static var liveValue: IDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: IDInteractionManager(issueTracker: SentryIssueTracker()),
+                                                                                 debugIDInteractionManager: DebugIDInteractionManager())
 #else
     static var liveValue: IDInteractionManagerType = IDInteractionManager(issueTracker: SentryIssueTracker())
 #endif

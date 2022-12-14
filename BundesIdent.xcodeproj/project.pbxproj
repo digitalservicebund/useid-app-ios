@@ -118,6 +118,7 @@
 		E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E9428215971008ADA2A /* PINEntryView.swift */; };
 		E1DCC97E29072B8B002E9371 /* SetupUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DCC97D29072B8B002E9371 /* SetupUITests.swift */; };
 		E1DCC98029072BB3002E9371 /* HomeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DCC97F29072BB3002E9371 /* HomeUITests.swift */; };
+		E1DF0996294A0FF300199761 /* PreviewIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DF0995294A0FF300199761 /* PreviewIDInteractionManager.swift */; };
 		E1EB9FFA28B5288A007FF467 /* ScanBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EB9FF928B5288A007FF467 /* ScanBody.swift */; };
 		E1EFB5C22858EAA2005C38C6 /* IdentificationOverviewLoaded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */; };
 		E1EFB5C42858EB0F005C38C6 /* IdentificationOverviewLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C32858EB0F005C38C6 /* IdentificationOverviewLoading.swift */; };
@@ -296,6 +297,7 @@
 		E1D8453C28F8190B00B1DD1E /* Preview.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Preview.xcconfig; sourceTree = "<group>"; };
 		E1DCC97D29072B8B002E9371 /* SetupUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupUITests.swift; sourceTree = "<group>"; };
 		E1DCC97F29072BB3002E9371 /* HomeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUITests.swift; sourceTree = "<group>"; };
+		E1DF0995294A0FF300199761 /* PreviewIDInteractionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewIDInteractionManager.swift; sourceTree = "<group>"; };
 		E1EB9FF928B5288A007FF467 /* ScanBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanBody.swift; sourceTree = "<group>"; };
 		E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoaded.swift; sourceTree = "<group>"; };
 		E1EFB5C32858EB0F005C38C6 /* IdentificationOverviewLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoading.swift; sourceTree = "<group>"; };
@@ -683,6 +685,7 @@
 				E13925C52841119400161F5C /* Mocks */,
 				E593E278281686DC00154EB0 /* IDInteractionManager.swift */,
 				E1B6991B2869B31B00360273 /* DebugIDInteractionManager.swift */,
+				E1DF0995294A0FF300199761 /* PreviewIDInteractionManager.swift */,
 				E14C21B128B8BF9100192338 /* StorageManager.swift */,
 			);
 			path = Managers;
@@ -1086,6 +1089,7 @@
 				E593E2682816847900154EB0 /* EIDAuthenticationRequest.swift in Sources */,
 				E16708BA283D7CA1001A1637 /* DialogButtons.swift in Sources */,
 				E1EFB5D5285C7D81005C38C6 /* IdentificationPersonalPIN.swift in Sources */,
+				E1DF0996294A0FF300199761 /* PreviewIDInteractionManager.swift in Sources */,
 				E1A769FF28B940C6001E1F04 /* LaunchArgument.swift in Sources */,
 				E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */,
 				B9DF15642913CCF1004E15E9 /* SetupPersonalPinConfirm.swift in Sources */,

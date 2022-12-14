@@ -13,7 +13,7 @@ struct SetupScan: ReducerProtocol {
     @Dependency(\.logger) var logger
     @Dependency(\.storageManager) var storageManager
 #if PREVIEW
-    @Dependency(\.debugIDInteractionManager) var debugIDInteractionManager
+    @Dependency(\.previewIDInteractionManager) var previewIDInteractionManager
 #endif
     
     struct State: Equatable {
@@ -100,7 +100,7 @@ struct SetupScan: ReducerProtocol {
         switch action {
 #if PREVIEW
         case .runDebugSequence(let debugSequence):
-            state.availableDebugActions = debugIDInteractionManager.runChangePIN(debugSequence: debugSequence)
+            state.availableDebugActions = previewIDInteractionManager.runChangePIN(debugSequence: debugSequence)
             return .none
 #endif
         case .onAppear:
@@ -113,8 +113,8 @@ struct SetupScan: ReducerProtocol {
                 
             let publisher: EIDInteractionPublisher
 #if PREVIEW
-            if MOCK_OPENECARD {
-                let debuggableInteraction = debugIDInteractionManager.debuggableChangePIN()
+            if previewIDInteractionManager.isDebugModeEnabled {
+                let debuggableInteraction = previewIDInteractionManager.debuggableChangePIN()
                 state.availableDebugActions = debuggableInteraction.sequence
                 publisher = debuggableInteraction.publisher
             } else {

@@ -29,7 +29,7 @@ struct IdentificationCoordinator: ReducerProtocol {
     @Dependency(\.mainQueue) var mainQueue
     @Dependency(\.storageManager) var storageManager
 #if PREVIEW
-    @Dependency(\.debugIDInteractionManager) var debugIDInteractionManager
+    @Dependency(\.previewIDInteractionManager) var previewIDInteractionManager
 #endif
     struct State: Equatable, IndexedRouterState {
         var tokenURL: URL
@@ -80,7 +80,7 @@ struct IdentificationCoordinator: ReducerProtocol {
             switch action {
 #if PREVIEW
             case .runDebugSequence(let debugSequence):
-                state.availableDebugActions = debugIDInteractionManager.runIdentify(debugSequence: debugSequence)
+                state.availableDebugActions = previewIDInteractionManager.runIdentify(debugSequence: debugSequence)
                 return .none
 #endif
             case .routeAction(_, action: .scan(.wrongPIN(remainingAttempts: let remainingAttempts))):
@@ -104,8 +104,8 @@ struct IdentificationCoordinator: ReducerProtocol {
             case .routeAction(_, action: .overview(.loading(.identify))):
                 let publisher: EIDInteractionPublisher
 #if PREVIEW
-                if MOCK_OPENECARD {
-                    let debuggableInteraction = debugIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
+                if previewIDInteractionManager.isDebugModeEnabled {
+                    let debuggableInteraction = previewIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
                     state.availableDebugActions = debuggableInteraction.sequence
                     publisher = debuggableInteraction.publisher
                 } else {
