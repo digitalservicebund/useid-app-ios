@@ -44,6 +44,33 @@ struct AppConfig: AppConfigType {
         options.debug = true
 #endif
         options.tracesSampleRate = 1.0
+        
+        options.enableAutoPerformanceTracking = false
+        options.enableAutoBreadcrumbTracking = false
+        
+        options.enableNetworkBreadcrumbs = false
+        options.enableNetworkTracking = false
+        
+        options.attachViewHierarchy = false
+        options.enableUIViewControllerTracking = false
+        options.enableUserInteractionTracing = false
+        options.enableAppHangTracking = false
+        options.beforeSend = {
+            guard var context: [String: [String: Any]] = $0.context else { return $0 }
+            
+            let osKeys = Set(["version", "name"])
+            let deviceKeys = Set(["family", "model", "model_id"])
+            let appKeys = Set(["app_build", "app_version"])
+            let newContext: [String: [String: Any]] = [
+                "user info": context["user info"],
+                "os": context["os"]?.filter({ osKeys.contains($0.key) }),
+                "device": context["device"]?.filter({ deviceKeys.contains($0.key) }),
+                "app": context["app"]?.filter({ appKeys.contains($0.key) }),
+            ].compactMapValues({ $0 })
+            
+            $0.context = newContext
+            return $0
+        }
     }
     
     func configureAudio() {
