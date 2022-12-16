@@ -8,7 +8,7 @@ struct SetupIncorrectTransportPIN: ReducerProtocol {
     struct State: Equatable {
         var remainingAttempts: Int
         
-#if DEBUG && !PREVIEW
+#if DEBUG || PREVIEW
         var maxDigits: Int = 5
 #else
         var maxDigits: Int { 5 }
@@ -27,7 +27,7 @@ struct SetupIncorrectTransportPIN: ReducerProtocol {
         case dismissAlert
         case binding(BindingAction<SetupIncorrectTransportPIN.State>)
         
-#if DEBUG && !PREVIEW
+#if DEBUG || PREVIEW
         case toggleDigitCount
 #endif
     }
@@ -44,7 +44,7 @@ struct SetupIncorrectTransportPIN: ReducerProtocol {
                                                                      action: .send(.confirmEnd)),
                                          secondaryButton: .cancel(TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.deny)))
                 return .none
-#if DEBUG && !PREVIEW
+#if DEBUG || PREVIEW
             case .toggleDigitCount:
                 if state.maxDigits == 5 {
                     state.maxDigits = 6
@@ -116,7 +116,7 @@ struct SetupIncorrectTransportPINView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(false)
-#if DEBUG && !PREVIEW
+#if DEBUG || PREVIEW
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         WithViewStore(store) { viewStore in
