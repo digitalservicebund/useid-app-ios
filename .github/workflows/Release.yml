@@ -54,9 +54,97 @@ jobs:
             .bundle
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
 
-  bumpVersion:
+  buildForTesting:
     runs-on: [self-hosted, ARM64]
     needs: dependencies
+    steps:
+      - name: Setup shell
+        run: |
+          eval "$(rbenv init -)"
+          eval "$(/opt/homebrew/bin/brew shellenv)"
+      - name: Check out repository code
+        uses: actions/checkout@v3          
+      - name: Restore Dependencies
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-dependencies
+        with:
+          path: |
+            vendor
+            .bundle
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}       
+      - name: Build
+        run: |
+            export LANG=en_US.UTF-8;
+            export LANGUAGE=en_US:en;
+            bundle exec fastlane build_for_testing
+      - name: Save DerivedData and SwiftPM folder
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-derived-data
+        with:
+          path: |
+            DerivedData
+            .swift-packages
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
+      - name: Save test_output folder
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-test-output
+        with:
+          path: fastlane/test_output
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
+
+  runUnitTests:
+    runs-on: [self-hosted, ARM64]
+    needs: buildForTesting
+    steps:
+      - name: Setup shell
+        run: |
+          eval "$(rbenv init -)"
+          eval "$(/opt/homebrew/bin/brew shellenv)"
+      - name: Check out repository code
+        uses: actions/checkout@v3       
+      - name: Restore Dependencies
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-dependencies
+        with:
+          path: |
+            vendor
+            .bundle
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
+      - name: Restore DerivedData and SwiftPM folder
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-derived-data
+        with:
+          path: |
+            DerivedData
+            .swift-packages
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
+      - name: Restore test_output folder
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-test-output
+        with:
+          path: fastlane/test_output
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
+      - name: Run all tests
+        run: |
+            export LANG=en_US.UTF-8;
+            export LANGUAGE=en_US:en;
+            bundle exec fastlane test_without_building testplan:UnitTests device:"iPhone 14"
+      - name: Archive xcresult
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: xcresult-${{ github.sha }}
+          path: fastlane/test_output/BundesIdent.xcresult.zip
+
+  bumpVersion:
+    runs-on: [self-hosted, ARM64]
+    needs: runUnitTests
     outputs:
       gitTag: ${{ steps.gitTag.outputs.gitTag }}
     steps:
