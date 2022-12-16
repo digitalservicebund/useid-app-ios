@@ -337,7 +337,7 @@ final class RouteTests: XCTestCase {
         let callback = IdentifiableCallback<FlaggedAttributes>(id: UUID(number: 0), callback: closure)
         let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
-        let tokenURL = URL(string: "https://example.com")!
+        let tokenURL = demoTokenURL
         let initialCanRoutes: [Route<IdentificationCANScreen.State>] = [.root(.canPINForgotten(.init(request: request)))]
 
         let initialIdentificationRoutes: [Route<IdentificationScreen.State>] = [

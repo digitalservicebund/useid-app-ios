@@ -8,4 +8,4 @@
 # file options
 --exclude **/Generated,vendor
 # rules
---disable sortedImports,trailingCommas,trailingClosures,unusedArguments,wrapMultilineStatementBraces
+--disable trailingCommas,trailingClosures,unusedArguments,wrapMultilineStatementBraces

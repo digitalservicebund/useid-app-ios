@@ -1,9 +1,9 @@
-import ComposableArchitecture
-import TCACoordinators
-import SwiftUI
 import Analytics
-import Sentry
+import ComposableArchitecture
 import OpenEcard
+import Sentry
+import SwiftUI
+import TCACoordinators
 
 enum HandleURLError: Error, CustomStringConvertible, CustomNSError {
     case componentsInvalid
@@ -24,12 +24,14 @@ enum HandleURLError: Error, CustomStringConvertible, CustomNSError {
 }
 
 struct Coordinator: ReducerProtocol {
+    
     @Dependency(\.idInteractionManager) var idInteractionManager
     @Dependency(\.analytics) var analytics
     @Dependency(\.issueTracker) var issueTracker
     @Dependency(\.mainQueue) var mainQueue
     @Dependency(\.logger) var logger
     @Dependency(\.storageManager) var storageManager
+    
     struct State: Equatable, IndexedRouterState {
         var routes: [Route<Screen.State>]
     }
