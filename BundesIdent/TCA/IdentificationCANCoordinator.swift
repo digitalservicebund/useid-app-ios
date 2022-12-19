@@ -22,7 +22,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
         var pin: String?
         var can: String?
         var pinCANCallback: PINCANCallback
-        var tokenURL: URL
+        var tokenURL: URL // TODO: IdentificationInformation
         var authenticationSuccessful = false
         var attempt: Int
         

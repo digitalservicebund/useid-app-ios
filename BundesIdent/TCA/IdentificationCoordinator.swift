@@ -32,8 +32,9 @@ struct IdentificationCoordinator: ReducerProtocol {
     @Dependency(\.previewIDInteractionManager) var previewIDInteractionManager
 #endif
     struct State: Equatable, IndexedRouterState {
-        var tokenURL: URL
+        var identificationInformation: IdentificationInformation
         var pin: String?
+        
         var attempt: Int = 0
         var authenticationSuccessful = false
         
@@ -67,7 +68,7 @@ struct IdentificationCoordinator: ReducerProtocol {
         case afterConfirmEnd
         case dismissAlert
         case dismiss
-        case back(tokenURL: URL)
+        case back(identificationInformation: IdentificationInformation)
 #if PREVIEW
         case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -100,19 +101,19 @@ struct IdentificationCoordinator: ReducerProtocol {
                 state.routes.dismiss()
                 return .none
             case .routeAction(_, action: .overview(.back)):
-                return Effect(value: .back(tokenURL: state.tokenURL))
+                return Effect(value: .back(identificationInformation: state.identificationInformation))
             case .routeAction(_, action: .overview(.loading(.identify))):
                 let publisher: EIDInteractionPublisher
 #if PREVIEW
                 if previewIDInteractionManager.isDebugModeEnabled {
-                    let debuggableInteraction = previewIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
+                    let debuggableInteraction = previewIDInteractionManager.debuggableIdentify(tokenURL: state.identificationInformation.tcTokenURL)
                     state.availableDebugActions = debuggableInteraction.sequence
                     publisher = debuggableInteraction.publisher
                 } else {
-                    publisher = idInteractionManager.identify(tokenURL: state.tokenURL, nfcMessagesProvider: IdentificationNFCMessageProvider())
+                    publisher = idInteractionManager.identify(tokenURL: state.identificationInformation.tcTokenURL, nfcMessagesProvider: IdentificationNFCMessageProvider())
                 }
 #else
-                publisher = idInteractionManager.identify(tokenURL: state.tokenURL, nfcMessagesProvider: IdentificationNFCMessageProvider())
+                publisher = idInteractionManager.identify(tokenURL: state.identificationInformation.tcTokenURL, nfcMessagesProvider: IdentificationNFCMessageProvider())
 #endif
                 return publisher
                     .receive(on: mainQueue)
@@ -141,7 +142,7 @@ struct IdentificationCoordinator: ReducerProtocol {
                 return .none
             case .routeAction(_, action: .scan(.requestPINAndCAN(let request, let pinCANCallback))):
                 let pinIsUnchecked = state.attempt == 0
-                state.routes.push(.identificationCANCoordinator(.init(tokenURL: state.tokenURL,
+                state.routes.push(.identificationCANCoordinator(.init(tokenURL: state.identificationInformation.tcTokenURL,
                                                                       request: request,
                                                                       pinCANCallback: pinCANCallback,
                                                                       pin: pinIsUnchecked ? state.pin : nil,
@@ -170,6 +171,13 @@ struct IdentificationCoordinator: ReducerProtocol {
                                          primaryButton: .destructive(TextState(verbatim: L10n.Identification.ConfirmEnd.confirm),
                                                                      action: .send(.dismiss)),
                                          secondaryButton: .cancel(TextState(verbatim: L10n.Identification.ConfirmEnd.deny)))
+                return .none
+            case .routeAction(_, action: .scan(.identifiedSuccessfully(let request, let redirectURL))):
+                state.routes.push(.open(IdentificationContinue.State(request: request, redirectURL: redirectURL)))
+                return .none
+            case .routeAction(_, action: .open(.open(let request))),
+                    .routeAction(_, action: .open(.refreshed(success: true, request: let request))):
+                state.routes.push(.done(IdentificationDone.State(request: request)))
                 return .none
             case .swipeToDismiss:
                 switch state.swipeToDismiss {
@@ -261,8 +269,8 @@ extension IdentificationCoordinator.State: AnalyticsView {
 }
 
 extension IdentificationCoordinator.State {
-    init(tokenURL: URL, canGoBackToSetupIntro: Bool = false) {
-        self.tokenURL = tokenURL
+    init(identificationInformation: IdentificationInformation, canGoBackToSetupIntro: Bool = false) {
+        self.identificationInformation = identificationInformation
         states = [.root(.overview(.loading(IdentificationOverviewLoading.State(canGoBackToSetupIntro: canGoBackToSetupIntro))))]
     }
 }
@@ -323,6 +331,12 @@ struct IdentificationCoordinatorView: View {
                         CaseLet(state: /IdentificationScreen.State.identificationCANCoordinator,
                                 action: IdentificationScreen.Action.identificationCANCoordinator,
                                 then: IdentificationCANCoordinatorView.init)
+                        CaseLet(state: /IdentificationScreen.State.open,
+                                action: IdentificationScreen.Action.open,
+                                then: IdentificationContinueView.init)
+                        CaseLet(state: /IdentificationScreen.State.done,
+                                action: IdentificationScreen.Action.done,
+                                then: IdentificationDoneView.init)
                     }
                 }
             }

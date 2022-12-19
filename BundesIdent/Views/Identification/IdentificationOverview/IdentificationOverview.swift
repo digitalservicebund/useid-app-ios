@@ -130,7 +130,7 @@ struct IdentificationOverviewView: View {
 }
 
 #if PREVIEW
-let demoTokenURL = URL(string: "bundesident://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Feid.digitalservicebund.de%2Fapi%2Fv1%2Fidentification%2Fsessions%2F57a2537b-87c3-4170-83fb-3fbb9a245888%2Ftc-token")!
+let demoTokenURL = URL(string: "bundesident://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Feid.digitalservicebund.de%2Fapi%2Fv1%2Fidentification%2Fsessions%2F57a2537b-87c3-4170-83fb-3fbb9a245888%2Ftc-token&widgetSessionId=57a2537b-87c3-4170-83fb-3fbb9a245888")!
 #endif
 
 struct IdentificationOverview_Previews: PreviewProvider {

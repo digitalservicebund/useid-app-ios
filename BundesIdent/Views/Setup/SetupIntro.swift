@@ -3,12 +3,12 @@ import ComposableArchitecture
 
 struct SetupIntro: ReducerProtocol {
     enum Action: Equatable {
-        case chooseSkipSetup(tokenURL: URL?)
+        case chooseSkipSetup(identificationInformation: IdentificationInformation?)
         case chooseStartSetup
     }
 
     struct State: Equatable {
-        var tokenURL: URL?
+        var identificationInformation: IdentificationInformation?
     }
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
@@ -27,7 +27,7 @@ struct SetupIntroView: View {
                        message: L10n.FirstTimeUser.Intro.body,
                        imageMeta: ImageMeta(asset: Asset.eiDs),
                        secondaryButton: .init(title: L10n.FirstTimeUser.Intro.skipSetup,
-                                              action: .chooseSkipSetup(tokenURL: viewStore.tokenURL)),
+                                              action: .chooseSkipSetup(identificationInformation: viewStore.identificationInformation)),
                        primaryButton: .init(title: L10n.FirstTimeUser.Intro.startSetup,
                                             action: .chooseStartSetup))
                 .toolbar {
@@ -45,13 +45,13 @@ struct SetupIntroView: View {
 struct SetupIntro_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            SetupIntroView(store: Store(initialState: SetupIntro.State(tokenURL: nil),
+            SetupIntroView(store: Store(initialState: SetupIntro.State(identificationInformation: nil),
                                         reducer: SetupIntro()))
         }
         .previewDevice("iPhone SE (2nd generation)")
         
         NavigationView {
-            SetupIntroView(store: Store(initialState: SetupIntro.State(tokenURL: nil),
+            SetupIntroView(store: Store(initialState: SetupIntro.State(identificationInformation: nil),
                                         reducer: SetupIntro()))
         }
         .previewDevice("iPhone 12")

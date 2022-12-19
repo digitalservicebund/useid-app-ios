@@ -258,7 +258,7 @@ final class RouteTests: XCTestCase {
         verify(mockMatomoTracker).track(view: ["identification", "scan"], url: URL?.none)
         endInteraction(mockMatomoTracker)
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(2, action: .scan(.identifiedSuccessfully(redirectURL: tokenURL))))))
+        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(2, action: .scan(.identifiedSuccessfully(request: request, redirectURL: tokenURL))))))
         verify(mockMatomoTracker)
             .track(eventWithCategory: "identification",
                    action: "success",

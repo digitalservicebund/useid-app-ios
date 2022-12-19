@@ -2,16 +2,22 @@ import Foundation
 import SwiftUI
 import ComposableArchitecture
 
-struct IdentificationDoneState: Equatable {
-    var request: EIDAuthenticationRequest
+struct IdentificationDone: ReducerProtocol {
+    struct State: Equatable {
+        let request: EIDAuthenticationRequest
+    }
+    
+    enum Action: Equatable {
+        case close
+    }
+    
+    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+        .none
+    }
 }
 
-enum IdentificationDoneAction: Equatable {
-    case close
-}
-
-struct IdentificationDone: View {
-    let store: Store<IdentificationDoneState, IdentificationDoneAction>
+struct IdentificationDoneView: View {
+    let store: StoreOf<IdentificationDone>
     
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -20,9 +26,9 @@ struct IdentificationDone: View {
                        message: L10n.Identification.Done.message(viewStore.request.subject),
                        imageMeta: nil,
                        secondaryButton: nil,
-                       primaryButton: .init(title: L10n.Identification.Done.close,
-                                            action: .close))
+                       primaryButton: .init(title: L10n.Identification.Done.close, action: .close))
             .navigationBarBackButtonHidden(true)
+            .navigationBarHidden(false)
         }
     }
 }

@@ -41,7 +41,7 @@ struct IdentificationPINScan: ReducerProtocol {
         case shared(SharedScan.Action)
         case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
         case wrongPIN(remainingAttempts: Int)
-        case identifiedSuccessfully(redirectURL: URL)
+        case identifiedSuccessfully(request: EIDAuthenticationRequest, redirectURL: URL)
         case requestPINAndCAN(EIDAuthenticationRequest, PINCANCallback)
         case requestCAN(EIDAuthenticationRequest, PINCallback)
         case error(ScanError.State)
@@ -87,13 +87,11 @@ struct IdentificationPINScan: ReducerProtocol {
         case .wrongPIN:
             state.shared.isScanning = false
             return .none
-        case .identifiedSuccessfully(let redirectURL):
+        case .identifiedSuccessfully:
             storageManager.setupCompleted = true
             storageManager.identifiedOnce = true
+            return .trackEvent(category: "identification", action: "success", analytics: analytics)
             
-            return .concatenate(.trackEvent(category: "identification", action: "success", analytics: analytics),
-                                Effect(value: .dismiss),
-                                .openURL(redirectURL, urlOpener: urlOpener))
         case .shared(.showNFCInfo):
             state.alert = AlertState(title: TextState(L10n.HelpNFC.title),
                                      message: TextState(L10n.HelpNFC.body),
@@ -164,9 +162,9 @@ struct IdentificationPINScan: ReducerProtocol {
         case .cardRemoved:
             logger.info("Card removed.")
             state.authenticationSuccessful = false
-        case .processCompletedSuccessfullyWithRedirect(let redirect):
+        case .processCompletedSuccessfullyWithRedirect(let redirectURL):
             logger.info("Authentication successfully with redirect.")
-            return Effect(value: .identifiedSuccessfully(redirectURL: redirect))
+            return Effect(value: .identifiedSuccessfully(request: state.request, redirectURL: redirectURL))
         case .processCompletedSuccessfullyWithoutRedirect:
             state.shared.scanAvailable = false
             issueTracker.capture(error: RedactedEIDInteractionEventError(.processCompletedSuccessfullyWithoutRedirect))

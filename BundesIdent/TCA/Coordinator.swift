@@ -8,19 +8,28 @@ import TCACoordinators
 enum HandleURLError: Error, CustomStringConvertible, CustomNSError {
     case componentsInvalid
     case noTCTokenURLQueryItem
+    case noWidgetSessionIdQueryItem
     case tcTokenURLEncodingError
+    case tcTokenURLCreationFailed
     
     var description: String {
         switch self {
         case .componentsInvalid: return "URL components could not be created from URL"
         case .noTCTokenURLQueryItem: return "URL Components do not contain a tcTokenURL query parameter"
+        case .noWidgetSessionIdQueryItem: return "URL Components do not contain a widgetSessionId query parameter"
         case .tcTokenURLEncodingError: return "TCTokenURL could not be encoded"
+        case .tcTokenURLCreationFailed: return "Could not create a url containing the tcTokenURL"
         }
     }
     
     var errorUserInfo: [String: Any] {
         [NSDebugDescriptionErrorKey: description]
     }
+}
+
+struct IdentificationInformation: Equatable {
+    let sessionId: String
+    let tcTokenURL: URL
 }
 
 struct Coordinator: ReducerProtocol {
@@ -54,14 +63,14 @@ struct Coordinator: ReducerProtocol {
         .eraseToEffect()
     }
     
-    func extractTCTokenURL(url: URL) -> URL? {
+    func extractIdentificationInformation(url: URL) -> IdentificationInformation? {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let queryItems = components.queryItems else {
             issueTracker.capture(error: HandleURLError.componentsInvalid)
             return nil
         }
-        guard let queryItem = queryItems.last(where: { $0.name == "tcTokenURL" && $0.value != nil }),
-              let urlString = queryItem.value else {
+        guard let tcTokenURLQueryItem = queryItems.last(where: { $0.name == "tcTokenURL" }),
+              let urlString = tcTokenURLQueryItem.value else {
             issueTracker.capture(error: HandleURLError.noTCTokenURLQueryItem)
             return nil
         }
@@ -69,23 +78,34 @@ struct Coordinator: ReducerProtocol {
             issueTracker.capture(error: HandleURLError.tcTokenURLEncodingError)
             return nil
         }
+        guard let widgetSessionIdQueryItem = queryItems.last(where: { $0.name == "widgetSessionId" }),
+              let widgetSessionId = widgetSessionIdQueryItem.value else {
+            issueTracker.capture(error: HandleURLError.noWidgetSessionIdQueryItem)
+            return nil
+        }
         
         var urlComponents = URLComponents(string: "http://127.0.0.1:24727/eID-Client")!
         urlComponents.percentEncodedQueryItems = [URLQueryItem(name: "tcTokenURL", value: encodedTCTokenURL)]
-        return urlComponents.url
+        guard let tcTokenURL = urlComponents.url else {
+            issueTracker.capture(error: HandleURLError.tcTokenURLCreationFailed)
+            return nil
+        }
+        
+        return IdentificationInformation(sessionId: widgetSessionId, tcTokenURL: tcTokenURL)
     }
     
     func handleURL(state: inout State, _ url: URL) -> Effect<Action, Never> {
-        guard let tcTokenURL = extractTCTokenURL(url: url) else {
-            logger.warning("Could not extract tc token url from \(url, privacy: .sensitive)")
+        guard let information = extractIdentificationInformation(url: url) else {
+            logger.warning("Could not extract identification information from \(url, privacy: .sensitive)")
             return .none
         }
         
         let screen: Screen.State
         if storageManager.setupCompleted {
-            screen = .identificationCoordinator(IdentificationCoordinator.State(tokenURL: tcTokenURL, canGoBackToSetupIntro: false))
+            screen = .identificationCoordinator(IdentificationCoordinator.State(identificationInformation: information,
+                                                                                canGoBackToSetupIntro: false))
         } else {
-            screen = .setupCoordinator(SetupCoordinator.State(tokenURL: tcTokenURL))
+            screen = .setupCoordinator(SetupCoordinator.State(identificationInformation: information))
         }
         
         // In case setup or ident is shown, dismiss any shown sheets that screens
@@ -120,31 +140,31 @@ struct Coordinator: ReducerProtocol {
             guard case .routeAction(_, action: let routeAction) = action else { return .none }
             switch routeAction {
             case .home(.triggerSetup):
-                state.routes.presentSheet(.setupCoordinator(SetupCoordinator.State(tokenURL: nil)))
+                state.routes.presentSheet(.setupCoordinator(SetupCoordinator.State(identificationInformation: nil)))
                 return .trackEvent(category: "firstTimeUser",
                                    action: "buttonPressed",
                                    name: "start",
                                    analytics: analytics)
-            case .identificationCoordinator(.back(let tokenURL)):
+            case .identificationCoordinator(.back(let identificationInformation)):
                 return Effect.routeWithDelaysIfUnsupported(state.routes) {
                     $0.dismiss()
-                    $0.presentSheet(.setupCoordinator(SetupCoordinator.State(tokenURL: tokenURL)))
+                    $0.presentSheet(.setupCoordinator(SetupCoordinator.State(identificationInformation: identificationInformation)))
                 }
-            case .setupCoordinator(.routeAction(_, action: .intro(.chooseSkipSetup(let tokenURL)))):
-                if let tokenURL {
+            case .setupCoordinator(.routeAction(_, action: .intro(.chooseSkipSetup(let identificationInformation)))):
+                if let identificationInformation {
                     return Effect.routeWithDelaysIfUnsupported(state.routes) {
                         $0.dismiss()
-                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(tokenURL: tokenURL,
+                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(identificationInformation: identificationInformation,
                                                                                                    canGoBackToSetupIntro: true)))
                     }
                 } else {
                     state.routes.dismiss()
                     return .none
                 }
-            case .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification(let tokenURL)))):
+            case .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification(let identificationInformation)))):
                 return Effect.routeWithDelaysIfUnsupported(state.routes) {
                     $0.dismiss()
-                    $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(tokenURL: tokenURL,
+                    $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(identificationInformation: identificationInformation,
                                                                                                canGoBackToSetupIntro: false)))
                 }
 #if PREVIEW
@@ -157,6 +177,7 @@ struct Coordinator: ReducerProtocol {
                  .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.afterConfirmEnd))),
                  .identificationCoordinator(.routeAction(_, action: .scan(.dismiss))),
                  .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.dismiss))))),
+                 .identificationCoordinator(.routeAction(_, action: .done(.close))),
                  .setupCoordinator(.confirmEnd),
                  .setupCoordinator(.routeAction(_, action: .done(.done))),
                  .setupCoordinator(.afterConfirmEnd):

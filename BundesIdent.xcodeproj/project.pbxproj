@@ -89,6 +89,8 @@
 		E16708C0283E6A07001A1637 /* SetupScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708BF283E6A07001A1637 /* SetupScan.swift */; };
 		E17604D1287E24F1007DFA10 /* DebugMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17604D0287E24F1007DFA10 /* DebugMenu.swift */; };
 		E18E223A285349D200221DB1 /* IdentificationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18E2239285349D200221DB1 /* IdentificationUITests.swift */; };
+		E1903FFF295079D200C41D02 /* IdentificationDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1903FFE295079D200C41D02 /* IdentificationDone.swift */; };
+		E1904001295087E800C41D02 /* IdentificationRedirect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1904000295087E800C41D02 /* IdentificationRedirect.swift */; };
 		E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
 		E1A769FD28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A769FC28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift */; };
 		E1A769FF28B940C6001E1F04 /* LaunchArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A769FE28B940C6001E1F04 /* LaunchArgument.swift */; };
@@ -266,6 +268,8 @@
 		E18E2237285349D200221DB1 /* BundesIdentUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BundesIdentUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E18E2239285349D200221DB1 /* IdentificationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationUITests.swift; sourceTree = "<group>"; };
 		E18E224228534A8500221DB1 /* UITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UITests.xctestplan; sourceTree = "<group>"; };
+		E1903FFE295079D200C41D02 /* IdentificationDone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentificationDone.swift; sourceTree = "<group>"; };
+		E1904000295087E800C41D02 /* IdentificationRedirect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationRedirect.swift; sourceTree = "<group>"; };
 		E19D26B0282557B00005B111 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E1A769FC28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+LaunchArguments.swift"; sourceTree = "<group>"; };
 		E1A769FE28B940C6001E1F04 /* LaunchArgument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchArgument.swift; sourceTree = "<group>"; };
@@ -505,6 +509,7 @@
 			children = (
 				E1EFB5C02858EA8C005C38C6 /* IdentificationOverview */,
 				E1EFB5C7285A365E005C38C6 /* IdentificationAbout.swift */,
+				E1903FFE295079D200C41D02 /* IdentificationDone.swift */,
 				E1EFB5D4285C7D81005C38C6 /* IdentificationPersonalPIN.swift */,
 				E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */,
 				E1C2D8B928620E2B000E0F5B /* IdentificationPINScan.swift */,
@@ -515,6 +520,7 @@
 				B974FD0929268A5C00B338E5 /* IdentificationCANInput.swift */,
 				B95FAA8A2927A90D009BDAC9 /* IdentificationCANIncorrectInput.swift */,
 				B95FAA8829278F74009BDAC9 /* IdentificationCANPersonalPINInput.swift */,
+				E1904000295087E800C41D02 /* IdentificationRedirect.swift */,
 			);
 			path = Identification;
 			sourceTree = "<group>";
@@ -1055,6 +1061,7 @@
 			files = (
 				E12CB30A284A2C700039FD56 /* InteractiveDismissableView.swift in Sources */,
 				E1FDEAAB28F96BD300F70CE1 /* AppConfig.swift in Sources */,
+				E1903FFF295079D200C41D02 /* IdentificationDone.swift in Sources */,
 				E15776A0286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift in Sources */,
 				E5E69D832812FB4500A3B66A /* EIDInteractionEvent.swift in Sources */,
 				D278AC9A28FD388100BD0528 /* View+Synchronize.swift in Sources */,
@@ -1071,6 +1078,7 @@
 				D28D280228B7A9F5008DA310 /* SetupDone.swift in Sources */,
 				B974FD08292685FC00B338E5 /* IdentificationCANIntro.swift in Sources */,
 				E593E279281686DC00154EB0 /* IDInteractionManager.swift in Sources */,
+				E1904001295087E800C41D02 /* IdentificationRedirect.swift in Sources */,
 				E59097B5281153A100CDA144 /* NFCMessageProvider.swift in Sources */,
 				E16708AE283D4224001A1637 /* HomeView.swift in Sources */,
 				E593E2662816845C00154EB0 /* AuthenticationTerms.swift in Sources */,

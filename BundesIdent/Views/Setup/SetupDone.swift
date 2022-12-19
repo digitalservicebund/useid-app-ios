@@ -3,22 +3,22 @@ import ComposableArchitecture
 
 struct SetupDone: ReducerProtocol {
     struct State: Equatable {
-        var tokenURL: URL?
+        var identificationInformation: IdentificationInformation?
         
         var primaryButton: DialogButtons<SetupDone.Action>.ButtonConfiguration {
-            guard let tokenURL else {
+            guard let identificationInformation else {
                 return .init(title: L10n.FirstTimeUser.Done.close,
                              action: .done)
             }
             
             return .init(title: L10n.FirstTimeUser.Done.identify,
-                         action: .triggerIdentification(tokenURL: tokenURL))
+                         action: .triggerIdentification(identificationInformation: identificationInformation))
         }
     }
 
     enum Action: Equatable {
         case done
-        case triggerIdentification(tokenURL: URL)
+        case triggerIdentification(identificationInformation: IdentificationInformation)
     }
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {

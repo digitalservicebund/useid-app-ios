@@ -10,7 +10,7 @@ struct SetupCoordinator: ReducerProtocol {
     struct State: Equatable, IndexedRouterState {
         var transportPIN: String
         var attempt: Int
-        var tokenURL: URL?
+        var identificationInformation: IdentificationInformation?
         var alert: AlertState<Action>?
         
         var routes: [Route<SetupScreen.State>] {
@@ -23,7 +23,7 @@ struct SetupCoordinator: ReducerProtocol {
                             scanState.shared.attempt = attempt
                             return .scan(scanState)
                         case .intro(var state):
-                            state.tokenURL = tokenURL
+                            state.identificationInformation = identificationInformation
                             return .intro(state)
                         default:
                             return setupScreenState
@@ -38,12 +38,12 @@ struct SetupCoordinator: ReducerProtocol {
         
         var states: [Route<SetupScreen.State>]
         
-        init(transportPIN: String = "", attempt: Int = 0, tokenURL: URL? = nil, alert: AlertState<SetupCoordinator.Action>? = nil, states: [Route<SetupScreen.State>]? = nil) {
+        init(transportPIN: String = "", attempt: Int = 0, identificationInformation: IdentificationInformation? = nil, alert: AlertState<SetupCoordinator.Action>? = nil, states: [Route<SetupScreen.State>]? = nil) {
             self.transportPIN = transportPIN
             self.attempt = attempt
-            self.tokenURL = tokenURL
+            self.identificationInformation = identificationInformation
             self.alert = alert
-            self.states = states ?? [.root(.intro(.init(tokenURL: tokenURL)))]
+            self.states = states ?? [.root(.intro(.init(identificationInformation: identificationInformation)))]
         }
     }
     
@@ -79,7 +79,7 @@ struct SetupCoordinator: ReducerProtocol {
                 state.routes.pop()
                 state.routes.push(.scan(SetupScan.State(transportPIN: state.transportPIN, newPIN: pin)))
             case .routeAction(_, action: .scan(.scannedSuccessfully)):
-                state.routes.push(.done(SetupDone.State(tokenURL: state.tokenURL)))
+                state.routes.push(.done(SetupDone.State(identificationInformation: state.identificationInformation)))
             case .routeAction(_, action: .scan(.error(let errorState))):
                 state.routes.presentSheet(.error(errorState))
             case .routeAction(_, action: .scan(.shared(.showHelp))):
@@ -96,7 +96,7 @@ struct SetupCoordinator: ReducerProtocol {
                     .eraseToEffect()
             case .routeAction(_, action: .scan(.wrongTransportPIN(remainingAttempts: let remainingAttempts))):
                 state.routes.presentSheet(.incorrectTransportPIN(SetupIncorrectTransportPIN.State(remainingAttempts: remainingAttempts)))
-            case .routeAction(let index, action: .incorrectTransportPIN(.confirmEnd)):
+            case .routeAction(_, action: .incorrectTransportPIN(.confirmEnd)):
                 state.routes.dismiss()
                 
                 // Dismissing two sheets at the same time from different coordinators is not well supported.

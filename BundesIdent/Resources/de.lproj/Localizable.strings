@@ -118,6 +118,14 @@
 "identification_confirmEnd_deny" = "Abbrechen";
 "identification_confirmEnd_message" = "Möchten Sie das Ausweisen beenden?";
 "identification_confirmEnd_title" = "Ausweisen beenden?";
+"identification_continue_message" = "Um die Identifizierung abzuschließen, können Sie den Vorgang mit »%@« entweder auf diesem Gerät fortfahren oder auf ein anderes Gerät (z.B. auf einen Computer) wechseln.\n\nMöchten Sie auf diesem Smartphone oder auf einem anderen Gerät fortfahren?";
+"identification_continue_open" = "Dieses Smartphone";
+"identification_continue_refresh" = "Ursprüngliches Gerät";
+"identification_continue_share" = "Anderes Gerät";
+"identification_continue_title" = "Auf welchem Gerät möchten Sie fortfahren?";
+"identification_done_close" = "Schließen";
+"identification_done_message" = "Sie haben sich erfolgreich bei »%@« ausgewiesen.";
+"identification_done_title" = "Identifizierung abgeschlossen";
 "identification_end" = "Abbrechen";
 "identification_fetchMetadataError_body" = "Bitte versuchen Sie es erneut. Stellen Sie dabei sicher, dass Sie mit dem Internet verbunden sind.";
 "identification_fetchMetadataError_retry" = "Erneut versuchen";

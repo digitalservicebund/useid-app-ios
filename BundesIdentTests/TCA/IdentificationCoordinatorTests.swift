@@ -148,7 +148,7 @@ class IdentificationCoordinatorTests: XCTestCase {
             $0.identifiedOnce.set(any()).thenDoNothing()
         }
         
-        store.send(.routeAction(0, action: .scan(.identifiedSuccessfully(redirectURL: redirect))))
+        store.send(.routeAction(0, action: .scan(.identifiedSuccessfully(request: request, redirectURL: redirect))))
         store.receive(.routeAction(0, action: IdentificationScreen.Action.scan(IdentificationPINScan.Action.dismiss)))
         
         XCTAssertEqual(redirect, openedURL)
