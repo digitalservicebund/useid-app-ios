@@ -92,6 +92,7 @@
 		E1903FFF295079D200C41D02 /* IdentificationDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1903FFE295079D200C41D02 /* IdentificationDone.swift */; };
 		E1904001295087E800C41D02 /* IdentificationRedirect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1904000295087E800C41D02 /* IdentificationRedirect.swift */; };
 		E19040032951DCAC00C41D02 /* IdentificationShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19040022951DCAC00C41D02 /* IdentificationShare.swift */; };
+		E19040052952068300C41D02 /* BundTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19040042952068300C41D02 /* BundTextFieldStyle.swift */; };
 		E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
 		E1A769FD28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A769FC28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift */; };
 		E1A769FF28B940C6001E1F04 /* LaunchArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A769FE28B940C6001E1F04 /* LaunchArgument.swift */; };
@@ -272,6 +273,7 @@
 		E1903FFE295079D200C41D02 /* IdentificationDone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentificationDone.swift; sourceTree = "<group>"; };
 		E1904000295087E800C41D02 /* IdentificationRedirect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationRedirect.swift; sourceTree = "<group>"; };
 		E19040022951DCAC00C41D02 /* IdentificationShare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationShare.swift; sourceTree = "<group>"; };
+		E19040042952068300C41D02 /* BundTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundTextFieldStyle.swift; sourceTree = "<group>"; };
 		E19D26B0282557B00005B111 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E1A769FC28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+LaunchArguments.swift"; sourceTree = "<group>"; };
 		E1A769FE28B940C6001E1F04 /* LaunchArgument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchArgument.swift; sourceTree = "<group>"; };
@@ -650,6 +652,7 @@
 				E1CD8E8E2820395F008ADA2A /* BundButtonStyle.swift */,
 				E1CD8E87281FF62F008ADA2A /* Colors.swift */,
 				E1AB879D282283AB00C7FC94 /* Fonts.swift */,
+				E19040042952068300C41D02 /* BundTextFieldStyle.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -1146,6 +1149,7 @@
 				E13925B82840FB7700161F5C /* Types.swift in Sources */,
 				E13925C72841119400161F5C /* MockIDInteractionManager.swift in Sources */,
 				E1BC3D7928B7E40B007A7B39 /* LicensesView.swift in Sources */,
+				E19040052952068300C41D02 /* BundTextFieldStyle.swift in Sources */,
 				E16708B1283D4EAC001A1637 /* Dependencies.swift in Sources */,
 				E593E2722816864800154EB0 /* ControllerCallback.swift in Sources */,
 				E1CD8E88281FF62F008ADA2A /* Colors.swift in Sources */,

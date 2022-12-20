@@ -35,16 +35,19 @@ struct IdentificationScreen: ReducerProtocol {
         
         var swipeToDismissState: SwipeToDismissState {
             switch self {
-            case .overview: return .allowAfterConfirmation
+            case .overview: return .allowAfterConfirmation()
             case .personalPIN: return .block
-            case .scan: return .allowAfterConfirmation
+            case .scan: return .allowAfterConfirmation()
             // handled by screen reducers
             case .incorrectPersonalPIN: return .allow
             case .error: return .allow
             case .identificationCANCoordinator: return .allow
             case .handOff: return .block
             case .done: return .allow
-            case .share: return .allowAfterConfirmation
+            case .share: return .allowAfterConfirmation(title: L10n.Identification.Share.ConfirmClose.title,
+                                                        body: L10n.Identification.Share.ConfirmClose.body,
+                                                        confirm: L10n.Identification.Share.ConfirmClose.close,
+                                                        deny: L10n.General.cancel)
             }
         }
     }
