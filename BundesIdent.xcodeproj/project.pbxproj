@@ -301,7 +301,6 @@
 		E1CD8E9028214FDB008ADA2A /* SetupPINLetterIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPINLetterIntro.swift; sourceTree = "<group>"; };
 		E1CD8E92282156F2008ADA2A /* SetupTransportPIN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupTransportPIN.swift; sourceTree = "<group>"; };
 		E1CD8E9428215971008ADA2A /* PINEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINEntryView.swift; sourceTree = "<group>"; };
-		E1D8453B28F816B000B1DD1E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		E1D8453C28F8190B00B1DD1E /* Preview.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Preview.xcconfig; sourceTree = "<group>"; };
 		E1DCC97D29072B8B002E9371 /* SetupUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupUITests.swift; sourceTree = "<group>"; };
 		E1DCC97F29072BB3002E9371 /* HomeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUITests.swift; sourceTree = "<group>"; };
@@ -753,7 +752,6 @@
 				E1EFB5D2285C794A005C38C6 /* InfoPlist.strings */,
 				E166AF6B28FEAD38004EE034 /* Default.xcconfig */,
 				E1D8453C28F8190B00B1DD1E /* Preview.xcconfig */,
-				E1D8453B28F816B000B1DD1E /* Release.xcconfig */,
 			);
 			path = BundesIdent;
 			sourceTree = "<group>";
