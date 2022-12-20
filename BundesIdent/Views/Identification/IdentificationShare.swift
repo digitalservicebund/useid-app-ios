@@ -137,6 +137,8 @@ struct IdentificationShareView_Previews: PreviewProvider {
                                     redirectURL: URL(string: "https://bundesident.de/yx29ejm")!),
                 reducer: EmptyReducer())
         )
+        .previewDisplayName("Empty email")
+        
         IdentificationShareView(
             store: .init(
                 initialState: .init(request: .preview,
@@ -144,5 +146,6 @@ struct IdentificationShareView_Previews: PreviewProvider {
                                     email: "abc@example.org"),
                 reducer: EmptyReducer())
         )
+        .previewDisplayName("Filled email")
     }
 }
