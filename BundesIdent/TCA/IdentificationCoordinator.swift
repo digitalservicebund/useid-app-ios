@@ -180,11 +180,11 @@ struct IdentificationCoordinator: ReducerProtocol {
                 )
                 return .none
             case .routeAction(_, action: .handOff(.open(let request))),
-                    .routeAction(_, action: .handOff(.refreshed(success: true, request: let request))):
+                    .routeAction(_, action: .handOff(.refreshed(success: true, request: let request, redirectURL: _))):
                 state.routes.push(.done(IdentificationDone.State(request: request)))
                 return .none
-            case .routeAction(_, action: .handOff(.refreshed(success: false, request: let request))):
-                // TODO: state.routes.push(.share(IdentificationShare.State(request: request)))
+            case .routeAction(_, action: .handOff(.refreshed(success: false, request: let request, redirectURL: let redirectURL))):
+                state.routes.push(.share(IdentificationShare.State(request: request, redirectURL: redirectURL)))
                 return .none
             case .swipeToDismiss:
                 switch state.swipeToDismiss {
@@ -344,6 +344,9 @@ struct IdentificationCoordinatorView: View {
                         CaseLet(state: /IdentificationScreen.State.done,
                                 action: IdentificationScreen.Action.done,
                                 then: IdentificationDoneView.init)
+                        CaseLet(state: /IdentificationScreen.State.share,
+                                action: IdentificationScreen.Action.share,
+                                then: IdentificationShareView.init)
                     }
                 }
             }

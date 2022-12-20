@@ -16,7 +16,7 @@ struct IdentificationHandOff: ReducerProtocol {
     enum Action: Equatable {
         case open(request: EIDAuthenticationRequest)
         case refresh
-        case refreshed(success: Bool, request: EIDAuthenticationRequest)
+        case refreshed(success: Bool, request: EIDAuthenticationRequest, redirectURL: URL)
     }
     
     enum Error: Swift.Error, Equatable {
@@ -34,7 +34,9 @@ struct IdentificationHandOff: ReducerProtocol {
                 let refreshAddress: String
             }
             
+            // TODO: Extract that logic later
             let request = state.request
+            let redirectURL = state.redirectURL
             let sessionId = state.identificationInformation.sessionId
             let lastPathComponent = "success"
             let payload = Payload(refreshAddress: state.redirectURL.absoluteString)
@@ -54,18 +56,14 @@ struct IdentificationHandOff: ReducerProtocol {
                         throw Error.invalidURLResponse
                     }
                     
-                    guard httpResponse.statusCode == 204 else {
+                    guard httpResponse.statusCode == 202 else {
                         throw Error.unexpectedStatusCode(httpResponse.statusCode)
                     }
                     
-                    // TODO: Check response
-                    // if successful => success: true
-                    // otherwise throws => success: false
-                    
-                    await send(.refreshed(success: true, request: request))
+                    await send(.refreshed(success: true, request: request, redirectURL: redirectURL))
                 } catch {
                     logger.error("Error sending event to server: \(error)")
-                    await send(.refreshed(success: false, request: request))
+                    await send(.refreshed(success: false, request: request, redirectURL: redirectURL))
                 }
             }
         case .refreshed:

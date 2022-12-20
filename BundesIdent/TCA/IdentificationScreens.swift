@@ -13,6 +13,7 @@ struct IdentificationScreen: ReducerProtocol {
         case identificationCANCoordinator(IdentificationCANCoordinator.State)
         case handOff(IdentificationHandOff.State)
         case done(IdentificationDone.State)
+        case share(IdentificationShare.State)
         
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationScreen.Action? {
             switch self {
@@ -43,6 +44,7 @@ struct IdentificationScreen: ReducerProtocol {
             case .identificationCANCoordinator: return .allow
             case .handOff: return .block
             case .done: return .allow
+            case .share: return .allowAfterConfirmation
             }
         }
     }
@@ -56,6 +58,7 @@ struct IdentificationScreen: ReducerProtocol {
         case identificationCANCoordinator(IdentificationCANCoordinator.Action)
         case handOff(IdentificationHandOff.Action)
         case done(IdentificationDone.Action)
+        case share(IdentificationShare.Action)
     }
     
     var body: some ReducerProtocol<State, Action> {
@@ -84,6 +87,9 @@ struct IdentificationScreen: ReducerProtocol {
         Scope(state: /State.done, action: /Action.done) {
             IdentificationDone()
         }
+        Scope(state: /State.share, action: /Action.share) {
+            IdentificationShare()
+        }
     }
 }
 
@@ -102,6 +108,8 @@ extension IdentificationScreen.State: AnalyticsView {
             return state.errorType.route
         case .handOff:
             return ["handOff"]
+        case .share:
+            return ["share"]
         case .done:
             return ["done"]
         case .identificationCANCoordinator(let state):
