@@ -225,7 +225,7 @@ final class RouteTests: XCTestCase {
         let request = EIDAuthenticationRequest.preview
         let closure = { (_: FlaggedAttributes) in }
         let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
-        let tokenURL = URL(string: "https://example.com")!
+        let tokenURL = demoTokenURL
         let root = Route<Screen.State>.root(.home(Home.State(appVersion: "1.0.0", buildNumber: 1)))
         let store = TestStore(initialState: Coordinator.State(routes: [root]),
                               reducer: Coordinator())
@@ -276,7 +276,7 @@ final class RouteTests: XCTestCase {
         let closure = { (_: FlaggedAttributes) in }
         let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
-        let tokenURL = URL(string: "https://example.com")!
+        let tokenURL = demoTokenURL
         let root = Route<Screen.State>.root(.home(Home.State(appVersion: "1.0.0", buildNumber: 1)))
         let store = TestStore(initialState: Coordinator.State(routes: [root]),
                               reducer: Coordinator())

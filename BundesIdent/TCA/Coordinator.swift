@@ -3,6 +3,25 @@ import TCACoordinators
 import SwiftUI
 import Analytics
 import Sentry
+import OpenEcard
+
+enum HandleURLError: Error, CustomStringConvertible, CustomNSError {
+    case componentsInvalid
+    case noTCTokenURLQueryItem
+    case tcTokenURLEncodingError
+    
+    var description: String {
+        switch self {
+        case .componentsInvalid: return "URL components could not be created from URL"
+        case .noTCTokenURLQueryItem: return "URL Components do not contain a tcTokenURL query parameter"
+        case .tcTokenURLEncodingError: return "TCTokenURL could not be encoded"
+        }
+    }
+    
+    var errorUserInfo: [String: Any] {
+        [NSDebugDescriptionErrorKey: description]
+    }
+}
 
 struct Coordinator: ReducerProtocol {
     @Dependency(\.idInteractionManager) var idInteractionManager
@@ -33,12 +52,38 @@ struct Coordinator: ReducerProtocol {
         .eraseToEffect()
     }
     
-    func handleURL(state: inout State, _ url: URL) -> Effect<Coordinator.Action, Never> {
+    func extractTCTokenURL(url: URL) -> URL? {
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let queryItems = components.queryItems else {
+            issueTracker.capture(error: HandleURLError.componentsInvalid)
+            return nil
+        }
+        guard let queryItem = queryItems.last(where: { $0.name == "tcTokenURL" && $0.value != nil }),
+              let urlString = queryItem.value else {
+            issueTracker.capture(error: HandleURLError.noTCTokenURLQueryItem)
+            return nil
+        }
+        guard let encodedTCTokenURL = OpenEcardImp().prepareTCTokenURL(urlString) else {
+            issueTracker.capture(error: HandleURLError.tcTokenURLEncodingError)
+            return nil
+        }
+        
+        var urlComponents = URLComponents(string: "http://127.0.0.1:24727/eID-Client")!
+        urlComponents.percentEncodedQueryItems = [URLQueryItem(name: "tcTokenURL", value: encodedTCTokenURL)]
+        return urlComponents.url
+    }
+    
+    func handleURL(state: inout State, _ url: URL) -> Effect<Action, Never> {
+        guard let tcTokenURL = extractTCTokenURL(url: url) else {
+            logger.warning("Could not extract tc token url from \(url, privacy: .sensitive)")
+            return .none
+        }
+        
         let screen: Screen.State
         if storageManager.setupCompleted {
-            screen = .identificationCoordinator(IdentificationCoordinator.State(tokenURL: url, canGoBackToSetupIntro: false))
+            screen = .identificationCoordinator(IdentificationCoordinator.State(tokenURL: tcTokenURL, canGoBackToSetupIntro: false))
         } else {
-            screen = .setupCoordinator(SetupCoordinator.State(tokenURL: url))
+            screen = .setupCoordinator(SetupCoordinator.State(tokenURL: tcTokenURL))
         }
         
         // In case setup or ident is shown, dismiss any shown sheets that screens
