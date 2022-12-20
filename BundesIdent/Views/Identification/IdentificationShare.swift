@@ -93,12 +93,10 @@ struct IdentificationShareView: View {
                                 .aspectRatio(contentMode: .fit)
                                 .cornerRadius(5)
                                 .frame(height: 30)
-                            if #available(iOS 16.0, *) {
-                                ShareLink(item: viewStore.redirectURL) {
-                                    HStack(alignment: .firstTextBaseline) {
-                                        Text(viewStore.formattedRedirectURL)
-                                        Image(systemName: "square.and.arrow.up")
-                                    }
+                            ShareLink(item: viewStore.redirectURL) {
+                                HStack(alignment: .firstTextBaseline) {
+                                    Text(viewStore.formattedRedirectURL)
+                                    Image(systemName: "square.and.arrow.up")
                                 }
                             }
                         }
