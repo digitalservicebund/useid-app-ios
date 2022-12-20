@@ -27,8 +27,6 @@ struct IdentificationDoneView: View {
                        imageMeta: nil,
                        secondaryButton: nil,
                        primaryButton: .init(title: L10n.Identification.Done.close, action: .close))
-            .navigationBarBackButtonHidden(true)
-            .navigationBarHidden(false)
         }
     }
 }

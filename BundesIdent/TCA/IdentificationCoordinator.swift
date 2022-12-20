@@ -173,11 +173,18 @@ struct IdentificationCoordinator: ReducerProtocol {
                                          secondaryButton: .cancel(TextState(verbatim: L10n.Identification.ConfirmEnd.deny)))
                 return .none
             case .routeAction(_, action: .scan(.identifiedSuccessfully(let request, let redirectURL))):
-                state.routes.push(.open(IdentificationContinue.State(request: request, redirectURL: redirectURL)))
+                state.routes.push(
+                    .handOff(IdentificationHandOff.State(identificationInformation: state.identificationInformation,
+                                                         request: request,
+                                                         redirectURL: redirectURL))
+                )
                 return .none
-            case .routeAction(_, action: .open(.open(let request))),
-                    .routeAction(_, action: .open(.refreshed(success: true, request: let request))):
+            case .routeAction(_, action: .handOff(.open(let request))),
+                    .routeAction(_, action: .handOff(.refreshed(success: true, request: let request))):
                 state.routes.push(.done(IdentificationDone.State(request: request)))
+                return .none
+            case .routeAction(_, action: .handOff(.refreshed(success: false, request: let request))):
+                // TODO: state.routes.push(.share(IdentificationShare.State(request: request)))
                 return .none
             case .swipeToDismiss:
                 switch state.swipeToDismiss {
@@ -331,9 +338,9 @@ struct IdentificationCoordinatorView: View {
                         CaseLet(state: /IdentificationScreen.State.identificationCANCoordinator,
                                 action: IdentificationScreen.Action.identificationCANCoordinator,
                                 then: IdentificationCANCoordinatorView.init)
-                        CaseLet(state: /IdentificationScreen.State.open,
-                                action: IdentificationScreen.Action.open,
-                                then: IdentificationContinueView.init)
+                        CaseLet(state: /IdentificationScreen.State.handOff,
+                                action: IdentificationScreen.Action.handOff,
+                                then: IdentificationHandOffView.init)
                         CaseLet(state: /IdentificationScreen.State.done,
                                 action: IdentificationScreen.Action.done,
                                 then: IdentificationDoneView.init)

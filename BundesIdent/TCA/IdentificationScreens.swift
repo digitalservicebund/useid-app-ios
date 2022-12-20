@@ -11,7 +11,7 @@ struct IdentificationScreen: ReducerProtocol {
         case scan(IdentificationPINScan.State)
         case error(ScanError.State)
         case identificationCANCoordinator(IdentificationCANCoordinator.State)
-        case open(IdentificationContinue.State)
+        case handOff(IdentificationHandOff.State)
         case done(IdentificationDone.State)
         
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationScreen.Action? {
@@ -41,7 +41,7 @@ struct IdentificationScreen: ReducerProtocol {
             case .incorrectPersonalPIN: return .allow
             case .error: return .allow
             case .identificationCANCoordinator: return .allow
-            case .open: return .block
+            case .handOff: return .block
             case .done: return .allow
             }
         }
@@ -54,7 +54,7 @@ struct IdentificationScreen: ReducerProtocol {
         case scan(IdentificationPINScan.Action)
         case error(ScanError.Action)
         case identificationCANCoordinator(IdentificationCANCoordinator.Action)
-        case open(IdentificationContinue.Action)
+        case handOff(IdentificationHandOff.Action)
         case done(IdentificationDone.Action)
     }
     
@@ -78,8 +78,8 @@ struct IdentificationScreen: ReducerProtocol {
         Scope(state: /State.identificationCANCoordinator, action: /Action.identificationCANCoordinator) {
             IdentificationCANCoordinator()
         }
-        Scope(state: /State.open, action: /Action.open) {
-            IdentificationContinue()
+        Scope(state: /State.handOff, action: /Action.handOff) {
+            IdentificationHandOff()
         }
         Scope(state: /State.done, action: /Action.done) {
             IdentificationDone()
@@ -100,8 +100,8 @@ extension IdentificationScreen.State: AnalyticsView {
             return ["incorrectPersonalPIN"]
         case .error(let state):
             return state.errorType.route
-        case .open:
-            return ["open"]
+        case .handOff:
+            return ["handOff"]
         case .done:
             return ["done"]
         case .identificationCANCoordinator(let state):
