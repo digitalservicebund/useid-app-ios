@@ -93,14 +93,16 @@ struct IdentificationShareView: View {
                                 .aspectRatio(contentMode: .fit)
                                 .cornerRadius(5)
                                 .frame(height: 30)
-                            if #available(iOS 16.0, *) {
-                                ShareLink(item: viewStore.redirectURL) {
-                                    HStack(alignment: .firstTextBaseline) {
-                                        Text(viewStore.formattedRedirectURL)
-                                            .lineLimit(1)
-                                            .truncationMode(.tail)
-                                        Image(systemName: "square.and.arrow.up")
-                                    }
+                            HStack(alignment: .firstTextBaseline) {
+                                Text(viewStore.formattedRedirectURL)
+                                    .lineLimit(1)
+                                    .truncationMode(.tail)
+                                    .textSelection(.enabled)
+                                Button {
+                                    let pasteboard = UIPasteboard.general
+                                    pasteboard.string = viewStore.redirectURL.absoluteString
+                                } label: {
+                                    Image(systemName: "doc.on.doc")
                                 }
                             }
                         }
