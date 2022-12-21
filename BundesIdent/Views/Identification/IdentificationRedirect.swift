@@ -48,6 +48,7 @@ struct IdentificationHandOff: ReducerProtocol {
                     }
                     var urlRequest = URLRequest(url: url)
                     urlRequest.httpMethod = "POST"
+                    urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
                     urlRequest.httpBody = data
                     let (_, response) = try await URLSession.shared.data(for: urlRequest)
                     
