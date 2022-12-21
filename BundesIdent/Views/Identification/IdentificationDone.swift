@@ -1,6 +1,6 @@
 import Foundation
-import SwiftUI
 import ComposableArchitecture
+import SwiftUI
 
 struct IdentificationDone: ReducerProtocol {
     struct State: Equatable {
