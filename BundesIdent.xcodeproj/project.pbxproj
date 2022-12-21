@@ -89,7 +89,6 @@
 		E16708C0283E6A07001A1637 /* SetupScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708BF283E6A07001A1637 /* SetupScan.swift */; };
 		E17604D1287E24F1007DFA10 /* DebugMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17604D0287E24F1007DFA10 /* DebugMenu.swift */; };
 		E18E223A285349D200221DB1 /* IdentificationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18E2239285349D200221DB1 /* IdentificationUITests.swift */; };
-		E1903FFF295079D200C41D02 /* IdentificationDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1903FFE295079D200C41D02 /* IdentificationDone.swift */; };
 		E1904001295087E800C41D02 /* IdentificationRedirect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1904000295087E800C41D02 /* IdentificationRedirect.swift */; };
 		E19040032951DCAC00C41D02 /* IdentificationShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19040022951DCAC00C41D02 /* IdentificationShare.swift */; };
 		E19040052952068300C41D02 /* BundTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19040042952068300C41D02 /* BundTextFieldStyle.swift */; };
@@ -123,6 +122,8 @@
 		E1DCC97E29072B8B002E9371 /* SetupUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DCC97D29072B8B002E9371 /* SetupUITests.swift */; };
 		E1DCC98029072BB3002E9371 /* HomeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DCC97F29072BB3002E9371 /* HomeUITests.swift */; };
 		E1DF0996294A0FF300199761 /* PreviewIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DF0995294A0FF300199761 /* PreviewIDInteractionManager.swift */; };
+		E1E30A83295340E200F741C7 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = E1E30A82295340E200F741C7 /* ComposableArchitecture */; };
+		E1E30A85295341A400F741C7 /* IdentificationDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E30A84295341A400F741C7 /* IdentificationDone.swift */; };
 		E1EB9FFA28B5288A007FF467 /* ScanBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EB9FF928B5288A007FF467 /* ScanBody.swift */; };
 		E1EFB5C22858EAA2005C38C6 /* IdentificationOverviewLoaded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */; };
 		E1EFB5C42858EB0F005C38C6 /* IdentificationOverviewLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C32858EB0F005C38C6 /* IdentificationOverviewLoading.swift */; };
@@ -270,7 +271,6 @@
 		E18E2237285349D200221DB1 /* BundesIdentUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BundesIdentUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E18E2239285349D200221DB1 /* IdentificationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationUITests.swift; sourceTree = "<group>"; };
 		E18E224228534A8500221DB1 /* UITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UITests.xctestplan; sourceTree = "<group>"; };
-		E1903FFE295079D200C41D02 /* IdentificationDone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationDone.swift; sourceTree = "<group>"; };
 		E1904000295087E800C41D02 /* IdentificationRedirect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationRedirect.swift; sourceTree = "<group>"; };
 		E19040022951DCAC00C41D02 /* IdentificationShare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationShare.swift; sourceTree = "<group>"; };
 		E19040042952068300C41D02 /* BundTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundTextFieldStyle.swift; sourceTree = "<group>"; };
@@ -305,6 +305,7 @@
 		E1DCC97D29072B8B002E9371 /* SetupUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupUITests.swift; sourceTree = "<group>"; };
 		E1DCC97F29072BB3002E9371 /* HomeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUITests.swift; sourceTree = "<group>"; };
 		E1DF0995294A0FF300199761 /* PreviewIDInteractionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewIDInteractionManager.swift; sourceTree = "<group>"; };
+		E1E30A84295341A400F741C7 /* IdentificationDone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationDone.swift; sourceTree = "<group>"; };
 		E1EB9FF928B5288A007FF467 /* ScanBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanBody.swift; sourceTree = "<group>"; };
 		E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoaded.swift; sourceTree = "<group>"; };
 		E1EFB5C32858EB0F005C38C6 /* IdentificationOverviewLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoading.swift; sourceTree = "<group>"; };
@@ -364,6 +365,7 @@
 			files = (
 				E144EBD628C63A31009B4900 /* MarkdownUI in Frameworks */,
 				E1BC3D8628B7E919007A7B39 /* LicensePlistViewController in Frameworks */,
+				E1E30A83295340E200F741C7 /* ComposableArchitecture in Frameworks */,
 				D2B76A7A28BE4B93000B442D /* Analytics in Frameworks */,
 				E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */,
 				B9F5055829361F69009FE297 /* TCACoordinators in Frameworks */,
@@ -512,7 +514,6 @@
 			children = (
 				E1EFB5C02858EA8C005C38C6 /* IdentificationOverview */,
 				E1EFB5C7285A365E005C38C6 /* IdentificationAbout.swift */,
-				E1903FFE295079D200C41D02 /* IdentificationDone.swift */,
 				E19040022951DCAC00C41D02 /* IdentificationShare.swift */,
 				E1EFB5D4285C7D81005C38C6 /* IdentificationPersonalPIN.swift */,
 				E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */,
@@ -525,6 +526,7 @@
 				B95FAA8A2927A90D009BDAC9 /* IdentificationCANIncorrectInput.swift */,
 				B95FAA8829278F74009BDAC9 /* IdentificationCANPersonalPINInput.swift */,
 				E1904000295087E800C41D02 /* IdentificationRedirect.swift */,
+				E1E30A84295341A400F741C7 /* IdentificationDone.swift */,
 			);
 			path = Identification;
 			sourceTree = "<group>";
@@ -679,6 +681,13 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		E1E30A862953427300F741C7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E1EFB5C02858EA8C005C38C6 /* IdentificationOverview */ = {
 			isa = PBXGroup;
 			children = (
@@ -711,6 +720,7 @@
 				E18E2238285349D200221DB1 /* BundesIdentUITests */,
 				E5CEB27B281041330076B9FE /* Products */,
 				D28BC72128BE0A44003C012C /* Packages */,
+				E1E30A862953427300F741C7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -851,6 +861,7 @@
 				D2B76A7928BE4B93000B442D /* Analytics */,
 				E144EBD528C63A31009B4900 /* MarkdownUI */,
 				B9F5055729361F69009FE297 /* TCACoordinators */,
+				E1E30A82295340E200F741C7 /* ComposableArchitecture */,
 			);
 			productName = BundesIdent;
 			productReference = E5CEB27A281041330076B9FE /* BundesIdent.app */;
@@ -895,6 +906,7 @@
 				E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */,
 				E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 				B9F5055629361F69009FE297 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
+				E1E30A81295340E200F741C7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			productRefGroup = E5CEB27B281041330076B9FE /* Products */;
 			projectDirPath = "";
@@ -1065,7 +1077,6 @@
 			files = (
 				E12CB30A284A2C700039FD56 /* InteractiveDismissableView.swift in Sources */,
 				E1FDEAAB28F96BD300F70CE1 /* AppConfig.swift in Sources */,
-				E1903FFF295079D200C41D02 /* IdentificationDone.swift in Sources */,
 				E15776A0286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift in Sources */,
 				E5E69D832812FB4500A3B66A /* EIDInteractionEvent.swift in Sources */,
 				D278AC9A28FD388100BD0528 /* View+Synchronize.swift in Sources */,
@@ -1143,6 +1154,7 @@
 				D29C542F28FFD9580064AB41 /* Logger+Catetory.swift in Sources */,
 				F43622A72850D6C9008AEBB9 /* ScanError.swift in Sources */,
 				B95FAA8B2927A90D009BDAC9 /* IdentificationCANIncorrectInput.swift in Sources */,
+				E1E30A85295341A400F741C7 /* IdentificationDone.swift in Sources */,
 				E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */,
 				E13925B82840FB7700161F5C /* Types.swift in Sources */,
 				E13925C72841119400161F5C /* MockIDInteractionManager.swift in Sources */,
@@ -1301,6 +1313,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1430,10 +1443,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BundesIdent/BundesIdent.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 50;
 				DEVELOPMENT_ASSET_PATHS = "\"BundesIdent/Preview Content\"";
-				DEVELOPMENT_TEAM = VDTVKQ35RL;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = VDTVKQ35RL;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BundesIdent/Info.plist;
@@ -1447,6 +1462,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1455,6 +1471,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "de.bund.digitalservice.UseID-Prototype";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "UseID Prototype - Distribution";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1597,6 +1614,14 @@
 				minimumVersion = 2.2.0;
 			};
 		};
+		E1E30A81295340E200F741C7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.47.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1633,6 +1658,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */;
 			productName = LicensePlistViewController;
+		};
+		E1E30A82295340E200F741C7 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E1E30A81295340E200F741C7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

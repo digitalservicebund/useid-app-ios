@@ -1,6 +1,6 @@
+import ComposableArchitecture
 import Foundation
 import SwiftUI
-import ComposableArchitecture
 
 struct IdentificationShare: ReducerProtocol {
     
@@ -23,7 +23,7 @@ struct IdentificationShare: ReducerProtocol {
         }
         
         var sendButtonDisabled: Bool {
-            return email.isEmpty
+            email.isEmpty
         }
     }
     
@@ -93,12 +93,14 @@ struct IdentificationShareView: View {
                                 .aspectRatio(contentMode: .fit)
                                 .cornerRadius(5)
                                 .frame(height: 30)
-                            ShareLink(item: viewStore.redirectURL) {
-                                HStack(alignment: .firstTextBaseline) {
-                                    Text(viewStore.formattedRedirectURL)
-                                        .lineLimit(1)
-                                        .truncationMode(.tail)
-                                    Image(systemName: "square.and.arrow.up")
+                            if #available(iOS 16.0, *) {
+                                ShareLink(item: viewStore.redirectURL) {
+                                    HStack(alignment: .firstTextBaseline) {
+                                        Text(viewStore.formattedRedirectURL)
+                                            .lineLimit(1)
+                                            .truncationMode(.tail)
+                                        Image(systemName: "square.and.arrow.up")
+                                    }
                                 }
                             }
                         }
@@ -136,7 +138,8 @@ struct IdentificationShareView_Previews: PreviewProvider {
             store: .init(
                 initialState: .init(request: .preview,
                                     redirectURL: URL(string: "https://bundesident.de/yx29ejm")!),
-                reducer: IdentificationShare())
+                reducer: IdentificationShare()
+            )
         )
         .previewDisplayName("Empty email")
         
@@ -145,7 +148,8 @@ struct IdentificationShareView_Previews: PreviewProvider {
                 initialState: .init(request: .preview,
                                     redirectURL: URL(string: "https://bundesident.de/yx29ejm")!,
                                     email: "abc@example.org"),
-                reducer: IdentificationShare())
+                reducer: IdentificationShare()
+            )
         )
         .previewDisplayName("Filled email")
         
@@ -153,7 +157,8 @@ struct IdentificationShareView_Previews: PreviewProvider {
             store: .init(
                 initialState: .init(request: .preview,
                                     redirectURL: URL(string: "https://bundesident.de/opsidfjksdhjfisdhaijsdhaijshdfiajshfijsdgfjoashfkjahsfjhsaf")!),
-                reducer: IdentificationShare())
+                reducer: IdentificationShare()
+            )
         )
         .previewDisplayName("Very long link")
     }
