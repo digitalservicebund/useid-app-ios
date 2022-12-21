@@ -16,7 +16,7 @@
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>MatomoHost</key>
-	<string>bund.matomo.cloud</string>
+	<string>example.org</string>
 	<key>MatomoSiteID</key>
 	<string>$(MATOMO_SITE_ID)</string>
 	<key>SentryHost</key>

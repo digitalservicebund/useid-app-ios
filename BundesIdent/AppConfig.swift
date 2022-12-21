@@ -37,6 +37,7 @@ struct AppConfig: AppConfigType {
     
     func configureSentry(_ options: Options) {
         options.dsn = sentryDSN
+        options.enabled = false
 #if DEBUG
         options.enabled = false
 #endif
