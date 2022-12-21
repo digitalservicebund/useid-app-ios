@@ -96,12 +96,13 @@ struct IdentificationShareView: View {
                             ShareLink(item: viewStore.redirectURL) {
                                 HStack(alignment: .firstTextBaseline) {
                                     Text(viewStore.formattedRedirectURL)
+                                        .lineLimit(1)
+                                        .truncationMode(.tail)
                                     Image(systemName: "square.and.arrow.up")
                                 }
                             }
                         }
                         .headingM()
-                        .fixedSize()
                         .padding()
                     }
                     WithViewStore(store) { viewStore in
@@ -135,7 +136,7 @@ struct IdentificationShareView_Previews: PreviewProvider {
             store: .init(
                 initialState: .init(request: .preview,
                                     redirectURL: URL(string: "https://bundesident.de/yx29ejm")!),
-                reducer: EmptyReducer())
+                reducer: IdentificationShare())
         )
         .previewDisplayName("Empty email")
         
@@ -144,8 +145,16 @@ struct IdentificationShareView_Previews: PreviewProvider {
                 initialState: .init(request: .preview,
                                     redirectURL: URL(string: "https://bundesident.de/yx29ejm")!,
                                     email: "abc@example.org"),
-                reducer: EmptyReducer())
+                reducer: IdentificationShare())
         )
         .previewDisplayName("Filled email")
+        
+        IdentificationShareView(
+            store: .init(
+                initialState: .init(request: .preview,
+                                    redirectURL: URL(string: "https://bundesident.de/opsidfjksdhjfisdhaijsdhaijshdfiajshfijsdgfjoashfkjahsfjhsaf")!),
+                reducer: IdentificationShare())
+        )
+        .previewDisplayName("Very long link")
     }
 }

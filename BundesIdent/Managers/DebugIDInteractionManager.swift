@@ -83,7 +83,7 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             subject.send(.cardRecognized)
             subject.send(.cardInteractionComplete)
             subject.send(.authenticationSuccessful)
-            subject.send(.processCompletedSuccessfullyWithRedirect(url: URL(string: "https://example.org")!))
+            subject.send(.processCompletedSuccessfullyWithRedirect(url: URL(string: "https://verylonglink.com/aspdkljaskjhfkjsahfsjkdfhjksdhfsdkjfhasd")!))
             subject.send(completion: .finished)
             return []
         case .missingRedirect:
