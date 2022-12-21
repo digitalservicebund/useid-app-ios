@@ -38,13 +38,12 @@ struct IdentificationHandOff: ReducerProtocol {
             let request = state.request
             let redirectURL = state.redirectURL
             let sessionId = state.identificationInformation.sessionId
-            let lastPathComponent = "success"
             let payload = Payload(refreshAddress: state.redirectURL.absoluteString)
             
             return .run { send in
                 do {
                     let data = try JSONEncoder().encode(payload)
-                    guard let url = URL(string: "https://useid.dev.ds4g.net/api/v1/events/\(sessionId)/\(lastPathComponent)") else {
+                    guard let url = URL(string: "https://eid.digitalservicebund.de/api/v1/events/\(sessionId)/success") else {
                         throw Error.invalidURL
                     }
                     var urlRequest = URLRequest(url: url)

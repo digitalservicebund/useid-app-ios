@@ -182,11 +182,10 @@ struct IdentificationCoordinator: ReducerProtocol {
                                                          redirectURL: redirectURL))
                 )
                 return .none
-            case .routeAction(_, action: .handOff(.open(let request))),
-                    .routeAction(_, action: .handOff(.refreshed(success: true, request: let request, redirectURL: _))):
+            case .routeAction(_, action: .handOff(.open(let request))):
                 state.routes.push(.done(IdentificationDone.State(request: request)))
                 return .none
-            case .routeAction(_, action: .handOff(.refreshed(success: false, request: let request, redirectURL: let redirectURL))):
+            case .routeAction(_, action: .handOff(.refreshed(success: _, request: let request, redirectURL: let redirectURL))):
                 state.routes.push(.share(IdentificationShare.State(request: request, redirectURL: redirectURL)))
                 return .none
             case .routeAction(_, action: .share(.sent(success: true, request: let request))):
