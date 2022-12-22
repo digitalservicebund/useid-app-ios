@@ -11,10 +11,13 @@ protocol IDInteractionHandler {
     func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> LocalAction?
 }
 
-enum SwipeToDismissState {
+enum SwipeToDismissState: Equatable {
     case block
     case allow
-    case allowAfterConfirmation
+    case allowAfterConfirmation(title: String = L10n.Identification.ConfirmEnd.title,
+                                body: String = L10n.Identification.ConfirmEnd.message,
+                                confirm: String = L10n.Identification.ConfirmEnd.confirm,
+                                deny: String = L10n.Identification.ConfirmEnd.deny)
 }
 
 enum IdentificationCoordinatorError: CustomNSError {
@@ -177,12 +180,12 @@ struct IdentificationCoordinator: ReducerProtocol {
                     return .none
                 case .block:
                     return .none
-                case .allowAfterConfirmation:
-                    state.alert = AlertState(title: TextState(verbatim: L10n.Identification.ConfirmEnd.title),
-                                             message: TextState(verbatim: L10n.Identification.ConfirmEnd.message),
-                                             primaryButton: .destructive(TextState(verbatim: L10n.Identification.ConfirmEnd.confirm),
+                case .allowAfterConfirmation(let title, let message, let confirm, let deny):
+                    state.alert = AlertState(title: TextState(verbatim: title),
+                                             message: TextState(verbatim: message),
+                                             primaryButton: .destructive(TextState(verbatim: confirm),
                                                                          action: .send(.dismiss)),
-                                             secondaryButton: .cancel(TextState(verbatim: L10n.Identification.ConfirmEnd.deny)))
+                                             secondaryButton: .cancel(TextState(verbatim: deny)))
                     return .none
                 }
             case .dismissAlert:

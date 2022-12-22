@@ -26,14 +26,14 @@ struct IdentificationCANScreen: ReducerProtocol {
         
         var swipeToDismissState: SwipeToDismissState {
             switch self {
-            case .canScan: return .allowAfterConfirmation
-            case .canPINForgotten: return .allowAfterConfirmation
+            case .canScan: return .allowAfterConfirmation()
+            case .canPINForgotten: return .allowAfterConfirmation()
             case .canOrderNewPIN: return .block
             case .canIntro(let state):
-                return state.shouldDismiss ? .allowAfterConfirmation : .block
+                return state.shouldDismiss ? .allowAfterConfirmation() : .block
             case .canInput: return .block
             case .canPersonalPINInput: return .block
-            case .canIncorrectInput: return .allowAfterConfirmation
+            case .canIncorrectInput: return .allowAfterConfirmation()
             case .error: return .allow
             }
         }

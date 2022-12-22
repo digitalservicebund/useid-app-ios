@@ -32,9 +32,9 @@ struct IdentificationScreen: ReducerProtocol {
         
         var swipeToDismissState: SwipeToDismissState {
             switch self {
-            case .overview: return .allowAfterConfirmation
+            case .overview: return .allowAfterConfirmation()
             case .personalPIN: return .block
-            case .scan: return .allowAfterConfirmation
+            case .scan: return .allowAfterConfirmation()
             // handled by screen reducers
             case .incorrectPersonalPIN: return .allow
             case .error: return .allow
