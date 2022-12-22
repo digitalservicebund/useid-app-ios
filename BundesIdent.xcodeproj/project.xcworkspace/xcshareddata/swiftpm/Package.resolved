@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
       "state" : {
-        "revision" : "c3c19e29f775ee95b77aa3168f3e2fd6c20deba6",
-        "version" : "7.31.3"
+        "revision" : "5238cc5f12c2b75027730a54ecf632cf103daf21",
+        "version" : "7.31.4"
       }
     },
     {
@@ -158,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swiftui-navigation",
       "state" : {
-        "revision" : "a4a84e387c83a735e56d03bf9736d49a07b3c3ae",
-        "version" : "0.4.3"
+        "revision" : "46acf5ecc1cabdb28d7fe03289f6c8b13a023f52",
+        "version" : "0.4.5"
       }
     },
     {
@@ -176,8 +176,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
       "state" : {
-        "revision" : "5a5457a744239896e9b0b03a8e1a5069c3e7b91f",
-        "version" : "0.6.0"
+        "revision" : "df16fe6ffe4d6e2e06761aa67716b808b2c9109e",
+        "version" : "0.7.0"
       }
     }
   ],
