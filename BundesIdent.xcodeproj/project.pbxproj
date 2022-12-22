@@ -132,6 +132,7 @@
 		E1F39DDA28588AB000D8D907 /* IdentificationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F39DD928588AB000D8D907 /* IdentificationCoordinator.swift */; };
 		E1F39DDC28588B0100D8D907 /* IdentificationScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F39DDB28588B0100D8D907 /* IdentificationScreens.swift */; };
 		E1FDEAAB28F96BD300F70CE1 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FDEAAA28F96BD300F70CE1 /* AppConfig.swift */; };
+		E1FE617329548074002FA330 /* IdentificationCANUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FE617229548074002FA330 /* IdentificationCANUITests.swift */; };
 		E1FFDF0C2875C7E9006DFE03 /* UUID+Zero.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FFDF0B2875C7E9006DFE03 /* UUID+Zero.swift */; };
 		E59097B5281153A100CDA144 /* NFCMessageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59097B4281153A100CDA144 /* NFCMessageProvider.swift */; };
 		E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */; };
@@ -311,6 +312,7 @@
 		E1F39DD928588AB000D8D907 /* IdentificationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCoordinator.swift; sourceTree = "<group>"; };
 		E1F39DDB28588B0100D8D907 /* IdentificationScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationScreens.swift; sourceTree = "<group>"; };
 		E1FDEAAA28F96BD300F70CE1 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		E1FE617229548074002FA330 /* IdentificationCANUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANUITests.swift; sourceTree = "<group>"; };
 		E1FFDF0B2875C7E9006DFE03 /* UUID+Zero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UUID+Zero.swift"; sourceTree = "<group>"; };
 		E59097B4281153A100CDA144 /* NFCMessageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFCMessageProvider.swift; sourceTree = "<group>"; };
 		E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenEcardExtensions.swift; sourceTree = "<group>"; };
@@ -591,6 +593,7 @@
 			isa = PBXGroup;
 			children = (
 				E1DCC97F29072BB3002E9371 /* HomeUITests.swift */,
+				E1FE617229548074002FA330 /* IdentificationCANUITests.swift */,
 				E18E2239285349D200221DB1 /* IdentificationUITests.swift */,
 				E1DCC97D29072B8B002E9371 /* SetupUITests.swift */,
 				E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */,
@@ -1011,6 +1014,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E13A632128B8010A00AB7A39 /* LocalizedStrings+Generated.swift in Sources */,
+				E1FE617329548074002FA330 /* IdentificationCANUITests.swift in Sources */,
 				E1A769FD28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift in Sources */,
 				E1A76A0028B940C6001E1F04 /* LaunchArgument.swift in Sources */,
 				E11EB2A928537DE1008B4042 /* XCUITestHelper.swift in Sources */,
