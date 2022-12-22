@@ -73,7 +73,6 @@ class SetupCoordinatorTests: XCTestCase {
     }
     
     func testPersonalIntroIntroPushesToPersonalInput() {
-        let transportPIN = "12345"
         let store = TestStore(initialState: SetupCoordinator.State(states: [
             .root(.personalPINIntro)
         ]),
@@ -174,7 +173,7 @@ class SetupCoordinatorTests: XCTestCase {
     func testScanWrongTransportPINPresentsIncorrectTransportPIN() {
         let pin = "123456"
         let transportPIN = "12345"
-        var remainingAttempts = 3
+        let remainingAttempts = 3
         let store = TestStore(initialState: SetupCoordinator.State(transportPIN: transportPIN,
                                                                    states: [
                                                                        .root(.scan(.init(transportPIN: transportPIN, newPIN: pin)))
@@ -193,7 +192,7 @@ class SetupCoordinatorTests: XCTestCase {
         let pin = "123456"
         let transportPIN = "12345"
         let newTransportPIN = "54321"
-        var remainingAttempts = 3
+        let remainingAttempts = 3
         let store = TestStore(initialState: SetupCoordinator.State(transportPIN: transportPIN,
                                                                    states: [
                                                                        .root(.scan(.init(transportPIN: transportPIN, newPIN: pin))),

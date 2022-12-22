@@ -13,7 +13,7 @@ struct SetupTransportPIN: ReducerProtocol {
     enum Action: BindableAction, Equatable {
         case done(transportPIN: String)
         case binding(BindingAction<SetupTransportPIN.State>)
-#if DEBUG && !PREVIEW
+#if DEBUG || PREVIEW
         case toggleDigits
 #endif
     }
@@ -22,7 +22,7 @@ struct SetupTransportPIN: ReducerProtocol {
         BindingReducer()
         Reduce { state, action in
             switch action {
-#if DEBUG && !PREVIEW
+#if DEBUG || PREVIEW
             case .toggleDigits:
                 state.digits = 11 - state.digits
                 return .none
@@ -75,7 +75,7 @@ struct SetupTransportPINView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .interactiveDismissDisabled()
-#if DEBUG && !PREVIEW
+#if DEBUG || PREVIEW
             .toolbar {
                 WithViewStore(store) { viewStore in
                     ToolbarItem(placement: .navigationBarTrailing) {

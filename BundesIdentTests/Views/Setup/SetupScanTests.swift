@@ -13,6 +13,7 @@ class SetupScanTests: XCTestCase {
     var mockIssueTracker: MockIssueTracker!
     var mockStorageManager: MockStorageManagerType!
     var mockIDInteractionManager: MockIDInteractionManagerType!
+    var mockPreviewIDInteractionManager: MockPreviewIDInteractionManagerType!
     
     override func setUp() {
         mockAnalyticsClient = MockAnalyticsClient()
@@ -20,6 +21,7 @@ class SetupScanTests: XCTestCase {
         scheduler = DispatchQueue.test
         mockStorageManager = MockStorageManagerType()
         mockIDInteractionManager = MockIDInteractionManagerType()
+        mockPreviewIDInteractionManager = MockPreviewIDInteractionManagerType()
         
         stub(mockAnalyticsClient) {
             $0.track(view: any()).thenDoNothing()
@@ -34,6 +36,10 @@ class SetupScanTests: XCTestCase {
         stub(mockStorageManager) {
             when($0.setupCompleted.set(true)).thenDoNothing()
         }
+        
+        stub(mockPreviewIDInteractionManager) {
+            $0.isDebugModeEnabled.get.thenReturn(false)
+        }
     }
     
     func testChangePINSuccess() throws {
@@ -45,6 +51,7 @@ class SetupScanTests: XCTestCase {
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.storageManager = mockStorageManager
+        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
         let cardInsertionCallback: (String) -> Void = { _ in }
         
         let requestChangedPINExpectation = expectation(description: "requestCardInsertion callback")
@@ -119,7 +126,8 @@ class SetupScanTests: XCTestCase {
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.issueTracker = mockIssueTracker
-
+        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        
         let queue = scheduler!
         stub(mockIDInteractionManager) { mock in
             mock.changePIN(nfcMessagesProvider: any()).then { _ in
@@ -168,6 +176,8 @@ class SetupScanTests: XCTestCase {
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        
         stub(mockIDInteractionManager) { mock in
             mock.changePIN(nfcMessagesProvider: any()).then { _ in
                 let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()

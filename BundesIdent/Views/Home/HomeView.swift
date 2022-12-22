@@ -1,11 +1,20 @@
 import SwiftUI
+import Combine
 import ComposableArchitecture
 import Analytics
 
 struct Home: ReducerProtocol {
+#if PREVIEW
+    @Dependency(\.previewIDInteractionManager) var previewIDInteractionManager
+#endif
+    
     struct State: Equatable {
         var appVersion: String
         var buildNumber: Int
+        
+#if PREVIEW
+        var isDebugModeEnabled: Bool = false
+#endif
         
         var versionInfo: String {
             let appVersion = "\(appVersion) - \(buildNumber)"
@@ -18,14 +27,44 @@ struct Home: ReducerProtocol {
     }
     
     enum Action: Equatable {
+        case task
         case triggerSetup
 #if PREVIEW
         case triggerIdentification(tokenURL: URL)
+        case setDebugModeEnabled(Bool)
+        case updateDebugModeEnabled(Bool)
 #endif
     }
     
-    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-        .none
+    var body: some ReducerProtocol<State, Action> {
+        Reduce<State, Action> { state, action in
+            switch action {
+            case .task:
+#if PREVIEW
+                return .run { send in
+                    for await value in previewIDInteractionManager.publishedIsDebugModeEnabled.values {
+                        await send(.updateDebugModeEnabled(value))
+                    }
+                }
+#else
+                return .none
+#endif
+#if PREVIEW
+            case .setDebugModeEnabled(let enabled):
+#if targetEnvironment(simulator)
+                previewIDInteractionManager.isDebugModeEnabled = false
+#else
+                previewIDInteractionManager.isDebugModeEnabled = enabled
+#endif
+                return .none
+            case .updateDebugModeEnabled(let enabled):
+                state.isDebugModeEnabled = enabled
+                return .none
+#endif
+            default:
+                return .none
+            }
+        }
     }
 }
 
@@ -48,28 +87,26 @@ struct HomeView: View {
                         .padding(.bottom)
                         .background(Color.blue200)
                     
-                    VStack(spacing: 16) {
-                        HStack {
-                            Text(L10n.Home.More.title)
-                                .headingXL()
-                                .padding(.top)
-                                .accessibilityAddTraits(.isHeader)
-                            Spacer()
-                        }
+                    VStack(alignment: .leading, spacing: 16) {
+#if PREVIEW
+                        previewView
+#endif
+                        Text(L10n.Home.More.title)
+                            .headingXL()
+                            .padding(.top)
                         setupActionView
                         listView
                         Spacer(minLength: 0)
-                        WithViewStore(store) { viewStore in
-                            Text(L10n.Home.version(viewStore.state.versionInfo))
-                                .captionL(color: .neutral900)
-                                .padding(.bottom)
-                        }
+                        versionView
                     }
                     .padding(.horizontal, 24)
                 }
             }
             .navigationBarHidden(true)
             .ignoresSafeArea(.container, edges: .top)
+            .task {
+                await ViewStore(store.stateless).send(.task).finish()
+            }
         }
     }
     
@@ -97,6 +134,26 @@ struct HomeView: View {
                 .padding(.bottom, 20)
         }
     }
+    
+#if PREVIEW
+    @ViewBuilder
+    private var previewView: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            WithViewStore(store) { viewStore in
+                Toggle("Simulator Mode", isOn: viewStore.binding(get: \.isDebugModeEnabled, send: Home.Action.setDebugModeEnabled))
+                    .bodyLRegular(color: viewStore.isDebugModeEnabled ? .red : nil)
+#if targetEnvironment(simulator)
+                    .disabled(true)
+#endif
+                Text("If enabled, all interaction with the eID card and the server is simulated. Use the \(Image(systemName: "wrench")) to simulate the steps.")
+                    .captionM(color: .secondary)
+            }
+        }
+        .padding()
+        .grouped()
+        .padding(.top)
+    }
+#endif
     
     @ViewBuilder
     private var setupActionView: some View {
@@ -189,13 +246,33 @@ struct HomeView: View {
             .offset(y: -height)
             .padding(.bottom, -height)
     }
+    
+    @ViewBuilder
+    private var versionView: some View {
+        WithViewStore(store, observe: \.versionInfo) { viewStore in
+            HStack {
+                Spacer()
+                Text(L10n.Home.version(viewStore.state))
+                    .captionL(color: .neutral900)
+                    .padding(.bottom)
+                Spacer()
+            }
+        }
+    }
 }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
+#if PREVIEW
+        HomeView(store: Store(initialState: Home.State(appVersion: "1.2.3",
+                                                       buildNumber: 42,
+                                                       isDebugModeEnabled: false),
+                              reducer: Home()))
+#else
         HomeView(store: Store(initialState: Home.State(appVersion: "1.2.3",
                                                        buildNumber: 42),
                               reducer: Home()))
+#endif
     }
 }
 

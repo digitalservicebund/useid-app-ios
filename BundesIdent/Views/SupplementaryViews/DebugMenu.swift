@@ -19,6 +19,7 @@ extension View {
                     } label: {
                         Label("Debug", systemImage: "wrench")
                     }
+                    .disabled(viewStore.isEmpty)
                 }
             }
         }

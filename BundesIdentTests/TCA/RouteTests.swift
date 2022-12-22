@@ -173,7 +173,7 @@ final class RouteTests: XCTestCase {
     func testScanErrorHelpRoutes() {
         let pin = "123456"
         let transportPIN = "123456"
-        var store = testStore(setupScanRoutes(pin: pin, transportPIN: transportPIN))
+        let store = testStore(setupScanRoutes(pin: pin, transportPIN: transportPIN))
         store.send(.routeAction(1, action: .setupCoordinator(.routeAction(5, action: .scan(.error(.init(errorType: .help, retry: true)))))))
         verify(mockMatomoTracker).track(view: ["firstTimeUser", "scanHelp"], url: URL?.none)
         verify(mockMatomoTracker).reset()
@@ -346,7 +346,7 @@ final class RouteTests: XCTestCase {
             .push(.identificationCANCoordinator(.init(pinCANCallback: pinCANCallback, tokenURL: tokenURL, attempt: 0, states: initialCanRoutes))),
         ]
 
-        var initialRoutes: [Route<Screen.State>] = [
+        let initialRoutes: [Route<Screen.State>] = [
             .root(.home(Home.State(appVersion: "1.0.0", buildNumber: 1))),
             .push(.identificationCoordinator(.init(tokenURL: tokenURL, states: initialIdentificationRoutes))),
         ]

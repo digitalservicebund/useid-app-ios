@@ -13,6 +13,7 @@ class IdentificationCoordinatorTests: XCTestCase {
     var mockIDInteractionManager: MockIDInteractionManagerType!
     var mockStorageManager: MockStorageManagerType!
     var mockAnalyticsClient: MockAnalyticsClient!
+    var mockPreviewIDInteractionManager: MockPreviewIDInteractionManagerType!
     var openedURL: URL?
     var urlOpener: ((URL) -> Void)!
     
@@ -21,6 +22,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         mockStorageManager = MockStorageManagerType()
         scheduler = DispatchQueue.test
         mockAnalyticsClient = MockAnalyticsClient()
+        mockPreviewIDInteractionManager = MockPreviewIDInteractionManagerType()
         urlOpener = { self.openedURL = $0 }
         
         stub(mockStorageManager) {
@@ -30,6 +32,10 @@ class IdentificationCoordinatorTests: XCTestCase {
         stub(mockAnalyticsClient) {
             $0.track(view: any()).thenDoNothing()
             $0.track(event: any()).thenDoNothing()
+        }
+        
+        stub(mockPreviewIDInteractionManager) {
+            $0.isDebugModeEnabled.get.thenReturn(false)
         }
     }
     
@@ -234,6 +240,8 @@ class IdentificationCoordinatorTests: XCTestCase {
         )
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
         store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        
         let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
         stub(mockIDInteractionManager) {
             $0.identify(tokenURL: demoTokenURL, nfcMessagesProvider: any()).thenReturn(subject.eraseToAnyPublisher())
