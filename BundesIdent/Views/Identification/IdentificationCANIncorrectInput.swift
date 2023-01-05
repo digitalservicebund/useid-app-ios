@@ -94,6 +94,8 @@ struct IdentificationCANIncorrectInputView: View {
     }
 }
 
+#if DEBUG
+
 struct IdentificationCANIncorrectInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
@@ -103,3 +105,5 @@ struct IdentificationCANIncorrectInput_Previews: PreviewProvider {
         .previewDevice("iPhone 12")
     }
 }
+
+#endif

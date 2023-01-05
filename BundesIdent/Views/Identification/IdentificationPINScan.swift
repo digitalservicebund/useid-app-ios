@@ -211,6 +211,8 @@ struct IdentificationPINScanView: View {
     }
 }
 
+#if DEBUG
+
 struct IdentificationScan_Previews: PreviewProvider {
     static var previews: some View {
         IdentificationPINScanView(store: Store(initialState: IdentificationPINScan.State(request: .preview,
@@ -223,3 +225,5 @@ struct IdentificationScan_Previews: PreviewProvider {
                                                reducer: IdentificationPINScan()))
     }
 }
+
+#endif

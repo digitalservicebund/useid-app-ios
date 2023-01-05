@@ -189,6 +189,8 @@ struct IdentificationCANScanView: View {
     }
 }
 
+#if DEBUG
+
 struct IdentificationCANScan_Previews: PreviewProvider {
     static var previews: some View {
         IdentificationCANScanView(store: Store(initialState: IdentificationCANScan.State(request: .preview,
@@ -204,3 +206,5 @@ struct IdentificationCANScan_Previews: PreviewProvider {
                                                reducer: IdentificationCANScan()))
     }
 }
+
+#endif

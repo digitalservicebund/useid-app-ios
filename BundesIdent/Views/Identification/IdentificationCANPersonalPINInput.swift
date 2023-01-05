@@ -71,6 +71,8 @@ struct IdentificationCANPersonalPINInputView: View {
     }
 }
 
+#if DEBUG
+
 struct IdentificationCANPersonalPINInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
@@ -80,3 +82,5 @@ struct IdentificationCANPersonalPINInput_Previews: PreviewProvider {
         .previewDevice("iPhone 12")
     }
 }
+
+#endif

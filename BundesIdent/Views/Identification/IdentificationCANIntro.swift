@@ -40,6 +40,8 @@ struct IdentificationCANIntroView: View {
     }
 }
 
+#if DEBUG
+
 struct IdentificationCANIntro_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
@@ -48,3 +50,5 @@ struct IdentificationCANIntro_Previews: PreviewProvider {
         .previewDevice("iPhone 12")
     }
 }
+
+#endif

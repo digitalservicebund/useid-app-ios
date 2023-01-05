@@ -62,6 +62,8 @@ struct IdentificationCANInputView: View {
     }
 }
 
+#if DEBUG
+
 struct IdentificationCANInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
@@ -70,3 +72,5 @@ struct IdentificationCANInput_Previews: PreviewProvider {
         .previewDevice("iPhone 12")
     }
 }
+
+#endif

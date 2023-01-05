@@ -70,6 +70,8 @@ struct IdentificationPersonalPINView: View {
     }
 }
 
+#if DEBUG
+
 struct IdentificationPersonalPIN_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
@@ -84,3 +86,5 @@ struct IdentificationPersonalPIN_Previews: PreviewProvider {
         .previewDevice("iPhone 12")
     }
 }
+
+#endif

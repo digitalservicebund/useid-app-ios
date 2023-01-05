@@ -41,9 +41,13 @@ struct IdentificationCANPINForgottenView: View {
     }
 }
 
+#if DEBUG
+
 struct IdentificationCANPINForgotten_Previews: PreviewProvider {
     static var previews: some View {
         IdentificationCANPINForgottenView(store: .init(initialState: .init(request: .preview),
                                                        reducer: IdentificationCANPINForgotten()))
     }
 }
+
+#endif
