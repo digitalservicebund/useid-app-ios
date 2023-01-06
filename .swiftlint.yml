@@ -16,7 +16,6 @@ opt_in_rules:
   - override_in_extension
   - toggle_bool
   - unneeded_parentheses_in_closure_argument
-  - unused_import
   - duplicate_imports
   - yoda_condition
   - xct_specific_matcher
@@ -36,6 +35,9 @@ disabled_rules:
 trailing_whitespace:
  ignores_empty_lines: true
  ignores_comments: true
+
+analyzer_rules:
+  - unused_import
 
 file_header:
  forbidden_pattern: Created
