@@ -28,6 +28,15 @@
       }
     },
     {
+      "identity" : "faviconfinder",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/will-lumley/FaviconFinder.git",
+      "state" : {
+        "revision" : "b8cde6c03b0cf72829b327c2c537bd39c1a8f60b",
+        "version" : "4.1.0"
+      }
+    },
+    {
       "identity" : "flowstacks",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/johnpatrickmorgan/FlowStacks",
@@ -122,8 +131,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-composable-architecture",
       "state" : {
-        "revision" : "c9259b5f74892690cb04a9a8088b4a1789b05a7d",
-        "version" : "0.47.2"
+        "revision" : "30015d13a3ca0988b4674a83eccebbea747fe1f8",
+        "version" : "0.48.0"
       }
     },
     {
@@ -154,12 +163,21 @@
       }
     },
     {
+      "identity" : "swiftsoup",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/scinfu/SwiftSoup.git",
+      "state" : {
+        "revision" : "6778575285177365cbad3e5b8a72f2a20583cfec",
+        "version" : "2.4.3"
+      }
+    },
+    {
       "identity" : "swiftui-navigation",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swiftui-navigation",
       "state" : {
-        "revision" : "a4a84e387c83a735e56d03bf9736d49a07b3c3ae",
-        "version" : "0.4.3"
+        "revision" : "46acf5ecc1cabdb28d7fe03289f6c8b13a023f52",
+        "version" : "0.4.5"
       }
     },
     {

@@ -1,20 +1,43 @@
 import ComposableArchitecture
+import FaviconFinder
+import MarkdownUI
 import SwiftUI
+
+struct TransactionInfo: Codable, Equatable {
+    var providerName: String
+    var providerURL: URL
+    var additionalInfo: [String: String]
+    
+#if PREVIEW
+    static var preview: TransactionInfo = .init(
+        providerName: "Spaßkasse",
+        providerURL: URL(string: "https://spaßkasse.de")!,
+        additionalInfo: [
+            "Kundennummer": "345978121",
+            "Name": "Max Mustermann"
+        ]
+    )
+#endif
+}
 
 struct IdentificationOverviewLoaded: ReducerProtocol {
     @Dependency(\.uuid) var uuid
     struct State: Identifiable, Equatable {
         let id: UUID
         let request: EIDAuthenticationRequest
+        var transactionInfo: TransactionInfo
         var handler: IdentifiableCallback<FlaggedAttributes>
         let canGoBackToSetupIntro: Bool
         
         // used when going back to the overview screen when we already received a pin handler
         var pinHandler: PINCallback?
         
-        init(id: UUID, request: EIDAuthenticationRequest, handler: IdentifiableCallback<FlaggedAttributes>, canGoBackToSetupIntro: Bool = false, pinHandler: PINCallback? = nil) {
+        var faviconURL: URL?
+        
+        init(id: UUID, request: EIDAuthenticationRequest, transactionInfo: TransactionInfo, handler: IdentifiableCallback<FlaggedAttributes>, canGoBackToSetupIntro: Bool = false, pinHandler: PINCallback? = nil) {
             self.id = id
             self.request = request
+            self.transactionInfo = transactionInfo
             self.handler = handler
             self.canGoBackToSetupIntro = canGoBackToSetupIntro
             self.pinHandler = pinHandler
@@ -34,6 +57,8 @@ struct IdentificationOverviewLoaded: ReducerProtocol {
         case callbackReceived(EIDAuthenticationRequest, PINCallback)
         case confirm
         case failure(IdentifiableError)
+        case onAppear
+        case retrievedFaviconURL(TaskResult<URL>)
     }
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
@@ -60,6 +85,19 @@ struct IdentificationOverviewLoaded: ReducerProtocol {
             return .none
         case .moreInfo:
             return .none
+        case .onAppear:
+            return .task { [providerURL = state.transactionInfo.providerURL] in
+                await .retrievedFaviconURL(TaskResult {
+                    let favIcon = try await FaviconFinder(url: providerURL, downloadImage: false).downloadFavicon()
+                    return favIcon.url
+                })
+            }
+        case .retrievedFaviconURL(.success(let faviconURL)):
+            state.faviconURL = faviconURL
+            return .none
+        case .retrievedFaviconURL(.failure):
+            // TODO: No favicon, what should we do?
+            return .none
         }
     }
 }
@@ -72,9 +110,36 @@ struct IdentificationOverviewLoadedView: View {
             VStack(alignment: .leading, spacing: 0) {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
-                        HeaderView(title: L10n.Identification.AttributeConsent.title(viewStore.request.subject),
-                                   message: L10n.Identification.AttributeConsent.body)
-                            .padding(.horizontal)
+                        VStack(alignment: .leading, spacing: 24) {
+                            Text(L10n.Identification.AttributeConsent.title(viewStore.transactionInfo.providerName))
+                                .headingXL()
+
+                            HStack(alignment: .center, spacing: 8) {
+                                AsyncImage(url: viewStore.faviconURL) { image in
+                                    image
+                                        .resizable()
+                                } placeholder: {
+                                    ProgressView()
+                                }
+                                .frame(width: 24, height: 24)
+                                    
+                                Button {} label: {
+                                    Text(viewStore.transactionInfo.providerName)
+                                        .underline()
+                                        .bodyLRegular()
+                                }
+                            }
+                            .padding(16)
+                            .background(Color.neutral100)
+                            .foregroundColor(Color.blackish)
+                            .cornerRadius(10)
+                            
+                            Markdown(L10n.Identification.AttributeConsent.body)
+                                .markdownStyle(MarkdownStyle(font: .bundBody))
+                                .foregroundColor(.blackish)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .padding(.horizontal)
                         
                         attributesBox
                         
@@ -89,6 +154,9 @@ struct IdentificationOverviewLoadedView: View {
                               primary: .init(title: L10n.Identification.AttributeConsent.continue, action: .confirm))
             }
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
         }
     }
     

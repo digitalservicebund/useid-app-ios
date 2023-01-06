@@ -1,6 +1,6 @@
-import SwiftUI
 import Analytics
 import ComposableArchitecture
+import SwiftUI
 import TCACoordinators
 
 typealias PINCallback = IdentifiableCallback<String>
@@ -80,10 +80,16 @@ struct IdentificationOverview: ReducerProtocol {
                                    name: "attributes",
                                    analytics: analytics)
             case .loading(.done(let request, let callback)):
-                state = .loaded(IdentificationOverviewLoaded.State(id: uuid.callAsFunction(),
-                                                                   request: request,
-                                                                   handler: callback,
-                                                                   canGoBackToSetupIntro: state.canGoBackToSetupIntro))
+                // TODO: Add parsing of TokenInformation here
+                let transactionInfo = TransactionInfo(providerName: "Sparkasse",
+                                                      providerURL: URL(string: "https://sparkasse.de")!,
+                                                      additionalInfo: ["Kundennummer": "12323874"])
+                let loadedState = IdentificationOverviewLoaded.State(id: uuid.callAsFunction(),
+                                                                     request: request,
+                                                                     transactionInfo: transactionInfo,
+                                                                     handler: callback,
+                                                                     canGoBackToSetupIntro: state.canGoBackToSetupIntro)
+                state = .loaded(loadedState)
                 return .none
             default:
                 return .none

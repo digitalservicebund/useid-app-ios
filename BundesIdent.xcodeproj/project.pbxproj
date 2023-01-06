@@ -122,6 +122,7 @@
 		E1DCC97E29072B8B002E9371 /* SetupUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DCC97D29072B8B002E9371 /* SetupUITests.swift */; };
 		E1DCC98029072BB3002E9371 /* HomeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DCC97F29072BB3002E9371 /* HomeUITests.swift */; };
 		E1DF0996294A0FF300199761 /* PreviewIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DF0995294A0FF300199761 /* PreviewIDInteractionManager.swift */; };
+		E1E1E886296836DB00ABC567 /* FaviconFinder in Frameworks */ = {isa = PBXBuildFile; productRef = E1E1E885296836DB00ABC567 /* FaviconFinder */; };
 		E1E30A83295340E200F741C7 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = E1E30A82295340E200F741C7 /* ComposableArchitecture */; };
 		E1E30A85295341A400F741C7 /* IdentificationDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E30A84295341A400F741C7 /* IdentificationDone.swift */; };
 		E1EB9FFA28B5288A007FF467 /* ScanBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EB9FF928B5288A007FF467 /* ScanBody.swift */; };
@@ -366,6 +367,7 @@
 				E144EBD628C63A31009B4900 /* MarkdownUI in Frameworks */,
 				E1BC3D8628B7E919007A7B39 /* LicensePlistViewController in Frameworks */,
 				E1E30A83295340E200F741C7 /* ComposableArchitecture in Frameworks */,
+				E1E1E886296836DB00ABC567 /* FaviconFinder in Frameworks */,
 				D2B76A7A28BE4B93000B442D /* Analytics in Frameworks */,
 				E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */,
 				B9F5055829361F69009FE297 /* TCACoordinators in Frameworks */,
@@ -862,6 +864,7 @@
 				E144EBD528C63A31009B4900 /* MarkdownUI */,
 				B9F5055729361F69009FE297 /* TCACoordinators */,
 				E1E30A82295340E200F741C7 /* ComposableArchitecture */,
+				E1E1E885296836DB00ABC567 /* FaviconFinder */,
 			);
 			productName = BundesIdent;
 			productReference = E5CEB27A281041330076B9FE /* BundesIdent.app */;
@@ -907,6 +910,7 @@
 				E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 				B9F5055629361F69009FE297 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
 				E1E30A81295340E200F741C7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				E1E1E884296836DB00ABC567 /* XCRemoteSwiftPackageReference "FaviconFinder" */,
 			);
 			productRefGroup = E5CEB27B281041330076B9FE /* Products */;
 			projectDirPath = "";
@@ -1612,6 +1616,14 @@
 				minimumVersion = 2.2.0;
 			};
 		};
+		E1E1E884296836DB00ABC567 /* XCRemoteSwiftPackageReference "FaviconFinder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/will-lumley/FaviconFinder.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 		E1E30A81295340E200F741C7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
@@ -1656,6 +1668,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */;
 			productName = LicensePlistViewController;
+		};
+		E1E1E885296836DB00ABC567 /* FaviconFinder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E1E1E884296836DB00ABC567 /* XCRemoteSwiftPackageReference "FaviconFinder" */;
+			productName = FaviconFinder;
 		};
 		E1E30A82295340E200F741C7 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
