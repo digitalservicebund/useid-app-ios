@@ -70,10 +70,18 @@ struct InfoBox_Previews: PreviewProvider {
     
     static var previews: some View {
         VStack(spacing: 8) {
-            Box(content: BoxContent(title: "Informational message", message: message, style: .info))
-            Box(content: BoxContent(title: "Warning message", message: message, style: .warning))
-            Box(content: BoxContent(title: "Error message", message: message, style: .error))
-            Box(content: BoxContent(title: "Success message", message: message, style: .success))
+            Box(content: BoxContent(title: "Informational message",
+                                    message: message,
+                                    style: .info))
+            Box(content: BoxContent(title: "Warning message",
+                                    message: message,
+                                    style: .warning))
+            Box(content: BoxContent(title: "Error message",
+                                    message: message,
+                                    style: .error))
+            Box(content: BoxContent(title: "Success message",
+                                    message: message,
+                                    style: .success))
         }
         .padding()
     }
