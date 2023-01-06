@@ -90,6 +90,9 @@
 "identification_attributeConsentInfo_provider" = "Anbieter";
 "identification_attributeConsentInfo_providerInfo" = "Anbieterinformationen";
 "identification_attributeConsentInfo_terms" = "Terms";
+"identification_attributeConsent_additionalInformation_key" = "%@:";
+"identification_attributeConsent_additionalInformation_title" = "Weitere Informationen:";
+"identification_attributeConsent_additionalInformation_value" = "%@";
 "identification_attributeConsent_body" = "Der Diensteanbieter möchte auf folgende Daten von Ihrem Ausweis zugreifen:";
 "identification_attributeConsent_continue" = "Freigabe erteilen";
 "identification_attributeConsent_moreInfo" = "Weitere Informationen";

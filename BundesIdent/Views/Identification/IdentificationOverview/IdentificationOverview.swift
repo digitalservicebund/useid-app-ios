@@ -83,7 +83,7 @@ struct IdentificationOverview: ReducerProtocol {
                 // TODO: Add parsing of TokenInformation here
                 let transactionInfo = TransactionInfo(providerName: "Sparkasse",
                                                       providerURL: URL(string: "https://sparkasse.de")!,
-                                                      additionalInfo: ["Kundennummer": "12323874"])
+                                                      additionalInfo: [TransactionInfo.AdditionalInfo(key: "Kundennummer", value: "12323874")])
                 let loadedState = IdentificationOverviewLoaded.State(id: uuid.callAsFunction(),
                                                                      request: request,
                                                                      transactionInfo: transactionInfo,
@@ -143,5 +143,9 @@ struct IdentificationOverview_Previews: PreviewProvider {
     static var previews: some View {
         IdentificationOverviewView(store: .init(initialState: IdentificationOverview.State.loading(IdentificationOverviewLoading.State(canGoBackToSetupIntro: false)),
                                                 reducer: IdentificationOverview()))
+            .previewDisplayName("Loading")
+        IdentificationOverviewView(store: .init(initialState: IdentificationOverview.State.loaded(IdentificationOverviewLoaded.State(id: UUID(), request: EIDAuthenticationRequest.preview, transactionInfo: .preview, handler: IdentifiableCallback(id: UUID(), callback: { _ in }))),
+                                                reducer: IdentificationOverview()))
+            .previewDisplayName("Loaded")
     }
 }

@@ -1,6 +1,6 @@
+import Combine
 import Foundation
 import OpenEcard
-import Combine
 
 #if PREVIEW
 
@@ -313,7 +313,7 @@ extension EIDAuthenticationRequest {
         subjectURL: "https://subject.com",
         validity: "Validity",
         terms: AuthenticationTerms.text("Terms"),
-        transactionInfo: nil,
+        transactionInfo: "{\"providerName\":\"Sparkasse\",\"providerURL\":\"https://sparkasse.de\",\"additionalInfo\":[{\"key\":\"Kundennummer\",\"value\":\"23467812\"},{\"key\":\"Nachname\",\"value\":\"Mustermann\"}]}",
         readAttributes: [
             .DG01: true,
             .DG02: true,

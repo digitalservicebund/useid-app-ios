@@ -1,20 +1,28 @@
 import ComposableArchitecture
 import FaviconFinder
+import IdentifiedCollections
 import MarkdownUI
 import SwiftUI
 
 struct TransactionInfo: Codable, Equatable {
     var providerName: String
     var providerURL: URL
-    var additionalInfo: [String: String]
+    var additionalInfo: IdentifiedArrayOf<AdditionalInfo>
+    
+    struct AdditionalInfo: Codable, Identifiable, Equatable {
+        var key: String
+        var value: String
+        
+        var id: String { key }
+    }
     
 #if PREVIEW
     static var preview: TransactionInfo = .init(
-        providerName: "Spaßkasse",
-        providerURL: URL(string: "https://spaßkasse.de")!,
+        providerName: "Sparkasse",
+        providerURL: URL(string: "https://sparkasse.de")!,
         additionalInfo: [
-            "Kundennummer": "345978121",
-            "Name": "Max Mustermann"
+            AdditionalInfo(key: "Kundennummer", value: "345978121"),
+            AdditionalInfo(key: "Name", value: "Max Mustermann")
         ]
     )
 #endif
@@ -114,19 +122,31 @@ struct IdentificationOverviewLoadedView: View {
                             Text(L10n.Identification.AttributeConsent.title(viewStore.transactionInfo.providerName))
                                 .headingXL()
 
-                            HStack(alignment: .center, spacing: 8) {
-                                AsyncImage(url: viewStore.faviconURL) { image in
-                                    image
-                                        .resizable()
-                                } placeholder: {
-                                    ProgressView()
-                                }
-                                .frame(width: 24, height: 24)
-                                    
-                                Button {} label: {
-                                    Text(viewStore.transactionInfo.providerName)
-                                        .underline()
-                                        .bodyLRegular()
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    HStack(alignment: .center, spacing: 8) {
+                                        AsyncImage(url: viewStore.faviconURL) { image in
+                                            image
+                                                .resizable()
+                                        } placeholder: {
+                                            ProgressView()
+                                        }
+                                        .frame(width: 24, height: 24)
+                                        
+                                        Button {} label: {
+                                            Text(viewStore.transactionInfo.providerName)
+                                                .underline()
+                                                .bodyLRegular()
+                                        }
+                                    }
+                                    ForEach(viewStore.transactionInfo.additionalInfo) { info in
+                                        HStack {
+                                            Text(L10n.Identification.AttributeConsent.AdditionalInformation.key(info.key))
+                                                .bodyMBold()
+                                            Text(L10n.Identification.AttributeConsent.AdditionalInformation.value(info.value))
+                                                .bodyMRegular()
+                                        }
+                                    }
                                 }
                             }
                             .padding(16)
@@ -186,5 +206,18 @@ struct IdentificationOverviewLoadedView: View {
         .shadow(color: .black.opacity(0.08), radius: 20, x: 0, y: 10)
         .padding(.horizontal)
         .padding(.vertical, 24)
+    }
+}
+
+struct IdentificationOverviewLoaded_Previews: PreviewProvider {
+    static var previews: some View {
+        IdentificationOverviewLoadedView(
+            store: .init(initialState: .init(id: UUID(),
+                                             request: EIDAuthenticationRequest.preview,
+                                             transactionInfo: .preview,
+                                             handler: IdentifiableCallback(id: UUID(),
+                                                                           callback: { _ in })),
+                         reducer: EmptyReducer())
+        )
     }
 }
