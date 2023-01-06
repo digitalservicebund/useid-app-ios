@@ -57,7 +57,7 @@ struct IdentificationOverviewLoaded: ReducerProtocol {
         case callbackReceived(EIDAuthenticationRequest, PINCallback)
         case confirm
         case failure(IdentifiableError)
-        case onAppear
+        case onInitialAppear
         case retrievedFaviconURL(TaskResult<URL>)
     }
     
@@ -85,7 +85,7 @@ struct IdentificationOverviewLoaded: ReducerProtocol {
             return .none
         case .moreInfo:
             return .none
-        case .onAppear:
+        case .onInitialAppear:
             return .task { [providerURL = state.transactionInfo.providerURL] in
                 await .retrievedFaviconURL(TaskResult {
                     let favIcon = try await FaviconFinder(url: providerURL, downloadImage: false).downloadFavicon()
@@ -154,8 +154,8 @@ struct IdentificationOverviewLoadedView: View {
                               primary: .init(title: L10n.Identification.AttributeConsent.continue, action: .confirm))
             }
             .navigationBarTitleDisplayMode(.inline)
-            .onAppear {
-                viewStore.send(.onAppear)
+            .onInitialAppear {
+                viewStore.send(.onInitialAppear)
             }
         }
     }

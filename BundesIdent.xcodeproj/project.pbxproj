@@ -123,6 +123,7 @@
 		E1DCC98029072BB3002E9371 /* HomeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DCC97F29072BB3002E9371 /* HomeUITests.swift */; };
 		E1DF0996294A0FF300199761 /* PreviewIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DF0995294A0FF300199761 /* PreviewIDInteractionManager.swift */; };
 		E1E1E886296836DB00ABC567 /* FaviconFinder in Frameworks */ = {isa = PBXBuildFile; productRef = E1E1E885296836DB00ABC567 /* FaviconFinder */; };
+		E1E1E88829683C7B00ABC567 /* FirstAppear.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E1E88729683C7B00ABC567 /* FirstAppear.swift */; };
 		E1E30A83295340E200F741C7 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = E1E30A82295340E200F741C7 /* ComposableArchitecture */; };
 		E1E30A85295341A400F741C7 /* IdentificationDone.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E30A84295341A400F741C7 /* IdentificationDone.swift */; };
 		E1EB9FFA28B5288A007FF467 /* ScanBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EB9FF928B5288A007FF467 /* ScanBody.swift */; };
@@ -306,6 +307,7 @@
 		E1DCC97D29072B8B002E9371 /* SetupUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupUITests.swift; sourceTree = "<group>"; };
 		E1DCC97F29072BB3002E9371 /* HomeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUITests.swift; sourceTree = "<group>"; };
 		E1DF0995294A0FF300199761 /* PreviewIDInteractionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewIDInteractionManager.swift; sourceTree = "<group>"; };
+		E1E1E88729683C7B00ABC567 /* FirstAppear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstAppear.swift; sourceTree = "<group>"; };
 		E1E30A84295341A400F741C7 /* IdentificationDone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationDone.swift; sourceTree = "<group>"; };
 		E1EB9FF928B5288A007FF467 /* ScanBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanBody.swift; sourceTree = "<group>"; };
 		E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoaded.swift; sourceTree = "<group>"; };
@@ -552,6 +554,7 @@
 				E166AF6F28FEC6C7004EE034 /* LogAnalyticsClient.swift */,
 				D29C542E28FFD9580064AB41 /* Logger+Catetory.swift */,
 				B9AF23D22930BD1300BD12DF /* Constants.swift */,
+				E1E1E88729683C7B00ABC567 /* FirstAppear.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1176,6 +1179,7 @@
 				E5CEB27E281041330076B9FE /* BundesIdentApp.swift in Sources */,
 				E1CD8E8F2820395F008ADA2A /* BundButtonStyle.swift in Sources */,
 				B95FAA8929278F74009BDAC9 /* IdentificationCANPersonalPINInput.swift in Sources */,
+				E1E1E88829683C7B00ABC567 /* FirstAppear.swift in Sources */,
 				B9EB82E12940A8C1002590F9 /* IdentificationCANScreen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
