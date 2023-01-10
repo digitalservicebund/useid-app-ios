@@ -1,9 +1,9 @@
 import Analytics
-import XCTest
+import Combine
 import ComposableArchitecture
 import Cuckoo
-import Combine
 import TCACoordinators
+import XCTest
 
 @testable import BundesIdent
 
@@ -29,7 +29,7 @@ final class IdentificationOverviewTests: XCTestCase {
         )
         store.dependencies.analytics = mockAnalyticsClient
         store.send(IdentificationOverview.Action.loading(.failure(error))) {
-            $0 = .error(IdentificationOverviewErrorState(error: error))
+            $0 = .error(IdentificationOverviewError.State(error: error))
         }
         
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification",

@@ -12,7 +12,7 @@ struct IdentificationOverview: ReducerProtocol {
     enum State: Equatable, IDInteractionHandler {
         case loading(IdentificationOverviewLoading.State)
         case loaded(IdentificationOverviewLoaded.State)
-        case error(IdentificationOverviewErrorState)
+        case error(IdentificationOverviewError.State)
         
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
             switch self {
@@ -54,7 +54,7 @@ struct IdentificationOverview: ReducerProtocol {
     enum Action: Equatable {
         case loading(IdentificationOverviewLoading.Action)
         case loaded(IdentificationOverviewLoaded.Action)
-        case error(IdentificationOverviewErrorAction)
+        case error(IdentificationOverviewError.Action)
         
         case onAppear
         case end
@@ -74,7 +74,7 @@ struct IdentificationOverview: ReducerProtocol {
                 state = .loading(IdentificationOverviewLoading.State(canGoBackToSetupIntro: state.canGoBackToSetupIntro))
                 return .none
             case .loading(.failure(let error)):
-                state = .error(IdentificationOverviewErrorState(error: error, canGoBackToSetupIntro: state.canGoBackToSetupIntro))
+                state = .error(IdentificationOverviewError.State(error: error, canGoBackToSetupIntro: state.canGoBackToSetupIntro))
                 return .trackEvent(category: "identification",
                                    action: "loadingFailed",
                                    name: "attributes",
@@ -116,10 +116,7 @@ struct IdentificationOverviewView: View {
                 }
                 CaseLet(state: /IdentificationOverview.State.error,
                         action: IdentificationOverview.Action.error) { errorStore in
-                    DialogView(store: errorStore.stateless,
-                               title: L10n.Identification.FetchMetadataError.title,
-                               message: L10n.Identification.FetchMetadataError.body,
-                               primaryButton: .init(title: L10n.Identification.FetchMetadataError.retry, action: .retry))
+                    IdentificationOverviewErrorView(store: errorStore)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
             }
