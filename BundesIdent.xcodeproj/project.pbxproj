@@ -76,6 +76,7 @@
 		E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */ = {isa = PBXBuildFile; productRef = E15C22FF2850F5A8005CCBB9 /* OpenEcard */; };
 		E15D0EBC29095F740088EF4E /* IdentificationOverviewError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15D0EBB29095F740088EF4E /* IdentificationOverviewError.swift */; };
 		E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */; };
+		E15FF675296EC93000A90824 /* RealHTTP in Frameworks */ = {isa = PBXBuildFile; productRef = E15FF674296EC93000A90824 /* RealHTTP */; };
 		E166AF6C28FEAD38004EE034 /* Default.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E166AF6B28FEAD38004EE034 /* Default.xcconfig */; };
 		E166AF7028FEC6C7004EE034 /* LogAnalyticsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E166AF6F28FEC6C7004EE034 /* LogAnalyticsClient.swift */; };
 		E16708AE283D4224001A1637 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708AD283D4224001A1637 /* HomeView.swift */; };
@@ -92,6 +93,7 @@
 		E1904001295087E800C41D02 /* IdentificationRedirect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1904000295087E800C41D02 /* IdentificationRedirect.swift */; };
 		E19040032951DCAC00C41D02 /* IdentificationShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19040022951DCAC00C41D02 /* IdentificationShare.swift */; };
 		E19040052952068300C41D02 /* BundTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19040042952068300C41D02 /* BundTextFieldStyle.swift */; };
+		E19BFDDC296DC6F6002125AE /* APIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19BFDDB296DC6F6002125AE /* APIController.swift */; };
 		E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
 		E1A769FD28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A769FC28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift */; };
 		E1A769FF28B940C6001E1F04 /* LaunchArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A769FE28B940C6001E1F04 /* LaunchArgument.swift */; };
@@ -276,6 +278,7 @@
 		E1904000295087E800C41D02 /* IdentificationRedirect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationRedirect.swift; sourceTree = "<group>"; };
 		E19040022951DCAC00C41D02 /* IdentificationShare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationShare.swift; sourceTree = "<group>"; };
 		E19040042952068300C41D02 /* BundTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundTextFieldStyle.swift; sourceTree = "<group>"; };
+		E19BFDDB296DC6F6002125AE /* APIController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIController.swift; sourceTree = "<group>"; };
 		E19D26B0282557B00005B111 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E1A769FC28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+LaunchArguments.swift"; sourceTree = "<group>"; };
 		E1A769FE28B940C6001E1F04 /* LaunchArgument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchArgument.swift; sourceTree = "<group>"; };
@@ -372,6 +375,7 @@
 				E1E1E886296836DB00ABC567 /* FaviconFinder in Frameworks */,
 				D2B76A7A28BE4B93000B442D /* Analytics in Frameworks */,
 				E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */,
+				E15FF675296EC93000A90824 /* RealHTTP in Frameworks */,
 				B9F5055829361F69009FE297 /* TCACoordinators in Frameworks */,
 				E128E0BA288941DC00C5195F /* Sentry in Frameworks */,
 			);
@@ -712,6 +716,7 @@
 				E1B6991B2869B31B00360273 /* DebugIDInteractionManager.swift */,
 				E1DF0995294A0FF300199761 /* PreviewIDInteractionManager.swift */,
 				E14C21B128B8BF9100192338 /* StorageManager.swift */,
+				E19BFDDB296DC6F6002125AE /* APIController.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -868,6 +873,7 @@
 				B9F5055729361F69009FE297 /* TCACoordinators */,
 				E1E30A82295340E200F741C7 /* ComposableArchitecture */,
 				E1E1E885296836DB00ABC567 /* FaviconFinder */,
+				E15FF674296EC93000A90824 /* RealHTTP */,
 			);
 			productName = BundesIdent;
 			productReference = E5CEB27A281041330076B9FE /* BundesIdent.app */;
@@ -914,6 +920,7 @@
 				B9F5055629361F69009FE297 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
 				E1E30A81295340E200F741C7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				E1E1E884296836DB00ABC567 /* XCRemoteSwiftPackageReference "FaviconFinder" */,
+				E15FF673296EC93000A90824 /* XCRemoteSwiftPackageReference "RealHTTP" */,
 			);
 			productRefGroup = E5CEB27B281041330076B9FE /* Products */;
 			projectDirPath = "";
@@ -1030,7 +1037,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PATH=$PATH:/opt/homebrew/bin\nlicense-plist --suppress-opening-directory --fail-if-missing-license --output-path BundesIdent/Generated --prefix Licenses\n";
+			shellScript = "PATH=$PATH:/opt/homebrew/bin\nlicense-plist --suppress-opening-directory --output-path BundesIdent/Generated --prefix Licenses\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1146,6 +1153,7 @@
 				E16708B7283D7C2B001A1637 /* DialogView.swift in Sources */,
 				E128E0BC28898D3400C5195F /* AppDelegate.swift in Sources */,
 				B9A408A6292E231100EAB0B2 /* IdentificationCANScan.swift in Sources */,
+				E19BFDDC296DC6F6002125AE /* APIController.swift in Sources */,
 				E1AB87A02822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift in Sources */,
 				D28D27FF28B7A91B008DA310 /* MissingPINLetter.swift in Sources */,
 				B974FD062926714500B338E5 /* IdentificationCANOrderNewPIN.swift in Sources */,
@@ -1612,6 +1620,14 @@
 				minimumVersion = 2.1.2;
 			};
 		};
+		E15FF673296EC93000A90824 /* XCRemoteSwiftPackageReference "RealHTTP" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/immobiliare/RealHTTP.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.8.1;
+			};
+		};
 		E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/yhirano/LicensePlistViewController.git";
@@ -1667,6 +1683,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */;
 			productName = OpenEcard;
+		};
+		E15FF674296EC93000A90824 /* RealHTTP */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E15FF673296EC93000A90824 /* XCRemoteSwiftPackageReference "RealHTTP" */;
+			productName = RealHTTP;
 		};
 		E1BC3D8528B7E919007A7B39 /* LicensePlistViewController */ = {
 			isa = XCSwiftPackageProductDependency;

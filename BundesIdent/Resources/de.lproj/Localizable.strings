@@ -125,6 +125,9 @@
 "identification_done_message" = "Sie haben sich erfolgreich bei »%@« ausgewiesen.";
 "identification_done_title" = "Identifizierung abgeschlossen";
 "identification_end" = "Abbrechen";
+"identification_expiredTokenError_body" = "";
+"identification_expiredTokenError_close" = "Schließen";
+"identification_expiredTokenError_title" = "Der QR-Code ist nicht mehr gültig";
 "identification_fetchMetadataError_body" = "Bitte versuchen Sie es erneut. Stellen Sie dabei sicher, dass Sie mit dem Internet verbunden sind.";
 "identification_fetchMetadataError_retry" = "Erneut versuchen";
 "identification_fetchMetadataError_title" = "Es ist ein Fehler aufgetreten.";

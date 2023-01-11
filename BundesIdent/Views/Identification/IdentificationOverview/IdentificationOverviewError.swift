@@ -6,25 +6,52 @@ struct IdentificationOverviewError: ReducerProtocol {
     
     struct State: Equatable {
         let error: IdentifiableError
+        let identificationInformation: IdentificationInformation
         let canGoBackToSetupIntro: Bool
         
-        init(error: IdentifiableError, canGoBackToSetupIntro: Bool = false) {
+        init(error: IdentifiableError, identificationInformation: IdentificationInformation, canGoBackToSetupIntro: Bool = false) {
             self.error = error
+            self.identificationInformation = identificationInformation
             self.canGoBackToSetupIntro = canGoBackToSetupIntro
         }
         
+        var tokenIsInvalid: Bool {
+            if let identificationError = error.error as? IdentificationOverviewLoadingError,
+               identificationError == .invalidToken {
+                return true
+            } else {
+                return false
+            }
+        }
+        
         var title: String {
-            // TODO: Check if error was because of http error 410 Gone
-            L10n.Identification.FetchMetadataError.title
+            if tokenIsInvalid {
+                return L10n.Identification.ExpiredTokenError.title
+            } else {
+                return L10n.Identification.FetchMetadataError.title
+            }
         }
         
         var body: String {
-            L10n.Identification.FetchMetadataError.body
+            if tokenIsInvalid {
+                return L10n.Identification.ExpiredTokenError.body
+            } else {
+                return L10n.Identification.FetchMetadataError.body
+            }
+        }
+        
+        var primaryButton: DialogButtons<Action>.ButtonConfiguration? {
+            if tokenIsInvalid {
+                return .init(title: L10n.Identification.ExpiredTokenError.close, action: .close)
+            } else {
+                return .init(title: L10n.Identification.FetchMetadataError.retry, action: .retry)
+            }
         }
     }
     
     enum Action: Equatable {
         case retry
+        case close
     }
     
     var body: some ReducerProtocol<State, Action> {
@@ -41,14 +68,14 @@ struct IdentificationOverviewErrorView: View {
             DialogView(store: store.stateless,
                        title: viewStore.title,
                        message: viewStore.body,
-                       primaryButton: .init(title: L10n.Identification.FetchMetadataError.retry, action: .retry))
+                       primaryButton: viewStore.primaryButton)
         }
     }
 }
 
 struct IdentificationOverviewErrorView_Previews: PreviewProvider {
     static var previews: some View {
-        IdentificationOverviewErrorView(store: StoreOf<IdentificationOverviewError>(initialState: .init(error: IdentifiableError(HandleURLError.tcTokenURLCreationFailed)),
+        IdentificationOverviewErrorView(store: StoreOf<IdentificationOverviewError>(initialState: .init(error: IdentifiableError(HandleURLError.tcTokenURLCreationFailed), identificationInformation: .preview),
                                                                                     reducer: EmptyReducer()))
     }
 }

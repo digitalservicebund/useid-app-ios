@@ -36,6 +36,17 @@ struct IdentificationOverview: ReducerProtocol {
             }
         }
         
+        var identificationInformation: IdentificationInformation {
+            switch self {
+            case .loading(let subState):
+                return subState.identificationInformation
+            case .loaded(let subState):
+                return subState.identificationInformation
+            case .error(let subState):
+                return subState.identificationInformation
+            }
+        }
+        
 #if PREVIEW
         var availableDebugActions: [IdentifyDebugSequence] {
             get {
@@ -71,20 +82,22 @@ struct IdentificationOverview: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .error(.retry):
-                state = .loading(IdentificationOverviewLoading.State(canGoBackToSetupIntro: state.canGoBackToSetupIntro))
+                state = .loading(IdentificationOverviewLoading.State(identificationInformation: state.identificationInformation,
+                                                                     canGoBackToSetupIntro: state.canGoBackToSetupIntro))
                 return .none
+            case .error(.close):
+                return Effect(value: .end)
             case .loading(.failure(let error)):
-                state = .error(IdentificationOverviewError.State(error: error, canGoBackToSetupIntro: state.canGoBackToSetupIntro))
+                state = .error(IdentificationOverviewError.State(error: error,
+                                                                 identificationInformation: state.identificationInformation,
+                                                                 canGoBackToSetupIntro: state.canGoBackToSetupIntro))
                 return .trackEvent(category: "identification",
                                    action: "loadingFailed",
                                    name: "attributes",
                                    analytics: analytics)
-            case .loading(.done(let request, let callback)):
-                // TODO: Add parsing of TokenInformation here
-                let transactionInfo = TransactionInfo(providerName: "Sparkasse",
-                                                      providerURL: URL(string: "https://sparkasse.de")!,
-                                                      additionalInfo: [TransactionInfo.AdditionalInfo(key: "Kundennummer", value: "12323874")])
+            case .loading(.done(let request, let transactionInfo, let callback)):
                 let loadedState = IdentificationOverviewLoaded.State(id: uuid.callAsFunction(),
+                                                                     identificationInformation: state.identificationInformation,
                                                                      request: request,
                                                                      transactionInfo: transactionInfo,
                                                                      handler: callback,
@@ -133,15 +146,22 @@ struct IdentificationOverviewView: View {
 }
 
 #if PREVIEW
-let demoTokenURL = URL(string: "bundesident://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Feid.digitalservicebund.de%2Fapi%2Fv1%2Fidentification%2Fsessions%2F57a2537b-87c3-4170-83fb-3fbb9a245888%2Ftc-token&widgetSessionId=57a2537b-87c3-4170-83fb-3fbb9a245888")!
+private let demoTokenURLWithoutScheme = "127.0.0.1:24727/eID-Client?tcTokenURL=http%3A%2F%2Flocalhost%3A8080%2Fapi%2Fv1%2Fidentification%2Fsessions%2F1d954a29-ba8d-42b3-b1db-76e9569db6f4%2Ftc-token&widgetSessionId=c1eda54c-2a5c-4e03-8e3c-5000148b280e"
+
+/// Demo url with scheme `bundesident`
+let demoTokenURL = URL(string: "bundesident://\(demoTokenURLWithoutScheme)")!
+
+/// Demo url with scheme `http`
+let demoTCTokenURL = URL(string: "http://\(demoTokenURLWithoutScheme)")!
 #endif
 
 struct IdentificationOverview_Previews: PreviewProvider {
     static var previews: some View {
-        IdentificationOverviewView(store: .init(initialState: IdentificationOverview.State.loading(IdentificationOverviewLoading.State(canGoBackToSetupIntro: false)),
+        IdentificationOverviewView(store: .init(initialState: IdentificationOverview.State.loading(IdentificationOverviewLoading.State(identificationInformation: .preview,
+                                                                                                                                       canGoBackToSetupIntro: false)),
                                                 reducer: IdentificationOverview()))
             .previewDisplayName("Loading")
-        IdentificationOverviewView(store: .init(initialState: IdentificationOverview.State.loaded(IdentificationOverviewLoaded.State(id: UUID(), request: EIDAuthenticationRequest.preview, transactionInfo: .preview, handler: IdentifiableCallback(id: UUID(), callback: { _ in }))),
+        IdentificationOverviewView(store: .init(initialState: IdentificationOverview.State.loaded(IdentificationOverviewLoaded.State(id: UUID(), identificationInformation: .preview, request: EIDAuthenticationRequest.preview, transactionInfo: .preview, handler: IdentifiableCallback(id: UUID(), callback: { _ in }))),
                                                 reducer: IdentificationOverview()))
             .previewDisplayName("Loaded")
     }

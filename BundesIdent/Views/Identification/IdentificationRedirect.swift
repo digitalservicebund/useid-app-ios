@@ -1,11 +1,12 @@
+import ComposableArchitecture
 import Foundation
 import SwiftUI
-import ComposableArchitecture
 
 struct IdentificationHandOff: ReducerProtocol {
     
     @Dependency(\.urlOpener) var urlOpener
     @Dependency(\.logger) var logger
+    @Dependency(\.apiController) var apiController
     
     struct State: Equatable {
         var identificationInformation: IdentificationInformation
@@ -30,40 +31,16 @@ struct IdentificationHandOff: ReducerProtocol {
         case .open:
             return .openURL(state.redirectURL, urlOpener: urlOpener)
         case .refresh:
-            struct Payload: Codable {
-                let refreshAddress: String
-            }
-            
-            // TODO: Extract that logic later
             let request = state.request
             let redirectURL = state.redirectURL
-            let sessionId = state.identificationInformation.sessionId
-            let payload = Payload(refreshAddress: state.redirectURL.absoluteString)
+            let sessionId = state.identificationInformation.widgetSessionId
             
-            return .run { send in
+            return .task {
                 do {
-                    let data = try JSONEncoder().encode(payload)
-                    guard let url = URL(string: "https://eid.digitalservicebund.de/api/v1/events/\(sessionId)/success") else {
-                        throw Error.invalidURL
-                    }
-                    var urlRequest = URLRequest(url: url)
-                    urlRequest.httpMethod = "POST"
-                    urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-                    urlRequest.httpBody = data
-                    let (_, response) = try await URLSession.shared.data(for: urlRequest)
-                    
-                    guard let httpResponse = response as? HTTPURLResponse else {
-                        throw Error.invalidURLResponse
-                    }
-                    
-                    guard httpResponse.statusCode == 202 else {
-                        throw Error.unexpectedStatusCode(httpResponse.statusCode)
-                    }
-                    
-                    await send(.refreshed(success: true, request: request, redirectURL: redirectURL))
+                    try await apiController.sendSessionEvent(sessionId: sessionId, redirectURL: redirectURL)
+                    return .refreshed(success: true, request: request, redirectURL: redirectURL)
                 } catch {
-                    logger.error("Error sending event to server: \(error)")
-                    await send(.refreshed(success: false, request: request, redirectURL: redirectURL))
+                    return .refreshed(success: false, request: request, redirectURL: redirectURL)
                 }
             }
         case .refreshed:
@@ -83,8 +60,8 @@ struct IdentificationHandOffView: View {
                        imageMeta: nil,
                        secondaryButton: .init(title: L10n.Identification.HandOff.handOff, action: .refresh),
                        primaryButton: .init(title: L10n.Identification.HandOff.open, action: .open(request: viewStore.request)))
-            .navigationBarBackButtonHidden(true)
-            .navigationBarHidden(false)
+                .navigationBarBackButtonHidden(true)
+                .navigationBarHidden(false)
         }
     }
 }

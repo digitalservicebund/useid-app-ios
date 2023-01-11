@@ -1,10 +1,10 @@
-import Foundation
+import Analytics
+import ComposableArchitecture
 import FlowStacks
-import TCACoordinators
+import Foundation
 import IdentifiedCollections
 import SwiftUI
-import ComposableArchitecture
-import Analytics
+import TCACoordinators
 
 protocol IDInteractionHandler {
     associatedtype LocalAction
@@ -197,7 +197,7 @@ struct IdentificationCoordinator: ReducerProtocol {
                     return .none
                 case .block:
                     return .none
-                case let .allowAfterConfirmation(title, message, confirm, deny):
+                case .allowAfterConfirmation(let title, let message, let confirm, let deny):
                     state.alert = AlertState(title: TextState(verbatim: title),
                                              message: TextState(verbatim: message),
                                              primaryButton: .destructive(TextState(verbatim: confirm),
@@ -283,7 +283,7 @@ extension IdentificationCoordinator.State: AnalyticsView {
 extension IdentificationCoordinator.State {
     init(identificationInformation: IdentificationInformation, canGoBackToSetupIntro: Bool = false) {
         self.identificationInformation = identificationInformation
-        states = [.root(.overview(.loading(IdentificationOverviewLoading.State(canGoBackToSetupIntro: canGoBackToSetupIntro))))]
+        states = [.root(.overview(.loading(IdentificationOverviewLoading.State(identificationInformation: identificationInformation, canGoBackToSetupIntro: canGoBackToSetupIntro))))]
     }
 }
 

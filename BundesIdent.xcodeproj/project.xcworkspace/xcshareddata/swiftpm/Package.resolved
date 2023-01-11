@@ -91,12 +91,21 @@
       }
     },
     {
+      "identity" : "realhttp",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/immobiliare/RealHTTP.git",
+      "state" : {
+        "revision" : "d904f5592e4810875a7c26b5dc392c7584a64bed",
+        "version" : "1.8.1"
+      }
+    },
+    {
       "identity" : "sentry-cocoa",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
       "state" : {
-        "revision" : "c3c19e29f775ee95b77aa3168f3e2fd6c20deba6",
-        "version" : "7.31.3"
+        "revision" : "5238cc5f12c2b75027730a54ecf632cf103daf21",
+        "version" : "7.31.4"
       }
     },
     {
@@ -131,8 +140,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-composable-architecture",
       "state" : {
-        "revision" : "30015d13a3ca0988b4674a83eccebbea747fe1f8",
-        "version" : "0.48.0"
+        "revision" : "c9259b5f74892690cb04a9a8088b4a1789b05a7d",
+        "version" : "0.47.2"
       }
     },
     {
@@ -167,8 +176,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scinfu/SwiftSoup.git",
       "state" : {
-        "revision" : "6778575285177365cbad3e5b8a72f2a20583cfec",
-        "version" : "2.4.3"
+        "revision" : "f707b8680cddb96dc1855632340a572ef37bbb98",
+        "version" : "2.5.3"
       }
     },
     {
@@ -194,8 +203,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
       "state" : {
-        "revision" : "5a5457a744239896e9b0b03a8e1a5069c3e7b91f",
-        "version" : "0.6.0"
+        "revision" : "df16fe6ffe4d6e2e06761aa67716b808b2c9109e",
+        "version" : "0.7.0"
       }
     }
   ],

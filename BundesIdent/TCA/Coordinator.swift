@@ -9,6 +9,7 @@ enum HandleURLError: Error, CustomStringConvertible, CustomNSError {
     case componentsInvalid
     case noTCTokenURLQueryItem
     case noWidgetSessionIdQueryItem
+    case noUseIDSessionId
     case tcTokenURLEncodingError
     case tcTokenURLCreationFailed
     
@@ -17,6 +18,7 @@ enum HandleURLError: Error, CustomStringConvertible, CustomNSError {
         case .componentsInvalid: return "URL components could not be created from URL"
         case .noTCTokenURLQueryItem: return "URL Components do not contain a tcTokenURL query parameter"
         case .noWidgetSessionIdQueryItem: return "URL Components do not contain a widgetSessionId query parameter"
+        case .noUseIDSessionId: return "TCTokenURL does not contain a useIDSessionId parameter"
         case .tcTokenURLEncodingError: return "TCTokenURL could not be encoded"
         case .tcTokenURLCreationFailed: return "Could not create a url containing the tcTokenURL"
         }
@@ -28,8 +30,13 @@ enum HandleURLError: Error, CustomStringConvertible, CustomNSError {
 }
 
 struct IdentificationInformation: Equatable {
-    let sessionId: String
+    let useIDSessionId: String
+    let widgetSessionId: String
     let tcTokenURL: URL
+    
+#if PREVIEW
+    static var preview = IdentificationInformation(useIDSessionId: "12345", widgetSessionId: "56789", tcTokenURL: demoTCTokenURL)
+#endif
 }
 
 struct Coordinator: ReducerProtocol {
@@ -84,6 +91,20 @@ struct Coordinator: ReducerProtocol {
             return nil
         }
         
+        // swiftlint:disable:next force_try
+        let sessionIdRegex = try! NSRegularExpression(pattern: "\\/sessions\\/([a-f0-9-]*)\\/tc-token", options: .caseInsensitive)
+        let range = NSRange(location: 0, length: urlString.utf16.count)
+        let matches = sessionIdRegex.matches(in: urlString, range: range)
+        
+        guard matches.count == 1,
+              matches[0].numberOfRanges == 2,
+              let matchedRange = Range(matches[0].range(at: 1), in: urlString) else {
+            issueTracker.capture(error: HandleURLError.noUseIDSessionId)
+            return nil
+        }
+        
+        let useIDSessionId = String(urlString[matchedRange])
+        
         var urlComponents = URLComponents(string: "http://127.0.0.1:24727/eID-Client")!
         urlComponents.percentEncodedQueryItems = [URLQueryItem(name: "tcTokenURL", value: encodedTCTokenURL)]
         guard let tcTokenURL = urlComponents.url else {
@@ -91,7 +112,7 @@ struct Coordinator: ReducerProtocol {
             return nil
         }
         
-        return IdentificationInformation(sessionId: widgetSessionId, tcTokenURL: tcTokenURL)
+        return IdentificationInformation(useIDSessionId: useIDSessionId, widgetSessionId: widgetSessionId, tcTokenURL: tcTokenURL)
     }
     
     func handleURL(state: inout State, _ url: URL) -> Effect<Action, Never> {

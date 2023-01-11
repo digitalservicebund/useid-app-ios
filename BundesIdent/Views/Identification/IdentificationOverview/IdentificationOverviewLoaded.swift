@@ -32,6 +32,7 @@ struct IdentificationOverviewLoaded: ReducerProtocol {
     @Dependency(\.uuid) var uuid
     struct State: Identifiable, Equatable {
         let id: UUID
+        let identificationInformation: IdentificationInformation
         let request: EIDAuthenticationRequest
         var transactionInfo: TransactionInfo
         var handler: IdentifiableCallback<FlaggedAttributes>
@@ -42,8 +43,9 @@ struct IdentificationOverviewLoaded: ReducerProtocol {
         
         var faviconURL: URL?
         
-        init(id: UUID, request: EIDAuthenticationRequest, transactionInfo: TransactionInfo, handler: IdentifiableCallback<FlaggedAttributes>, canGoBackToSetupIntro: Bool = false, pinHandler: PINCallback? = nil) {
+        init(id: UUID, identificationInformation: IdentificationInformation, request: EIDAuthenticationRequest, transactionInfo: TransactionInfo, handler: IdentifiableCallback<FlaggedAttributes>, canGoBackToSetupIntro: Bool = false, pinHandler: PINCallback? = nil) {
             self.id = id
+            self.identificationInformation = identificationInformation
             self.request = request
             self.transactionInfo = transactionInfo
             self.handler = handler
@@ -213,6 +215,7 @@ struct IdentificationOverviewLoaded_Previews: PreviewProvider {
     static var previews: some View {
         IdentificationOverviewLoadedView(
             store: .init(initialState: .init(id: UUID(),
+                                             identificationInformation: .preview,
                                              request: EIDAuthenticationRequest.preview,
                                              transactionInfo: .preview,
                                              handler: IdentifiableCallback(id: UUID(),

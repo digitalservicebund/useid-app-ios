@@ -1,19 +1,21 @@
-import SwiftUI
-import ComposableArchitecture
 import Analytics
+import ComposableArchitecture
+import SwiftUI
 
 struct Home: ReducerProtocol {
-    #if PREVIEW
+#if PREVIEW
     @Dependency(\.previewIDInteractionManager) var previewIDInteractionManager
-    #endif
+    @Dependency(\.apiController) var apiController
+#endif
     
     struct State: Equatable {
         var appVersion: String
         var buildNumber: Int
         
-        #if PREVIEW
+#if PREVIEW
         var isDebugModeEnabled: Bool
-        #endif
+        var backendEnvironment: BackendEnvironment = .default
+#endif
         
         var versionInfo: String {
             let appVersion = "\(appVersion) - \(buildNumber)"
@@ -30,6 +32,7 @@ struct Home: ReducerProtocol {
 #if PREVIEW
         case triggerIdentification(tokenURL: URL)
         case setDebugModeEnabled(Bool)
+        case setBackendEnvironment(BackendEnvironment)
 #endif
     }
     
@@ -38,12 +41,16 @@ struct Home: ReducerProtocol {
             switch action {
 #if PREVIEW
             case .setDebugModeEnabled(let enabled):
-                #if targetEnvironment(simulator)
+#if targetEnvironment(simulator)
                 previewIDInteractionManager.isDebugModeEnabled = false
-                #else
+#else
                 previewIDInteractionManager.isDebugModeEnabled = enabled
-                #endif
+#endif
                 state.isDebugModeEnabled = previewIDInteractionManager.isDebugModeEnabled
+                return .none
+            case .setBackendEnvironment(let environment):
+                state.backendEnvironment = environment
+                apiController.setEnvironment(environment)
                 return .none
 #endif
             default:
@@ -90,6 +97,15 @@ struct HomeView: View {
                                     .padding(.bottom)
 #if PREVIEW
                                 Toggle("DEBUG MODE", isOn: viewStore.binding(get: \.isDebugModeEnabled, send: Home.Action.setDebugModeEnabled))
+                                HStack {
+                                    Text("Environment")
+                                    Spacer()
+                                    Picker("Environment", selection: viewStore.binding(get: \.backendEnvironment, send: Home.Action.setBackendEnvironment)) {
+                                        ForEach(BackendEnvironment.allCases) {
+                                            Text($0.rawValue).tag($0)
+                                        }
+                                    }
+                                }
 #endif
                             }
                         }

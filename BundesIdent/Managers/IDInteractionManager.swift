@@ -1,7 +1,7 @@
-import Foundation
 import Combine
-import OpenEcard
 import CombineSchedulers
+import Foundation
+import OpenEcard
 import OSLog
 
 extension OpenEcardImp: OpenEcardType {}
@@ -14,8 +14,6 @@ class IDInteractionManager: IDInteractionManagerType {
     
     init(openEcard: OpenEcardProtocol = OpenEcardImp(), issueTracker: IssueTracker) {
         self.openEcard = openEcard
-//        let developerOptions = self.openEcard.developerOptions()
-//        developerOptions?.enableTR03112DeveloperMOde()
         self.issueTracker = issueTracker
     }
     

@@ -1,8 +1,9 @@
-import Dependencies
 import Analytics
-import UIKit
+import Dependencies
 import OpenEcard
 import OSLog
+import RealHTTP
+import UIKit
 
 enum LoggerKey: DependencyKey {
     static var liveValue: Logger = .init()
@@ -51,6 +52,14 @@ enum AnalyticsKey: DependencyKey {
     static var liveValue: AnalyticsClient = LogAnalyticsClient()
 }
 
+enum APIControllerKey: DependencyKey {
+    static var liveValue: APIControllerType = APIController(
+        client: HTTPClient(baseURL: BackendEnvironment.default.baseURL),
+        jsonEncoder: JSONEncoder(),
+        jsonDecoder: JSONDecoder()
+    )
+}
+
 extension DependencyValues {
     var idInteractionManager: IDInteractionManagerType {
         get { self[IDInteractionManagerKey.self] }
@@ -80,5 +89,10 @@ extension DependencyValues {
     var analytics: AnalyticsClient {
         get { self[AnalyticsKey.self] }
         set { self[AnalyticsKey.self] = newValue }
+    }
+    
+    var apiController: APIControllerType {
+        get { self[APIControllerKey.self] }
+        set { self[APIControllerKey.self] = newValue }
     }
 }
