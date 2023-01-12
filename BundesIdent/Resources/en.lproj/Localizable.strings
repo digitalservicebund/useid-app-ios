@@ -29,7 +29,7 @@
 "firstTimeUser_incorrectTransportPIN_continue" = "Next";
 "firstTimeUser_incorrectTransportPIN_textFieldLabel" = "Transport PIN, five digits";
 "firstTimeUser_incorrectTransportPIN_title" = "Entered incorrect transport PIN.";
-"firstTimeUser_intro_body" = "In the setup, you set your 6-digit personal ID PIN.";
+"firstTimeUser_intro_body" = "You only need to set up your ID card once. If you already have a 6-digit PIN, your ID card has been already set up.";
 "firstTimeUser_intro_skipSetup" = "Already set up";
 "firstTimeUser_intro_startSetup" = "Set up online ID card now";
 "firstTimeUser_intro_title" = "Have you already set up your online ID card?";
@@ -77,10 +77,10 @@
 "general_ok" = "OK";
 "helpNFC_body" = "NFC stands for Near Field Communication. The technology enables the contact-free exchange of data over very short distances. It is also used, for example, when paying with a smartphone at the supermarket checkout.";
 "helpNFC_title" = "How the NFC technology works";
-"home_header_infoText" = "Open the provider's website on your iPhone and press the button “Mit BundesIdent ausweisen”.";
-"home_header_title" = "Identify";
+"home_header_infoText" = "Visit the »Grundsteuererklärung für Privateigentum« website to start the identification process. We will support more providers soon.";
+"home_header_title" = "How it works";
 "home_more_accessibilityStatement" = "Accessibility Statement";
-"home_more_imprint" = "Imprint";
+"home_more_imprint" = "Contact and Imprint";
 "home_more_licenses" = "Licenses";
 "home_more_privacy" = "Privacy Policy";
 "home_more_terms" = "Terms and Conditions of Use";
