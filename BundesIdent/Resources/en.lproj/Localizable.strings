@@ -62,7 +62,7 @@
 "firstTimeUser_scan_cardRecognized_second" = "Do not move the ID card.";
 "firstTimeUser_scan_progress_body" = "Step 1 completed.\nStep 2 is being performed.";
 "firstTimeUser_scan_progress_title" = "Do not move the ID card.";
-"firstTimeUser_scan_provideCard_first" = "Hold your ID card close to the upper back of the iPhone.";
+"firstTimeUser_scan_provideCard_first" = "Hold your ID card close to the upper back of the iPhone.";
 "firstTimeUser_scan_provideCard_second" = "Do not move the ID card.";
 "firstTimeUser_scan_scan" = "Transfer new PIN";
 "firstTimeUser_scan_scanSuccess_first" = "Do not move the ID card.";
