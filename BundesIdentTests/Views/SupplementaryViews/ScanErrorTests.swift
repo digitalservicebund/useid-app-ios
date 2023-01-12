@@ -38,7 +38,7 @@ final class ScanErrorReducerTests: XCTestCase {
             initialState: ScanError.State(errorType: .idCardInteraction(.processFailed(resultCode: .INTERNAL_ERROR,
                                                                                        redirectURL: nil,
                                                                                        resultMinor: nil)),
-            retry: false),
+                                          retry: false),
             reducer: ScanError()
         )
         store.dependencies.urlOpener = urlOpener
@@ -53,7 +53,7 @@ final class ScanErrorReducerTests: XCTestCase {
             initialState: ScanError.State(errorType: .idCardInteraction(.processFailed(resultCode: .BAD_REQUEST,
                                                                                        redirectURL: redirectURL,
                                                                                        resultMinor: nil)),
-            retry: false),
+                                          retry: false),
             reducer: ScanError()
         )
         store.dependencies.urlOpener = urlOpener
@@ -76,7 +76,7 @@ final class ScanErrorStateTests: XCTestCase {
         let state = ScanError.State(errorType: .idCardInteraction(.processFailed(resultCode: .CLIENT_ERROR,
                                                                                  redirectURL: redirectURL,
                                                                                  resultMinor: nil)),
-        retry: false)
+                                    retry: false)
         
         XCTAssertEqual(state.primaryButton.title, L10n.ScanError.redirect)
         XCTAssertEqual(state.primaryButton.action, .end(redirectURL: redirectURL))
@@ -98,7 +98,7 @@ final class ScanErrorStateTests: XCTestCase {
         let state = ScanError.State(errorType: .idCardInteraction(.processFailed(resultCode: .CLIENT_ERROR,
                                                                                  redirectURL: redirectURL,
                                                                                  resultMinor: nil)),
-        retry: false)
+                                    retry: false)
         
         XCTAssertEqual(state.boxContent?.title, L10n.ScanError.Box.title)
         XCTAssertEqual(state.boxContent?.message, L10n.ScanError.Box.body)
