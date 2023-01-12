@@ -29,7 +29,7 @@
 "firstTimeUser_incorrectTransportPIN_continue" = "Weiter";
 "firstTimeUser_incorrectTransportPIN_textFieldLabel" = "Transport-PIN, fünfstellig";
 "firstTimeUser_incorrectTransportPIN_title" = "Inkorrekte Transport-PIN eingegeben.";
-"firstTimeUser_intro_body" = "Bei der Einrichtung haben Sie Ihre 6-stellige persönliche Ausweis-PIN festgelegt.";
+"firstTimeUser_intro_body" = "Sie müssen Ihren Ausweis insgesamt nur einmal einrichten. Falls Sie schon über eine 6-stellige PIN verfügen, ist Ihr Ausweis bereits eingerichtet.";
 "firstTimeUser_intro_skipSetup" = "Bereits eingerichtet";
 "firstTimeUser_intro_startSetup" = "Jetzt Online-Ausweis einrichten";
 "firstTimeUser_intro_title" = "Haben Sie Ihren Online‑Ausweis bereits eingerichtet?";
