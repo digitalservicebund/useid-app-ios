@@ -52,9 +52,9 @@
 "firstTimeUser_pinLetter_letterPresent" = "Ja, PIN-Brief vorhanden";
 "firstTimeUser_pinLetter_requestLetter" = "Nein, PIN-Rücksetzbrief bestellen";
 "firstTimeUser_pinLetter_title" = "Haben Sie Ihren PIN‑Brief noch?";
-"firstTimeUser_scanInstructions_body" = "Die App nutzt nicht die Kamera, sondern die NFC‑Sensoren in iPhone und Ausweis, um Ihre neue PIN auf den Ausweis zu übertragen. Deswegen müssen sich Ausweis und iPhone im nächsten Schritt direkt berühren.";
+"firstTimeUser_scanInstructions_body" = "Die App nutzt nicht die Kamera, sondern die NFC‑Sensoren in iPhone und Ausweis, um Ihre neue PIN auf den Ausweis zu übertragen. Deswegen müssen sich Ausweis und iPhone während der PIN-Übertragung direkt berühren.";
 "firstTimeUser_scanInstructions_title" = "So übertragen Sie Ihre neue PIN auf den Ausweis.";
-"firstTimeUser_scan_body" = "Die App nutzt nicht die Kamera, sondern die NFC‑Sensoren in Smartphone und Ausweis, um Ihre neue PIN auf den Ausweis zu übertragen. Deswegen müssen sich Ausweis und Smartphone direkt berühren.";
+"firstTimeUser_scan_body" = "Die App nutzt nicht die Kamera, sondern die NFC‑Sensoren in Smartphone und Ausweis, um Ihre neue PIN auf den Ausweis zu übertragen. Deswegen müssen sich Ausweis und Smartphone während der PIN-Übertragung direkt berühren.";
 "firstTimeUser_scan_cardConnected_first" = "Ausweis nicht bewegen.";
 "firstTimeUser_scan_cardConnected_second" = "Ausweis nicht bewegen.";
 "firstTimeUser_scan_cardRecognized_first" = "Ausweis nicht bewegen.";
@@ -135,11 +135,11 @@
 "identification_personalPIN_missingPIN" = "PIN nicht vorhanden";
 "identification_personalPIN_textFieldLabel" = "Persönliche PIN, sechsstellig";
 "identification_personalPIN_title" = "Geben Sie die persönliche PIN Ihres Ausweises ein.";
-"identification_scanInstructions_body" = "Die App nutzt nicht die Kamera, sondern die NFC‑Sensoren in iPhone und Ausweis, um Ihre PIN zu überprüfen und die benötigten Daten abzurufen. Deswegen müssen sich im nächsten Schritt Ausweis und iPhone direkt berühren.";
+"identification_scanInstructions_body" = "Die App nutzt nicht die Kamera, sondern die NFC‑Sensoren in iPhone und Ausweis, um Ihre PIN zu überprüfen und die benötigten Daten abzurufen. Deswegen müssen sich Ausweis und iPhone während des Datenabrufs direkt berühren.";
 "identification_scanInstructions_title" = "So rufen Sie die Daten von Ihrem Ausweis ab.";
 "identification_scan_cardConnected" = "Ausweis nicht bewegen.";
 "identification_scan_cardRecognized" = "Ausweis nicht bewegen.";
-"identification_scan_message" = "Die App nutzt nicht die Kamera, sondern die NFC‑Sensoren in iPhone und Ausweis, um Ihre PIN zu überprüfen und die benötigten Daten abzurufen. Deswegen müssen sich Ausweis und iPhone direkt berühren.";
+"identification_scan_message" = "Die App nutzt nicht die Kamera, sondern die NFC‑Sensoren in iPhone und Ausweis, um Ihre PIN zu überprüfen und die benötigten Daten abzurufen. Deswegen müssen sich Ausweis und iPhone während des Datenabrufs direkt berühren.";
 "identification_scan_provideCard" = "Berühren Sie Ihren Ausweis mit der oberen Rückseite des iPhones.";
 "identification_scan_scan" = "Jetzt Daten abrufen";
 "identification_scan_scanSuccess" = "Scannen erfolgreich abgeschlossen.";
