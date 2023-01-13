@@ -146,7 +146,7 @@ struct IdentificationOverviewView: View {
 }
 
 #if PREVIEW
-private let demoTokenURLWithoutScheme = "127.0.0.1:24727/eID-Client?tcTokenURL=http%3A%2F%2Flocalhost%3A8080%2Fapi%2Fv1%2Fidentification%2Fsessions%2F1d954a29-ba8d-42b3-b1db-76e9569db6f4%2Ftc-token&widgetSessionId=c1eda54c-2a5c-4e03-8e3c-5000148b280e"
+private let demoTokenURLWithoutScheme = "127.0.0.1:24727/eID-Client?tcTokenURL=http%3A%2F%2Flocalhost%3A8080%2Fapi%2Fv1%2Fidentification%2Fsessions%2F1d954a29-ba8d-42b3-b1db-76e9569db6f4%2Ftc-token&widgetSessionId=c1eda54c-2a5c-4e03-8e3c-5000148b280e&tokenId=tokenId"
 
 /// Demo url with scheme `bundesident`
 let demoTokenURL = URL(string: "bundesident://\(demoTokenURLWithoutScheme)")!

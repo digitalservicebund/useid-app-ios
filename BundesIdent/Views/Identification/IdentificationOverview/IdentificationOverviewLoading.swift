@@ -57,9 +57,9 @@ struct IdentificationOverviewLoading: ReducerProtocol {
                 expirationChecked ? .retrieveTransactionInfo : .validateTokenURL
             }
         case .validateTokenURL:
-            return .task { [sessionId = state.identificationInformation.useIDSessionId] in
+            return .task { [identificationInformation = state.identificationInformation] in
                 await .validatedTokenURL(TaskResult {
-                    try await apiController.validateTCTokenURL(sessionId: sessionId)
+                    try await apiController.validateTCTokenURL(sessionId: identificationInformation.useIDSessionId, tokenId: identificationInformation.tokenId)
                 })
             }
         case .validatedTokenURL(.success(true)):

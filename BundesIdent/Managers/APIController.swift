@@ -5,7 +5,7 @@ protocol APIControllerType {
     
     func setEnvironment(_ environment: BackendEnvironment)
     
-    func validateTCTokenURL(sessionId: String) async throws -> Bool
+    func validateTCTokenURL(sessionId: String, tokenId: String) async throws -> Bool
     func retrieveTransactionInfo(sessionId: String) async throws -> TransactionInfo
     func sendSessionEvent(sessionId: String, redirectURL: URL) async throws
 }
@@ -68,8 +68,7 @@ class APIController: APIControllerType {
         client.baseURL = environment.baseURL
     }
     
-    func validateTCTokenURL(sessionId: String) async throws -> Bool {
-        let tokenId = "tokenId" // TODO: pass tokenId
+    func validateTCTokenURL(sessionId: String, tokenId: String) async throws -> Bool {
         let req = try HTTPRequest(method: .get, URI: "/identification/sessions/{sessionId}/tokens/{tokenId}", variables: ["sessionId": sessionId, "tokenId": tokenId])
         let response = try await req.fetch(client)
         return true

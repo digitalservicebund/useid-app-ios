@@ -9,6 +9,7 @@ enum HandleURLError: Error, CustomStringConvertible, CustomNSError {
     case componentsInvalid
     case noTCTokenURLQueryItem
     case noWidgetSessionIdQueryItem
+    case noTokenIdQueryItem
     case noUseIDSessionId
     case tcTokenURLEncodingError
     case tcTokenURLCreationFailed
@@ -18,6 +19,7 @@ enum HandleURLError: Error, CustomStringConvertible, CustomNSError {
         case .componentsInvalid: return "URL components could not be created from URL"
         case .noTCTokenURLQueryItem: return "URL Components do not contain a tcTokenURL query parameter"
         case .noWidgetSessionIdQueryItem: return "URL Components do not contain a widgetSessionId query parameter"
+        case .noTokenIdQueryItem: return "URL Components do not contain a tokenId query parameter"
         case .noUseIDSessionId: return "TCTokenURL does not contain a useIDSessionId parameter"
         case .tcTokenURLEncodingError: return "TCTokenURL could not be encoded"
         case .tcTokenURLCreationFailed: return "Could not create a url containing the tcTokenURL"
@@ -32,10 +34,11 @@ enum HandleURLError: Error, CustomStringConvertible, CustomNSError {
 struct IdentificationInformation: Equatable {
     let useIDSessionId: String
     let widgetSessionId: String
+    let tokenId: String
     let tcTokenURL: URL
     
 #if PREVIEW
-    static var preview = IdentificationInformation(useIDSessionId: "12345", widgetSessionId: "56789", tcTokenURL: demoTCTokenURL)
+    static var preview = IdentificationInformation(useIDSessionId: "useIDSessionId", widgetSessionId: "widgetSessionId", tokenId: "tokenId", tcTokenURL: demoTCTokenURL)
 #endif
 }
 
@@ -90,6 +93,11 @@ struct Coordinator: ReducerProtocol {
             issueTracker.capture(error: HandleURLError.noWidgetSessionIdQueryItem)
             return nil
         }
+        guard let tokenIdQueryItem = queryItems.last(where: { $0.name == "tokenId" }),
+              let tokenId = tokenIdQueryItem.value else {
+            issueTracker.capture(error: HandleURLError.noTokenIdQueryItem)
+            return nil
+        }
         
         // swiftlint:disable:next force_try
         let sessionIdRegex = try! NSRegularExpression(pattern: "\\/sessions\\/([a-f0-9-]*)\\/tc-token", options: .caseInsensitive)
@@ -112,7 +120,12 @@ struct Coordinator: ReducerProtocol {
             return nil
         }
         
-        return IdentificationInformation(useIDSessionId: useIDSessionId, widgetSessionId: widgetSessionId, tcTokenURL: tcTokenURL)
+        return IdentificationInformation(
+            useIDSessionId: useIDSessionId,
+            widgetSessionId: widgetSessionId,
+            tokenId: tokenId,
+            tcTokenURL: tcTokenURL
+        )
     }
     
     func handleURL(state: inout State, _ url: URL) -> Effect<Action, Never> {
