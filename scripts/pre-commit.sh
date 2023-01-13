@@ -5,10 +5,13 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 
 for localizableFile in BundesIdent/Resources/*.lproj/Localizable.strings
 do
-    echo "Sorting file - $localizableFile"
-    sort "$localizableFile" -o "$localizableFile"
+    sort "$localizableFile" -c
+    if [ $? -ne 0 ]; then
+        echo "Sorting file - $localizableFile"
+        sort "$localizableFile" -o "$localizableFile"
+    fi
 done
 
-nvm use
-npx git-format-staged --formatter "swiftformat stdin --stdinpath '{}'" "*.swift"
+nvm use --silent
+npx git-format-staged --formatter "swiftformat --quiet stdin --stdinpath '{}'" "*.swift"
 swiftlint lint --quiet --strict
