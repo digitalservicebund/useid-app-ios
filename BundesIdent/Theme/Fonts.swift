@@ -13,6 +13,14 @@ extension UIFont {
     convenience init(descriptor: UIFontDescriptor) {
         self.init(descriptor: descriptor, size: descriptor.pointSize)
     }
+    
+    static var bundBodyLRegular: UIFont {
+        var descriptor = UIFontDescriptor(name: bundFontName, size: 18)
+        if UIAccessibility.isBoldTextEnabled {
+            descriptor = descriptor.withSymbolicTraits(.traitBold)!
+        }
+        return UIFontMetrics(forTextStyle: .body).scaledFont(for: .init(descriptor: descriptor))
+    }
 
     static var bundNavigationBar: UIFont {
         var descriptor = UIFontDescriptor(name: bundFontName, size: 17)

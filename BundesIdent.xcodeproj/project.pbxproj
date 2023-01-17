@@ -49,6 +49,7 @@
 		E11EB2AB2853A8B6008B4042 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11EB2AA2853A8B6008B4042 /* Coordinator.swift */; };
 		E11EB2AD2853A8EA008B4042 /* SetupScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11EB2AC2853A8EA008B4042 /* SetupScreens.swift */; };
 		E1234DB12976E0BC00837872 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1234DB02976E0BC00837872 /* SceneDelegate.swift */; };
+		E1234DB32976EA3900837872 /* BundLicensePlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1234DB22976EA3900837872 /* BundLicensePlistViewController.swift */; };
 		E128E0BA288941DC00C5195F /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = E128E0B9288941DC00C5195F /* Sentry */; };
 		E128E0BC28898D3400C5195F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E128E0BB28898D3400C5195F /* AppDelegate.swift */; };
 		E12B424828D8AB440032D65D /* ControllerCallbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12B424728D8AB440032D65D /* ControllerCallbackTests.swift */; };
@@ -227,6 +228,7 @@
 		E11EB2AA2853A8B6008B4042 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		E11EB2AC2853A8EA008B4042 /* SetupScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScreens.swift; sourceTree = "<group>"; };
 		E1234DB02976E0BC00837872 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		E1234DB22976EA3900837872 /* BundLicensePlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundLicensePlistViewController.swift; sourceTree = "<group>"; };
 		E128E0BB28898D3400C5195F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E12B424728D8AB440032D65D /* ControllerCallbackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerCallbackTests.swift; sourceTree = "<group>"; };
 		E12B424928DA1A360032D65D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -587,6 +589,7 @@
 			children = (
 				E16708AD283D4224001A1637 /* HomeView.swift */,
 				E1BC3D7828B7E40B007A7B39 /* LicensesView.swift */,
+				E1234DB22976EA3900837872 /* BundLicensePlistViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1146,6 +1149,7 @@
 				E593E2722816864800154EB0 /* ControllerCallback.swift in Sources */,
 				E1CD8E88281FF62F008ADA2A /* Colors.swift in Sources */,
 				E11EB2AB2853A8B6008B4042 /* Coordinator.swift in Sources */,
+				E1234DB32976EA3900837872 /* BundLicensePlistViewController.swift in Sources */,
 				E5E69D872812FB7A00A3B66A /* IDTask.swift in Sources */,
 				D2B7BCFB28D2108900318B9F /* Effects.swift in Sources */,
 				E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */,
