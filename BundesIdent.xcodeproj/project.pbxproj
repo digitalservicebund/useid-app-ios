@@ -1037,7 +1037,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PATH=$PATH:/opt/homebrew/bin\nlicense-plist --suppress-opening-directory --output-path BundesIdent/Generated --prefix Licenses\n";
+			shellScript = "PATH=$PATH:/opt/homebrew/bin\nlicense-plist --suppress-opening-directory --fail-if-missing-license --output-path BundesIdent/Generated --prefix Licenses\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
