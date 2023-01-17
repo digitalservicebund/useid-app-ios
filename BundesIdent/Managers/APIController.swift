@@ -16,7 +16,7 @@ enum BackendEnvironment: String, Identifiable, CaseIterable {
     /// BaseURL: http://localhost:8080
     case local
     
-    /// BaseURL: https://demo.useid.dev.ds4g.net
+    /// BaseURL: https://useid.dev.ds4g.net
     case staging
 #endif
     
@@ -25,7 +25,7 @@ enum BackendEnvironment: String, Identifiable, CaseIterable {
     
     static var `default`: BackendEnvironment {
 #if DEBUG || PREVIEW
-        return .local
+        return .staging
 #else
         return .production
 #endif
@@ -37,7 +37,7 @@ enum BackendEnvironment: String, Identifiable, CaseIterable {
         switch self {
 #if DEBUG || PREVIEW
         case .local: return URL(string: "http://localhost:8080/api/v1")!
-        case .staging: return URL(string: "https://demo.useid.dev.ds4g.net/api/v1")!
+        case .staging: return URL(string: "https://useid.dev.ds4g.net/api/v1")!
 #endif
         case .production: return URL(string: "https://eid.digitalservicebund.de/api/v1")!
         }
@@ -99,6 +99,10 @@ class APIController: APIControllerType {
         let req = HTTPRequest(method: .post, URI: "/events/{sessionId}/success", variables: ["sessionId": sessionId]) {
             $0.body = .json(payload)
         }
-        _ = try await req.fetch(client)
+        let response = try await req.fetch(client)
+        
+        guard response.statusCode == .accepted else {
+            throw Error.unexpectedStatusCode(response.statusCode.rawValue)
+        }
     }
 }
