@@ -76,8 +76,11 @@ struct IdentificationCANIncorrectInputView: View {
             .navigationBarHidden(false)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(L10n.Identification.Can.IncorrectInput.back) {
+                    Button {
                         ViewStore(store).send(.triggerEnd)
+                    } label: {
+                        Label(L10n.Identification.Can.IncorrectInput.back, systemImage: "chevron.left")
+                            .labelStyle(.titleAndIcon)
                     }
                     .bodyLRegular(color: .accentColor)
                 }
