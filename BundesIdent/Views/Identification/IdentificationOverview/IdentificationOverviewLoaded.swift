@@ -16,7 +16,6 @@ struct TransactionInfo: Codable, Equatable {
         var id: String { key }
     }
     
-#if PREVIEW
     static var preview: TransactionInfo = .init(
         providerName: "Sparkasse",
         providerURL: URL(string: "https://sparkasse.de")!,
@@ -25,7 +24,6 @@ struct TransactionInfo: Codable, Equatable {
             AdditionalInfo(key: "Name", value: "Max Mustermann")
         ]
     )
-#endif
 }
 
 struct IdentificationOverviewLoaded: ReducerProtocol {
@@ -41,9 +39,9 @@ struct IdentificationOverviewLoaded: ReducerProtocol {
         // used when going back to the overview screen when we already received a pin handler
         var pinHandler: PINCallback?
         
-        var faviconURL: URL?
+        var faviconResult: Result<URL, IdentifiableError>?
         
-        init(id: UUID, identificationInformation: IdentificationInformation, request: EIDAuthenticationRequest, transactionInfo: TransactionInfo, handler: IdentifiableCallback<FlaggedAttributes>, canGoBackToSetupIntro: Bool = false, pinHandler: PINCallback? = nil) {
+        init(id: UUID, identificationInformation: IdentificationInformation, request: EIDAuthenticationRequest, transactionInfo: TransactionInfo, handler: IdentifiableCallback<FlaggedAttributes>, canGoBackToSetupIntro: Bool = false, pinHandler: PINCallback? = nil, faviconResult: Result<URL, IdentifiableError>? = nil) {
             self.id = id
             self.identificationInformation = identificationInformation
             self.request = request
@@ -51,6 +49,7 @@ struct IdentificationOverviewLoaded: ReducerProtocol {
             self.handler = handler
             self.canGoBackToSetupIntro = canGoBackToSetupIntro
             self.pinHandler = pinHandler
+            self.faviconResult = faviconResult
         }
         
         var requiredReadAttributes: IdentifiedArrayOf<IDCardAttribute> {
@@ -102,17 +101,26 @@ struct IdentificationOverviewLoaded: ReducerProtocol {
                     return favIcon.url
                 })
             }
-        case .retrievedFaviconURL(.success(let faviconURL)):
-            state.faviconURL = faviconURL
-            return .none
-        case .retrievedFaviconURL(.failure):
-            // TODO: No favicon, what should we do?
+        case .retrievedFaviconURL(let result):
+            state.faviconResult = Result(result).mapError(IdentifiableError.init)
             return .none
         }
     }
 }
 
+extension Result {
+    var optionalValue: Success? {
+        switch self {
+        case .success(let success): return success
+        default: return nil
+        }
+    }
+}
+
 struct IdentificationOverviewLoadedView: View {
+    
+    @Dependency(\.urlOpener) var urlOpener
+    
     var store: Store<IdentificationOverviewLoaded.State, IdentificationOverviewLoaded.Action>
     
     var body: some View {
@@ -127,15 +135,27 @@ struct IdentificationOverviewLoadedView: View {
                             HStack {
                                 VStack(alignment: .leading) {
                                     HStack(alignment: .center, spacing: 8) {
-                                        AsyncImage(url: viewStore.faviconURL) { image in
-                                            image
-                                                .resizable()
-                                        } placeholder: {
-                                            ProgressView()
+                                        ZStack {
+                                            switch viewStore.faviconResult {
+                                            case .none:
+                                                ProgressView()
+                                            case .success(let url):
+                                                AsyncImage(url: url) { image in
+                                                    image
+                                                        .resizable()
+                                                } placeholder: {
+                                                    ProgressView()
+                                                }
+                                            case .failure:
+                                                Image(systemName: "exclamationmark.triangle.fill")
+                                                    .foregroundColor(.orange400)
+                                            }
                                         }
                                         .frame(width: 24, height: 24)
                                         
-                                        Button {} label: {
+                                        Button {
+                                            urlOpener(viewStore.transactionInfo.providerURL)
+                                        } label: {
                                             Text(viewStore.transactionInfo.providerName)
                                                 .underline()
                                                 .bodyLRegular()
@@ -222,5 +242,23 @@ struct IdentificationOverviewLoaded_Previews: PreviewProvider {
                                                                            callback: { _ in })),
                          reducer: EmptyReducer())
         )
+        .previewDisplayName("Loading")
+        IdentificationOverviewLoadedView(
+            store: .init(initialState: .init(id: UUID(),
+                                             identificationInformation: .preview,
+                                             request: EIDAuthenticationRequest.preview,
+                                             transactionInfo: .preview,
+                                             handler: IdentifiableCallback(id: UUID(),
+                                                                           callback: { _ in }), faviconResult: .failure(IdentifiableError(PreviewError()))),
+                         reducer: EmptyReducer())
+        )
+        .previewDisplayName("Error")
+    }
+}
+
+struct PreviewError: Error {
+    let string: String?
+    init(_ string: String? = nil) {
+        self.string = string
     }
 }
