@@ -30,8 +30,6 @@ struct IdentificationShare: ReducerProtocol {
     enum Action: Equatable, BindableAction {
         case close
         case confirmClose
-        case send
-        case sent(success: Bool, request: EIDAuthenticationRequest)
         case binding(BindingAction<State>)
         case dismissAlert
     }
@@ -44,23 +42,6 @@ struct IdentificationShare: ReducerProtocol {
         BindingReducer()
         Reduce { state, action in
             switch action {
-            case .send:
-                let request = state.request
-                let email = state.email
-                return .run { send in
-                    // TODO: Send to backend
-                    do {
-                        throw Error.emailError
-                        await send(.sent(success: true, request: request))
-                    } catch {
-                        logger.error("Could not send email request: \(error)")
-                        await send(.sent(success: false, request: request))
-                    }
-                }
-            case .sent(success: false, request: _):
-                state.alert = AlertState(title: TextState(L10n.Identification.Share.Email.Error.title),
-                                         message: TextState(L10n.Identification.Share.Email.Error.body))
-                return .none
             case .dismissAlert:
                 state.alert = nil
                 return .none
@@ -91,38 +72,26 @@ struct IdentificationShareView: View {
                             Asset.bundesIdentIcon.swiftUIImage
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .cornerRadius(5)
-                                .frame(height: 30)
-                            HStack(alignment: .firstTextBaseline) {
-                                Text(viewStore.formattedRedirectURL)
-                                    .lineLimit(1)
-                                    .truncationMode(.tail)
-                                    .textSelection(.enabled)
-                                Button {
-                                    let pasteboard = UIPasteboard.general
-                                    pasteboard.string = viewStore.redirectURL.absoluteString
-                                } label: {
-                                    Image(systemName: "doc.on.doc")
-                                }
+//                                .cornerRadius(5)
+                            Text(viewStore.formattedRedirectURL)
+                                .headingM()
+                                .lineLimit(1)
+                                .truncationMode(.tail)
+                                .textSelection(.enabled)
+                            Button {
+                                let pasteboard = UIPasteboard.general
+                                pasteboard.string = viewStore.redirectURL.absoluteString
+                            } label: {
+                                Label("Kopieren", systemImage: "doc.on.doc")
+                                    .bodyMBold(color: .blue800)
+                                    .padding(10)
+                                    .background(Color.blue200)
+                                    .cornerRadius(8)
                             }
+                            Spacer(minLength: 0)
                         }
-                        .headingM()
+                        .frame(maxHeight: 30)
                         .padding()
-                    }
-                    WithViewStore(store) { viewStore in
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text(L10n.Identification.Share.Email.title)
-                                .bodyLRegular()
-                                .padding(.horizontal)
-                            TextField(L10n.Identification.Share.Email.placeholder, text: viewStore.binding(\.$email))
-                                .textContentType(.emailAddress)
-                                .textInputAutocapitalization(.never)
-                                .disableAutocorrection(true)
-                                .padding(.horizontal)
-                                .textFieldStyle(BundTextFieldStyle())
-                            DialogButtons(store: store.stateless, primary: .init(title: L10n.Identification.Share.Email.send, action: .send))
-                                .disabled(viewStore.sendButtonDisabled)
-                        }
                     }
                 }
             }
@@ -139,7 +108,7 @@ struct IdentificationShareView_Previews: PreviewProvider {
         IdentificationShareView(
             store: .init(
                 initialState: .init(request: .preview,
-                                    redirectURL: URL(string: "https://bundesident.de/yx29ejm")!),
+                                    redirectURL: URL(string: "https://buid.de/yx29ejm")!),
                 reducer: IdentificationShare()
             )
         )
