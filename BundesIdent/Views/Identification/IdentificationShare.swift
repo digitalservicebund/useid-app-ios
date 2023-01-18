@@ -10,7 +10,6 @@ struct IdentificationShare: ReducerProtocol {
         let request: EIDAuthenticationRequest
         let redirectURL: URL
         
-        @BindableState var email: String = ""
         @BindableState var alert: AlertState<Action>?
         
         var formattedRedirectURL: String {
@@ -20,10 +19,6 @@ struct IdentificationShare: ReducerProtocol {
             }
             string.removeSubrange(range)
             return string
-        }
-        
-        var sendButtonDisabled: Bool {
-            email.isEmpty
         }
     }
     
@@ -72,7 +67,7 @@ struct IdentificationShareView: View {
                             Asset.bundesIdentIcon.swiftUIImage
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-//                                .cornerRadius(5)
+                                .cornerRadius(8)
                             Text(viewStore.formattedRedirectURL)
                                 .headingM()
                                 .lineLimit(1)
@@ -112,17 +107,7 @@ struct IdentificationShareView_Previews: PreviewProvider {
                 reducer: IdentificationShare()
             )
         )
-        .previewDisplayName("Empty email")
-        
-        IdentificationShareView(
-            store: .init(
-                initialState: .init(request: .preview,
-                                    redirectURL: URL(string: "https://bundesident.de/yx29ejm")!,
-                                    email: "abc@example.org"),
-                reducer: IdentificationShare()
-            )
-        )
-        .previewDisplayName("Filled email")
+        .previewDisplayName("Short link")
         
         IdentificationShareView(
             store: .init(

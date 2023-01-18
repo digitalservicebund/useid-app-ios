@@ -191,9 +191,6 @@ struct IdentificationCoordinator: ReducerProtocol {
             case .routeAction(_, action: .handOff(.refreshed(success: true, request: let request, redirectURL: _))):
                 state.routes.push(.done(IdentificationDone.State(request: request)))
                 return .none
-            case .routeAction(_, action: .share(.sent(success: true, request: let request))):
-                state.routes.push(.done(IdentificationDone.State(request: request)))
-                return .none
             case .swipeToDismiss:
                 switch state.swipeToDismiss {
                 case .allow:
