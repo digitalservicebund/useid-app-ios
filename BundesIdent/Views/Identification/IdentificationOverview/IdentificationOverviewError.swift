@@ -9,10 +9,15 @@ struct IdentificationOverviewError: ReducerProtocol {
         let identificationInformation: IdentificationInformation
         let canGoBackToSetupIntro: Bool
         
-        init(error: IdentifiableError, identificationInformation: IdentificationInformation, canGoBackToSetupIntro: Bool = false) {
+        let expirationChecked: Bool
+        let transactionInfo: TransactionInfo?
+        
+        init(error: IdentifiableError, identificationInformation: IdentificationInformation, canGoBackToSetupIntro: Bool = false, expirationChecked: Bool, transactionInfo: TransactionInfo?) {
             self.error = error
             self.identificationInformation = identificationInformation
             self.canGoBackToSetupIntro = canGoBackToSetupIntro
+            self.expirationChecked = expirationChecked
+            self.transactionInfo = transactionInfo
         }
         
         var tokenIsInvalid: Bool {
@@ -44,13 +49,13 @@ struct IdentificationOverviewError: ReducerProtocol {
             if tokenIsInvalid {
                 return .init(title: L10n.Identification.ExpiredTokenError.close, action: .close)
             } else {
-                return .init(title: L10n.Identification.FetchMetadataError.retry, action: .retry)
+                return .init(title: L10n.Identification.FetchMetadataError.retry, action: .retry(expirationChecked: expirationChecked, transactionInfo: transactionInfo))
             }
         }
     }
     
     enum Action: Equatable {
-        case retry
+        case retry(expirationChecked: Bool, transactionInfo: TransactionInfo?)
         case close
     }
     
@@ -75,7 +80,7 @@ struct IdentificationOverviewErrorView: View {
 
 struct IdentificationOverviewErrorView_Previews: PreviewProvider {
     static var previews: some View {
-        IdentificationOverviewErrorView(store: StoreOf<IdentificationOverviewError>(initialState: .init(error: IdentifiableError(HandleURLError.tcTokenURLCreationFailed), identificationInformation: .preview),
+        IdentificationOverviewErrorView(store: StoreOf<IdentificationOverviewError>(initialState: .init(error: IdentifiableError(HandleURLError.tcTokenURLCreationFailed), identificationInformation: .preview, expirationChecked: false, transactionInfo: nil),
                                                                                     reducer: EmptyReducer()))
     }
 }

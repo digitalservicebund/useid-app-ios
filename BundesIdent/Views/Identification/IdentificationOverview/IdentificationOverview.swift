@@ -81,16 +81,25 @@ struct IdentificationOverview: ReducerProtocol {
         }
         Reduce { state, action in
             switch action {
-            case .error(.retry):
+            case .error(.retry(expirationChecked: let expirationChecked,
+                               transactionInfo: let transactionInfo)):
                 state = .loading(IdentificationOverviewLoading.State(identificationInformation: state.identificationInformation,
-                                                                     canGoBackToSetupIntro: state.canGoBackToSetupIntro))
+                                                                     canGoBackToSetupIntro: state.canGoBackToSetupIntro,
+                                                                     expirationChecked: expirationChecked,
+                                                                     transactionInfo: transactionInfo))
                 return .none
             case .error(.close):
                 return Effect(value: .end)
-            case .loading(.failure(let error)):
-                state = .error(IdentificationOverviewError.State(error: error,
-                                                                 identificationInformation: state.identificationInformation,
-                                                                 canGoBackToSetupIntro: state.canGoBackToSetupIntro))
+            case .loading(.failure(error: let error, expirationChecked: let expirationChecked, transactionInfo: let transactionInfo)):
+                state = .error(
+                    IdentificationOverviewError.State(
+                        error: error,
+                        identificationInformation: state.identificationInformation,
+                        canGoBackToSetupIntro: state.canGoBackToSetupIntro,
+                        expirationChecked: expirationChecked,
+                        transactionInfo: transactionInfo
+                    )
+                )
                 return .trackEvent(category: "identification",
                                    action: "loadingFailed",
                                    name: "attributes",
