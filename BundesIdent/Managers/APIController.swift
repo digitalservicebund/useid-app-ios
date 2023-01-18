@@ -71,9 +71,7 @@ class APIController: APIControllerType {
     func validateTCTokenURL(sessionId: String, tokenId: String) async throws -> Bool {
         let req = try HTTPRequest(method: .get, URI: "/identification/sessions/{sessionId}/tokens/{tokenId}", variables: ["sessionId": sessionId, "tokenId": tokenId])
         let response = try await req.fetch(client)
-        return true
         
-        // TODO: Once Simons code is merged
         switch response.statusCode {
         case .noContent: return true
         case .notFound: return false

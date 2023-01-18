@@ -1,10 +1,10 @@
-import Foundation
+import Analytics
+import ComposableArchitecture
 import FlowStacks
-import TCACoordinators
+import Foundation
 import IdentifiedCollections
 import SwiftUI
-import ComposableArchitecture
-import Analytics
+import TCACoordinators
 
 enum IdentificationCANCoordinatorError: CustomNSError {
     case canNilWhenTriedScan
@@ -22,7 +22,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
         var pin: String?
         var can: String?
         var pinCANCallback: PINCANCallback
-        var tokenURL: URL // TODO: IdentificationInformation
+        var tokenURL: URL
         var authenticationSuccessful = false
         var attempt: Int
         
