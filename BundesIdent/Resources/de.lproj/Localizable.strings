@@ -33,7 +33,7 @@
 "firstTimeUser_intro_skipSetup" = "Bereits eingerichtet";
 "firstTimeUser_intro_startSetup" = "Jetzt Online-Ausweis einrichten";
 "firstTimeUser_intro_title" = "Haben Sie Ihren Online‑Ausweis bereits eingerichtet?";
-"firstTimeUser_missingPINLetter_body" = "Wir arbeiten noch an dieser Funktion.\n\nWeitere Informationen über den PIN‑Rücksetzbrief finden Sie unter:\n\n**[www.pin-ruecksetzbrief-bestellen.de ↗](https://www.pin-ruecksetzbrief-bestellen.de)**";
+"firstTimeUser_missingPINLetter_body" = "Sie brauchen eine neue PIN? Bestellen Sie einen PIN-Rücksetzbrief:\n\n**[www.pin-ruecksetzbrief-bestellen.de ↗](https://www.pin-ruecksetzbrief-bestellen.de)**";
 "firstTimeUser_missingPINLetter_title" = "PIN-Rücksetzbrief bestellen.";
 "firstTimeUser_personalPINIntro_continue" = "Persönliche Ausweis–PIN vergeben";
 "firstTimeUser_personalPINIntro_info_body" = "Sie benötigen diese jedes Mal, wenn Sie die Online‑Ausweisfunktion in Zukunft nutzen.";
@@ -54,7 +54,7 @@
 "firstTimeUser_pinLetter_title" = "Haben Sie Ihren PIN‑Brief noch?";
 "firstTimeUser_scanInstructions_body" = "Die App nutzt nicht die Kamera, sondern die NFC‑Sensoren in iPhone und Ausweis, um Ihre neue PIN auf den Ausweis zu übertragen. Deswegen müssen sich Ausweis und iPhone während der PIN‑Übertragung direkt berühren.";
 "firstTimeUser_scanInstructions_title" = "So übertragen Sie Ihre neue PIN auf den Ausweis.";
-"firstTimeUser_scan_body" = "Die App nutzt nicht die Kamera, sondern die NFC‑Sensoren in Smartphone und Ausweis, um Ihre neue PIN auf den Ausweis zu übertragen. Deswegen müssen sich Ausweis und Smartphone während der PIN‑Übertragung direkt berühren.";
+"firstTimeUser_scan_body" = "Die App nutzt nicht die Kamera, sondern die NFC-Technologie, um Ihre neue PIN auf den Ausweis zu übertragen. Achten Sie darauf, dass Ihr Ausweis das Gerät direkt berührt.";
 "firstTimeUser_scan_cardConnected_first" = "Ausweis nicht bewegen.";
 "firstTimeUser_scan_cardConnected_second" = "Ausweis nicht bewegen.";
 "firstTimeUser_scan_cardRecognized_first" = "Ausweis nicht bewegen.";
@@ -110,7 +110,7 @@
 "identification_can_intro_title" = "Geben Sie die 6‑stellige Nummer von Ihrem Ausweis ein.";
 "identification_can_orderNewPin_body" = "Setzen Sie Ihre PIN in Ihrer zuständigen Behörde neu oder bestellen Sie einen PIN‑Rücksetzbrief: \n\n[**www.pin-ruecksetzbrief-bestellen.de ↗**](https://www.pin-ruecksetzbrief-bestellen.de)";
 "identification_can_orderNewPin_title" = "Neue PIN bestellen";
-"identification_can_pinForgotten_body" = "Sie haben ihre PIN zweimal falsch eingegeben.";
+"identification_can_pinForgotten_body" = "Sie haben Ihre PIN zweimal falsch eingegeben.";
 "identification_can_pinForgotten_orderNewPin" = "Ja, ich möchte eine neue PIN";
 "identification_can_pinForgotten_retry" = "Nein, erneut versuchen";
 "identification_can_pinForgotten_title" = "Haben Sie Ihre persönliche Ausweis‑PIN vielleicht vergessen?";
