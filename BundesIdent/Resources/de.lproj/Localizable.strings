@@ -54,7 +54,7 @@
 "firstTimeUser_pinLetter_title" = "Haben Sie Ihren PIN‑Brief noch?";
 "firstTimeUser_scanInstructions_body" = "Die App nutzt nicht die Kamera, sondern die NFC‑Sensoren in iPhone und Ausweis, um Ihre neue PIN auf den Ausweis zu übertragen. Deswegen müssen sich Ausweis und iPhone während der PIN‑Übertragung direkt berühren.";
 "firstTimeUser_scanInstructions_title" = "So übertragen Sie Ihre neue PIN auf den Ausweis.";
-"firstTimeUser_scan_body" = "Die App nutzt nicht die Kamera, sondern die NFC-Technologie, um Ihre neue PIN auf den Ausweis zu übertragen. Achten Sie darauf, dass Ihr Ausweis das Gerät direkt berührt.";
+"firstTimeUser_scan_body" = "Probieren Sie verschiedene Stellen aus. Achten Sie darauf, dass Ihr Ausweis das Gerät direkt berührt.";
 "firstTimeUser_scan_cardConnected_first" = "Ausweis nicht bewegen.";
 "firstTimeUser_scan_cardConnected_second" = "Ausweis nicht bewegen.";
 "firstTimeUser_scan_cardRecognized_first" = "Ausweis nicht bewegen.";
@@ -143,7 +143,7 @@
 "identification_scan_provideCard" = "Berühren Sie Ihren Ausweis mit der oberen Rückseite des iPhones.";
 "identification_scan_scan" = "Jetzt Daten abrufen";
 "identification_scan_scanSuccess" = "Scannen erfolgreich abgeschlossen.";
-"identification_scan_title" = "Berühren Sie Ihren Ausweis mit der oberen Rückseite des Smartphones.";
+"identification_scan_title" = "Berühren Sie Ihren Ausweis mit der Rückseite des Smartphones.";
 "identification_scan_unexpectedError_close" = "Schließen";
 "identification_scan_unexpectedError_message" = "Ein unerwarteter Fehler ist aufgetreten. Bitte kehren Sie zur Webseite zurück und wiederholen Sie den Vorgang.";
 "identification_scan_unexpectedError_title" = "Es ist ein Fehler aufgetreten.";
