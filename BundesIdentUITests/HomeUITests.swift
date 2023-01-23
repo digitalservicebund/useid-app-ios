@@ -32,7 +32,7 @@ final class HomeUITests: XCTestCase {
         
         app.buttons[L10n.Home.More.privacy].wait().tap()
         app.staticTexts[L10n.Privacy.title].assertExistence()
-        app.staticTexts["E-Mail: poststelle@bfdi.bund.de ↗"].assertExistence()
+        app.staticTexts["E‑Mail: poststelle@bfdi.bund.de ↗"].assertExistence()
         app.backButton.assertExistence()
     }
     
