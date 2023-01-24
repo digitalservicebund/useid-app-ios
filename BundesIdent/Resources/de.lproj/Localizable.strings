@@ -66,7 +66,7 @@
 "firstTimeUser_scan_scan" = "Neue PIN übertragen";
 "firstTimeUser_scan_scanSuccess_first" = "Ausweis nicht bewegen.";
 "firstTimeUser_scan_scanSuccess_second" = "Persönliche Ausweis‑PIN erfolgreich übertragen.";
-"firstTimeUser_scan_title" = "Berühren Sie Ihren Ausweis mit der oberen Rückseite des Smartphones.";
+"firstTimeUser_scan_title_iOS" = "Berühren Sie Ihren Ausweis mit der oberen Rückseite des Smartphones.";
 "firstTimeUser_transportPIN_body" = "Die 5‑stellige Transport‑PIN finden Sie in Ihrem PIN‑Brief.";
 "firstTimeUser_transportPIN_continue" = "Weiter";
 "firstTimeUser_transportPIN_textFieldLabel" = "Transport-PIN, fünfstellig";
@@ -143,7 +143,7 @@
 "identification_scan_provideCard" = "Berühren Sie Ihren Ausweis mit der oberen Rückseite des iPhones.";
 "identification_scan_scan" = "Jetzt Daten abrufen";
 "identification_scan_scanSuccess" = "Scannen erfolgreich abgeschlossen.";
-"identification_scan_title" = "Berühren Sie Ihren Ausweis mit der Rückseite des Smartphones.";
+"identification_scan_title_iOS" = "Berühren Sie Ihren Ausweis mit der Rückseite des iPhones.";
 "identification_scan_unexpectedError_close" = "Schließen";
 "identification_scan_unexpectedError_message" = "Ein unerwarteter Fehler ist aufgetreten. Bitte kehren Sie zur Webseite zurück und wiederholen Sie den Vorgang.";
 "identification_scan_unexpectedError_title" = "Es ist ein Fehler aufgetreten.";

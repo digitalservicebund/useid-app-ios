@@ -202,7 +202,7 @@ struct SetupScanView: View {
                        instructionsTitle: L10n.FirstTimeUser.ScanInstructions.title,
                        instructionsBody: L10n.FirstTimeUser.ScanInstructions.body,
                        instructionsScanButtonTitle: L10n.FirstTimeUser.Scan.scan,
-                       scanTitle: L10n.FirstTimeUser.Scan.title,
+                       scanTitle: L10n.FirstTimeUser.Scan.Title.ios,
                        scanBody: L10n.FirstTimeUser.Scan.body,
                        scanButton: L10n.FirstTimeUser.Scan.scan)
             .interactiveDismissDisabled()

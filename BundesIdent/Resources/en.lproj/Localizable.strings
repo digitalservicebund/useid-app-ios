@@ -67,7 +67,7 @@
 "firstTimeUser_scan_scan" = "Transfer new PIN";
 "firstTimeUser_scan_scanSuccess_first" = "Do not move the ID card.";
 "firstTimeUser_scan_scanSuccess_second" = "Data transfer successful.";
-"firstTimeUser_scan_title" = "Hold your ID card close to the top back of the smartphone.";
+"firstTimeUser_scan_title_iOS" = "Hold your ID card close to the top back of the smartphone.";
 "firstTimeUser_transportPIN_body" = "You will find the 5‑digit transport PIN in your PIN letter.";
 "firstTimeUser_transportPIN_continue" = "Next";
 "firstTimeUser_transportPIN_textFieldLabel" = "Transport PIN, five digits";
@@ -144,7 +144,7 @@
 "identification_scan_provideCard" = "Hold your ID card close to the top back of the iPhone.";
 "identification_scan_scan" = "Retrieve data now";
 "identification_scan_scanSuccess" = "Scanning completed successfully.";
-"identification_scan_title" = "Retrieve the data from your ID card.";
+"identification_scan_title_iOS" = "Retrieve the data from your ID card.";
 "identification_scan_unexpectedError_close" = "Close";
 "identification_scan_unexpectedError_message" = "An unexpected error has occurred. Please return to the website and try again.";
 "identification_scan_unexpectedError_title" = "An error occurred";

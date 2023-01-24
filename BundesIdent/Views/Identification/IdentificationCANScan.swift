@@ -167,7 +167,7 @@ struct IdentificationCANScanView: View {
                        instructionsTitle: L10n.Identification.ScanInstructions.title,
                        instructionsBody: L10n.Identification.ScanInstructions.body,
                        instructionsScanButtonTitle: L10n.Identification.Scan.scan,
-                       scanTitle: L10n.Identification.Scan.title,
+                       scanTitle: L10n.Identification.Scan.Title.ios,
                        scanBody: L10n.Identification.Scan.message,
                        scanButton: L10n.Identification.Scan.scan)
             .onAppear {
