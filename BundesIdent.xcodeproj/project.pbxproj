@@ -48,6 +48,7 @@
 		E11EB2A928537DE1008B4042 /* XCUITestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */; };
 		E11EB2AB2853A8B6008B4042 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11EB2AA2853A8B6008B4042 /* Coordinator.swift */; };
 		E11EB2AD2853A8EA008B4042 /* SetupScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11EB2AC2853A8EA008B4042 /* SetupScreens.swift */; };
+		E1234DB52976F80E00837872 /* WebAuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1234DB42976F80E00837872 /* WebAuthenticationManager.swift */; };
 		E128E0BA288941DC00C5195F /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = E128E0B9288941DC00C5195F /* Sentry */; };
 		E128E0BC28898D3400C5195F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E128E0BB28898D3400C5195F /* AppDelegate.swift */; };
 		E12B424828D8AB440032D65D /* ControllerCallbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12B424728D8AB440032D65D /* ControllerCallbackTests.swift */; };
@@ -233,6 +234,7 @@
 		E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUITestHelper.swift; sourceTree = "<group>"; };
 		E11EB2AA2853A8B6008B4042 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		E11EB2AC2853A8EA008B4042 /* SetupScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScreens.swift; sourceTree = "<group>"; };
+		E1234DB42976F80E00837872 /* WebAuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAuthenticationManager.swift; sourceTree = "<group>"; };
 		E128E0BB28898D3400C5195F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E12B424728D8AB440032D65D /* ControllerCallbackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerCallbackTests.swift; sourceTree = "<group>"; };
 		E12B424928DA1A360032D65D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -717,6 +719,7 @@
 				E1DF0995294A0FF300199761 /* PreviewIDInteractionManager.swift */,
 				E14C21B128B8BF9100192338 /* StorageManager.swift */,
 				E19BFDDB296DC6F6002125AE /* APIController.swift */,
+				E1234DB42976F80E00837872 /* WebAuthenticationManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1092,6 +1095,7 @@
 				E12CB30A284A2C700039FD56 /* InteractiveDismissableView.swift in Sources */,
 				E1FDEAAB28F96BD300F70CE1 /* AppConfig.swift in Sources */,
 				E15776A0286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift in Sources */,
+				E1234DB52976F80E00837872 /* WebAuthenticationManager.swift in Sources */,
 				E5E69D832812FB4500A3B66A /* EIDInteractionEvent.swift in Sources */,
 				D278AC9A28FD388100BD0528 /* View+Synchronize.swift in Sources */,
 				E110400D281C389C004BA03E /* SetupIntro.swift in Sources */,

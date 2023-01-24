@@ -1,13 +1,69 @@
+import AuthenticationServices
 import Foundation
 import RealHTTP
 
+struct UserRegistrationResponse: Codable, Equatable {
+    let userId: String
+    let challenge: Data
+}
+
+struct RegistrationDetails: Codable, Equatable {
+    var rawAttestationObject: Data
+    var rawClientDataJSON: Data
+    var credentialId: Data
+}
+
+struct UserAuthenticationRequest: Codable, Equatable {
+    var rawAttestationObject: Data
+    var rawClientDataJSON: Data
+    var credentialId: Data
+}
+
+struct UserAuthenticationResponse: Codable, Equatable {
+    let challenge: Data
+}
+
+struct AuthenticationDetails: Codable, Equatable {
+    var rawAuthenticatorData: Data
+    var signature: Data
+    var rawClientDataJSON: Data
+    var credentialId: Data
+}
+
+typealias UserId = String
+
 protocol APIControllerType {
+    
+    var environment: BackendEnvironment { get }
     
     func setEnvironment(_ environment: BackendEnvironment)
     
     func validateTCTokenURL(sessionId: String, tokenId: String) async throws -> Bool
     func retrieveTransactionInfo(sessionId: String) async throws -> TransactionInfo
     func sendSessionEvent(sessionId: String, redirectURL: URL) async throws
+    
+    /**
+     POST /users
+     */
+    func initiateRegistration() async throws -> UserRegistrationResponse
+    
+    /**
+     POST /users/:userId/:widgetSessionId/register/complete
+     (previously /events/:widgetSessionId/success)
+     */
+    func completeRegistration(userId: UserId, widgetSessionId: String, registrationDetails: RegistrationDetails, refreshURL: URL) async throws
+ 
+    //  TODO: Implement later for re-using passkeys
+//    /**
+//     POST /users/:userId/initiate
+//     */
+//    func initiateAuthentication(userId: UserId) async throws -> UserAuthenticationResponse
+//
+//    /**
+//     POST /users/:userId/:widgetSessionId/auth/complete
+//     (previously /events/:widgetSessionId/success)
+//     */
+//    func completeAuthentication(userId: UserId, widgetSessionId: String, authenticationDetails: AuthenticationDetails, refreshURL: URL) async throws
 }
 
 enum BackendEnvironment: String, Identifiable, CaseIterable {
@@ -45,7 +101,7 @@ enum BackendEnvironment: String, Identifiable, CaseIterable {
 }
 
 class APIController: APIControllerType {
-    
+
     enum Error: Swift.Error {
         case tcTokenURLMalformed
         case notYetImplemented
@@ -62,6 +118,10 @@ class APIController: APIControllerType {
         self.client.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         self.jsonEncoder = jsonEncoder
         self.jsonDecoder = jsonDecoder
+    }
+    
+    var environment: BackendEnvironment {
+        .staging
     }
     
     func setEnvironment(_ environment: BackendEnvironment) {
@@ -82,6 +142,7 @@ class APIController: APIControllerType {
     }
     
     func retrieveTransactionInfo(sessionId: String) async throws -> TransactionInfo {
+        return TransactionInfo.preview
         let req = try HTTPRequest(method: .get, URI: "/identification/sessions/{sessionId}/transaction-info", variables: ["sessionId": sessionId])
         let response = try await req.fetch(client)
         let transactionInfo = try response.decode(TransactionInfo.self, decoder: jsonDecoder)
@@ -95,6 +156,58 @@ class APIController: APIControllerType {
         
         let payload = Payload(refreshAddress: redirectURL.absoluteString)
         let req = HTTPRequest(method: .post, URI: "/events/{sessionId}/success", variables: ["sessionId": sessionId]) {
+            $0.body = .json(payload)
+        }
+        let response = try await req.fetch(client)
+        
+        guard response.statusCode == .accepted else {
+            throw Error.unexpectedStatusCode(response.statusCode.rawValue)
+        }
+    }
+    
+    func initiateRegistration() async throws -> UserRegistrationResponse {
+        let count = 32
+        var bytes = [Int8](repeating: 0, count: count)
+        
+        // Fill bytes with secure random data
+        let status = SecRandomCopyBytes(
+            kSecRandomDefault,
+            count,
+            &bytes
+        )
+        let data = Data(bytes: bytes, count: count)
+        return UserRegistrationResponse(userId: "someUserId", challenge: data)
+        
+        let req = try HTTPRequest(method: .post, URI: "/users", variables: [:])
+        let response = try await req.fetch(client)
+        
+        guard response.statusCode == .accepted else {
+            throw Error.unexpectedStatusCode(response.statusCode.rawValue)
+        }
+        
+        let decodedResponse = try response.decode(UserRegistrationResponse.self)
+        return decodedResponse
+    }
+    
+    func completeRegistration(userId: UserId, widgetSessionId: String, registrationDetails: RegistrationDetails, refreshURL: URL) async throws {
+        struct Payload: Codable {
+            let rawAttestationObject: Data
+            let rawClientDataJSON: Data
+            let credentialId: Data
+            let refreshAddress: String
+        }
+        
+        let payload = Payload(
+            rawAttestationObject: registrationDetails.rawAttestationObject,
+            rawClientDataJSON: registrationDetails.rawClientDataJSON,
+            credentialId: registrationDetails.credentialId,
+            refreshAddress: refreshURL.absoluteString
+        )
+        let req = HTTPRequest(method: .post, URI: "/users/{userId}/{widgetSessionId}/success",
+                              variables: [
+                                  "userId": userId,
+                                  "widgetSessionId": widgetSessionId
+                              ]) {
             $0.body = .json(payload)
         }
         let response = try await req.fetch(client)

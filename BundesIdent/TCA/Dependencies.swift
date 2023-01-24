@@ -52,6 +52,10 @@ enum AnalyticsKey: DependencyKey {
     static var liveValue: AnalyticsClient = LogAnalyticsClient()
 }
 
+enum WebAuthenticationManagerKey: DependencyKey {
+    static var liveValue: WebAuthenticationManagerType = WebAuthenticationManager(logger: Logger.analytics)
+}
+
 enum APIControllerKey: DependencyKey {
     static var liveValue: APIControllerType = APIController(
         client: HTTPClient(baseURL: BackendEnvironment.default.baseURL),
@@ -94,5 +98,10 @@ extension DependencyValues {
     var apiController: APIControllerType {
         get { self[APIControllerKey.self] }
         set { self[APIControllerKey.self] = newValue }
+    }
+    
+    var webAuthenticationManager: WebAuthenticationManagerType {
+        get { self[WebAuthenticationManagerKey.self] }
+        set { self[WebAuthenticationManagerKey.self] = newValue }
     }
 }
