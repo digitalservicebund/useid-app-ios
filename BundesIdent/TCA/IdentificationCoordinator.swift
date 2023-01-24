@@ -103,7 +103,10 @@ struct IdentificationCoordinator: ReducerProtocol {
                 state.routes.dismiss()
                 return .none
             case .routeAction(_, action: .overview(.back)):
-                return Effect(value: .back(tokenURL: state.tokenURL))
+                return Effect.merge(
+                    .cancel(id: CancelId.self),
+                    Effect(value: .back(tokenURL: state.tokenURL))
+                )
             case .routeAction(_, action: .overview(.loading(.identify))):
                 let publisher: EIDInteractionPublisher
 #if PREVIEW
