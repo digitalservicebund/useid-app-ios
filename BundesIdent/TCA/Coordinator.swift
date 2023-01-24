@@ -34,15 +34,6 @@ struct Coordinator: ReducerProtocol {
         var routes: [Route<Screen.State>]
     }
     
-    func handleAppStart(state: inout State) -> Effect<Coordinator.Action, Never> {
-        if storageManager.setupCompleted {
-            return .none
-        } else {
-            state.routes.presentSheet(.setupCoordinator(SetupCoordinator.State()))
-            return .none
-        }
-    }
-    
     func dismiss(state: inout State, show screen: State.Screen) -> Effect<Coordinator.Action, Never> {
         Effect.routeWithDelaysIfUnsupported(state.routes) {
             $0.dismissAll()
@@ -194,8 +185,6 @@ struct Coordinator: ReducerProtocol {
         switch action {
         case .openURL(let url):
             return handleURL(state: &state, url)
-        case .onAppear:
-            return handleAppStart(state: &state)
         default:
             return .none
         }

@@ -57,9 +57,7 @@ final class CoordinatorTests: XCTestCase {
             $0.setupCompleted.get.thenReturn(false)
         }
         
-        store.send(.onAppear) {
-            $0.routes.append(.sheet(.setupCoordinator(SetupCoordinator.State(tokenURL: nil)), embedInNavigationView: false))
-        }
+        store.send(.onAppear)
     }
     
     func testOpenEIDURLWithUnfinishedSetup() {
