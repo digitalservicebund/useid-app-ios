@@ -33,7 +33,7 @@
 "firstTimeUser_intro_skipSetup" = "Already set up";
 "firstTimeUser_intro_startSetup" = "Set up online ID card now";
 "firstTimeUser_intro_title" = "Have you already set up your online ID card?";
-"firstTimeUser_missingPINLetter_body" = "We are still working on this feature.\n\nFor more information about the PIN reset letter, please visit:\n\n**[www.pin-ruecksetzbrief-bestellen.de ↗](https://www.pin-ruecksetzbrief-bestellen.de)**";
+"firstTimeUser_missingPINLetter_body" = "Do you need a new PIN? Order a PIN reset letter:\n\n**[www.pin-ruecksetzbrief-bestellen.de ↗](https://www.pin-ruecksetzbrief-bestellen.de)**";
 "firstTimeUser_missingPINLetter_title" = "Order PIN reset letter.";
 "firstTimeUser_personalPINIntro_continue" = "Assign personal ID PIN";
 "firstTimeUser_personalPINIntro_info_body" = "You will need this every time you use the online ID function in the future.";
@@ -144,7 +144,7 @@
 "identification_scan_provideCard" = "Hold your ID card close to the top back of the iPhone.";
 "identification_scan_scan" = "Retrieve data now";
 "identification_scan_scanSuccess" = "Scanning completed successfully.";
-"identification_scan_title_iOS" = "Retrieve the data from your ID card.";
+"identification_scan_title_iOS" = "Place your ID card on the back of your smartphone.";
 "identification_scan_unexpectedError_close" = "Close";
 "identification_scan_unexpectedError_message" = "An unexpected error has occurred. Please return to the website and try again.";
 "identification_scan_unexpectedError_title" = "An error occurred";
