@@ -139,57 +139,49 @@ class IdentificationCANCoordinatorTests: XCTestCase {
         }
     }
     
-    @MainActor
-    func testScanFromImmediateThirdAttemptPopsToCanIntro() async throws {
+    func testScanFromImmediateThirdAttemptPopsToCanIntro() throws {
         let pin = "123456"
         let can = "123456"
         let request = EIDAuthenticationRequest.preview
         let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
         let newPINCANCallback = PINCANCallback(id: UUID(number: 1), callback: { _, _ in })
-        let store = TestStore(
-            initialState: IdentificationCANCoordinator.State(pin: pin,
-                                                             can: can,
-                                                             pinCANCallback: pinCANCallback,
-                                                             tokenURL: demoTokenURL,
-                                                             attempt: 0,
-                                                             states: [
-                                                                 .root(.canIntro(IdentificationCANIntro.State(request: request, shouldDismiss: true))),
-                                                                 .push(.canInput(IdentificationCANInput.State(request: request, pushesToPINEntry: false))),
-                                                                 .push(.canScan(IdentificationCANScan.State(request: request, pin: pin, can: can, pinCANCallback: newPINCANCallback, shared: SharedScan.State(showInstructions: false)))),
-                                                                 .sheet(.canIncorrectInput(IdentificationCANIncorrectInput.State(request: request)))
-                                                             ]),
-            reducer: IdentificationCANCoordinator()
-        )
-    
+        
         let oldRoutes: [Route<IdentificationCANScreen.State>] = [
             .root(.canIntro(IdentificationCANIntro.State(request: request, shouldDismiss: true))),
             .push(.canInput(IdentificationCANInput.State(request: request, pushesToPINEntry: false))),
             .push(.canScan(IdentificationCANScan.State(request: request, pin: pin, can: can, pinCANCallback: newPINCANCallback, shared: SharedScan.State(showInstructions: false)))),
             .sheet(.canIncorrectInput(IdentificationCANIncorrectInput.State(request: request)))
         ]
+        
+        let store = TestStore(
+            initialState: IdentificationCANCoordinator.State(pin: pin,
+                                                             can: can,
+                                                             pinCANCallback: pinCANCallback,
+                                                             tokenURL: demoTokenURL,
+                                                             attempt: 0,
+                                                             states: oldRoutes),
+            reducer: IdentificationCANCoordinator()
+        )
+        
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
     
-        let routesWithSheetDismissed: [Route<IdentificationCANScreen.State>] = [
-            .root(.canIntro(IdentificationCANIntro.State(request: request, shouldDismiss: true))),
-            .push(.canInput(IdentificationCANInput.State(request: request, pushesToPINEntry: false))),
-            .push(.canScan(IdentificationCANScan.State(request: request, pin: pin, can: can, pinCANCallback: newPINCANCallback, shared: SharedScan.State(showInstructions: false))))
-        ]
+        let routesWithSheetDismissed = Array(oldRoutes.dropLast(1))
     
         let updatedRoutes: [Route<IdentificationCANScreen.State>] = [
-            .root(.canIntro(IdentificationCANIntro.State(request: request, shouldDismiss: true)))
+            .sheet(.canIntro(IdentificationCANIntro.State(request: request, shouldDismiss: true)))
         ]
-    
-        await store.send(.routeAction(3, action: .canIncorrectInput(.end(request))))
-    
-        await store.receive(.updateRoutes(oldRoutes))
-    
-        await store.receive(.updateRoutes(routesWithSheetDismissed)) {
+        
+        store.send(.routeAction(3, action: .canIncorrectInput(.triggerEnd)))
+        store.receive(.routeAction(3, action: .canIncorrectInput(.end(request))))
+        store.receive(.updateRoutes(oldRoutes))
+        store.receive(.updateRoutes(routesWithSheetDismissed)) {
             $0.routes = routesWithSheetDismissed
         }
-    
-        await store.receive(.updateRoutes(updatedRoutes)) {
+        
+        scheduler.advance(by: .seconds(0.65))
+        
+        store.receive(.updateRoutes(updatedRoutes)) {
             $0.routes = updatedRoutes
         }
-    
-        await store.finish()
     }
 }

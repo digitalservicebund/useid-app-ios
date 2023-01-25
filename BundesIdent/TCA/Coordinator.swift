@@ -35,7 +35,7 @@ struct Coordinator: ReducerProtocol {
     }
     
     func dismiss(state: inout State, show screen: State.Screen) -> Effect<Coordinator.Action, Never> {
-        Effect.routeWithDelaysIfUnsupported(state.routes) {
+        Effect.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
             $0.dismissAll()
             $0.presentSheet(screen)
         }
@@ -115,13 +115,13 @@ struct Coordinator: ReducerProtocol {
                                    name: "start",
                                    analytics: analytics)
             case .identificationCoordinator(.back(let tokenURL)):
-                return Effect.routeWithDelaysIfUnsupported(state.routes) {
+                return Effect.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
                     $0.dismiss()
                     $0.presentSheet(.setupCoordinator(SetupCoordinator.State(tokenURL: tokenURL)))
                 }
             case .setupCoordinator(.routeAction(_, action: .intro(.chooseSkipSetup(let tokenURL)))):
                 if let tokenURL {
-                    return Effect.routeWithDelaysIfUnsupported(state.routes) {
+                    return Effect.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
                         $0.dismiss()
                         $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(tokenURL: tokenURL,
                                                                                                    canGoBackToSetupIntro: true)))
@@ -131,7 +131,7 @@ struct Coordinator: ReducerProtocol {
                     return .none
                 }
             case .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification(let tokenURL)))):
-                return Effect.routeWithDelaysIfUnsupported(state.routes) {
+                return Effect.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
                     $0.dismiss()
                     $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(tokenURL: tokenURL,
                                                                                                canGoBackToSetupIntro: false)))

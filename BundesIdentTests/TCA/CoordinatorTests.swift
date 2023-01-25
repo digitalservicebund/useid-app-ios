@@ -113,8 +113,11 @@ final class CoordinatorTests: XCTestCase {
             .sheet(.setupCoordinator(SetupCoordinator.State()))
         ]),
         reducer: Coordinator())
+        
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.issueTracker = mockIssueTracker
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
+        
         store.send(.routeAction(1, action: .setupCoordinator(.routeAction(0, action: .intro(.chooseSkipSetup(tokenURL: tokenURL))))))
         
         let newRoutes: [Route<Screen.State>] = [

@@ -7,6 +7,7 @@ final class SetupUITests: XCTestCase {
         app.launchWithDefaultArguments()
         app.launch()
         
+        app.buttons[L10n.Home.startSetup].wait().tap()
         app.buttons[L10n.FirstTimeUser.Intro.startSetup].wait().tap()
         app.buttons[L10n.FirstTimeUser.PinLetter.letterPresent].wait().tap()
         

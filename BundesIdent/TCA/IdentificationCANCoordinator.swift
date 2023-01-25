@@ -123,8 +123,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                     logger.error("CanIntroState not found in routes")
                     return Effect(value: .dismiss)
                 }
-                
-                return Effect.routeWithDelaysIfUnsupported(state.routes) {
+                return Effect.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
                     $0.dismiss()
                     $0.popTo(index: index)
                 }
