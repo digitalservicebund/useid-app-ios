@@ -66,7 +66,7 @@
 "firstTimeUser_scan_provideCard_second" = "Do not move the ID card.";
 "firstTimeUser_scan_scan" = "Transfer new PIN";
 "firstTimeUser_scan_scanSuccess_first" = "Do not move the ID card.";
-"firstTimeUser_scan_scanSuccess_second" = "Data transfer successful.";
+"firstTimeUser_scan_scanSuccess_second" = "Scanning completed successfully.";
 "firstTimeUser_scan_title_iOS" = "Hold your ID card close to the top back of the iPhone.";
 "firstTimeUser_transportPIN_body" = "You will find the 5‑digit transport PIN in your PIN letter.";
 "firstTimeUser_transportPIN_continue" = "Next";
