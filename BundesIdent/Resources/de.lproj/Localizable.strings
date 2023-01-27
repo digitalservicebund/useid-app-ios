@@ -73,7 +73,7 @@
 "firstTimeUser_scan_provideCard_second" = "Ausweis nicht bewegen.";
 "firstTimeUser_scan_scan" = "Neue PIN übertragen";
 "firstTimeUser_scan_scanSuccess_first" = "Ausweis nicht bewegen.";
-"firstTimeUser_scan_scanSuccess_second" = "Persönliche Ausweis‑PIN erfolgreich übertragen.";
+"firstTimeUser_scan_scanSuccess_second" = "Scannen abgeschlossen.";
 "firstTimeUser_scan_title_iOS" = "Berühren Sie Ihren Ausweis mit der oberen Rückseite des iPhones.";
 "firstTimeUser_transportPIN_body" = "Die 5‑stellige Transport‑PIN finden Sie in Ihrem PIN‑Brief.";
 "firstTimeUser_transportPIN_continue" = "Weiter";
