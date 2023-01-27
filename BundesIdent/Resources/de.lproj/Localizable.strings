@@ -150,7 +150,7 @@
 "identification_scan_message" = "Die App nutzt nicht die Kamera, sondern die NFC‑Sensoren in iPhone und Ausweis, um Ihre PIN zu überprüfen und die benötigten Daten abzurufen. Deswegen müssen sich Ausweis und iPhone während des Datenabrufs direkt berühren.";
 "identification_scan_provideCard" = "Berühren Sie Ihren Ausweis mit der oberen Rückseite des iPhones.";
 "identification_scan_scan" = "Jetzt Daten abrufen";
-"identification_scan_scanSuccess" = "Scannen erfolgreich abgeschlossen.";
+"identification_scan_scanSuccess" = "Scannen abgeschlossen.";
 "identification_scan_title_iOS" = "Berühren Sie Ihren Ausweis mit der oberen Rückseite des iPhones.";
 "identification_scan_unexpectedError_close" = "Schließen";
 "identification_scan_unexpectedError_message" = "Ein unerwarteter Fehler ist aufgetreten. Bitte kehren Sie zur Webseite zurück und wiederholen Sie den Vorgang.";
