@@ -62,7 +62,7 @@
 "firstTimeUser_pinLetter_title" = "Haben Sie Ihren PIN‑Brief noch?";
 "firstTimeUser_scanInstructions_body" = "Die App nutzt nicht die Kamera, sondern die NFC‑Sensoren in iPhone und Ausweis, um Ihre neue PIN auf den Ausweis zu übertragen. Deswegen müssen sich Ausweis und iPhone während der PIN‑Übertragung direkt berühren.";
 "firstTimeUser_scanInstructions_title" = "So übertragen Sie Ihre neue PIN auf den Ausweis.";
-"firstTimeUser_scan_body" = "Probieren Sie verschiedene Stellen aus. Achten Sie darauf, dass Ihr Ausweis das Gerät direkt berührt.";
+"firstTimeUser_scan_body" = "Probieren Sie verschiedene Stellen aus. Achten Sie darauf, dass Ihr Ausweis das Smartphone direkt berührt.";
 "firstTimeUser_scan_cardConnected_first" = "Ausweis nicht bewegen.";
 "firstTimeUser_scan_cardConnected_second" = "Ausweis nicht bewegen.";
 "firstTimeUser_scan_cardRecognized_first" = "Ausweis nicht bewegen.";
