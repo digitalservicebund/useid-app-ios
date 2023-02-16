@@ -17,6 +17,13 @@ struct SharedCANScreen: ReducerProtocol {
             case .scanError: return .allow
             }
         }
+        
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
+            switch self {
+            default:
+                return nil
+            }
+        }
     }
     
     enum Action: Equatable {

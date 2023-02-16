@@ -34,10 +34,9 @@ struct SetupCANScreen: ReducerProtocol {
             case .setupCoordinator(let state):
                 guard let localAction = state.transformToLocalAction(event) else { return nil }
                 return .setupCoordinator(localAction)
-            // TODO:
-//            case .shared(let state):
-//                guard let localAction = state.transformToLocalAction(event) else { return nil }
-//                return .shared(localAction)
+            case .shared(let state):
+                guard let localAction = state.transformToLocalAction(event) else { return nil }
+                return .shared(localAction)
             default:
                 return nil
             }
