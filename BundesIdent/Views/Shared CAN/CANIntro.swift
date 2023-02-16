@@ -3,7 +3,7 @@ import ComposableArchitecture
 
 struct CANIntro: ReducerProtocol {
     struct State: Equatable {
-        var shouldDismiss: Bool
+        var shouldDismiss: Bool // TODO: Rename to isRootOfCANFlow
     }
     
     enum Action: Equatable {

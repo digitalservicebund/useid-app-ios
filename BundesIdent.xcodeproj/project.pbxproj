@@ -71,6 +71,8 @@
 		E13F9E45288853950088E955 /* CoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E44288853950088E955 /* CoordinatorTests.swift */; };
 		E144EBD628C63A31009B4900 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = E144EBD528C63A31009B4900 /* MarkdownUI */; };
 		E144EBD828C63A4D009B4900 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E144EBD728C63A4D009B4900 /* AboutView.swift */; };
+		E144F066299D012400C79E8B /* SharedCANScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E144F065299D012400C79E8B /* SharedCANScreens.swift */; };
+		E144F068299D015800C79E8B /* SharedCANCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E144F067299D015800C79E8B /* SharedCANCoordinator.swift */; };
 		E149B15C2840F636002C1139 /* SetupScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E149B15B2840F636002C1139 /* SetupScanTests.swift */; };
 		E14C21B228B8BF9100192338 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C21B128B8BF9100192338 /* StorageManager.swift */; };
 		E156DD02287EF9C200C88914 /* XCUITestDeeplinking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E156DD01287EF9C200C88914 /* XCUITestDeeplinking.swift */; };
@@ -259,6 +261,8 @@
 		E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCoordinatorStateTests.swift; sourceTree = "<group>"; };
 		E13F9E44288853950088E955 /* CoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorTests.swift; sourceTree = "<group>"; };
 		E144EBD728C63A4D009B4900 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		E144F065299D012400C79E8B /* SharedCANScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedCANScreens.swift; sourceTree = "<group>"; };
+		E144F067299D015800C79E8B /* SharedCANCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedCANCoordinator.swift; sourceTree = "<group>"; };
 		E149B15B2840F636002C1139 /* SetupScanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScanTests.swift; sourceTree = "<group>"; };
 		E14C21B128B8BF9100192338 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		E156DD01287EF9C200C88914 /* XCUITestDeeplinking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUITestDeeplinking.swift; sourceTree = "<group>"; };
@@ -585,6 +589,8 @@
 				E16708B4283D4F25001A1637 /* Screens.swift */,
 				E16708B2283D4ED2001A1637 /* SetupCoordinator.swift */,
 				E11EB2AC2853A8EA008B4042 /* SetupScreens.swift */,
+				E144F065299D012400C79E8B /* SharedCANScreens.swift */,
+				E144F067299D015800C79E8B /* SharedCANCoordinator.swift */,
 			);
 			path = TCA;
 			sourceTree = "<group>";
@@ -1160,6 +1166,7 @@
 				B9DF15642913CCF1004E15E9 /* SetupPersonalPinConfirm.swift in Sources */,
 				E1EFB5C42858EB0F005C38C6 /* IdentificationOverviewLoading.swift in Sources */,
 				E1F2F3D728770F28004C8D4B /* IdentifiableCallback.swift in Sources */,
+				E144F066299D012400C79E8B /* SharedCANScreens.swift in Sources */,
 				E1FFDF0C2875C7E9006DFE03 /* UUID+Zero.swift in Sources */,
 				E1AB87A4282413A700C7FC94 /* PINTextField.swift in Sources */,
 				E11EB2AD2853A8EA008B4042 /* SetupScreens.swift in Sources */,
@@ -1198,6 +1205,7 @@
 				B95FAA8B2927A90D009BDAC9 /* CANIncorrectInput.swift in Sources */,
 				E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */,
 				E1B0F5A62981435C00143B82 /* SetupCANConfirmTransportPIN.swift in Sources */,
+				E144F068299D015800C79E8B /* SharedCANCoordinator.swift in Sources */,
 				E13925B82840FB7700161F5C /* Types.swift in Sources */,
 				E13925C72841119400161F5C /* MockIDInteractionManager.swift in Sources */,
 				E1BC3D7928B7E40B007A7B39 /* LicensesView.swift in Sources */,

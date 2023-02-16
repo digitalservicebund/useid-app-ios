@@ -6,14 +6,6 @@ import SwiftUI
 import ComposableArchitecture
 import Analytics
 
-enum IdentificationCANCoordinatorError: CustomNSError {
-    case canNilWhenTriedScan
-    case pinNilWhenTriedScan
-    case canIntroStateNotInRoutes
-    case pinCANCallbackNilWhenTriedScan
-    case noScreenToHandleEIDInteractionEvents
-}
-
 struct IdentificationCANCoordinator: ReducerProtocol {
     @Dependency(\.issueTracker) var issueTracker
     @Dependency(\.logger) var logger
@@ -89,7 +81,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                                                              shared: SharedScan.State(showInstructions: false)))
                     )
                 } else {
-                    issueTracker.capture(error: IdentificationCANCoordinatorError.pinNilWhenTriedScan)
+                    issueTracker.capture(error: SharedCANCoordinatorError.pinNilWhenTriedScan)
                     logger.error("PIN nil when tried to scan")
                     return Effect(value: .dismiss)
                 }
@@ -97,7 +89,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
             case .routeAction(_, action: .canPersonalPINInput(.done(pin: let pin))):
                 state.pin = pin
                 guard let can = state.can else {
-                    issueTracker.capture(error: IdentificationCANCoordinatorError.canNilWhenTriedScan)
+                    issueTracker.capture(error: SharedCANCoordinatorError.canNilWhenTriedScan)
                     logger.error("CAN nil when tried to scan")
                     return Effect(value: .dismiss)
                 }
@@ -116,7 +108,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                     }
                     return false
                 }) else {
-                    issueTracker.capture(error: IdentificationCANCoordinatorError.canIntroStateNotInRoutes)
+                    issueTracker.capture(error: SharedCANCoordinatorError.canIntroStateNotInRoutes)
                     logger.error("CanIntroState not found in routes")
                     return Effect(value: .dismiss)
                 }

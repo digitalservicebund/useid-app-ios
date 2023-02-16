@@ -32,7 +32,7 @@ final class SetupCANUITests: XCTestCase {
         app.buttons[L10n.FirstTimeUser.Scan.scan].wait().tap()
         
         app.navigationBars.buttons["Debug"].wait().tap()
-        app.buttons["runCardSuspended"].wait().tap()
+        app.buttons["askForCAN"].wait().tap()
         
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
         
@@ -42,7 +42,7 @@ final class SetupCANUITests: XCTestCase {
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
         app.activityIndicators["ScanProgressView"].assertExistence()
         app.navigationBars.buttons["Debug"].wait().tap()
-        app.buttons["runCANError"].wait().tap()
+        app.buttons["askForCAN"].wait().tap()
         
         let incorrectCANTextField = app.textFields[L10n.Identification.Can.IncorrectInput.canInputLabel]
         incorrectCANTextField.wait().tap()
@@ -155,7 +155,7 @@ final class SetupCANUITests: XCTestCase {
         app.buttons[L10n.FirstTimeUser.Scan.scan].wait().tap()
         
         app.navigationBars.buttons["Debug"].wait().tap()
-        app.buttons["runCardSuspended"].wait().tap()
+        app.buttons["askForCAN"].wait().tap()
         
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
         

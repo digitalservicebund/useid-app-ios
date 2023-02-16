@@ -141,20 +141,16 @@ struct Coordinator: ReducerProtocol {
                 return Effect(value: .openURL(tokenURL))
 #endif
             case .identificationCoordinator(.dismiss),
-                 .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.dismiss))),
                  .identificationCoordinator(.afterConfirmEnd),
-                 .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.afterConfirmEnd))),
                  .identificationCoordinator(.routeAction(_, action: .scan(.dismiss))),
+                 .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.dismiss))), // TODO: Lift up all under CAN
+                 .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.afterConfirmEnd))),
                  .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.dismiss))))),
                  .setupCoordinator(.confirmEnd),
                  .setupCoordinator(.routeAction(_, action: .done(.done))),
-                 .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canAlreadySetup(.done))))),
                  .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.dismiss))),
                  .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canScan(.dismiss))))),
-                 .setupCoordinator(.afterConfirmEnd),
-                 // This is bad, but we can not switch back to a previous coordinator while having another coordinator inbetween. See https://github.com/johnpatrickmorgan/FlowStacks/issues/23#issuecomment-1407125421
-                 // We are only showing the setup coordinator in the end for the done screen
-                 .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .setupCoordinator(.routeAction(_, action: .done(.done))))))):
+                 .setupCoordinator(.afterConfirmEnd):
                 state.routes.dismiss()
                 return .none
             default:

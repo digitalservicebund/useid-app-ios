@@ -14,14 +14,6 @@ struct CANAndChangedPINCallbackPayload: Equatable {
 
 typealias CANAndChangedPINCallback = IdentifiableCallback<CANAndChangedPINCallbackPayload>
 
-enum SetupCANCoordinatorError: CustomNSError {
-    case canNilWhenTriedScan
-    case pinNilWhenTriedScan
-    case canIntroStateNotInRoutes
-    case pinCANCallbackNilWhenTriedScan
-    case noScreenToHandleEIDInteractionEvents
-}
-
 struct SetupCANCoordinator: ReducerProtocol {
     
     @Dependency(\.issueTracker) var issueTracker
@@ -32,22 +24,19 @@ struct SetupCANCoordinator: ReducerProtocol {
         
         var pin: String
         var transportPIN: String?
-        var can: String?
         var oldTransportPIN: String
         var canAndChangedPINCallback: CANAndChangedPINCallback
         var tokenURL: URL?
-        var authenticationSuccessful = false
-        var attempt: Int
         
         var swipeToDismiss: SwipeToDismissState {
             guard let lastScreen = states.last?.screen else { return .allow }
             return lastScreen.swipeToDismissState
         }
         
-        var alert: AlertState<Action>?
 #if PREVIEW
         var availableDebugActions: [ChangePINDebugSequence] = []
 #endif
+        var _shared: SharedCANCoordinator.State
         var states: [Route<SetupCANScreen.State>]
         
         typealias LocalAction = Action
@@ -59,6 +48,17 @@ struct SetupCANCoordinator: ReducerProtocol {
             }
             return nil
         }
+        
+        var shared: SharedCANCoordinator.State {
+            get {
+                var value = _shared
+                value.swipeToDismiss = swipeToDismiss
+                return value
+            }
+            set {
+                _shared = newValue
+            }
+        }
     }
     
     indirect enum Action: Equatable, IndexedRouterAction {
@@ -69,29 +69,27 @@ struct SetupCANCoordinator: ReducerProtocol {
         case afterConfirmEnd
         case dismissAlert
         case dismiss
+        case shared(SharedCANCoordinator.Action)
     }
     
     var body: some ReducerProtocol<State, Action> {
+        Reduce<State, Action> { state, action in
+            guard case .routeAction(let index, action: .shared(let action)) = action else { return .none }
+            let sharedEffect = SharedCANCoordinator().reduce(into: &state.shared, action: .routeAction(index, action: action))
+            return sharedEffect.map(SetupCANCoordinator.Action.shared)
+        }
         Reduce<State, Action> { state, action in
             switch action {
             case .routeAction(_, action: .canConfirmTransportPIN(.confirm)):
                 state.routes.push(.canAlreadySetup(.init(tokenURL: state.tokenURL)))
                 return .none
             case .routeAction(_, action: .canConfirmTransportPIN(.edit)):
-                state.routes.push(.canIntro(.init(shouldDismiss: false)))
+                state.routes.push(.shared(.canIntro(.init(shouldDismiss: false))))
                 return .none
             case .routeAction(_, action: .canAlreadySetup(.missingPersonalPIN)):
                 state.routes.push(.missingPIN(.init()))
                 return .none
-            case .routeAction(_, action: .canAlreadySetup(.done)):
-                return Effect(value: .swipeToDismiss)
-            case .routeAction(_, action: .canIntro(.showInput(let shouldDismiss))):
-                state.routes.push(.canInput(CANInput.State(pushesToPINEntry: !shouldDismiss)))
-                return .none
-            case .routeAction(_, action: .canIntro(.end)):
-                return Effect(value: .swipeToDismiss)
-            case .routeAction(_, action: .canInput(.done(can: let can, pushesToPINEntry: let pushesToPINEntry))):
-                state.can = can
+            case .routeAction(_, action: .shared(.canInput(.done(can: let can, pushesToPINEntry: let pushesToPINEntry)))):
                 if pushesToPINEntry {
                     state.routes.push(.canTransportPINInput(.init(attempts: 1)))
                 } else if let transportPIN = state.transportPIN {
@@ -103,15 +101,15 @@ struct SetupCANCoordinator: ReducerProtocol {
                                                     shared: SharedScan.State(showInstructions: false)))
                     )
                 } else {
-                    issueTracker.capture(error: IdentificationCANCoordinatorError.pinNilWhenTriedScan)
+                    issueTracker.capture(error: SharedCANCoordinatorError.pinNilWhenTriedScan)
                     logger.error("Transport PIN or new PIN nil when tried to scan")
                     return Effect(value: .dismiss)
                 }
                 return .none
             case .routeAction(_, action: .canTransportPINInput(.done(transportPIN: let transportPIN))):
                 state.transportPIN = transportPIN
-                guard let can = state.can else {
-                    issueTracker.capture(error: IdentificationCANCoordinatorError.canNilWhenTriedScan)
+                guard let can = state.shared.can else {
+                    issueTracker.capture(error: SharedCANCoordinatorError.canNilWhenTriedScan)
                     logger.error("CAN nil when tried to scan")
                     return Effect(value: .dismiss)
                 }
@@ -126,21 +124,16 @@ struct SetupCANCoordinator: ReducerProtocol {
                 return .none
             case .routeAction(_, action: .canScan(.incorrectCAN(callback: let callback))):
                 state.canAndChangedPINCallback = callback
-                state.routes.presentSheet(.canIncorrectInput(CANIncorrectInput.State()))
+                state.routes.presentSheet(.shared(.canIncorrectInput(CANIncorrectInput.State())))
                 return .none
-            case .routeAction(_, action: .canIncorrectInput(.done(can: let newCAN))):
-                state.can = newCAN
-                state.attempt += 1
-                state.routes.dismiss()
-                return .none
-            case .routeAction(_, action: .canIncorrectInput(.end)):
+            case .routeAction(_, action: .shared(.canIncorrectInput(.end))):
                 guard let index = state.routes.firstIndex(where: { route in
-                    if case .canIntro = route.screen {
+                    if case .shared(.canIntro) = route.screen {
                         return true
                     }
                     return false
                 }) else {
-                    issueTracker.capture(error: SetupCANCoordinatorError.canIntroStateNotInRoutes)
+                    issueTracker.capture(error: SharedCANCoordinatorError.canIntroStateNotInRoutes)
                     logger.error("CanIntroState not found in routes")
                     return Effect(value: .dismiss)
                 }
@@ -156,39 +149,31 @@ struct SetupCANCoordinator: ReducerProtocol {
                 state.routes.push(.setupCoordinator(setupCoordinatorState))
                 return .none
             case .routeAction(_, action: .canScan(.error(let errorState))):
-                state.routes.presentSheet(.error(errorState))
+                state.routes.presentSheet(.shared(.error(errorState)))
                 return .none
             case .routeAction(_, action: .canScan(.shared(.showHelp))):
-                state.routes.presentSheet(.error(ScanError.State(errorType: .help, retry: true)))
+                state.routes.presentSheet(.shared(.error(ScanError.State(errorType: .help, retry: true))))
                 return .none
-            case .routeAction(_, action: .error(.retry)):
-                state.routes.dismiss()
-                return .none
-            case .routeAction(_, action: .error(.end)):
-                state.routes.dismiss()
                 
-                // Dismissing two sheets at the same time from different coordinators is not well supported.
-                // Waiting for 0.65s (as TCACoordinators does) fixes this temporarily.
-                return Effect(value: .afterConfirmEnd)
-                    .delay(for: 0.65, scheduler: mainQueue)
-                    .eraseToEffect()
-            case .swipeToDismiss:
-                switch state.swipeToDismiss {
-                case .allow:
+            case .shared(.afterConfirmEnd),
+                 .routeAction(_, action: .canAlreadySetup(.done)),
+                 .routeAction(_, action: .canScan(.dismiss)),
+                 .routeAction(_, action: .setupCoordinator(.confirmEnd)),
+                 .routeAction(_, action: .setupCoordinator(.routeAction(_, action: .done(.done)))),
+                 .routeAction(_, action: .setupCoordinator(.afterConfirmEnd)):
+                return Effect(value: .dismiss)
+            case .shared(let action):
+                switch action {
+                case .push(let screenState):
+                    state.routes.push(.shared(screenState))
                     return .none
-                case .block:
+                case .dismiss:
+                    state.routes.dismiss()
                     return .none
-                case .allowAfterConfirmation:
-                    state.alert = AlertState(title: TextState(verbatim: L10n.Identification.ConfirmEnd.title),
-                                             message: TextState(verbatim: L10n.Identification.ConfirmEnd.message),
-                                             primaryButton: .destructive(TextState(verbatim: L10n.Identification.ConfirmEnd.confirm),
-                                                                         action: .send(.dismiss)),
-                                             secondaryButton: .cancel(TextState(verbatim: L10n.Identification.ConfirmEnd.deny)))
-                    return .none
+                default:
+                    let effect = SharedCANCoordinator().reduce(into: &state.shared, action: action)
+                    return effect.map(Action.shared)
                 }
-            case .dismissAlert:
-                state.alert = nil
-                return .none
             default:
                 return .none
             }
@@ -211,10 +196,10 @@ extension SetupCANCoordinator.State {
         self.transportPIN = transportPIN
         self.pin = pin
         canAndChangedPINCallback = callback
-        self.attempt = attempt
+        _shared = .init(attempt: attempt)
         
         if goToCanIntroScreen {
-            states = [.root(.canIntro(.init(shouldDismiss: true)))]
+            states = [.root(.shared(.canIntro(.init(shouldDismiss: true))))]
         } else {
             states = [
                 .root(.canConfirmTransportPIN(SetupCANConfirmTransportPIN.State(transportPIN: oldTransportPIN)))
@@ -231,11 +216,11 @@ extension SetupCANCoordinator.State {
                         if let transportPIN {
                             state.transportPIN = transportPIN
                         }
-                        if let can {
+                        if let can = shared.can {
                             state.can = can
                         }
                         state.newPIN = pin
-                        state.shared.attempt = attempt
+                        state.shared.attempt = shared.attempt
                         state.canAndChangedPINCallback = canAndChangedPINCallback
                         return .canScan(state)
                     default:
@@ -261,52 +246,62 @@ extension SetupCANCoordinator.State {
 struct SetupCANCoordinatorView: View {
     let store: StoreOf<SetupCANCoordinator>
     
+    typealias State = SetupCANScreen.State
+    typealias Action = SetupCANScreen.Action
+    
     var body: some View {
         WithViewStore(store) { viewStore in
             TCARouter(store) { screen in
                 SwitchStore(screen) {
-                    CaseLet(state: /SetupCANScreen.State.canConfirmTransportPIN,
-                            action: SetupCANScreen.Action.canConfirmTransportPIN,
+                    CaseLet(state: /State.canConfirmTransportPIN,
+                            action: Action.canConfirmTransportPIN,
                             then: SetupCANConfirmTransportPINView.init)
-                    CaseLet(state: /SetupCANScreen.State.canAlreadySetup,
-                            action: SetupCANScreen.Action.canAlreadySetup,
+                    CaseLet(state: /State.canAlreadySetup,
+                            action: Action.canAlreadySetup,
                             then: SetupCANAlreadySetupView.init)
-                    CaseLet(state: /SetupCANScreen.State.missingPIN,
-                            action: SetupCANScreen.Action.missingPIN,
+                    CaseLet(state: /State.missingPIN,
+                            action: Action.missingPIN,
                             then: MissingPINLetterView.init)
-                    CaseLet(state: /SetupCANScreen.State.canIntro,
-                            action: SetupCANScreen.Action.canIntro,
-                            then: CANIntroView.init)
-                    CaseLet(state: /SetupCANScreen.State.canInput,
-                            action: SetupCANScreen.Action.canInput,
-                            then: CANInputView.init)
-                    CaseLet(state: /SetupCANScreen.State.canTransportPINInput,
-                            action: SetupCANScreen.Action.canTransportPINInput,
+                    CaseLet(state: /State.canTransportPINInput,
+                            action: Action.canTransportPINInput,
                             then: SetupTransportPINView.init)
-                    CaseLet(state: /SetupCANScreen.State.canIncorrectInput,
-                            action: SetupCANScreen.Action.canIncorrectInput,
-                            then: CANIncorrectInputView.init)
-                    CaseLet(state: /SetupCANScreen.State.canScan,
-                            action: SetupCANScreen.Action.canScan,
+                    CaseLet(state: /State.canScan,
+                            action: Action.canScan,
                             then: SetupCANScanView.init)
-                    CaseLet(state: /SetupCANScreen.State.error,
-                            action: SetupCANScreen.Action.error,
-                            then: ScanErrorView.init)
-                    Default {
-                        SwitchStore(screen) {
-                            CaseLet(state: /SetupCANScreen.State.setupCoordinator,
-                                    action: SetupCANScreen.Action.setupCoordinator,
-                                    then: SetupCoordinatorView.init)
-                        }
-                    }
+                    CaseLet(state: /State.setupCoordinator,
+                            action: Action.setupCoordinator,
+                            then: SetupCoordinatorView.init)
+                    CaseLet(state: /State.shared,
+                            action: Action.shared,
+                            then: SharedCANScreenView.init)
                 }
             }
-            .navigationBarHidden(false)
-            .alert(store.scope(state: \.alert), dismiss: SetupCANCoordinator.Action.dismissAlert)
+            .alert(store.scope(state: \.shared.alert, action: SetupCANCoordinator.Action.shared), dismiss: SharedCANCoordinator.Action.dismissAlert)
             .interactiveDismissDisabled(viewStore.swipeToDismiss != .allow) {
                 viewStore.send(.swipeToDismiss)
             }
         }
     }
     
+}
+
+struct SharedCANScreenView: View {
+    let store: StoreOf<SharedCANScreen>
+    
+    var body: some View {
+        SwitchStore(store) {
+            CaseLet(state: /SharedCANScreen.State.canIntro,
+                    action: SharedCANScreen.Action.canIntro,
+                    then: CANIntroView.init)
+            CaseLet(state: /SharedCANScreen.State.canInput,
+                    action: SharedCANScreen.Action.canInput,
+                    then: CANInputView.init)
+            CaseLet(state: /SharedCANScreen.State.canIncorrectInput,
+                    action: SharedCANScreen.Action.canIncorrectInput,
+                    then: CANIncorrectInputView.init)
+            CaseLet(state: /SharedCANScreen.State.error,
+                    action: SharedCANScreen.Action.error,
+                    then: ScanErrorView.init)
+        }
+    }
 }

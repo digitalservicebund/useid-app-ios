@@ -20,19 +20,30 @@ class SetupCANCoordinatorTests: XCTestCase {
                                                     oldTransportPIN: transportPIN,
                                                     canAndChangedPINCallback: canAndChangedPINCallback,
                                                     tokenURL: demoTokenURL,
-                                                    attempt: 0,
+                                                    _shared: SharedCANCoordinator.State(
+                                                        attempt: 0
+                                                    ),
                                                     states: [
-                                                        .root(.canIntro(CANIntro.State(shouldDismiss: true)))
+                                                        .root(.shared(.canIntro(CANIntro.State(shouldDismiss: true))))
                                                     ]),
             reducer: SetupCANCoordinator()
         )
         
-        store.send(.routeAction(0, action: .canIntro(.showInput(shouldDismiss: true)))) {
-            $0.routes.append(.push(.canInput(CANInput.State(pushesToPINEntry: false))))
+        store.send(.routeAction(0, action: .shared(.canIntro(.showInput(shouldDismiss: true))))) {
+            $0.shared.swipeToDismiss = SwipeToDismissState.allowAfterConfirmation(
+                title: L10n.Identification.ConfirmEnd.title,
+                body: L10n.Identification.ConfirmEnd.message,
+                confirm: L10n.Identification.ConfirmEnd.confirm,
+                deny: L10n.General.cancel
+            )
         }
         
-        store.send(.routeAction(1, action: .canInput(.done(can: can, pushesToPINEntry: false)))) {
-            $0.can = can
+        store.receive(.shared(.push(.canInput(CANInput.State(pushesToPINEntry: false))))) {
+            $0.routes.append(.push(.shared(.canInput(CANInput.State(pushesToPINEntry: false)))))
+        }
+        
+        store.send(.routeAction(1, action: .shared(.canInput(.done(can: can, pushesToPINEntry: false))))) {
+            $0.shared.can = can
             $0.routes.append(.push(
                 .canScan(SetupCANScan.State(transportPIN: transportPIN,
                                             newPIN: pin,
@@ -44,7 +55,7 @@ class SetupCANCoordinatorTests: XCTestCase {
         
         store.send(.routeAction(2, action: .canScan(.incorrectCAN(callback: newCANAndChangedPINCallback)))) {
             $0.canAndChangedPINCallback = newCANAndChangedPINCallback
-            $0.routes.append(.sheet(.canIncorrectInput(.init())))
+            $0.routes.append(.sheet(.shared(.canIncorrectInput(.init()))))
         }
     }
     
@@ -59,19 +70,30 @@ class SetupCANCoordinatorTests: XCTestCase {
                                                     oldTransportPIN: transportPIN,
                                                     canAndChangedPINCallback: canAndChangedPINCallback,
                                                     tokenURL: demoTokenURL,
-                                                    attempt: 0,
+                                                    _shared: SharedCANCoordinator.State(
+                                                        attempt: 0
+                                                    ),
                                                     states: [
-                                                        .root(.canIntro(CANIntro.State(shouldDismiss: true)))
+                                                        .root(.shared(.canIntro(CANIntro.State(shouldDismiss: true))))
                                                     ]),
             reducer: SetupCANCoordinator()
         )
         
-        store.send(.routeAction(0, action: .canIntro(.showInput(shouldDismiss: false)))) {
-            $0.routes.append(.push(.canInput(CANInput.State(pushesToPINEntry: true))))
+        store.send(.routeAction(0, action: .shared(.canIntro(.showInput(shouldDismiss: false))))) {
+            $0.shared.swipeToDismiss = SwipeToDismissState.allowAfterConfirmation(
+                title: L10n.Identification.ConfirmEnd.title,
+                body: L10n.Identification.ConfirmEnd.message,
+                confirm: L10n.Identification.ConfirmEnd.confirm,
+                deny: L10n.General.cancel
+            )
         }
         
-        store.send(.routeAction(1, action: .canInput(.done(can: can, pushesToPINEntry: true)))) {
-            $0.can = can
+        store.receive(.shared(.push(.canInput(CANInput.State(pushesToPINEntry: true))))) {
+            $0.routes.append(.push(.shared(.canInput(CANInput.State(pushesToPINEntry: true)))))
+        }
+        
+        store.send(.routeAction(1, action: .shared(.canInput(.done(can: can, pushesToPINEntry: true))))) {
+            $0.shared.can = can
             $0.routes.append(.push(
                 .canTransportPINInput(SetupTransportPIN.State(enteredPIN: "", digits: 5, attempts: 1))
             ))
@@ -102,7 +124,9 @@ class SetupCANCoordinatorTests: XCTestCase {
                                                     oldTransportPIN: transportPIN,
                                                     canAndChangedPINCallback: canAndChangedPINCallback,
                                                     tokenURL: demoTokenURL,
-                                                    attempt: 0,
+                                                    _shared: SharedCANCoordinator.State(
+                                                        attempt: 0
+                                                    ),
                                                     states: [
                                                         .root(.canScan(SetupCANScan.State(transportPIN: transportPIN,
                                                                                           newPIN: newPIN,

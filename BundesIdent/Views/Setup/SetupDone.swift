@@ -38,7 +38,7 @@ struct SetupDoneView: View {
                        primaryButton: viewStore.primaryButton)
         }
         .navigationBarBackButtonHidden(true)
-        .navigationBarHidden(false)
+        .navigationBarHidden(true)
         .interactiveDismissDisabled()
     }
     
