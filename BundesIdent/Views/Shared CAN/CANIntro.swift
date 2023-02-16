@@ -3,11 +3,11 @@ import ComposableArchitecture
 
 struct CANIntro: ReducerProtocol {
     struct State: Equatable {
-        var shouldDismiss: Bool // TODO: Rename to isRootOfCANFlow
+        var isRootOfCANFlow: Bool
     }
     
     enum Action: Equatable {
-        case showInput(shouldDismiss: Bool)
+        case showInput(isRootOfCANFlow: Bool)
         case end
     }
     
@@ -23,10 +23,10 @@ struct CANIntroView: View {
             DialogView(store: store.stateless, title: L10n.Identification.Can.Intro.title,
                        message: L10n.Identification.Can.Intro.body,
                        imageMeta: ImageMeta(asset: Asset.idCan),
-                       primaryButton: .init(title: L10n.Identification.Can.Intro.continue, action: .showInput(shouldDismiss: viewStore.shouldDismiss)))
+                       primaryButton: .init(title: L10n.Identification.Can.Intro.continue, action: .showInput(isRootOfCANFlow: viewStore.isRootOfCANFlow)))
             
-                .navigationBarBackButtonHidden(viewStore.shouldDismiss)
-                .navigationBarItems(leading: viewStore.shouldDismiss ? cancelButton(viewStore: viewStore) : nil)
+                .navigationBarBackButtonHidden(viewStore.isRootOfCANFlow)
+                .navigationBarItems(leading: viewStore.isRootOfCANFlow ? cancelButton(viewStore: viewStore) : nil)
         }
     }
     
@@ -44,7 +44,7 @@ struct CANIntroView: View {
 struct CANIntro_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            CANIntroView(store: .init(initialState: .init(shouldDismiss: true),
+            CANIntroView(store: .init(initialState: .init(isRootOfCANFlow: true),
                                       reducer: CANIntro()))
         }
         .previewDevice("iPhone 12")

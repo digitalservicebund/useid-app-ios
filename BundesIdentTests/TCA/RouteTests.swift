@@ -355,7 +355,7 @@ final class RouteTests: XCTestCase {
         verify(mockMatomoTracker).reset()
         endInteraction(mockMatomoTracker)
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(3, action: .identificationCANCoordinator(.routeAction(1, action: .canIntro(.showInput(shouldDismiss: true))))))))
+        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(3, action: .identificationCANCoordinator(.routeAction(1, action: .canIntro(.showInput(isRootOfCANFlow: true))))))))
         verify(mockMatomoTracker).track(view: ["identification", "canInput"],
                                         url: URL?.none)
         endInteraction(mockMatomoTracker)

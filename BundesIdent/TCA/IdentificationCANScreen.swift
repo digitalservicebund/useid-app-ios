@@ -30,7 +30,7 @@ struct IdentificationCANScreen: ReducerProtocol {
             case .canPINForgotten: return .allowAfterConfirmation()
             case .canOrderNewPIN: return .block
             case .canIntro(let state):
-                return state.shouldDismiss ? .allowAfterConfirmation() : .block
+                return state.isRootOfCANFlow ? .allowAfterConfirmation() : .block
             case .canInput: return .block
             case .canPersonalPINInput: return .block
             case .canIncorrectInput: return .allowAfterConfirmation()

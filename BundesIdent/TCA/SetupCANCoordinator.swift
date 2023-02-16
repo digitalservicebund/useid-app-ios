@@ -84,7 +84,7 @@ struct SetupCANCoordinator: ReducerProtocol {
                 state.routes.push(.canAlreadySetup(.init(tokenURL: state.tokenURL)))
                 return .none
             case .routeAction(_, action: .canConfirmTransportPIN(.edit)):
-                state.routes.push(.shared(.canIntro(.init(shouldDismiss: false))))
+                state.routes.push(.shared(.canIntro(.init(isRootOfCANFlow: false))))
                 return .none
             case .routeAction(_, action: .canAlreadySetup(.missingPersonalPIN)):
                 state.routes.push(.missingPIN(.init()))
@@ -199,7 +199,7 @@ extension SetupCANCoordinator.State {
         _shared = .init(attempt: attempt)
         
         if goToCanIntroScreen {
-            states = [.root(.shared(.canIntro(.init(shouldDismiss: true))))]
+            states = [.root(.shared(.canIntro(.init(isRootOfCANFlow: true))))]
         } else {
             states = [
                 .root(.canConfirmTransportPIN(SetupCANConfirmTransportPIN.State(transportPIN: oldTransportPIN)))

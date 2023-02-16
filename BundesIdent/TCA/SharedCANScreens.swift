@@ -11,7 +11,7 @@ struct SharedCANScreen: ReducerProtocol {
         
         var swipeToDismissState: SwipeToDismissState {
             switch self {
-            case .canIntro(let state): return state.shouldDismiss ? .allowAfterConfirmation() : .block
+            case .canIntro(let state): return state.isRootOfCANFlow ? .allowAfterConfirmation() : .block
             case .canInput: return .block
             case .canIncorrectInput: return .allowAfterConfirmation()
             case .scanError: return .allow

@@ -51,12 +51,12 @@ class IdentificationCANCoordinatorTests: XCTestCase {
                                                              tokenURL: demoTokenURL,
                                                              attempt: 0,
                                                              states: [
-                                                                 .root(.canIntro(CANIntro.State(shouldDismiss: true)))
+                                                                 .root(.canIntro(CANIntro.State(isRootOfCANFlow: true)))
                                                              ]),
             reducer: IdentificationCANCoordinator()
         )
         
-        store.send(.routeAction(0, action: .canIntro(.showInput(shouldDismiss: true)))) {
+        store.send(.routeAction(0, action: .canIntro(.showInput(isRootOfCANFlow: true)))) {
             $0.routes.append(.push(.canInput(CANInput.State(pushesToPINEntry: false))))
         }
         
@@ -146,7 +146,7 @@ class IdentificationCANCoordinatorTests: XCTestCase {
         let newPINCANCallback = PINCANCallback(id: UUID(number: 1), callback: { _, _ in })
         
         let oldRoutes: [Route<IdentificationCANScreen.State>] = [
-            .root(.canIntro(CANIntro.State(shouldDismiss: true))),
+            .root(.canIntro(CANIntro.State(isRootOfCANFlow: true))),
             .push(.canInput(CANInput.State(pushesToPINEntry: false))),
             .push(.canScan(IdentificationCANScan.State(pin: pin, can: can, pinCANCallback: newPINCANCallback, shared: SharedScan.State(showInstructions: false)))),
             .sheet(.canIncorrectInput(CANIncorrectInput.State()))
@@ -168,7 +168,7 @@ class IdentificationCANCoordinatorTests: XCTestCase {
         let routesWithSheetDismissed = Array(oldRoutes.dropLast(1))
     
         let updatedRoutes: [Route<IdentificationCANScreen.State>] = [
-            .sheet(.canIntro(CANIntro.State(shouldDismiss: true)))
+            .sheet(.canIntro(CANIntro.State(isRootOfCANFlow: true)))
         ]
         
         store.send(.routeAction(3, action: .canIncorrectInput(.end)))

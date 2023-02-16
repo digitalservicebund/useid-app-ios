@@ -24,12 +24,12 @@ class SetupCANCoordinatorTests: XCTestCase {
                                                         attempt: 0
                                                     ),
                                                     states: [
-                                                        .root(.shared(.canIntro(CANIntro.State(shouldDismiss: true))))
+                                                        .root(.shared(.canIntro(CANIntro.State(isRootOfCANFlow: true))))
                                                     ]),
             reducer: SetupCANCoordinator()
         )
         
-        store.send(.routeAction(0, action: .shared(.canIntro(.showInput(shouldDismiss: true))))) {
+        store.send(.routeAction(0, action: .shared(.canIntro(.showInput(isRootOfCANFlow: true))))) {
             $0.shared.swipeToDismiss = SwipeToDismissState.allowAfterConfirmation(
                 title: L10n.Identification.ConfirmEnd.title,
                 body: L10n.Identification.ConfirmEnd.message,
@@ -74,12 +74,12 @@ class SetupCANCoordinatorTests: XCTestCase {
                                                         attempt: 0
                                                     ),
                                                     states: [
-                                                        .root(.shared(.canIntro(CANIntro.State(shouldDismiss: true))))
+                                                        .root(.shared(.canIntro(CANIntro.State(isRootOfCANFlow: true))))
                                                     ]),
             reducer: SetupCANCoordinator()
         )
         
-        store.send(.routeAction(0, action: .shared(.canIntro(.showInput(shouldDismiss: false))))) {
+        store.send(.routeAction(0, action: .shared(.canIntro(.showInput(isRootOfCANFlow: false))))) {
             $0.shared.swipeToDismiss = SwipeToDismissState.allowAfterConfirmation(
                 title: L10n.Identification.ConfirmEnd.title,
                 body: L10n.Identification.ConfirmEnd.message,

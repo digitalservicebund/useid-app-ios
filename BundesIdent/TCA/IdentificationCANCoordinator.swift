@@ -62,10 +62,10 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                 state.routes.push(.canOrderNewPIN(.init()))
                 return .none
             case .routeAction(_, action: .canPINForgotten(.showCANIntro)):
-                state.routes.push(.canIntro(CANIntro.State(shouldDismiss: false)))
+                state.routes.push(.canIntro(CANIntro.State(isRootOfCANFlow: false)))
                 return .none
-            case .routeAction(_, action: .canIntro(.showInput(let shouldDismiss))):
-                state.routes.push(.canInput(CANInput.State(pushesToPINEntry: !shouldDismiss)))
+            case .routeAction(_, action: .canIntro(.showInput(let isRootOfCANFlow))):
+                state.routes.push(.canInput(CANInput.State(pushesToPINEntry: !isRootOfCANFlow)))
                 return .none
             case .routeAction(_, action: .canIntro(.end)):
                 return Effect(value: .swipeToDismiss)
@@ -182,7 +182,7 @@ extension IdentificationCANCoordinator.State {
         self.tokenURL = tokenURL
         self.attempt = attempt
         if goToCanIntroScreen {
-            states = [.root(.canIntro(.init(shouldDismiss: true)))]
+            states = [.root(.canIntro(.init(isRootOfCANFlow: true)))]
         } else {
             states = [.root(.canPINForgotten(.init()))]
         }

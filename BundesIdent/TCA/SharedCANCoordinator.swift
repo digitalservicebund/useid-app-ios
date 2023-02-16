@@ -36,8 +36,8 @@ struct SharedCANCoordinator: ReducerProtocol {
     var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
-            case .routeAction(_, action: .canIntro(.showInput(let shouldDismiss))):
-                return Effect(value: .push(.canInput(CANInput.State(pushesToPINEntry: !shouldDismiss))))
+            case .routeAction(_, action: .canIntro(.showInput(let isRootOfCANFlow))):
+                return Effect(value: .push(.canInput(CANInput.State(pushesToPINEntry: !isRootOfCANFlow))))
             case .routeAction(_, action: .canIntro(.end)):
                 return Effect(value: .swipeToDismiss)
             case .routeAction(_, action: .canIncorrectInput(.done(can: let newCAN))):
