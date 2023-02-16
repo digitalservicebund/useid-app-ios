@@ -7,14 +7,14 @@ struct SharedCANScreen: ReducerProtocol {
         case canIntro(CANIntro.State)
         case canInput(CANInput.State)
         case canIncorrectInput(CANIncorrectInput.State)
-        case error(ScanError.State) // TODO: Rename case to scanError
+        case scanError(ScanError.State)
         
         var swipeToDismissState: SwipeToDismissState {
             switch self {
             case .canIntro(let state): return state.shouldDismiss ? .allowAfterConfirmation() : .block
             case .canInput: return .block
             case .canIncorrectInput: return .allowAfterConfirmation()
-            case .error: return .allow
+            case .scanError: return .allow
             }
         }
     }
@@ -36,7 +36,7 @@ struct SharedCANScreen: ReducerProtocol {
         Scope(state: /State.canIncorrectInput, action: /Action.canIncorrectInput) {
             CANIncorrectInput()
         }
-        Scope(state: /State.error, action: /Action.error) {
+        Scope(state: /State.scanError, action: /Action.error) {
             ScanError()
         }
     }
@@ -51,7 +51,7 @@ extension SharedCANScreen.State: AnalyticsView {
             return ["canInput"]
         case .canIncorrectInput:
             return ["canIncorrectInput"]
-        case .error(let state):
+        case .scanError(let state):
             return state.errorType.route
         }
     }

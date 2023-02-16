@@ -149,10 +149,10 @@ struct SetupCANCoordinator: ReducerProtocol {
                 state.routes.push(.setupCoordinator(setupCoordinatorState))
                 return .none
             case .routeAction(_, action: .canScan(.error(let errorState))):
-                state.routes.presentSheet(.shared(.error(errorState)))
+                state.routes.presentSheet(.shared(.scanError(errorState)))
                 return .none
             case .routeAction(_, action: .canScan(.shared(.showHelp))):
-                state.routes.presentSheet(.shared(.error(ScanError.State(errorType: .help, retry: true))))
+                state.routes.presentSheet(.shared(.scanError(ScanError.State(errorType: .help, retry: true))))
                 return .none
                 
             case .shared(.afterConfirmEnd),
@@ -299,7 +299,7 @@ struct SharedCANScreenView: View {
             CaseLet(state: /SharedCANScreen.State.canIncorrectInput,
                     action: SharedCANScreen.Action.canIncorrectInput,
                     then: CANIncorrectInputView.init)
-            CaseLet(state: /SharedCANScreen.State.error,
+            CaseLet(state: /SharedCANScreen.State.scanError,
                     action: SharedCANScreen.Action.error,
                     then: ScanErrorView.init)
         }
