@@ -32,8 +32,11 @@ struct HeaderView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
-            Text(title)
-                .headingXL()
+            HStack {
+                Text(title)
+                    .headingXL()
+                Spacer()
+            }
             if let boxContent {
                 Box(content: boxContent)
             }
@@ -75,5 +78,8 @@ struct HeaderView_Previews: PreviewProvider {
                    message: L10n.FirstTimeUser.Intro.body,
                    imageMeta: ImageMeta(asset: Asset.pinBrief))
             .previewLayout(.sizeThatFits)
+        HeaderView(title: "Some title")
+            .previewLayout(.sizeThatFits)
+            .previewDisplayName("Title only")
     }
 }

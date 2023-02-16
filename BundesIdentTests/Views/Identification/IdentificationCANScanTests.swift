@@ -27,8 +27,7 @@ final class IdentificationCANScanTests: XCTestCase {
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
         let store = TestStore(
-            initialState: IdentificationCANScan.State(request: request,
-                                                      pin: pin,
+            initialState: IdentificationCANScan.State(pin: pin,
                                                       can: can,
                                                       pinCANCallback: pinCANCallback,
                                                       shared: SharedScan.State(isScanning: false, showInstructions: false)),
@@ -46,8 +45,7 @@ final class IdentificationCANScanTests: XCTestCase {
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
-        let store = TestStore(initialState: IdentificationCANScan.State(request: request,
-                                                                        pin: pin,
+        let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
                                                                         can: can,
                                                                         pinCANCallback: pinCANCallback,
                                                                         shared: SharedScan.State(isScanning: true, showInstructions: false)),
@@ -61,8 +59,7 @@ final class IdentificationCANScanTests: XCTestCase {
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
-        let store = TestStore(initialState: IdentificationCANScan.State(request: request,
-                                                                        pin: pin,
+        let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
                                                                         can: can,
                                                                         pinCANCallback: pinCANCallback,
                                                                         shared: SharedScan.State(isScanning: true, showInstructions: false)),
@@ -80,8 +77,7 @@ final class IdentificationCANScanTests: XCTestCase {
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
-        let store = TestStore(initialState: IdentificationCANScan.State(request: request,
-                                                                        pin: pin,
+        let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
                                                                         can: can,
                                                                         pinCANCallback: pinCANCallback,
                                                                         shared: SharedScan.State(isScanning: true, showInstructions: false)),
@@ -99,8 +95,7 @@ final class IdentificationCANScanTests: XCTestCase {
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
-        let store = TestStore(initialState: IdentificationCANScan.State(request: request,
-                                                                        pin: pin,
+        let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
                                                                         can: can,
                                                                         pinCANCallback: pinCANCallback,
                                                                         shared: SharedScan.State(isScanning: false, showInstructions: false)),
@@ -123,8 +118,7 @@ final class IdentificationCANScanTests: XCTestCase {
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
-        let store = TestStore(initialState: IdentificationCANScan.State(request: request,
-                                                                        pin: pin,
+        let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
                                                                         can: can,
                                                                         pinCANCallback: pinCANCallback,
                                                                         shared: SharedScan.State(isScanning: false, showInstructions: false)),

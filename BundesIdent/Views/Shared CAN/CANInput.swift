@@ -1,10 +1,9 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct IdentificationCANInput: ReducerProtocol {
+struct CANInput: ReducerProtocol {
     struct State: Equatable {
         @BindableState var enteredCAN: String = ""
-        let request: EIDAuthenticationRequest
         var pushesToPINEntry: Bool
         var doneButtonEnabled: Bool {
             enteredCAN.count == Constants.CAN_DIGIT_COUNT
@@ -12,8 +11,8 @@ struct IdentificationCANInput: ReducerProtocol {
     }
     
     enum Action: Equatable, BindableAction {
-        case done(can: String, request: EIDAuthenticationRequest, pushesToPINEntry: Bool)
-        case binding(BindingAction<IdentificationCANInput.State>)
+        case done(can: String, pushesToPINEntry: Bool)
+        case binding(BindingAction<State>)
     }
     
     var body: some ReducerProtocol<State, Action> {
@@ -21,8 +20,8 @@ struct IdentificationCANInput: ReducerProtocol {
     }
 }
 
-struct IdentificationCANInputView: View {
-    var store: Store<IdentificationCANInput.State, IdentificationCANInput.Action>
+struct CANInputView: View {
+    var store: StoreOf<CANInput>
     @FocusState private var pinEntryFocused: Bool
     
     var body: some View {
@@ -42,7 +41,7 @@ struct IdentificationCANInputView: View {
                                      doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                           title: L10n.Identification.Can.Input.continue,
                                                                           handler: { can in
-                                                                              viewStore.send(.done(can: can, request: viewStore.request, pushesToPINEntry: viewStore.pushesToPINEntry))
+                                                                              viewStore.send(.done(can: can, pushesToPINEntry: viewStore.pushesToPINEntry))
                                                                           }))
                                                                           .focused($pinEntryFocused)
                                                                           .headingL()
@@ -64,10 +63,10 @@ struct IdentificationCANInputView: View {
 
 #if DEBUG
 
-struct IdentificationCANInput_Previews: PreviewProvider {
+struct CANInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationCANInputView(store: .init(initialState: .init(request: .preview, pushesToPINEntry: true), reducer: IdentificationCANInput()))
+            CANInputView(store: .init(initialState: .init(pushesToPINEntry: true), reducer: CANInput()))
         }
         .previewDevice("iPhone 12")
     }

@@ -1,10 +1,9 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct IdentificationCANIncorrectInput: ReducerProtocol {
+struct CANIncorrectInput: ReducerProtocol {
     struct State: Equatable {
         @BindableState var enteredCAN: String = ""
-        let request: EIDAuthenticationRequest
         
         var doneButtonEnabled: Bool {
             enteredCAN.count == Constants.CAN_DIGIT_COUNT
@@ -13,26 +12,17 @@ struct IdentificationCANIncorrectInput: ReducerProtocol {
 
     enum Action: Equatable, BindableAction {
         case done(can: String)
-        case triggerEnd
-        case end(EIDAuthenticationRequest)
-        case binding(BindingAction<IdentificationCANIncorrectInput.State>)
+        case end
+        case binding(BindingAction<CANIncorrectInput.State>)
     }
     
     var body: some ReducerProtocol<State, Action> {
         BindingReducer()
-        Reduce { state, action in
-            switch action {
-            case .triggerEnd:
-                return Effect(value: .end(state.request))
-            default:
-                return .none
-            }
-        }
     }
 }
 
-struct IdentificationCANIncorrectInputView: View {
-    var store: Store<IdentificationCANIncorrectInput.State, IdentificationCANIncorrectInput.Action>
+struct CANIncorrectInputView: View {
+    var store: Store<CANIncorrectInput.State, CANIncorrectInput.Action>
     @FocusState private var pinEntryFocused: Bool
     
     var body: some View {
@@ -77,7 +67,7 @@ struct IdentificationCANIncorrectInputView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        ViewStore(store).send(.triggerEnd)
+                        ViewStore(store).send(.end)
                     } label: {
                         Label(L10n.Identification.Can.IncorrectInput.back, systemImage: "chevron.left")
                             .labelStyle(.titleAndIcon)
@@ -91,7 +81,7 @@ struct IdentificationCANIncorrectInputView: View {
                 }
             }
             .interactiveDismissDisabled(true, onAttemptToDismiss: {
-                ViewStore(store).send(.triggerEnd)
+                ViewStore(store).send(.end)
             })
         }
     }
@@ -99,11 +89,11 @@ struct IdentificationCANIncorrectInputView: View {
 
 #if DEBUG
 
-struct IdentificationCANIncorrectInput_Previews: PreviewProvider {
+struct CANIncorrectInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationCANIncorrectInputView(store: .init(initialState: .init(request: .preview),
-                                                             reducer: IdentificationCANIncorrectInput()))
+            CANIncorrectInputView(store: .init(initialState: .init(),
+                                               reducer: CANIncorrectInput()))
         }
         .previewDevice("iPhone 12")
     }

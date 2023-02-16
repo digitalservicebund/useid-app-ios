@@ -8,7 +8,7 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
         let subState = IdentificationOverviewLoading.State()
         let state = IdentificationCoordinator.State(tokenURL: demoTokenURL, states: [.root(.overview(.loading(subState)))])
         
-        let effect = state.transformToLocalInteractionHandler(event: .failure(.cardBlocked))
+        let effect = state.transformToLocalAction(.failure(.cardBlocked))
         
         guard let effect else {
             return XCTFail("Effect should not be nil")
@@ -24,7 +24,7 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
                                                         .push(.overview(.loading(IdentificationOverviewLoading.State())))
                                                     ])
         
-        let effect = state.transformToLocalInteractionHandler(event: .failure(.cardBlocked))
+        let effect = state.transformToLocalAction(.failure(.cardBlocked))
         
         guard let effect else {
             return XCTFail("Effect should not be nil")
@@ -40,7 +40,7 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
                                                         .root(.overview(.error(IdentificationOverviewErrorState(error: IdentifiableError(SomeError())))))
                                                     ])
         
-        let effect = state.transformToLocalInteractionHandler(event: .failure(.cardBlocked))
+        let effect = state.transformToLocalAction(.failure(.cardBlocked))
         XCTAssertNil(effect)
     }
     
@@ -52,7 +52,7 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
                                                         .push(.overview(.error(IdentificationOverviewErrorState(error: IdentifiableError(SomeError())))))
                                                     ])
         
-        let effect = state.transformToLocalInteractionHandler(event: .failure(.cardBlocked))
+        let effect = state.transformToLocalAction(.failure(.cardBlocked))
         
         guard let effect else {
             return XCTFail("Effect should not be nil")

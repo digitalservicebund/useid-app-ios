@@ -8,13 +8,13 @@ struct IdentificationCANScreen: ReducerProtocol {
         case canScan(IdentificationCANScan.State)
         case canPINForgotten(IdentificationCANPINForgotten.State)
         case canOrderNewPIN(IdentificationCANOrderNewPIN.State)
-        case canIntro(IdentificationCANIntro.State)
-        case canInput(IdentificationCANInput.State)
+        case canIntro(CANIntro.State)
+        case canInput(CANInput.State)
         case canPersonalPINInput(IdentificationCANPersonalPINInput.State)
-        case canIncorrectInput(IdentificationCANIncorrectInput.State)
+        case canIncorrectInput(CANIncorrectInput.State)
         case error(ScanError.State)
         
-        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationCANScreen.Action? {
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
             switch self {
             case .canScan(let state):
                 guard let localAction = state.transformToLocalAction(event) else { return nil }
@@ -43,10 +43,10 @@ struct IdentificationCANScreen: ReducerProtocol {
         case canScan(IdentificationCANScan.Action)
         case canPINForgotten(IdentificationCANPINForgotten.Action)
         case orderNewPIN(IdentificationCANOrderNewPIN.Action)
-        case canIntro(IdentificationCANIntro.Action)
-        case canInput(IdentificationCANInput.Action)
+        case canIntro(CANIntro.Action)
+        case canInput(CANInput.Action)
         case canPersonalPINInput(IdentificationCANPersonalPINInput.Action)
-        case canIncorrectInput(IdentificationCANIncorrectInput.Action)
+        case canIncorrectInput(CANIncorrectInput.Action)
         case error(ScanError.Action)
     }
     
@@ -61,17 +61,17 @@ struct IdentificationCANScreen: ReducerProtocol {
             IdentificationCANOrderNewPIN()
         }
         Scope(state: /State.canIntro, action: /Action.canIntro) {
-            IdentificationCANIntro()
+            CANIntro()
         }
         Scope(state: /State.canInput, action: /Action.canInput) {
-            IdentificationCANInput()
+            CANInput()
         }
         
         Scope(state: /State.canPersonalPINInput, action: /Action.canPersonalPINInput) {
             IdentificationCANPersonalPINInput()
         }
         Scope(state: /State.canIncorrectInput, action: /Action.canIncorrectInput) {
-            IdentificationCANIncorrectInput()
+            CANIncorrectInput()
         }
         Scope(state: /State.error, action: /Action.error) {
             ScanError()

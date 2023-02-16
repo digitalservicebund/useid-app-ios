@@ -13,11 +13,11 @@
 		B945F5DD2938DC120043DF9A /* IdentificationCANScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B945F5DC2938DC120043DF9A /* IdentificationCANScanTests.swift */; };
 		B95E687729473791004D956B /* RouteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95E687629473791004D956B /* RouteTests.swift */; };
 		B95FAA8929278F74009BDAC9 /* IdentificationCANPersonalPINInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95FAA8829278F74009BDAC9 /* IdentificationCANPersonalPINInput.swift */; };
-		B95FAA8B2927A90D009BDAC9 /* IdentificationCANIncorrectInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95FAA8A2927A90D009BDAC9 /* IdentificationCANIncorrectInput.swift */; };
+		B95FAA8B2927A90D009BDAC9 /* CANIncorrectInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95FAA8A2927A90D009BDAC9 /* CANIncorrectInput.swift */; };
 		B974FD042926657200B338E5 /* IdentificationCANPINForgotten.swift in Sources */ = {isa = PBXBuildFile; fileRef = B974FD032926657200B338E5 /* IdentificationCANPINForgotten.swift */; };
 		B974FD062926714500B338E5 /* IdentificationCANOrderNewPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = B974FD052926714500B338E5 /* IdentificationCANOrderNewPIN.swift */; };
-		B974FD08292685FC00B338E5 /* IdentificationCANIntro.swift in Sources */ = {isa = PBXBuildFile; fileRef = B974FD07292685FC00B338E5 /* IdentificationCANIntro.swift */; };
-		B974FD0A29268A5C00B338E5 /* IdentificationCANInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = B974FD0929268A5C00B338E5 /* IdentificationCANInput.swift */; };
+		B974FD08292685FC00B338E5 /* CANIntro.swift in Sources */ = {isa = PBXBuildFile; fileRef = B974FD07292685FC00B338E5 /* CANIntro.swift */; };
+		B974FD0A29268A5C00B338E5 /* CANInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = B974FD0929268A5C00B338E5 /* CANInput.swift */; };
 		B9A408A6292E231100EAB0B2 /* IdentificationCANScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A408A5292E231100EAB0B2 /* IdentificationCANScan.swift */; };
 		B9AF23D32930BD1300BD12DF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AF23D22930BD1300BD12DF /* Constants.swift */; };
 		B9DF15642913CCF1004E15E9 /* SetupPersonalPinConfirm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DF15632913CCF1004E15E9 /* SetupPersonalPinConfirm.swift */; };
@@ -78,6 +78,7 @@
 		E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */ = {isa = PBXBuildFile; productRef = E15C22FF2850F5A8005CCBB9 /* OpenEcard */; };
 		E15D0EBC29095F740088EF4E /* IdentificationOverviewError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15D0EBB29095F740088EF4E /* IdentificationOverviewError.swift */; };
 		E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */; };
+		E1658735299508D100FCF9C8 /* CancelId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1658734299508D100FCF9C8 /* CancelId.swift */; };
 		E166AF6C28FEAD38004EE034 /* Default.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E166AF6B28FEAD38004EE034 /* Default.xcconfig */; };
 		E166AF7028FEC6C7004EE034 /* LogAnalyticsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E166AF6F28FEC6C7004EE034 /* LogAnalyticsClient.swift */; };
 		E16708AE283D4224001A1637 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708AD283D4224001A1637 /* HomeView.swift */; };
@@ -105,7 +106,16 @@
 		E1AB87A02822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB879F2822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift */; };
 		E1AB87A4282413A700C7FC94 /* PINTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB87A3282413A700C7FC94 /* PINTextField.swift */; };
 		E1AB87AC2825238D00C7FC94 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1AB87AA2825238D00C7FC94 /* Localizable.strings */; };
+		E1AB87EE299A981000C462C1 /* SetupCANUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB87ED299A981000C462C1 /* SetupCANUITests.swift */; };
+		E1AB87F0299AA49200C462C1 /* SetupCANCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB87EF299AA49200C462C1 /* SetupCANCoordinatorTests.swift */; };
+		E1B0F5A62981435C00143B82 /* SetupCANConfirmTransportPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B0F5A52981435C00143B82 /* SetupCANConfirmTransportPIN.swift */; };
+		E1B0F5A82981437600143B82 /* SetupCANAlreadySetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B0F5A72981437600143B82 /* SetupCANAlreadySetup.swift */; };
+		E1B0F5AA29829D8900143B82 /* SetupCANCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B0F5A929829D8900143B82 /* SetupCANCoordinator.swift */; };
+		E1B0F5AC2982EB2300143B82 /* SetupCANScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B0F5AB2982EB2300143B82 /* SetupCANScreens.swift */; };
+		E1B0F5AF29830D2100143B82 /* SetupCANScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B0F5AE29830D2100143B82 /* SetupCANScan.swift */; };
 		E1B6991C2869B31B00360273 /* DebugIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B6991B2869B31B00360273 /* DebugIDInteractionManager.swift */; };
+		E1BA4D34299299CB004E4C66 /* ChangePINDebugSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BA4D33299299CB004E4C66 /* ChangePINDebugSequence.swift */; };
+		E1BA4D36299299F5004E4C66 /* IdentifyDebugSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BA4D35299299F5004E4C66 /* IdentifyDebugSequence.swift */; };
 		E1BC3D7928B7E40B007A7B39 /* LicensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BC3D7828B7E40B007A7B39 /* LicensesView.swift */; };
 		E1BC3D8128B7E73B007A7B39 /* Licenses in Resources */ = {isa = PBXBuildFile; fileRef = E1BC3D7F28B7E73B007A7B39 /* Licenses */; };
 		E1BC3D8228B7E73B007A7B39 /* Licenses.plist in Resources */ = {isa = PBXBuildFile; fileRef = E1BC3D8028B7E73B007A7B39 /* Licenses.plist */; };
@@ -193,11 +203,11 @@
 		B945F5DC2938DC120043DF9A /* IdentificationCANScanTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentificationCANScanTests.swift; sourceTree = "<group>"; };
 		B95E687629473791004D956B /* RouteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteTests.swift; sourceTree = "<group>"; };
 		B95FAA8829278F74009BDAC9 /* IdentificationCANPersonalPINInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANPersonalPINInput.swift; sourceTree = "<group>"; };
-		B95FAA8A2927A90D009BDAC9 /* IdentificationCANIncorrectInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANIncorrectInput.swift; sourceTree = "<group>"; };
+		B95FAA8A2927A90D009BDAC9 /* CANIncorrectInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CANIncorrectInput.swift; sourceTree = "<group>"; };
 		B974FD032926657200B338E5 /* IdentificationCANPINForgotten.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANPINForgotten.swift; sourceTree = "<group>"; };
 		B974FD052926714500B338E5 /* IdentificationCANOrderNewPIN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANOrderNewPIN.swift; sourceTree = "<group>"; };
-		B974FD07292685FC00B338E5 /* IdentificationCANIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANIntro.swift; sourceTree = "<group>"; };
-		B974FD0929268A5C00B338E5 /* IdentificationCANInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANInput.swift; sourceTree = "<group>"; };
+		B974FD07292685FC00B338E5 /* CANIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CANIntro.swift; sourceTree = "<group>"; };
+		B974FD0929268A5C00B338E5 /* CANInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CANInput.swift; sourceTree = "<group>"; };
 		B9A408A5292E231100EAB0B2 /* IdentificationCANScan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANScan.swift; sourceTree = "<group>"; };
 		B9AF23D22930BD1300BD12DF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		B9DF15632913CCF1004E15E9 /* SetupPersonalPinConfirm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPersonalPinConfirm.swift; sourceTree = "<group>"; };
@@ -255,6 +265,7 @@
 		E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentificationIncorrectPersonalPIN.swift; sourceTree = "<group>"; };
 		E15D0EBB29095F740088EF4E /* IdentificationOverviewError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewError.swift; sourceTree = "<group>"; };
 		E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LocalizedStrings+Generated.swift"; sourceTree = "<group>"; };
+		E1658734299508D100FCF9C8 /* CancelId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelId.swift; sourceTree = "<group>"; };
 		E166AF6B28FEAD38004EE034 /* Default.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Default.xcconfig; sourceTree = "<group>"; };
 		E166AF6F28FEC6C7004EE034 /* LogAnalyticsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogAnalyticsClient.swift; sourceTree = "<group>"; };
 		E16708AD283D4224001A1637 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -286,7 +297,16 @@
 		E1AB879F2822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPersonalPINIntroScreen.swift; sourceTree = "<group>"; };
 		E1AB87A3282413A700C7FC94 /* PINTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINTextField.swift; sourceTree = "<group>"; };
 		E1AB87AB2825238D00C7FC94 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E1AB87ED299A981000C462C1 /* SetupCANUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCANUITests.swift; sourceTree = "<group>"; };
+		E1AB87EF299AA49200C462C1 /* SetupCANCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCANCoordinatorTests.swift; sourceTree = "<group>"; };
+		E1B0F5A52981435C00143B82 /* SetupCANConfirmTransportPIN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCANConfirmTransportPIN.swift; sourceTree = "<group>"; };
+		E1B0F5A72981437600143B82 /* SetupCANAlreadySetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCANAlreadySetup.swift; sourceTree = "<group>"; };
+		E1B0F5A929829D8900143B82 /* SetupCANCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCANCoordinator.swift; sourceTree = "<group>"; };
+		E1B0F5AB2982EB2300143B82 /* SetupCANScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCANScreens.swift; sourceTree = "<group>"; };
+		E1B0F5AE29830D2100143B82 /* SetupCANScan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCANScan.swift; sourceTree = "<group>"; };
 		E1B6991B2869B31B00360273 /* DebugIDInteractionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugIDInteractionManager.swift; sourceTree = "<group>"; };
+		E1BA4D33299299CB004E4C66 /* ChangePINDebugSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePINDebugSequence.swift; sourceTree = "<group>"; };
+		E1BA4D35299299F5004E4C66 /* IdentifyDebugSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifyDebugSequence.swift; sourceTree = "<group>"; };
 		E1BC3D7828B7E40B007A7B39 /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
 		E1BC3D7F28B7E73B007A7B39 /* Licenses */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Licenses; sourceTree = "<group>"; };
 		E1BC3D8028B7E73B007A7B39 /* Licenses.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Licenses.plist; sourceTree = "<group>"; };
@@ -404,6 +424,7 @@
 				B922901D294203360018D671 /* IdentificationCANCoordinatorTests.swift */,
 				E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */,
 				E135D6A928B7696400A32862 /* SetupCoordinatorTests.swift */,
+				E1AB87EF299AA49200C462C1 /* SetupCANCoordinatorTests.swift */,
 				E13F9E44288853950088E955 /* CoordinatorTests.swift */,
 				B95E687629473791004D956B /* RouteTests.swift */,
 			);
@@ -493,8 +514,10 @@
 		E13F9E372886F2C70088E955 /* Setup */ = {
 			isa = PBXGroup;
 			children = (
+				E1B0F5A42981433300143B82 /* CAN */,
 				D28D27FE28B7A91B008DA310 /* MissingPINLetter.swift */,
 				D28D280028B7A9F5008DA310 /* SetupDone.swift */,
+				E1B0F5AE29830D2100143B82 /* SetupCANScan.swift */,
 				D28D280128B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift */,
 				E110400C281C389C004BA03E /* SetupIntro.swift */,
 				E1AAACF92837B98100A51183 /* SetupPersonalPIN */,
@@ -517,9 +540,7 @@
 				B9A408A5292E231100EAB0B2 /* IdentificationCANScan.swift */,
 				B974FD032926657200B338E5 /* IdentificationCANPINForgotten.swift */,
 				B974FD052926714500B338E5 /* IdentificationCANOrderNewPIN.swift */,
-				B974FD07292685FC00B338E5 /* IdentificationCANIntro.swift */,
-				B974FD0929268A5C00B338E5 /* IdentificationCANInput.swift */,
-				B95FAA8A2927A90D009BDAC9 /* IdentificationCANIncorrectInput.swift */,
+				B95FAA8A2927A90D009BDAC9 /* CANIncorrectInput.swift */,
 				B95FAA8829278F74009BDAC9 /* IdentificationCANPersonalPINInput.swift */,
 			);
 			path = Identification;
@@ -544,6 +565,7 @@
 				E166AF6F28FEC6C7004EE034 /* LogAnalyticsClient.swift */,
 				D29C542E28FFD9580064AB41 /* Logger+Catetory.swift */,
 				B9AF23D22930BD1300BD12DF /* Constants.swift */,
+				E1658734299508D100FCF9C8 /* CancelId.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -557,6 +579,8 @@
 				E1F39DD928588AB000D8D907 /* IdentificationCoordinator.swift */,
 				B9EB82DE2940A589002590F9 /* IdentificationCANCoordinator.swift */,
 				B9EB82E02940A8C1002590F9 /* IdentificationCANScreen.swift */,
+				E1B0F5A929829D8900143B82 /* SetupCANCoordinator.swift */,
+				E1B0F5AB2982EB2300143B82 /* SetupCANScreens.swift */,
 				E1F39DDB28588B0100D8D907 /* IdentificationScreens.swift */,
 				E16708B4283D4F25001A1637 /* Screens.swift */,
 				E16708B2283D4ED2001A1637 /* SetupCoordinator.swift */,
@@ -601,6 +625,7 @@
 				E1FE617229548074002FA330 /* IdentificationCANUITests.swift */,
 				E18E2239285349D200221DB1 /* IdentificationUITests.swift */,
 				E1DCC97D29072B8B002E9371 /* SetupUITests.swift */,
+				E1AB87ED299A981000C462C1 /* SetupCANUITests.swift */,
 				E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */,
 				E156DD01287EF9C200C88914 /* XCUITestDeeplinking.swift */,
 				E1A769FC28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift */,
@@ -639,6 +664,7 @@
 				E16708B8283D7C47001A1637 /* SupplementaryViews */,
 				E13F9E372886F2C70088E955 /* Setup */,
 				E13F9E392886F2EE0088E955 /* Identification */,
+				E1B0F5AD29830A0A00143B82 /* Shared CAN */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -651,6 +677,24 @@
 				E1AB879D282283AB00C7FC94 /* Fonts.swift */,
 			);
 			path = Theme;
+			sourceTree = "<group>";
+		};
+		E1B0F5A42981433300143B82 /* CAN */ = {
+			isa = PBXGroup;
+			children = (
+				E1B0F5A52981435C00143B82 /* SetupCANConfirmTransportPIN.swift */,
+				E1B0F5A72981437600143B82 /* SetupCANAlreadySetup.swift */,
+			);
+			path = CAN;
+			sourceTree = "<group>";
+		};
+		E1B0F5AD29830A0A00143B82 /* Shared CAN */ = {
+			isa = PBXGroup;
+			children = (
+				B974FD07292685FC00B338E5 /* CANIntro.swift */,
+				B974FD0929268A5C00B338E5 /* CANInput.swift */,
+			);
+			path = "Shared CAN";
 			sourceTree = "<group>";
 		};
 		E1BC3D7A28B7E5C0007A7B39 /* Generated */ = {
@@ -692,6 +736,8 @@
 			children = (
 				E13925C52841119400161F5C /* Mocks */,
 				E593E278281686DC00154EB0 /* IDInteractionManager.swift */,
+				E1BA4D33299299CB004E4C66 /* ChangePINDebugSequence.swift */,
+				E1BA4D35299299F5004E4C66 /* IdentifyDebugSequence.swift */,
 				E1B6991B2869B31B00360273 /* DebugIDInteractionManager.swift */,
 				E1DF0995294A0FF300199761 /* PreviewIDInteractionManager.swift */,
 				E14C21B128B8BF9100192338 /* StorageManager.swift */,
@@ -1019,6 +1065,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1AB87EE299A981000C462C1 /* SetupCANUITests.swift in Sources */,
 				E13A632128B8010A00AB7A39 /* LocalizedStrings+Generated.swift in Sources */,
 				E1FE617329548074002FA330 /* IdentificationCANUITests.swift in Sources */,
 				E1A769FD28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift in Sources */,
@@ -1054,6 +1101,7 @@
 				B945F5DD2938DC120043DF9A /* IdentificationCANScanTests.swift in Sources */,
 				D2FD741128DDF63000C7C5E7 /* ScanErrorTests.swift in Sources */,
 				E1AAACF328378C0E00A51183 /* SetupPersonalPINTests.swift in Sources */,
+				E1AB87F0299AA49200C462C1 /* SetupCANCoordinatorTests.swift in Sources */,
 				E13F9E43288835350088E955 /* IdentificationCoordinatorStateTests.swift in Sources */,
 				E13F9E3F288804140088E955 /* IdentificationPINScanTests.swift in Sources */,
 			);
@@ -1065,6 +1113,7 @@
 			files = (
 				E12CB30A284A2C700039FD56 /* InteractiveDismissableView.swift in Sources */,
 				E1FDEAAB28F96BD300F70CE1 /* AppConfig.swift in Sources */,
+				E1B0F5AC2982EB2300143B82 /* SetupCANScreens.swift in Sources */,
 				E15776A0286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift in Sources */,
 				E5E69D832812FB4500A3B66A /* EIDInteractionEvent.swift in Sources */,
 				D278AC9A28FD388100BD0528 /* View+Synchronize.swift in Sources */,
@@ -1074,12 +1123,15 @@
 				E1C2D8BA28620E2B000E0F5B /* IdentificationPINScan.swift in Sources */,
 				E593E26E2816853A00154EB0 /* StopServiceHandler.swift in Sources */,
 				E16708B3283D4ED2001A1637 /* SetupCoordinator.swift in Sources */,
+				E1658735299508D100FCF9C8 /* CancelId.swift in Sources */,
+				E1B0F5A82981437600143B82 /* SetupCANAlreadySetup.swift in Sources */,
 				E16708C0283E6A07001A1637 /* SetupScan.swift in Sources */,
+				E1B0F5AF29830D2100143B82 /* SetupCANScan.swift in Sources */,
 				E1AAACEB2836668200A51183 /* ShakeEffect.swift in Sources */,
 				E166AF7028FEC6C7004EE034 /* LogAnalyticsClient.swift in Sources */,
-				B974FD0A29268A5C00B338E5 /* IdentificationCANInput.swift in Sources */,
+				B974FD0A29268A5C00B338E5 /* CANInput.swift in Sources */,
 				D28D280228B7A9F5008DA310 /* SetupDone.swift in Sources */,
-				B974FD08292685FC00B338E5 /* IdentificationCANIntro.swift in Sources */,
+				B974FD08292685FC00B338E5 /* CANIntro.swift in Sources */,
 				E593E279281686DC00154EB0 /* IDInteractionManager.swift in Sources */,
 				E59097B5281153A100CDA144 /* NFCMessageProvider.swift in Sources */,
 				E16708AE283D4224001A1637 /* HomeView.swift in Sources */,
@@ -1089,6 +1141,7 @@
 				E16708BE283E666A001A1637 /* Store+Empty.swift in Sources */,
 				E1CD8E9128214FDB008ADA2A /* SetupPINLetterIntro.swift in Sources */,
 				E1EB9FFA28B5288A007FF467 /* ScanBody.swift in Sources */,
+				E1BA4D36299299F5004E4C66 /* IdentifyDebugSequence.swift in Sources */,
 				D28D280328B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift in Sources */,
 				E5E69D852812FB6100A3B66A /* IDCardInteractionError.swift in Sources */,
 				E1EFB5C62858EB2A005C38C6 /* Shape+Fill.swift in Sources */,
@@ -1101,6 +1154,7 @@
 				E1234DB12976E0BC00837872 /* SceneDelegate.swift in Sources */,
 				E1EFB5D5285C7D81005C38C6 /* IdentificationPersonalPIN.swift in Sources */,
 				E1DF0996294A0FF300199761 /* PreviewIDInteractionManager.swift in Sources */,
+				E1B0F5AA29829D8900143B82 /* SetupCANCoordinator.swift in Sources */,
 				E1A769FF28B940C6001E1F04 /* LaunchArgument.swift in Sources */,
 				E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */,
 				B9DF15642913CCF1004E15E9 /* SetupPersonalPinConfirm.swift in Sources */,
@@ -1131,6 +1185,7 @@
 				B974FD062926714500B338E5 /* IdentificationCANOrderNewPIN.swift in Sources */,
 				E593E2762816868100154EB0 /* PINManagementInteraction.swift in Sources */,
 				E106614C28EC8C0C00CA2DB9 /* SharedScan.swift in Sources */,
+				E1BA4D34299299CB004E4C66 /* ChangePINDebugSequence.swift in Sources */,
 				E1AB879A282281C400C7FC94 /* HeaderView.swift in Sources */,
 				E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */,
 				E144EBD828C63A4D009B4900 /* AboutView.swift in Sources */,
@@ -1140,8 +1195,9 @@
 				E1EFB5C8285A365E005C38C6 /* IdentificationAbout.swift in Sources */,
 				D29C542F28FFD9580064AB41 /* Logger+Catetory.swift in Sources */,
 				F43622A72850D6C9008AEBB9 /* ScanError.swift in Sources */,
-				B95FAA8B2927A90D009BDAC9 /* IdentificationCANIncorrectInput.swift in Sources */,
+				B95FAA8B2927A90D009BDAC9 /* CANIncorrectInput.swift in Sources */,
 				E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */,
+				E1B0F5A62981435C00143B82 /* SetupCANConfirmTransportPIN.swift in Sources */,
 				E13925B82840FB7700161F5C /* Types.swift in Sources */,
 				E13925C72841119400161F5C /* MockIDInteractionManager.swift in Sources */,
 				E1BC3D7928B7E40B007A7B39 /* LicensesView.swift in Sources */,

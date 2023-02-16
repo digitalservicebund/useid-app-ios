@@ -2,6 +2,7 @@ import XCTest
 import ComposableArchitecture
 import Cuckoo
 import Combine
+import Analytics
 
 @testable import BundesIdent
 
@@ -207,5 +208,94 @@ class SetupCoordinatorTests: XCTestCase {
                 .root(.scan(.init(transportPIN: newTransportPIN, newPIN: pin, shared: .init(attempt: 1))))
             ]
         }
+    }
+    
+    func testInitiateScan() {
+        let oldPIN = "12345"
+        let newPIN = "123456"
+        let store = TestStore(initialState: SetupCoordinator.State(transportPIN: oldPIN,
+                                                                   states: [
+                                                                       .root(.scan(SetupScan.State(transportPIN: oldPIN, newPIN: newPIN)))
+                                                                   ]),
+                              reducer: SetupCoordinator())
+        
+        let mockPreviewIDInteractionManager = MockPreviewIDInteractionManagerType()
+        let mockIDInteractionManager = MockIDInteractionManagerType()
+        
+        let scheduler = DispatchQueue.test
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
+        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        
+        stub(mockPreviewIDInteractionManager) {
+            $0.isDebugModeEnabled.get.thenReturn(false)
+        }
+        
+        stub(mockIDInteractionManager) {
+            $0.changePIN(nfcMessagesProvider: any()).then { _ in
+                let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+                scheduler.schedule {
+                    subject.send(.authenticationStarted)
+                    subject.send(completion: .finished)
+                }
+                return subject.eraseToAnyPublisher()
+            }
+        }
+        
+        store.send(.routeAction(0, action: .scan(.shared(.initiateScan))))
+        
+        scheduler.advance()
+        
+        store.receive(.idInteractionEvent(.success(.authenticationStarted)))
+        
+        store.receive(.routeAction(0, action: .scan(.scanEvent(.success(.authenticationStarted))))) {
+            guard case .scan(var scanState) = $0.states[0].screen else { return XCTFail() }
+            scanState.shared.isScanning = true
+            $0.states[0].screen = .scan(scanState)
+        }
+    }
+    
+    func testStartScanTracking() {
+        let store = TestStore(initialState: SetupCoordinator.State(transportPIN: "12345",
+                                                                   states: [
+                                                                       .root(.scan(SetupScan.State(transportPIN: "12345", newPIN: "123456")))
+                                                                   ]), reducer: SetupCoordinator())
+        
+        let scheduler = DispatchQueue.test
+        let mockAnalyticsClient = MockAnalyticsClient()
+        let mockIDInteractionManager = MockIDInteractionManagerType()
+        let mockPreviewIDInteractionManager = MockPreviewIDInteractionManagerType()
+        
+        stub(mockAnalyticsClient) {
+            $0.track(view: any()).thenDoNothing()
+            $0.track(event: any()).thenDoNothing()
+        }
+        
+        stub(mockIDInteractionManager) { mock in
+            mock.changePIN(nfcMessagesProvider: any()).then { _ in
+                let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+                scheduler.schedule {
+                    subject.send(completion: .finished)
+                }
+                return subject.eraseToAnyPublisher()
+            }
+        }
+        
+        stub(mockPreviewIDInteractionManager) {
+            $0.isDebugModeEnabled.get.thenReturn(false)
+        }
+        
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
+        store.dependencies.analytics = mockAnalyticsClient
+        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        
+        store.send(.routeAction(0, action: .scan(.shared(.initiateScan))))
+        
+        scheduler.advance()
+        
+        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "firstTimeUser",
+                                                                action: "buttonPressed",
+                                                                name: "scan"))
     }
 }

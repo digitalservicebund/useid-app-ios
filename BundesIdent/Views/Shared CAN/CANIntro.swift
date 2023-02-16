@@ -1,14 +1,13 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct IdentificationCANIntro: ReducerProtocol {
+struct CANIntro: ReducerProtocol {
     struct State: Equatable {
-        let request: EIDAuthenticationRequest
         var shouldDismiss: Bool
     }
     
     enum Action: Equatable {
-        case showInput(EIDAuthenticationRequest, Bool)
+        case showInput(shouldDismiss: Bool)
         case end
     }
     
@@ -17,14 +16,14 @@ struct IdentificationCANIntro: ReducerProtocol {
     }
 }
 
-struct IdentificationCANIntroView: View {
-    var store: Store<IdentificationCANIntro.State, IdentificationCANIntro.Action>
+struct CANIntroView: View {
+    var store: StoreOf<CANIntro>
     var body: some View {
         WithViewStore(store) { viewStore in
             DialogView(store: store.stateless, title: L10n.Identification.Can.Intro.title,
                        message: L10n.Identification.Can.Intro.body,
                        imageMeta: ImageMeta(asset: Asset.idCan),
-                       primaryButton: .init(title: L10n.Identification.Can.Intro.continue, action: .showInput(viewStore.request, viewStore.shouldDismiss)))
+                       primaryButton: .init(title: L10n.Identification.Can.Intro.continue, action: .showInput(shouldDismiss: viewStore.shouldDismiss)))
             
                 .navigationBarBackButtonHidden(viewStore.shouldDismiss)
                 .navigationBarItems(leading: viewStore.shouldDismiss ? cancelButton(viewStore: viewStore) : nil)
@@ -32,7 +31,7 @@ struct IdentificationCANIntroView: View {
     }
     
     @ViewBuilder
-    func cancelButton(viewStore: ViewStore<IdentificationCANIntro.State, IdentificationCANIntro.Action>) -> some View {
+    func cancelButton(viewStore: ViewStore<CANIntro.State, CANIntro.Action>) -> some View {
         Button(L10n.General.cancel) {
             ViewStore(store.stateless).send(.end)
         }
@@ -42,10 +41,11 @@ struct IdentificationCANIntroView: View {
 
 #if DEBUG
 
-struct IdentificationCANIntro_Previews: PreviewProvider {
+struct CANIntro_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationCANIntroView(store: .init(initialState: .init(request: .preview, shouldDismiss: true), reducer: IdentificationCANIntro()))
+            CANIntroView(store: .init(initialState: .init(shouldDismiss: true),
+                                      reducer: CANIntro()))
         }
         .previewDevice("iPhone 12")
     }

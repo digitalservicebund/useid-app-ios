@@ -194,10 +194,10 @@ final class IdentificationCANUITests: XCTestCase {
         remainingAttempts -= 1
         
         app.buttons[L10n.Identification.Can.PinForgotten.orderNewPin].wait().tap()
-        app.navigationBars.buttons.element(boundBy: 0).wait().tap()
+        app.backButton.wait().tap()
         
         app.buttons[L10n.Identification.Can.PinForgotten.retry].wait().tap()
-        app.navigationBars.buttons.element(boundBy: 0).wait().tap()
+        app.backButton.wait().tap()
         
         app.buttons[L10n.Identification.Can.PinForgotten.retry].wait().tap()
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()

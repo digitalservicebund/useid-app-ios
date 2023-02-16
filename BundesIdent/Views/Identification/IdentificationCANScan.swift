@@ -11,8 +11,6 @@ struct IdentificationCANScan: ReducerProtocol {
     @Dependency(\.logger) var logger
     @Dependency(\.uuid) var uuid
     struct State: Equatable, IDInteractionHandler {
-        let request: EIDAuthenticationRequest
-        
         var pin: String
         var can: String
         var pinCANCallback: PINCANCallback
@@ -24,7 +22,7 @@ struct IdentificationCANScan: ReducerProtocol {
         var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
         
-        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationCANScan.Action? {
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
             .scanEvent(event)
         }
     }
@@ -35,7 +33,7 @@ struct IdentificationCANScan: ReducerProtocol {
         case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
         case wrongPIN(remainingAttempts: Int)
         case identifiedSuccessfully(redirectURL: URL)
-        case requestPINAndCAN(EIDAuthenticationRequest, PINCANCallback)
+        case requestPINAndCAN(PINCANCallback)
         case requestCAN
         case error(ScanError.State)
         case cancelIdentification
@@ -120,7 +118,7 @@ struct IdentificationCANScan: ReducerProtocol {
             if !state.shared.cardRecognized {
                 return .none
             }
-            return Effect(value: .requestPINAndCAN(state.request, state.pinCANCallback))
+            return Effect(value: .requestPINAndCAN(state.pinCANCallback))
         case .authenticationStarted:
             logger.info("Authentication started.")
             state.shared.isScanning = true
@@ -193,14 +191,12 @@ struct IdentificationCANScanView: View {
 
 struct IdentificationCANScan_Previews: PreviewProvider {
     static var previews: some View {
-        IdentificationCANScanView(store: Store(initialState: IdentificationCANScan.State(request: .preview,
-                                                                                         pin: "123456",
+        IdentificationCANScanView(store: Store(initialState: IdentificationCANScan.State(pin: "123456",
                                                                                          can: "123456",
                                                                                          pinCANCallback: PINCANCallback(id: .zero, callback: { _, _ in })),
                                                reducer: IdentificationCANScan()))
         
-        IdentificationCANScanView(store: Store(initialState: IdentificationCANScan.State(request: .preview,
-                                                                                         pin: "123456",
+        IdentificationCANScanView(store: Store(initialState: IdentificationCANScan.State(pin: "123456",
                                                                                          can: "123456",
                                                                                          pinCANCallback: PINCANCallback(id: .zero, callback: { _, _ in }), shared: SharedScan.State(isScanning: true)),
                                                reducer: IdentificationCANScan()))

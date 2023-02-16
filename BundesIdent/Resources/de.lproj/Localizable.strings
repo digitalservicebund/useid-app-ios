@@ -18,6 +18,14 @@
 "cardInteraction_error_default" = "Es ist ein Fehler aufgetreten.";
 "cardInteraction_error_tagLost" = "Karte wurde entfernt";
 "cardInteraction_error_timeout" = "Kein Ausweis erkannt.";
+"firstTimeUser_can_alreadySetup_body_ident" = "Sie müssen Ihren Ausweis insgesamt nur einmal einrichten. Falls Sie schon über eine 6-stellige persönliche PIN verfügen, ist Ihr Ausweis bereits eingerichtet.\n\nMit dieser PIN können Sie sich jetzt ausweisen.";
+"firstTimeUser_can_alreadySetup_body_setup" = "Sie müssen Ihren Ausweis insgesamt nur einmal einrichten. Falls Sie schon über eine 6-stellige persönliche PIN verfügen, ist Ihr Ausweis bereits eingerichtet.";
+"firstTimeUser_can_alreadySetup_personalPINNotAvailable" = "Persönliche PIN nicht vorhanden?";
+"firstTimeUser_can_alreadySetup_title" = "Anscheinend ist Ihr Online-Ausweis bereits eingerichtet.";
+"firstTimeUser_can_confirmTransportPIN_body" = "Sie haben **%@** als Ihre Transport-PIN eingebegen. Bitte überprüfen Sie, ob diese mit der in Ihrem PIN-Brief angegebenen Transport-PIN übereinstimmt.";
+"firstTimeUser_can_confirmTransportPIN_confirmInput" = "Ja, meine Eingabe war korrekt";
+"firstTimeUser_can_confirmTransportPIN_incorrectInput" = "Nein, Transport-PIN korrigieren";
+"firstTimeUser_can_confirmTransportPIN_title" = "Ist %@ wirklich Ihre Transport-PIN?";
 "firstTimeUser_confirmEnd_confirm" = "Beenden";
 "firstTimeUser_confirmEnd_deny" = "Abbrechen";
 "firstTimeUser_confirmEnd_message" = "Möchten Sie die Einrichtung der Online‑Ausweisfunktion abbrechen?\n\nSie können die Einrichtung später erneut starten.";

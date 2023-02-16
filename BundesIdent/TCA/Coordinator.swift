@@ -148,7 +148,13 @@ struct Coordinator: ReducerProtocol {
                  .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.dismiss))))),
                  .setupCoordinator(.confirmEnd),
                  .setupCoordinator(.routeAction(_, action: .done(.done))),
-                 .setupCoordinator(.afterConfirmEnd):
+                 .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canAlreadySetup(.done))))),
+                 .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.dismiss))),
+                 .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canScan(.dismiss))))),
+                 .setupCoordinator(.afterConfirmEnd),
+                 // This is bad, but we can not switch back to a previous coordinator while having another coordinator inbetween. See https://github.com/johnpatrickmorgan/FlowStacks/issues/23#issuecomment-1407125421
+                 // We are only showing the setup coordinator in the end for the done screen
+                 .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .setupCoordinator(.routeAction(_, action: .done(.done))))))):
                 state.routes.dismiss()
                 return .none
             default:
@@ -222,11 +228,21 @@ struct CoordinatorView: View {
                         action: Screen.Action.home,
                         then: HomeView.init)
                 CaseLet(state: /Screen.State.setupCoordinator,
-                        action: Screen.Action.setupCoordinator,
-                        then: SetupCoordinatorView.init)
+                        action: Screen.Action.setupCoordinator) { caseStore in
+                    NavigationView {
+                        SetupCoordinatorView(store: caseStore)
+                    }
+                    .accentColor(Asset.accentColor.swiftUIColor)
+                    .ignoresSafeArea(.keyboard)
+                }
                 CaseLet(state: /Screen.State.identificationCoordinator,
-                        action: Screen.Action.identificationCoordinator,
-                        then: IdentificationCoordinatorView.init)
+                        action: Screen.Action.identificationCoordinator) { caseStore in
+                    NavigationView {
+                        IdentificationCoordinatorView(store: caseStore)
+                    }
+                    .accentColor(Asset.accentColor.swiftUIColor)
+                    .ignoresSafeArea(.keyboard)
+                }
             }
         }
         .accentColor(Asset.accentColor.swiftUIColor)

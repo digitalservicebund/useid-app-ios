@@ -3,7 +3,7 @@ import Foundation
 import Analytics
 
 struct SetupScreen: ReducerProtocol {
-    enum State: Equatable {
+    enum State: Equatable, IDInteractionHandler {
         case intro(SetupIntro.State)
         case transportPINIntro
         case transportPIN(SetupTransportPIN.State)
@@ -15,6 +15,22 @@ struct SetupScreen: ReducerProtocol {
         case incorrectTransportPIN(SetupIncorrectTransportPIN.State)
         case error(ScanError.State)
         case missingPINLetter(MissingPINLetter.State)
+        case setupCANCoordinator(SetupCANCoordinator.State)
+        
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
+            switch self {
+            case .scan(let state):
+                guard let localAction = state.transformToLocalAction(event) else { return nil }
+                return .scan(localAction)
+            case .setupCANCoordinator(let state):
+                guard let localAction = state.transformToLocalInteractionHandler(event: event) else {
+                    return nil
+                }
+                return .setupCANCoordinator(localAction)
+            default:
+                return nil
+            }
+        }
     }
     
     enum Action: Equatable {
@@ -29,6 +45,7 @@ struct SetupScreen: ReducerProtocol {
         case incorrectTransportPIN(SetupIncorrectTransportPIN.Action)
         case error(ScanError.Action)
         case missingPINLetter(MissingPINLetter.Action)
+        case setupCANCoordinator(SetupCANCoordinator.Action)
     }
     
     var body: some ReducerProtocol<State, Action> {
@@ -54,6 +71,9 @@ struct SetupScreen: ReducerProtocol {
         
         Scope(state: /State.error, action: /Action.error) {
             ScanError()
+        }
+        Scope(state: /State.setupCANCoordinator, action: /Action.setupCANCoordinator) {
+            SetupCANCoordinator()
         }
     }
 }
@@ -83,6 +103,8 @@ extension SetupScreen.State: AnalyticsView {
             return state.errorType.route
         case .missingPINLetter:
             return ["missingPINLetter"]
+        case .setupCANCoordinator(let state):
+            return state.route
         }
     }
 }

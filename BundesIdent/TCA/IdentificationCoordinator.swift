@@ -34,7 +34,7 @@ struct IdentificationCoordinator: ReducerProtocol {
 #if PREVIEW
     @Dependency(\.previewIDInteractionManager) var previewIDInteractionManager
 #endif
-    struct State: Equatable, IndexedRouterState {
+    struct State: Equatable, IndexedRouterState, IDInteractionHandler {
         var tokenURL: URL
         var pin: String?
         var attempt: Int = 0
@@ -52,7 +52,7 @@ struct IdentificationCoordinator: ReducerProtocol {
 #endif
         var states: [Route<IdentificationScreen.State>]
         
-        func transformToLocalInteractionHandler(event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationCoordinator.Action? {
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationCoordinator.Action? {
             for (index, state) in states.enumerated().reversed() {
                 guard let action = state.screen.transformToLocalAction(event) else { continue }
                 return .routeAction(index, action: action)
@@ -76,8 +76,6 @@ struct IdentificationCoordinator: ReducerProtocol {
 #endif
     }
     
-    enum CancelId {}
-    
     var body: some ReducerProtocol<State, Action> {
         Reduce<State, Action> { state, action in
             switch action {
@@ -91,7 +89,7 @@ struct IdentificationCoordinator: ReducerProtocol {
                                                                                                          remainingAttempts: remainingAttempts)))
                 return .none
             case .idInteractionEvent(let result):
-                guard let localAction = state.transformToLocalInteractionHandler(event: result) else {
+                guard let localAction = state.transformToLocalAction(result) else {
                     issueTracker.capture(error: IdentificationCoordinatorError.noScreenToHandleEIDInteractionEvents)
                     logger.error("No screen found to handle EIDInteractionEvents")
                     return .none
@@ -308,33 +306,30 @@ struct IdentificationCoordinatorView: View {
     
     var body: some View {
         WithViewStore(store) { viewStore in
-            NavigationView {
-                TCARouter(store) { screen in
-                    SwitchStore(screen) {
-                        CaseLet(state: /IdentificationScreen.State.overview,
-                                action: IdentificationScreen.Action.overview,
-                                then: IdentificationOverviewView.init)
-                        CaseLet(state: /IdentificationScreen.State.personalPIN,
-                                action: IdentificationScreen.Action.personalPIN,
-                                then: IdentificationPersonalPINView.init)
-                        CaseLet(state: /IdentificationScreen.State.incorrectPersonalPIN,
-                                action: IdentificationScreen.Action.incorrectPersonalPIN,
-                                then: IdentificationIncorrectPersonalPINView.init)
-                        CaseLet(state: /IdentificationScreen.State.scan,
-                                action: IdentificationScreen.Action.scan,
-                                then: IdentificationPINScanView.init)
-                        CaseLet(state: /IdentificationScreen.State.error,
-                                action: IdentificationScreen.Action.error,
-                                then: ScanErrorView.init)
-                        CaseLet(state: /IdentificationScreen.State.identificationCANCoordinator,
-                                action: IdentificationScreen.Action.identificationCANCoordinator,
-                                then: IdentificationCANCoordinatorView.init)
-                    }
+            TCARouter(store) { screen in
+                SwitchStore(screen) {
+                    CaseLet(state: /IdentificationScreen.State.overview,
+                            action: IdentificationScreen.Action.overview,
+                            then: IdentificationOverviewView.init)
+                    CaseLet(state: /IdentificationScreen.State.personalPIN,
+                            action: IdentificationScreen.Action.personalPIN,
+                            then: IdentificationPersonalPINView.init)
+                    CaseLet(state: /IdentificationScreen.State.incorrectPersonalPIN,
+                            action: IdentificationScreen.Action.incorrectPersonalPIN,
+                            then: IdentificationIncorrectPersonalPINView.init)
+                    CaseLet(state: /IdentificationScreen.State.scan,
+                            action: IdentificationScreen.Action.scan,
+                            then: IdentificationPINScanView.init)
+                    CaseLet(state: /IdentificationScreen.State.error,
+                            action: IdentificationScreen.Action.error,
+                            then: ScanErrorView.init)
+                    CaseLet(state: /IdentificationScreen.State.identificationCANCoordinator,
+                            action: IdentificationScreen.Action.identificationCANCoordinator,
+                            then: IdentificationCANCoordinatorView.init)
                 }
             }
-            .accentColor(Asset.accentColor.swiftUIColor)
-            .ignoresSafeArea(.keyboard)
             .alert(store.scope(state: \.alert), dismiss: IdentificationCoordinator.Action.dismissAlert)
+            .navigationBarHidden(false)
             .interactiveDismissDisabled(viewStore.swipeToDismiss != .allow) {
                 viewStore.send(IdentificationCoordinator.Action.swipeToDismiss)
             }

@@ -42,16 +42,34 @@ class SetupScanTests: XCTestCase {
         }
     }
     
+    func testInitiateScan() throws {
+        let oldPIN = "12345"
+        let newPIN = "123456"
+        let store = TestStore(initialState: SetupScan.State(transportPIN: oldPIN, newPIN: newPIN),
+                              reducer: SetupScan())
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
+        store.dependencies.analytics = mockAnalyticsClient
+        store.dependencies.storageManager = mockStorageManager
+        
+        store.send(.shared(.startScan)) {
+            $0.shared.isScanning = true
+            $0.shared.showInstructions = false
+        }
+        
+        store.receive(.shared(.initiateScan))
+    }
+    
     func testChangePINSuccess() throws {
         let oldPIN = "12345"
         let newPIN = "123456"
         let store = TestStore(initialState: SetupScan.State(transportPIN: oldPIN, newPIN: newPIN),
                               reducer: SetupScan())
-        store.dependencies.idInteractionManager = mockIDInteractionManager
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.storageManager = mockStorageManager
+        store.dependencies.idInteractionManager = mockIDInteractionManager
         store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        
         let cardInsertionCallback: (String) -> Void = { _ in }
         
         let requestChangedPINExpectation = expectation(description: "requestCardInsertion callback")
@@ -61,66 +79,45 @@ class SetupScanTests: XCTestCase {
             requestChangedPINExpectation.fulfill()
         }
         
-        let queue = scheduler!
-        stub(mockIDInteractionManager) { mock in
-            mock.changePIN(nfcMessagesProvider: any()).then { _ in
-                let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
-                queue.schedule {
-                    subject.send(.authenticationStarted)
-                    subject.send(.requestCardInsertion(cardInsertionCallback))
-                    subject.send(.cardRecognized)
-                    subject.send(.cardInteractionComplete)
-                    subject.send(.requestChangedPIN(remainingAttempts: 3, pinCallback: pinCallback))
-                    subject.send(.cardRemoved)
-                    subject.send(.requestCardInsertion(cardInsertionCallback))
-                    subject.send(.cardRecognized)
-                    subject.send(.cardInteractionComplete)
-                    subject.send(.processCompletedSuccessfullyWithoutRedirect)
-                    subject.send(completion: .finished)
-                }
-                return subject.eraseToAnyPublisher()
-            }
-        }
-        
-        store.send(.shared(.startScan)) {
+        store.send(.scanEvent(.success(.authenticationStarted))) {
             $0.shared.isScanning = true
-            $0.shared.showInstructions = false
         }
-        
-        scheduler.advance()
-        
-        store.receive(.scanEvent(.success(.authenticationStarted)))
-        store.receive(.scanEvent(.success(.requestCardInsertion(cardInsertionCallback))))
-        
-        store.receive(.scanEvent(.success(.cardRecognized))) {
+        store.send(.scanEvent(.success(.requestCardInsertion(cardInsertionCallback))))
+
+        store.send(.scanEvent(.success(.cardRecognized))) {
             $0.shared.cardRecognized = true
         }
         
-        store.receive(.scanEvent(.success(.cardInteractionComplete)))
-        store.receive(.scanEvent(.success(.requestChangedPIN(remainingAttempts: 3, pinCallback: pinCallback)))) {
+        store.send(.scanEvent(.success(.cardInteractionComplete)))
+        store.send(.scanEvent(.success(.requestChangedPIN(remainingAttempts: 3, pinCallback: pinCallback)))) {
             $0.remainingAttempts = 3
         }
-        
-        store.receive(.scanEvent(.success(.cardRemoved))) {
+
+        store.send(.scanEvent(.success(.cardRemoved))) {
             $0.shared.showProgressCaption = ProgressCaption(title: L10n.FirstTimeUser.Scan.Progress.title,
                                                             body: L10n.FirstTimeUser.Scan.Progress.body)
         }
-        store.receive(.scanEvent(.success(.requestCardInsertion(cardInsertionCallback)))) {
+        store.send(.scanEvent(.success(.requestCardInsertion(cardInsertionCallback)))) {
             $0.shared.showProgressCaption = nil
+            $0.shared.cardRecognized = false
         }
-        store.receive(.scanEvent(.success(.cardRecognized)))
-        store.receive(.scanEvent(.success(.cardInteractionComplete)))
-        store.receive(.scanEvent(.success(.processCompletedSuccessfullyWithoutRedirect)))
-        
+        store.send(.scanEvent(.success(.cardRecognized))) {
+            $0.shared.cardRecognized = true
+        }
+        store.send(.scanEvent(.success(.cardInteractionComplete)))
+        store.send(.scanEvent(.success(.processCompletedSuccessfullyWithoutRedirect)))
+
         store.receive(.scannedSuccessfully)
-        
+
         verify(mockStorageManager).setupCompleted.set(true)
-        
+
         wait(for: [requestChangedPINExpectation], timeout: 0.0)
     }
     
     func testScanFail() throws {
-        let store = TestStore(initialState: SetupScan.State(transportPIN: "12345", newPIN: "123456"),
+        let store = TestStore(initialState: SetupScan.State(transportPIN: "12345",
+                                                            newPIN: "123456",
+                                                            shared: SharedScan.State(isScanning: true)),
                               reducer: SetupScan())
         store.dependencies.idInteractionManager = mockIDInteractionManager
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
@@ -139,14 +136,7 @@ class SetupScanTests: XCTestCase {
             }
         }
         
-        store.send(.shared(.startScan)) {
-            $0.shared.isScanning = true
-            $0.shared.showInstructions = false
-        }
-        
-        scheduler.advance()
-        
-        store.receive(.scanEvent(.failure(.frameworkError(message: "Fail")))) {
+        store.send(.scanEvent(.failure(.frameworkError(message: "Fail")))) {
             $0.shared.isScanning = false
         }
         
@@ -168,35 +158,5 @@ class SetupScanTests: XCTestCase {
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "firstTimeUser",
                                                                 action: "alertShown",
                                                                 name: "NFCInfo"))
-    }
-    
-    func testStartScanTracking() {
-        let store = TestStore(initialState: SetupScan.State(transportPIN: "12345", newPIN: "123456"),
-                              reducer: SetupScan())
-        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
-        store.dependencies.analytics = mockAnalyticsClient
-        store.dependencies.idInteractionManager = mockIDInteractionManager
-        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
-        
-        stub(mockIDInteractionManager) { mock in
-            mock.changePIN(nfcMessagesProvider: any()).then { _ in
-                let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
-                self.scheduler.schedule {
-                    subject.send(completion: .finished)
-                }
-                return subject.eraseToAnyPublisher()
-            }
-        }
-        
-        store.send(.shared(.startScan)) {
-            $0.shared.isScanning = true
-            $0.shared.showInstructions = false
-        }
-        
-        scheduler.advance()
-        
-        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "firstTimeUser",
-                                                                action: "buttonPressed",
-                                                                name: "scan"))
     }
 }
