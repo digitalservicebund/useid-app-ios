@@ -17,7 +17,7 @@ struct Card {
     var remainingAttempts: Int = 3
 }
 
-enum CancelAction {
+enum CancelAction: Equatable {
     case pin
     case can
 }
