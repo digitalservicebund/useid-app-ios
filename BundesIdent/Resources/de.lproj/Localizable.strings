@@ -97,7 +97,7 @@
 "identification_attributeConsentInfo_issuer" = "Aussteller des Berechtigungszertifikats";
 "identification_attributeConsentInfo_provider" = "Anbieter";
 "identification_attributeConsentInfo_providerInfo" = "Anbieterinformationen";
-"identification_attributeConsentInfo_terms" = "Terms";
+"identification_attributeConsentInfo_terms" = "Benutzungsbedigungen";
 "identification_attributeConsent_body" = "Der Diensteanbieter möchte auf folgende Daten von Ihrem Ausweis zugreifen:";
 "identification_attributeConsent_continue" = "Freigabe erteilen";
 "identification_attributeConsent_moreInfo" = "Weitere Informationen";
