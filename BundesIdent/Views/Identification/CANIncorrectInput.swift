@@ -66,13 +66,9 @@ struct CANIncorrectInputView: View {
             .navigationBarHidden(false)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
+                    BackButton {
                         ViewStore(store).send(.end)
-                    } label: {
-                        Label(L10n.Identification.Can.IncorrectInput.back, systemImage: "chevron.left")
-                            .labelStyle(.titleAndIcon)
                     }
-                    .bodyLRegular(color: .accentColor)
                 }
             }
             .focusOnAppear {
