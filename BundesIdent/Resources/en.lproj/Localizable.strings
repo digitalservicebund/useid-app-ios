@@ -90,7 +90,7 @@
 "identification_attributeConsentInfo_issuer" = "Issuer of the authorization certificate";
 "identification_attributeConsentInfo_provider" = "Provider";
 "identification_attributeConsentInfo_providerInfo" = "Provider information";
-"identification_attributeConsentInfo_terms" = "Terms";
+"identification_attributeConsentInfo_terms" = "Terms of usage";
 "identification_attributeConsent_body" = "The service provider would like to access the following data from your ID card:";
 "identification_attributeConsent_continue" = "Grant release";
 "identification_attributeConsent_moreInfo" = "More information";
