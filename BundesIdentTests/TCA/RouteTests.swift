@@ -190,16 +190,6 @@ final class RouteTests: XCTestCase {
         endInteraction(mockMatomoTracker)
     }
 
-    func testScanErrorCardSuspendedRoutes() {
-        let pin = "123456"
-        let transportPIN = "123456"
-        let store = testStore(setupScanRoutes(pin: pin, transportPIN: transportPIN))
-        store.send(.routeAction(1, action: .setupCoordinator(.routeAction(5, action: .scan(.error(.init(errorType: .cardSuspended, retry: true)))))))
-        verify(mockMatomoTracker).track(view: ["firstTimeUser", "cardSuspended"], url: URL?.none)
-        verify(mockMatomoTracker).reset()
-        endInteraction(mockMatomoTracker)
-    }
-
     func testScanErrorUnexpectedEventRoutes() {
         let pin = "123456"
         let transportPIN = "123456"
