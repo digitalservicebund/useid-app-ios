@@ -17,11 +17,6 @@ struct Card {
     var remainingAttempts: Int = 3
 }
 
-enum CancelAction: Equatable {
-    case pin
-    case can
-}
-
 class DebugIDInteractionManager: IDInteractionManagerType {
     private var subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>?
     private var card: Card = .init(remainingAttempts: 3)

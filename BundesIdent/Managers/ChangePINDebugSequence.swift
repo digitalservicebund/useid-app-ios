@@ -65,7 +65,6 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
                     .runCardBlocked
                 ]
             } else {
-                // TODO: PUK, need investigation
                 return []
             }
         case .changePINSuccessfully:

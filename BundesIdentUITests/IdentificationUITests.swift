@@ -165,7 +165,7 @@ final class IdentificationUITests: XCTestCase {
         
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
         app.navigationBars.buttons["Debug"].wait().tap()
-        app.buttons["cancelPINScan"].wait().tap()
+        app.buttons["cancel"].wait().tap()
         app.buttons[L10n.Identification.Scan.scan].assertExistence()
     }
     

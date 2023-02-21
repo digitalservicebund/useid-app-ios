@@ -23,7 +23,7 @@ final class IdentificationCANUITests: XCTestCase {
         
         app.buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
         app.navigationBars.buttons["Debug"].wait().tap()
-        app.buttons["runCardSuspended"].wait().tap()
+        app.buttons["askForCAN"].wait().tap()
         
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
         
@@ -83,7 +83,7 @@ final class IdentificationCANUITests: XCTestCase {
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
         app.activityIndicators["ScanProgressView"].assertExistence()
         app.navigationBars.buttons["Debug"].wait().tap()
-        app.buttons["runCardSuspended"].wait().tap()
+        app.buttons["askForCAN"].wait().tap()
         
         app.navigationBars.buttons[L10n.General.cancel].wait().tap()
         app.buttons[L10n.Identification.ConfirmEnd.confirm].wait().tap()
@@ -111,7 +111,7 @@ final class IdentificationCANUITests: XCTestCase {
         
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
         app.navigationBars.buttons["Debug"].wait().tap()
-        app.buttons["runCardSuspended"].wait().tap()
+        app.buttons["askForCAN"].wait().tap()
         
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
         
@@ -146,7 +146,7 @@ final class IdentificationCANUITests: XCTestCase {
         
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
         app.navigationBars.buttons["Debug"].wait().tap()
-        app.buttons["runCardSuspended"].wait().tap()
+        app.buttons["askForCAN"].wait().tap()
         
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
         
@@ -157,7 +157,7 @@ final class IdentificationCANUITests: XCTestCase {
         app.activityIndicators["ScanProgressView"].assertExistence()
         
         app.navigationBars.buttons["Debug"].wait().tap()
-        app.buttons["cancelCANScan"].wait().tap()
+        app.buttons["cancel"].wait().tap()
         
         app.buttons[L10n.Identification.Scan.scan].assertExistence()
     }
