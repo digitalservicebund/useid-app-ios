@@ -8,9 +8,9 @@ struct BackButton: View {
         Button {
             action()
         } label: {
-            HStack {
-                Image(systemName: "chevron.backward").bodyLBold(color: .accentColor)
-                Text(L10n.General.back).bodyLRegular(color: .accentColor)
+            HStack(spacing: 5) {
+                Image(systemName: "chevron.backward").bundNavigationBarBold()
+                Text(L10n.General.back).bundNavigationBar()
             }
             .padding(.leading, -8)
         }
