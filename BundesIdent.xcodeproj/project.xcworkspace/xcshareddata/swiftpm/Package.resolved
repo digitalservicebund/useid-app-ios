@@ -1,15 +1,6 @@
 {
   "pins" : [
     {
-      "identity" : "attributedtext",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gonzalezreal/AttributedText",
-      "state" : {
-        "revision" : "0e811cb14de367bbd58a94d12259687e5ee08bea",
-        "version" : "1.0.1"
-      }
-    },
-    {
       "identity" : "combine-schedulers",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/combine-schedulers",
@@ -50,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/gonzalezreal/MarkdownUI",
       "state" : {
-        "revision" : "6a33c60ad430772d69ac5278e35474d6b3e5d30a",
-        "version" : "1.1.1"
+        "revision" : "5e15c0d75e42b9840301503e0df681027d4bea05",
+        "version" : "2.0.1"
       }
     },
     {
@@ -61,15 +52,6 @@
       "state" : {
         "branch" : "develop",
         "revision" : "1d853c3b7acfdb6552f63666390e37374f87c5cd"
-      }
-    },
-    {
-      "identity" : "networkimage",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gonzalezreal/NetworkImage",
-      "state" : {
-        "revision" : "c97f83e771c95186af80ef6118f158852a9e54be",
-        "version" : "4.0.1"
       }
     },
     {
@@ -151,15 +133,6 @@
       "state" : {
         "revision" : "fd34c544ad27f3ba6b19142b348005bfa85b6005",
         "version" : "0.6.0"
-      }
-    },
-    {
-      "identity" : "swiftcommonmark",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gonzalezreal/SwiftCommonMark",
-      "state" : {
-        "revision" : "ed252beaddecce28ea6363f800c773d6169011b8",
-        "version" : "1.0.0"
       }
     },
     {
