@@ -121,4 +121,20 @@ public extension View {
         font(.custom(bundFontName, size: 12, relativeTo: .caption2).leading(.standard))
             .foregroundColor(color)
     }
+
+    /// 17/22
+    /// regular
+    func bundNavigationBar() -> some View {
+        var customFont = Font.custom(bundFontName, size: 17, relativeTo: .body).leading(.standard)
+        if UIAccessibility.isBoldTextEnabled {
+            customFont = customFont.bold()
+        }
+        return font(customFont).foregroundColor(.accentColor)
+    }
+
+    /// 17/22
+    /// bold
+    func bundNavigationBarBold() -> some View {
+        font(.custom(bundFontName, size: 17, relativeTo: .body).bold().leading(.standard)).foregroundColor(.accentColor)
+    }
 }

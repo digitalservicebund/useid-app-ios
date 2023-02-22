@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		43EE410329A3D89700A96953 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EE410229A3D89700A96953 /* BackButton.swift */; };
 		B91E34512938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E34502938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift */; };
 		B922901E294203360018D671 /* IdentificationCANCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B922901D294203360018D671 /* IdentificationCANCoordinatorTests.swift */; };
 		B92AC3B62934E8E000A0BF02 /* SetupTransportPINTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92AC3B52934E8E000A0BF02 /* SetupTransportPINTests.swift */; };
@@ -197,6 +198,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		43EE410229A3D89700A96953 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
 		B91E34502938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoadingTests.swift; sourceTree = "<group>"; };
 		B922901D294203360018D671 /* IdentificationCANCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANCoordinatorTests.swift; sourceTree = "<group>"; };
 		B92AC3B52934E8E000A0BF02 /* SetupTransportPINTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupTransportPINTests.swift; sourceTree = "<group>"; };
@@ -593,6 +595,7 @@
 			isa = PBXGroup;
 			children = (
 				E144EBD728C63A4D009B4900 /* AboutView.swift */,
+				43EE410229A3D89700A96953 /* BackButton.swift */,
 				D201402628C5E6FD0002A054 /* Box.swift */,
 				E17604D0287E24F1007DFA10 /* DebugMenu.swift */,
 				E16708B9283D7CA1001A1637 /* DialogButtons.swift */,
@@ -936,8 +939,8 @@
 			packageReferences = (
 				E13925B928410F3F00161F5C /* XCRemoteSwiftPackageReference "Cuckoo" */,
 				E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */,
-				E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */,
-				E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController.git" */,
+				E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */,
 				E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 				B9F5055629361F69009FE297 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
 			);
@@ -1200,6 +1203,7 @@
 				E1B0F5A62981435C00143B82 /* SetupCANConfirmTransportPIN.swift in Sources */,
 				E13925B82840FB7700161F5C /* Types.swift in Sources */,
 				E13925C72841119400161F5C /* MockIDInteractionManager.swift in Sources */,
+				43EE410329A3D89700A96953 /* BackButton.swift in Sources */,
 				E1BC3D7928B7E40B007A7B39 /* LicensesView.swift in Sources */,
 				E16708B1283D4EAC001A1637 /* Dependencies.swift in Sources */,
 				E593E2722816864800154EB0 /* ControllerCallback.swift in Sources */,
@@ -1924,7 +1928,7 @@
 				minimumVersion = 0.3.0;
 			};
 		};
-		E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */ = {
+		E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
 			requirement = {
@@ -1956,7 +1960,7 @@
 				minimumVersion = 2.1.2;
 			};
 		};
-		E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController.git" */ = {
+		E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/yhirano/LicensePlistViewController.git";
 			requirement = {
@@ -1978,7 +1982,7 @@
 		};
 		E128E0B9288941DC00C5195F /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */;
+			package = E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = Sentry;
 		};
 		E13925C1284110FD00161F5C /* Cuckoo */ = {
@@ -1998,7 +2002,7 @@
 		};
 		E1BC3D8528B7E919007A7B39 /* LicensePlistViewController */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController.git" */;
+			package = E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */;
 			productName = LicensePlistViewController;
 		};
 /* End XCSwiftPackageProductDependency section */
