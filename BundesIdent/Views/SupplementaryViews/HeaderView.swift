@@ -42,8 +42,7 @@ struct HeaderView: View {
             }
             if let message {
                 Markdown(message)
-                    .markdownStyle(MarkdownStyle(font: .bundBody))
-                    .foregroundColor(.blackish)
+                    .markdownTheme(.bund)
                     .fixedSize(horizontal: false, vertical: true)
             }
             if let imageMeta {

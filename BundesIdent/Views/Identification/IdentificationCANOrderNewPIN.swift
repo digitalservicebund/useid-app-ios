@@ -21,11 +21,9 @@ struct IdentificationCANOrderNewPINView: View {
                     Text(L10n.Identification.Can.OrderNewPin.title)
                         .headingXL()
                     Markdown(L10n.Identification.Can.OrderNewPin.body)
-                        .markdownStyle(MarkdownStyle(font: .bundBody))
-                        .foregroundColor(.blackish)
+                        .markdownTheme(.bund)
                         .fixedSize(horizontal: false, vertical: true)
-                        .accentColor(.blue800)
-                            
+
                     if let imageMeta = ImageMeta(asset: Asset.missingPINBrief) {
                         imageMeta.image
                             .resizable()

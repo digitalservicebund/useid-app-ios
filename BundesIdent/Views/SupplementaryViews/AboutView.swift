@@ -9,7 +9,7 @@ struct AboutView: View {
         ScrollView {
             HStack {
                 Markdown(markdown)
-                    .markdownStyle(MarkdownStyle(font: .bundBody))
+                    .markdownTheme(.bund)
                     .padding(24)
                 Spacer()
             }
