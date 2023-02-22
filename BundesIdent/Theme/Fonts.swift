@@ -37,10 +37,12 @@ extension UIFont {
     }
 }
 
-extension MarkdownStyle.Font {
+extension MarkdownUI.FontProperties {
     
-    /// 18pt – regular
-    static let bundBody = MarkdownStyle.Font.custom(bundFontName, size: 18)
+    /// body-l
+    /// 18/24
+    /// regular
+    static let bodyLRegular: Self = .init(family: .custom(bundFontName), size: 18)
 }
 
 public extension View {
@@ -90,7 +92,7 @@ public extension View {
             .foregroundColor(color)
     }
     
-    /// body-l
+    /// body-m
     /// 16/20
     /// bold
     func bodyMBold(color: Color? = .blackish) -> some View {
@@ -98,7 +100,7 @@ public extension View {
             .foregroundColor(color)
     }
     
-    /// body-l
+    /// body-m
     /// 16/20
     /// regular
     func bodyMRegular(color: Color? = .blackish) -> some View {
