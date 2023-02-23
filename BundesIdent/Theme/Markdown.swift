@@ -1,3 +1,4 @@
+import SwiftUI
 import MarkdownUI
 
 extension Theme {
@@ -11,6 +12,10 @@ extension Theme {
         .link {
             FontWeight(.bold)
             ForegroundColor(.accentColor)
+        }
+        .bulletedListMarker { _ in
+            Text("• ")
+                .relativeFrame(minWidth: .em(1.0), alignment: .trailing)
         }
         .listItem {
             $0.markdownMargin(top: .em(0.7))
