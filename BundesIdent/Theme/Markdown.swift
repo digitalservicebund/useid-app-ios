@@ -12,4 +12,10 @@ extension Theme {
             FontWeight(.bold)
             ForegroundColor(.accentColor)
         }
+        .listItem {
+            $0.markdownMargin(top: .em(0.7))
+        }
+        .paragraph {
+            $0.markdownMargin(top: .zero, bottom: .em(1.4))
+        }
 }

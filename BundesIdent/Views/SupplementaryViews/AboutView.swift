@@ -28,3 +28,13 @@ struct AboutView: View {
         }
     }
 }
+
+struct AboutView_Previews: PreviewProvider {
+
+    static var previews: some View {
+        NavigationView {
+            AboutView(title: L10n.Privacy.title,
+                      markdown: L10n.Privacy.text)
+        }
+    }
+}
