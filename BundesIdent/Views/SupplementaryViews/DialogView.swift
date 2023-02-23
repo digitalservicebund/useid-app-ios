@@ -18,6 +18,7 @@ struct DialogView<Action>: View {
                            message: message,
                            imageMeta: imageMeta)
                     .padding(.horizontal)
+                    .padding(.bottom, 24)
             }
             DialogButtons(store: store,
                           secondary: secondaryButton,
