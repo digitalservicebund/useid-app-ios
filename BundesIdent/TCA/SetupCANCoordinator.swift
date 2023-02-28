@@ -185,11 +185,7 @@ struct SetupCANCoordinator: ReducerProtocol {
                 case .block:
                     return .none
                 case .allowAfterConfirmation:
-                    state.alert = AlertState(title: TextState(verbatim: L10n.Identification.ConfirmEnd.title),
-                                             message: TextState(verbatim: L10n.Identification.ConfirmEnd.message),
-                                             primaryButton: .destructive(TextState(verbatim: L10n.Identification.ConfirmEnd.confirm),
-                                                                         action: .send(.dismiss)),
-                                             secondaryButton: .cancel(TextState(verbatim: L10n.Identification.ConfirmEnd.deny)))
+                    state.alert = AlertState.confirmEndInSetup(.dismiss)
                     return .none
                 }
             case .dismissAlert:

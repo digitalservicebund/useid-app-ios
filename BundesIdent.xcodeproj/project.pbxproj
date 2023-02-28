@@ -75,6 +75,7 @@
 		E144EBD828C63A4D009B4900 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E144EBD728C63A4D009B4900 /* AboutView.swift */; };
 		E149B15C2840F636002C1139 /* SetupScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E149B15B2840F636002C1139 /* SetupScanTests.swift */; };
 		E14C21B228B8BF9100192338 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C21B128B8BF9100192338 /* StorageManager.swift */; };
+		E1531DC429AE4994008D5185 /* AlertState+Confirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1531DC329AE4994008D5185 /* AlertState+Confirmation.swift */; };
 		E156DD02287EF9C200C88914 /* XCUITestDeeplinking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E156DD01287EF9C200C88914 /* XCUITestDeeplinking.swift */; };
 		E15776A0286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */; };
 		E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */ = {isa = PBXBuildFile; productRef = E15C22FF2850F5A8005CCBB9 /* OpenEcard */; };
@@ -265,6 +266,7 @@
 		E144EBD728C63A4D009B4900 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		E149B15B2840F636002C1139 /* SetupScanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScanTests.swift; sourceTree = "<group>"; };
 		E14C21B128B8BF9100192338 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
+		E1531DC329AE4994008D5185 /* AlertState+Confirmation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AlertState+Confirmation.swift"; sourceTree = "<group>"; };
 		E156DD01287EF9C200C88914 /* XCUITestDeeplinking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUITestDeeplinking.swift; sourceTree = "<group>"; };
 		E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentificationIncorrectPersonalPIN.swift; sourceTree = "<group>"; };
 		E15D0EBB29095F740088EF4E /* IdentificationOverviewError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewError.swift; sourceTree = "<group>"; };
@@ -553,6 +555,7 @@
 		E15FCE40282BFD4A00CD7AD6 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				E1531DC329AE4994008D5185 /* AlertState+Confirmation.swift */,
 				E1AAACE728350FD500A51183 /* Array+Safe.swift */,
 				E13F9E4028882A9C0088E955 /* Bundle+Version.swift */,
 				E1F2F3D628770F28004C8D4B /* IdentifiableCallback.swift */,
@@ -1191,6 +1194,7 @@
 				D28D27FF28B7A91B008DA310 /* MissingPINLetter.swift in Sources */,
 				B974FD062926714500B338E5 /* IdentificationCANOrderNewPIN.swift in Sources */,
 				E593E2762816868100154EB0 /* PINManagementInteraction.swift in Sources */,
+				E1531DC429AE4994008D5185 /* AlertState+Confirmation.swift in Sources */,
 				E106614C28EC8C0C00CA2DB9 /* SharedScan.swift in Sources */,
 				E1BA4D34299299CB004E4C66 /* ChangePINDebugSequence.swift in Sources */,
 				E1AB879A282281C400C7FC94 /* HeaderView.swift in Sources */,

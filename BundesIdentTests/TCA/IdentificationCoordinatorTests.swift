@@ -274,11 +274,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         
         store.send(.routeAction(1, action: .incorrectPersonalPIN(IdentificationIncorrectPersonalPIN.Action.end))) {
             guard case .incorrectPersonalPIN(var incorrectPersonalPINState) = $0.routes[1].screen else { return XCTFail("Unexpected state") }
-            incorrectPersonalPINState.alert = AlertState(title: .init(verbatim: L10n.Identification.ConfirmEnd.title),
-                                                         message: .init(verbatim: L10n.Identification.ConfirmEnd.message),
-                                                         primaryButton: .destructive(.init(verbatim: L10n.Identification.ConfirmEnd.confirm),
-                                                                                     action: .send(.confirmEnd)),
-                                                         secondaryButton: .cancel(.init(verbatim: L10n.Identification.ConfirmEnd.deny)))
+            incorrectPersonalPINState.alert = AlertState.confirmEndInIdentification(.confirmEnd)
             $0.routes[1].screen = .incorrectPersonalPIN(incorrectPersonalPINState)
         }
     }
@@ -318,11 +314,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         )
         
         store.send(.swipeToDismiss) {
-            $0.alert = AlertState(title: .init(verbatim: L10n.Identification.ConfirmEnd.title),
-                                  message: .init(verbatim: L10n.Identification.ConfirmEnd.message),
-                                  primaryButton: .destructive(.init(verbatim: L10n.Identification.ConfirmEnd.confirm),
-                                                              action: .send(.dismiss)),
-                                  secondaryButton: .cancel(.init(verbatim: L10n.Identification.ConfirmEnd.deny)))
+            $0.alert = AlertState.confirmEndInIdentification(.dismiss)
         }
     }
     

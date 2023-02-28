@@ -298,4 +298,43 @@ class SetupCoordinatorTests: XCTestCase {
                                                                 action: "buttonPressed",
                                                                 name: "scan"))
     }
+    
+    func testCancelingOnConfirmTransportPINAsksForConfirmation() throws {
+        let canAndChangedPINCallback: CANAndChangedPINCallback = IdentifiableCallback(id: .zero, callback: { _ in })
+        let setupCANCoordinatorState = SetupCANCoordinator.State(pin: "123456", oldTransportPIN: "12345", initialCANAndChangedPINCallback: canAndChangedPINCallback, attempt: 0, states: [
+            .root(.canConfirmTransportPIN(.init(transportPIN: "12345")))
+        ])
+        
+        let store = TestStore(initialState: SetupCoordinator.State(transportPIN: "12345",
+                                                                   states: [
+                                                                       .root(.setupCANCoordinator(setupCANCoordinatorState))
+                                                                   ]),
+                              reducer: SetupCoordinator())
+        
+        store.send(.routeAction(0, action: .setupCANCoordinator(.swipeToDismiss))) {
+            guard case .setupCANCoordinator(var setupCANCoordinatorState) = $0.states[0].screen else { return XCTFail() }
+            setupCANCoordinatorState.alert = AlertState.confirmEndInSetup(.dismiss)
+            $0.states[0].screen = .setupCANCoordinator(setupCANCoordinatorState)
+        }
+    }
+    
+    func testCancelingOnCANIntroAsksForConfirmation() throws {
+        let canAndChangedPINCallback: CANAndChangedPINCallback = IdentifiableCallback(id: .zero, callback: { _ in })
+        let setupCANCoordinatorState = SetupCANCoordinator.State(pin: "123456", oldTransportPIN: "12345", initialCANAndChangedPINCallback: canAndChangedPINCallback, attempt: 0, states: [
+            .root(.canIntro(.init(shouldDismiss: true)))
+        ])
+        
+        let store = TestStore(initialState: SetupCoordinator.State(transportPIN: "12345",
+                                                                   states: [
+                                                                       .root(.setupCANCoordinator(setupCANCoordinatorState))
+                                                                   ]),
+                              reducer: SetupCoordinator())
+        
+        store.send(.routeAction(0, action: .setupCANCoordinator(.swipeToDismiss))) {
+            guard case .setupCANCoordinator(var setupCANCoordinatorState) = $0.states[0].screen else { return XCTFail() }
+            setupCANCoordinatorState.alert = AlertState.confirmEndInSetup(.dismiss)
+            $0.states[0].screen = .setupCANCoordinator(setupCANCoordinatorState)
+        }
+    }
+
 }
