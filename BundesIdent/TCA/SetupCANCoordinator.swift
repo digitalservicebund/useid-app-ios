@@ -14,6 +14,13 @@ struct CANAndChangedPINCallbackPayload: Equatable {
 
 typealias CANAndChangedPINCallback = IdentifiableCallback<CANAndChangedPINCallbackPayload>
 
+struct ChangedPINCallbackPayload: Equatable {
+    let oldPIN: String
+    let newPIN: String
+}
+
+typealias ChangedPINCallback = IdentifiableCallback<ChangedPINCallbackPayload>
+
 enum SetupCANCoordinatorError: CustomNSError {
     case canNilWhenTriedScan
     case pinNilWhenTriedScan
@@ -34,7 +41,7 @@ struct SetupCANCoordinator: ReducerProtocol {
         var transportPIN: String?
         var can: String?
         var oldTransportPIN: String
-        var canAndChangedPINCallback: CANAndChangedPINCallback
+        var initialCANAndChangedPINCallback: CANAndChangedPINCallback
         var tokenURL: URL?
         var authenticationSuccessful = false
         var attempt: Int
@@ -99,7 +106,7 @@ struct SetupCANCoordinator: ReducerProtocol {
                         .canScan(SetupCANScan.State(transportPIN: transportPIN,
                                                     newPIN: state.pin,
                                                     can: can,
-                                                    canAndChangedPINCallback: state.canAndChangedPINCallback,
+                                                    canAndChangedPINCallback: state.initialCANAndChangedPINCallback,
                                                     shared: SharedScan.State(showInstructions: false)))
                     )
                 } else {
@@ -119,13 +126,12 @@ struct SetupCANCoordinator: ReducerProtocol {
                     .canScan(SetupCANScan.State(transportPIN: transportPIN,
                                                 newPIN: state.pin,
                                                 can: can,
-                                                canAndChangedPINCallback: state.canAndChangedPINCallback,
+                                                canAndChangedPINCallback: state.initialCANAndChangedPINCallback,
                                                 shared: SharedScan.State(showInstructions: false)))
                 )
                 
                 return .none
-            case .routeAction(_, action: .canScan(.incorrectCAN(callback: let callback))):
-                state.canAndChangedPINCallback = callback
+            case .routeAction(_, action: .canScan(.incorrectCAN)):
                 state.routes.presentSheet(.canIncorrectInput(CANIncorrectInput.State()))
                 return .none
             case .routeAction(_, action: .canIncorrectInput(.done(can: let newCAN))):
@@ -210,7 +216,7 @@ extension SetupCANCoordinator.State {
         self.oldTransportPIN = oldTransportPIN
         self.transportPIN = transportPIN
         self.pin = pin
-        canAndChangedPINCallback = callback
+        initialCANAndChangedPINCallback = callback
         self.attempt = attempt
         
         if goToCanIntroScreen {
@@ -236,7 +242,6 @@ extension SetupCANCoordinator.State {
                         }
                         state.newPIN = pin
                         state.shared.attempt = attempt
-                        state.canAndChangedPINCallback = canAndChangedPINCallback
                         return .canScan(state)
                     default:
                         return screenState

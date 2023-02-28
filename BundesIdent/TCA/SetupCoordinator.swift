@@ -143,7 +143,8 @@ struct SetupCoordinator: ReducerProtocol {
             case .routeAction(_, action: .personalPINConfirm(.done(pin: let pin))):
                 state.routes.pop()
                 state.routes.push(.scan(SetupScan.State(transportPIN: state.transportPIN, newPIN: pin)))
-            case .routeAction(_, action: .scan(.shared(.initiateScan))):
+            case .routeAction(_, action: .scan(.shared(.initiateScan))),
+                 .routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canScan(.shared(.initiateScan))))):
                 let publisher: EIDInteractionPublisher
 #if PREVIEW
                 if previewIDInteractionManager.isDebugModeEnabled {

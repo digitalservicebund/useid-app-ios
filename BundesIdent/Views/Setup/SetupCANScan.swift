@@ -16,7 +16,7 @@ struct SetupCANScan: ReducerProtocol {
         var transportPIN: String
         var newPIN: String
         var can: String
-        var canAndChangedPINCallback: CANAndChangedPINCallback
+        var canAndChangedPINCallback: CANAndChangedPINCallback?
         var shared: SharedScan.State = .init()
         
         var authenticationSuccessful = false
@@ -55,13 +55,27 @@ struct SetupCANScan: ReducerProtocol {
             return Effect(value: .shared(.startScan))
         case .shared(.startScan):
             guard !state.shared.isScanning else { return .none }
-            let payload = CANAndChangedPINCallbackPayload(can: state.can, oldPIN: state.transportPIN, newPIN: state.newPIN)
-            state.canAndChangedPINCallback(payload)
+            
             state.shared.isScanning = true
-            return .trackEvent(category: "Setup",
-                               action: "buttonPressed",
-                               name: "canScan",
-                               analytics: analytics)
+            
+            let trackEvent: EffectTask<Action> = .trackEvent(category: "Setup",
+                                                             action: "buttonPressed",
+                                                             name: "canScan",
+                                                             analytics: analytics)
+            
+            guard let canAndChangedPINCallback = state.canAndChangedPINCallback else {
+                logger.info("Initiating a new scan")
+                return .concatenate(
+                    .cancel(id: CancelId.self),
+                    EffectTask(value: .shared(.initiateScan)),
+                    trackEvent
+                )
+            }
+            
+            logger.info("Calling CAN callback")
+            let payload = CANAndChangedPINCallbackPayload(can: state.can, oldPIN: state.transportPIN, newPIN: state.newPIN)
+            canAndChangedPINCallback(payload)
+            return trackEvent
         case .scanEvent(.success(let event)):
             return handle(state: &state, event: event)
         case .scanEvent(.failure(let error)):
@@ -131,22 +145,46 @@ struct SetupCANScan: ReducerProtocol {
         case .processCompletedSuccessfullyWithoutRedirect:
             return Effect(value: .scannedSuccessfully)
         case .requestCANAndChangedPIN(pinCallback: let pinCallback):
-            logger.info("Wrong CAN provided")
-            state.shared.isScanning = false
             let identifiedCallback = CANAndChangedPINCallback(id: uuid()) { payload in
                 pinCallback(payload.oldPIN, payload.can, payload.newPIN)
             }
-            return Effect(value: .incorrectCAN(callback: identifiedCallback))
+            if state.canAndChangedPINCallback == nil {
+                logger.info("CAN and changed PIN requested after cancelling scan. Directly providing previous values to continue the flow.")
+                identifiedCallback(CANAndChangedPINCallbackPayload(can: state.can,
+                                                                   oldPIN: state.transportPIN,
+                                                                   newPIN: state.newPIN))
+                state.shared.isScanning = true
+                return .none
+            } else {
+                logger.info("Wrong CAN provided")
+                state.canAndChangedPINCallback = identifiedCallback
+                state.shared.isScanning = false
+                return Effect(value: .incorrectCAN(callback: identifiedCallback))
+            }
         case .requestPUK:
             logger.info("PUK requested, so card is blocked. Callback not implemented yet.")
             return Effect(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
+            
+        case .requestChangedPIN:
+            // This case should actually not happen but it does due to an Open-Ecard bug.
+            // Repro: After calling the canAndChangedPINCallback, the system scan overlay is presented. By tapping cancel or waiting on that screen too long,
+            // Expected: we get a new canAndChangedPINCallback to restart the scan overlay
+            // Actual: The event requestChangedPIN is triggered
+            //
+            // If we call the callback from this event, we get a new canAndChangedPINCallback but calling this one results in an openecard error (unexpected memory change) and we get a new canAndChangedPINCallback (this loops forever)
+            // Workaround: We cancel the current change pin management flow and start a new one. This results in two scans happening, similar to the normal setup pin flow.
+            
+            logger.info("Scan popup was closed (timeout or cancel).")
+            logger.debug("Open-Ecard bug triggered, preparing to restart the change pin management flow.")
+            state.shared.isScanning = false
+            state.canAndChangedPINCallback = nil
+            return EffectTask.cancel(id: CancelId.self)
         case .requestPIN,
              .requestCAN,
              .requestPINAndCAN,
              .processCompletedSuccessfullyWithRedirect,
              .requestAuthenticationRequestConfirmation,
              .authenticationSuccessful,
-             .requestChangedPIN,
              .pinManagementStarted:
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             logger.error("Received unexpected event.")
