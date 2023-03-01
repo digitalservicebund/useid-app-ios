@@ -193,8 +193,8 @@ struct SetupCoordinator: ReducerProtocol {
                 return Effect(value: .afterConfirmEnd)
                     .delay(for: 0.65, scheduler: mainQueue)
                     .eraseToEffect()
-            case .routeAction(_, action: .scan(.wrongTransportPIN(remainingAttempts: let remainingAttempts))):
-                state.routes.presentSheet(.incorrectTransportPIN(SetupIncorrectTransportPIN.State(remainingAttempts: remainingAttempts)))
+            case .routeAction(_, action: .scan(.wrongTransportPIN)):
+                state.routes.presentSheet(.incorrectTransportPIN(SetupIncorrectTransportPIN.State()))
             case .routeAction(_, action: .incorrectTransportPIN(.confirmEnd)):
                 state.routes.dismiss()
                 

@@ -6,7 +6,6 @@ import IdentifiedCollections
 
 struct SetupIncorrectTransportPIN: ReducerProtocol {
     struct State: Equatable {
-        var remainingAttempts: Int
         
 #if DEBUG || PREVIEW
         var maxDigits: Int = 5
@@ -92,15 +91,6 @@ struct SetupIncorrectTransportPINView: View {
                                                                                   .background(Color.white.cornerRadius(10))
                                                                                   .padding(40)
                             }
-                            VStack(spacing: 24) {
-                                VStack {
-                                    Text(L10n.FirstTimeUser.IncorrectTransportPIN.remainingAttemptsLld(viewStore.remainingAttempts))
-                                        .bodyLRegular()
-                                        .multilineTextAlignment(.center)
-                                        .lineLimit(nil)
-                                }
-                            }
-                            .frame(maxWidth: .infinity)
                             .toolbar {
                                 ToolbarItem(placement: .navigationBarLeading) {
                                     Button(L10n.General.cancel) {
@@ -143,18 +133,12 @@ struct SetupIncorrectTransportPINView: View {
 struct SetupIncorrectTransportPIN_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            SetupIncorrectTransportPINView(store: Store(initialState: .init(remainingAttempts: 2),
-                                                        reducer: SetupIncorrectTransportPIN()))
-        }
-        .previewDevice("iPhone SE (2nd generation)")
-        NavigationView {
-            SetupIncorrectTransportPINView(store: Store(initialState: .init(remainingAttempts: 2, enteredPIN: "12345"),
+            SetupIncorrectTransportPINView(store: Store(initialState: .init(),
                                                         reducer: SetupIncorrectTransportPIN()))
         }
         NavigationView {
-            SetupIncorrectTransportPINView(store: Store(initialState: .init(remainingAttempts: 1),
+            SetupIncorrectTransportPINView(store: Store(initialState: .init(enteredPIN: "12345"),
                                                         reducer: SetupIncorrectTransportPIN()))
         }
-        .previewDevice("iPhone 12")
     }
 }

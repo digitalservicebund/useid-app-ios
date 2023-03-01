@@ -174,17 +174,16 @@ class SetupCoordinatorTests: XCTestCase {
     func testScanWrongTransportPINPresentsIncorrectTransportPIN() {
         let pin = "123456"
         let transportPIN = "12345"
-        let remainingAttempts = 3
         let store = TestStore(initialState: SetupCoordinator.State(transportPIN: transportPIN,
                                                                    states: [
                                                                        .root(.scan(.init(transportPIN: transportPIN, newPIN: pin)))
                                                                    ]),
                               reducer: SetupCoordinator())
         
-        store.send(.routeAction(0, action: .scan(.wrongTransportPIN(remainingAttempts: remainingAttempts)))) {
+        store.send(.routeAction(0, action: .scan(.wrongTransportPIN(remainingAttempts: 3)))) {
             $0.routes = [
                 .root(.scan(.init(transportPIN: $0.transportPIN, newPIN: pin))),
-                .sheet(.incorrectTransportPIN(.init(remainingAttempts: remainingAttempts)))
+                .sheet(.incorrectTransportPIN(.init()))
             ]
         }
     }
@@ -197,7 +196,7 @@ class SetupCoordinatorTests: XCTestCase {
         let store = TestStore(initialState: SetupCoordinator.State(transportPIN: transportPIN,
                                                                    states: [
                                                                        .root(.scan(.init(transportPIN: transportPIN, newPIN: pin))),
-                                                                       .sheet(.incorrectTransportPIN(.init(remainingAttempts: remainingAttempts)))
+                                                                       .sheet(.incorrectTransportPIN(.init()))
                                                                    ]),
                               reducer: SetupCoordinator())
         
