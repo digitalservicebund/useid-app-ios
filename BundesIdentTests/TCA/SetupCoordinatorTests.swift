@@ -255,6 +255,56 @@ class SetupCoordinatorTests: XCTestCase {
         }
     }
     
+    func testStartingCANFlow() {
+        let oldPIN = "12345"
+        let newPIN = "123456"
+        let store = TestStore(initialState: SetupCoordinator.State(transportPIN: oldPIN,
+                                                                   tokenURL: demoTokenURL,
+                                                                   states: [
+                                                                       .root(.scan(SetupScan.State(transportPIN: oldPIN, newPIN: newPIN, shared: SharedScan.State(isScanning: true))))
+                                                                   ]),
+                              reducer: SetupCoordinator())
+        
+        let mockPreviewIDInteractionManager = MockPreviewIDInteractionManagerType()
+        let mockIDInteractionManager = MockIDInteractionManagerType()
+        
+        let scheduler = DispatchQueue.test
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
+        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        store.dependencies.uuid = .incrementing
+        
+        stub(mockPreviewIDInteractionManager) {
+            $0.isDebugModeEnabled.get.thenReturn(false)
+        }
+        
+        let requestCANAndChangedPINCallback: (String, String, String) -> Void = { _, _, _ in }
+        
+        store.send(.routeAction(0, action: .scan(.scanEvent(.success(.requestCANAndChangedPIN(pinCallback: requestCANAndChangedPINCallback)))))) {
+            guard case .scan(var scanState) = $0.states[0].screen else { return XCTFail() }
+            scanState.shared.isScanning = false
+            $0.states[0].screen = .scan(scanState)
+        }
+        
+        scheduler.advance(by: .seconds(2))
+        
+        let canAndChangedPINCallback = CANAndChangedPINCallback(id: .zero) { payload in }
+        
+        store.receive(.routeAction(0, action: .scan(.requestCANAndChangedPIN(pin: newPIN, callback: canAndChangedPINCallback)))) {
+            $0.states.append(.push(.setupCANCoordinator(SetupCANCoordinator.State(
+                pin: newPIN,
+                transportPIN: oldPIN,
+                oldTransportPIN: oldPIN,
+                initialCANAndChangedPINCallback: canAndChangedPINCallback,
+                tokenURL: demoTokenURL,
+                attempt: 0,
+                states: [
+                    .root(.canIntro(CANIntro.State(shouldDismiss: true)))
+                ]
+            ))))
+        }
+    }
+    
     func testStartScanTracking() {
         let store = TestStore(initialState: SetupCoordinator.State(transportPIN: "12345",
                                                                    states: [

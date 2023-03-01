@@ -208,11 +208,12 @@ extension SetupCANCoordinator.State: AnalyticsView {
 
 extension SetupCANCoordinator.State {
     
-    init(oldTransportPIN: String, transportPIN: String?, pin: String, callback: CANAndChangedPINCallback, attempt: Int, goToCanIntroScreen: Bool) {
+    init(oldTransportPIN: String, transportPIN: String?, pin: String, callback: CANAndChangedPINCallback, tokenURL: URL?, attempt: Int, goToCanIntroScreen: Bool) {
         self.oldTransportPIN = oldTransportPIN
         self.transportPIN = transportPIN
         self.pin = pin
         initialCANAndChangedPINCallback = callback
+        self.tokenURL = tokenURL
         self.attempt = attempt
         
         if goToCanIntroScreen {

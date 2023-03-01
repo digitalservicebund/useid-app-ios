@@ -177,6 +177,7 @@ struct SetupCoordinator: ReducerProtocol {
                                                                                  transportPIN: transportPINIsUnchecked ? state.transportPIN : nil,
                                                                                  pin: pin,
                                                                                  callback: canAndChangedPINCallback,
+                                                                                 tokenURL: state.tokenURL,
                                                                                  attempt: state.attempt,
                                                                                  goToCanIntroScreen: transportPINIsUnchecked)))
                 return .none
