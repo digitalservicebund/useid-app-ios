@@ -80,15 +80,18 @@ struct SetupCANScan: ReducerProtocol {
             return handle(state: &state, event: event)
         case .scanEvent(.failure(let error)):
             RedactedIDCardInteractionError(error).flatMap(issueTracker.capture(error:))
-            
             state.shared.isScanning = false
+            
             switch error {
             case .cardDeactivated:
-                return Effect(value: .error(ScanError.State(errorType: .cardDeactivated, retry: false)))
+                state.shared.scanAvailable = false
+                return Effect(value: .error(ScanError.State(errorType: .cardDeactivated, retry: state.shared.scanAvailable)))
             case .cardBlocked:
-                return Effect(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
+                state.shared.scanAvailable = false
+                return Effect(value: .error(ScanError.State(errorType: .cardBlocked, retry: state.shared.scanAvailable)))
             default:
-                return Effect(value: .error(ScanError.State(errorType: .idCardInteraction(error), retry: false)))
+                state.shared.scanAvailable = true
+                return Effect(value: .error(ScanError.State(errorType: .idCardInteraction(error), retry: state.shared.scanAvailable)))
             }
         case .wrongPIN:
             state.shared.isScanning = false
@@ -102,7 +105,7 @@ struct SetupCANScan: ReducerProtocol {
                                      dismissButton: .cancel(TextState(L10n.General.ok),
                                                             action: .send(.dismissAlert)))
             
-            return .trackEvent(category: "Setup",
+            return .trackEvent(category: "firstTimeUser",
                                action: "alertShown",
                                name: "NFCInfo",
                                analytics: analytics)
@@ -126,6 +129,8 @@ struct SetupCANScan: ReducerProtocol {
         case .authenticationStarted:
             logger.info("Authentication started.")
             state.shared.isScanning = true
+        case .pinManagementStarted:
+            logger.info("PIN Management started.")
         case .cardInteractionComplete:
             logger.info("Card interaction complete.")
         case .requestCardInsertion:
@@ -184,8 +189,10 @@ struct SetupCANScan: ReducerProtocol {
              .requestPINAndCAN,
              .processCompletedSuccessfullyWithRedirect,
              .requestAuthenticationRequestConfirmation,
-             .authenticationSuccessful,
-             .pinManagementStarted:
+             .authenticationSuccessful:
+            
+            // Make sure to restart the pin management flow
+            state.canAndChangedPINCallback = nil
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             logger.error("Received unexpected event.")
             return Effect(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))

@@ -336,5 +336,68 @@ class SetupCoordinatorTests: XCTestCase {
             $0.states[0].screen = .setupCANCoordinator(setupCANCoordinatorState)
         }
     }
+    
+    func testInitiatingScanOnCAN() throws {
+        let transportPIN = "12345"
+        let newPIN = "123456"
+        let can = "111111"
+        let canAndChangedPINCallback: CANAndChangedPINCallback = IdentifiableCallback(id: .zero, callback: { _ in })
+        let setupCANCoordinatorState = SetupCANCoordinator.State(pin: newPIN, oldTransportPIN: transportPIN, initialCANAndChangedPINCallback: canAndChangedPINCallback, attempt: 0, states: [
+            .root(.canScan(SetupCANScan.State(transportPIN: transportPIN, newPIN: newPIN, can: can)))
+        ])
+        
+        let store = TestStore(initialState: SetupCoordinator.State(transportPIN: transportPIN,
+                                                                   states: [
+                                                                       .root(.setupCANCoordinator(setupCANCoordinatorState))
+                                                                   ]),
+                              reducer: SetupCoordinator())
+        
+        let scheduler = DispatchQueue.test
+        let mockPreviewIDInteractionManager = MockPreviewIDInteractionManagerType()
+        let mockIDInteractionManager = MockIDInteractionManagerType()
+        let mockAnalyticsClient = MockAnalyticsClient()
+        
+        stub(mockPreviewIDInteractionManager) {
+            $0.isDebugModeEnabled.get.thenReturn(false)
+        }
+        
+        stub(mockIDInteractionManager) {
+            $0.changePIN(nfcMessagesProvider: any()).then { _ in
+                let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+                scheduler.schedule {
+                    subject.send(.authenticationStarted)
+                    subject.send(completion: .finished)
+                }
+                return subject.eraseToAnyPublisher()
+            }
+        }
+        
+        stub(mockAnalyticsClient) {
+            $0.track(view: any()).thenDoNothing()
+            $0.track(event: any()).thenDoNothing()
+        }
+        
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
+        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        store.dependencies.analytics = mockAnalyticsClient
+        
+        store.send(.routeAction(0, action: .setupCANCoordinator(.routeAction(0, action: .canScan(.shared(.initiateScan))))))
+        
+        scheduler.advance()
+        
+        store.receive(.idInteractionEvent(.success(.authenticationStarted)))
+        
+        store.receive(.routeAction(0, action: .setupCANCoordinator(.routeAction(0, action: .canScan(.scanEvent(.success(.authenticationStarted))))))) {
+            guard case .setupCANCoordinator(var setupCANCoordinatorState) = $0.states[0].screen else { return XCTFail() }
+            guard case .canScan(var canScanState) = setupCANCoordinatorState.states[0].screen else { return XCTFail() }
+            canScanState.shared.isScanning = true
+            setupCANCoordinatorState.states[0].screen = .canScan(canScanState)
+            $0.states[0].screen = .setupCANCoordinator(setupCANCoordinatorState)
+        }
+        
+        verify(mockIDInteractionManager).changePIN(nfcMessagesProvider: any())
+        verify(mockAnalyticsClient).track(event: any())
+    }
 
 }

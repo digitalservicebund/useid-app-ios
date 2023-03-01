@@ -92,7 +92,6 @@ class SetupCANCoordinatorTests: XCTestCase {
     func testSuccessfulScan() {
         let pin = "111111"
         let transportPIN = "12345"
-        let newPIN = "222222"
         let can = "333333"
         let canAndChangedPINCallback = CANAndChangedPINCallback(id: UUID(number: 0)) { _ in }
         let store = TestStore(
@@ -104,7 +103,7 @@ class SetupCANCoordinatorTests: XCTestCase {
                                                     attempt: 0,
                                                     states: [
                                                         .root(.canScan(SetupCANScan.State(transportPIN: transportPIN,
-                                                                                          newPIN: newPIN,
+                                                                                          newPIN: pin,
                                                                                           can: can,
                                                                                           canAndChangedPINCallback: canAndChangedPINCallback)))
                                                     ]),

@@ -168,7 +168,6 @@ struct SetupScan: ReducerProtocol {
         case .requestPIN,
              .requestCAN,
              .requestPINAndCAN,
-             .processCompletedSuccessfullyWithoutRedirect,
              .processCompletedSuccessfullyWithRedirect,
              .requestAuthenticationRequestConfirmation,
              .authenticationSuccessful:
