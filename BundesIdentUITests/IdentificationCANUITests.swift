@@ -55,10 +55,11 @@ final class IdentificationCANUITests: XCTestCase {
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["identifySuccessfully"].wait().tap()
         
-        app.buttons[L10n.Home.startSetup].assertExistence()
-        
         let safari = XCUIApplication(bundleIdentifier: SafariIdentifiers.bundleId.rawValue)
         XCTAssertEqual(safari.state, .runningForeground)
+        
+        app.activate()
+        app.assertBeingOnHome()
     }
     
     func testIdentificationCANThirdAttemptDismissesInIntro() throws {

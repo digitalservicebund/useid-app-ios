@@ -152,6 +152,7 @@ struct Coordinator: ReducerProtocol {
                  .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.dismiss))),
                  .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canScan(.dismiss))))),
                  .setupCoordinator(.afterConfirmEnd),
+                 .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.afterConfirmEnd))),
                  // This is bad, but we can not switch back to a previous coordinator while having another coordinator inbetween. See https://github.com/johnpatrickmorgan/FlowStacks/issues/23#issuecomment-1407125421
                  // We are only showing the setup coordinator in the end for the done screen
                  .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .setupCoordinator(.routeAction(_, action: .done(.done))))))):

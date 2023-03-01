@@ -2,7 +2,7 @@ import XCTest
 
 final class SetupCANUITests: XCTestCase {
     
-    func testSuspendedCardWrongCANOnceAndThenHappyPath() throws {
+    func testGivenSuspendedCard_ChangePIN_ByEnteringWrongCANOnceAndThenHappyPath() throws {
         let app = XCUIApplication()
         app.launchWithDefaultArguments()
         app.launch()
@@ -55,10 +55,10 @@ final class SetupCANUITests: XCTestCase {
         
         app.buttons[L10n.FirstTimeUser.Done.close].wait().tap()
         
-        app.buttons[L10n.Home.startSetup].assertExistence()
+        app.assertBeingOnHome()
     }
     
-    func testSuspendAndBlockCardByEnteringCANAndWrongPINs() throws {
+    func testGivenNormalCard_ChangePIN_ByEnteringCorrectCANAndWrongPINs() throws {
         let app = XCUIApplication()
         app.launchWithDefaultArguments()
         app.launch()
@@ -122,7 +122,7 @@ final class SetupCANUITests: XCTestCase {
         
         app.buttons[L10n.FirstTimeUser.Done.close].wait().tap()
         
-        app.buttons[L10n.Home.startSetup].assertExistence()
+        app.assertBeingOnHome()
     }
     
     func testSuspendedCardAndWrongTransportPINToBlock() throws {
@@ -171,6 +171,6 @@ final class SetupCANUITests: XCTestCase {
         app.staticTexts[L10n.ScanError.CardBlocked.title].assertExistence()
         
         app.buttons[L10n.ScanError.close].wait().tap()
-        app.buttons[L10n.Home.startSetup].assertExistence()
+        app.assertBeingOnHome()
     }
 }

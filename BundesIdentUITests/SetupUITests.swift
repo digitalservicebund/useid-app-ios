@@ -7,6 +7,8 @@ final class SetupUITests: XCTestCase {
         app.launchWithDefaultArguments()
         app.launch()
         
+        app.assertBeingOnHome()
+        
         app.buttons[L10n.Home.startSetup].wait().tap()
         app.buttons[L10n.FirstTimeUser.Intro.startSetup].wait().tap()
         app.buttons[L10n.FirstTimeUser.PinLetter.letterPresent].wait().tap()
@@ -38,7 +40,7 @@ final class SetupUITests: XCTestCase {
         
         app.buttons[L10n.FirstTimeUser.Done.close].wait().tap()
         
-        app.buttons[L10n.Home.startSetup].assertExistence()
+        app.assertBeingOnHome()
     }
     
     func testSetupWrongTransportPINAndEndEarly() throws {
@@ -81,7 +83,7 @@ final class SetupUITests: XCTestCase {
         
         app.buttons[L10n.FirstTimeUser.ConfirmEnd.confirm].wait().tap()
         
-        app.buttons[L10n.Home.startSetup].assertExistence()
+        app.assertBeingOnHome()
     }
     
     func testSetupWrongTransportPINAndThenHappyPath() throws {
@@ -132,7 +134,7 @@ final class SetupUITests: XCTestCase {
         
         app.buttons[L10n.FirstTimeUser.Done.close].wait().tap()
         
-        app.buttons[L10n.Home.startSetup].assertExistence()
+        app.assertBeingOnHome()
     }
     
     func testSetupMismatchingPINs() throws {
