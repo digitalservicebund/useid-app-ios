@@ -46,7 +46,7 @@ struct SetupCANAlreadySetupView: View {
                         HeaderView(title: L10n.FirstTimeUser.Can.AlreadySetup.title,
                                    message: viewStore.message)
                         HStack {
-                            Button(L10n.Scan.helpNFC) {
+                            Button(L10n.FirstTimeUser.Can.AlreadySetup.personalPINNotAvailable) {
                                 viewStore.send(.missingPersonalPIN)
                             }
                             .buttonStyle(BundTextButtonStyle())
