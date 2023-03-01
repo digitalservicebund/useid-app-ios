@@ -104,7 +104,7 @@ struct Coordinator: ReducerProtocol {
     }
     
     var body: some ReducerProtocol<State, Action> {
-        Reduce(self.token)
+        Reduce(token)
         Reduce { state, action in
             guard case .routeAction(_, action: let routeAction) = action else { return .none }
             switch routeAction {
@@ -167,7 +167,7 @@ struct Coordinator: ReducerProtocol {
 #if DEBUG
             ._printChanges(.log({ logger.debug("\($0)") }))
 #endif
-        Reduce(self.tracking)
+        Reduce(tracking)
     }
     
     func tracking(state: inout State, action: Action) -> EffectTask<Action> {
