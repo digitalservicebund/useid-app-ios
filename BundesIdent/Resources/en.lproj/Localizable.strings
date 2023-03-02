@@ -53,9 +53,9 @@
 "firstTimeUser_pinLetter_letterPresent" = "Yes, the PIN letter is available";
 "firstTimeUser_pinLetter_requestLetter" = "No, order PIN reset letter";
 "firstTimeUser_pinLetter_title" = "Do you still have your PIN letter?";
-"firstTimeUser_scanInstructions_body" = "The app does not use the camera, but the NFC sensors in the iPhone and ID to transfer your new PIN to the ID. Therefore, make sure the ID and iPhone touch each other during the PIN transfer.";
+"firstTimeUser_scanInstructions_body" = "In the next step, hold your ID against the top back of the iPhone. Make sure that your ID card is directly in contact with the device.";
 "firstTimeUser_scanInstructions_title" = "How to transfer your new PIN to the ID card.";
-"firstTimeUser_scan_body" = "The app does not use the camera, but the NFC sensors in the smartphone and ID to transfer your new PIN to the ID. Therefore, make sure the ID and smartphone touch each other during the PIN transfer.";
+"firstTimeUser_scan_body" = "In the next step, hold your ID against the top back of the iPhone. Make sure that your ID card is directly in contact with the device.";
 "firstTimeUser_scan_cardConnected_first" = "Do not move the ID card.";
 "firstTimeUser_scan_cardConnected_second" = "Do not move the ID card.";
 "firstTimeUser_scan_cardRecognized_first" = "Do not move the ID card.";
@@ -136,7 +136,7 @@
 "identification_personalPIN_missingPIN" = "PIN not available";
 "identification_personalPIN_textFieldLabel" = "Personal PIN, six digits";
 "identification_personalPIN_title" = "Enter the personal PIN for your ID card.";
-"identification_scanInstructions_body" = "The app does not use the camera, but the NFC sensors in the iPhone and ID to check your PIN and retrieve the required data. Therefore, make sure the ID and iPhone touch each other during the data retrieval.";
+"identification_scanInstructions_body" = "In the next step, hold your ID against the top back of the iPhone. Make sure that your ID card is directly in contact with the device.";
 "identification_scanInstructions_title" = "How to retrieve data from your ID card.";
 "identification_scan_cardConnected" = "Do not move the ID card.";
 "identification_scan_cardRecognized" = "Do not move the ID card.";
