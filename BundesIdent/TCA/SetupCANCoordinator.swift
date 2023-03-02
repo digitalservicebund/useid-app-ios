@@ -41,7 +41,7 @@ struct SetupCANCoordinator: ReducerProtocol {
         var transportPIN: String?
         var can: String?
         var oldTransportPIN: String
-        var initialCANAndChangedPINCallback: CANAndChangedPINCallback
+        var canAndChangedPINCallback: CANAndChangedPINCallback
         var tokenURL: URL?
         var authenticationSuccessful = false
         var attempt: Int
@@ -106,7 +106,7 @@ struct SetupCANCoordinator: ReducerProtocol {
                         .canScan(SetupCANScan.State(transportPIN: transportPIN,
                                                     newPIN: state.pin,
                                                     can: can,
-                                                    canAndChangedPINCallback: state.initialCANAndChangedPINCallback,
+                                                    canAndChangedPINCallback: state.canAndChangedPINCallback,
                                                     shared: SharedScan.State(showInstructions: false)))
                     )
                 } else {
@@ -126,12 +126,13 @@ struct SetupCANCoordinator: ReducerProtocol {
                     .canScan(SetupCANScan.State(transportPIN: transportPIN,
                                                 newPIN: state.pin,
                                                 can: can,
-                                                canAndChangedPINCallback: state.initialCANAndChangedPINCallback,
+                                                canAndChangedPINCallback: state.canAndChangedPINCallback,
                                                 shared: SharedScan.State(showInstructions: false)))
                 )
                 
                 return .none
-            case .routeAction(_, action: .canScan(.incorrectCAN)):
+            case .routeAction(_, action: .canScan(.incorrectCAN(callback: let callback))):
+                state.canAndChangedPINCallback = callback
                 state.routes.presentSheet(.canIncorrectInput(CANIncorrectInput.State()))
                 return .none
             case .routeAction(_, action: .canIncorrectInput(.done(can: let newCAN))):
@@ -212,7 +213,7 @@ extension SetupCANCoordinator.State {
         self.oldTransportPIN = oldTransportPIN
         self.transportPIN = transportPIN
         self.pin = pin
-        initialCANAndChangedPINCallback = callback
+        canAndChangedPINCallback = callback
         self.tokenURL = tokenURL
         self.attempt = attempt
         

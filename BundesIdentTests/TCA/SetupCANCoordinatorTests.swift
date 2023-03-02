@@ -18,7 +18,7 @@ class SetupCANCoordinatorTests: XCTestCase {
             initialState: SetupCANCoordinator.State(pin: pin,
                                                     transportPIN: transportPIN,
                                                     oldTransportPIN: transportPIN,
-                                                    initialCANAndChangedPINCallback: canAndChangedPINCallback,
+                                                    canAndChangedPINCallback: canAndChangedPINCallback,
                                                     tokenURL: demoTokenURL,
                                                     attempt: 0,
                                                     states: [
@@ -43,6 +43,7 @@ class SetupCANCoordinatorTests: XCTestCase {
         }
         
         store.send(.routeAction(2, action: .canScan(.incorrectCAN(callback: newCANAndChangedPINCallback)))) {
+            $0.canAndChangedPINCallback = newCANAndChangedPINCallback
             $0.routes.append(.sheet(.canIncorrectInput(.init())))
         }
     }
@@ -56,7 +57,7 @@ class SetupCANCoordinatorTests: XCTestCase {
             initialState: SetupCANCoordinator.State(pin: pin,
                                                     transportPIN: transportPIN,
                                                     oldTransportPIN: transportPIN,
-                                                    initialCANAndChangedPINCallback: canAndChangedPINCallback,
+                                                    canAndChangedPINCallback: canAndChangedPINCallback,
                                                     tokenURL: demoTokenURL,
                                                     attempt: 0,
                                                     states: [
@@ -98,7 +99,7 @@ class SetupCANCoordinatorTests: XCTestCase {
             initialState: SetupCANCoordinator.State(pin: pin,
                                                     transportPIN: transportPIN,
                                                     oldTransportPIN: transportPIN,
-                                                    initialCANAndChangedPINCallback: canAndChangedPINCallback,
+                                                    canAndChangedPINCallback: canAndChangedPINCallback,
                                                     tokenURL: demoTokenURL,
                                                     attempt: 0,
                                                     states: [

@@ -294,7 +294,7 @@ class SetupCoordinatorTests: XCTestCase {
                 pin: newPIN,
                 transportPIN: oldPIN,
                 oldTransportPIN: oldPIN,
-                initialCANAndChangedPINCallback: canAndChangedPINCallback,
+                canAndChangedPINCallback: canAndChangedPINCallback,
                 tokenURL: demoTokenURL,
                 attempt: 0,
                 states: [
@@ -350,7 +350,7 @@ class SetupCoordinatorTests: XCTestCase {
     
     func testCancelingOnConfirmTransportPINAsksForConfirmation() throws {
         let canAndChangedPINCallback: CANAndChangedPINCallback = IdentifiableCallback(id: .zero, callback: { _ in })
-        let setupCANCoordinatorState = SetupCANCoordinator.State(pin: "123456", oldTransportPIN: "12345", initialCANAndChangedPINCallback: canAndChangedPINCallback, attempt: 0, states: [
+        let setupCANCoordinatorState = SetupCANCoordinator.State(pin: "123456", oldTransportPIN: "12345", canAndChangedPINCallback: canAndChangedPINCallback, attempt: 0, states: [
             .root(.canConfirmTransportPIN(.init(transportPIN: "12345")))
         ])
         
@@ -369,7 +369,7 @@ class SetupCoordinatorTests: XCTestCase {
     
     func testCancelingOnCANIntroAsksForConfirmation() throws {
         let canAndChangedPINCallback: CANAndChangedPINCallback = IdentifiableCallback(id: .zero, callback: { _ in })
-        let setupCANCoordinatorState = SetupCANCoordinator.State(pin: "123456", oldTransportPIN: "12345", initialCANAndChangedPINCallback: canAndChangedPINCallback, attempt: 0, states: [
+        let setupCANCoordinatorState = SetupCANCoordinator.State(pin: "123456", oldTransportPIN: "12345", canAndChangedPINCallback: canAndChangedPINCallback, attempt: 0, states: [
             .root(.canIntro(.init(shouldDismiss: true)))
         ])
         
@@ -391,7 +391,7 @@ class SetupCoordinatorTests: XCTestCase {
         let newPIN = "123456"
         let can = "111111"
         let canAndChangedPINCallback: CANAndChangedPINCallback = IdentifiableCallback(id: .zero, callback: { _ in })
-        let setupCANCoordinatorState = SetupCANCoordinator.State(pin: newPIN, oldTransportPIN: transportPIN, initialCANAndChangedPINCallback: canAndChangedPINCallback, attempt: 0, states: [
+        let setupCANCoordinatorState = SetupCANCoordinator.State(pin: newPIN, oldTransportPIN: transportPIN, canAndChangedPINCallback: canAndChangedPINCallback, attempt: 0, states: [
             .root(.canScan(SetupCANScan.State(transportPIN: transportPIN, newPIN: newPIN, can: can)))
         ])
         
