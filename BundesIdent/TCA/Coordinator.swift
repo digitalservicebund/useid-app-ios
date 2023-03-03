@@ -130,7 +130,8 @@ struct Coordinator: ReducerProtocol {
                     state.routes.dismiss()
                     return .none
                 }
-            case .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification(let tokenURL)))):
+            case .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification(let tokenURL)))),
+                 .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canAlreadySetup(.triggerIdentification(tokenURL: let tokenURL)))))):
                 return Effect.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
                     $0.dismiss()
                     $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(tokenURL: tokenURL,
