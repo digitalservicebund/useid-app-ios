@@ -18,6 +18,14 @@
 "cardInteraction_error_default" = "An error has occurred.";
 "cardInteraction_error_tagLost" = "Card has been removed";
 "cardInteraction_error_timeout" = "No ID card recognized.";
+"firstTimeUser_can_alreadySetup_body_ident" = "You only need to set up your ID card once in total. If you already have a 6-digit personal PIN, your ID card has been set up already.\n\nWith this PIN, you can now identify yourself.";
+"firstTimeUser_can_alreadySetup_body_setup" = "You only need to set up your ID card once in total. If you already have a 6-digit personal PIN, your ID card has been set up already.";
+"firstTimeUser_can_alreadySetup_personalPINNotAvailable" = "Don\'t have a personal PIN\?";
+"firstTimeUser_can_alreadySetup_title" = "It appears that your online ID card has been set up already.";
+"firstTimeUser_can_confirmTransportPIN_body_iOS" = "You have entered **%@** as your transport PIN. Please confirm that this is the transport PIN specified in your PIN letter.";
+"firstTimeUser_can_confirmTransportPIN_confirmInput" = "Yes, this is my transport PIN";
+"firstTimeUser_can_confirmTransportPIN_incorrectInput" = "No, enter Transport-PIN again";
+"firstTimeUser_can_confirmTransportPIN_title" = "Is %@ really your transport PIN\?";
 "firstTimeUser_confirmEnd_confirm" = "End";
 "firstTimeUser_confirmEnd_deny" = "Cancel";
 "firstTimeUser_confirmEnd_message" = "Do you want to cancel the setup of the online ID card function? \n\nYou can restart the setup later.";
@@ -40,7 +48,6 @@
 "firstTimeUser_personalPINIntro_info_title" = "Remember your personal ID PIN";
 "firstTimeUser_personalPINIntro_title" = "Now assign your personal ID PIN.";
 "firstTimeUser_personalPIN_body" = "Do not use your birthday as your PIN. Assign a PIN that is not easy to guess.";
-"firstTimeUser_personalPIN_confirmation" = "Confirm your personal PIN";
 "firstTimeUser_personalPIN_confirmation_body" = "Do not use your birthday as your PIN. Assign a PIN that is not easy to guess.";
 "firstTimeUser_personalPIN_confirmation_title" = "Confirm your personal ID PIN.";
 "firstTimeUser_personalPIN_continue" = "Next";

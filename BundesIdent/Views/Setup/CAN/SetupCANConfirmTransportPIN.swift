@@ -24,7 +24,7 @@ struct SetupCANConfirmTransportPINView: View {
         WithViewStore(store.scope(state: \.transportPIN)) { transportPIN in
             DialogView(store: store.stateless,
                        title: L10n.FirstTimeUser.Can.ConfirmTransportPIN.title(transportPIN.state),
-                       message: L10n.FirstTimeUser.Can.ConfirmTransportPIN.body(transportPIN.state),
+                       message: L10n.FirstTimeUser.Can.ConfirmTransportPIN.Body.ios(transportPIN.state),
                        secondaryButton: .init(title: L10n.FirstTimeUser.Can.ConfirmTransportPIN.incorrectInput, action: .edit),
                        primaryButton: .init(title: L10n.FirstTimeUser.Can.ConfirmTransportPIN.confirmInput, action: .confirm))
                 .toolbar {
