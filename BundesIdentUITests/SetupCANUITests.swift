@@ -171,10 +171,18 @@ final class SetupCANUITests: XCTestCase {
         
         let transportPINInCANTextField = app.textFields[L10n.FirstTimeUser.TransportPIN.textFieldLabel]
         transportPINInCANTextField.wait().tap()
-        transportPINInCANTextField.typeText("12345")
+        transportPINInCANTextField.waitAndTypeText("12345")
         app.buttons[L10n.FirstTimeUser.TransportPIN.continue].wait().tap()
         
         app.activityIndicators["ScanProgressView"].assertExistence()
+        app.navigationBars.buttons["Debug"].wait().tap()
+        app.buttons["runCANError"].wait().tap()
+        
+        canTextField.wait().tap()
+        canTextField.waitAndTypeText("123456")
+        app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
+        app.activityIndicators["ScanProgressView"].assertExistence()
+        
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
         

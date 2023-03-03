@@ -106,11 +106,11 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
             case .can: cancelDebugSequence = .cancelCANScan
             }
             
-            if remainingAttempts >= 2 {
+            if card.remainingAttempts >= 2 {
                 subject.send(.requestChangedPIN(remainingAttempts: remainingAttempts, pinCallback: { _, _ in firstCallback() }))
                 return [.changePINSuccessfully, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: cancelAction), cancelDebugSequence]
             } else if card.remainingAttempts == 1 {
-                subject.send(.requestCANAndChangedPIN(pinCallback: { _, _, _ in firstCallback() }))
+                subject.send(.requestCANAndChangedPIN(pinCallback: { _, _, _ in }))
                 return [.changePINSuccessfully, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: cancelAction), .runCANError, cancelDebugSequence]
             } else {
                 subject.send(completion: .failure(.cardBlocked))
