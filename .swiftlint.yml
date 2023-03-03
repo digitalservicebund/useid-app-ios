@@ -47,5 +47,6 @@ excluded:
   - fastlane
   - vendor
   - BundesIdentTests
+  - BundesIdentUITests
 
 allow_zero_lintable_files: true
