@@ -225,6 +225,9 @@ struct CoordinatorView: View {
     var body: some View {
         TCARouter(store) { screen in
             SwitchStore(screen) {
+                CaseLet(state: /Screen.State.launch,
+                        action: Screen.Action.launch,
+                        then: LaunchView.init)
                 CaseLet(state: /Screen.State.home,
                         action: Screen.Action.home,
                         then: HomeView.init)

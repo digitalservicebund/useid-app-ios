@@ -48,7 +48,7 @@ struct BundesIdentApp: App {
         store = Store(
             initialState: Coordinator.State(
                 routes: [
-                    .root(.home(homeState))
+                    .root(.launch(.init()))
                 ]
             ),
             reducer: Coordinator()

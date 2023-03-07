@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4334B4D329A64F00001FF36C /* Markdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4334B4D229A64F00001FF36C /* Markdown.swift */; };
+		43363E0729A79D6200E9FA23 /* UnleashProxyClientSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 43363E0629A79D6200E9FA23 /* UnleashProxyClientSwift */; };
+		43363E0B29B0C41300E9FA23 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43363E0A29B0C41300E9FA23 /* LaunchView.swift */; };
 		43EE410329A3D89700A96953 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EE410229A3D89700A96953 /* BackButton.swift */; };
 		B91E34512938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E34502938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift */; };
 		B922901E294203360018D671 /* IdentificationCANCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B922901D294203360018D671 /* IdentificationCANCoordinatorTests.swift */; };
@@ -202,6 +204,7 @@
 
 /* Begin PBXFileReference section */
 		4334B4D229A64F00001FF36C /* Markdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Markdown.swift; sourceTree = "<group>"; };
+		43363E0A29B0C41300E9FA23 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		43EE410229A3D89700A96953 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
 		B91E34502938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoadingTests.swift; sourceTree = "<group>"; };
 		B922901D294203360018D671 /* IdentificationCANCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -679,6 +682,7 @@
 				E13F9E372886F2C70088E955 /* Setup */,
 				E13F9E392886F2EE0088E955 /* Identification */,
 				E1B0F5AD29830A0A00143B82 /* Shared CAN */,
+				43363E0A29B0C41300E9FA23 /* LaunchView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1215,6 +1219,7 @@
 				D29C542F28FFD9580064AB41 /* Logger+Catetory.swift in Sources */,
 				F43622A72850D6C9008AEBB9 /* ScanError.swift in Sources */,
 				B95FAA8B2927A90D009BDAC9 /* CANIncorrectInput.swift in Sources */,
+				43363E0B29B0C41300E9FA23 /* LaunchView.swift in Sources */,
 				E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */,
 				E1B0F5A62981435C00143B82 /* SetupCANConfirmTransportPIN.swift in Sources */,
 				E13925B82840FB7700161F5C /* Types.swift in Sources */,
