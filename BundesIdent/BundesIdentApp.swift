@@ -36,15 +36,7 @@ struct BundesIdentApp: App {
 #else
         AnalyticsKey.liveValue = MatomoAnalyticsClient(siteId: config.matomoSiteID, baseURL: config.matomoURL)
 #endif
-        
-        let homeState: Home.State
-#if PREVIEW
-        let previewIDInteractionManager = DependencyValues._current[keyPath: \.previewIDInteractionManager]
-        homeState = Home.State(appVersion: Bundle.main.version, buildNumber: Bundle.main.buildNumber, isDebugModeEnabled: previewIDInteractionManager.isDebugModeEnabled)
-#else
-        homeState = Home.State(appVersion: Bundle.main.version, buildNumber: Bundle.main.buildNumber)
-#endif
-        
+
         store = Store(
             initialState: Coordinator.State(
                 routes: [

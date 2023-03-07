@@ -32,6 +32,7 @@ struct Coordinator: ReducerProtocol {
     @Dependency(\.storageManager) var storageManager
     struct State: Equatable, IndexedRouterState {
         var routes: [Route<Screen.State>]
+        var remoteConfiguration = RemoteConfiguration.State.initial
     }
     
     func dismiss(state: inout State, show screen: State.Screen) -> EffectTask<Coordinator.Action> {
@@ -101,9 +102,30 @@ struct Coordinator: ReducerProtocol {
         case didEnterBackground
         case routeAction(Int, action: Screen.Action)
         case updateRoutes([Route<Screen.State>])
+        case remoteConfiguration(RemoteConfiguration.Action)
     }
     
     var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .onAppear:
+                return Effect(value: .remoteConfiguration(.onAppStart))
+            case .remoteConfiguration(.timeout), .remoteConfiguration(.loadingSuccess), .remoteConfiguration(.loadingError):
+                let homeState: Home.State
+        #if PREVIEW
+                let previewIDInteractionManager = DependencyValues._current[keyPath: \.previewIDInteractionManager]
+                homeState = Home.State(appVersion: Bundle.main.version, buildNumber: Bundle.main.buildNumber, isDebugModeEnabled: previewIDInteractionManager.isDebugModeEnabled)
+        #else
+                homeState = Home.State(appVersion: Bundle.main.version, buildNumber: Bundle.main.buildNumber)
+        #endif
+                return Effect(value: .updateRoutes([.root(.home(homeState))]))
+            default:
+                return .none
+            }
+        }
+        Scope(state: \.remoteConfiguration, action: /Action.remoteConfiguration) {
+            RemoteConfiguration()
+        }
         Reduce(token)
         Reduce { state, action in
             guard case .routeAction(_, action: let routeAction) = action else { return .none }
