@@ -65,7 +65,7 @@
 "firstTimeUser_pinLetter_title" = "Do you still have your PIN letter?";
 "firstTimeUser_scanInstructions_body" = "In the next step, hold your ID against the top back of the iPhone. Make sure that your ID card is directly in contact with the device.";
 "firstTimeUser_scanInstructions_title" = "How to transfer your new PIN to the ID card.";
-"firstTimeUser_scan_body" = "In the next step, hold your ID against the top back of the iPhone. Make sure that your ID card is directly in contact with the device.";
+"firstTimeUser_scan_body" = "Try out different positions. Make sure that your ID is in direct contact with the device.";
 "firstTimeUser_scan_cardConnected_first" = "Do not move the ID card.";
 "firstTimeUser_scan_cardConnected_second" = "Do not move the ID card.";
 "firstTimeUser_scan_cardRecognized_first" = "Do not move the ID card.";
