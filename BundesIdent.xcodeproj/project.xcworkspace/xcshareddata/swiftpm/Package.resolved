@@ -136,6 +136,15 @@
       }
     },
     {
+      "identity" : "swifteventbus",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/cesarferreira/SwiftEventBus.git",
+      "state" : {
+        "revision" : "a30ff35e616f507d8a8d122dac32a2150371a87e",
+        "version" : "5.1.0"
+      }
+    },
+    {
       "identity" : "swiftui-navigation",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swiftui-navigation",
@@ -151,6 +160,15 @@
       "state" : {
         "revision" : "006bd9277fae20444143d8961a1aa55f7a1f82d1",
         "version" : "0.4.3"
+      }
+    },
+    {
+      "identity" : "unleash-proxy-client-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Unleash/unleash-proxy-client-swift",
+      "state" : {
+        "revision" : "8f863a62c040719a7613680691cf808dff589e9c",
+        "version" : "0.0.6"
       }
     },
     {

@@ -397,6 +397,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E144EBD628C63A31009B4900 /* MarkdownUI in Frameworks */,
+				43363E0729A79D6200E9FA23 /* UnleashProxyClientSwift in Frameworks */,
 				E1BC3D8628B7E919007A7B39 /* LicensePlistViewController in Frameworks */,
 				D2B76A7A28BE4B93000B442D /* Analytics in Frameworks */,
 				E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */,
@@ -919,6 +920,7 @@
 				D2B76A7928BE4B93000B442D /* Analytics */,
 				E144EBD528C63A31009B4900 /* MarkdownUI */,
 				B9F5055729361F69009FE297 /* TCACoordinators */,
+				43363E0629A79D6200E9FA23 /* UnleashProxyClientSwift */,
 			);
 			productName = BundesIdent;
 			productReference = E5CEB27A281041330076B9FE /* BundesIdent.app */;
@@ -963,6 +965,7 @@
 				E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */,
 				E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 				B9F5055629361F69009FE297 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
+				43363E0529A79D6200E9FA23 /* XCRemoteSwiftPackageReference "unleash-proxy-client-swift" */,
 			);
 			productRefGroup = E5CEB27B281041330076B9FE /* Products */;
 			projectDirPath = "";
@@ -1945,6 +1948,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		43363E0529A79D6200E9FA23 /* XCRemoteSwiftPackageReference "unleash-proxy-client-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Unleash/unleash-proxy-client-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.6;
+			};
+		};
 		B9F5055629361F69009FE297 /* XCRemoteSwiftPackageReference "TCACoordinators" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/johnpatrickmorgan/TCACoordinators";
@@ -1996,6 +2007,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		43363E0629A79D6200E9FA23 /* UnleashProxyClientSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43363E0529A79D6200E9FA23 /* XCRemoteSwiftPackageReference "unleash-proxy-client-swift" */;
+			productName = UnleashProxyClientSwift;
+		};
 		B9F5055729361F69009FE297 /* TCACoordinators */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B9F5055629361F69009FE297 /* XCRemoteSwiftPackageReference "TCACoordinators" */;
