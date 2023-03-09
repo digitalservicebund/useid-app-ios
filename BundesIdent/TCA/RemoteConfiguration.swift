@@ -4,60 +4,38 @@ import ComposableArchitecture
 struct RemoteConfiguration: ReducerProtocol {
 
     @Dependency(\.mainQueue) var mainQueue
+    @Dependency(\.abTester) var abTester
 
-    enum State: Equatable {
-        case initial
-        case loading(start: Date)
-        case loaded
-        case timeouted(start: Date)
+    struct State: Equatable {
+        let timeoutInterval: TimeInterval = 1.5
+        var abTesterConfigured: Bool = false
     }
 
     enum Action: Equatable {
-        case onAppStart
-        case loadingSuccess
-        case loadingError
+        case start
+        case abTesterConfigured
         case timeout
+        case startTimeoutTimer
+        case stopTimoutTimer
         case done
-        case doneAfterTimeout(start: Date)
     }
 
-    var body: some ReducerProtocol<State, Action> {
-        Reduce { state, action in
-            struct TimerID: Hashable {}
-            switch (action, state) {
-            case (.onAppStart, _):
-                // TODO: start abtester
-                state = .loading(start: Date())
-                return EffectTask.timer(id: TimerID(), every: 1.5, on: mainQueue)
-                    .map { _ in .timeout }
-            case (.loadingSuccess, let .timeouted(start: date)), (.loadingError, let .timeouted(start: date)):
-                return Effect(value: .doneAfterTimeout(start: date))
-            case (.loadingSuccess, _), (.loadingError, _):
-                state = .loaded
-                return Effect(value: .done)
-            case (.timeout, let .loading(start: date)):
-                state = .timeouted(start: date)
-                return .concatenate(.cancel(id: TimerID()), Effect(value: .done))
-            default:
-                return .none
-            }
-        }
-        Reduce(tracking)
-    }
-
-
-    func tracking(state: inout State, action: Action) -> EffectTask<Action> {
+    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+        struct TimerID: Hashable {}
         switch action {
-        case let .doneAfterTimeout(start: date):
-            return .fireAndForget {
-                print("👆 doneAfterTimeout.", "Request took:", Date().timeIntervalSince(date), " seconds")
-                // TODO: track how long the request took
-            }
-        case .loadingError:
-            return .fireAndForget {
-                print("👆 loadingError")
-                // TODO: track error from Unleash
-            }
+        case .start:
+            abTester.prepare() // TODO: wait for response and send `abTesterConfigured`
+            return Effect(value: .startTimeoutTimer)
+        case .startTimeoutTimer:
+            return EffectTask.timer(id: TimerID(), every: .seconds(state.timeoutInterval), on: mainQueue).map { _ in .timeout }
+        case .stopTimoutTimer:
+            return .concatenate(.cancel(id: TimerID()), Effect(value: .done))
+        case .abTesterConfigured:
+            state.abTesterConfigured = true
+            return Effect(value: .stopTimoutTimer)
+        case .timeout where state.abTesterConfigured == false:
+            abTester.disable()
+            return Effect(value: .stopTimoutTimer)
         default:
             return .none
         }

@@ -32,7 +32,7 @@ struct Coordinator: ReducerProtocol {
     @Dependency(\.storageManager) var storageManager
     struct State: Equatable, IndexedRouterState {
         var routes: [Route<Screen.State>]
-        var remoteConfiguration = RemoteConfiguration.State.initial
+        var remoteConfiguration = RemoteConfiguration.State()
     }
     
     func dismiss(state: inout State, show screen: State.Screen) -> EffectTask<Coordinator.Action> {
@@ -109,7 +109,7 @@ struct Coordinator: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return Effect(value: .remoteConfiguration(.onAppStart))
+                return Effect(value: .remoteConfiguration(.start))
             case .remoteConfiguration(.done):
                 let homeState: Home.State
         #if PREVIEW

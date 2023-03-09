@@ -36,6 +36,8 @@ protocol IssueTracker {
 }
 
 protocol ABTester {
+    func prepare()
+    func disable()
 }
 
 #if PREVIEW
