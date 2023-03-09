@@ -110,7 +110,7 @@ struct Coordinator: ReducerProtocol {
             switch action {
             case .onAppear:
                 return Effect(value: .remoteConfiguration(.onAppStart))
-            case .remoteConfiguration(.timeout), .remoteConfiguration(.loadingSuccess), .remoteConfiguration(.loadingError):
+            case .remoteConfiguration(.done):
                 let homeState: Home.State
         #if PREVIEW
                 let previewIDInteractionManager = DependencyValues._current[keyPath: \.previewIDInteractionManager]
