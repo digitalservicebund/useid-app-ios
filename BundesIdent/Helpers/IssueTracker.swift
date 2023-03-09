@@ -19,6 +19,14 @@ extension IssueTracker {
         breadcrumb.category = view.route.joined(separator: "/")
         addBreadcrumb(crumb: breadcrumb)
     }
+
+    func addInfoBreadcrumb(category: String, message: String) {
+        let breadcrumb = Breadcrumb()
+        breadcrumb.level = .info
+        breadcrumb.category = category
+        breadcrumb.message = message
+        addBreadcrumb(crumb: breadcrumb)
+    }
 }
 
 struct LogIssueTracker: IssueTracker {

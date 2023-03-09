@@ -4,13 +4,15 @@ import UnleashProxyClientSwift
 
 final class Unleash: ABTester {
 
-    init(url: String, clientKey: String, analytics: AnalyticsClient) {
+    init(url: String, clientKey: String, analytics: AnalyticsClient, issueTracker: IssueTracker) {
         self.unleash = UnleashClient(unleashUrl: url, clientKey: clientKey)
         self.analytics = analytics
+        self.issueTracker = issueTracker
     }
 
     private let unleash: UnleashClient
     private let analytics: AnalyticsClient
+    private let issueTracker: IssueTracker
 
     private var state: State = .initial
 
@@ -29,19 +31,17 @@ final class Unleash: ABTester {
             unleash.start() { [weak self] error in
                 guard let self else { return continuation.resume() }
                 if let error = error {
-                    print("👆", "loading error:", error)
-                    // TODO: track error
+                    self.trackUnleashBreadcrumb(message: "request failed with error \(error)")
                 }
 
                 switch self.state {
                 case .loading where error == nil:
                     self.state = .active
+                    self.trackUnleashBreadcrumb(message: "activated")
                 case .loading:
                     self.state = .disabled
                 case .disabled:
-                    print("👆", "request took:", Date().timeIntervalSince(start))
-                    // TODO: track how long the request took
-                    break
+                    self.trackUnleashBreadcrumb(message: "request took \(Date().timeIntervalSince(start)) seconds")
                 default:
                     break
                 }
@@ -51,7 +51,14 @@ final class Unleash: ABTester {
     }
 
     func disable() {
+        if state == .loading {
+            trackUnleashBreadcrumb(message: "request is taking too long")
+        }
         state = .disabled
+    }
+
+    private func trackUnleashBreadcrumb(message: String) {
+        issueTracker.addInfoBreadcrumb(category: "unleash", message: message)
     }
 }
 
