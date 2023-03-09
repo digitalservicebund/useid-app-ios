@@ -2,10 +2,15 @@ import Foundation
 import Analytics
 import UnleashProxyClientSwift
 
+enum ABTest: String, CaseIterable {
+    case none
+}
+
 final class Unleash: ABTester {
 
     init(url: String, clientKey: String, analytics: AnalyticsClient, issueTracker: IssueTracker) {
-        self.unleash = UnleashClient(unleashUrl: url, clientKey: clientKey)
+        self.unleash = .init(unleashUrl: url, clientKey: clientKey, refreshInterval: .max, appName: "bundesIdent.iOS")
+        self.unleash.context["supportedToggles"] = ABTest.allCases.map(\.rawValue).joined(separator: ",")
         self.analytics = analytics
         self.issueTracker = issueTracker
     }
