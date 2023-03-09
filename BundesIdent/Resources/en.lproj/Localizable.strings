@@ -92,7 +92,9 @@
 "home_more_privacy" = "Privacy Policy";
 "home_more_terms" = "Terms and Conditions of Use";
 "home_more_title" = "More";
-"home_startSetup" = "Set up online ID card";
+"home_setup_body" = "Set your personal PIN for your ID card. You can then identify yourself online with your ID.";
+"home_setup_setup" = "Set up online ID card";
+"home_setup_title" = "New ID card?";
 "home_version" = "Version %@";
 "identification_attributeConsentInfo_issuer" = "Issuer of the authorization certificate";
 "identification_attributeConsentInfo_provider" = "Provider";

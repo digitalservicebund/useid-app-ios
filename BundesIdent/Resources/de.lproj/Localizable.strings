@@ -92,7 +92,9 @@
 "home_more_privacy" = "Datenschutzerklärung";
 "home_more_terms" = "Nutzungsbedingungen";
 "home_more_title" = "Mehr";
-"home_startSetup" = "Online-Ausweis einrichten";
+"home_setup_body" = "Setzen Sie Ihre persönliche Ausweis‑PIN. Danach können Sie sich mit Ihrem Ausweis online identifizieren.";
+"home_setup_setup" = "Online-Ausweis einrichten";
+"home_setup_title" = "Neuer Ausweis?";
 "home_version" = "Version %@";
 "identification_attributeConsentInfo_issuer" = "Aussteller des Berechtigungszertifikats";
 "identification_attributeConsentInfo_provider" = "Anbieter";

@@ -85,15 +85,12 @@ struct HomeView: View {
                     overscrollBackground
                     
                     headerView
-                        .padding(.bottom)
+                        .padding(.bottom, 24)
                     
                     VStack(alignment: .leading, spacing: 16) {
 #if PREVIEW
                         previewView
 #endif
-                        Text(L10n.Home.More.title)
-                            .headingXL()
-                            .padding(.top)
                         setupActionView
                         listView
                         Spacer(minLength: 0)
@@ -157,24 +154,25 @@ struct HomeView: View {
         }
         .padding()
         .grouped()
-        .padding(.top)
     }
 #endif
     
     @ViewBuilder
     private var setupActionView: some View {
-        VStack {
-            ImageMeta(asset: Asset.setupPINLetterEId).image
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-            Button(L10n.Home.startSetup) {
+        VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(L10n.Home.Setup.title)
+                    .headingM()
+                Text(L10n.Home.Setup.body)
+                    .bodyMRegular()
+            }
+            Button(L10n.Home.Setup.setup) {
                 ViewStore(store.stateless).send(.triggerSetup)
             }
-            .buttonStyle(BundButtonStyle(isPrimary: true))
-            .offset(y: -60)
-            .padding(.bottom, -40)
-            .padding(.horizontal)
+            .buttonStyle(BundTextButtonStyle())
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
         .grouped()
     }
     
