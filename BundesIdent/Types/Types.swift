@@ -35,6 +35,9 @@ protocol IssueTracker {
     func capture(error: CustomNSError)
 }
 
+protocol ABTester {
+}
+
 #if PREVIEW
 protocol PreviewIDInteractionManagerType: IDInteractionManagerType, AnyObject {
     var isDebugModeEnabled: Bool { get set }

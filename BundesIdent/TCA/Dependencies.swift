@@ -53,6 +53,10 @@ enum AnalyticsKey: DependencyKey {
     static var testValue: AnalyticsClient = LogAnalyticsClient()
 }
 
+enum ABTesterKey: DependencyKey {
+    static var liveValue: ABTester = AlwaysControlABTester()
+}
+
 extension DependencyValues {
     var idInteractionManager: IDInteractionManagerType {
         get { self[IDInteractionManagerKey.self] }
@@ -82,5 +86,10 @@ extension DependencyValues {
     var analytics: AnalyticsClient {
         get { self[AnalyticsKey.self] }
         set { self[AnalyticsKey.self] = newValue }
+    }
+
+    var abTester: ABTester {
+        get { self[ABTesterKey.self] }
+        set { self[ABTesterKey.self] = newValue }
     }
 }

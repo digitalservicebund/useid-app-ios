@@ -36,6 +36,7 @@ struct BundesIdentApp: App {
 #else
         AnalyticsKey.liveValue = MatomoAnalyticsClient(siteId: config.matomoSiteID, baseURL: config.matomoURL)
 #endif
+        ABTesterKey.liveValue = Unleash(url: config.unleashURL, clientKey: config.unleashClientKey, analytics: AnalyticsKey.liveValue)
 
         store = Store(
             initialState: Coordinator.State(

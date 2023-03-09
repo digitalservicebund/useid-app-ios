@@ -15,6 +15,8 @@ struct AppConfig: AppConfigType {
     let sentryDSN: String
     let matomoURL: URL
     let matomoSiteID: String
+    let unleashURL: String
+    let unleashClientKey: String
     
     init(bundle: Bundle) {
         // Sentry
@@ -33,6 +35,12 @@ struct AppConfig: AppConfigType {
         // swiftlint:enable force_cast
         
         matomoURL = URL(string: "https://\(matomoHost)/matomo.php")!
+
+        // Unleash
+        // swiftlint:disable force_cast
+        unleashURL = bundle.infoDictionary!["UnleashURL"] as! String
+        unleashClientKey = bundle.infoDictionary!["UnleashClientKey"] as! String
+        // swiftlint:enable force_cast
     }
     
     func configureSentry(_ options: Options) {

@@ -25,6 +25,10 @@
 	<string>bund.matomo.cloud</string>
 	<key>MatomoSiteID</key>
 	<string>$(MATOMO_SITE_ID)</string>
+	<key>UnleashURL</key>
+	<string>https://features.p.digitalservice.dev/api/frontend</string>
+	<key>UnleashClientKey</key>
+	<string>$(UNLEASH_CLIENT_KEY)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>BundesSans-DTP-Regular.otf</string>

@@ -11,6 +11,7 @@
 		43363E0729A79D6200E9FA23 /* UnleashProxyClientSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 43363E0629A79D6200E9FA23 /* UnleashProxyClientSwift */; };
 		43363E0B29B0C41300E9FA23 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43363E0A29B0C41300E9FA23 /* LaunchView.swift */; };
 		43363E0D29B6BFF300E9FA23 /* RemoteConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43363E0C29B6BFF300E9FA23 /* RemoteConfiguration.swift */; };
+		43363E0929B01D4900E9FA23 /* ABTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43363E0829B01D4900E9FA23 /* ABTester.swift */; };
 		43EE410329A3D89700A96953 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EE410229A3D89700A96953 /* BackButton.swift */; };
 		B91E34512938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E34502938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift */; };
 		B922901E294203360018D671 /* IdentificationCANCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B922901D294203360018D671 /* IdentificationCANCoordinatorTests.swift */; };
@@ -207,6 +208,7 @@
 		4334B4D229A64F00001FF36C /* Markdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Markdown.swift; sourceTree = "<group>"; };
 		43363E0A29B0C41300E9FA23 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		43363E0C29B6BFF300E9FA23 /* RemoteConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfiguration.swift; sourceTree = "<group>"; };
+		43363E0829B01D4900E9FA23 /* ABTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABTester.swift; sourceTree = "<group>"; };
 		43EE410229A3D89700A96953 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
 		B91E34502938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoadingTests.swift; sourceTree = "<group>"; };
 		B922901D294203360018D671 /* IdentificationCANCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -568,6 +570,7 @@
 			isa = PBXGroup;
 			children = (
 				E1531DC329AE4994008D5185 /* AlertState+Confirmation.swift */,
+				43363E0829B01D4900E9FA23 /* ABTester.swift */,
 				E1AAACE728350FD500A51183 /* Array+Safe.swift */,
 				E13F9E4028882A9C0088E955 /* Bundle+Version.swift */,
 				E1F2F3D628770F28004C8D4B /* IdentifiableCallback.swift */,
@@ -1152,6 +1155,7 @@
 				E16708B3283D4ED2001A1637 /* SetupCoordinator.swift in Sources */,
 				E1658735299508D100FCF9C8 /* CancelId.swift in Sources */,
 				E1B0F5A82981437600143B82 /* SetupCANAlreadySetup.swift in Sources */,
+				43363E0929B01D4900E9FA23 /* ABTester.swift in Sources */,
 				E16708C0283E6A07001A1637 /* SetupScan.swift in Sources */,
 				E1B0F5AF29830D2100143B82 /* SetupCANScan.swift in Sources */,
 				E1AAACEB2836668200A51183 /* ShakeEffect.swift in Sources */,
