@@ -62,6 +62,19 @@ final class Unleash: ABTester {
         state = .disabled
     }
 
+    func isVariationActivated(for test: ABTest) -> Bool {
+        guard state == .active else { return false }
+
+        let testName = test.rawValue
+        if unleash.isEnabled(name: testName) {
+            let variantName = unleash.getVariant(name: testName).name
+            analytics.track(event: .init(category: "abtesting", action: testName, name: variantName))
+            return variantName == "variation"
+        } else {
+            return false
+        }
+    }
+
     private func trackUnleashBreadcrumb(message: String) {
         issueTracker.addInfoBreadcrumb(category: "unleash", message: message)
     }
@@ -71,4 +84,8 @@ struct AlwaysControlABTester: ABTester {
 
     func prepare() {}
     func disable() {}
+
+    func isVariationActivated(for test: ABTest) -> Bool {
+        return false
+    }
 }

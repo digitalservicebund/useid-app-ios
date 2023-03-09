@@ -38,6 +38,7 @@ protocol IssueTracker {
 protocol ABTester {
     func prepare() async
     func disable()
+    func isVariationActivated(for test: ABTest) -> Bool
 }
 
 #if PREVIEW
