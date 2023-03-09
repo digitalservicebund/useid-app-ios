@@ -21,25 +21,31 @@ final class Unleash: ABTester {
         case disabled
     }
 
-    func prepare() {
+    func prepare() async {
         let start = Date()
         state = .loading
-        unleash.start(true) { [weak self] error in
-            guard let self else { return }
-            if let error = error {
-                print("👆", "loading error:", error)
-                // TODO: track error
-            }
 
-            switch self.state {
-            case .loading:
-                self.state = .active
-            case .disabled:
-                print("👆", "request took:", Date().timeIntervalSince(start))
-                // TODO: track how long the request took
-                break
-            default:
-                break
+        await withCheckedContinuation { continuation in
+            unleash.start() { [weak self] error in
+                guard let self else { return continuation.resume() }
+                if let error = error {
+                    print("👆", "loading error:", error)
+                    // TODO: track error
+                }
+
+                switch self.state {
+                case .loading where error == nil:
+                    self.state = .active
+                case .loading:
+                    self.state = .disabled
+                case .disabled:
+                    print("👆", "request took:", Date().timeIntervalSince(start))
+                    // TODO: track how long the request took
+                    break
+                default:
+                    break
+                }
+                return continuation.resume()
             }
         }
     }

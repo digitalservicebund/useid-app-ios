@@ -36,7 +36,7 @@ protocol IssueTracker {
 }
 
 protocol ABTester {
-    func prepare()
+    func prepare() async
     func disable()
 }
 

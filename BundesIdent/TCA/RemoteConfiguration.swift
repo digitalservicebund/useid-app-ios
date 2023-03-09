@@ -13,6 +13,7 @@ struct RemoteConfiguration: ReducerProtocol {
 
     enum Action: Equatable {
         case start
+        case startABTester
         case abTesterConfigured
         case timeout
         case startTimeoutTimer
@@ -24,8 +25,12 @@ struct RemoteConfiguration: ReducerProtocol {
         struct TimerID: Hashable {}
         switch action {
         case .start:
-            abTester.prepare() // TODO: wait for response and send `abTesterConfigured`
-            return Effect(value: .startTimeoutTimer)
+            return .concatenate(Effect(value: .startABTester), Effect(value: .startTimeoutTimer))
+        case .startABTester:
+            return .run { send in
+                await abTester.prepare()
+                await send(.abTesterConfigured)
+            }
         case .startTimeoutTimer:
             return EffectTask.timer(id: TimerID(), every: .seconds(state.timeoutInterval), on: mainQueue).map { _ in .timeout }
         case .stopTimoutTimer:
