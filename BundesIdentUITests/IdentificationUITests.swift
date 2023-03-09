@@ -9,6 +9,13 @@ final class IdentificationUITests: XCTestCase {
         app.launch()
         
         app.staticTexts[L10n.FirstTimeUser.Intro.title].assertExistence()
+        
+        app.buttons[L10n.FirstTimeUser.Intro.skipSetup].wait().tap()
+        
+        app.activityIndicators.element(boundBy: 0).assertExistence()
+        
+        app.navigationBars.buttons["Debug"].wait().tap()
+        app.buttons["requestAuthorization"].assertExistence()
     }
     
     func testIdentificationShowAttributeDetails() throws {

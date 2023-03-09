@@ -5,6 +5,7 @@ import Analytics
 struct SetupScreen: ReducerProtocol {
     enum State: Equatable, IDInteractionHandler {
         case intro(SetupIntro.State)
+        case alreadySetupConfirmation
         case transportPINIntro
         case transportPIN(SetupTransportPIN.State)
         case personalPINIntro
@@ -35,6 +36,7 @@ struct SetupScreen: ReducerProtocol {
     
     enum Action: Equatable {
         case intro(SetupIntro.Action)
+        case alreadySetupConfirmation(AlreadySetupConfirmation.Action)
         case transportPINIntro(SetupTransportPINIntroAction)
         case transportPIN(SetupTransportPIN.Action)
         case personalPINIntro(SetupPersonalPINIntroAction)
@@ -83,6 +85,8 @@ extension SetupScreen.State: AnalyticsView {
         switch self {
         case .intro:
             return ["intro"]
+        case .alreadySetupConfirmation:
+            return ["alreadySetupConfirmation"]
         case .transportPINIntro:
             return ["PINLetter"]
         case .transportPIN:

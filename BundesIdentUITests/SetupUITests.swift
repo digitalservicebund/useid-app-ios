@@ -43,6 +43,23 @@ final class SetupUITests: XCTestCase {
         app.assertBeingOnHome()
     }
     
+    func testFirstTimeUserSkipSetup() throws {
+        let app = XCUIApplication()
+        app.launchWithDefaultArguments()
+        app.launch()
+        
+        app.assertBeingOnHome()
+        
+        app.buttons[L10n.Home.Setup.setup].wait().tap()
+        app.buttons[L10n.FirstTimeUser.Intro.skipSetup].wait().tap()
+        
+        app.staticTexts[L10n.FirstTimeUser.AlreadySetupConfirmation.title].assertExistence()
+        
+        app.buttons[L10n.FirstTimeUser.AlreadySetupConfirmation.close].wait().tap()
+        
+        app.assertBeingOnHome()
+    }
+    
     func testIdentificationWithSetupInbetween() throws {
         let app = XCUIApplication()
         app.launchWithDefaultArguments()

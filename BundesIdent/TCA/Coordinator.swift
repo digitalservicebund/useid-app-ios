@@ -119,17 +119,15 @@ struct Coordinator: ReducerProtocol {
                     $0.dismiss()
                     $0.presentSheet(.setupCoordinator(SetupCoordinator.State(tokenURL: tokenURL)))
                 }
-            case .setupCoordinator(.routeAction(_, action: .intro(.chooseSkipSetup(let tokenURL)))):
-                if let tokenURL {
-                    return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
-                        $0.dismiss()
-                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(tokenURL: tokenURL,
-                                                                                                   canGoBackToSetupIntro: true)))
-                    }
-                } else {
-                    state.routes.dismiss()
-                    return .none
+            case .setupCoordinator(.routeAction(_, action: .intro(.chooseSkipSetup(.some(let tokenURL))))):
+                return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
+                    $0.dismiss()
+                    $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(tokenURL: tokenURL,
+                                                                                               canGoBackToSetupIntro: true)))
                 }
+            case .setupCoordinator(.routeAction(_, action: .alreadySetupConfirmation(.close))):
+                state.routes.dismiss()
+                return .none
             case .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification(let tokenURL)))),
                  .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canAlreadySetup(.triggerIdentification(tokenURL: let tokenURL)))))),
                  .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification(tokenURL: let tokenURL)))))))):

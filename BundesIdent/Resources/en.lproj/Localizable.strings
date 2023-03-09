@@ -18,6 +18,9 @@
 "cardInteraction_error_default" = "An error has occurred.";
 "cardInteraction_error_tagLost" = "Card has been removed";
 "cardInteraction_error_timeout" = "No ID card recognized.";
+"firstTimeUser_alreadySetupConfirmation_box" = "**Note:** To identify yourself online with your ID, you need your personal PIN. You always start the process on the service provider's website.";
+"firstTimeUser_alreadySetupConfirmation_close" = "Close";
+"firstTimeUser_alreadySetupConfirmation_title" = "You are ready to go!";
 "firstTimeUser_can_alreadySetup_body_ident" = "You only need to set up your ID card once in total. If you already have a 6-digit personal PIN, your ID card has been set up already.\n\nWith this PIN, you can now identify yourself.";
 "firstTimeUser_can_alreadySetup_body_setup" = "You only need to set up your ID card once in total. If you already have a 6-digit personal PIN, your ID card has been set up already.";
 "firstTimeUser_can_alreadySetup_personalPINNotAvailable" = "Don\'t have a personal PIN\?";

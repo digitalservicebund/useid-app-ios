@@ -93,7 +93,7 @@ final class CoordinatorTests: XCTestCase {
         }
     }
     
-    func testAbortSetup() {
+    func testAbortSetupWithoutTokenURL() {
         let store = TestStore(initialState: Coordinator.State(routes: [
             .root(.home(Home.State(appVersion: "1.0.0", buildNumber: 1))),
             .sheet(.setupCoordinator(SetupCoordinator.State()))
@@ -101,8 +101,11 @@ final class CoordinatorTests: XCTestCase {
         reducer: Coordinator())
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.issueTracker = mockIssueTracker
+        
         store.send(.routeAction(1, action: .setupCoordinator(.routeAction(0, action: .intro(.chooseSkipSetup(tokenURL: nil)))))) {
-            $0.routes.removeLast()
+            guard case .setupCoordinator(var setupRoutes) = $0.routes[1].screen else { return XCTFail() }
+            setupRoutes.routes.append(.push(.alreadySetupConfirmation))
+            $0.routes[1].screen = .setupCoordinator(setupRoutes)
         }
     }
     

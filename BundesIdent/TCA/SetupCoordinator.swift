@@ -127,6 +127,8 @@ struct SetupCoordinator: ReducerProtocol {
                 return EffectTask(value: localAction)
             case .routeAction(_, .intro(.chooseStartSetup)):
                 state.routes.push(.transportPINIntro)
+            case .routeAction(_, .intro(.chooseSkipSetup(tokenURL: nil))):
+                state.routes.push(.alreadySetupConfirmation)
             case .routeAction(_, .transportPINIntro(.choosePINLetterAvailable)):
                 state.routes.push(.transportPIN(SetupTransportPIN.State()))
             case .routeAction(_, .transportPINIntro(.choosePINLetterMissing)):
@@ -269,6 +271,9 @@ struct SetupCoordinatorView: View {
                     // This works around this issue by nesting a second switch store inside the default case.
                     // For more information see: https://github.com/pointfreeco/swift-composable-architecture/issues/602
                     SwitchStore(screen) {
+                        CaseLet(state: /SetupScreen.State.alreadySetupConfirmation,
+                                action: SetupScreen.Action.alreadySetupConfirmation,
+                                then: AlreadySetupConfirmationView.init)
                         CaseLet(state: /SetupScreen.State.missingPINLetter,
                                 action: SetupScreen.Action.missingPINLetter,
                                 then: MissingPINLetterView.init)
