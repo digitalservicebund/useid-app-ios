@@ -84,7 +84,7 @@
 "general_ok" = "OK";
 "helpNFC_body" = "NFC steht für Near Field Communication. Die Technik ermöglicht den kontaktlosen Austausch von Daten über sehr kurze Strecken. Sie wird bspw. auch beim Bezahlen mit dem Smartphone an der Supermarktkasse verwendet.";
 "helpNFC_title" = "So funktioniert die NFC‑Technologie";
-"home_header_infoText" = "Gehen Sie zur »Grundsteuererklärung für Privateigentum« Website, um die Identifizierung zu starten. Wir werden bald weitere Anbieter unterstützen.";
+"home_header_infoText" = "Öffnen Sie die »**Grundsteuererklärung für Privateigentum**« Website und tippen Sie auf »**Mit BundesIdent ausweisen**«.";
 "home_header_title" = "So funktioniert’s";
 "home_more_accessibilityStatement" = "Barrierefreiheitserklärung";
 "home_more_imprint" = "Kontakt und Impressum";

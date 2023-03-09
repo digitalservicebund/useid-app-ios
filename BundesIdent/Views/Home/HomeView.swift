@@ -2,6 +2,7 @@ import SwiftUI
 import Combine
 import ComposableArchitecture
 import Analytics
+import MarkdownUI
 
 struct Home: ReducerProtocol {
 #if PREVIEW
@@ -85,7 +86,6 @@ struct HomeView: View {
                     
                     headerView
                         .padding(.bottom)
-                        .background(Color.blue200)
                     
                     VStack(alignment: .leading, spacing: 16) {
 #if PREVIEW
@@ -113,13 +113,10 @@ struct HomeView: View {
     @ViewBuilder
     private var headerView: some View {
         VStack(spacing: 0) {
-            ImageMeta(asset: Asset.abstractWidget).image
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .padding(EdgeInsets(top: 60, leading: 24, bottom: 20, trailing: 24))
-            
+            Image(asset: Asset.homeIcon)
+                .padding(24)
             Text(L10n.Home.Header.title)
-                .headingXL()
+                .headingM()
                 .padding(.bottom, 8)
                 .padding(.horizontal, 36)
 #if PREVIEW
@@ -127,12 +124,21 @@ struct HomeView: View {
                     ViewStore(store.stateless).send(.triggerIdentification(tokenURL: demoTokenURL))
                 }
 #endif
-            Text(L10n.Home.Header.infoText)
-                .font(.bundCustom(size: 20, relativeTo: .body))
+            Markdown(L10n.Home.Header.infoText)
+                .markdownTheme(.bund.text {
+                    FontProperties(family: .custom(bundFontName), size: 20)
+                })
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 36)
                 .padding(.bottom, 20)
+            
+            ImageMeta(asset: Asset.abstractWidget).image
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .padding(.horizontal)
+                .padding(.bottom, 36)
         }
+        .padding(EdgeInsets(top: 60, leading: 24, bottom: 20, trailing: 24))
+        .background(LinearGradient(colors: [.blue100, .blue200], startPoint: .top, endPoint: .bottom))
     }
     
 #if PREVIEW
@@ -241,7 +247,7 @@ struct HomeView: View {
     @ViewBuilder
     private var overscrollBackground: some View {
         let height = 1000.0
-        Color.blue200
+        Color.blue100
             .frame(height: height)
             .offset(y: -height)
             .padding(.bottom, -height)

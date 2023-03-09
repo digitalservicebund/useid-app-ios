@@ -1,7 +1,7 @@
 import SwiftUI
 import MarkdownUI
 
-private let bundFontName = "BundesSans"
+let bundFontName = "BundesSans"
 
 extension Font {
     static func bundCustom(size: CGFloat, relativeTo textStyle: Font.TextStyle) -> Font {
