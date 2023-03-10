@@ -40,7 +40,7 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}        
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        run: bundle install --path=vendor
+        run: bundle install
       - name: Brew bundle
         run: ./native_arch.sh brew bundle --no-lock
       - name: Save Dependencies
