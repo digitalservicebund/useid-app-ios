@@ -166,19 +166,8 @@ class APIController: APIControllerType {
     }
     
     func initiateRegistration() async throws -> UserRegistrationResponse {
-        let count = 32
-        var bytes = [Int8](repeating: 0, count: count)
         
-        // Fill bytes with secure random data
-        let status = SecRandomCopyBytes(
-            kSecRandomDefault,
-            count,
-            &bytes
-        )
-        let data = Data(bytes: bytes, count: count)
-        return UserRegistrationResponse(userId: "someUserId", challenge: data)
-        
-        let req = try HTTPRequest(method: .post, URI: "/users", variables: [:])
+        let req = try HTTPRequest(method: .post, URI: "/webauthn/users", variables: [:])
         let response = try await req.fetch(client)
         
         guard response.statusCode == .accepted else {
@@ -191,19 +180,19 @@ class APIController: APIControllerType {
     
     func completeRegistration(userId: UserId, widgetSessionId: String, registrationDetails: RegistrationDetails, refreshURL: URL) async throws {
         struct Payload: Codable {
-            let rawAttestationObject: Data
-            let rawClientDataJSON: Data
-            let credentialId: Data
+            let attestationObject: Data
+            let clientDataJSON: Data
+            let rawId: Data
             let refreshAddress: String
         }
         
         let payload = Payload(
-            rawAttestationObject: registrationDetails.rawAttestationObject,
-            rawClientDataJSON: registrationDetails.rawClientDataJSON,
-            credentialId: registrationDetails.credentialId,
+            attestationObject: registrationDetails.rawAttestationObject,
+            clientDataJSON: registrationDetails.rawClientDataJSON,
+            rawId: registrationDetails.credentialId,
             refreshAddress: refreshURL.absoluteString
         )
-        let req = HTTPRequest(method: .post, URI: "/users/{userId}/{widgetSessionId}/success",
+        let req = HTTPRequest(method: .post, URI: "/webauthn/users/{userId}/{widgetSessionId}/complete",
                               variables: [
                                   "userId": userId,
                                   "widgetSessionId": widgetSessionId
