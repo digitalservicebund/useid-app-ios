@@ -83,7 +83,6 @@
 		E15D0EBC29095F740088EF4E /* IdentificationOverviewError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15D0EBB29095F740088EF4E /* IdentificationOverviewError.swift */; };
 		E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */; };
 		E1658735299508D100FCF9C8 /* CancelId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1658734299508D100FCF9C8 /* CancelId.swift */; };
-		E166AF6C28FEAD38004EE034 /* Default.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E166AF6B28FEAD38004EE034 /* Default.xcconfig */; };
 		E166AF7028FEC6C7004EE034 /* LogAnalyticsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E166AF6F28FEC6C7004EE034 /* LogAnalyticsClient.swift */; };
 		E16708AE283D4224001A1637 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708AD283D4224001A1637 /* HomeView.swift */; };
 		E16708B1283D4EAC001A1637 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708B0283D4EAC001A1637 /* Dependencies.swift */; };
@@ -921,7 +920,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1400;
-				LastUpgradeCheck = 1400;
+				LastUpgradeCheck = 1420;
 				TargetAttributes = {
 					E18E2236285349D200221DB1 = {
 						CreatedOnToolsVersion = 14.0;
@@ -993,7 +992,6 @@
 				E5CEB282281041340076B9FE /* Assets.xcassets in Resources */,
 				D2AD47AF28C73B7400863D43 /* Launch Screen.storyboard in Resources */,
 				E1CD8E8D281FFCC1008ADA2A /* BundesSans-DTP-Bold.otf in Resources */,
-				E166AF6C28FEAD38004EE034 /* Default.xcconfig in Resources */,
 				E1BC3D8128B7E73B007A7B39 /* Licenses in Resources */,
 				E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */,
 				E1BC3D8228B7E73B007A7B39 /* Licenses.plist in Resources */,
