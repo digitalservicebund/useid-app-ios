@@ -22,7 +22,6 @@ final class IdentificationCANScanTests: XCTestCase {
     }
     
     func testOnAppearDoesTriggerScanningWhenNotAlreadyScanning() throws {
-        let request = EIDAuthenticationRequest.preview
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
@@ -41,7 +40,6 @@ final class IdentificationCANScanTests: XCTestCase {
     }
     
     func testOnAppearIgnoredWhenAlreadyScanning() throws {
-        let request = EIDAuthenticationRequest.preview
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
@@ -55,7 +53,6 @@ final class IdentificationCANScanTests: XCTestCase {
     }
     
     func testCancellation() throws {
-        let request = EIDAuthenticationRequest.preview
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
@@ -73,7 +70,6 @@ final class IdentificationCANScanTests: XCTestCase {
     }
     
     func testWrongCAN() throws {
-        let request = EIDAuthenticationRequest.preview
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
@@ -91,7 +87,6 @@ final class IdentificationCANScanTests: XCTestCase {
     }
     
     func testShowNFCInfo() {
-        let request = EIDAuthenticationRequest.preview
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
@@ -114,7 +109,6 @@ final class IdentificationCANScanTests: XCTestCase {
     }
     
     func testStartScanTracking() {
-        let request = EIDAuthenticationRequest.preview
         let pin = "123456"
         let can = "123456"
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
