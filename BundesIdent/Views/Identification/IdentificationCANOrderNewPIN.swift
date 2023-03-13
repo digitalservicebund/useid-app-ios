@@ -24,13 +24,12 @@ struct IdentificationCANOrderNewPINView: View {
                         .markdownTheme(.bund)
                         .fixedSize(horizontal: false, vertical: true)
 
-                    if let imageMeta = ImageMeta(asset: Asset.missingPINBrief) {
-                        imageMeta.image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(maxWidth: .infinity, maxHeight: imageMeta.maxHeight)
-                            .padding(.vertical, 10)
-                    }
+                    let imageMeta = ImageMeta(asset: Asset.missingPINBrief)
+                    imageMeta.image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: .infinity, maxHeight: imageMeta.maxHeight)
+                        .padding(.vertical, 10)
                 }
             }
             .padding(.horizontal)

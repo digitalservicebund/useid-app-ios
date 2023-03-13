@@ -91,8 +91,8 @@ struct SetupTransportPINView: View {
         .interactiveDismissDisabled()
 #if DEBUG || PREVIEW
             .toolbar {
-                WithViewStore(store) { viewStore in
-                    ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    WithViewStore(store) { viewStore in
                         Button("\(Image(systemName: "arrow.left.and.right")) \(viewStore.digits == 5 ? "6" : "5")") {
                             viewStore.send(.toggleDigits)
                         }
