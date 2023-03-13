@@ -4,7 +4,7 @@ import Analytics
 
 // MARK: Open URL
 
-extension Effect {
+extension EffectTask {
     static func openURL(_ url: URL, urlOpener: @escaping (URL) -> Void) -> EffectPublisher {
         .fireAndForget {
             urlOpener(url)
@@ -14,7 +14,7 @@ extension Effect {
 
 // MARK: Analytics
 
-extension Effect {
+extension EffectTask {
     static func trackEvent(category: String,
                            action: String,
                            name: String? = nil,

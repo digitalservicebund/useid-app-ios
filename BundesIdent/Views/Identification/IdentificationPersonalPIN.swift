@@ -6,7 +6,7 @@ struct IdentificationPersonalPIN: ReducerProtocol {
     struct State: Equatable {
         var request: EIDAuthenticationRequest
         var callback: PINCallback
-        @BindableState var enteredPIN: String = ""
+        @BindingState var enteredPIN: String = ""
         
         var doneButtonEnabled: Bool {
             enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT

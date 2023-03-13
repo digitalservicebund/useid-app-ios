@@ -50,7 +50,7 @@ struct IdentificationCANScan: ReducerProtocol {
             guard !state.shared.showInstructions, !state.shared.isScanning else {
                 return .none
             }
-            return Effect(value: .shared(.startScan))
+            return EffectTask(value: .shared(.startScan))
         case .shared(.startScan):
             guard !state.shared.isScanning else { return .none }
             state.pinCANCallback((state.pin, state.can))
@@ -67,11 +67,11 @@ struct IdentificationCANScan: ReducerProtocol {
             state.shared.isScanning = false
             switch error {
             case .cardDeactivated:
-                return Effect(value: .error(ScanError.State(errorType: .cardDeactivated, retry: false)))
+                return EffectTask(value: .error(ScanError.State(errorType: .cardDeactivated, retry: false)))
             case .cardBlocked:
-                return Effect(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
+                return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
             default:
-                return Effect(value: .error(ScanError.State(errorType: .idCardInteraction(error), retry: false)))
+                return EffectTask(value: .error(ScanError.State(errorType: .idCardInteraction(error), retry: false)))
             }
         case .wrongPIN:
             state.shared.isScanning = false
@@ -81,7 +81,7 @@ struct IdentificationCANScan: ReducerProtocol {
             storageManager.identifiedOnce = true
             
             return .concatenate(.trackEvent(category: "identification", action: "success", analytics: analytics),
-                                Effect(value: .dismiss),
+                                EffectTask(value: .dismiss),
                                 .openURL(redirectURL, urlOpener: urlOpener))
         case .shared(.showNFCInfo):
             state.alert = AlertState(title: TextState(L10n.HelpNFC.title),
@@ -104,7 +104,7 @@ struct IdentificationCANScan: ReducerProtocol {
         }
     }
     
-    func handle(state: inout State, event: EIDInteractionEvent) -> Effect<IdentificationCANScan.Action, Never> {
+    func handle(state: inout State, event: EIDInteractionEvent) -> EffectTask<IdentificationCANScan.Action> {
         switch event {
         case .requestPINAndCAN(let callback):
             logger.info("Request PIN and CAN")
@@ -114,7 +114,7 @@ struct IdentificationCANScan: ReducerProtocol {
             if !state.shared.cardRecognized {
                 return .none
             }
-            return Effect(value: .requestPINAndCAN(state.pinCANCallback))
+            return EffectTask(value: .requestPINAndCAN(state.pinCANCallback))
         case .authenticationStarted:
             logger.info("Authentication started.")
             state.shared.isScanning = true
@@ -137,16 +137,16 @@ struct IdentificationCANScan: ReducerProtocol {
             state.authenticationSuccessful = false
         case .processCompletedSuccessfullyWithRedirect(let redirect):
             logger.info("Process Completed Successfully With Redirect")
-            return Effect(value: .identifiedSuccessfully(redirectURL: redirect))
+            return EffectTask(value: .identifiedSuccessfully(redirectURL: redirect))
         case .processCompletedSuccessfullyWithoutRedirect:
             state.shared.scanAvailable = false
             issueTracker.capture(error: RedactedEIDInteractionEventError(.processCompletedSuccessfullyWithoutRedirect))
             logger.error("Received unexpected event.")
-            return Effect(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: state.shared.scanAvailable)))
+            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: state.shared.scanAvailable)))
         default:
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             logger.error("Received unexpected event.")
-            return Effect(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))
+            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))
         }
         return .none
     }

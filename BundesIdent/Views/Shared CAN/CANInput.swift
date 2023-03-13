@@ -3,7 +3,7 @@ import ComposableArchitecture
 
 struct CANInput: ReducerProtocol {
     struct State: Equatable {
-        @BindableState var enteredCAN: String = ""
+        @BindingState var enteredCAN: String = ""
         var pushesToPINEntry: Bool
         var doneButtonEnabled: Bool {
             enteredCAN.count == Constants.CAN_DIGIT_COUNT

@@ -59,7 +59,7 @@ struct IdentificationPINScan: ReducerProtocol {
             guard !state.shared.showInstructions, !state.shared.isScanning else {
                 return .none
             }
-            return Effect(value: .shared(.startScan))
+            return EffectTask(value: .shared(.startScan))
         case .shared(.startScan):
             state.shared.showInstructions = false
             state.shared.cardRecognized = false
@@ -78,11 +78,11 @@ struct IdentificationPINScan: ReducerProtocol {
             state.shared.isScanning = false
             switch error {
             case .cardDeactivated:
-                return Effect(value: .error(ScanError.State(errorType: .cardDeactivated, retry: false)))
+                return EffectTask(value: .error(ScanError.State(errorType: .cardDeactivated, retry: false)))
             case .cardBlocked:
-                return Effect(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
+                return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
             default:
-                return Effect(value: .error(ScanError.State(errorType: .idCardInteraction(error), retry: false)))
+                return EffectTask(value: .error(ScanError.State(errorType: .idCardInteraction(error), retry: false)))
             }
         case .wrongPIN:
             state.shared.isScanning = false
@@ -92,7 +92,7 @@ struct IdentificationPINScan: ReducerProtocol {
             storageManager.identifiedOnce = true
             
             return .concatenate(.trackEvent(category: "identification", action: "success", analytics: analytics),
-                                Effect(value: .dismiss),
+                                EffectTask(value: .dismiss),
                                 .openURL(redirectURL, urlOpener: urlOpener))
         case .shared(.showNFCInfo):
             state.alert = AlertState(title: TextState(L10n.HelpNFC.title),
@@ -115,7 +115,7 @@ struct IdentificationPINScan: ReducerProtocol {
         }
     }
     
-    func handle(state: inout State, event: EIDInteractionEvent) -> Effect<IdentificationPINScan.Action, Never> {
+    func handle(state: inout State, event: EIDInteractionEvent) -> EffectTask<IdentificationPINScan.Action> {
         switch event {
         case .requestPIN(remainingAttempts: let remainingAttempts, pinCallback: let callback):
             let callbackId = uuid.callAsFunction()
@@ -132,14 +132,14 @@ struct IdentificationPINScan: ReducerProtocol {
                 return .none
             }
             logger.info("PIN request: \(callbackId)")
-            return Effect(value: .wrongPIN(remainingAttempts: remainingAttempts))
+            return EffectTask(value: .wrongPIN(remainingAttempts: remainingAttempts))
         case .requestPINAndCAN(let callback):
             let callbackId = uuid.callAsFunction()
             let pinCANCallback = PINCANCallback(id: callbackId, callback: callback)
             logger.info("PIN and CAN request: \(callbackId)")
             state.shared.isScanning = false
             state.shared.scanAvailable = true
-            return Effect(value: .requestPINAndCAN(state.request, pinCANCallback))
+            return EffectTask(value: .requestPINAndCAN(state.request, pinCANCallback))
                 .delay(for: 2, scheduler: mainQueue) // this delay is here to fix a bug where this particular screen was presented incorrectly
                 .eraseToEffect()
         case .authenticationStarted:
@@ -162,16 +162,16 @@ struct IdentificationPINScan: ReducerProtocol {
             state.authenticationSuccessful = false
         case .processCompletedSuccessfullyWithRedirect(let redirect):
             logger.info("Authentication successfully with redirect.")
-            return Effect(value: .identifiedSuccessfully(redirectURL: redirect))
+            return EffectTask(value: .identifiedSuccessfully(redirectURL: redirect))
         case .processCompletedSuccessfullyWithoutRedirect:
             state.shared.scanAvailable = false
             issueTracker.capture(error: RedactedEIDInteractionEventError(.processCompletedSuccessfullyWithoutRedirect))
             logger.error("Received unexpected event.")
-            return Effect(value: .error(ScanError.State(errorType: .unexpectedEvent(.processCompletedSuccessfullyWithoutRedirect), retry: state.shared.scanAvailable)))
+            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(.processCompletedSuccessfullyWithoutRedirect), retry: state.shared.scanAvailable)))
         default:
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             logger.error("Received unexpected event.")
-            return Effect(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))
+            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))
         }
         return .none
     }

@@ -39,14 +39,14 @@ struct IdentificationOverviewLoading: ReducerProtocol {
             }
             state.onAppearCalled = true
             
-            return Effect(value: .identify)
+            return EffectTask(value: .identify)
         case .identify:
             return .none
         case .idInteractionEvent(.success(.requestAuthenticationRequestConfirmation(let request, let handler))):
-            return Effect(value: .done(request, IdentifiableCallback(id: uuid.callAsFunction(), callback: handler)))
+            return EffectTask(value: .done(request, IdentifiableCallback(id: uuid.callAsFunction(), callback: handler)))
         case .idInteractionEvent(.failure(let error)):
             RedactedIDCardInteractionError(error).flatMap(issueTracker.capture(error:))
-            return Effect(value: .failure(IdentifiableError(error)))
+            return EffectTask(value: .failure(IdentifiableError(error)))
         case .idInteractionEvent:
             return .none
         case .done:

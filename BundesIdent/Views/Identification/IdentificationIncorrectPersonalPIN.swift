@@ -8,16 +8,16 @@ enum PersonalPINError: Equatable {
 
 struct IdentificationIncorrectPersonalPIN: ReducerProtocol {
     struct State: Equatable {
-        @BindableState var enteredPIN: String = ""
+        @BindingState var enteredPIN: String = ""
         var error: PersonalPINError?
         var remainingAttempts: Int
-        @BindableState var alert: AlertState<IdentificationIncorrectPersonalPIN.Action>?
+        @BindingState var alert: AlertState<IdentificationIncorrectPersonalPIN.Action>?
         
         var doneButtonEnabled: Bool {
             enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
         }
         
-        mutating func handlePINChange(_ enteredPIN: String) -> Effect<IdentificationIncorrectPersonalPIN.Action, Never> {
+        mutating func handlePINChange(_ enteredPIN: String) -> EffectTask<IdentificationIncorrectPersonalPIN.Action> {
             if !enteredPIN.isEmpty {
                 withAnimation {
                     error = nil

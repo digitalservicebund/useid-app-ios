@@ -56,7 +56,7 @@ struct AppConfig: AppConfigType {
         options.enableUserInteractionTracing = false
         options.enableAppHangTracking = false
         options.beforeSend = {
-            guard var context: [String: [String: Any]] = $0.context else { return $0 }
+            guard let context: [String: [String: Any]] = $0.context else { return $0 }
             
             let osKeys = Set(["version", "name"])
             let deviceKeys = Set(["family", "model", "model_id"])

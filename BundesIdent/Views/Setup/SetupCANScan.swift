@@ -52,7 +52,7 @@ struct SetupCANScan: ReducerProtocol {
             guard !state.shared.showInstructions, !state.shared.isScanning else {
                 return .none
             }
-            return Effect(value: .shared(.startScan))
+            return EffectTask(value: .shared(.startScan))
         case .shared(.startScan):
             guard !state.shared.isScanning else { return .none }
             
@@ -85,13 +85,13 @@ struct SetupCANScan: ReducerProtocol {
             switch error {
             case .cardDeactivated:
                 state.shared.scanAvailable = false
-                return Effect(value: .error(ScanError.State(errorType: .cardDeactivated, retry: state.shared.scanAvailable)))
+                return EffectTask(value: .error(ScanError.State(errorType: .cardDeactivated, retry: state.shared.scanAvailable)))
             case .cardBlocked:
                 state.shared.scanAvailable = false
-                return Effect(value: .error(ScanError.State(errorType: .cardBlocked, retry: state.shared.scanAvailable)))
+                return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: state.shared.scanAvailable)))
             default:
                 state.shared.scanAvailable = true
-                return Effect(value: .error(ScanError.State(errorType: .idCardInteraction(error), retry: state.shared.scanAvailable)))
+                return EffectTask(value: .error(ScanError.State(errorType: .idCardInteraction(error), retry: state.shared.scanAvailable)))
             }
         case .wrongPIN:
             state.shared.isScanning = false
@@ -124,7 +124,7 @@ struct SetupCANScan: ReducerProtocol {
         }
     }
     
-    func handle(state: inout State, event: EIDInteractionEvent) -> Effect<SetupCANScan.Action, Never> {
+    func handle(state: inout State, event: EIDInteractionEvent) -> EffectTask<SetupCANScan.Action> {
         switch event {
         case .authenticationStarted:
             logger.info("Authentication started.")
@@ -148,7 +148,7 @@ struct SetupCANScan: ReducerProtocol {
             logger.info("Card removed.")
             state.authenticationSuccessful = false
         case .processCompletedSuccessfullyWithoutRedirect:
-            return Effect(value: .scannedSuccessfully)
+            return EffectTask(value: .scannedSuccessfully)
         case .requestCANAndChangedPIN(pinCallback: let pinCallback):
             let identifiedCallback = CANAndChangedPINCallback(id: uuid()) { payload in
                 pinCallback(payload.oldPIN, payload.can, payload.newPIN)
@@ -164,11 +164,11 @@ struct SetupCANScan: ReducerProtocol {
                 logger.info("Wrong CAN provided")
                 state.canAndChangedPINCallback = identifiedCallback
                 state.shared.isScanning = false
-                return Effect(value: .incorrectCAN(callback: identifiedCallback))
+                return EffectTask(value: .incorrectCAN(callback: identifiedCallback))
             }
         case .requestPUK:
             logger.info("PUK requested, so card is blocked. Callback not implemented yet.")
-            return Effect(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
+            return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
             
         case .requestChangedPIN:
             // This case should actually not happen but it does due to an Open-Ecard bug.
@@ -195,7 +195,7 @@ struct SetupCANScan: ReducerProtocol {
             state.canAndChangedPINCallback = nil
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             logger.error("Received unexpected event.")
-            return Effect(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))
+            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))
         }
         return .none
     }

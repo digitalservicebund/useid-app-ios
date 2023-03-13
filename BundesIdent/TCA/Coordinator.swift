@@ -34,8 +34,8 @@ struct Coordinator: ReducerProtocol {
         var routes: [Route<Screen.State>]
     }
     
-    func dismiss(state: inout State, show screen: State.Screen) -> Effect<Coordinator.Action, Never> {
-        Effect.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
+    func dismiss(state: inout State, show screen: State.Screen) -> EffectTask<Coordinator.Action> {
+        EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
             $0.dismissAll()
             $0.presentSheet(screen)
         }
@@ -64,7 +64,7 @@ struct Coordinator: ReducerProtocol {
         return urlComponents.url
     }
     
-    func handleURL(state: inout State, _ url: URL) -> Effect<Action, Never> {
+    func handleURL(state: inout State, _ url: URL) -> EffectTask<Action> {
         guard let tcTokenURL = extractTCTokenURL(url: url) else {
             logger.warning("Could not extract tc token url from \(url, privacy: .sensitive)")
             return .none
@@ -81,12 +81,12 @@ struct Coordinator: ReducerProtocol {
         // Afterwards dismiss setup or ident and show new flow
         if case .sheet(.identificationCoordinator, embedInNavigationView: _, onDismiss: _) = state.routes.last {
             return .concatenate(
-                Effect(value: .routeAction(state.routes.count - 1, action: .identificationCoordinator(.dismiss))),
+                EffectTask(value: .routeAction(state.routes.count - 1, action: .identificationCoordinator(.dismiss))),
                 dismiss(state: &state, show: screen)
             )
         } else if case .sheet(.setupCoordinator, embedInNavigationView: _, onDismiss: _) = state.routes.last {
             return .concatenate(
-                Effect(value: .routeAction(state.routes.count - 1, action: .setupCoordinator(.dismiss))),
+                EffectTask(value: .routeAction(state.routes.count - 1, action: .setupCoordinator(.dismiss))),
                 dismiss(state: &state, show: screen)
             )
         } else {
@@ -115,13 +115,13 @@ struct Coordinator: ReducerProtocol {
                                    name: "start",
                                    analytics: analytics)
             case .identificationCoordinator(.back(let tokenURL)):
-                return Effect.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
+                return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
                     $0.dismiss()
                     $0.presentSheet(.setupCoordinator(SetupCoordinator.State(tokenURL: tokenURL)))
                 }
             case .setupCoordinator(.routeAction(_, action: .intro(.chooseSkipSetup(let tokenURL)))):
                 if let tokenURL {
-                    return Effect.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
+                    return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
                         $0.dismiss()
                         $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(tokenURL: tokenURL,
                                                                                                    canGoBackToSetupIntro: true)))
@@ -133,14 +133,14 @@ struct Coordinator: ReducerProtocol {
             case .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification(let tokenURL)))),
                  .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canAlreadySetup(.triggerIdentification(tokenURL: let tokenURL)))))),
                  .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification(tokenURL: let tokenURL)))))))):
-                return Effect.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
+                return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
                     $0.dismiss()
                     $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(tokenURL: tokenURL,
                                                                                                canGoBackToSetupIntro: false)))
                 }
 #if PREVIEW
             case .home(.triggerIdentification(let tokenURL)):
-                return Effect(value: .openURL(tokenURL))
+                return EffectTask(value: .openURL(tokenURL))
 #endif
             case .identificationCoordinator(.dismiss),
                  .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.dismiss))),

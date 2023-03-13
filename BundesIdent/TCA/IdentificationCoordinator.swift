@@ -94,16 +94,16 @@ struct IdentificationCoordinator: ReducerProtocol {
                     logger.error("No screen found to handle EIDInteractionEvents")
                     return .none
                 }
-                return Effect(value: localAction)
+                return EffectTask(value: localAction)
             case .routeAction(_, action: .incorrectPersonalPIN(.done(let pin))):
                 state.pin = pin
                 state.attempt += 1
                 state.routes.dismiss()
                 return .none
             case .routeAction(_, action: .overview(.back)):
-                return Effect.merge(
+                return EffectTask.merge(
                     .cancel(id: CancelId.self),
-                    Effect(value: .back(tokenURL: state.tokenURL))
+                    EffectTask(value: .back(tokenURL: state.tokenURL))
                 )
             case .routeAction(_, action: .overview(.loading(.identify))):
                 let publisher: EIDInteractionPublisher
@@ -126,7 +126,7 @@ struct IdentificationCoordinator: ReducerProtocol {
             case .routeAction(_, action: .overview(.loading(.runDebugSequence(let sequence)))),
                  .routeAction(_, action: .scan(.runDebugSequence(let sequence))),
                  .routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.runDebugSequence(let sequence))))):
-                return Effect(value: .runDebugSequence(sequence))
+                return EffectTask(value: .runDebugSequence(sequence))
 #endif
             case .routeAction(_, action: .overview(.loaded(.callbackReceived(let request, let callback)))):
                 state.routes.push(.personalPIN(IdentificationPersonalPIN.State(request: request, callback: callback)))
@@ -164,7 +164,7 @@ struct IdentificationCoordinator: ReducerProtocol {
                 
                 // Dismissing two sheets at the same time from different coordinators is not well supported.
                 // Waiting for 0.65s (as TCACoordinators does) fixes this temporarily.
-                return Effect(value: .afterConfirmEnd)
+                return EffectTask(value: .afterConfirmEnd)
                     .delay(for: 0.65, scheduler: mainQueue)
                     .eraseToEffect()
                 

@@ -6,7 +6,7 @@ import IdentifiedCollections
 
 struct SetupTransportPIN: ReducerProtocol {
     struct State: Equatable {
-        @BindableState var enteredPIN = ""
+        @BindingState var enteredPIN = ""
         var digits = 5
         var attempts: Int?
     }

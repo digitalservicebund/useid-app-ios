@@ -13,9 +13,9 @@ struct SetupIncorrectTransportPIN: ReducerProtocol {
         var maxDigits: Int { 5 }
 #endif
         
-        @BindableState var enteredPIN: String = ""
-        @BindableState var focusTextField: Bool = true
-        @BindableState var alert: AlertState<SetupIncorrectTransportPIN.Action>?
+        @BindingState var enteredPIN: String = ""
+        @BindingState var focusTextField: Bool = true
+        @BindingState var alert: AlertState<SetupIncorrectTransportPIN.Action>?
     }
     
     enum Action: BindableAction, Equatable {

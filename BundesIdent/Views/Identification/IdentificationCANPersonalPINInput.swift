@@ -3,7 +3,7 @@ import ComposableArchitecture
 
 struct IdentificationCANPersonalPINInput: ReducerProtocol {
     struct State: Equatable {
-        @BindableState var enteredPIN: String = ""
+        @BindingState var enteredPIN: String = ""
         var doneButtonEnabled: Bool {
             enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
         }

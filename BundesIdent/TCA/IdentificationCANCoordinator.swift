@@ -65,7 +65,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                 state.routes.presentSheet(.canIncorrectInput(.init()))
                 return .none
             case .routeAction(_, action: .canPINForgotten(.end)):
-                return Effect(value: .swipeToDismiss)
+                return EffectTask(value: .swipeToDismiss)
             case .routeAction(_, action: .canPINForgotten(.orderNewPIN)):
                 state.routes.push(.canOrderNewPIN(.init()))
                 return .none
@@ -76,7 +76,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                 state.routes.push(.canInput(CANInput.State(pushesToPINEntry: !shouldDismiss)))
                 return .none
             case .routeAction(_, action: .canIntro(.end)):
-                return Effect(value: .swipeToDismiss)
+                return EffectTask(value: .swipeToDismiss)
             case .routeAction(_, action: .canInput(.done(can: let can, pushesToPINEntry: let pushesToPINEntry))):
                 state.can = can
                 if pushesToPINEntry {
@@ -91,7 +91,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                 } else {
                     issueTracker.capture(error: IdentificationCANCoordinatorError.pinNilWhenTriedScan)
                     logger.error("PIN nil when tried to scan")
-                    return Effect(value: .dismiss)
+                    return EffectTask(value: .dismiss)
                 }
                 return .none
             case .routeAction(_, action: .canPersonalPINInput(.done(pin: let pin))):
@@ -99,7 +99,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                 guard let can = state.can else {
                     issueTracker.capture(error: IdentificationCANCoordinatorError.canNilWhenTriedScan)
                     logger.error("CAN nil when tried to scan")
-                    return Effect(value: .dismiss)
+                    return EffectTask(value: .dismiss)
                 }
                 state.routes.push(
                     .canScan(IdentificationCANScan.State(pin: pin,
@@ -118,9 +118,9 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                 }) else {
                     issueTracker.capture(error: IdentificationCANCoordinatorError.canIntroStateNotInRoutes)
                     logger.error("CanIntroState not found in routes")
-                    return Effect(value: .dismiss)
+                    return EffectTask(value: .dismiss)
                 }
-                return Effect.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
+                return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
                     $0.dismiss()
                     $0.popTo(index: index)
                 }
@@ -142,7 +142,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                 state.routes.dismiss()
                 // Dismissing two sheets at the same time from different coordinators is not well supported.
                 // Waiting for 0.65s (as TCACoordinators does) fixes this temporarily.
-                return Effect(value: .afterConfirmEnd)
+                return EffectTask(value: .afterConfirmEnd)
                     .delay(for: 0.65, scheduler: mainQueue)
                     .eraseToEffect()
             case .swipeToDismiss:

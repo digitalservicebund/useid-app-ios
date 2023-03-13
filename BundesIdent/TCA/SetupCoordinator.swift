@@ -116,7 +116,7 @@ struct SetupCoordinator: ReducerProtocol {
                 return .none
             case .routeAction(_, action: .scan(.runDebugSequence(let sequence))),
                  .routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canScan(.runDebugSequence(let sequence))))):
-                return Effect(value: .runDebugSequence(sequence))
+                return EffectTask(value: .runDebugSequence(sequence))
 #endif
             case .idInteractionEvent(let result):
                 guard let localAction = state.transformToLocalAction(result) else {
@@ -124,7 +124,7 @@ struct SetupCoordinator: ReducerProtocol {
                     logger.error("No screen found to handle EIDInteractionEvents")
                     return .none
                 }
-                return Effect(value: localAction)
+                return EffectTask(value: localAction)
             case .routeAction(_, .intro(.chooseStartSetup)):
                 state.routes.push(.transportPINIntro)
             case .routeAction(_, .transportPINIntro(.choosePINLetterAvailable)):
@@ -190,7 +190,7 @@ struct SetupCoordinator: ReducerProtocol {
                 
                 // Dismissing two sheets at the same time from different coordinators is not well supported.
                 // Waiting for 0.65s (as TCACoordinators does) fixes this temporarily.
-                return Effect(value: .afterConfirmEnd)
+                return EffectTask(value: .afterConfirmEnd)
                     .delay(for: 0.65, scheduler: mainQueue)
                     .eraseToEffect()
             case .routeAction(_, action: .scan(.wrongTransportPIN)):
@@ -200,7 +200,7 @@ struct SetupCoordinator: ReducerProtocol {
                 
                 // Dismissing two sheets at the same time from different coordinators is not well supported.
                 // Waiting for 0.65s (as TCACoordinators does) fixes this temporarily.
-                return Effect(value: .afterConfirmEnd)
+                return EffectTask(value: .afterConfirmEnd)
                     .delay(for: 0.65, scheduler: mainQueue)
                     .eraseToEffect()
             case .routeAction(_, action: .incorrectTransportPIN(.done(let transportPIN))):
