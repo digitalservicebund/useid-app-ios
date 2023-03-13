@@ -55,6 +55,7 @@ enum AnalyticsKey: DependencyKey {
 
 enum ABTesterKey: DependencyKey {
     static var liveValue: ABTester = AlwaysControlABTester()
+    static var testValue: ABTester = AlwaysControlABTester()
 }
 
 extension DependencyValues {
