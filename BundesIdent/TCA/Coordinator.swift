@@ -109,7 +109,7 @@ struct Coordinator: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return Effect(value: .remoteConfiguration(.start))
+                return EffectTask(value: .remoteConfiguration(.start))
             case .remoteConfiguration(.done):
                 let homeState: Home.State
         #if PREVIEW
@@ -118,7 +118,7 @@ struct Coordinator: ReducerProtocol {
         #else
                 homeState = Home.State(appVersion: Bundle.main.version, buildNumber: Bundle.main.buildNumber)
         #endif
-                return Effect(value: .updateRoutes([.root(.home(homeState))]))
+                return EffectTask(value: .updateRoutes([.root(.home(homeState))]))
             default:
                 return .none
             }
