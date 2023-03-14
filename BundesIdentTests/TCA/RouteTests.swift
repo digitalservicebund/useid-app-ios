@@ -68,6 +68,7 @@ final class RouteTests: XCTestCase {
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.issueTracker = mockIssueTracker
         store.dependencies.storageManager = mockStorageManager
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
 
         store.send(.onAppear)
 
@@ -118,6 +119,7 @@ final class RouteTests: XCTestCase {
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.issueTracker = mockIssueTracker
         store.dependencies.storageManager = mockStorageManager
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
 
         store.send(.onAppear)
 
@@ -217,7 +219,7 @@ final class RouteTests: XCTestCase {
         let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let tokenURL = demoTokenURL
         let root = Route<Screen.State>.root(.home(Home.State(appVersion: "1.0.0", buildNumber: 1)))
-        let store = TestStore(initialState: Coordinator.State(routes: [root]),
+        let store = TestStore(initialState: Coordinator.State(routes: [root], remoteConfiguration: .init(finished: true)),
                               reducer: Coordinator())
         store.exhaustivity = .off
         store.dependencies.analytics = mockAnalyticsClient
@@ -225,6 +227,7 @@ final class RouteTests: XCTestCase {
         store.dependencies.storageManager = mockStorageManager
         store.dependencies.uuid = .incrementing
         store.dependencies.urlOpener = urlOpener
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
         store.send(.onAppear)
 
         verify(mockMatomoTracker).reset()
@@ -268,7 +271,7 @@ final class RouteTests: XCTestCase {
         let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
         let tokenURL = demoTokenURL
         let root = Route<Screen.State>.root(.home(Home.State(appVersion: "1.0.0", buildNumber: 1)))
-        let store = TestStore(initialState: Coordinator.State(routes: [root]),
+        let store = TestStore(initialState: Coordinator.State(routes: [root], remoteConfiguration: .init(finished: true)),
                               reducer: Coordinator())
         store.exhaustivity = .off
         store.dependencies.analytics = mockAnalyticsClient
@@ -276,6 +279,7 @@ final class RouteTests: XCTestCase {
         store.dependencies.storageManager = mockStorageManager
         store.dependencies.uuid = .incrementing
         store.dependencies.urlOpener = urlOpener
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
         store.send(.onAppear)
 
         verify(mockMatomoTracker).reset()
