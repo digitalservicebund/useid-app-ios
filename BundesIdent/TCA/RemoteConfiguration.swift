@@ -31,7 +31,7 @@ struct RemoteConfiguration: ReducerProtocol {
             let startTimer = EffectTask.timer(id: TimerID(), every: .seconds(state.timeoutInterval), on: mainQueue)
                 .map { _ in Action.timeout }
             return .merge(prepareABTester, startTimer)
-        case .abTesterConfigured:
+        case .abTesterConfigured where state.finished == false:
             state.abTesterConfigured = true
             return cancelTimerAndFinish(state: &state)
         case .timeout where state.abTesterConfigured == false:
