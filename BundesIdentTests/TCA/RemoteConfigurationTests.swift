@@ -9,10 +9,8 @@ class RemoteConfigurationTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var mockABTester: MockABTester!
-    var mockPreviewIDInteractionManager: MockPreviewIDInteractionManagerType!
 
     override func setUp() {
-        mockPreviewIDInteractionManager = MockPreviewIDInteractionManagerType()
         scheduler = DispatchQueue.test
         mockABTester = MockABTester()
         stub(mockABTester) {
@@ -23,20 +21,19 @@ class RemoteConfigurationTests: XCTestCase {
     func testStartTriggersPrepareABTesterAndStartTimeoutTimer() async {
         let store = TestStore(
             initialState: RemoteConfiguration.State(),
-            reducer: RemoteConfiguration()//.dependency(\.abTester, mockABTester)
+            reducer: RemoteConfiguration()
         )
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
         store.dependencies.abTester = mockABTester
-        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
 
         await store.send(.start)
-        await store.receive(.prepareABTester)
-        await store.receive(.startTimeoutTimer)
+        await scheduler.advance()
         await store.receive(.abTesterConfigured) {
             $0.abTesterConfigured = true
-            verify(self.mockABTester).disable()
         }
-        await store.receive(.stopTimoutTimer)
-        await store.receive(.done)
+        await store.receive(.done) {
+            $0.finished = true
+        }
+        await store.finish()
     }
 }

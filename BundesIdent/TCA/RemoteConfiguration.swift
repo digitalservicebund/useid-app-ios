@@ -14,37 +14,36 @@ struct RemoteConfiguration: ReducerProtocol {
 
     enum Action: Equatable {
         case start
-        case prepareABTester
         case abTesterConfigured
         case timeout
-        case startTimeoutTimer
-        case stopTimoutTimer
         case done
     }
 
+    private struct TimerID: Hashable {}
+
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-        struct TimerID: Hashable {}
         switch action {
         case .start:
-            return .concatenate(EffectTask(value: .prepareABTester), EffectTask(value: .startTimeoutTimer))
-        case .prepareABTester:
-            return .run { send in
+            let prepareABTester = EffectTask.run { send in
                 await abTester.prepare()
-                await send(.abTesterConfigured)
+                await send(Action.abTesterConfigured)
             }
-        case .startTimeoutTimer:
-            return EffectTask.timer(id: TimerID(), every: .seconds(state.timeoutInterval), on: mainQueue).map { _ in .timeout }
-        case .stopTimoutTimer:
-            return .concatenate(.cancel(id: TimerID()), EffectTask(value: .done))
+            let startTimer = EffectTask.timer(id: TimerID(), every: .seconds(state.timeoutInterval), on: mainQueue)
+                .map { _ in Action.timeout }
+            return .merge(prepareABTester, startTimer)
         case .abTesterConfigured:
             state.abTesterConfigured = true
-            return EffectTask(value: .stopTimoutTimer)
+            return cancelTimerAndFinish(state: &state)
         case .timeout where state.abTesterConfigured == false:
             abTester.disable()
-            return EffectTask(value: .stopTimoutTimer)
+            return cancelTimerAndFinish(state: &state)
         default:
-            state.finished = true
             return .none
         }
+    }
+
+    private func cancelTimerAndFinish(state: inout State) -> EffectTask<Action> {
+        state.finished = true
+        return .concatenate(.cancel(id: TimerID()), EffectTask(value: .done))
     }
 }
