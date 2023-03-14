@@ -187,7 +187,7 @@ struct IdentificationPINScanView: View {
                        instructionsBody: L10n.Identification.ScanInstructions.body,
                        instructionsScanButtonTitle: L10n.Identification.Scan.scan,
                        scanTitle: L10n.Identification.Scan.Title.ios,
-                       scanBody: L10n.Identification.Scan.message,
+                       scanBody: L10n.Identification.Scan.Message.ios,
                        scanButton: L10n.Identification.Scan.scan)
             .onAppear {
                 ViewStore(store).send(.onAppear)

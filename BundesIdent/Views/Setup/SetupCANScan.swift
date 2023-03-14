@@ -211,7 +211,7 @@ struct SetupCANScanView: View {
                        instructionsBody: L10n.FirstTimeUser.ScanInstructions.body,
                        instructionsScanButtonTitle: L10n.FirstTimeUser.Scan.scan,
                        scanTitle: L10n.FirstTimeUser.Scan.Title.ios,
-                       scanBody: L10n.FirstTimeUser.Scan.body,
+                       scanBody: L10n.FirstTimeUser.Scan.Body.ios,
                        scanButton: L10n.FirstTimeUser.Scan.scan)
             .onAppear {
                 ViewStore(store).send(.onAppear)

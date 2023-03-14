@@ -65,7 +65,7 @@
 "firstTimeUser_pinLetter_title" = "Do you still have your PIN letter?";
 "firstTimeUser_scanInstructions_body" = "In the next step, hold your ID against the top back of the iPhone. Make sure that your ID card is directly in contact with the device.";
 "firstTimeUser_scanInstructions_title" = "How to transfer your new PIN to the ID card.";
-"firstTimeUser_scan_body" = "In the next step, hold your ID against the top back of the iPhone. Make sure that your ID card is directly in contact with the device.";
+"firstTimeUser_scan_body_iOS" = "In the next step, hold your ID against the top back of the iPhone. Make sure that your ID card is directly in contact with the device.";
 "firstTimeUser_scan_cardConnected_first" = "Do not move the ID card.";
 "firstTimeUser_scan_cardConnected_second" = "Do not move the ID card.";
 "firstTimeUser_scan_cardRecognized_first" = "Do not move the ID card.";
@@ -152,7 +152,7 @@
 "identification_scanInstructions_title" = "How to retrieve data from your ID card.";
 "identification_scan_cardConnected" = "Do not move the ID card.";
 "identification_scan_cardRecognized" = "Do not move the ID card.";
-"identification_scan_message" = "The app does not use the camera, but the NFC sensors in the iPhone and ID to check your PIN and retrieve the required data. Therefore, make sure the ID and iPhone touch each other during the data retrieval.";
+"identification_scan_message_iOS" = "The app does not use the camera, but the NFC sensors in the iPhone and ID to check your PIN and retrieve the required data. Therefore, make sure the ID and iPhone touch each other during the data retrieval.";
 "identification_scan_provideCard" = "Hold your ID card close to the top back of the iPhone.";
 "identification_scan_scan" = "Retrieve data now";
 "identification_scan_scanSuccess" = "Scanning completed successfully.";
