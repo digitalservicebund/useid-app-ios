@@ -41,6 +41,11 @@ protocol ABTester {
     func isVariationActivated(for test: ABTest) -> Bool
 }
 
+protocol AppVersionProvider {
+    var version: String { get }
+    var buildNumber: Int { get }
+}
+
 #if PREVIEW
 protocol PreviewIDInteractionManagerType: IDInteractionManagerType, AnyObject {
     var isDebugModeEnabled: Bool { get set }

@@ -30,6 +30,7 @@ struct Coordinator: ReducerProtocol {
     @Dependency(\.mainQueue) var mainQueue
     @Dependency(\.logger) var logger
     @Dependency(\.storageManager) var storageManager
+    @Dependency(\.appVersionProvider) var appVersionProvider
 #if PREVIEW
     @Dependency(\.previewIDInteractionManager) var previewIDInteractionManager
 #endif
@@ -111,7 +112,7 @@ struct Coordinator: ReducerProtocol {
     
     var body: some ReducerProtocol<State, Action> {
         Scope(state: \.remoteConfiguration, action: /Action.remoteConfiguration) {
-            RemoteConfiguration()
+            RemoteConfiguration().dependency(\.mainQueue, mainQueue)
         }
         Reduce(remoteConfigurationRouting)
         Reduce(token)
@@ -218,17 +219,20 @@ struct Coordinator: ReducerProtocol {
             return EffectTask(value: .remoteConfiguration(.start))
         case .remoteConfiguration(.done):
             let homeState: Home.State
-    #if PREVIEW
-            homeState = Home.State(appVersion: Bundle.main.version, buildNumber: Bundle.main.buildNumber, isDebugModeEnabled: previewIDInteractionManager.isDebugModeEnabled)
-    #else
-            homeState = Home.State(appVersion: Bundle.main.version, buildNumber: Bundle.main.buildNumber)
-    #endif
-            var tasks = [EffectTask(value: Action.updateRoutes([.root(.home(homeState))]))]
+            let version = appVersionProvider.version
+            let buildNumber = appVersionProvider.buildNumber
+#if PREVIEW
+            homeState = Home.State(appVersion: version, buildNumber: buildNumber, isDebugModeEnabled: previewIDInteractionManager.isDebugModeEnabled)
+#else
+            homeState = Home.State(appVersion: version, buildNumber: buildNumber)
+#endif
+            state.routes = [.root(.home(homeState))]
             if let deferredTokenURL = state.deferredTokenURL {
                 state.deferredTokenURL = nil
-                tasks.append(EffectTask(value: .openURL(deferredTokenURL)))
+                return EffectTask(value: .openURL(deferredTokenURL))
+            } else {
+                return .none
             }
-            return .concatenate(tasks)
         default:
             return .none
         }

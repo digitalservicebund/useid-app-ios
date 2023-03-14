@@ -58,6 +58,10 @@ enum ABTesterKey: DependencyKey {
     static var testValue: ABTester = AlwaysControlABTester()
 }
 
+enum AppVersionProviderKey: DependencyKey {
+    static var liveValue: AppVersionProvider = Bundle.main
+}
+
 extension DependencyValues {
     var idInteractionManager: IDInteractionManagerType {
         get { self[IDInteractionManagerKey.self] }
@@ -92,5 +96,10 @@ extension DependencyValues {
     var abTester: ABTester {
         get { self[ABTesterKey.self] }
         set { self[ABTesterKey.self] = newValue }
+    }
+
+    var appVersionProvider: AppVersionProvider {
+        get { self[AppVersionProviderKey.self] }
+        set { self[AppVersionProviderKey.self] = newValue }
     }
 }

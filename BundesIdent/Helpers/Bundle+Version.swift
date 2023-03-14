@@ -1,6 +1,6 @@
 import Foundation
 
-extension Bundle {
+extension Bundle: AppVersionProvider {
     
     var version: String {
         let shortVersionString = infoDictionary?["CFBundleShortVersionString"] as? String
