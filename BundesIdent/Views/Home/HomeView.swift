@@ -1,5 +1,7 @@
 import Analytics
+import Combine
 import ComposableArchitecture
+import MarkdownUI
 import SwiftUI
 
 struct Home: ReducerProtocol {
@@ -13,7 +15,7 @@ struct Home: ReducerProtocol {
         var buildNumber: Int
         
 #if PREVIEW
-        var isDebugModeEnabled: Bool
+        var isDebugModeEnabled: Bool = false
         var backendEnvironment: BackendEnvironment = .default
 #endif
         
@@ -28,10 +30,12 @@ struct Home: ReducerProtocol {
     }
     
     enum Action: Equatable {
+        case task
         case triggerSetup
 #if PREVIEW
         case triggerIdentification(tokenURL: URL)
         case setDebugModeEnabled(Bool)
+        case updateDebugModeEnabled(Bool)
         case setBackendEnvironment(BackendEnvironment)
 #endif
     }
@@ -39,6 +43,16 @@ struct Home: ReducerProtocol {
     var body: some ReducerProtocol<State, Action> {
         Reduce<State, Action> { state, action in
             switch action {
+            case .task:
+#if PREVIEW
+                return .run { send in
+                    for await value in previewIDInteractionManager.publishedIsDebugModeEnabled.values {
+                        await send(.updateDebugModeEnabled(value))
+                    }
+                }
+#else
+                return .none
+#endif
 #if PREVIEW
             case .setDebugModeEnabled(let enabled):
 #if targetEnvironment(simulator)
@@ -46,7 +60,9 @@ struct Home: ReducerProtocol {
 #else
                 previewIDInteractionManager.isDebugModeEnabled = enabled
 #endif
-                state.isDebugModeEnabled = previewIDInteractionManager.isDebugModeEnabled
+                return .none
+            case .updateDebugModeEnabled(let enabled):
+                state.isDebugModeEnabled = enabled
                 return .none
             case .setBackendEnvironment(let environment):
                 state.backendEnvironment = environment
@@ -76,58 +92,35 @@ struct HomeView: View {
                     overscrollBackground
                     
                     headerView
-                        .padding(.bottom)
-                        .background(Color.blue200)
+                        .padding(.bottom, 24)
                     
-                    VStack(spacing: 16) {
-                        HStack {
-                            Text(L10n.Home.More.title)
-                                .headingXL()
-                                .padding(.top)
-                                .accessibilityAddTraits(.isHeader)
-                            Spacer()
-                        }
+                    VStack(alignment: .leading, spacing: 16) {
+#if PREVIEW
+                        previewView
+#endif
                         setupActionView
                         listView
                         Spacer(minLength: 0)
-                        WithViewStore(store) { viewStore in
-                            VStack {
-                                Text(L10n.Home.version(viewStore.versionInfo))
-                                    .captionL(color: .neutral900)
-                                    .padding(.bottom)
-#if PREVIEW
-                                Toggle("DEBUG MODE", isOn: viewStore.binding(get: \.isDebugModeEnabled, send: Home.Action.setDebugModeEnabled))
-                                HStack {
-                                    Text("Environment")
-                                    Spacer()
-                                    Picker("Environment", selection: viewStore.binding(get: \.backendEnvironment, send: Home.Action.setBackendEnvironment)) {
-                                        ForEach(BackendEnvironment.allCases) {
-                                            Text($0.rawValue).tag($0)
-                                        }
-                                    }
-                                }
-#endif
-                            }
-                        }
+                        versionView
                     }
                     .padding(.horizontal, 24)
                 }
             }
             .navigationBarHidden(true)
             .ignoresSafeArea(.container, edges: .top)
+            .task {
+                await ViewStore(store.stateless).send(.task).finish()
+            }
         }
     }
     
     @ViewBuilder
     private var headerView: some View {
         VStack(spacing: 0) {
-            ImageMeta(asset: Asset.abstractWidget).image
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .padding(EdgeInsets(top: 60, leading: 24, bottom: 20, trailing: 24))
-            
+            Image(asset: Asset.homeIcon)
+                .padding(24)
             Text(L10n.Home.Header.title)
-                .headingXL()
+                .headingM()
                 .padding(.bottom, 8)
                 .padding(.horizontal, 36)
 #if PREVIEW
@@ -135,28 +128,68 @@ struct HomeView: View {
                     ViewStore(store.stateless).send(.triggerIdentification(tokenURL: demoTokenURL))
                 }
 #endif
-            Text(L10n.Home.Header.infoText)
-                .font(.bundCustom(size: 20, relativeTo: .body))
+            Markdown(L10n.Home.Header.infoText)
+                .markdownTheme(.bund.text {
+                    FontProperties(family: .custom(bundFontName), size: 20)
+                })
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 36)
                 .padding(.bottom, 20)
+            
+            ImageMeta(asset: Asset.abstractWidget).image
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .padding(.horizontal)
+                .padding(.bottom, 36)
         }
+        .padding(EdgeInsets(top: 60, leading: 24, bottom: 20, trailing: 24))
+        .background(LinearGradient(colors: [.blue100, .blue200], startPoint: .top, endPoint: .bottom))
     }
+    
+#if PREVIEW
+    @ViewBuilder
+    private var previewView: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            WithViewStore(store) { viewStore in
+                Toggle("Simulator Mode", isOn: viewStore.binding(get: \.isDebugModeEnabled, send: Home.Action.setDebugModeEnabled))
+                    .bodyLRegular(color: viewStore.isDebugModeEnabled ? .red : nil)
+#if targetEnvironment(simulator)
+                    .disabled(true)
+#endif
+                Text("If enabled, all interaction with the eID card and the server is simulated. Use the \(Image(systemName: "wrench")) to simulate the steps.")
+                    .captionM(color: .secondary)
+                HStack {
+                    Text("Environment")
+                    Spacer()
+                    Picker("Environment", selection: viewStore.binding(get: \.backendEnvironment,
+                                                                       send: Home.Action.setBackendEnvironment)) {
+                        ForEach(BackendEnvironment.allCases) {
+                            Text($0.rawValue).tag($0)
+                        }
+                    }
+                }
+            }
+        }
+        .padding()
+        .grouped()
+    }
+#endif
     
     @ViewBuilder
     private var setupActionView: some View {
-        VStack {
-            ImageMeta(asset: Asset.setupPINLetterEId).image
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-            Button(L10n.Home.startSetup) {
+        VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(L10n.Home.Setup.title)
+                    .headingM()
+                Text(L10n.Home.Setup.body)
+                    .bodyMRegular()
+            }
+            Button(L10n.Home.Setup.setup) {
                 ViewStore(store.stateless).send(.triggerSetup)
             }
-            .buttonStyle(BundButtonStyle(isPrimary: true))
-            .offset(y: -60)
-            .padding(.bottom, -40)
-            .padding(.horizontal)
+            .buttonStyle(BundTextButtonStyle())
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
         .grouped()
     }
     
@@ -229,10 +262,23 @@ struct HomeView: View {
     @ViewBuilder
     private var overscrollBackground: some View {
         let height = 1000.0
-        Color.blue200
+        Color.blue100
             .frame(height: height)
             .offset(y: -height)
             .padding(.bottom, -height)
+    }
+    
+    @ViewBuilder
+    private var versionView: some View {
+        WithViewStore(store, observe: \.versionInfo) { viewStore in
+            HStack {
+                Spacer()
+                Text(L10n.Home.version(viewStore.state))
+                    .captionL(color: .neutral900)
+                    .padding(.bottom)
+                Spacer()
+            }
+        }
     }
 }
 

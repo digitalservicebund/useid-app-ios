@@ -1,6 +1,6 @@
-import Foundation
-import ComposableArchitecture
 import Analytics
+import ComposableArchitecture
+import Foundation
 
 struct IdentificationScreen: ReducerProtocol {
     
@@ -15,7 +15,7 @@ struct IdentificationScreen: ReducerProtocol {
         case done(IdentificationDone.State)
         case share(IdentificationShare.State)
         
-        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationScreen.Action? {
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
             switch self {
             case .overview(let state):
                 guard let localAction = state.transformToLocalAction(event) else { return nil }

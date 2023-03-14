@@ -1,15 +1,15 @@
-import SwiftUI
+import Analytics
 import Combine
 import ComposableArchitecture
-import Analytics
+import SwiftUI
 
 struct SetupPersonalPINConfirm: ReducerProtocol {
     @Dependency(\.analytics) var analytics: AnalyticsClient
     
     struct State: Equatable {
         var enteredPIN1: String
-        @BindableState var enteredPIN2 = ""
-        @BindableState var alert: AlertState<SetupPersonalPINConfirm.Action>?
+        @BindingState var enteredPIN2 = ""
+        @BindingState var alert: AlertState<SetupPersonalPINConfirm.Action>?
         
         var doneButtonEnabled: Bool {
             enteredPIN2.count == Constants.PERSONAL_PIN_DIGIT_COUNT
@@ -42,10 +42,10 @@ struct SetupPersonalPINConfirm: ReducerProtocol {
                                     action: "errorShown",
                                     name: "personalPINMismatch",
                                     analytics: analytics),
-                        Effect(value: .mismatchError)
+                        EffectTask(value: .mismatchError)
                     )
                 }
-                return Effect(value: .done(pin: state.enteredPIN1))
+                return EffectTask(value: .done(pin: state.enteredPIN1))
             default:
                 return .none
             }

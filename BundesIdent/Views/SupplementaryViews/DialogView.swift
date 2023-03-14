@@ -1,5 +1,5 @@
-import SwiftUI
 import ComposableArchitecture
+import SwiftUI
 
 struct DialogView<Action>: View {
     var store: Store<Void, Action>
@@ -18,6 +18,7 @@ struct DialogView<Action>: View {
                            message: message,
                            imageMeta: imageMeta)
                     .padding(.horizontal)
+                    .padding(.bottom, 24)
             }
             DialogButtons(store: store,
                           secondary: secondaryButton,

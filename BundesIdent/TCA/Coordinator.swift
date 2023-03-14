@@ -55,17 +55,8 @@ struct Coordinator: ReducerProtocol {
         var routes: [Route<Screen.State>]
     }
     
-    func handleAppStart(state: inout State) -> Effect<Coordinator.Action, Never> {
-        if storageManager.setupCompleted {
-            return .none
-        } else {
-            state.routes.presentSheet(.setupCoordinator(SetupCoordinator.State()))
-            return .none
-        }
-    }
-    
-    func dismiss(state: inout State, show screen: State.Screen) -> Effect<Coordinator.Action, Never> {
-        Effect.routeWithDelaysIfUnsupported(state.routes) {
+    func dismiss(state: inout State, show screen: State.Screen) -> EffectTask<Coordinator.Action> {
+        EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
             $0.dismissAll()
             $0.presentSheet(screen)
         }
@@ -128,7 +119,7 @@ struct Coordinator: ReducerProtocol {
         )
     }
     
-    func handleURL(state: inout State, _ url: URL) -> Effect<Action, Never> {
+    func handleURL(state: inout State, _ url: URL) -> EffectTask<Action> {
         guard let information = extractIdentificationInformation(url: url) else {
             logger.warning("Could not extract identification information from \(url, privacy: .sensitive)")
             return .none
@@ -146,12 +137,12 @@ struct Coordinator: ReducerProtocol {
         // Afterwards dismiss setup or ident and show new flow
         if case .sheet(.identificationCoordinator, embedInNavigationView: _, onDismiss: _) = state.routes.last {
             return .concatenate(
-                Effect(value: .routeAction(state.routes.count - 1, action: .identificationCoordinator(.dismiss))),
+                EffectTask(value: .routeAction(state.routes.count - 1, action: .identificationCoordinator(.dismiss))),
                 dismiss(state: &state, show: screen)
             )
         } else if case .sheet(.setupCoordinator, embedInNavigationView: _, onDismiss: _) = state.routes.last {
             return .concatenate(
-                Effect(value: .routeAction(state.routes.count - 1, action: .setupCoordinator(.dismiss))),
+                EffectTask(value: .routeAction(state.routes.count - 1, action: .setupCoordinator(.dismiss))),
                 dismiss(state: &state, show: screen)
             )
         } else {
@@ -169,7 +160,7 @@ struct Coordinator: ReducerProtocol {
     }
     
     var body: some ReducerProtocol<State, Action> {
-        Reduce(self.token)
+        Reduce(token)
         Reduce { state, action in
             guard case .routeAction(_, action: let routeAction) = action else { return .none }
             switch routeAction {
@@ -180,30 +171,30 @@ struct Coordinator: ReducerProtocol {
                                    name: "start",
                                    analytics: analytics)
             case .identificationCoordinator(.back(let identificationInformation)):
-                return Effect.routeWithDelaysIfUnsupported(state.routes) {
+                return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
                     $0.dismiss()
                     $0.presentSheet(.setupCoordinator(SetupCoordinator.State(identificationInformation: identificationInformation)))
                 }
-            case .setupCoordinator(.routeAction(_, action: .intro(.chooseSkipSetup(let identificationInformation)))):
-                if let identificationInformation {
-                    return Effect.routeWithDelaysIfUnsupported(state.routes) {
-                        $0.dismiss()
-                        $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(identificationInformation: identificationInformation,
-                                                                                                   canGoBackToSetupIntro: true)))
-                    }
-                } else {
-                    state.routes.dismiss()
-                    return .none
+            case .setupCoordinator(.routeAction(_, action: .intro(.chooseSkipSetup(.some(let identificationInformation))))):
+                return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
+                    $0.dismiss()
+                    $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(identificationInformation: identificationInformation,
+                                                                                               canGoBackToSetupIntro: true)))
                 }
-            case .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification(let identificationInformation)))):
-                return Effect.routeWithDelaysIfUnsupported(state.routes) {
+            case .setupCoordinator(.routeAction(_, action: .alreadySetupConfirmation(.close))):
+                state.routes.dismiss()
+                return .none
+            case .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification(let identificationInformation)))),
+                 .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canAlreadySetup(.triggerIdentification(identificationInformation: let identificationInformation)))))),
+                 .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .setupCoordinator(.routeAction(_, action: .done(.triggerIdentification(identificationInformation: let identificationInformation)))))))):
+                return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
                     $0.dismiss()
                     $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(identificationInformation: identificationInformation,
                                                                                                canGoBackToSetupIntro: false)))
                 }
 #if PREVIEW
             case .home(.triggerIdentification(let tokenURL)):
-                return Effect(value: .openURL(tokenURL))
+                return EffectTask(value: .openURL(tokenURL))
 #endif
             case .identificationCoordinator(.dismiss),
                  .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.dismiss))),
@@ -215,7 +206,14 @@ struct Coordinator: ReducerProtocol {
                  .identificationCoordinator(.routeAction(_, action: .done(.close))),
                  .setupCoordinator(.confirmEnd),
                  .setupCoordinator(.routeAction(_, action: .done(.done))),
-                 .setupCoordinator(.afterConfirmEnd):
+                 .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canAlreadySetup(.done))))),
+                 .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.dismiss))),
+                 .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canScan(.dismiss))))),
+                 .setupCoordinator(.afterConfirmEnd),
+                 .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.afterConfirmEnd))),
+                 // This is bad, but we can not switch back to a previous coordinator while having another coordinator inbetween. See https://github.com/johnpatrickmorgan/FlowStacks/issues/23#issuecomment-1407125421
+                 // We are only showing the setup coordinator in the end for the done screen
+                 .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .setupCoordinator(.routeAction(_, action: .done(.done))))))):
                 state.routes.dismiss()
                 return .none
             default:
@@ -227,7 +225,7 @@ struct Coordinator: ReducerProtocol {
 #if DEBUG
             ._printChanges(.log({ logger.debug("\($0)") }))
 #endif
-        Reduce(self.tracking)
+        Reduce(tracking)
     }
     
     func tracking(state: inout State, action: Action) -> EffectTask<Action> {
@@ -252,8 +250,6 @@ struct Coordinator: ReducerProtocol {
         switch action {
         case .openURL(let url):
             return handleURL(state: &state, url)
-        case .onAppear:
-            return handleAppStart(state: &state)
         default:
             return .none
         }
@@ -291,11 +287,21 @@ struct CoordinatorView: View {
                         action: Screen.Action.home,
                         then: HomeView.init)
                 CaseLet(state: /Screen.State.setupCoordinator,
-                        action: Screen.Action.setupCoordinator,
-                        then: SetupCoordinatorView.init)
+                        action: Screen.Action.setupCoordinator) { caseStore in
+                    NavigationView {
+                        SetupCoordinatorView(store: caseStore)
+                    }
+                    .accentColor(Asset.accentColor.swiftUIColor)
+                    .ignoresSafeArea(.keyboard)
+                }
                 CaseLet(state: /Screen.State.identificationCoordinator,
-                        action: Screen.Action.identificationCoordinator,
-                        then: IdentificationCoordinatorView.init)
+                        action: Screen.Action.identificationCoordinator) { caseStore in
+                    NavigationView {
+                        IdentificationCoordinatorView(store: caseStore)
+                    }
+                    .accentColor(Asset.accentColor.swiftUIColor)
+                    .ignoresSafeArea(.keyboard)
+                }
             }
         }
         .accentColor(Asset.accentColor.swiftUIColor)

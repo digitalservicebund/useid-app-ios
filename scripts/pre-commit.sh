@@ -5,7 +5,7 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 
 for localizableFile in BundesIdent/Resources/*.lproj/Localizable.strings
 do
-    sort "$localizableFile" -c
+    sort "$localizableFile" --check &> /dev/null
     if [ $? -ne 0 ]; then
         echo "Sorting file - $localizableFile"
         sort "$localizableFile" -o "$localizableFile"

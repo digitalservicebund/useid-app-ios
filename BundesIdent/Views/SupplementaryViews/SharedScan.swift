@@ -1,6 +1,6 @@
-import SwiftUI
-import ComposableArchitecture
 import AVKit
+import ComposableArchitecture
+import SwiftUI
 
 struct ProgressCaption: Equatable {
     var title: String
@@ -20,6 +20,7 @@ struct SharedScan: ReducerProtocol {
 
     enum Action: Equatable {
         case startScan
+        case initiateScan
         case showNFCInfo
         case showHelp
     }

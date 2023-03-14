@@ -1,12 +1,12 @@
-import SwiftUI
 import Combine
 import ComposableArchitecture
+import SwiftUI
 
 struct IdentificationPersonalPIN: ReducerProtocol {
     struct State: Equatable {
         var request: EIDAuthenticationRequest
         var callback: PINCallback
-        @BindableState var enteredPIN: String = ""
+        @BindingState var enteredPIN: String = ""
         
         var doneButtonEnabled: Bool {
             enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
@@ -70,6 +70,8 @@ struct IdentificationPersonalPINView: View {
     }
 }
 
+#if DEBUG
+
 struct IdentificationPersonalPIN_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
@@ -84,3 +86,5 @@ struct IdentificationPersonalPIN_Previews: PreviewProvider {
         .previewDevice("iPhone 12")
     }
 }
+
+#endif

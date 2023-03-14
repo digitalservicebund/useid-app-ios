@@ -13,12 +13,12 @@ enum LoggerKey: DependencyKey {
 
 #if PREVIEW
 enum PreviewIDInteractionManagerKey: DependencyKey {
-    static var liveValue: PreviewIDInteractionManager = .init(realIDInteractionManager: IDInteractionManager(issueTracker: SentryIssueTracker()),
-                                                              debugIDInteractionManager: DebugIDInteractionManager())
+    static var liveValue: PreviewIDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: IDInteractionManager(issueTracker: SentryIssueTracker()),
+                                                                                        debugIDInteractionManager: DebugIDInteractionManager())
 }
 
 extension DependencyValues {
-    var previewIDInteractionManager: PreviewIDInteractionManager {
+    var previewIDInteractionManager: PreviewIDInteractionManagerType {
         get { self[PreviewIDInteractionManagerKey.self] }
         set { self[PreviewIDInteractionManagerKey.self] = newValue }
     }
@@ -46,10 +46,12 @@ enum StorageManagerKey: DependencyKey {
 
 enum IssueTrackerKey: DependencyKey {
     static var liveValue: IssueTracker = SentryIssueTracker()
+    static var testValue: IssueTracker = LogIssueTracker()
 }
 
 enum AnalyticsKey: DependencyKey {
     static var liveValue: AnalyticsClient = LogAnalyticsClient()
+    static var testValue: AnalyticsClient = LogAnalyticsClient()
 }
 
 enum WebAuthenticationManagerKey: DependencyKey {

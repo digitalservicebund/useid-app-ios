@@ -76,13 +76,13 @@ struct IdentificationOverviewLoading: ReducerProtocol {
             }
         case .validatedTokenURL(.success(true)):
             state.expirationChecked = true
-            return Effect(value: .retrieveTransactionInfo)
+            return EffectTask(value: .retrieveTransactionInfo)
         case .validatedTokenURL(.success(false)):
             state.expirationChecked = false
             let error = IdentificationOverviewLoadingError.invalidToken
-            return Effect(value: state.failureAction(error: error))
+            return EffectTask(value: state.failureAction(error: error))
         case .validatedTokenURL(.failure(let error)):
-            return Effect(value: state.failureAction(error: error))
+            return EffectTask(value: state.failureAction(error: error))
         case .retrieveTransactionInfo:
             return .task { [sessionId = state.identificationInformation.useIDSessionId] in
                 await .retrievedTransactionInfo(TaskResult {
@@ -95,17 +95,17 @@ struct IdentificationOverviewLoading: ReducerProtocol {
                 .identify
             }
         case .retrievedTransactionInfo(.failure(let error)):
-            return Effect(value: state.failureAction(error: error))
+            return EffectTask(value: state.failureAction(error: error))
         case .identify:
             return .none
         case .idInteractionEvent(.success(.requestAuthenticationRequestConfirmation(let request, let handler))):
             guard let transactionInfo = state.transactionInfo else {
                 return Effect(value: state.failureAction(error: IdentificationOverviewLoadingError.invalidTransactionInfo))
             }
-            return Effect(value: .done(request, transactionInfo, IdentifiableCallback(id: uuid.callAsFunction(), callback: handler)))
+            return EffectTask(value: .done(request, transactionInfo, IdentifiableCallback(id: uuid.callAsFunction(), callback: handler)))
         case .idInteractionEvent(.failure(let error)):
             RedactedIDCardInteractionError(error).flatMap(issueTracker.capture(error:))
-            return Effect(value: state.failureAction(error: error))
+            return EffectTask(value: state.failureAction(error: error))
         case .idInteractionEvent:
             return .none
         case .done:

@@ -1,7 +1,7 @@
-import SwiftUI
-import ComposableArchitecture
 import Combine
+import ComposableArchitecture
 import Sentry
+import SwiftUI
 
 enum IdentificationScanError: Error, Equatable, CustomNSError {
     case idCardInteraction(IDCardInteractionError)
@@ -59,7 +59,7 @@ struct IdentificationPINScan: ReducerProtocol {
             guard !state.shared.showInstructions, !state.shared.isScanning else {
                 return .none
             }
-            return Effect(value: .shared(.startScan))
+            return EffectTask(value: .shared(.startScan))
         case .shared(.startScan):
             state.shared.showInstructions = false
             state.shared.cardRecognized = false
@@ -78,11 +78,11 @@ struct IdentificationPINScan: ReducerProtocol {
             state.shared.isScanning = false
             switch error {
             case .cardDeactivated:
-                return Effect(value: .error(ScanError.State(errorType: .cardDeactivated, retry: false)))
+                return EffectTask(value: .error(ScanError.State(errorType: .cardDeactivated, retry: false)))
             case .cardBlocked:
-                return Effect(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
+                return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
             default:
-                return Effect(value: .error(ScanError.State(errorType: .idCardInteraction(error), retry: false)))
+                return EffectTask(value: .error(ScanError.State(errorType: .idCardInteraction(error), retry: false)))
             }
         case .wrongPIN:
             state.shared.isScanning = false
@@ -103,11 +103,7 @@ struct IdentificationPINScan: ReducerProtocol {
                                name: "NFCInfo",
                                analytics: analytics)
         case .cancelIdentification:
-            state.alert = AlertState(title: TextState(verbatim: L10n.Identification.ConfirmEnd.title),
-                                     message: TextState(verbatim: L10n.Identification.ConfirmEnd.message),
-                                     primaryButton: .destructive(TextState(verbatim: L10n.Identification.ConfirmEnd.confirm),
-                                                                 action: .send(.dismiss)),
-                                     secondaryButton: .cancel(TextState(verbatim: L10n.Identification.ConfirmEnd.deny)))
+            state.alert = AlertState.confirmEndInIdentification(.dismiss)
             return .none
         case .dismissAlert:
             state.alert = nil
@@ -117,7 +113,7 @@ struct IdentificationPINScan: ReducerProtocol {
         }
     }
     
-    func handle(state: inout State, event: EIDInteractionEvent) -> Effect<IdentificationPINScan.Action, Never> {
+    func handle(state: inout State, event: EIDInteractionEvent) -> EffectTask<IdentificationPINScan.Action> {
         switch event {
         case .requestPIN(remainingAttempts: let remainingAttempts, pinCallback: let callback):
             let callbackId = uuid.callAsFunction()
@@ -134,14 +130,14 @@ struct IdentificationPINScan: ReducerProtocol {
                 return .none
             }
             logger.info("PIN request: \(callbackId)")
-            return Effect(value: .wrongPIN(remainingAttempts: remainingAttempts))
+            return EffectTask(value: .wrongPIN(remainingAttempts: remainingAttempts))
         case .requestPINAndCAN(let callback):
             let callbackId = uuid.callAsFunction()
             let pinCANCallback = PINCANCallback(id: callbackId, callback: callback)
             logger.info("PIN and CAN request: \(callbackId)")
             state.shared.isScanning = false
             state.shared.scanAvailable = true
-            return Effect(value: .requestPINAndCAN(state.request, pinCANCallback))
+            return EffectTask(value: .requestPINAndCAN(state.request, pinCANCallback))
                 .delay(for: 2, scheduler: mainQueue) // this delay is here to fix a bug where this particular screen was presented incorrectly
                 .eraseToEffect()
         case .authenticationStarted:
@@ -164,16 +160,16 @@ struct IdentificationPINScan: ReducerProtocol {
             state.authenticationSuccessful = false
         case .processCompletedSuccessfullyWithRedirect(let redirectURL):
             logger.info("Authentication successfully with redirect.")
-            return Effect(value: .identifiedSuccessfully(request: state.request, redirectURL: redirectURL))
+            return EffectTask(value: .identifiedSuccessfully(request: state.request, redirectURL: redirectURL))
         case .processCompletedSuccessfullyWithoutRedirect:
             state.shared.scanAvailable = false
             issueTracker.capture(error: RedactedEIDInteractionEventError(.processCompletedSuccessfullyWithoutRedirect))
             logger.error("Received unexpected event.")
-            return Effect(value: .error(ScanError.State(errorType: .unexpectedEvent(.processCompletedSuccessfullyWithoutRedirect), retry: state.shared.scanAvailable)))
+            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(.processCompletedSuccessfullyWithoutRedirect), retry: state.shared.scanAvailable)))
         default:
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             logger.error("Received unexpected event.")
-            return Effect(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))
+            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))
         }
         return .none
     }
@@ -188,7 +184,7 @@ struct IdentificationPINScanView: View {
                        instructionsTitle: L10n.Identification.ScanInstructions.title,
                        instructionsBody: L10n.Identification.ScanInstructions.body,
                        instructionsScanButtonTitle: L10n.Identification.Scan.scan,
-                       scanTitle: L10n.Identification.Scan.title,
+                       scanTitle: L10n.Identification.Scan.Title.ios,
                        scanBody: L10n.Identification.Scan.message,
                        scanButton: L10n.Identification.Scan.scan)
             .onAppear {
@@ -209,6 +205,8 @@ struct IdentificationPINScanView: View {
     }
 }
 
+#if DEBUG
+
 struct IdentificationScan_Previews: PreviewProvider {
     static var previews: some View {
         IdentificationPINScanView(store: Store(initialState: IdentificationPINScan.State(request: .preview,
@@ -221,3 +219,5 @@ struct IdentificationScan_Previews: PreviewProvider {
                                                reducer: IdentificationPINScan()))
     }
 }
+
+#endif

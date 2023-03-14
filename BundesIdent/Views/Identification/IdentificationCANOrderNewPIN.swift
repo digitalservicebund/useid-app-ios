@@ -1,6 +1,6 @@
 import ComposableArchitecture
-import SwiftUI
 import MarkdownUI
+import SwiftUI
 
 struct IdentificationCANOrderNewPIN: ReducerProtocol {
     struct State: Equatable {}
@@ -21,18 +21,15 @@ struct IdentificationCANOrderNewPINView: View {
                     Text(L10n.Identification.Can.OrderNewPin.title)
                         .headingXL()
                     Markdown(L10n.Identification.Can.OrderNewPin.body)
-                        .markdownStyle(MarkdownStyle(font: .bundBody))
-                        .foregroundColor(.blackish)
+                        .markdownTheme(.bund)
                         .fixedSize(horizontal: false, vertical: true)
-                        .accentColor(.blue800)
-                            
-                    if let imageMeta = ImageMeta(asset: Asset.missingPINBrief) {
-                        imageMeta.image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(maxWidth: .infinity, maxHeight: imageMeta.maxHeight)
-                            .padding(.vertical, 10)
-                    }
+
+                    let imageMeta = ImageMeta(asset: Asset.missingPINBrief)
+                    imageMeta.image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: .infinity, maxHeight: imageMeta.maxHeight)
+                        .padding(.vertical, 10)
                 }
             }
             .padding(.horizontal)

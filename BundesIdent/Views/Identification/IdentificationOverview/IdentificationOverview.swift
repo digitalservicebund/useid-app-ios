@@ -144,10 +144,16 @@ struct IdentificationOverviewView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(viewStore.canGoBackToSetupIntro ? L10n.General.back : L10n.Identification.end) {
-                        ViewStore(store.stateless).send(viewStore.canGoBackToSetupIntro ? .back : .end)
+                    if viewStore.canGoBackToSetupIntro {
+                        BackButton {
+                            ViewStore(store.stateless).send(.back)
+                        }
+                    } else {
+                        Button(L10n.Identification.end) {
+                            ViewStore(store.stateless).send(.end)
+                        }
+                        .bodyLRegular(color: .accentColor)
                     }
-                    .bodyLRegular(color: .accentColor)
                 }
             }
         }

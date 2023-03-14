@@ -1,8 +1,8 @@
 // This file is used for mock generation via Cuckoo
 
+import Combine
 import Foundation
 import OpenEcard
-import Combine
 import Sentry
 
 typealias NFCConfigType = NSObjectProtocol & NFCConfigProtocol
@@ -34,3 +34,18 @@ protocol IssueTracker {
     func addBreadcrumb(crumb: Breadcrumb)
     func capture(error: CustomNSError)
 }
+
+#if PREVIEW
+protocol PreviewIDInteractionManagerType: IDInteractionManagerType, AnyObject {
+    var isDebugModeEnabled: Bool { get set }
+    var publishedIsDebugModeEnabled: AnyPublisher<Bool, Never> { get }
+    
+    func identify(tokenURL: URL, nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher
+    func changePIN(nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher
+    func debuggableChangePIN() -> DebuggableInteraction<ChangePINDebugSequence>
+    func debuggableIdentify(tokenURL: URL) -> DebuggableInteraction<IdentifyDebugSequence>
+    func debuggableCANIdentify(tokenURL: URL) -> DebuggableInteraction<IdentifyDebugSequence>
+    func runChangePIN(debugSequence: ChangePINDebugSequence) -> [ChangePINDebugSequence]
+    func runIdentify(debugSequence: IdentifyDebugSequence) -> [IdentifyDebugSequence]
+}
+#endif

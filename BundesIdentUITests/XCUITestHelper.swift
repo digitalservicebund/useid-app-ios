@@ -40,6 +40,58 @@ extension XCUIElement {
     func longStaticText(containing text: String, file: StaticString = #filePath, line: UInt = #line) -> XCUIElement {
         staticTexts.element(matching: NSPredicate(format: "label CONTAINS[c] %@", text))
     }
+    
+    func assertHittable(timeout: TimeInterval = 5, file: StaticString = #filePath, line: UInt = #line) {
+        let expectation = XCTNSPredicateExpectation(predicate: NSPredicate(format: "hittable == true"), object: self)
+        guard XCTWaiter.wait(for: [expectation], timeout: timeout) == .completed else {
+            return XCTFail("Element \(self) not hittable", file: file, line: line)
+        }
+    }
+    
+    func scrollBySwiping(scrollDirection: ScrollDirection, _ velocity: XCUIGestureVelocity? = nil) {
+        switch scrollDirection {
+        case .left: swipeRight(velocity: velocity)
+        case .up: swipeDown(velocity: velocity)
+        case .down: swipeUp(velocity: velocity)
+        case .right: swipeLeft(velocity: velocity)
+        }
+    }
+    
+    func swipeRight(velocity: XCUIGestureVelocity?) {
+        if let velocity {
+            swipeRight(velocity: velocity)
+        } else {
+            swipeRight()
+        }
+    }
+    
+    func swipeLeft(velocity: XCUIGestureVelocity?) {
+        if let velocity {
+            swipeLeft(velocity: velocity)
+        } else {
+            swipeLeft()
+        }
+    }
+    
+    func swipeUp(velocity: XCUIGestureVelocity?) {
+        if let velocity {
+            swipeUp(velocity: velocity)
+        } else {
+            swipeUp()
+        }
+    }
+    
+    func swipeDown(velocity: XCUIGestureVelocity?) {
+        if let velocity {
+            swipeDown(velocity: velocity)
+        } else {
+            swipeDown()
+        }
+    }
+}
+
+enum ScrollDirection {
+    case left, up, right, down
 }
 
 extension XCUIApplication {
@@ -53,15 +105,21 @@ extension XCUIApplication {
         return safeFrame.contains(element.frame)
     }
     
-    func scrollElementIntoVisibility(_ element: XCUIElement, maxSwipeActions: Int = 10) {
+    func scrollElementIntoVisibility(_ element: XCUIElement, maxSwipeActions: Int = 10, searchDirection: ScrollDirection = .down) {
         guard !hasVisible(element: element) else { return }
         
         for _ in 0 ..< maxSwipeActions {
-            swipeUp()
-            
+            scrollBySwiping(scrollDirection: searchDirection)
             if hasVisible(element: element) {
                 break
             }
         }
+    }
+    
+    func assertBeingOnHome(timeout: TimeInterval = 5, file: StaticString = #filePath, line: UInt = #line) {
+        let element = staticTexts[L10n.Home.Header.title]
+        element.assertExistence(timeout: timeout, file: file, line: line)
+        scrollElementIntoVisibility(element, searchDirection: .up)
+        element.assertHittable(timeout: timeout, file: file, line: line)
     }
 }

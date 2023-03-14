@@ -1,9 +1,9 @@
-import XCTest
-import ComposableArchitecture
-import TCACoordinators
-import Cuckoo
-import Combine
 import Analytics
+import Combine
+import ComposableArchitecture
+import Cuckoo
+import TCACoordinators
+import XCTest
 
 @testable import BundesIdent
 
@@ -13,6 +13,7 @@ class IdentificationCoordinatorTests: XCTestCase {
     var mockIDInteractionManager: MockIDInteractionManagerType!
     var mockStorageManager: MockStorageManagerType!
     var mockAnalyticsClient: MockAnalyticsClient!
+    var mockPreviewIDInteractionManager: MockPreviewIDInteractionManagerType!
     var openedURL: URL?
     var urlOpener: ((URL) -> Void)!
     
@@ -21,6 +22,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         mockStorageManager = MockStorageManagerType()
         scheduler = DispatchQueue.test
         mockAnalyticsClient = MockAnalyticsClient()
+        mockPreviewIDInteractionManager = MockPreviewIDInteractionManagerType()
         urlOpener = { self.openedURL = $0 }
         
         stub(mockStorageManager) {
@@ -30,6 +32,10 @@ class IdentificationCoordinatorTests: XCTestCase {
         stub(mockAnalyticsClient) {
             $0.track(view: any()).thenDoNothing()
             $0.track(event: any()).thenDoNothing()
+        }
+        
+        stub(mockPreviewIDInteractionManager) {
+            $0.isDebugModeEnabled.get.thenReturn(false)
         }
     }
     
@@ -234,6 +240,8 @@ class IdentificationCoordinatorTests: XCTestCase {
         )
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
         store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        
         let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
         stub(mockIDInteractionManager) {
             $0.identify(tokenURL: demoTokenURL, nfcMessagesProvider: any()).thenReturn(subject.eraseToAnyPublisher())
@@ -266,11 +274,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         
         store.send(.routeAction(1, action: .incorrectPersonalPIN(IdentificationIncorrectPersonalPIN.Action.end))) {
             guard case .incorrectPersonalPIN(var incorrectPersonalPINState) = $0.routes[1].screen else { return XCTFail("Unexpected state") }
-            incorrectPersonalPINState.alert = AlertState(title: .init(verbatim: L10n.Identification.ConfirmEnd.title),
-                                                         message: .init(verbatim: L10n.Identification.ConfirmEnd.message),
-                                                         primaryButton: .destructive(.init(verbatim: L10n.Identification.ConfirmEnd.confirm),
-                                                                                     action: .send(.confirmEnd)),
-                                                         secondaryButton: .cancel(.init(verbatim: L10n.Identification.ConfirmEnd.deny)))
+            incorrectPersonalPINState.alert = AlertState.confirmEndInIdentification(.confirmEnd)
             $0.routes[1].screen = .incorrectPersonalPIN(incorrectPersonalPINState)
         }
     }
@@ -310,11 +314,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         )
         
         store.send(.swipeToDismiss) {
-            $0.alert = AlertState(title: .init(verbatim: L10n.Identification.ConfirmEnd.title),
-                                  message: .init(verbatim: L10n.Identification.ConfirmEnd.message),
-                                  primaryButton: .destructive(.init(verbatim: L10n.Identification.ConfirmEnd.confirm),
-                                                              action: .send(.dismiss)),
-                                  secondaryButton: .cancel(.init(verbatim: L10n.Identification.ConfirmEnd.deny)))
+            $0.alert = AlertState.confirmEndInIdentification(.dismiss)
         }
     }
     

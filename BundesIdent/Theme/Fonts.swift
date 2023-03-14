@@ -1,7 +1,7 @@
-import SwiftUI
 import MarkdownUI
+import SwiftUI
 
-private let bundFontName = "BundesSans"
+let bundFontName = "BundesSans"
 
 extension Font {
     static func bundCustom(size: CGFloat, relativeTo textStyle: Font.TextStyle) -> Font {
@@ -12,6 +12,14 @@ extension Font {
 extension UIFont {
     convenience init(descriptor: UIFontDescriptor) {
         self.init(descriptor: descriptor, size: descriptor.pointSize)
+    }
+    
+    static var bundBodyLRegular: UIFont {
+        var descriptor = UIFontDescriptor(name: bundFontName, size: 18)
+        if UIAccessibility.isBoldTextEnabled {
+            descriptor = descriptor.withSymbolicTraits(.traitBold)!
+        }
+        return UIFontMetrics(forTextStyle: .body).scaledFont(for: .init(descriptor: descriptor))
     }
 
     static var bundNavigationBar: UIFont {
@@ -29,10 +37,12 @@ extension UIFont {
     }
 }
 
-extension MarkdownStyle.Font {
+extension MarkdownUI.FontProperties {
     
-    /// 18pt – regular
-    static let bundBody = MarkdownStyle.Font.custom(bundFontName, size: 18)
+    /// body-l
+    /// 18/24
+    /// regular
+    static let bodyLRegular: Self = .init(family: .custom(bundFontName), size: 18)
 }
 
 public extension View {
@@ -82,7 +92,7 @@ public extension View {
             .foregroundColor(color)
     }
     
-    /// body-l
+    /// body-m
     /// 16/20
     /// bold
     func bodyMBold(color: Color? = .blackish) -> some View {
@@ -90,7 +100,7 @@ public extension View {
             .foregroundColor(color)
     }
     
-    /// body-l
+    /// body-m
     /// 16/20
     /// regular
     func bodyMRegular(color: Color? = .blackish) -> some View {
@@ -112,5 +122,21 @@ public extension View {
     func captionM(color: Color? = .blackish) -> some View {
         font(.custom(bundFontName, size: 12, relativeTo: .caption2).leading(.standard))
             .foregroundColor(color)
+    }
+
+    /// 17/22
+    /// regular
+    func bundNavigationBar() -> some View {
+        var customFont = Font.custom(bundFontName, size: 17, relativeTo: .body).leading(.standard)
+        if UIAccessibility.isBoldTextEnabled {
+            customFont = customFont.bold()
+        }
+        return font(customFont).foregroundColor(.accentColor)
+    }
+
+    /// 17/22
+    /// bold
+    func bundNavigationBarBold() -> some View {
+        font(.custom(bundFontName, size: 17, relativeTo: .body).bold().leading(.standard)).foregroundColor(.accentColor)
     }
 }

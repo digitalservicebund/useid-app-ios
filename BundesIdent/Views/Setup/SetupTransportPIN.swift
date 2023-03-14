@@ -1,13 +1,14 @@
-import SwiftUI
 import ComposableArchitecture
 import FlowStacks
-import TCACoordinators
 import IdentifiedCollections
+import SwiftUI
+import TCACoordinators
 
 struct SetupTransportPIN: ReducerProtocol {
     struct State: Equatable {
-        @BindableState var enteredPIN = ""
+        @BindingState var enteredPIN = ""
         var digits = 5
+        var attempts: Int?
     }
     
     enum Action: BindableAction, Equatable {
@@ -65,6 +66,19 @@ struct SetupTransportPINView: View {
                                                                           .padding(40)
                     }
                 }
+                IfLetStore(store.scope(state: \.attempts).actionless) {
+                    WithViewStore($0) { remainingAttempts in
+                        VStack(spacing: 24) {
+                            VStack {
+                                Text(L10n.FirstTimeUser.IncorrectTransportPIN.remainingAttemptsLld(remainingAttempts.state))
+                                    .bodyLRegular()
+                                    .multilineTextAlignment(.center)
+                                    .lineLimit(nil)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
+                }
             }
             .padding(.horizontal)
         }
@@ -77,8 +91,8 @@ struct SetupTransportPINView: View {
         .interactiveDismissDisabled()
 #if DEBUG || PREVIEW
             .toolbar {
-                WithViewStore(store) { viewStore in
-                    ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    WithViewStore(store) { viewStore in
                         Button("\(Image(systemName: "arrow.left.and.right")) \(viewStore.digits == 5 ? "6" : "5")") {
                             viewStore.send(.toggleDigits)
                         }
@@ -95,11 +109,17 @@ struct SetupTransportPIN_Previews: PreviewProvider {
             SetupTransportPINView(store: Store(initialState: .init(),
                                                reducer: SetupTransportPIN()))
         }
-        .previewDevice("iPhone SE (2nd generation)")
+        .previewDisplayName("w/o pin")
         NavigationView {
             SetupTransportPINView(store: Store(initialState: .init(enteredPIN: "12345"),
                                                reducer: SetupTransportPIN()))
         }
-        .previewDevice("iPhone SE (2nd generation)")
+        .previewDisplayName("w/ pin")
+        NavigationView {
+            SetupTransportPINView(store: Store(initialState: .init(enteredPIN: "12345",
+                                                                   attempts: 1),
+                                               reducer: SetupTransportPIN()))
+        }
+        .previewDisplayName("1 attempts")
     }
 }

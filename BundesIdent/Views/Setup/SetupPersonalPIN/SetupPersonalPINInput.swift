@@ -1,10 +1,10 @@
-import SwiftUI
 import Combine
 import ComposableArchitecture
+import SwiftUI
 
 struct SetupPersonalPINInput: ReducerProtocol {
     struct State: Equatable {
-        @BindableState var enteredPIN = ""
+        @BindingState var enteredPIN = ""
         var doneButtonEnabled: Bool {
             enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
         }

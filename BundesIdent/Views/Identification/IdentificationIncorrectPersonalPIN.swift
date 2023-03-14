@@ -1,6 +1,6 @@
-import SwiftUI
 import Combine
 import ComposableArchitecture
+import SwiftUI
 
 enum PersonalPINError: Equatable {
     case incorrect
@@ -8,16 +8,16 @@ enum PersonalPINError: Equatable {
 
 struct IdentificationIncorrectPersonalPIN: ReducerProtocol {
     struct State: Equatable {
-        @BindableState var enteredPIN: String = ""
+        @BindingState var enteredPIN: String = ""
         var error: PersonalPINError?
         var remainingAttempts: Int
-        @BindableState var alert: AlertState<IdentificationIncorrectPersonalPIN.Action>?
+        @BindingState var alert: AlertState<IdentificationIncorrectPersonalPIN.Action>?
         
         var doneButtonEnabled: Bool {
             enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
         }
         
-        mutating func handlePINChange(_ enteredPIN: String) -> Effect<IdentificationIncorrectPersonalPIN.Action, Never> {
+        mutating func handlePINChange(_ enteredPIN: String) -> EffectTask<IdentificationIncorrectPersonalPIN.Action> {
             if !enteredPIN.isEmpty {
                 withAnimation {
                     error = nil
@@ -44,11 +44,7 @@ struct IdentificationIncorrectPersonalPIN: ReducerProtocol {
             case .binding(\.$enteredPIN):
                 return state.handlePINChange(state.enteredPIN)
             case .end:
-                state.alert = AlertState(title: TextState(verbatim: L10n.Identification.ConfirmEnd.title),
-                                         message: TextState(verbatim: L10n.Identification.ConfirmEnd.message),
-                                         primaryButton: .destructive(TextState(verbatim: L10n.Identification.ConfirmEnd.confirm),
-                                                                     action: .send(.confirmEnd)),
-                                         secondaryButton: .cancel(TextState(verbatim: L10n.Identification.ConfirmEnd.deny)))
+                state.alert = AlertState.confirmEndInIdentification(.confirmEnd)
                 return .none
             case .dismissAlert:
                 state.alert = nil

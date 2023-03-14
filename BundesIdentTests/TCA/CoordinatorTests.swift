@@ -1,9 +1,9 @@
-import XCTest
+import Analytics
+import Combine
 import ComposableArchitecture
 import Cuckoo
-import Combine
 import TCACoordinators
-import Analytics
+import XCTest
 
 @testable import BundesIdent
 
@@ -57,9 +57,7 @@ final class CoordinatorTests: XCTestCase {
             $0.setupCompleted.get.thenReturn(false)
         }
         
-        store.send(.onAppear) {
-            $0.routes.append(.sheet(.setupCoordinator(SetupCoordinator.State(tokenURL: nil)), embedInNavigationView: false))
-        }
+        store.send(.onAppear)
     }
     
     func testOpenEIDURLWithUnfinishedSetup() {
@@ -95,7 +93,7 @@ final class CoordinatorTests: XCTestCase {
         }
     }
     
-    func testAbortSetup() {
+    func testAbortSetupWithoutTokenURL() {
         let store = TestStore(initialState: Coordinator.State(routes: [
             .root(.home(Home.State(appVersion: "1.0.0", buildNumber: 1))),
             .sheet(.setupCoordinator(SetupCoordinator.State()))
@@ -103,8 +101,11 @@ final class CoordinatorTests: XCTestCase {
         reducer: Coordinator())
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.issueTracker = mockIssueTracker
+        
         store.send(.routeAction(1, action: .setupCoordinator(.routeAction(0, action: .intro(.chooseSkipSetup(tokenURL: nil)))))) {
-            $0.routes.removeLast()
+            guard case .setupCoordinator(var setupRoutes) = $0.routes[1].screen else { return XCTFail() }
+            setupRoutes.routes.append(.push(.alreadySetupConfirmation))
+            $0.routes[1].screen = .setupCoordinator(setupRoutes)
         }
     }
     
@@ -115,8 +116,11 @@ final class CoordinatorTests: XCTestCase {
             .sheet(.setupCoordinator(SetupCoordinator.State()))
         ]),
         reducer: Coordinator())
+        
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.issueTracker = mockIssueTracker
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
+        
         store.send(.routeAction(1, action: .setupCoordinator(.routeAction(0, action: .intro(.chooseSkipSetup(tokenURL: tokenURL))))))
         
         let newRoutes: [Route<Screen.State>] = [

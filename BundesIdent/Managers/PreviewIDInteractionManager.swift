@@ -4,12 +4,13 @@ import OpenEcard
 
 #if PREVIEW
 
-class PreviewIDInteractionManager: IDInteractionManagerType {
+class PreviewIDInteractionManager: PreviewIDInteractionManagerType {
     
     private let realIDInteractionManager: IDInteractionManager
     private let debugIDInteractionManager: DebugIDInteractionManager
     
-    public var isDebugModeEnabled: Bool
+    @Published public var isDebugModeEnabled: Bool
+    var publishedIsDebugModeEnabled: AnyPublisher<Bool, Never> { $isDebugModeEnabled.eraseToAnyPublisher() }
     
     init(realIDInteractionManager: IDInteractionManager, debugIDInteractionManager: DebugIDInteractionManager) {
         self.realIDInteractionManager = realIDInteractionManager
@@ -17,9 +18,9 @@ class PreviewIDInteractionManager: IDInteractionManagerType {
         
 #if targetEnvironment(simulator)
         // Always mock except in unit tests
-        self.isDebugModeEnabled = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil
+        isDebugModeEnabled = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil
 #else
-        self.isDebugModeEnabled = false
+        isDebugModeEnabled = false
 #endif
     }
     

@@ -1,17 +1,16 @@
-import SwiftUI
 import ComposableArchitecture
+import SwiftUI
 
 struct IdentificationCANPersonalPINInput: ReducerProtocol {
     struct State: Equatable {
-        @BindableState var enteredPIN: String = ""
-        let request: EIDAuthenticationRequest
+        @BindingState var enteredPIN: String = ""
         var doneButtonEnabled: Bool {
             enteredPIN.count == Constants.PERSONAL_PIN_DIGIT_COUNT
         }
     }
 
     enum Action: Equatable, BindableAction {
-        case done(pin: String, request: EIDAuthenticationRequest)
+        case done(pin: String)
         case binding(BindingAction<IdentificationCANPersonalPINInput.State>)
     }
     
@@ -42,7 +41,7 @@ struct IdentificationCANPersonalPINInputView: View {
                                          doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                               title: L10n.Identification.PersonalPIN.continue,
                                                                               handler: { pin in
-                                                                                  viewStore.send(.done(pin: pin, request: viewStore.request))
+                                                                                  viewStore.send(.done(pin: pin))
                                                                               }))
                                                                               .focused($pinEntryFocused)
                                                                               .headingL()
@@ -71,12 +70,16 @@ struct IdentificationCANPersonalPINInputView: View {
     }
 }
 
+#if DEBUG
+
 struct IdentificationCANPersonalPINInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationCANPersonalPINInputView(store: .init(initialState: .init(request: .preview),
+            IdentificationCANPersonalPINInputView(store: .init(initialState: .init(),
                                                                reducer: IdentificationCANPersonalPINInput()))
         }
         .previewDevice("iPhone 12")
     }
 }
+
+#endif

@@ -21,6 +21,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
     struct State: Equatable, IndexedRouterState {
         var pin: String?
         var can: String?
+        var request: EIDAuthenticationRequest
         var pinCANCallback: PINCANCallback
         var tokenURL: URL
         var authenticationSuccessful = false
@@ -56,36 +57,33 @@ struct IdentificationCANCoordinator: ReducerProtocol {
         case dismiss
     }
     
-    enum CancelId {}
-    
     var body: some ReducerProtocol<State, Action> {
         Reduce<State, Action> { state, action in
             switch action {
-            case .routeAction(_, action: .canScan(.requestPINAndCAN(let request, let pinCANCallback))):
+            case .routeAction(_, action: .canScan(.requestPINAndCAN(let pinCANCallback))):
                 state.pinCANCallback = pinCANCallback
-                state.routes.presentSheet(.canIncorrectInput(.init(request: request)))
+                state.routes.presentSheet(.canIncorrectInput(.init()))
                 return .none
             case .routeAction(_, action: .canPINForgotten(.end)):
-                return Effect(value: .swipeToDismiss)
+                return EffectTask(value: .swipeToDismiss)
             case .routeAction(_, action: .canPINForgotten(.orderNewPIN)):
                 state.routes.push(.canOrderNewPIN(.init()))
                 return .none
-            case .routeAction(_, action: .canPINForgotten(.showCANIntro(let request))):
-                state.routes.push(.canIntro(IdentificationCANIntro.State(request: request, shouldDismiss: false)))
+            case .routeAction(_, action: .canPINForgotten(.showCANIntro)):
+                state.routes.push(.canIntro(CANIntro.State(shouldDismiss: false)))
                 return .none
-            case .routeAction(_, action: .canIntro(.showInput(let request, let shouldDismiss))):
-                state.routes.push(.canInput(IdentificationCANInput.State(request: request, pushesToPINEntry: !shouldDismiss)))
+            case .routeAction(_, action: .canIntro(.showInput(let shouldDismiss))):
+                state.routes.push(.canInput(CANInput.State(pushesToPINEntry: !shouldDismiss)))
                 return .none
             case .routeAction(_, action: .canIntro(.end)):
-                return Effect(value: .swipeToDismiss)
-            case .routeAction(_, action: .canInput(.done(can: let can, request: let request, pushesToPINEntry: let pushesToPINEntry))):
+                return EffectTask(value: .swipeToDismiss)
+            case .routeAction(_, action: .canInput(.done(can: let can, pushesToPINEntry: let pushesToPINEntry))):
                 state.can = can
                 if pushesToPINEntry {
-                    state.routes.push(.canPersonalPINInput(IdentificationCANPersonalPINInput.State(request: request)))
+                    state.routes.push(.canPersonalPINInput(.init()))
                 } else if let pin = state.pin {
                     state.routes.push(
-                        .canScan(IdentificationCANScan.State(request: request,
-                                                             pin: pin,
+                        .canScan(IdentificationCANScan.State(pin: pin,
                                                              can: can,
                                                              pinCANCallback: state.pinCANCallback,
                                                              shared: SharedScan.State(showInstructions: false)))
@@ -93,19 +91,18 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                 } else {
                     issueTracker.capture(error: IdentificationCANCoordinatorError.pinNilWhenTriedScan)
                     logger.error("PIN nil when tried to scan")
-                    return Effect(value: .dismiss)
+                    return EffectTask(value: .dismiss)
                 }
                 return .none
-            case .routeAction(_, action: .canPersonalPINInput(.done(pin: let pin, request: let request))):
+            case .routeAction(_, action: .canPersonalPINInput(.done(pin: let pin))):
                 state.pin = pin
                 guard let can = state.can else {
                     issueTracker.capture(error: IdentificationCANCoordinatorError.canNilWhenTriedScan)
                     logger.error("CAN nil when tried to scan")
-                    return Effect(value: .dismiss)
+                    return EffectTask(value: .dismiss)
                 }
                 state.routes.push(
-                    .canScan(IdentificationCANScan.State(request: request,
-                                                         pin: pin,
+                    .canScan(IdentificationCANScan.State(pin: pin,
                                                          can: can,
                                                          pinCANCallback: state.pinCANCallback,
                                                          shared: SharedScan.State(showInstructions: false)))
@@ -121,10 +118,9 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                 }) else {
                     issueTracker.capture(error: IdentificationCANCoordinatorError.canIntroStateNotInRoutes)
                     logger.error("CanIntroState not found in routes")
-                    return Effect(value: .dismiss)
+                    return EffectTask(value: .dismiss)
                 }
-                
-                return Effect.routeWithDelaysIfUnsupported(state.routes) {
+                return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
                     $0.dismiss()
                     $0.popTo(index: index)
                 }
@@ -146,7 +142,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                 state.routes.dismiss()
                 // Dismissing two sheets at the same time from different coordinators is not well supported.
                 // Waiting for 0.65s (as TCACoordinators does) fixes this temporarily.
-                return Effect(value: .afterConfirmEnd)
+                return EffectTask(value: .afterConfirmEnd)
                     .delay(for: 0.65, scheduler: mainQueue)
                     .eraseToEffect()
             case .swipeToDismiss:
@@ -156,11 +152,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                 case .block:
                     return .none
                 case .allowAfterConfirmation:
-                    state.alert = AlertState(title: TextState(verbatim: L10n.Identification.ConfirmEnd.title),
-                                             message: TextState(verbatim: L10n.Identification.ConfirmEnd.message),
-                                             primaryButton: .destructive(TextState(verbatim: L10n.Identification.ConfirmEnd.confirm),
-                                                                         action: .send(.dismiss)),
-                                             secondaryButton: .cancel(TextState(verbatim: L10n.Identification.ConfirmEnd.deny)))
+                    state.alert = AlertState.confirmEndInIdentification(.dismiss)
                     return .none
                 }
             case .dismissAlert:
@@ -189,13 +181,14 @@ extension IdentificationCANCoordinator.State {
          attempt: Int,
          goToCanIntroScreen: Bool) {
         self.pin = pin
+        self.request = request
         self.pinCANCallback = pinCANCallback
         self.tokenURL = tokenURL
         self.attempt = attempt
         if goToCanIntroScreen {
-            states = [.root(.canIntro(.init(request: request, shouldDismiss: true)))]
+            states = [.root(.canIntro(.init(shouldDismiss: true)))]
         } else {
-            states = [.root(.canPINForgotten(.init(request: request)))]
+            states = [.root(.canPINForgotten(.init()))]
         }
     }
 }
@@ -253,16 +246,16 @@ struct IdentificationCANCoordinatorView: View {
                             then: IdentificationCANOrderNewPINView.init)
                     CaseLet(state: /IdentificationCANScreen.State.canIntro,
                             action: IdentificationCANScreen.Action.canIntro,
-                            then: IdentificationCANIntroView.init)
+                            then: CANIntroView.init)
                     CaseLet(state: /IdentificationCANScreen.State.canInput,
                             action: IdentificationCANScreen.Action.canInput,
-                            then: IdentificationCANInputView.init)
+                            then: CANInputView.init)
                     CaseLet(state: /IdentificationCANScreen.State.canPersonalPINInput,
                             action: IdentificationCANScreen.Action.canPersonalPINInput,
                             then: IdentificationCANPersonalPINInputView.init)
                     CaseLet(state: /IdentificationCANScreen.State.canIncorrectInput,
                             action: IdentificationCANScreen.Action.canIncorrectInput,
-                            then: IdentificationCANIncorrectInputView.init)
+                            then: CANIncorrectInputView.init)
                     CaseLet(state: /IdentificationCANScreen.State.canScan,
                             action: IdentificationCANScreen.Action.canScan,
                             then: IdentificationCANScanView.init)

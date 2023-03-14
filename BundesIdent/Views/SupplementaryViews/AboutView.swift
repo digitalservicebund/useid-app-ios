@@ -1,5 +1,5 @@
-import SwiftUI
 import MarkdownUI
+import SwiftUI
 
 struct AboutView: View {
     let title: String
@@ -9,7 +9,7 @@ struct AboutView: View {
         ScrollView {
             HStack {
                 Markdown(markdown)
-                    .markdownStyle(MarkdownStyle(font: .bundBody))
+                    .markdownTheme(.bund)
                     .padding(24)
                 Spacer()
             }
@@ -25,6 +25,16 @@ struct AboutView: View {
         } catch {
             assertionFailure("Invalid markdown:\n\(message)")
             return AttributedString(message)
+        }
+    }
+}
+
+struct AboutView_Previews: PreviewProvider {
+
+    static var previews: some View {
+        NavigationView {
+            AboutView(title: L10n.Privacy.title,
+                      markdown: L10n.Privacy.text)
         }
     }
 }

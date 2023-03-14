@@ -1,10 +1,9 @@
-import SwiftUI
 import Analytics
 import ComposableArchitecture
+import SwiftUI
 
 enum ScanErrorType: Equatable {
     case cardDeactivated
-    case cardSuspended
     case cardBlocked
     case help
     case idCardInteraction(IDCardInteractionError)
@@ -21,8 +20,6 @@ struct ScanError: ReducerProtocol {
             switch errorType {
             case .cardDeactivated:
                 return L10n.ScanError.CardDeactivated.title
-            case .cardSuspended:
-                return L10n.ScanError.CardSuspended.title
             case .cardBlocked:
                 return L10n.ScanError.CardBlocked.title
             case .idCardInteraction,
@@ -36,8 +33,6 @@ struct ScanError: ReducerProtocol {
             switch errorType {
             case .cardDeactivated:
                 return L10n.ScanError.CardDeactivated.body
-            case .cardSuspended:
-                return L10n.ScanError.CardSuspended.body
             case .cardBlocked:
                 return L10n.ScanError.CardBlocked.body
             case .idCardInteraction,
@@ -61,7 +56,7 @@ struct ScanError: ReducerProtocol {
             guard !retry else { return nil }
             
             switch errorType {
-            case .cardDeactivated, .cardSuspended, .cardBlocked, .help, .idCardInteraction(.cardDeactivated), .idCardInteraction(.cardBlocked):
+            case .cardDeactivated, .cardBlocked, .help, .idCardInteraction(.cardDeactivated), .idCardInteraction(.cardBlocked):
                 return nil
             case .idCardInteraction, .unexpectedEvent:
                 return .init(title: L10n.ScanError.Box.title, message: L10n.ScanError.Box.body, style: .error)
@@ -92,8 +87,6 @@ extension ScanErrorType: AnalyticsView {
             return ["scanHelp"]
         case .cardDeactivated:
             return ["cardDeactivated"]
-        case .cardSuspended:
-            return ["cardSuspended"]
         case .cardBlocked:
             return ["cardBlocked"]
         case .idCardInteraction, .unexpectedEvent:
@@ -124,8 +117,6 @@ struct ScanErrorView: View {
 struct SetupError_Previews: PreviewProvider {
     static var previews: some View {
         ScanErrorView(store: Store(initialState: .init(errorType: .cardDeactivated, retry: false),
-                                   reducer: ScanError()))
-        ScanErrorView(store: Store(initialState: .init(errorType: .cardSuspended, retry: false),
                                    reducer: ScanError()))
         ScanErrorView(store: Store(initialState: .init(errorType: .cardBlocked, retry: false),
                                    reducer: ScanError()))

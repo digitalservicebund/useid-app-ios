@@ -75,14 +75,14 @@ struct IdentificationOverviewLoaded: ReducerProtocol {
         case .idInteractionEvent(.success(.requestPIN(remainingAttempts: nil, pinCallback: let handler))):
             let pinHandler = PINCallback(id: uuid.callAsFunction(), callback: handler)
             state.pinHandler = pinHandler
-            return Effect(value: .callbackReceived(state.request, pinHandler))
+            return EffectTask(value: .callbackReceived(state.request, pinHandler))
         case .idInteractionEvent(.failure(let error)):
-            return Effect(value: .failure(IdentifiableError(error)))
+            return EffectTask(value: .failure(IdentifiableError(error)))
         case .idInteractionEvent:
             return .none
         case .confirm:
             if let pinHandler = state.pinHandler {
-                return Effect(value: .callbackReceived(state.request, pinHandler))
+                return EffectTask(value: .callbackReceived(state.request, pinHandler))
             } else {
                 let dict = Dictionary(uniqueKeysWithValues: state.requiredReadAttributes.map { ($0, true) })
                 state.handler(dict)
@@ -177,8 +177,7 @@ struct IdentificationOverviewLoadedView: View {
                             .cornerRadius(10)
                             
                             Markdown(L10n.Identification.AttributeConsent.body)
-                                .markdownStyle(MarkdownStyle(font: .bundBody))
-                                .foregroundColor(.blackish)
+                                .markdownTheme(.bund)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                         .padding(.horizontal)

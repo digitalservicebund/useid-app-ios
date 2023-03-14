@@ -1,10 +1,9 @@
-import SwiftUI
 import ComposableArchitecture
+import SwiftUI
 
-struct IdentificationCANIncorrectInput: ReducerProtocol {
+struct CANIncorrectInput: ReducerProtocol {
     struct State: Equatable {
-        @BindableState var enteredCAN: String = ""
-        let request: EIDAuthenticationRequest
+        @BindingState var enteredCAN: String = ""
         
         var doneButtonEnabled: Bool {
             enteredCAN.count == Constants.CAN_DIGIT_COUNT
@@ -13,26 +12,17 @@ struct IdentificationCANIncorrectInput: ReducerProtocol {
 
     enum Action: Equatable, BindableAction {
         case done(can: String)
-        case triggerEnd
-        case end(EIDAuthenticationRequest)
-        case binding(BindingAction<IdentificationCANIncorrectInput.State>)
+        case end
+        case binding(BindingAction<CANIncorrectInput.State>)
     }
     
     var body: some ReducerProtocol<State, Action> {
         BindingReducer()
-        Reduce { state, action in
-            switch action {
-            case .triggerEnd:
-                return Effect(value: .end(state.request))
-            default:
-                return .none
-            }
-        }
     }
 }
 
-struct IdentificationCANIncorrectInputView: View {
-    var store: Store<IdentificationCANIncorrectInput.State, IdentificationCANIncorrectInput.Action>
+struct CANIncorrectInputView: View {
+    var store: Store<CANIncorrectInput.State, CANIncorrectInput.Action>
     @FocusState private var pinEntryFocused: Bool
     
     var body: some View {
@@ -76,10 +66,9 @@ struct IdentificationCANIncorrectInputView: View {
             .navigationBarHidden(false)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(L10n.Identification.Can.IncorrectInput.back) {
-                        ViewStore(store).send(.triggerEnd)
+                    BackButton {
+                        ViewStore(store).send(.end)
                     }
-                    .bodyLRegular(color: .accentColor)
                 }
             }
             .focusOnAppear {
@@ -88,18 +77,22 @@ struct IdentificationCANIncorrectInputView: View {
                 }
             }
             .interactiveDismissDisabled(true, onAttemptToDismiss: {
-                ViewStore(store).send(.triggerEnd)
+                ViewStore(store).send(.end)
             })
         }
     }
 }
 
-struct IdentificationCANIncorrectInput_Previews: PreviewProvider {
+#if DEBUG
+
+struct CANIncorrectInput_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationCANIncorrectInputView(store: .init(initialState: .init(request: .preview),
-                                                             reducer: IdentificationCANIncorrectInput()))
+            CANIncorrectInputView(store: .init(initialState: .init(),
+                                               reducer: CANIncorrectInput()))
         }
         .previewDevice("iPhone 12")
     }
 }
+
+#endif
