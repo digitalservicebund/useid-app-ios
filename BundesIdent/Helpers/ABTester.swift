@@ -9,8 +9,8 @@ enum ABTest: String, CaseIterable {
 final class Unleash: ABTester {
 
     init(url: String, clientKey: String, analytics: AnalyticsClient, issueTracker: IssueTracker) {
-        self.unleash = .init(unleashUrl: url, clientKey: clientKey, refreshInterval: .max, appName: "bundesIdent.iOS")
-        self.unleash.context["supportedToggles"] = ABTest.allCases.map(\.rawValue).joined(separator: ",")
+        unleash = .init(unleashUrl: url, clientKey: clientKey, refreshInterval: .max, appName: "bundesIdent.iOS")
+        unleash.context["supportedToggles"] = ABTest.allCases.map(\.rawValue).joined(separator: ",")
         self.analytics = analytics
         self.issueTracker = issueTracker
     }
@@ -33,9 +33,9 @@ final class Unleash: ABTester {
         state = .loading
 
         await withCheckedContinuation { continuation in
-            unleash.start() { [weak self] error in
+            unleash.start { [weak self] error in
                 guard let self else { return continuation.resume() }
-                if let error = error {
+                if let error {
                     self.trackUnleashBreadcrumb(message: "request failed with error \(error)")
                 }
 
@@ -86,6 +86,6 @@ struct AlwaysControlABTester: ABTester {
     func disable() {}
 
     func isVariationActivated(for test: ABTest) -> Bool {
-        return false
+        false
     }
 }
