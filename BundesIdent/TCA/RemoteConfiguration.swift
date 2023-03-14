@@ -9,6 +9,7 @@ struct RemoteConfiguration: ReducerProtocol {
     struct State: Equatable {
         let timeoutInterval: TimeInterval = 1.5
         var abTesterConfigured: Bool = false
+        var finished: Bool = false
     }
 
     enum Action: Equatable {
@@ -42,6 +43,7 @@ struct RemoteConfiguration: ReducerProtocol {
             abTester.disable()
             return EffectTask(value: .stopTimoutTimer)
         default:
+            state.finished = true
             return .none
         }
     }

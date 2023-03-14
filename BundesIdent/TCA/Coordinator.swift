@@ -30,9 +30,13 @@ struct Coordinator: ReducerProtocol {
     @Dependency(\.mainQueue) var mainQueue
     @Dependency(\.logger) var logger
     @Dependency(\.storageManager) var storageManager
+#if PREVIEW
+    @Dependency(\.previewIDInteractionManager) var previewIDInteractionManager
+#endif
     struct State: Equatable, IndexedRouterState {
         var routes: [Route<Screen.State>]
         var remoteConfiguration = RemoteConfiguration.State()
+        var deferredTokenURL: URL?
     }
     
     func dismiss(state: inout State, show screen: State.Screen) -> EffectTask<Coordinator.Action> {
@@ -106,26 +110,10 @@ struct Coordinator: ReducerProtocol {
     }
     
     var body: some ReducerProtocol<State, Action> {
-        Reduce { state, action in
-            switch action {
-            case .onAppear:
-                return EffectTask(value: .remoteConfiguration(.start))
-            case .remoteConfiguration(.done):
-                let homeState: Home.State
-        #if PREVIEW
-                let previewIDInteractionManager = DependencyValues._current[keyPath: \.previewIDInteractionManager]
-                homeState = Home.State(appVersion: Bundle.main.version, buildNumber: Bundle.main.buildNumber, isDebugModeEnabled: previewIDInteractionManager.isDebugModeEnabled)
-        #else
-                homeState = Home.State(appVersion: Bundle.main.version, buildNumber: Bundle.main.buildNumber)
-        #endif
-                return EffectTask(value: .updateRoutes([.root(.home(homeState))]))
-            default:
-                return .none
-            }
-        }
         Scope(state: \.remoteConfiguration, action: /Action.remoteConfiguration) {
             RemoteConfiguration()
         }
+        Reduce(remoteConfigurationRouting)
         Reduce(token)
         Reduce { state, action in
             guard case .routeAction(_, action: let routeAction) = action else { return .none }
@@ -213,7 +201,34 @@ struct Coordinator: ReducerProtocol {
     func token(state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .openURL(let url):
-            return handleURL(state: &state, url)
+            if state.remoteConfiguration.finished {
+                return handleURL(state: &state, url)
+            } else {
+                state.deferredTokenURL = url
+                return .none
+            }
+        default:
+            return .none
+        }
+    }
+
+    func remoteConfigurationRouting(state: inout State, action: Action) -> EffectTask<Action> {
+        switch action {
+        case .onAppear:
+            return EffectTask(value: .remoteConfiguration(.start))
+        case .remoteConfiguration(.done):
+            let homeState: Home.State
+    #if PREVIEW
+            homeState = Home.State(appVersion: Bundle.main.version, buildNumber: Bundle.main.buildNumber, isDebugModeEnabled: previewIDInteractionManager.isDebugModeEnabled)
+    #else
+            homeState = Home.State(appVersion: Bundle.main.version, buildNumber: Bundle.main.buildNumber)
+    #endif
+            var tasks = [EffectTask(value: Action.updateRoutes([.root(.home(homeState))]))]
+            if let deferredTokenURL = state.deferredTokenURL {
+                state.deferredTokenURL = nil
+                tasks.append(EffectTask(value: .openURL(deferredTokenURL)))
+            }
+            return .concatenate(tasks)
         default:
             return .none
         }
