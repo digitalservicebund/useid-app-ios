@@ -63,16 +63,11 @@ final class Unleash: ABTester {
     }
 
     func isVariationActivated(for test: ABTest) -> Bool {
-        guard state == .active else { return false }
+        guard state == .active, unleash.isEnabled(name: test.rawValue) else { return false }
 
-        let testName = test.rawValue
-        if unleash.isEnabled(name: testName) {
-            let variantName = unleash.getVariant(name: testName).name
-            analytics.track(event: .init(category: "abtesting", action: testName, name: variantName))
-            return variantName == "variation"
-        } else {
-            return false
-        }
+        let variantName = unleash.getVariant(name: test.rawValue).name
+        analytics.track(event: .init(category: "abtesting", action: test.rawValue, name: variantName))
+        return variantName == "variation"
     }
 
     private func trackUnleashBreadcrumb(message: String) {
