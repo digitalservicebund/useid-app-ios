@@ -36,26 +36,23 @@ final class Unleash: ABTester {
         let start = Date()
         state = .loading
 
-        await withCheckedContinuation { continuation in
-            unleash.start { [weak self] error in
-                guard let self else { return continuation.resume() }
-                if let error {
-                    self.trackUnleashBreadcrumb(message: "request failed with error \(error)")
-                }
-
-                switch self.state {
-                case .loading where error == nil:
-                    self.state = .active
-                    self.trackUnleashBreadcrumb(message: "activated")
-                case .loading:
-                    self.state = .disabled
-                case .disabled:
-                    self.trackUnleashBreadcrumb(message: "request took \(Date().timeIntervalSince(start)) seconds")
-                default:
-                    break
-                }
-                return continuation.resume()
+        do {
+            try await unleash.start()
+            switch state {
+            case .loading:
+                state = .active
+                trackUnleashBreadcrumb(message: "activated")
+            case .disabled:
+                trackUnleashBreadcrumb(message: "request took \(Date().timeIntervalSince(start)) seconds")
+            default:
+                break
             }
+
+        } catch {
+            if state == .loading {
+                state = .disabled
+            }
+            trackUnleashBreadcrumb(message: "request failed with error \(error)")
         }
     }
 
@@ -86,5 +83,20 @@ struct AlwaysControlABTester: ABTester {
 
     func isVariationActivated(for test: ABTest) -> Bool {
         false
+    }
+}
+
+extension UnleashClient {
+
+    func start() async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            start { error in
+                if let error {
+                    continuation.resume(with: .failure(error))
+                } else {
+                    continuation.resume()
+                }
+            }
+        }
     }
 }
