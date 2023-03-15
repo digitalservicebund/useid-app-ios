@@ -2,8 +2,12 @@ import Foundation
 import Analytics
 import UnleashProxyClientSwift
 
-enum ABTest: String, CaseIterable {
-    case none
+enum ABTest: CaseIterable {
+
+    var rawValue: String {
+        switch self {
+        }
+    }
 }
 
 final class Unleash: ABTester {
