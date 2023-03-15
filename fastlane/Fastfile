@@ -216,6 +216,44 @@ platform :ios do
     )
   end
 
+  desc 'Trigger Prototype'
+  lane :prototype do |options|
+    ensure_git_status_clean
+    buildPrototype(options)
+    deliverPrototype(options)
+  end
+
+  desc 'Build Prototype'
+  lane :buildPrototype do |options|
+    build_app(
+      project: "#{PROJECT_FILENAME}.xcodeproj",
+      configuration: 'Release Preview',
+      clean: true,
+      scheme: SCHEME_NAME,
+      cloned_source_packages_path: '.swift-packages',
+      xcconfig: "#{SCHEME_NAME}/Prototype.xcconfig",
+      export_method: 'app-store',
+      export_options: {
+        provisioningProfiles: { 
+          "de.bund.digitalservice.UseID-Prototype" => "UseID Prototype - Distribution"
+        }
+      },
+      include_bitcode: false
+    )
+
+    artifcats = "../artifacts"
+    Dir.mkdir(artifcats) unless Dir.exists?(artifcats)
+    backup_xcarchive(destination: "artifacts", versioned: false)
+  end
+
+  desc 'Deliver Prototype'
+  lane :deliverPrototype do |options|
+    upload_to_testflight(
+      api_key_path: ENV['APPSTORECONNECT_API_KEY_PATH'],
+      skip_waiting_for_build_processing: true
+    )
+  end
+
   desc 'Bump version'
   lane :bumpVersion do |options|
     bumpBuildNumber = to_boolean(ENV['BUMP_BUILD_NUMBER'] || options[:bumpBuildNumber] || 'false')
