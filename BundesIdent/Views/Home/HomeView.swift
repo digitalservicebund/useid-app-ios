@@ -113,7 +113,8 @@ struct HomeView: View {
             Image(asset: Asset.homeIcon)
                 .padding(24)
             Text(L10n.Home.Header.title)
-                .headingM()
+                .bodyLBold(color: .blue800)
+                .accessibilityAddTraits(.isHeader)
                 .padding(.bottom, 8)
                 .padding(.horizontal, 36)
 #if PREVIEW
@@ -121,12 +122,15 @@ struct HomeView: View {
                     ViewStore(store.stateless).send(.triggerIdentification(tokenURL: demoTokenURL))
                 }
 #endif
-            Markdown(L10n.Home.Header.infoText)
-                .markdownTheme(.bund.text {
-                    FontProperties(family: .custom(bundFontName), size: 20)
-                })
+            Text(L10n.Home.Header.infoText)
+                .font(.bundCustom(size: 20, relativeTo: .body))
+                .foregroundColor(.blackish)
                 .multilineTextAlignment(.center)
-                .padding(.bottom, 20)
+                .padding(.bottom, 10)
+            
+            Text(L10n.Home.Header.infoCTA)
+                .headingM()
+                .padding(.bottom, 10)
             
             ImageMeta(asset: Asset.abstractWidget).image
                 .resizable()

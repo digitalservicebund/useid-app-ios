@@ -18,8 +18,8 @@
 "cardInteraction_error_default" = "Es ist ein Fehler aufgetreten.";
 "cardInteraction_error_tagLost" = "Karte wurde entfernt";
 "cardInteraction_error_timeout" = "Kein Ausweis erkannt.";
-"firstTimeUser_alreadySetupConfirmation_box" = "**Hinweis:** Um sich mit Ihrem Ausweis online identifizieren, brauchen Sie Ihre persönliche PIN. Den Prozess starten Sie immer auf der Internetseite des Dienstanbieters.";
-"firstTimeUser_alreadySetupConfirmation_close" = "Schließen";
+"firstTimeUser_alreadySetupConfirmation_box" = "**Hinweis:** Um sich mit Ihrem Ausweis online zu identifizieren, brauchen Sie Ihre persönliche PIN. Gehen Sie zur Internetseite des Services für den Sie sich ausweisen wollen. Dort können Sie die Identifizierung starten.";
+"firstTimeUser_alreadySetupConfirmation_close" = "Verstanden";
 "firstTimeUser_alreadySetupConfirmation_title" = "Sie sind startklar!";
 "firstTimeUser_can_alreadySetup_body_ident" = "Sie müssen Ihren Ausweis insgesamt nur einmal einrichten. Falls Sie schon über eine 6-stellige persönliche PIN verfügen, ist Ihr Ausweis bereits eingerichtet.\n\nMit dieser PIN können Sie sich jetzt ausweisen.";
 "firstTimeUser_can_alreadySetup_body_setup" = "Sie müssen Ihren Ausweis insgesamt nur einmal einrichten. Falls Sie schon über eine 6-stellige persönliche PIN verfügen, ist Ihr Ausweis bereits eingerichtet.";
@@ -87,7 +87,8 @@
 "general_ok" = "OK";
 "helpNFC_body" = "NFC steht für Near Field Communication. Die Technik ermöglicht den kontaktlosen Austausch von Daten über sehr kurze Strecken. Sie wird bspw. auch beim Bezahlen mit dem Smartphone an der Supermarktkasse verwendet.";
 "helpNFC_title" = "So funktioniert die NFC‑Technologie";
-"home_header_infoText" = "Öffnen Sie die »**Grundsteuererklärung für Privateigentum**« Website und tippen Sie auf »**Mit BundesIdent ausweisen**«.";
+"home_header_infoCTA" = "»Mit BundesIdent ausweisen«";
+"home_header_infoText" = "Öffnen Sie die Internetseite von »Grundsteuererklärung für Privateigentum«. Um die Identifizierung zu starten, tippen Sie dort auf:";
 "home_header_title" = "So funktioniert’s";
 "home_more_accessibilityStatement" = "Barrierefreiheitserklärung";
 "home_more_imprint" = "Kontakt und Impressum";
@@ -95,7 +96,7 @@
 "home_more_privacy" = "Datenschutzerklärung";
 "home_more_terms" = "Nutzungsbedingungen";
 "home_more_title" = "Mehr";
-"home_setup_body" = "Setzen Sie Ihre persönliche Ausweis‑PIN. Danach können Sie sich mit Ihrem Ausweis online identifizieren.";
+"home_setup_body" = "Vergeben Sie Ihre persönliche Ausweis‑PIN. Danach können Sie sich mit Ihrem Ausweis online identifizieren.";
 "home_setup_setup" = "Online-Ausweis einrichten";
 "home_setup_title" = "Neuer Ausweis?";
 "home_version" = "Version %@";

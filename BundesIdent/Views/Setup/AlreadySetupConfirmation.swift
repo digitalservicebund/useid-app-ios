@@ -19,25 +19,25 @@ struct AlreadySetupConfirmationView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Spacer()
-            VStack(alignment: .leading, spacing: 0) {
-                Image(systemName: "checkmark.circle.fill")
-                    .resizable()
-                    .foregroundColor(.green800)
-                    .frame(width: 40, height: 40)
-                    .padding(.bottom, 18)
-                HeaderView(title: L10n.FirstTimeUser.AlreadySetupConfirmation.title)
-                    .padding(.bottom, 24)
-                Markdown(L10n.FirstTimeUser.AlreadySetupConfirmation.box)
-                    .markdownTheme(.bund)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(16)
-                    .background(Color.green100)
-                    .foregroundColor(.blackish)
-                    .cornerRadius(10)
+            ScrollView {
+                VStack(alignment: .center, spacing: 24) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .resizable()
+                        .foregroundColor(.green800)
+                        .frame(width: 72, height: 72)
+                        .padding(.top, 16)
+                    Text(L10n.FirstTimeUser.AlreadySetupConfirmation.title)
+                        .headingL()
+                    Markdown(L10n.FirstTimeUser.AlreadySetupConfirmation.box)
+                        .markdownTheme(.bund)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(16)
+                        .background(Color.green100)
+                        .foregroundColor(.blackish)
+                        .cornerRadius(10)
+                }
+                .padding(.horizontal, 24)
             }
-            .padding(.horizontal)
-            Spacer()
             DialogButtons(store: store,
                           primary: .init(title: L10n.FirstTimeUser.AlreadySetupConfirmation.close,
                                          action: .close))
@@ -51,6 +51,11 @@ struct AlreadySetupConfirmationView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             AlreadySetupConfirmationView(store: .empty)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        BackButton {}
+                    }
+                }
         }
     }
 }
