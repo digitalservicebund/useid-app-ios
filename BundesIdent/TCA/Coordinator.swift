@@ -112,7 +112,7 @@ struct Coordinator: ReducerProtocol {
     
     var body: some ReducerProtocol<State, Action> {
         Scope(state: \.remoteConfiguration, action: /Action.remoteConfiguration) {
-            RemoteConfiguration().dependency(\.mainQueue, mainQueue)
+            RemoteConfiguration()
         }
         Reduce(remoteConfigurationRouting)
         Reduce(token)
