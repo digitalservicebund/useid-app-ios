@@ -329,6 +329,7 @@
 		E1CD8E9428215971008ADA2A /* PINEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINEntryView.swift; sourceTree = "<group>"; };
 		E1D8453B28F816B000B1DD1E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		E1D8453C28F8190B00B1DD1E /* Preview.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Preview.xcconfig; sourceTree = "<group>"; };
+		E1DB64F829C1DA7000177506 /* Prototype.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Prototype.xcconfig; sourceTree = "<group>"; };
 		E1DCC97D29072B8B002E9371 /* SetupUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupUITests.swift; sourceTree = "<group>"; };
 		E1DCC97F29072BB3002E9371 /* HomeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUITests.swift; sourceTree = "<group>"; };
 		E1DF0995294A0FF300199761 /* PreviewIDInteractionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewIDInteractionManager.swift; sourceTree = "<group>"; };
@@ -809,6 +810,7 @@
 				E18E22322853496B00221DB1 /* UnitTests.xctestplan */,
 				E1EFB5D2285C794A005C38C6 /* InfoPlist.strings */,
 				E166AF6B28FEAD38004EE034 /* Default.xcconfig */,
+				E1DB64F829C1DA7000177506 /* Prototype.xcconfig */,
 				E1D8453C28F8190B00B1DD1E /* Preview.xcconfig */,
 				E1D8453B28F816B000B1DD1E /* Release.xcconfig */,
 			);

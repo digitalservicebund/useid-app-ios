@@ -119,6 +119,30 @@ Build Production
 
 Deliver Production
 
+### ios prototype
+
+```sh
+[bundle exec] fastlane ios prototype
+```
+
+Trigger Prototype
+
+### ios buildPrototype
+
+```sh
+[bundle exec] fastlane ios buildPrototype
+```
+
+Build Prototype
+
+### ios deliverPrototype
+
+```sh
+[bundle exec] fastlane ios deliverPrototype
+```
+
+Deliver Prototype
+
 ### ios bumpVersion
 
 ```sh
