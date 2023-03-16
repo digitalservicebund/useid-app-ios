@@ -14,6 +14,7 @@
 		43363E0B29B0C41300E9FA23 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43363E0A29B0C41300E9FA23 /* LaunchView.swift */; };
 		43363E0D29B6BFF300E9FA23 /* RemoteConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43363E0C29B6BFF300E9FA23 /* RemoteConfiguration.swift */; };
 		43363E0F29BB164200E9FA23 /* RemoteConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43363E0E29BB164200E9FA23 /* RemoteConfigurationTests.swift */; };
+		43AE178929C3C1A700902E27 /* SetupIntroVariation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AE178829C3C1A700902E27 /* SetupIntroVariation.swift */; };
 		43EE410329A3D89700A96953 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EE410229A3D89700A96953 /* BackButton.swift */; };
 		B91E34512938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E34502938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift */; };
 		B922901E294203360018D671 /* IdentificationCANCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B922901D294203360018D671 /* IdentificationCANCoordinatorTests.swift */; };
@@ -213,6 +214,7 @@
 		43363E0A29B0C41300E9FA23 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		43363E0C29B6BFF300E9FA23 /* RemoteConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfiguration.swift; sourceTree = "<group>"; };
 		43363E0E29BB164200E9FA23 /* RemoteConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigurationTests.swift; sourceTree = "<group>"; };
+		43AE178829C3C1A700902E27 /* SetupIntroVariation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntroVariation.swift; sourceTree = "<group>"; };
 		43EE410229A3D89700A96953 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
 		B91E34502938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoadingTests.swift; sourceTree = "<group>"; };
 		B922901D294203360018D671 /* IdentificationCANCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -545,6 +547,7 @@
 				E1B0F5AE29830D2100143B82 /* SetupCANScan.swift */,
 				D28D280128B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift */,
 				E110400C281C389C004BA03E /* SetupIntro.swift */,
+				43AE178829C3C1A700902E27 /* SetupIntroVariation.swift */,
 				E1AAACF92837B98100A51183 /* SetupPersonalPIN */,
 				E1AB879F2822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift */,
 				E1CD8E9028214FDB008ADA2A /* SetupPINLetterIntro.swift */,
@@ -1252,6 +1255,7 @@
 				E1234DB32976EA3900837872 /* BundLicensePlistViewController.swift in Sources */,
 				E5E69D872812FB7A00A3B66A /* IDTask.swift in Sources */,
 				D2B7BCFB28D2108900318B9F /* Effects.swift in Sources */,
+				43AE178929C3C1A700902E27 /* SetupIntroVariation.swift in Sources */,
 				E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */,
 				E16708B5283D4F25001A1637 /* Screens.swift in Sources */,
 				D21E682028BCEB0A0055EBFE /* Assets+Generated.swift in Sources */,
