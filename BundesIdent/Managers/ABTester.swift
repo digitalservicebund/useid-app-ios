@@ -102,7 +102,7 @@ extension UnleashClient: UnleashClientWrapper {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
             start { error in
                 if let error {
-                    continuation.resume(with: .failure(error))
+                    continuation.resume(throwing: error)
                 } else {
                     continuation.resume()
                 }
