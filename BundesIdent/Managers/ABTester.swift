@@ -3,29 +3,41 @@ import Analytics
 import UnleashProxyClientSwift
 
 enum ABTest: CaseIterable {
+#if PREVIEW
+    case test
+#endif
 
-    var rawValue: String {
+    var name: String {
         switch self {
+#if PREVIEW
+        case .test: return "test"
+#endif
         }
     }
 }
 
 final class Unleash: ABTester {
 
-    init(url: String, clientKey: String, analytics: AnalyticsClient, issueTracker: IssueTracker) {
-        unleash = .init(unleashUrl: url, clientKey: clientKey, refreshInterval: .max, appName: "bundesIdent.iOS")
-        unleash.context["supportedToggles"] = ABTest.allCases.map(\.rawValue).joined(separator: ",")
-        self.analytics = analytics
-        self.issueTracker = issueTracker
+    convenience init(url: String, clientKey: String, analytics: AnalyticsClient, issueTracker: IssueTracker) {
+        let unleash = UnleashClient(unleashUrl: url, clientKey: clientKey, refreshInterval: .max, appName: "bundesIdent.iOS")
+        self.init(unleash: unleash, analytics: analytics, issueTracker: issueTracker)
     }
 
-    private let unleash: UnleashClient
+    init(unleash: UnleashClientWrapper, analytics: AnalyticsClient, issueTracker: IssueTracker) {
+        self.unleash = unleash
+        self.analytics = analytics
+        self.issueTracker = issueTracker
+
+        unleash.context["supportedToggles"] = ABTest.allCases.map(\.name).filter { $0 != "test" }.joined(separator: ",")
+    }
+
+    private let unleash: UnleashClientWrapper
     private let analytics: AnalyticsClient
     private let issueTracker: IssueTracker
 
-    private var state: State = .initial
+    private(set) var state: State = .initial
 
-    private enum State {
+    enum State {
         case initial
         case loading
         case active
@@ -59,17 +71,13 @@ final class Unleash: ABTester {
         state = .disabled
     }
 
-    func isVariationActivated(for test: ABTest) -> Bool {
-        guard state == .active, unleash.isEnabled(name: test.rawValue) else { return false }
+    func isVariationActivated(for test: ABTest?) -> Bool {
+        guard state == .active, let test = test, let variantName = unleash.variantName(forTestName: test.name)
+        else { return false }
 
-        let variantName = unleash.getVariant(name: test.rawValue).name
-        analytics.track(event: .init(category: "abtesting", action: test.rawValue, name: variantName))
-        issueTracker.addInfoBreadcrumb(category: "abtest", message: "\(test.rawValue): \(variantName)")
+        analytics.track(event: .init(category: "abtesting", action: test.name, name: variantName))
+        issueTracker.addInfoBreadcrumb(category: "abtest", message: "\(test.name): \(variantName)")
         return variantName == "variation"
-    }
-
-    private func trackUnleashBreadcrumb(message: String) {
-        issueTracker.addInfoBreadcrumb(category: "unleash", message: message)
     }
 }
 
@@ -83,12 +91,12 @@ struct AlwaysControlABTester: ABTester {
     func prepare() {}
     func disable() {}
 
-    func isVariationActivated(for test: ABTest) -> Bool {
+    func isVariationActivated(for test: ABTest?) -> Bool {
         false
     }
 }
 
-extension UnleashClient {
+extension UnleashClient: UnleashClientWrapper {
 
     func start() async throws {
         return try await withCheckedThrowingContinuation { continuation in
@@ -100,5 +108,9 @@ extension UnleashClient {
                 }
             }
         }
+    }
+
+    func variantName(forTestName testName: String) -> String? {
+        isEnabled(name: testName) ? getVariant(name: testName).name : nil
     }
 }

@@ -38,12 +38,18 @@ protocol IssueTracker {
 protocol ABTester {
     func prepare() async
     func disable()
-    func isVariationActivated(for test: ABTest) -> Bool
+    func isVariationActivated(for test: ABTest?) -> Bool
 }
 
 protocol AppVersionProvider {
     var version: String { get }
     var buildNumber: Int { get }
+}
+
+protocol UnleashClientWrapper: AnyObject {
+    var context: [String: String] { get set }
+    func start() async throws
+    func variantName(forTestName testName: String) -> String?
 }
 
 #if PREVIEW
