@@ -54,7 +54,7 @@ final class UnleashManager: ABTester {
             case .loading:
                 state = .active
             case .disabled:
-                issueTracker.capture(error: UnleashError.requestTookTooLong((Date().timeIntervalSince(start))))
+                issueTracker.capture(error: UnleashError.requestTookTooLong(Date().timeIntervalSince(start)))
             default:
                 break
             }
@@ -72,7 +72,7 @@ final class UnleashManager: ABTester {
     }
 
     func isVariationActivated(for test: ABTest?) -> Bool {
-        guard state == .active, let test = test, let variantName = unleashClient.variantName(forTestName: test.name)
+        guard state == .active, let test, let variantName = unleashClient.variantName(forTestName: test.name)
         else { return false }
 
         analytics.track(event: .init(category: "abtesting", action: test.name, name: variantName))
@@ -99,7 +99,7 @@ struct AlwaysControlABTester: ABTester {
 extension UnleashClient: UnleashClientWrapper {
 
     func start() async throws {
-        return try await withCheckedThrowingContinuation { continuation in
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
             start { error in
                 if let error {
                     continuation.resume(with: .failure(error))
