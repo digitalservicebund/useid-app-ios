@@ -33,16 +33,16 @@ struct BundesIdentApp: App {
         
 #if DEBUG
         AnalyticsKey.liveValue = LogAnalyticsClient()
-        ABTesterKey.liveValue = Unleash(url: config.unleashURL,
-                                        clientKey: config.unleashClientKey,
-                                        analytics: AnalyticsKey.liveValue,
-                                        issueTracker: IssueTrackerKey.testValue)
+        ABTesterKey.liveValue = UnleashManager(url: config.unleashURL,
+                                               clientKey: config.unleashClientKey,
+                                               analytics: AnalyticsKey.liveValue,
+                                               issueTracker: IssueTrackerKey.testValue)
 #else
         AnalyticsKey.liveValue = MatomoAnalyticsClient(siteId: config.matomoSiteID, baseURL: config.matomoURL)
-        ABTesterKey.liveValue = Unleash(url: config.unleashURL,
-                                        clientKey: config.unleashClientKey,
-                                        analytics: AnalyticsKey.liveValue,
-                                        issueTracker: IssueTrackerKey.liveValue)
+        ABTesterKey.liveValue = UnleashManager(url: config.unleashURL,
+                                               clientKey: config.unleashClientKey,
+                                               analytics: AnalyticsKey.liveValue,
+                                               issueTracker: IssueTrackerKey.liveValue)
 #endif
 
         store = Store(

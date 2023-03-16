@@ -1,17 +1,10 @@
-//
-//  ABTesterTests.swift
-//  BundesIdentTests
-//
-//  Created by Daria Kuznetsova on 16.03.23.
-//
-
 import XCTest
 import Analytics
 import Cuckoo
 import Sentry
 @testable import BundesIdent
 
-final class ABTesterTests: XCTestCase {
+final class UnleashManagerTests: XCTestCase {
 
     var mockUnleashClient: MockUnleashClientWrapper!
     var mockAnalyticsClient: MockAnalyticsClient!
@@ -45,7 +38,7 @@ final class ABTesterTests: XCTestCase {
             }
         }
 
-        let sut = Unleash(unleash: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
+        let sut = UnleashManager(unleashClient: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
 
         verify(mockUnleashClient).context.set(any())
         XCTAssert(context["supportedToggles"]?.contains(ABTest.test.name) == false)
@@ -56,7 +49,7 @@ final class ABTesterTests: XCTestCase {
 
     func testPrepareSetsStateToLoadingAndCallsStartOnClient() async {
         let expectation = XCTestExpectation(description: "unleash client responds with success")
-        let sut = Unleash(unleash: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
+        let sut = UnleashManager(unleashClient: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
         stub(mockUnleashClient) {
             $0.start().then {
                 guard sut.state == .loading else { return }
@@ -70,7 +63,7 @@ final class ABTesterTests: XCTestCase {
     }
 
     func testPrepareWhenClientSucceedsSetsStateToActive() async {
-        let sut = Unleash(unleash: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
+        let sut = UnleashManager(unleashClient: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
         stub(mockUnleashClient) {
             $0.start().thenDoNothing()
         }
@@ -81,7 +74,7 @@ final class ABTesterTests: XCTestCase {
     }
 
     func testPrepareWhenClientSucceedsInDisabledStateCapturesError() async {
-        let sut = Unleash(unleash: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
+        let sut = UnleashManager(unleashClient: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
         stub(mockUnleashClient) {
             $0.start().then {
                 sut.disable()
@@ -94,7 +87,7 @@ final class ABTesterTests: XCTestCase {
     }
 
     func testPrepareWhenClientThrowsSetsStateToDisabledAndCapturesError() async {
-        let sut = Unleash(unleash: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
+        let sut = UnleashManager(unleashClient: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
         stub(mockUnleashClient) {
             $0.start().thenThrow(TestError())
         }
@@ -106,7 +99,7 @@ final class ABTesterTests: XCTestCase {
     }
 
     func testDisableChangesStateToDisabled() async {
-        let sut = Unleash(unleash: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
+        let sut = UnleashManager(unleashClient: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
 
         sut.disable()
 
@@ -114,7 +107,7 @@ final class ABTesterTests: XCTestCase {
     }
 
     func testIsVariationActivatedWhenClientReturnsVariationTracksVariationAndReturnsTrue() async {
-        let sut = Unleash(unleash: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
+        let sut = UnleashManager(unleashClient: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
         stub(mockUnleashClient) {
             $0.variantName(forTestName: "test").thenReturn("variation")
         }
@@ -128,7 +121,7 @@ final class ABTesterTests: XCTestCase {
     }
 
     func testIsVariationActivatedWhenClientReturnsOriginalTracksOriginalAndReturnsFalse() async {
-        let sut = Unleash(unleash: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
+        let sut = UnleashManager(unleashClient: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
         stub(mockUnleashClient) {
             $0.variantName(forTestName: "test").thenReturn("original")
         }
@@ -142,7 +135,7 @@ final class ABTesterTests: XCTestCase {
     }
 
     func testIsVariationActivatedInDisabledStateReturnsFalseEarly() {
-        let sut = Unleash(unleash: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
+        let sut = UnleashManager(unleashClient: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
         sut.disable()
 
         XCTAssertFalse(sut.isVariationActivated(for: .test))
@@ -151,7 +144,7 @@ final class ABTesterTests: XCTestCase {
     }
 
     func testIsVariationActivatedForNilReturnsFalseEarly() async {
-        let sut = Unleash(unleash: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
+        let sut = UnleashManager(unleashClient: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
         await sut.prepare()
 
         let result = sut.isVariationActivated(for: nil)

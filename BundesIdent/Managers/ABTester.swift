@@ -16,22 +16,22 @@ enum ABTest: CaseIterable {
     }
 }
 
-final class Unleash: ABTester {
+final class UnleashManager: ABTester {
 
     convenience init(url: String, clientKey: String, analytics: AnalyticsClient, issueTracker: IssueTracker) {
-        let unleash = UnleashClient(unleashUrl: url, clientKey: clientKey, refreshInterval: .max, appName: "bundesIdent.iOS")
-        self.init(unleash: unleash, analytics: analytics, issueTracker: issueTracker)
+        let unleashClient = UnleashClient(unleashUrl: url, clientKey: clientKey, refreshInterval: .max, appName: "bundesIdent.iOS")
+        self.init(unleashClient: unleashClient, analytics: analytics, issueTracker: issueTracker)
     }
 
-    init(unleash: UnleashClientWrapper, analytics: AnalyticsClient, issueTracker: IssueTracker) {
-        self.unleash = unleash
+    init(unleashClient: UnleashClientWrapper, analytics: AnalyticsClient, issueTracker: IssueTracker) {
+        self.unleashClient = unleashClient
         self.analytics = analytics
         self.issueTracker = issueTracker
 
-        unleash.context["supportedToggles"] = ABTest.allCases.map(\.name).filter { $0 != "test" }.joined(separator: ",")
+        unleashClient.context["supportedToggles"] = ABTest.allCases.map(\.name).filter { $0 != "test" }.joined(separator: ",")
     }
 
-    private let unleash: UnleashClientWrapper
+    private let unleashClient: UnleashClientWrapper
     private let analytics: AnalyticsClient
     private let issueTracker: IssueTracker
 
@@ -49,7 +49,7 @@ final class Unleash: ABTester {
         state = .loading
 
         do {
-            try await unleash.start()
+            try await unleashClient.start()
             switch state {
             case .loading:
                 state = .active
@@ -72,7 +72,7 @@ final class Unleash: ABTester {
     }
 
     func isVariationActivated(for test: ABTest?) -> Bool {
-        guard state == .active, let test = test, let variantName = unleash.variantName(forTestName: test.name)
+        guard state == .active, let test = test, let variantName = unleashClient.variantName(forTestName: test.name)
         else { return false }
 
         analytics.track(event: .init(category: "abtesting", action: test.name, name: variantName))

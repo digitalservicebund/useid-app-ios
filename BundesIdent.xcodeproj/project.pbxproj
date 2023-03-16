@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		432A180529C34B5E0033058B /* ABTesterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432A180429C34B5E0033058B /* ABTesterTests.swift */; };
+		432A180529C34B5E0033058B /* UnleashManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432A180429C34B5E0033058B /* UnleashManagerTests.swift */; };
 		4334B4D329A64F00001FF36C /* Markdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4334B4D229A64F00001FF36C /* Markdown.swift */; };
 		43363E0729A79D6200E9FA23 /* UnleashProxyClientSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 43363E0629A79D6200E9FA23 /* UnleashProxyClientSwift */; };
 		43363E0929B01D4900E9FA23 /* ABTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43363E0829B01D4900E9FA23 /* ABTester.swift */; };
@@ -207,7 +207,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		432A180429C34B5E0033058B /* ABTesterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABTesterTests.swift; sourceTree = "<group>"; };
+		432A180429C34B5E0033058B /* UnleashManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnleashManagerTests.swift; sourceTree = "<group>"; };
 		4334B4D229A64F00001FF36C /* Markdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Markdown.swift; sourceTree = "<group>"; };
 		43363E0829B01D4900E9FA23 /* ABTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABTester.swift; sourceTree = "<group>"; };
 		43363E0A29B0C41300E9FA23 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
@@ -458,7 +458,7 @@
 			isa = PBXGroup;
 			children = (
 				E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */,
-				432A180429C34B5E0033058B /* ABTesterTests.swift */,
+				432A180429C34B5E0033058B /* UnleashManagerTests.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1120,7 +1120,7 @@
 				B922901E294203360018D671 /* IdentificationCANCoordinatorTests.swift in Sources */,
 				B92AC3B62934E8E000A0BF02 /* SetupTransportPINTests.swift in Sources */,
 				E1531DC629AF695E008D5185 /* SetupCANScanTests.swift in Sources */,
-				432A180529C34B5E0033058B /* ABTesterTests.swift in Sources */,
+				432A180529C34B5E0033058B /* UnleashManagerTests.swift in Sources */,
 				D245421828CB9E68002600C9 /* IdentificationOverviewTests.swift in Sources */,
 				B95E687729473791004D956B /* RouteTests.swift in Sources */,
 				E13F9E3D288802500088E955 /* UUID+InitFromNumber.swift in Sources */,
