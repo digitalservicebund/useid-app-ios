@@ -18,7 +18,7 @@ jobs:
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: Restore Dependencies
+      - name: Restore dependencies
         uses: actions/cache@v3
         id: cache-dependencies
         env:
@@ -27,13 +27,14 @@ jobs:
           path: |
             vendor
             .bundle
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}        
-      - name: Install dependencies
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock', 'Brewfile') }}        
+      - name: Install bundle dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: bundle install
-      - name: Brew bundle
+      - name: Install brew dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: ./native_arch.sh brew bundle --no-lock
-      - name: Save Dependencies
+      - name: Save dependencies
         uses: actions/cache@v3
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         env:
@@ -42,7 +43,7 @@ jobs:
           path: |
             vendor
             .bundle
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock', 'Brewfile') }}
           
   lint:
     runs-on: [self-hosted, ARM64]
@@ -54,7 +55,7 @@ jobs:
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3       
-      - name: Restore Dependencies
+      - name: Restore dependencies
         uses: actions/cache@v3
         env:
           cache-name: cache-dependencies
@@ -62,7 +63,8 @@ jobs:
           path: |
             vendor
             .bundle
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock', 'Brewfile') }}
+          fail-on-cache-miss: true
       - name: Run swiftlint
         run: |
           bundle exec fastlane swiftformatlint
@@ -85,7 +87,7 @@ jobs:
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3          
-      - name: Restore Dependencies
+      - name: Restore dependencies
         uses: actions/cache@v3
         env:
           cache-name: cache-dependencies
@@ -93,7 +95,8 @@ jobs:
           path: |
             vendor
             .bundle
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}       
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock', 'Brewfile') }}       
+          fail-on-cache-miss: true
       - name: Build
         run: |
             export LANG=en_US.UTF-8;
@@ -107,13 +110,7 @@ jobs:
           path: |
             DerivedData
             .swift-packages
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
-      - name: Save test_output folder
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-test-output
-        with:
-          path: fastlane/test_output
+            fastlane/test_output
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
 
   runUnitTests:
@@ -126,7 +123,7 @@ jobs:
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3       
-      - name: Restore Dependencies
+      - name: Restore dependencies
         uses: actions/cache@v3
         env:
           cache-name: cache-dependencies
@@ -134,8 +131,9 @@ jobs:
           path: |
             vendor
             .bundle
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
-      - name: Restore DerivedData and SwiftPM folder
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock', 'Brewfile') }}
+          fail-on-cache-miss: true
+      - name: Restore build data
         uses: actions/cache@v3
         env:
           cache-name: cache-derived-data
@@ -143,14 +141,9 @@ jobs:
           path: |
             DerivedData
             .swift-packages
+            fastlane/test_output
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
-      - name: Restore test_output folder
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-test-output
-        with:
-          path: fastlane/test_output
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
+          fail-on-cache-miss: true
       - name: Run all tests
         run: |
             export LANG=en_US.UTF-8;
@@ -176,7 +169,7 @@ jobs:
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: Restore Dependencies
+      - name: Restore dependencies
         uses: actions/cache@v3
         env:
           cache-name: cache-dependencies
@@ -184,8 +177,9 @@ jobs:
           path: |
             vendor
             .bundle
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock') }}
-      - name: Restore DerivedData and SwiftPM folder
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock', 'Brewfile') }}
+          fail-on-cache-miss: true
+      - name: Restore build data
         uses: actions/cache@v3
         env:
           cache-name: cache-derived-data
@@ -193,14 +187,9 @@ jobs:
           path: |
             DerivedData
             .swift-packages
+            fastlane/test_output
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
-      - name: Restore test_output folder
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-test-output
-        with:
-          path: fastlane/test_output
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
+          fail-on-cache-miss: true
       - name: Run UITests
         run: |
             export LANG=en_US.UTF-8;
