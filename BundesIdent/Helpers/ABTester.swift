@@ -41,25 +41,21 @@ final class Unleash: ABTester {
             switch state {
             case .loading:
                 state = .active
-                trackUnleashBreadcrumb(message: "activated")
             case .disabled:
-                trackUnleashBreadcrumb(message: "request took \(Date().timeIntervalSince(start)) seconds")
+                issueTracker.capture(error: UnleashError.requestTookTooLong((Date().timeIntervalSince(start))))
             default:
                 break
             }
 
-        } catch {
+        } catch let error as NSError {
             if state == .loading {
                 state = .disabled
             }
-            trackUnleashBreadcrumb(message: "request failed with error \(error)")
+            issueTracker.capture(error: UnleashError.requestFailed(error))
         }
     }
 
     func disable() {
-        if state == .loading {
-            trackUnleashBreadcrumb(message: "request is taking too long")
-        }
         state = .disabled
     }
 
@@ -68,12 +64,18 @@ final class Unleash: ABTester {
 
         let variantName = unleash.getVariant(name: test.rawValue).name
         analytics.track(event: .init(category: "abtesting", action: test.rawValue, name: variantName))
+        issueTracker.addInfoBreadcrumb(category: "abtest", message: "\(test.rawValue): \(variantName)")
         return variantName == "variation"
     }
 
     private func trackUnleashBreadcrumb(message: String) {
         issueTracker.addInfoBreadcrumb(category: "unleash", message: message)
     }
+}
+
+private enum UnleashError: CustomNSError {
+    case requestTookTooLong(TimeInterval)
+    case requestFailed(NSError)
 }
 
 struct AlwaysControlABTester: ABTester {
