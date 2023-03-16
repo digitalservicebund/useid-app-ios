@@ -28,7 +28,12 @@ final class UnleashManager: ABTester {
         self.analytics = analytics
         self.issueTracker = issueTracker
 
-        unleashClient.context["supportedToggles"] = ABTest.allCases.map(\.name).filter { $0 != "test" }.joined(separator: ",")
+        unleashClient.context["supportedToggles"] = ABTest.allCases
+        #if PREVIEW
+            .filter { $0 != .test }
+        #endif
+            .map(\.name)
+            .joined(separator: ",")
     }
 
     private let unleashClient: UnleashClientWrapper
