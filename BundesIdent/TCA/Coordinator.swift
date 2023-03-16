@@ -31,6 +31,7 @@ struct Coordinator: ReducerProtocol {
     @Dependency(\.logger) var logger
     @Dependency(\.storageManager) var storageManager
     @Dependency(\.appVersionProvider) var appVersionProvider
+    @Dependency(\.abTester) var abTester
 #if PREVIEW
     @Dependency(\.previewIDInteractionManager) var previewIDInteractionManager
 #endif
@@ -80,7 +81,7 @@ struct Coordinator: ReducerProtocol {
         if storageManager.setupCompleted {
             screen = .identificationCoordinator(IdentificationCoordinator.State(tokenURL: tcTokenURL, canGoBackToSetupIntro: false))
         } else {
-            screen = .setupCoordinator(SetupCoordinator.State(tokenURL: tcTokenURL))
+            screen = setupCoordinator(tokenURL: tcTokenURL)
         }
         
         // In case setup or ident is shown, dismiss any shown sheets that screens
@@ -120,7 +121,7 @@ struct Coordinator: ReducerProtocol {
             guard case .routeAction(_, action: let routeAction) = action else { return .none }
             switch routeAction {
             case .home(.triggerSetup):
-                state.routes.presentSheet(.setupCoordinator(SetupCoordinator.State(tokenURL: nil)))
+                state.routes.presentSheet(setupCoordinator(tokenURL: nil))
                 return .trackEvent(category: "firstTimeUser",
                                    action: "buttonPressed",
                                    name: "start",
@@ -128,7 +129,7 @@ struct Coordinator: ReducerProtocol {
             case .identificationCoordinator(.back(let tokenURL)):
                 return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
                     $0.dismiss()
-                    $0.presentSheet(.setupCoordinator(SetupCoordinator.State(tokenURL: tokenURL)))
+                    $0.presentSheet(setupCoordinator(tokenURL: tokenURL))
                 }
             case .setupCoordinator(.routeAction(_, action: .intro(.chooseSkipSetup(.some(let tokenURL))))):
                 return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
@@ -181,7 +182,7 @@ struct Coordinator: ReducerProtocol {
         Reduce(tracking)
     }
     
-    func tracking(state: inout State, action: Action) -> EffectTask<Action> {
+    private func tracking(state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .routeAction, .onAppear:
             let routes = state.routes
@@ -199,7 +200,7 @@ struct Coordinator: ReducerProtocol {
         }
     }
     
-    func token(state: inout State, action: Action) -> EffectTask<Action> {
+    private func token(state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .openURL(let url):
             if state.remoteConfiguration.finished {
@@ -213,7 +214,7 @@ struct Coordinator: ReducerProtocol {
         }
     }
 
-    func remoteConfigurationRouting(state: inout State, action: Action) -> EffectTask<Action> {
+    private func remoteConfigurationRouting(state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .onAppear:
             return EffectTask(value: .remoteConfiguration(.start))
@@ -236,6 +237,14 @@ struct Coordinator: ReducerProtocol {
         default:
             return .none
         }
+    }
+
+    private func setupCoordinator(tokenURL: URL?) -> Screen.State {
+        let setupIntro = SetupIntro.State(tokenURL: tokenURL)
+        let setupScreen: SetupScreen.State = abTester.isVariationActivated(for: .setupIntroductionExplanation)
+        ? .introVariation(setupIntro)
+        : .intro(setupIntro)
+        return .setupCoordinator(SetupCoordinator.State(tokenURL: tokenURL, states: [.root(setupScreen)]))
     }
 }
 

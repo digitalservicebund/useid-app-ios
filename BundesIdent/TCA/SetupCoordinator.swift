@@ -54,7 +54,11 @@ struct SetupCoordinator: ReducerProtocol {
                         case .intro(var state):
                             state.tokenURL = tokenURL
                             return .intro(state)
-                            
+
+                        case .introVariation(var state):
+                            state.tokenURL = tokenURL
+                            return .introVariation(state)
+
                         case .setupCANCoordinator(var canStates):
                             canStates.states = canStates.states.map {
                                 $0.map { canScreenState in
@@ -271,6 +275,9 @@ struct SetupCoordinatorView: View {
                     // This works around this issue by nesting a second switch store inside the default case.
                     // For more information see: https://github.com/pointfreeco/swift-composable-architecture/issues/602
                     SwitchStore(screen) {
+                        CaseLet(state: /SetupScreen.State.introVariation,
+                                action: SetupScreen.Action.intro,
+                                then: SetupIntroVariationView.init)
                         CaseLet(state: /SetupScreen.State.alreadySetupConfirmation,
                                 action: SetupScreen.Action.alreadySetupConfirmation,
                                 then: AlreadySetupConfirmationView.init)

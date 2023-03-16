@@ -6,12 +6,14 @@ enum ABTest: CaseIterable {
 #if PREVIEW
     case test
 #endif
+    case setupIntroductionExplanation
 
     var name: String {
         switch self {
 #if PREVIEW
         case .test: return "test"
 #endif
+        case .setupIntroductionExplanation: return "bundesIdent.setup_introduction_explanation"
         }
     }
 }
