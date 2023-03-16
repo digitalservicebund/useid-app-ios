@@ -44,6 +44,9 @@ struct BundesIdentApp: App {
                                                analytics: AnalyticsKey.liveValue,
                                                issueTracker: IssueTrackerKey.liveValue)
 #endif
+        if CommandLine.arguments.contains(LaunchArgument.uiTesting) {
+            ABTesterKey.liveValue = AlwaysControlABTester()
+        }
 
         store = Store(
             initialState: Coordinator.State(
