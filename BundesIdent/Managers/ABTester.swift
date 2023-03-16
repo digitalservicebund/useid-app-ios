@@ -29,9 +29,9 @@ final class UnleashManager: ABTester {
         self.issueTracker = issueTracker
 
         unleashClient.context["supportedToggles"] = ABTest.allCases
-        #if PREVIEW
+#if PREVIEW
             .filter { $0 != .test }
-        #endif
+#endif
             .map(\.name)
             .joined(separator: ",")
     }
