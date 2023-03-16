@@ -2,8 +2,8 @@ import SwiftUI
 import ComposableArchitecture
 
 struct Launch: ReducerProtocol {
+    typealias State = Void
 
-    struct State: Equatable {}
     enum Action: Equatable {}
 
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {}
@@ -11,7 +11,7 @@ struct Launch: ReducerProtocol {
 
 struct LaunchView: View {
 
-    var store: Store<Launch.State, Launch.Action>
+    var store: StoreOf<Launch>
 
     var body: some View {
         ZStack {
@@ -24,6 +24,6 @@ struct LaunchView: View {
 
 struct LaunchView_Previews: PreviewProvider {
     static var previews: some View {
-        LaunchView(store: .init(initialState: .init(), reducer: Launch()))
+        LaunchView(store: .empty)
     }
 }

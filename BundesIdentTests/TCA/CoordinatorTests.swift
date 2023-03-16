@@ -59,7 +59,7 @@ final class CoordinatorTests: XCTestCase {
     }
     
     func testOpeningTheAppWithUnfinishedSetup() {
-        let store = TestStore(initialState: Coordinator.State(routes: [.root(.launch(.init()))]),
+        let store = TestStore(initialState: Coordinator.State(routes: [.root(.launch)]),
                               reducer: Coordinator())
         store.exhaustivity = .off
         store.dependencies.analytics = mockAnalyticsClient

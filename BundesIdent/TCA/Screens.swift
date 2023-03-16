@@ -3,7 +3,7 @@ import Analytics
 
 struct Screen: ReducerProtocol {
     enum State: Equatable {
-        case launch(Launch.State)
+        case launch
         case home(Home.State)
         case setupCoordinator(SetupCoordinator.State)
         case identificationCoordinator(IdentificationCoordinator.State)
