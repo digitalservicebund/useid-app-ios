@@ -1,0 +1,20 @@
+{
+  "images" : [
+    {
+      "filename" : "img_pin_setup_iOS.svg",
+      "idiom" : "universal"
+    },
+    {
+      "filename" : "img_pin_setup_iOS_EN.svg",
+      "idiom" : "universal",
+      "locale" : "en"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "localizable" : true
+  }
+}
