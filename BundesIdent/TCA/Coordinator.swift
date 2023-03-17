@@ -242,8 +242,8 @@ struct Coordinator: ReducerProtocol {
     private func setupCoordinator(tokenURL: URL?) -> Screen.State {
         let setupIntro = SetupIntro.State(tokenURL: tokenURL)
         let setupScreen: SetupScreen.State = abTester.isVariationActivated(for: .setupIntroductionExplanation)
-        ? .introVariation(setupIntro)
-        : .intro(setupIntro)
+            ? .introVariation(setupIntro)
+            : .intro(setupIntro)
         return .setupCoordinator(SetupCoordinator.State(tokenURL: tokenURL, states: [.root(setupScreen)]))
     }
 }
