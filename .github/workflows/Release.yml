@@ -206,8 +206,8 @@ jobs:
           APPSTORECONNECT_API_KEY_PATH=$RUNNER_TEMP/api_key.json
 
           # import certificate and provisioning profile from secrets
-          echo -n "$DISTRIBUTION_CERTIFICATE_P12_BASE64" | base64 --decode --output $CERTIFICATE_PATH
-          echo -n "$DISTRIBUTION_PROVISIONING_PROFILE_BASE64" | base64 --decode --output $PP_PATH
+          echo -n "$DISTRIBUTION_CERTIFICATE_P12_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$DISTRIBUTION_PROVISIONING_PROFILE_BASE64" | base64 --decode -o $PP_PATH
 
           # create temporary keychain
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
@@ -289,8 +289,8 @@ jobs:
           APPSTORECONNECT_API_KEY_PATH=$RUNNER_TEMP/api_key.json
 
           # import certificate and provisioning profile from secrets
-          echo -n "$DISTRIBUTION_CERTIFICATE_P12_BASE64" | base64 --decode --output $CERTIFICATE_PATH
-          echo -n "$PREVIEW_DISTRIBUTION_PROVISIONING_PROFILE_BASE64" | base64 --decode --output $PP_PATH
+          echo -n "$DISTRIBUTION_CERTIFICATE_P12_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$PREVIEW_DISTRIBUTION_PROVISIONING_PROFILE_BASE64" | base64 --decode -o $PP_PATH
 
           # create temporary keychain
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
