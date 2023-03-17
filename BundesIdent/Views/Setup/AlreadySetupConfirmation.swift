@@ -36,7 +36,7 @@ struct AlreadySetupConfirmationView: View {
                         .foregroundColor(.blackish)
                         .cornerRadius(10)
                 }
-                .padding(.horizontal, 24)
+                .padding(.horizontal)
             }
             DialogButtons(store: store,
                           primary: .init(title: L10n.FirstTimeUser.AlreadySetupConfirmation.close,
