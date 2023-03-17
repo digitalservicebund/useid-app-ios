@@ -18,7 +18,7 @@
 "cardInteraction_error_default" = "An error has occurred.";
 "cardInteraction_error_tagLost" = "Card has been removed";
 "cardInteraction_error_timeout" = "No ID card recognized.";
-"firstTimeUser_alreadySetupConfirmation_box" = "**Note:** To identify yourself online with your ID, you need your personal PIN. Go to the website of the service you want to identify yourself for. There you can start the identification.";
+"firstTimeUser_alreadySetupConfirmation_box" = "**Please note:** To identify yourself with your ID card on the Internet, you need your personal PIN. Go to the website of the service for which you want to identify yourself. From there you can start identification.";
 "firstTimeUser_alreadySetupConfirmation_close" = "Got it";
 "firstTimeUser_alreadySetupConfirmation_title" = "You are ready to go!";
 "firstTimeUser_can_alreadySetup_body_ident" = "You only need to set up your ID card once in total. If you already have a 6-digit personal PIN, your ID card has been set up already.\n\nWith this PIN, you can now identify yourself.";
@@ -41,9 +41,11 @@
 "firstTimeUser_incorrectTransportPIN_textFieldLabel" = "Transport PIN, five digits";
 "firstTimeUser_incorrectTransportPIN_title" = "Entered incorrect transport PIN.";
 "firstTimeUser_intro_body" = "You only need to set up your ID card once. If you already have a 6‑digit PIN, your ID card has been already set up.";
+"firstTimeUser_intro_box" = "**Please note:** If you already have a personal 6-digit PIN, your ID card has been already set up.";
 "firstTimeUser_intro_skipSetup" = "Already set up";
 "firstTimeUser_intro_startSetup" = "Set up online ID card now";
 "firstTimeUser_intro_title" = "Have you already set up your online ID card?";
+"firstTimeUser_intro_titleVariation" = "Online ID card not set up yet?";
 "firstTimeUser_missingPINLetter_body" = "Do you need a new PIN? Order a PIN reset letter:\n\n**[www.pin-ruecksetzbrief-bestellen.de ↗](https://www.pin-ruecksetzbrief-bestellen.de)**";
 "firstTimeUser_missingPINLetter_title" = "Order PIN reset letter.";
 "firstTimeUser_personalPINIntro_continue" = "Assign personal ID PIN";
