@@ -32,7 +32,7 @@ platform :ios do
   lane :getAppVersion do |options|
     rel_path = options[:rel_path] || '../'
     project = Xcodeproj::Project.open("#{rel_path}#{PROJECT_FILENAME}.xcodeproj")
-    version = project.build_settings('Release Production')['MARKETING_VERSION']
+    version = project.build_settings('Release Preview')['MARKETING_VERSION']
     puts "Current version: #{version}"
     version
   end
