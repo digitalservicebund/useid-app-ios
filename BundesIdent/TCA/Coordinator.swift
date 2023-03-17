@@ -204,6 +204,7 @@ struct Coordinator: ReducerProtocol {
                  .identificationCoordinator(.routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.dismiss))))),
                  .identificationCoordinator(.routeAction(_, action: .share(.confirmClose))),
                  .identificationCoordinator(.routeAction(_, action: .done(.close))),
+                 .identificationCoordinator(.routeAction(_, action: .handOff(.registrationCompleted))),
                  .setupCoordinator(.confirmEnd),
                  .setupCoordinator(.routeAction(_, action: .done(.done))),
                  .setupCoordinator(.routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canAlreadySetup(.done))))),

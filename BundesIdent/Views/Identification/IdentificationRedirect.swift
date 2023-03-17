@@ -43,28 +43,22 @@ struct IdentificationHandOff: ReducerProtocol {
             let widgetSessionId = state.identificationInformation.widgetSessionId
             let window = UIApplication.shared.connectedScenes.compactMap({ ($0 as? UIWindowScene)?.keyWindow }).first!
             return .task {
-                let initiatingResponse = try await apiController.initiateRegistration()
+                let initiatingResponse = try await apiController.initiateRegistration(widgetSessionId: widgetSessionId, refreshAddress: redirectURL)
+
                 let generatedCredentials = try await webAuthenticationManager.registerWith(
-                    userId: initiatingResponse.userId,
-                    widgetSessionId: widgetSessionId,
-                    host: "useid.dev.ds4g.net",
-                    challenge: initiatingResponse.challenge,
+                    userId: initiatingResponse.pkcCreationOptions.user.id,
+                    username: initiatingResponse.pkcCreationOptions.user.displayName,
+                    host: apiController.hostname,
+                    challenge: initiatingResponse.pkcCreationOptions.challenge,
                     anchor: window
                 )
+                
                 guard let rawAttestationObject = generatedCredentials.rawAttestationObject else {
                     throw Error.missingRawAttestationObject
                 }
-                let registrationDetails = RegistrationDetails(
-                    rawAttestationObject: rawAttestationObject,
-                    rawClientDataJSON: generatedCredentials.rawClientDataJSON,
-                    credentialId: generatedCredentials.credentialID
-                )
-                try await apiController.completeRegistration(
-                    userId: initiatingResponse.userId,
-                    widgetSessionId: widgetSessionId,
-                    registrationDetails: registrationDetails,
-                    refreshURL: redirectURL
-                )
+                let cred = GeneratedRegistrationCredentials(attestationObject: rawAttestationObject, clientDataJSON: generatedCredentials.rawClientDataJSON, id: generatedCredentials.credentialID)
+                try await apiController.completeRegistration(credentialId: initiatingResponse.credentialId, generatedRegistrationCredentials: cred)
+
                 return .registrationCompleted
             } catch: { error in
                 .registrationFailed(IdentifiableError(error))

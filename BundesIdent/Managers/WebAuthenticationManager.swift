@@ -6,11 +6,12 @@ enum WebAuthenticationManagerError: Error {
     case alreadyRegistering
     case invalidUserId
     case invalidAuthorizationType
+    case invalidChallenge
     case canceled
 }
 
 protocol WebAuthenticationManagerType {
-    func registerWith(userId: String, widgetSessionId: String, host: String, challenge: Data, anchor: ASPresentationAnchor) async throws -> ASAuthorizationPlatformPublicKeyCredentialRegistration
+    func registerWith(userId: Data, username: String, host: String, challenge: Data, anchor: ASPresentationAnchor) async throws -> ASAuthorizationPlatformPublicKeyCredentialRegistration
 }
 
 class WebAuthenticationManager: NSObject, WebAuthenticationManagerType, ASAuthorizationControllerPresentationContextProviding, ASAuthorizationControllerDelegate {
@@ -30,20 +31,16 @@ class WebAuthenticationManager: NSObject, WebAuthenticationManagerType, ASAuthor
         authenticationAnchor!
     }
     
-    func registerWith(userId: String, widgetSessionId: String, host: String, challenge: Data, anchor: ASPresentationAnchor) async throws -> ASAuthorizationPlatformPublicKeyCredentialRegistration {
+    func registerWith(userId: Data, username: String, host: String, challenge: Data, anchor: ASPresentationAnchor) async throws -> ASAuthorizationPlatformPublicKeyCredentialRegistration {
         guard continuation == nil else { throw WebAuthenticationManagerError.alreadyRegistering }
         
         authenticationAnchor = anchor
         
         let publicKeyCredentialProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: host)
         
-        guard let userIdData = userId.data(using: .utf8) else {
-            throw WebAuthenticationManagerError.invalidUserId
-        }
-        
         let registrationRequest = publicKeyCredentialProvider.createCredentialRegistrationRequest(challenge: challenge,
-                                                                                                  name: widgetSessionId,
-                                                                                                  userID: userIdData)
+                                                                                                  name: username,
+                                                                                                  userID: userId)
         
         return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<ASAuthorizationPlatformPublicKeyCredentialRegistration, Error>) in
             self.continuation = continuation

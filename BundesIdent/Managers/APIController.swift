@@ -3,38 +3,73 @@ import Foundation
 import RealHTTP
 
 struct UserRegistrationResponse: Codable, Equatable {
-    let userId: String
-    let challenge: Data
+    let credentialId: String
+    let pkcCreationOptions: PkcCreationOptions
 }
 
-struct RegistrationDetails: Codable, Equatable {
-    var rawAttestationObject: Data
-    var rawClientDataJSON: Data
-    var credentialId: Data
+struct PkcUser: Codable, Equatable {
+    var name: String
+    var displayName: String
+    var id: Data
+    
+    public init(from decoder: Decoder) throws {
+        enum RootKeys: String, CodingKey { case name; case displayName; case id }
+        let container = try decoder.container(keyedBy: RootKeys.self)
+        
+        guard let idData = Data(base64urlEncoded: try container.decode(String.self, forKey: .id)) else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [RootKeys.id], debugDescription: "user id not correctly formatted"))
+        }
+        id = idData
+        name = try container.decode(String.self, forKey: .name)
+        displayName = try container.decode(String.self, forKey: .displayName)
+    }
 }
 
-struct UserAuthenticationRequest: Codable, Equatable {
-    var rawAttestationObject: Data
-    var rawClientDataJSON: Data
-    var credentialId: Data
+struct PkcCreationOptions: Codable, Equatable {
+    var user: PkcUser
+    var challenge: Data
+    
+    public init(from decoder: Decoder) throws {
+        enum RootKeys: String, CodingKey { case publicKey }
+        let container = try decoder.container(keyedBy: RootKeys.self)
+        enum PublicKeyKeys: String, CodingKey { case user; case challenge }
+        let publicKey = try container.nestedContainer(keyedBy: PublicKeyKeys.self, forKey: .publicKey)
+        
+        guard let challengeData = Data(base64urlEncoded: try publicKey.decode(String.self, forKey: .challenge)) else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [RootKeys.publicKey, PublicKeyKeys.challenge], debugDescription: "challenge not correctly formatted"))
+        }
+        challenge = challengeData
+        user = try publicKey.decode(PkcUser.self, forKey: .user)
+    }
 }
 
-struct UserAuthenticationResponse: Codable, Equatable {
-    let challenge: Data
+struct GeneratedRegistrationCredentials: Codable, Equatable {
+    var attestationObject: Data
+    var clientDataJSON: Data
+    var id: Data
 }
 
-struct AuthenticationDetails: Codable, Equatable {
-    var rawAuthenticatorData: Data
-    var signature: Data
-    var rawClientDataJSON: Data
-    var credentialId: Data
-}
-
-typealias UserId = String
+//struct UserAuthenticationRequest: Codable, Equatable {
+//    var rawAttestationObject: Data
+//    var rawClientDataJSON: Data
+//    var credentialId: Data
+//}
+//
+//struct UserAuthenticationResponse: Codable, Equatable {
+//    let challenge: Data
+//}
+//
+//struct AuthenticationDetails: Codable, Equatable {
+//    var rawAuthenticatorData: Data
+//    var signature: Data
+//    var rawClientDataJSON: Data
+//    var credentialId: Data
+//}
 
 protocol APIControllerType {
     
     var environment: BackendEnvironment { get }
+    var hostname: String { get }
     
     func setEnvironment(_ environment: BackendEnvironment)
     
@@ -43,15 +78,14 @@ protocol APIControllerType {
     func sendSessionEvent(sessionId: String, redirectURL: URL) async throws
     
     /**
-     POST /users
+     POST /credentials
      */
-    func initiateRegistration() async throws -> UserRegistrationResponse
+    func initiateRegistration(widgetSessionId: String, refreshAddress: URL) async throws -> UserRegistrationResponse
     
     /**
-     POST /users/:userId/:widgetSessionId/register/complete
-     (previously /events/:widgetSessionId/success)
+     PUT /credentials/:credentialId
      */
-    func completeRegistration(userId: UserId, widgetSessionId: String, registrationDetails: RegistrationDetails, refreshURL: URL) async throws
+    func completeRegistration(credentialId: String, generatedRegistrationCredentials: GeneratedRegistrationCredentials) async throws
  
     //  TODO: Implement later for re-using passkeys
 //    /**
@@ -124,6 +158,10 @@ class APIController: APIControllerType {
         .staging
     }
     
+    var hostname: String {
+        environment.baseURL.fullHost!
+    }
+    
     func setEnvironment(_ environment: BackendEnvironment) {
         client.baseURL = environment.baseURL
     }
@@ -165,44 +203,83 @@ class APIController: APIControllerType {
         }
     }
     
-    func initiateRegistration() async throws -> UserRegistrationResponse {
-        
-        let req = try HTTPRequest(method: .post, URI: "/webauthn/users", variables: [:])
-        let response = try await req.fetch(client)
-        
-        guard response.statusCode == .accepted else {
-            throw Error.unexpectedStatusCode(response.statusCode.rawValue)
-        }
-        
-        let decodedResponse = try response.decode(UserRegistrationResponse.self)
-        return decodedResponse
-    }
-    
-    func completeRegistration(userId: UserId, widgetSessionId: String, registrationDetails: RegistrationDetails, refreshURL: URL) async throws {
-        struct Payload: Codable {
-            let attestationObject: Data
-            let clientDataJSON: Data
-            let rawId: Data
+    func initiateRegistration(widgetSessionId: String, refreshAddress: URL) async throws -> UserRegistrationResponse {
+        struct UserRegistrationRequest: Codable, Equatable {
+            let widgetSessionId: String
             let refreshAddress: String
         }
+        let userRegistrationRequest = UserRegistrationRequest(widgetSessionId: widgetSessionId, refreshAddress: refreshAddress.absoluteString)
         
-        let payload = Payload(
-            attestationObject: registrationDetails.rawAttestationObject,
-            clientDataJSON: registrationDetails.rawClientDataJSON,
-            rawId: registrationDetails.credentialId,
-            refreshAddress: refreshURL.absoluteString
-        )
-        let req = HTTPRequest(method: .post, URI: "/webauthn/users/{userId}/{widgetSessionId}/complete",
+        let req = try HTTPRequest(method: .post, "/credentials", body: .json(userRegistrationRequest))
+        let response = try await req.fetch(client)
+        
+        guard response.statusCode == .accepted else {
+            throw Error.unexpectedStatusCode(response.statusCode.rawValue)
+        }
+        
+        struct RawUserRegistrationResponse: Codable, Equatable {
+            let credentialId: String
+            let pkcCreationOptions: String
+        }
+        
+        let decodedResponse = try response.decode(RawUserRegistrationResponse.self)
+        guard let pkcCreationOptionsData = decodedResponse.pkcCreationOptions.data(using: .utf8) else {
+            throw Error.invalidResponse
+        }
+        let decodedPkcCreationOptions = try JSONDecoder().decode(PkcCreationOptions.self, from: pkcCreationOptionsData)
+        return UserRegistrationResponse(credentialId: decodedResponse.credentialId, pkcCreationOptions: decodedPkcCreationOptions)
+    }
+    
+    func completeRegistration(credentialId: String, generatedRegistrationCredentials: GeneratedRegistrationCredentials) async throws {
+        struct RegistrationDetails: Codable, Equatable {
+            var attestationObject: String
+            var clientDataJSON: String
+        }
+        
+        struct ClientExtensionResults: Codable, Equatable {
+            struct CredProps: Codable, Equatable { var rk = true }
+            var credProps = CredProps()
+        }
+
+        struct Payload: Codable, Equatable {
+            var id: String
+            var type: String
+            var response: RegistrationDetails
+            var clientExtensionResults = ClientExtensionResults()
+        }
+        
+        let body = Payload(id: generatedRegistrationCredentials.id.base64urlEncodedString(), type: "public-key", response: RegistrationDetails(attestationObject: generatedRegistrationCredentials.attestationObject.base64urlEncodedString(), clientDataJSON: generatedRegistrationCredentials.clientDataJSON.base64urlEncodedString()))
+        
+        let req = HTTPRequest(method: .put, URI: "/credentials/{credentialId}",
                               variables: [
-                                  "userId": userId,
-                                  "widgetSessionId": widgetSessionId
+                                  "credentialId": credentialId,
                               ]) {
-            $0.body = .json(payload)
+            $0.body = .json(body)
         }
         let response = try await req.fetch(client)
         
         guard response.statusCode == .accepted else {
             throw Error.unexpectedStatusCode(response.statusCode.rawValue)
         }
+    }
+}
+
+fileprivate extension Data {
+    func base64urlEncodedString() -> String {
+        var result = self.base64EncodedString()
+        result = result.replacingOccurrences(of: "+", with: "-")
+        result = result.replacingOccurrences(of: "/", with: "_")
+        result = result.replacingOccurrences(of: "=", with: "")
+        return result
+    }
+    
+    init?(base64urlEncoded input: String) {
+        var base64 = input
+        base64 = base64.replacingOccurrences(of: "-", with: "+")
+        base64 = base64.replacingOccurrences(of: "_", with: "/")
+        while base64.count % 4 != 0 {
+            base64 = base64.appending("=")
+        }
+        self.init(base64Encoded: base64)
     }
 }
