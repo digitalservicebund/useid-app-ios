@@ -43,3 +43,13 @@ struct IdentificationAbout: View {
         }
     }
 }
+
+#if PREVIEW
+
+struct IdentificationAbout_Previews: PreviewProvider {
+    static var previews: some View {
+        IdentificationAbout(request: .preview)
+    }
+}
+
+#endif

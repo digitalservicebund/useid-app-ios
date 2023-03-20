@@ -145,7 +145,7 @@ struct HomeView: View {
 #if PREVIEW
     @ViewBuilder
     private var previewView: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 4) {
             WithViewStore(store) { viewStore in
                 Toggle("Simulator Mode", isOn: viewStore.binding(get: \.isDebugModeEnabled, send: Home.Action.setDebugModeEnabled))
                     .bodyLRegular(color: viewStore.isDebugModeEnabled ? .red : nil)
@@ -156,7 +156,7 @@ struct HomeView: View {
                     .captionM(color: .secondary)
             }
         }
-        .padding()
+        .padding(24)
         .grouped()
     }
 #endif
@@ -176,7 +176,7 @@ struct HomeView: View {
             .buttonStyle(BundTextButtonStyle())
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
+        .padding(24)
         .grouped()
     }
     

@@ -70,7 +70,7 @@ public extension View {
     /// 20/24
     /// bold
     func headingM(color: Color? = .blackish) -> some View {
-        font(.custom(bundFontName, size: 24, relativeTo: .headline).bold().leading(.standard))
+        font(.custom(bundFontName, size: 20, relativeTo: .headline).bold().leading(.standard))
             .foregroundColor(color)
             .fixedSize(horizontal: false, vertical: true)
             .accessibilityAddTraits(.isHeader)
