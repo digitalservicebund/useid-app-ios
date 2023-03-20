@@ -38,11 +38,15 @@ final class UnleashManagerTests: XCTestCase {
             }
         }
 
-        let sut = UnleashManager(unleashClient: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
+        let uuid = { UUID(uuidString: "00000000-0000-0000-0000-000000000000")! }
+        let sut = UnleashManager(unleashClient: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker, uuid: uuid)
 
         verify(mockUnleashClient).context.set(any())
-        XCTAssert(context["supportedToggles"]?.contains(ABTest.test.name) == false)
+        XCTAssertEqual(context.count, 4)
         XCTAssertEqual(context["someKey"], "someValue")
+        XCTAssert(context["supportedToggles"]?.contains(ABTest.test.name) == false)
+        XCTAssertEqual(context["appName"], "bundesIdent.iOS")
+        XCTAssertEqual(context["sessionId"], "00000000-0000-0000-0000-000000000000")
         XCTAssertNil(context["someOtherKey"])
         XCTAssertEqual(sut.state, .initial)
     }

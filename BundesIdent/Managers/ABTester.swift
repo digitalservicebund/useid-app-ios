@@ -21,21 +21,25 @@ enum ABTest: CaseIterable {
 final class UnleashManager: ABTester {
 
     convenience init(url: String, clientKey: String, analytics: AnalyticsClient, issueTracker: IssueTracker) {
-        let unleashClient = UnleashClient(unleashUrl: url, clientKey: clientKey, refreshInterval: .max, appName: "bundesIdent.iOS")
+        let unleashClient = UnleashClient(unleashUrl: url, clientKey: clientKey, refreshInterval: .max)
         self.init(unleashClient: unleashClient, analytics: analytics, issueTracker: issueTracker)
     }
 
-    init(unleashClient: UnleashClientWrapper, analytics: AnalyticsClient, issueTracker: IssueTracker) {
+    init(unleashClient: UnleashClientWrapper, analytics: AnalyticsClient, issueTracker: IssueTracker, uuid: () -> UUID = UUID.init) {
         self.unleashClient = unleashClient
         self.analytics = analytics
         self.issueTracker = issueTracker
 
-        unleashClient.context["supportedToggles"] = ABTest.allCases
+        var context = unleashClient.context
+        context["appName"] = "bundesIdent.iOS"
+        context["sessionId"] = uuid().uuidString
+        context["supportedToggles"] = ABTest.allCases
 #if PREVIEW
             .filter { $0 != .test }
 #endif
             .map(\.name)
             .joined(separator: ",")
+        unleashClient.context = context
     }
 
     private let unleashClient: UnleashClientWrapper
