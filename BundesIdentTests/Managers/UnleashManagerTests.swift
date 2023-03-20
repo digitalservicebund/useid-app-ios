@@ -113,13 +113,13 @@ final class UnleashManagerTests: XCTestCase {
     func testIsVariationActivatedWhenClientReturnsVariationTracksVariationAndReturnsTrue() async {
         let sut = UnleashManager(unleashClient: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
         stub(mockUnleashClient) {
-            $0.variantName(forTestName: "bundesIdent.test").thenReturn("variation")
+            $0.variantName(forTestName: "bundesIdent.test").thenReturn("Variation")
         }
         await sut.prepare()
 
         let result = sut.isVariationActivated(for: .test)
 
-        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "abtesting", action: "bundesIdent_test", name: "variation"))
+        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "abtesting", action: "bundesIdent_test", name: "Variation"))
         verify(mockIssueTracker).addBreadcrumb(crumb: any())
         XCTAssertTrue(result)
     }
@@ -127,13 +127,13 @@ final class UnleashManagerTests: XCTestCase {
     func testIsVariationActivatedWhenClientReturnsOriginalTracksOriginalAndReturnsFalse() async {
         let sut = UnleashManager(unleashClient: mockUnleashClient, analytics: mockAnalyticsClient, issueTracker: mockIssueTracker)
         stub(mockUnleashClient) {
-            $0.variantName(forTestName: "bundesIdent.test").thenReturn("original")
+            $0.variantName(forTestName: "bundesIdent.test").thenReturn("Original")
         }
         await sut.prepare()
 
         let result = sut.isVariationActivated(for: .test)
 
-        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "abtesting", action: "bundesIdent_test", name: "original"))
+        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "abtesting", action: "bundesIdent_test", name: "Original"))
         verify(mockIssueTracker).addBreadcrumb(crumb: any())
         XCTAssertFalse(result)
     }

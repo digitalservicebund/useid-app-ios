@@ -89,7 +89,7 @@ final class UnleashManager: ABTester {
         let matomoTestName = test.name.replacingOccurrences(of: ".", with: "_")
         analytics.track(event: .init(category: "abtesting", action: matomoTestName, name: variantName))
         issueTracker.addInfoBreadcrumb(category: "abtest", message: "\(test.name): \(variantName)")
-        return variantName == "variation"
+        return variantName == "Variation"
     }
 }
 
