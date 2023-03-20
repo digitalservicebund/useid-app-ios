@@ -11,7 +11,7 @@ enum ABTest: CaseIterable {
     var name: String {
         switch self {
 #if PREVIEW
-        case .test: return "test"
+        case .test: return "bundesIdent.test"
 #endif
         case .setupIntroductionExplanation: return "bundesIdent.setup_introduction_explanation"
         }
@@ -86,7 +86,8 @@ final class UnleashManager: ABTester {
         guard state == .active, let test, let variantName = unleashClient.variantName(forTestName: test.name)
         else { return false }
 
-        analytics.track(event: .init(category: "abtesting", action: test.name, name: variantName))
+        let matomoTestName = test.name.replacingOccurrences(of: ".", with: "_")
+        analytics.track(event: .init(category: "abtesting", action: matomoTestName, name: variantName))
         issueTracker.addInfoBreadcrumb(category: "abtest", message: "\(test.name): \(variantName)")
         return variantName == "variation"
     }
