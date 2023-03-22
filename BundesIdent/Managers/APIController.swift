@@ -68,7 +68,6 @@ struct GeneratedRegistrationCredentials: Codable, Equatable {
 
 protocol APIControllerType {
     
-    var environment: BackendEnvironment { get }
     var hostname: String { get }
     
     func setEnvironment(_ environment: BackendEnvironment)
@@ -154,12 +153,8 @@ class APIController: APIControllerType {
         self.jsonDecoder = jsonDecoder
     }
     
-    var environment: BackendEnvironment {
-        .staging
-    }
-    
     var hostname: String {
-        environment.baseURL.fullHost!
+        client.baseURL!.fullHost!
     }
     
     func setEnvironment(_ environment: BackendEnvironment) {
