@@ -213,7 +213,7 @@ class APIController: APIControllerType {
         let req = try HTTPRequest(method: .post, "/credentials", body: .json(userRegistrationRequest))
         let response = try await req.fetch(client)
         
-        guard response.statusCode == .accepted else {
+        guard response.statusCode == .created else {
             throw Error.unexpectedStatusCode(response.statusCode.rawValue)
         }
         
@@ -258,7 +258,7 @@ class APIController: APIControllerType {
         }
         let response = try await req.fetch(client)
         
-        guard response.statusCode == .accepted else {
+        guard response.statusCode == .noContent else {
             throw Error.unexpectedStatusCode(response.statusCode.rawValue)
         }
     }
