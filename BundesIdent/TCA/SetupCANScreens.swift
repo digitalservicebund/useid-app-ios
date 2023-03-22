@@ -5,7 +5,7 @@ import Analytics
 
 struct SetupCANScreen: ReducerProtocol {
     
-    enum State: Equatable, IDInteractionHandler {
+    enum State: Equatable, EIDInteractionHandler {
         case canAlreadySetup(SetupCANAlreadySetup.State)
         case canConfirmTransportPIN(SetupCANConfirmTransportPIN.State)
         case missingPIN(MissingPINLetter.State)
@@ -33,7 +33,7 @@ struct SetupCANScreen: ReducerProtocol {
             }
         }
         
-        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             switch self {
             case .canScan(let state):
                 guard let localAction = state.transformToLocalAction(event) else { return nil }

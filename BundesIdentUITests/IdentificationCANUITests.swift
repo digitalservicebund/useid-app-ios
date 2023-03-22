@@ -31,7 +31,7 @@ final class IdentificationCANUITests: XCTestCase {
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        app.activityIndicators["ScanProgressView"].assertExistence()
+        
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["runCANError"].wait().tap()
         
@@ -40,7 +40,7 @@ final class IdentificationCANUITests: XCTestCase {
         incorrectCANTextField.waitAndTypeText("123456")
         
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        app.activityIndicators["ScanProgressView"].assertExistence()
+        
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["runCANError"].wait().tap()
         
@@ -51,7 +51,7 @@ final class IdentificationCANUITests: XCTestCase {
         incorrectCANTextField.wait().tap()
         incorrectCANTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        app.activityIndicators["ScanProgressView"].assertExistence()
+        
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["identifySuccessfully"].wait().tap()
         
@@ -82,7 +82,7 @@ final class IdentificationCANUITests: XCTestCase {
         pinTextField.waitAndTypeText("123456")
         
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
-        app.activityIndicators["ScanProgressView"].assertExistence()
+        
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["runCardSuspended"].wait().tap()
         
@@ -120,7 +120,6 @@ final class IdentificationCANUITests: XCTestCase {
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        app.activityIndicators["ScanProgressView"].assertExistence()
         
         app.navigationBars.buttons[L10n.General.cancel].wait().tap()
         app.staticTexts[L10n.Home.Header.title].assertExistence()
@@ -155,12 +154,12 @@ final class IdentificationCANUITests: XCTestCase {
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        app.activityIndicators["ScanProgressView"].assertExistence()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
-        app.buttons["cancelCANScan"].wait().tap()
+//      When we get an AA2SDK with cancellation working, we do the following:
+//        app.navigationBars.buttons["Debug"].wait().tap()
+//        app.buttons["cancelCANScan"].wait().tap()
         
-        app.buttons[L10n.Identification.Scan.scan].assertExistence()
+        app.buttons[L10n.Scan.button].assertExistence()
     }
     
     func testIdentificationCANAfterTwoAttemptsToCardBlocked() throws {
@@ -211,7 +210,7 @@ final class IdentificationCANUITests: XCTestCase {
         pinTextField.wait().tap()
         pinTextField.waitAndTypeText("123456")
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
-        app.activityIndicators["ScanProgressView"].assertExistence()
+        
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["runCANError"].wait().tap()
         
@@ -219,7 +218,7 @@ final class IdentificationCANUITests: XCTestCase {
         incorrectCANTextField.wait().tap()
         incorrectCANTextField.waitAndTypeText("123456")
         app.toolbars["Toolbar"].buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        app.activityIndicators["ScanProgressView"].assertExistence()
+        
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["runCANError"].wait().tap()
         
@@ -234,7 +233,7 @@ final class IdentificationCANUITests: XCTestCase {
         pinTextField.wait().tap()
         pinTextField.waitAndTypeText("123456")
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
-        app.activityIndicators["ScanProgressView"].assertExistence()
+        
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["runPINError (\(remainingAttempts))"].wait().tap()
         app.staticTexts[L10n.ScanError.CardBlocked.title].assertExistence()

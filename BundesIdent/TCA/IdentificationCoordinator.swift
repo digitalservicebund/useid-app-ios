@@ -6,9 +6,9 @@ import SwiftUI
 import ComposableArchitecture
 import Analytics
 
-protocol IDInteractionHandler {
+protocol EIDInteractionHandler {
     associatedtype LocalAction
-    func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> LocalAction?
+    func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> LocalAction?
 }
 
 enum SwipeToDismissState: Equatable {
@@ -26,20 +26,19 @@ enum IdentificationCoordinatorError: CustomNSError {
 }
 
 struct IdentificationCoordinator: ReducerProtocol {
-    @Dependency(\.idInteractionManager) var idInteractionManager
+    @Dependency(\.eIDInteractionManager) var eIDInteractionManager
     @Dependency(\.issueTracker) var issueTracker
     @Dependency(\.logger) var logger
     @Dependency(\.mainQueue) var mainQueue
     @Dependency(\.storageManager) var storageManager
 #if PREVIEW
-    @Dependency(\.previewIDInteractionManager) var previewIDInteractionManager
+    @Dependency(\.previewEIDInteractionManager) var previewEIDInteractionManager
 #endif
-    struct State: Equatable, IndexedRouterState, IDInteractionHandler {
+    struct State: Equatable, IndexedRouterState, EIDInteractionHandler {
         var tokenURL: URL
         var pin: String?
         var attempt: Int = 0
-        var authenticationSuccessful = false
-        
+
         var swipeToDismiss: SwipeToDismissState {
             guard let lastScreen = states.last?.screen else { return .allow }
             return lastScreen.swipeToDismissState
@@ -52,7 +51,7 @@ struct IdentificationCoordinator: ReducerProtocol {
 #endif
         var states: [Route<IdentificationScreen.State>]
         
-        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationCoordinator.Action? {
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> IdentificationCoordinator.Action? {
             for (index, state) in states.enumerated().reversed() {
                 guard let action = state.screen.transformToLocalAction(event) else { continue }
                 return .routeAction(index, action: action)
@@ -64,7 +63,7 @@ struct IdentificationCoordinator: ReducerProtocol {
     enum Action: Equatable, IndexedRouterAction {
         case routeAction(Int, action: IdentificationScreen.Action)
         case updateRoutes([Route<IdentificationScreen.State>])
-        case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
+        case eIDInteractionEvent(Result<EIDInteractionEvent, EIDInteractionError>)
         case scanError(ScanError.State)
         case swipeToDismiss
         case afterConfirmEnd
@@ -78,17 +77,19 @@ struct IdentificationCoordinator: ReducerProtocol {
     
     var body: some ReducerProtocol<State, Action> {
         Reduce<State, Action> { state, action in
+            enum IdentificationCancelID {}
+
             switch action {
 #if PREVIEW
             case .runDebugSequence(let debugSequence):
-                state.availableDebugActions = previewIDInteractionManager.runIdentify(debugSequence: debugSequence)
+                state.availableDebugActions = previewEIDInteractionManager.runIdentify(debugSequence: debugSequence)
                 return .none
 #endif
             case .routeAction(_, action: .scan(.wrongPIN(remainingAttempts: let remainingAttempts))):
                 state.routes.presentSheet(.incorrectPersonalPIN(IdentificationIncorrectPersonalPIN.State(error: .incorrect,
                                                                                                          remainingAttempts: remainingAttempts)))
                 return .none
-            case .idInteractionEvent(let result):
+            case .eIDInteractionEvent(let result):
                 guard let localAction = state.transformToLocalAction(result) else {
                     issueTracker.capture(error: IdentificationCoordinatorError.noScreenToHandleEIDInteractionEvents)
                     logger.error("No screen found to handle EIDInteractionEvents")
@@ -102,52 +103,51 @@ struct IdentificationCoordinator: ReducerProtocol {
                 return .none
             case .routeAction(_, action: .overview(.back)):
                 return EffectTask.merge(
-                    .cancel(id: CancelId.self),
+                    .cancel(id: IdentificationCancelID.self),
                     EffectTask(value: .back(tokenURL: state.tokenURL))
                 )
-            case .routeAction(_, action: .overview(.loading(.identify))):
+            case .routeAction(_, action: .overview(.loading(.identify))),
+                 .routeAction(_, action: .scan(.identify)),
+                 .routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.identify)))):
                 let publisher: EIDInteractionPublisher
 #if PREVIEW
-                if previewIDInteractionManager.isDebugModeEnabled {
-                    let debuggableInteraction = previewIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
+                if previewEIDInteractionManager.isDebugModeEnabled {
+                    let debuggableInteraction = previewEIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
                     state.availableDebugActions = debuggableInteraction.sequence
                     publisher = debuggableInteraction.publisher
                 } else {
-                    publisher = idInteractionManager.identify(tokenURL: state.tokenURL, nfcMessagesProvider: IdentificationNFCMessageProvider())
+                    publisher = eIDInteractionManager.identify(tokenURL: state.tokenURL, messages: .identification)
                 }
 #else
-                publisher = idInteractionManager.identify(tokenURL: state.tokenURL, nfcMessagesProvider: IdentificationNFCMessageProvider())
+                publisher = eIDInteractionManager.identify(tokenURL: state.tokenURL, messages: .identification)
 #endif
                 return publisher
                     .receive(on: mainQueue)
-                    .catchToEffect(IdentificationCoordinator.Action.idInteractionEvent)
-                    .cancellable(id: CancelId.self, cancelInFlight: true)
+                    .catchToEffect(IdentificationCoordinator.Action.eIDInteractionEvent)
+                    .cancellable(id: IdentificationCancelID.self, cancelInFlight: true)
 #if PREVIEW
             case .routeAction(_, action: .overview(.loading(.runDebugSequence(let sequence)))),
                  .routeAction(_, action: .scan(.runDebugSequence(let sequence))),
                  .routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.runDebugSequence(let sequence))))):
                 return EffectTask(value: .runDebugSequence(sequence))
 #endif
-            case .routeAction(_, action: .overview(.loaded(.callbackReceived(let request, let callback)))):
-                state.routes.push(.personalPIN(IdentificationPersonalPIN.State(request: request, callback: callback)))
+            case .routeAction(_, action: .overview(.loaded(.confirm(let identificationInformation)))):
+                state.routes.push(.personalPIN(IdentificationPersonalPIN.State(identificationInformation: identificationInformation)))
                 return .none
-            case .routeAction(_, action: .personalPIN(.done(request: let request, pin: let pin, pinCallback: let pinCallback))):
+            case .routeAction(_, action: .personalPIN(.done(identificationInformation: let identificationInformation, pin: let pin))):
                 state.pin = pin
                 state.routes.push(
-                    .scan(IdentificationPINScan.State(request: request,
+                    .scan(IdentificationPINScan.State(identificationInformation: identificationInformation,
                                                       pin: pin,
-                                                      pinCallback: pinCallback,
-                                                      shared: SharedScan.State(showInstructions: !storageManager.identifiedOnce)))
+                                                      shared: SharedScan.State(startOnAppear: storageManager.identifiedOnce)))
                 )
                 return .none
             case .routeAction(_, action: .scan(.error(let errorState))):
                 state.routes.presentSheet(.error(errorState))
                 return .none
-            case .routeAction(_, action: .scan(.requestPINAndCAN(let request, let pinCANCallback))):
+            case .routeAction(_, action: .scan(.requestCAN(let identificationInformation))):
                 let pinIsUnchecked = state.attempt == 0
-                state.routes.push(.identificationCANCoordinator(.init(tokenURL: state.tokenURL,
-                                                                      request: request,
-                                                                      pinCANCallback: pinCANCallback,
+                state.routes.push(.identificationCANCoordinator(.init(identificationInformation: identificationInformation,
                                                                       pin: pinIsUnchecked ? state.pin : nil,
                                                                       attempt: state.attempt,
                                                                       goToCanIntroScreen: pinIsUnchecked)))
@@ -188,6 +188,9 @@ struct IdentificationCoordinator: ReducerProtocol {
             case .dismissAlert:
                 state.alert = nil
                 return .none
+            case .routeAction(_, action: .scan(.dismiss)),
+                 .routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.dismiss)))):
+                return .cancel(id: IdentificationCancelID.self)
             default:
                 return .none
             }
@@ -269,27 +272,25 @@ extension IdentificationCoordinator.State {
 
 /*
  Happy path loading token until scanning:
- .authenticationStarted
- .requestAuthenticationRequestConfirmation
+ .identificationStarted
+ .requestIdentificationRequestConfirmation
  .cardInteractionComplete
  .requestPIN(remainingAttempts: nil)
  .requestCardInsertion
  
  Happy path identification:
  .cardRecognized
- .authenticationSuccessful
+ .identificationSuccessful
  .processCompletedSuccessfully
  
  Wrong pin identification:
  .cardRecognized
  .cardInteractionComplete
  .requestPIN(remainingAttempts: 3)
- .cardRemoved
- 
+
  Card removed before process finished:
  .cardRecognized
- .authenticationSuccessful (optional)
- .cardRemoved // difference from happy path?
+ .identificationSuccessful (optional)
  .processCompletedSuccessfully // not really successful
  
  Wrong card:

@@ -8,13 +8,13 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
         let subState = IdentificationOverviewLoading.State()
         let state = IdentificationCoordinator.State(tokenURL: demoTokenURL, states: [.root(.overview(.loading(subState)))])
         
-        let effect = state.transformToLocalAction(.failure(.cardBlocked))
+        let effect = state.transformToLocalAction(.failure(.cardDeactivated))
         
         guard let effect else {
             return XCTFail("Effect should not be nil")
         }
         
-        XCTAssertEqual(effect, .routeAction(0, action: .overview(.loading(.idInteractionEvent(.failure(.cardBlocked))))))
+        XCTAssertEqual(effect, .routeAction(0, action: .overview(.loading(.eIDInteractionEvent(.failure(.cardDeactivated))))))
     }
     
     func testTransformToLocalInteractionHandlerLastState() throws {
@@ -24,13 +24,13 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
                                                         .push(.overview(.loading(IdentificationOverviewLoading.State())))
                                                     ])
         
-        let effect = state.transformToLocalAction(.failure(.cardBlocked))
+        let effect = state.transformToLocalAction(.failure(.cardDeactivated))
         
         guard let effect else {
             return XCTFail("Effect should not be nil")
         }
         
-        XCTAssertEqual(effect, .routeAction(1, action: .overview(.loading(.idInteractionEvent(.failure(.cardBlocked))))))
+        XCTAssertEqual(effect, .routeAction(1, action: .overview(.loading(.eIDInteractionEvent(.failure(.cardDeactivated))))))
     }
     
     func testNoTransformToLocalInteractionHandler() throws {
@@ -40,7 +40,7 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
                                                         .root(.overview(.error(IdentificationOverviewErrorState(error: IdentifiableError(SomeError())))))
                                                     ])
         
-        let effect = state.transformToLocalAction(.failure(.cardBlocked))
+        let effect = state.transformToLocalAction(.failure(.cardDeactivated))
         XCTAssertNil(effect)
     }
     
@@ -52,13 +52,13 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
                                                         .push(.overview(.error(IdentificationOverviewErrorState(error: IdentifiableError(SomeError())))))
                                                     ])
         
-        let effect = state.transformToLocalAction(.failure(.cardBlocked))
+        let effect = state.transformToLocalAction(.failure(.cardDeactivated))
         
         guard let effect else {
             return XCTFail("Effect should not be nil")
         }
         
-        XCTAssertEqual(effect, .routeAction(0, action: .overview(.loading(.idInteractionEvent(.failure(.cardBlocked))))))
+        XCTAssertEqual(effect, .routeAction(0, action: .overview(.loading(.eIDInteractionEvent(.failure(.cardDeactivated))))))
     }
 
 }

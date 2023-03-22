@@ -4,7 +4,7 @@ import Analytics
 
 struct IdentificationScreen: ReducerProtocol {
     
-    enum State: Equatable, IDInteractionHandler {
+    enum State: Equatable, EIDInteractionHandler {
         case overview(IdentificationOverview.State)
         case personalPIN(IdentificationPersonalPIN.State)
         case incorrectPersonalPIN(IdentificationIncorrectPersonalPIN.State)
@@ -12,7 +12,7 @@ struct IdentificationScreen: ReducerProtocol {
         case error(ScanError.State)
         case identificationCANCoordinator(IdentificationCANCoordinator.State)
         
-        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             switch self {
             case .overview(let state):
                 guard let localAction = state.transformToLocalAction(event) else { return nil }

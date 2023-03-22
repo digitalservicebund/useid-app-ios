@@ -1,28 +1,19 @@
 // This file is used for mock generation via Cuckoo
 
 import Foundation
-import OpenEcard
 import Combine
 import Sentry
 
-typealias NFCConfigType = NSObjectProtocol & NFCConfigProtocol
+protocol EIDInteractionManagerType {
+    func identify(tokenURL: URL, messages: ScanOverlayMessages) -> EIDInteractionPublisher
+    func changePIN(messages: ScanOverlayMessages) -> EIDInteractionPublisher
 
-protocol IDInteractionManagerType {
-    func identify(tokenURL: URL, nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher
-    func changePIN(nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher
-}
-
-protocol OpenEcardType: OpenEcardProtocol {
-    func context(_ nfcConfig: (NSObjectProtocol & NFCConfigProtocol)!) -> (NSObjectProtocol & ContextManagerProtocol)!
-    func context(_ defaultNFCDialgoMsg: String!, withDefaultNFCCardRecognizedMessage: String!) -> (NSObjectProtocol & ContextManagerProtocol)!
-    func prepareTCTokenURL(_ tcTokenURL: String!) -> String!
-    func setDebugLogLevel()
-    func developerOptions() -> (NSObjectProtocol & DeveloperOptionsProtocol)!
-}
-
-protocol ContextManagerType: ContextManagerProtocol {
-    func initializeContext(_ handler: NSObjectProtocol & StartServiceHandlerProtocol)
-    func terminateContext(_ handler: (NSObjectProtocol & StopServiceHandlerProtocol)!)
+    func setPIN(_ pin: String)
+    func setNewPIN(_ pin: String)
+    func setCAN(_ can: String)
+    func retrieveCertificateDescription()
+    func acceptAccessRights()
+    func interrupt()
 }
 
 protocol StorageManagerType: AnyObject {
@@ -53,12 +44,12 @@ protocol UnleashClientWrapper: AnyObject {
 }
 
 #if PREVIEW
-protocol PreviewIDInteractionManagerType: IDInteractionManagerType, AnyObject {
+protocol PreviewEIDInteractionManagerType: EIDInteractionManagerType, AnyObject {
     var isDebugModeEnabled: Bool { get set }
     var publishedIsDebugModeEnabled: AnyPublisher<Bool, Never> { get }
     
-    func identify(tokenURL: URL, nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher
-    func changePIN(nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher
+    func identify(tokenURL: URL, messages: ScanOverlayMessages) -> EIDInteractionPublisher
+    func changePIN(messages: ScanOverlayMessages) -> EIDInteractionPublisher
     func debuggableChangePIN() -> DebuggableInteraction<ChangePINDebugSequence>
     func debuggableIdentify(tokenURL: URL) -> DebuggableInteraction<IdentifyDebugSequence>
     func debuggableCANIdentify(tokenURL: URL) -> DebuggableInteraction<IdentifyDebugSequence>

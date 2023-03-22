@@ -6,7 +6,7 @@ import MarkdownUI
 
 struct Home: ReducerProtocol {
 #if PREVIEW
-    @Dependency(\.previewIDInteractionManager) var previewIDInteractionManager
+    @Dependency(\.previewEIDInteractionManager) var previewEIDInteractionManager
 #endif
     
     struct State: Equatable {
@@ -44,7 +44,7 @@ struct Home: ReducerProtocol {
             case .task:
 #if PREVIEW
                 return .run { send in
-                    for await value in previewIDInteractionManager.publishedIsDebugModeEnabled.values {
+                    for await value in previewEIDInteractionManager.publishedIsDebugModeEnabled.values {
                         await send(.updateDebugModeEnabled(value))
                     }
                 }
@@ -54,9 +54,9 @@ struct Home: ReducerProtocol {
 #if PREVIEW
             case .setDebugModeEnabled(let enabled):
 #if targetEnvironment(simulator)
-                previewIDInteractionManager.isDebugModeEnabled = false
+                previewEIDInteractionManager.isDebugModeEnabled = false
 #else
-                previewIDInteractionManager.isDebugModeEnabled = enabled
+                previewEIDInteractionManager.isDebugModeEnabled = enabled
 #endif
                 return .none
             case .updateDebugModeEnabled(let enabled):

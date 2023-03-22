@@ -31,7 +31,7 @@ final class SetupUITests: XCTestCase {
         pin2TextField.waitAndTypeText("123456")
         app.buttons[L10n.FirstTimeUser.PersonalPIN.continue].wait().tap()
         
-        app.buttons[L10n.FirstTimeUser.Scan.scan].wait().tap()
+        app.buttons[L10n.Scan.button].wait().tap()
         
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
@@ -87,7 +87,7 @@ final class SetupUITests: XCTestCase {
         pin2TextField.waitAndTypeText("123456")
         app.buttons[L10n.FirstTimeUser.PersonalPIN.continue].wait().tap()
         
-        app.buttons[L10n.FirstTimeUser.Scan.scan].wait().tap()
+        app.buttons[L10n.Scan.button].wait().tap()
         
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
@@ -147,7 +147,7 @@ final class SetupUITests: XCTestCase {
         
         app.buttons[L10n.FirstTimeUser.PersonalPIN.continue].wait().tap()
         
-        app.buttons[L10n.FirstTimeUser.Scan.scan].wait().tap()
+        app.buttons[L10n.Scan.button].wait().tap()
         
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["runPINError (3)"].wait().tap()
@@ -190,7 +190,7 @@ final class SetupUITests: XCTestCase {
         
         app.buttons[L10n.FirstTimeUser.PersonalPIN.continue].wait().tap()
         
-        app.buttons[L10n.FirstTimeUser.Scan.scan].wait().tap()
+        app.buttons[L10n.Scan.button].wait().tap()
         
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["runPINError (3)"].wait().tap()

@@ -22,12 +22,29 @@ final class IdentificationOverviewLoadingTests: XCTestCase {
         store.send(.onAppear)
     }
     
-    func testRecievedRequestConfirmationCallsDone() {
-        let request = EIDAuthenticationRequest.preview
-        let handler: (FlaggedAttributes) -> Void = { attributes in }
+    func testReceiveRequestConfirmationRetrievesCertificateDescription() {
+        let request = IdentificationRequest.preview
         let store = TestStore(initialState: IdentificationOverviewLoading.State(), reducer: IdentificationOverviewLoading())
-        store.dependencies.uuid = .constant(.zero)
-        store.send(.idInteractionEvent(.success(.requestAuthenticationRequestConfirmation(request, handler))))
-        store.receive(.done(request, IdentifiableCallback(id: .zero, callback: handler)))
+        
+        let mockEIDInteractionManager = MockEIDInteractionManagerType()
+        stub(mockEIDInteractionManager) {
+            $0.retrieveCertificateDescription().thenDoNothing()
+        }
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
+        
+        store.send(.eIDInteractionEvent(.success(.identificationRequestConfirmationRequested(request)))) {
+            $0.identificationRequest = request
+        }
+        
+        verify(mockEIDInteractionManager).retrieveCertificateDescription()
+    }
+    
+    func testReceiveCertificateCallsDone() {
+        let request = IdentificationRequest.preview
+        let store = TestStore(initialState: IdentificationOverviewLoading.State(identificationRequest: .preview), reducer: IdentificationOverviewLoading())
+        
+        let certificateDescription = CertificateDescription.preview
+        store.send(.eIDInteractionEvent(.success(.certificateDescriptionRetrieved(certificateDescription))))
+        store.receive(.done(request, certificateDescription))
     }
 }

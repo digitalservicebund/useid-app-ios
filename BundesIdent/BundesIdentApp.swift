@@ -1,7 +1,6 @@
 import SwiftUI
 import TCACoordinators
 import ComposableArchitecture
-import OpenEcard
 import Sentry
 import Analytics
 import XCTestDynamicOverlay

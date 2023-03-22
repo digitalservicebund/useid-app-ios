@@ -1,6 +1,24 @@
 {
   "pins" : [
     {
+      "identity" : "ausweisapp2-sdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Governikus/AusweisApp2-SDK-iOS",
+      "state" : {
+        "revision" : "b675a8f89a4390da8872a75fb56c394e296ea102",
+        "version" : "1.26.4"
+      }
+    },
+    {
+      "identity" : "ausweisapp2wrapper-ios-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/digitalservicebund/AusweisApp2Wrapper-iOS-SPM",
+      "state" : {
+        "branch" : "main",
+        "revision" : "eb646240714780f5741e8f631af25a728a0f8d99"
+      }
+    },
+    {
       "identity" : "combine-schedulers",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/combine-schedulers",
@@ -52,15 +70,6 @@
       "state" : {
         "branch" : "develop",
         "revision" : "1d853c3b7acfdb6552f63666390e37374f87c5cd"
-      }
-    },
-    {
-      "identity" : "open-ecard-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/TICESoftware/open-ecard-ios",
-      "state" : {
-        "revision" : "e9065acbc4bfacbfe6c4d5b90746692293eb852e",
-        "version" : "2.1.2"
       }
     },
     {

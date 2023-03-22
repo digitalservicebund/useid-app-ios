@@ -12,16 +12,16 @@ class SetupScanTests: XCTestCase {
     var mockAnalyticsClient: MockAnalyticsClient!
     var mockIssueTracker: MockIssueTracker!
     var mockStorageManager: MockStorageManagerType!
-    var mockIDInteractionManager: MockIDInteractionManagerType!
-    var mockPreviewIDInteractionManager: MockPreviewIDInteractionManagerType!
+    var mockEIDInteractionManager: MockEIDInteractionManagerType!
+    var mockPreviewEIDInteractionManager: MockPreviewEIDInteractionManagerType!
     
     override func setUp() {
         mockAnalyticsClient = MockAnalyticsClient()
         mockIssueTracker = MockIssueTracker()
         scheduler = DispatchQueue.test
         mockStorageManager = MockStorageManagerType()
-        mockIDInteractionManager = MockIDInteractionManagerType()
-        mockPreviewIDInteractionManager = MockPreviewIDInteractionManagerType()
+        mockEIDInteractionManager = MockEIDInteractionManagerType()
+        mockPreviewEIDInteractionManager = MockPreviewEIDInteractionManagerType()
         
         stub(mockAnalyticsClient) {
             $0.track(view: any()).thenDoNothing()
@@ -37,12 +37,12 @@ class SetupScanTests: XCTestCase {
             when($0.setupCompleted.set(true)).thenDoNothing()
         }
         
-        stub(mockPreviewIDInteractionManager) {
+        stub(mockPreviewEIDInteractionManager) {
             $0.isDebugModeEnabled.get.thenReturn(false)
         }
     }
     
-    func testInitiateScan() throws {
+    func testChangePIN() throws {
         let oldPIN = "12345"
         let newPIN = "123456"
         let store = TestStore(initialState: SetupScan.State(transportPIN: oldPIN, newPIN: newPIN),
@@ -50,13 +50,34 @@ class SetupScanTests: XCTestCase {
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.storageManager = mockStorageManager
-        
-        store.send(.shared(.startScan)) {
-            $0.shared.isScanning = true
-            $0.shared.showInstructions = false
+
+        store.send(.shared(.startScan(userInitiated: false))) {
+            $0.shouldRestartAfterCancellation = true
         }
-        
-        store.receive(.shared(.initiateScan))
+
+        store.receive(.changePIN)
+
+        verifyNoMoreInteractions(mockAnalyticsClient)
+    }
+
+    func testStartScanUserInitiated() throws {
+        let oldPIN = "12345"
+        let newPIN = "123456"
+        let store = TestStore(initialState: SetupScan.State(transportPIN: oldPIN, newPIN: newPIN),
+                              reducer: SetupScan())
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
+        store.dependencies.analytics = mockAnalyticsClient
+        store.dependencies.storageManager = mockStorageManager
+
+        store.send(.shared(.startScan(userInitiated: true))) {
+            $0.shouldRestartAfterCancellation = true
+        }
+
+        store.receive(.changePIN)
+
+        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "firstTimeUser",
+                                                                action: "buttonPressed",
+                                                                name: "scan"))
     }
     
     func testChangePINSuccess() throws {
@@ -67,68 +88,51 @@ class SetupScanTests: XCTestCase {
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.storageManager = mockStorageManager
-        store.dependencies.idInteractionManager = mockIDInteractionManager
-        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
+        store.dependencies.previewEIDInteractionManager = mockPreviewEIDInteractionManager
         
-        let cardInsertionCallback: (String) -> Void = { _ in }
-        
-        let requestChangedPINExpectation = expectation(description: "requestCardInsertion callback")
-        let pinCallback: (String, String) -> Void = { actualOldPIN, actualNewPIN in
-            XCTAssertEqual(oldPIN, actualOldPIN)
-            XCTAssertEqual(newPIN, actualNewPIN)
-            requestChangedPINExpectation.fulfill()
-        }
-        
-        store.send(.scanEvent(.success(.authenticationStarted))) {
-            $0.shared.isScanning = true
-        }
-        store.send(.scanEvent(.success(.requestCardInsertion(cardInsertionCallback))))
-
-        store.send(.scanEvent(.success(.cardRecognized))) {
-            $0.shared.cardRecognized = true
-        }
-        
-        store.send(.scanEvent(.success(.cardInteractionComplete)))
-        store.send(.scanEvent(.success(.requestChangedPIN(remainingAttempts: 3, pinCallback: pinCallback)))) {
-            $0.remainingAttempts = 3
+        stub(mockEIDInteractionManager) { mock in
+            mock.setPIN(anyString()).thenDoNothing()
+            mock.setNewPIN(anyString()).thenDoNothing()
         }
 
-        store.send(.scanEvent(.success(.cardRemoved))) {
-            $0.shared.showProgressCaption = ProgressCaption(title: L10n.FirstTimeUser.Scan.Progress.title,
-                                                            body: L10n.FirstTimeUser.Scan.Progress.body)
+        store.send(.scanEvent(.success(.identificationStarted)))
+        store.send(.scanEvent(.success(.cardInsertionRequested)))
+
+        store.send(.scanEvent(.success(.cardRecognized)))
+        
+        store.send(.scanEvent(.success(.pinRequested(remainingAttempts: 3)))) {
+            $0.lastRemainingAttempts = 3
         }
-        store.send(.scanEvent(.success(.requestCardInsertion(cardInsertionCallback)))) {
-            $0.shared.showProgressCaption = nil
-            $0.shared.cardRecognized = false
-        }
-        store.send(.scanEvent(.success(.cardRecognized))) {
-            $0.shared.cardRecognized = true
-        }
-        store.send(.scanEvent(.success(.cardInteractionComplete)))
-        store.send(.scanEvent(.success(.processCompletedSuccessfullyWithoutRedirect)))
+
+        store.send(.scanEvent(.success(.cardInsertionRequested)))
+        store.send(.scanEvent(.success(.cardRecognized)))
+        store.send(.scanEvent(.success(.newPINRequested)))
+        store.send(.scanEvent(.success(.pinChangeSucceeded)))
 
         store.receive(.scannedSuccessfully)
 
         verify(mockStorageManager).setupCompleted.set(true)
-
-        wait(for: [requestChangedPINExpectation], timeout: 0.0)
+        verify(mockEIDInteractionManager).setPIN(oldPIN)
+        verify(mockEIDInteractionManager).setNewPIN(newPIN)
+        verifyNoMoreInteractions(mockEIDInteractionManager)
     }
     
     func testScanFail() throws {
         let store = TestStore(initialState: SetupScan.State(transportPIN: "12345",
                                                             newPIN: "123456",
-                                                            shared: SharedScan.State(isScanning: true)),
+                                                            shared: SharedScan.State()),
                               reducer: SetupScan())
-        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.issueTracker = mockIssueTracker
-        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        store.dependencies.previewEIDInteractionManager = mockPreviewEIDInteractionManager
         
         let queue = scheduler!
-        stub(mockIDInteractionManager) { mock in
-            mock.changePIN(nfcMessagesProvider: any()).then { _ in
-                let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+        stub(mockEIDInteractionManager) { mock in
+            mock.changePIN(messages: any()).then { _ in
+                let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
                 queue.schedule {
                     subject.send(completion: .failure(.frameworkError(message: "Fail")))
                 }
@@ -136,27 +140,8 @@ class SetupScanTests: XCTestCase {
             }
         }
         
-        store.send(.scanEvent(.failure(.frameworkError(message: "Fail")))) {
-            $0.shared.isScanning = false
-        }
+        store.send(.scanEvent(.failure(.frameworkError(message: "Fail"))))
         
-        store.receive(.error(ScanError.State(errorType: .idCardInteraction(.frameworkError(message: "Fail")), retry: true)))
-    }
-    
-    func testShowNFCInfo() {
-        let store = TestStore(initialState: SetupScan.State(transportPIN: "12345", newPIN: "123456"),
-                              reducer: SetupScan())
-        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
-        store.dependencies.analytics = mockAnalyticsClient
-        store.send(.shared(.showNFCInfo)) {
-            $0.alert = AlertState(title: TextState(L10n.HelpNFC.title),
-                                  message: TextState(L10n.HelpNFC.body),
-                                  dismissButton: .cancel(TextState(L10n.General.ok),
-                                                         action: .send(.dismissAlert)))
-        }
-        
-        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "firstTimeUser",
-                                                                action: "alertShown",
-                                                                name: "NFCInfo"))
+        store.receive(.error(ScanError.State(errorType: .eIDInteraction(.frameworkError(message: "Fail")), retry: true)))
     }
 }

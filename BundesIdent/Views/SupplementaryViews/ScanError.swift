@@ -6,8 +6,9 @@ enum ScanErrorType: Equatable {
     case cardDeactivated
     case cardBlocked
     case help
-    case idCardInteraction(IDCardInteractionError)
+    case eIDInteraction(EIDInteractionError)
     case unexpectedEvent(EIDInteractionEvent)
+    case identificationRequestMismatch
 }
 
 struct ScanError: ReducerProtocol {
@@ -22,10 +23,12 @@ struct ScanError: ReducerProtocol {
                 return L10n.ScanError.CardDeactivated.title
             case .cardBlocked:
                 return L10n.ScanError.CardBlocked.title
-            case .idCardInteraction,
+            case .eIDInteraction,
                  .unexpectedEvent,
                  .help:
                 return L10n.ScanError.CardUnreadable.title
+            case .identificationRequestMismatch:
+                return L10n.ScanError.Unknown.title
             }
         }
         
@@ -35,17 +38,19 @@ struct ScanError: ReducerProtocol {
                 return L10n.ScanError.CardDeactivated.body
             case .cardBlocked:
                 return L10n.ScanError.CardBlocked.body
-            case .idCardInteraction,
+            case .eIDInteraction,
                  .unexpectedEvent,
                  .help:
                 return L10n.ScanError.CardUnreadable.body
+            case .identificationRequestMismatch:
+                return L10n.ScanError.Unknown.body
             }
         }
         
         var primaryButton: DialogButtons<ScanError.Action>.ButtonConfiguration {
             if retry {
                 return .init(title: L10n.ScanError.close, action: .retry)
-            } else if case .idCardInteraction(.processFailed(_, let url, _)) = errorType, let url {
+            } else if case .eIDInteraction(.identificationFailed(_, _, let url)) = errorType, let url {
                 return .init(title: L10n.ScanError.redirect, action: .end(redirectURL: url))
             } else {
                 return .init(title: L10n.ScanError.close, action: .end(redirectURL: nil))
@@ -56,9 +61,9 @@ struct ScanError: ReducerProtocol {
             guard !retry else { return nil }
             
             switch errorType {
-            case .cardDeactivated, .cardBlocked, .help, .idCardInteraction(.cardDeactivated), .idCardInteraction(.cardBlocked):
+            case .cardDeactivated, .cardBlocked, .help, .eIDInteraction(.cardDeactivated):
                 return nil
-            case .idCardInteraction, .unexpectedEvent:
+            case .eIDInteraction, .unexpectedEvent, .identificationRequestMismatch:
                 return .init(title: L10n.ScanError.Box.title, message: L10n.ScanError.Box.body, style: .error)
             }
         }
@@ -89,7 +94,9 @@ extension ScanErrorType: AnalyticsView {
             return ["cardDeactivated"]
         case .cardBlocked:
             return ["cardBlocked"]
-        case .idCardInteraction, .unexpectedEvent:
+        case .identificationRequestMismatch:
+            return ["identificationRequestMismatch"]
+        case .eIDInteraction, .unexpectedEvent:
             return ["cardUnreadable"]
         }
     }
@@ -120,7 +127,7 @@ struct SetupError_Previews: PreviewProvider {
                                    reducer: ScanError()))
         ScanErrorView(store: Store(initialState: .init(errorType: .cardBlocked, retry: false),
                                    reducer: ScanError()))
-        ScanErrorView(store: Store(initialState: .init(errorType: .unexpectedEvent(.cardRemoved), retry: true),
+        ScanErrorView(store: Store(initialState: .init(errorType: .unexpectedEvent(.cardRecognized), retry: true),
                                    reducer: ScanError()))
     }
 }

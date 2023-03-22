@@ -10,9 +10,11 @@ final class IdentificationPINScanTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var mockAnalyticsClient: MockAnalyticsClient!
+    var mockEIDInteractionManager: MockEIDInteractionManagerType!
     
     override func setUp() {
         mockAnalyticsClient = MockAnalyticsClient()
+        mockEIDInteractionManager = MockEIDInteractionManagerType()
         scheduler = DispatchQueue.test
         
         stub(mockAnalyticsClient) {
@@ -22,111 +24,58 @@ final class IdentificationPINScanTests: XCTestCase {
     }
     
     func testOnAppearDoesNotTriggerScanningWhenInstructionsShown() throws {
-        let request = EIDAuthenticationRequest.preview
         let pin = "123456"
-        let pinCallback = PINCallback(id: UUID(number: 0)) { pin in
-        }
         let store = TestStore(
-            initialState: IdentificationPINScan.State(request: request,
+            initialState: IdentificationPINScan.State(identificationInformation: .preview,
                                                       pin: pin,
-                                                      pinCallback: pinCallback,
-                                                      shared: SharedScan.State(isScanning: false, showInstructions: true)),
+                                                      shared: SharedScan.State()),
             reducer: IdentificationPINScan()
         )
         
-        store.send(.onAppear)
+        store.send(.shared(.onAppear))
     }
-    
-    func testOnAppearIgnoredWhenAlreadyScanning() throws {
-        let request = EIDAuthenticationRequest.preview
-        let pin = "123456"
-        let pinCallback = PINCallback(id: UUID(number: 0)) { pin in
-        }
-        let store = TestStore(initialState: IdentificationPINScan.State(request: request,
-                                                                        pin: pin,
-                                                                        pinCallback: pinCallback,
-                                                                        shared: SharedScan.State(isScanning: true)),
-                              reducer: IdentificationPINScan())
-        
-        store.send(.onAppear)
-    }
-    
-    func testCancellation() throws {
-        let request = EIDAuthenticationRequest.preview
-        let pin = "123456"
-        let pinCallback = PINCallback(id: UUID(number: 0)) { _ in }
-        
-        let store = TestStore(initialState: IdentificationPINScan.State(request: request,
-                                                                        pin: pin,
-                                                                        pinCallback: pinCallback,
-                                                                        shared: SharedScan.State(isScanning: true)),
-                              reducer: IdentificationPINScan())
-        store.dependencies.uuid = .incrementing
-        let newCallback = { (_: String) in }
-        store.send(.scanEvent(.success(.requestPIN(remainingAttempts: nil, pinCallback: newCallback)))) {
-            $0.shared.isScanning = false
-            $0.pinCallback = PINCallback(id: UUID(number: 0), callback: newCallback)
-        }
-    }
-    
+
     func testWrongPIN() throws {
-        let request = EIDAuthenticationRequest.preview
         let pin = "123456"
-        let pinCallback = PINCallback(id: UUID(number: 0)) { pin in
-        }
-        let store = TestStore(initialState: IdentificationPINScan.State(request: request,
+        let store = TestStore(initialState: IdentificationPINScan.State(identificationInformation: .preview,
                                                                         pin: pin,
-                                                                        pinCallback: pinCallback,
-                                                                        shared: SharedScan.State(isScanning: true)),
+                                                                        lastRemainingAttempts: 3,
+                                                                        shared: SharedScan.State()),
                               reducer: IdentificationPINScan())
         store.dependencies.uuid = .incrementing
-        let newCallback = { (_: String) in }
-        store.send(.scanEvent(.success(.requestPIN(remainingAttempts: 2, pinCallback: newCallback)))) {
-            $0.shared.isScanning = false
-            $0.pinCallback = PINCallback(id: UUID(number: 0), callback: newCallback)
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
+        
+        stub(mockEIDInteractionManager) {
+            $0.interrupt().thenDoNothing()
         }
+        
+        store.send(.scanEvent(.success(.pinRequested(remainingAttempts: 2)))) {
+            $0.lastRemainingAttempts = 2
+        }
+        
+        verify(mockEIDInteractionManager).interrupt()
         
         store.receive(.wrongPIN(remainingAttempts: 2))
     }
     
-    func testShowNFCInfo() {
-        let request = EIDAuthenticationRequest.preview
-        let pin = "123456"
-        let pinCallback = PINCallback(id: UUID(number: 0)) { _ in }
-        
-        let store = TestStore(initialState: IdentificationPINScan.State(request: request,
-                                                                        pin: pin,
-                                                                        pinCallback: pinCallback,
-                                                                        shared: SharedScan.State(isScanning: false)),
-                              reducer: IdentificationPINScan())
-        store.dependencies.analytics = mockAnalyticsClient
-        store.send(.shared(.showNFCInfo)) {
-            $0.alert = AlertState(title: TextState(L10n.HelpNFC.title),
-                                  message: TextState(L10n.HelpNFC.body),
-                                  dismissButton: .cancel(TextState(L10n.General.ok),
-                                                         action: .send(.dismissAlert)))
-        }
-        
-        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification",
-                                                                action: "alertShown",
-                                                                name: "NFCInfo"))
-    }
-    
     func testStartScanTracking() {
-        let request = EIDAuthenticationRequest.preview
         let pin = "123456"
-        let pinCallback = PINCallback(id: UUID(number: 0)) { _ in }
         
-        let store = TestStore(initialState: IdentificationPINScan.State(request: request,
+        let store = TestStore(initialState: IdentificationPINScan.State(identificationInformation: .preview,
                                                                         pin: pin,
-                                                                        pinCallback: pinCallback,
-                                                                        shared: SharedScan.State(isScanning: false)),
+                                                                        shared: SharedScan.State()),
                               reducer: IdentificationPINScan())
         store.dependencies.analytics = mockAnalyticsClient
-        store.send(.shared(.startScan)) {
-            $0.shared.isScanning = true
-            $0.shared.showInstructions = false
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
+        stub(mockEIDInteractionManager) {
+            $0.acceptAccessRights().thenDoNothing()
         }
+        
+        store.send(.shared(.startScan(userInitiated: true))) {
+            $0.shouldContinueAfterInterruption = true
+        }
+        
+        verify(mockEIDInteractionManager).acceptAccessRights()
         
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification",
                                                                 action: "buttonPressed",

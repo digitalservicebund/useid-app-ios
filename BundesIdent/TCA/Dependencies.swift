@@ -1,7 +1,6 @@
 import Dependencies
 import Analytics
 import UIKit
-import OpenEcard
 import OSLog
 
 enum LoggerKey: DependencyKey {
@@ -11,27 +10,32 @@ enum LoggerKey: DependencyKey {
 }
 
 #if PREVIEW
-enum PreviewIDInteractionManagerKey: DependencyKey {
-    static var liveValue: PreviewIDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: IDInteractionManager(issueTracker: SentryIssueTracker()),
-                                                                                        debugIDInteractionManager: DebugIDInteractionManager())
+enum PreviewEIDInteractionManagerKey: DependencyKey {
+    typealias Value = PreviewEIDInteractionManagerType
+#if !targetEnvironment(simulator)
+    static var liveValue: Value = PreviewEIDInteractionManager(real: EIDInteractionManager(), debug: .init())
+#else
+    static var liveValue: Value = PreviewEIDInteractionManager(real: UnimplementedEIDInteractionManager(), debug: .init())
+#endif
 }
 
 extension DependencyValues {
-    var previewIDInteractionManager: PreviewIDInteractionManagerType {
-        get { self[PreviewIDInteractionManagerKey.self] }
-        set { self[PreviewIDInteractionManagerKey.self] = newValue }
+    var previewEIDInteractionManager: PreviewEIDInteractionManagerType {
+        get { self[PreviewEIDInteractionManagerKey.self] }
+        set { self[PreviewEIDInteractionManagerKey.self] = newValue }
     }
 }
 #endif
 
-enum IDInteractionManagerKey: DependencyKey {
+enum EIDInteractionManagerKey: DependencyKey {
 #if PREVIEW
-    static var liveValue: IDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: IDInteractionManager(issueTracker: SentryIssueTracker()),
-                                                                                 debugIDInteractionManager: DebugIDInteractionManager())
+    static var liveValue: EIDInteractionManagerType = PreviewEIDInteractionManagerKey.liveValue
+#elseif !targetEnvironment(simulator)
+    static var liveValue: EIDInteractionManagerType = EIDInteractionManager()
 #else
-    static var liveValue: IDInteractionManagerType = IDInteractionManager(issueTracker: SentryIssueTracker())
+    static var liveValue: EIDInteractionManagerType = UnimplementedEIDInteractionManager()
 #endif
-    static var previewValue: IDInteractionManagerType = MockIDInteractionManager(queue: DispatchQueue.main.eraseToAnyScheduler())
+    static var previewValue: EIDInteractionManagerType = UnimplementedEIDInteractionManager()
 }
 
 enum URLOpenerKey: DependencyKey {
@@ -63,9 +67,9 @@ enum AppVersionProviderKey: DependencyKey {
 }
 
 extension DependencyValues {
-    var idInteractionManager: IDInteractionManagerType {
-        get { self[IDInteractionManagerKey.self] }
-        set { self[IDInteractionManagerKey.self] = newValue }
+    var eIDInteractionManager: EIDInteractionManagerType {
+        get { self[EIDInteractionManagerKey.self] }
+        set { self[EIDInteractionManagerKey.self] = newValue }
     }
     
     var storageManager: StorageManagerType {

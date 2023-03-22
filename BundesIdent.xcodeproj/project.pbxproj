@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		430A933729DC540200607329 /* EIDInteractionFlowListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430A933629DC540200607329 /* EIDInteractionFlowListener.swift */; };
+		43269A702A0118B500093FD7 /* AusweisApp2SDKWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 43269A6F2A0118B500093FD7 /* AusweisApp2SDKWrapper */; };
 		432A180529C34B5E0033058B /* UnleashManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432A180429C34B5E0033058B /* UnleashManagerTests.swift */; };
 		4334B4D329A64F00001FF36C /* Markdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4334B4D229A64F00001FF36C /* Markdown.swift */; };
 		43363E0729A79D6200E9FA23 /* UnleashProxyClientSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 43363E0629A79D6200E9FA23 /* UnleashProxyClientSwift */; };
@@ -14,6 +16,8 @@
 		43363E0B29B0C41300E9FA23 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43363E0A29B0C41300E9FA23 /* LaunchView.swift */; };
 		43363E0D29B6BFF300E9FA23 /* RemoteConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43363E0C29B6BFF300E9FA23 /* RemoteConfiguration.swift */; };
 		43363E0F29BB164200E9FA23 /* RemoteConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43363E0E29BB164200E9FA23 /* RemoteConfigurationTests.swift */; };
+		4398414629F981BB00B91714 /* IdentificationInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4398414529F981BB00B91714 /* IdentificationInformation.swift */; };
+		4398414829F9822200B91714 /* ScanOverlayMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4398414729F9822200B91714 /* ScanOverlayMessages.swift */; };
 		43AE178929C3C1A700902E27 /* SetupIntroVariation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AE178829C3C1A700902E27 /* SetupIntroVariation.swift */; };
 		43EE410329A3D89700A96953 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EE410229A3D89700A96953 /* BackButton.swift */; };
 		B91E34512938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E34502938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift */; };
@@ -61,16 +65,13 @@
 		E1234DB32976EA3900837872 /* BundLicensePlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1234DB22976EA3900837872 /* BundLicensePlistViewController.swift */; };
 		E128E0BA288941DC00C5195F /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = E128E0B9288941DC00C5195F /* Sentry */; };
 		E128E0BC28898D3400C5195F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E128E0BB28898D3400C5195F /* AppDelegate.swift */; };
-		E12B424828D8AB440032D65D /* ControllerCallbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12B424728D8AB440032D65D /* ControllerCallbackTests.swift */; };
-		E12CB30428494B0B0039FD56 /* OpenECardTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB30328494B0B0039FD56 /* OpenECardTypes.swift */; };
-		E12CB30628494BD70039FD56 /* IDInteractionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */; };
 		E12CB30A284A2C700039FD56 /* InteractiveDismissableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB309284A2C700039FD56 /* InteractiveDismissableView.swift */; };
 		E135D6AA28B7696400A32862 /* SetupCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E135D6A928B7696400A32862 /* SetupCoordinatorTests.swift */; };
 		E135D6AC28B76A3500A32862 /* Matchable+BundesIdent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E135D6AB28B76A3500A32862 /* Matchable+BundesIdent.swift */; };
 		E13925B82840FB7700161F5C /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925B72840FB7700161F5C /* Types.swift */; };
 		E13925C2284110FD00161F5C /* Cuckoo in Frameworks */ = {isa = PBXBuildFile; productRef = E13925C1284110FD00161F5C /* Cuckoo */; };
 		E13925C42841111100161F5C /* GeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925C32841111100161F5C /* GeneratedMocks.swift */; };
-		E13925C72841119400161F5C /* MockIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925C62841119400161F5C /* MockIDInteractionManager.swift */; };
+		E13925C72841119400161F5C /* UnimplementedEIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925C62841119400161F5C /* UnimplementedEIDInteractionManager.swift */; };
 		E13A632128B8010A00AB7A39 /* LocalizedStrings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */; };
 		E13F9E3B2886F3420088E955 /* IdentificationCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E3A2886F3420088E955 /* IdentificationCoordinatorTests.swift */; };
 		E13F9E3D288802500088E955 /* UUID+InitFromNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E3C288802500088E955 /* UUID+InitFromNumber.swift */; };
@@ -80,16 +81,15 @@
 		E13F9E45288853950088E955 /* CoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E44288853950088E955 /* CoordinatorTests.swift */; };
 		E144EBD628C63A31009B4900 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = E144EBD528C63A31009B4900 /* MarkdownUI */; };
 		E144EBD828C63A4D009B4900 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E144EBD728C63A4D009B4900 /* AboutView.swift */; };
+		E1494267291E8A750059703B /* EIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1494266291E8A750059703B /* EIDInteractionManager.swift */; };
 		E149B15C2840F636002C1139 /* SetupScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E149B15B2840F636002C1139 /* SetupScanTests.swift */; };
 		E14C21B228B8BF9100192338 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C21B128B8BF9100192338 /* StorageManager.swift */; };
 		E1531DC429AE4994008D5185 /* AlertState+Confirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1531DC329AE4994008D5185 /* AlertState+Confirmation.swift */; };
 		E1531DC629AF695E008D5185 /* SetupCANScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1531DC529AF695E008D5185 /* SetupCANScanTests.swift */; };
 		E156DD02287EF9C200C88914 /* XCUITestDeeplinking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E156DD01287EF9C200C88914 /* XCUITestDeeplinking.swift */; };
 		E15776A0286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */; };
-		E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */ = {isa = PBXBuildFile; productRef = E15C22FF2850F5A8005CCBB9 /* OpenEcard */; };
 		E15D0EBC29095F740088EF4E /* IdentificationOverviewError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15D0EBB29095F740088EF4E /* IdentificationOverviewError.swift */; };
 		E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */; };
-		E1658735299508D100FCF9C8 /* CancelId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1658734299508D100FCF9C8 /* CancelId.swift */; };
 		E166AF7028FEC6C7004EE034 /* LogAnalyticsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E166AF6F28FEC6C7004EE034 /* LogAnalyticsClient.swift */; };
 		E16708AE283D4224001A1637 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708AD283D4224001A1637 /* HomeView.swift */; };
 		E16708B1283D4EAC001A1637 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708B0283D4EAC001A1637 /* Dependencies.swift */; };
@@ -124,7 +124,7 @@
 		E1B0F5AA29829D8900143B82 /* SetupCANCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B0F5A929829D8900143B82 /* SetupCANCoordinator.swift */; };
 		E1B0F5AC2982EB2300143B82 /* SetupCANScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B0F5AB2982EB2300143B82 /* SetupCANScreens.swift */; };
 		E1B0F5AF29830D2100143B82 /* SetupCANScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B0F5AE29830D2100143B82 /* SetupCANScan.swift */; };
-		E1B6991C2869B31B00360273 /* DebugIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B6991B2869B31B00360273 /* DebugIDInteractionManager.swift */; };
+		E1B6991C2869B31B00360273 /* DebugEIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B6991B2869B31B00360273 /* DebugEIDInteractionManager.swift */; };
 		E1BA4D34299299CB004E4C66 /* ChangePINDebugSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BA4D33299299CB004E4C66 /* ChangePINDebugSequence.swift */; };
 		E1BA4D36299299F5004E4C66 /* IdentifyDebugSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BA4D35299299F5004E4C66 /* IdentifyDebugSequence.swift */; };
 		E1BC3D7928B7E40B007A7B39 /* LicensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BC3D7828B7E40B007A7B39 /* LicensesView.swift */; };
@@ -141,7 +141,7 @@
 		E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD8E9428215971008ADA2A /* PINEntryView.swift */; };
 		E1DCC97E29072B8B002E9371 /* SetupUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DCC97D29072B8B002E9371 /* SetupUITests.swift */; };
 		E1DCC98029072BB3002E9371 /* HomeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DCC97F29072BB3002E9371 /* HomeUITests.swift */; };
-		E1DF0996294A0FF300199761 /* PreviewIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DF0995294A0FF300199761 /* PreviewIDInteractionManager.swift */; };
+		E1DF0996294A0FF300199761 /* PreviewEIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DF0995294A0FF300199761 /* PreviewEIDInteractionManager.swift */; };
 		E1EB9FFA28B5288A007FF467 /* ScanBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EB9FF928B5288A007FF467 /* ScanBody.swift */; };
 		E1EFB5C22858EAA2005C38C6 /* IdentificationOverviewLoaded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */; };
 		E1EFB5C42858EB0F005C38C6 /* IdentificationOverviewLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C32858EB0F005C38C6 /* IdentificationOverviewLoading.swift */; };
@@ -149,7 +149,6 @@
 		E1EFB5C8285A365E005C38C6 /* IdentificationAbout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5C7285A365E005C38C6 /* IdentificationAbout.swift */; };
 		E1EFB5D0285C794A005C38C6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1EFB5D2285C794A005C38C6 /* InfoPlist.strings */; };
 		E1EFB5D5285C7D81005C38C6 /* IdentificationPersonalPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EFB5D4285C7D81005C38C6 /* IdentificationPersonalPIN.swift */; };
-		E1F2F3D728770F28004C8D4B /* IdentifiableCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F2F3D628770F28004C8D4B /* IdentifiableCallback.swift */; };
 		E1F39DD6285784DD00D8D907 /* IdentificationOverview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F39DD5285784DD00D8D907 /* IdentificationOverview.swift */; };
 		E1F39DD8285791BD00D8D907 /* IdentifiableError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F39DD7285791BD00D8D907 /* IdentifiableError.swift */; };
 		E1F39DDA28588AB000D8D907 /* IdentificationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F39DD928588AB000D8D907 /* IdentificationCoordinator.swift */; };
@@ -157,23 +156,12 @@
 		E1FDEAAB28F96BD300F70CE1 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FDEAAA28F96BD300F70CE1 /* AppConfig.swift */; };
 		E1FE617329548074002FA330 /* IdentificationCANUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FE617229548074002FA330 /* IdentificationCANUITests.swift */; };
 		E1FFDF0C2875C7E9006DFE03 /* UUID+Zero.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FFDF0B2875C7E9006DFE03 /* UUID+Zero.swift */; };
-		E59097B5281153A100CDA144 /* NFCMessageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59097B4281153A100CDA144 /* NFCMessageProvider.swift */; };
-		E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */; };
-		E593E2662816845C00154EB0 /* AuthenticationTerms.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E2652816845C00154EB0 /* AuthenticationTerms.swift */; };
-		E593E2682816847900154EB0 /* EIDAuthenticationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E2672816847900154EB0 /* EIDAuthenticationRequest.swift */; };
-		E593E26E2816853A00154EB0 /* StopServiceHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E26D2816853A00154EB0 /* StopServiceHandler.swift */; };
-		E593E2702816856200154EB0 /* StartServiceHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E26F2816856200154EB0 /* StartServiceHandler.swift */; };
-		E593E2722816864800154EB0 /* ControllerCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E2712816864800154EB0 /* ControllerCallback.swift */; };
-		E593E2742816866200154EB0 /* EACInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E2732816866200154EB0 /* EACInteraction.swift */; };
-		E593E2762816868100154EB0 /* PINManagementInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E2752816868100154EB0 /* PINManagementInteraction.swift */; };
-		E593E279281686DC00154EB0 /* IDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593E278281686DC00154EB0 /* IDInteractionManager.swift */; };
 		E5CEB27E281041330076B9FE /* BundesIdentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CEB27D281041330076B9FE /* BundesIdentApp.swift */; };
 		E5CEB282281041340076B9FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5CEB281281041340076B9FE /* Assets.xcassets */; };
 		E5CEB285281041340076B9FE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5CEB284281041340076B9FE /* Preview Assets.xcassets */; };
 		E5E69D832812FB4500A3B66A /* EIDInteractionEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D822812FB4500A3B66A /* EIDInteractionEvent.swift */; };
-		E5E69D852812FB6100A3B66A /* IDCardInteractionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D842812FB6100A3B66A /* IDCardInteractionError.swift */; };
-		E5E69D872812FB7A00A3B66A /* IDTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D862812FB7A00A3B66A /* IDTask.swift */; };
-		E5E69D892812FB8D00A3B66A /* IDCardAttribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D882812FB8D00A3B66A /* IDCardAttribute.swift */; };
+		E5E69D852812FB6100A3B66A /* EIDInteractionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D842812FB6100A3B66A /* EIDInteractionError.swift */; };
+		E5E69D892812FB8D00A3B66A /* EIDAttribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D882812FB8D00A3B66A /* EIDAttribute.swift */; };
 		F43622A72850D6C9008AEBB9 /* ScanError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43622A62850D6C9008AEBB9 /* ScanError.swift */; };
 /* End PBXBuildFile section */
 
@@ -208,12 +196,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		430A933629DC540200607329 /* EIDInteractionFlowListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIDInteractionFlowListener.swift; sourceTree = "<group>"; };
 		432A180429C34B5E0033058B /* UnleashManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnleashManagerTests.swift; sourceTree = "<group>"; };
 		4334B4D229A64F00001FF36C /* Markdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Markdown.swift; sourceTree = "<group>"; };
 		43363E0829B01D4900E9FA23 /* ABTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABTester.swift; sourceTree = "<group>"; };
 		43363E0A29B0C41300E9FA23 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		43363E0C29B6BFF300E9FA23 /* RemoteConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfiguration.swift; sourceTree = "<group>"; };
 		43363E0E29BB164200E9FA23 /* RemoteConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigurationTests.swift; sourceTree = "<group>"; };
+		4398414529F981BB00B91714 /* IdentificationInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationInformation.swift; sourceTree = "<group>"; };
+		4398414729F9822200B91714 /* ScanOverlayMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanOverlayMessages.swift; sourceTree = "<group>"; };
 		43AE178829C3C1A700902E27 /* SetupIntroVariation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntroVariation.swift; sourceTree = "<group>"; };
 		43EE410229A3D89700A96953 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
 		B91E34502938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoadingTests.swift; sourceTree = "<group>"; };
@@ -259,18 +250,15 @@
 		E1234DB02976E0BC00837872 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		E1234DB22976EA3900837872 /* BundLicensePlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundLicensePlistViewController.swift; sourceTree = "<group>"; };
 		E128E0BB28898D3400C5195F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E12B424728D8AB440032D65D /* ControllerCallbackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerCallbackTests.swift; sourceTree = "<group>"; };
 		E12B424928DA1A360032D65D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E12B424A28DA1A360032D65D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E12B424B28DA1A4B0032D65D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		E12CB30328494B0B0039FD56 /* OpenECardTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenECardTypes.swift; sourceTree = "<group>"; };
-		E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDInteractionManagerTests.swift; sourceTree = "<group>"; };
 		E12CB309284A2C700039FD56 /* InteractiveDismissableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractiveDismissableView.swift; sourceTree = "<group>"; };
 		E135D6A928B7696400A32862 /* SetupCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCoordinatorTests.swift; sourceTree = "<group>"; };
 		E135D6AB28B76A3500A32862 /* Matchable+BundesIdent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Matchable+BundesIdent.swift"; sourceTree = "<group>"; };
 		E13925B72840FB7700161F5C /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		E13925C32841111100161F5C /* GeneratedMocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedMocks.swift; sourceTree = "<group>"; };
-		E13925C62841119400161F5C /* MockIDInteractionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockIDInteractionManager.swift; sourceTree = "<group>"; };
+		E13925C62841119400161F5C /* UnimplementedEIDInteractionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnimplementedEIDInteractionManager.swift; sourceTree = "<group>"; };
 		E13F9E3A2886F3420088E955 /* IdentificationCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCoordinatorTests.swift; sourceTree = "<group>"; };
 		E13F9E3C288802500088E955 /* UUID+InitFromNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UUID+InitFromNumber.swift"; sourceTree = "<group>"; };
 		E13F9E3E288804140088E955 /* IdentificationPINScanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationPINScanTests.swift; sourceTree = "<group>"; };
@@ -278,6 +266,7 @@
 		E13F9E42288835350088E955 /* IdentificationCoordinatorStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCoordinatorStateTests.swift; sourceTree = "<group>"; };
 		E13F9E44288853950088E955 /* CoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorTests.swift; sourceTree = "<group>"; };
 		E144EBD728C63A4D009B4900 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		E1494266291E8A750059703B /* EIDInteractionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIDInteractionManager.swift; sourceTree = "<group>"; };
 		E149B15B2840F636002C1139 /* SetupScanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupScanTests.swift; sourceTree = "<group>"; };
 		E14C21B128B8BF9100192338 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		E1531DC329AE4994008D5185 /* AlertState+Confirmation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AlertState+Confirmation.swift"; sourceTree = "<group>"; };
@@ -286,7 +275,6 @@
 		E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentificationIncorrectPersonalPIN.swift; sourceTree = "<group>"; };
 		E15D0EBB29095F740088EF4E /* IdentificationOverviewError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewError.swift; sourceTree = "<group>"; };
 		E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LocalizedStrings+Generated.swift"; sourceTree = "<group>"; };
-		E1658734299508D100FCF9C8 /* CancelId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelId.swift; sourceTree = "<group>"; };
 		E166AF6B28FEAD38004EE034 /* Default.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Default.xcconfig; sourceTree = "<group>"; };
 		E166AF6F28FEC6C7004EE034 /* LogAnalyticsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogAnalyticsClient.swift; sourceTree = "<group>"; };
 		E16708AD283D4224001A1637 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -326,7 +314,7 @@
 		E1B0F5A929829D8900143B82 /* SetupCANCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCANCoordinator.swift; sourceTree = "<group>"; };
 		E1B0F5AB2982EB2300143B82 /* SetupCANScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCANScreens.swift; sourceTree = "<group>"; };
 		E1B0F5AE29830D2100143B82 /* SetupCANScan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupCANScan.swift; sourceTree = "<group>"; };
-		E1B6991B2869B31B00360273 /* DebugIDInteractionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugIDInteractionManager.swift; sourceTree = "<group>"; };
+		E1B6991B2869B31B00360273 /* DebugEIDInteractionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugEIDInteractionManager.swift; sourceTree = "<group>"; };
 		E1BA4D33299299CB004E4C66 /* ChangePINDebugSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePINDebugSequence.swift; sourceTree = "<group>"; };
 		E1BA4D35299299F5004E4C66 /* IdentifyDebugSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifyDebugSequence.swift; sourceTree = "<group>"; };
 		E1BC3D7828B7E40B007A7B39 /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
@@ -345,7 +333,7 @@
 		E1DB64F829C1DA7000177506 /* Prototype.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Prototype.xcconfig; sourceTree = "<group>"; };
 		E1DCC97D29072B8B002E9371 /* SetupUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupUITests.swift; sourceTree = "<group>"; };
 		E1DCC97F29072BB3002E9371 /* HomeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUITests.swift; sourceTree = "<group>"; };
-		E1DF0995294A0FF300199761 /* PreviewIDInteractionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewIDInteractionManager.swift; sourceTree = "<group>"; };
+		E1DF0995294A0FF300199761 /* PreviewEIDInteractionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewEIDInteractionManager.swift; sourceTree = "<group>"; };
 		E1EB9FF928B5288A007FF467 /* ScanBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanBody.swift; sourceTree = "<group>"; };
 		E1EFB5C12858EAA2005C38C6 /* IdentificationOverviewLoaded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoaded.swift; sourceTree = "<group>"; };
 		E1EFB5C32858EB0F005C38C6 /* IdentificationOverviewLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoading.swift; sourceTree = "<group>"; };
@@ -353,7 +341,6 @@
 		E1EFB5C7285A365E005C38C6 /* IdentificationAbout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationAbout.swift; sourceTree = "<group>"; };
 		E1EFB5D1285C794A005C38C6 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E1EFB5D4285C7D81005C38C6 /* IdentificationPersonalPIN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationPersonalPIN.swift; sourceTree = "<group>"; };
-		E1F2F3D628770F28004C8D4B /* IdentifiableCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableCallback.swift; sourceTree = "<group>"; };
 		E1F39DD5285784DD00D8D907 /* IdentificationOverview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverview.swift; sourceTree = "<group>"; };
 		E1F39DD7285791BD00D8D907 /* IdentifiableError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableError.swift; sourceTree = "<group>"; };
 		E1F39DD928588AB000D8D907 /* IdentificationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCoordinator.swift; sourceTree = "<group>"; };
@@ -361,16 +348,6 @@
 		E1FDEAAA28F96BD300F70CE1 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		E1FE617229548074002FA330 /* IdentificationCANUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANUITests.swift; sourceTree = "<group>"; };
 		E1FFDF0B2875C7E9006DFE03 /* UUID+Zero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UUID+Zero.swift"; sourceTree = "<group>"; };
-		E59097B4281153A100CDA144 /* NFCMessageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFCMessageProvider.swift; sourceTree = "<group>"; };
-		E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenEcardExtensions.swift; sourceTree = "<group>"; };
-		E593E2652816845C00154EB0 /* AuthenticationTerms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationTerms.swift; sourceTree = "<group>"; };
-		E593E2672816847900154EB0 /* EIDAuthenticationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIDAuthenticationRequest.swift; sourceTree = "<group>"; };
-		E593E26D2816853A00154EB0 /* StopServiceHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopServiceHandler.swift; sourceTree = "<group>"; };
-		E593E26F2816856200154EB0 /* StartServiceHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartServiceHandler.swift; sourceTree = "<group>"; };
-		E593E2712816864800154EB0 /* ControllerCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerCallback.swift; sourceTree = "<group>"; };
-		E593E2732816866200154EB0 /* EACInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EACInteraction.swift; sourceTree = "<group>"; };
-		E593E2752816868100154EB0 /* PINManagementInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINManagementInteraction.swift; sourceTree = "<group>"; };
-		E593E278281686DC00154EB0 /* IDInteractionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDInteractionManager.swift; sourceTree = "<group>"; };
 		E5CEB27A281041330076B9FE /* BundesIdent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BundesIdent.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5CEB27D281041330076B9FE /* BundesIdentApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundesIdentApp.swift; sourceTree = "<group>"; };
 		E5CEB281281041340076B9FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -378,9 +355,8 @@
 		E5CEB29428104F920076B9FE /* BundesIdent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BundesIdent.entitlements; sourceTree = "<group>"; };
 		E5CEB295281050BE0076B9FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E5E69D822812FB4500A3B66A /* EIDInteractionEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIDInteractionEvent.swift; sourceTree = "<group>"; };
-		E5E69D842812FB6100A3B66A /* IDCardInteractionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDCardInteractionError.swift; sourceTree = "<group>"; };
-		E5E69D862812FB7A00A3B66A /* IDTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDTask.swift; sourceTree = "<group>"; };
-		E5E69D882812FB8D00A3B66A /* IDCardAttribute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDCardAttribute.swift; sourceTree = "<group>"; };
+		E5E69D842812FB6100A3B66A /* EIDInteractionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIDInteractionError.swift; sourceTree = "<group>"; };
+		E5E69D882812FB8D00A3B66A /* EIDAttribute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIDAttribute.swift; sourceTree = "<group>"; };
 		F43622A62850D6C9008AEBB9 /* ScanError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -407,8 +383,8 @@
 				E144EBD628C63A31009B4900 /* MarkdownUI in Frameworks */,
 				43363E0729A79D6200E9FA23 /* UnleashProxyClientSwift in Frameworks */,
 				E1BC3D8628B7E919007A7B39 /* LicensePlistViewController in Frameworks */,
+				43269A702A0118B500093FD7 /* AusweisApp2SDKWrapper in Frameworks */,
 				D2B76A7A28BE4B93000B442D /* Analytics in Frameworks */,
-				E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */,
 				B9F5055829361F69009FE297 /* TCACoordinators in Frameworks */,
 				E128E0BA288941DC00C5195F /* Sentry in Frameworks */,
 			);
@@ -417,6 +393,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4398414B29FA985900B91714 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				E1BA4D33299299CB004E4C66 /* ChangePINDebugSequence.swift */,
+				E1B6991B2869B31B00360273 /* DebugEIDInteractionManager.swift */,
+				E1BA4D35299299F5004E4C66 /* IdentifyDebugSequence.swift */,
+				E1DF0995294A0FF300199761 /* PreviewEIDInteractionManager.swift */,
+				E13925C62841119400161F5C /* UnimplementedEIDInteractionManager.swift */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
 		D28BC72128BE0A44003C012C /* Packages */ = {
 			isa = PBXGroup;
 			children = (
@@ -431,14 +419,6 @@
 				D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */,
 			);
 			path = Helpers;
-			sourceTree = "<group>";
-		};
-		D2D2DA7A28E5A9C500240CDF /* OpenECard */ = {
-			isa = PBXGroup;
-			children = (
-				E12B424728D8AB440032D65D /* ControllerCallbackTests.swift */,
-			);
-			path = OpenECard;
 			sourceTree = "<group>";
 		};
 		D2D2DA7B28E5A9D500240CDF /* TCA */ = {
@@ -459,7 +439,6 @@
 		D2D2DA7C28E5AA2300240CDF /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */,
 				432A180429C34B5E0033058B /* UnleashManagerTests.swift */,
 			);
 			path = Managers;
@@ -514,6 +493,13 @@
 			path = SupplementaryViews;
 			sourceTree = "<group>";
 		};
+		E1220E9F291AAF5400F0248B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E13925BD28410FE200161F5C /* Generated */ = {
 			isa = PBXGroup;
 			children = (
@@ -528,14 +514,6 @@
 				E13925B72840FB7700161F5C /* Types.swift */,
 			);
 			path = Types;
-			sourceTree = "<group>";
-		};
-		E13925C52841119400161F5C /* Mocks */ = {
-			isa = PBXGroup;
-			children = (
-				E13925C62841119400161F5C /* MockIDInteractionManager.swift */,
-			);
-			path = Mocks;
 			sourceTree = "<group>";
 		};
 		E13F9E372886F2C70088E955 /* Setup */ = {
@@ -581,7 +559,6 @@
 				E1531DC329AE4994008D5185 /* AlertState+Confirmation.swift */,
 				E1AAACE728350FD500A51183 /* Array+Safe.swift */,
 				E13F9E4028882A9C0088E955 /* Bundle+Version.swift */,
-				E1F2F3D628770F28004C8D4B /* IdentifiableCallback.swift */,
 				E1F39DD7285791BD00D8D907 /* IdentifiableError.swift */,
 				E12CB309284A2C700039FD56 /* InteractiveDismissableView.swift */,
 				D20EE42528E421AE0063537E /* IssueTracker.swift */,
@@ -595,7 +572,6 @@
 				E166AF6F28FEC6C7004EE034 /* LogAnalyticsClient.swift */,
 				D29C542E28FFD9580064AB41 /* Logger+Catetory.swift */,
 				B9AF23D22930BD1300BD12DF /* Constants.swift */,
-				E1658734299508D100FCF9C8 /* CancelId.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -671,7 +647,6 @@
 				E13925BD28410FE200161F5C /* Generated */,
 				D2D2DA7928E5A9B600240CDF /* Helpers */,
 				D2D2DA7C28E5AA2300240CDF /* Managers */,
-				D2D2DA7A28E5A9C500240CDF /* OpenECard */,
 				D2D2DA7B28E5A9D500240CDF /* TCA */,
 				D2D2DA7D28E5B5BD00240CDF /* Views */,
 				E13F9E3C288802500088E955 /* UUID+InitFromNumber.swift */,
@@ -768,12 +743,6 @@
 		E593E277281686D000154EB0 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				E13925C52841119400161F5C /* Mocks */,
-				E593E278281686DC00154EB0 /* IDInteractionManager.swift */,
-				E1BA4D33299299CB004E4C66 /* ChangePINDebugSequence.swift */,
-				E1BA4D35299299F5004E4C66 /* IdentifyDebugSequence.swift */,
-				E1B6991B2869B31B00360273 /* DebugIDInteractionManager.swift */,
-				E1DF0995294A0FF300199761 /* PreviewIDInteractionManager.swift */,
 				E14C21B128B8BF9100192338 /* StorageManager.swift */,
 				43363E0829B01D4900E9FA23 /* ABTester.swift */,
 			);
@@ -789,6 +758,7 @@
 				E18E2238285349D200221DB1 /* BundesIdentUITests */,
 				E5CEB27B281041330076B9FE /* Products */,
 				D28BC72128BE0A44003C012C /* Packages */,
+				E1220E9F291AAF5400F0248B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -808,7 +778,7 @@
 				E1BC3D7A28B7E5C0007A7B39 /* Generated */,
 				E15FCE40282BFD4A00CD7AD6 /* Helpers */,
 				E593E277281686D000154EB0 /* Managers */,
-				E5CEB28B2810466C0076B9FE /* OpenECard */,
+				E5CEB28B2810466C0076B9FE /* EID */,
 				E5CEB283281041340076B9FE /* Preview Content */,
 				E1CD8E89281FFCA0008ADA2A /* Resources */,
 				E16708AF283D4E9E001A1637 /* TCA */,
@@ -845,25 +815,19 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		E5CEB28B2810466C0076B9FE /* OpenECard */ = {
+		E5CEB28B2810466C0076B9FE /* EID */ = {
 			isa = PBXGroup;
 			children = (
-				E12CB30328494B0B0039FD56 /* OpenECardTypes.swift */,
-				E59097B4281153A100CDA144 /* NFCMessageProvider.swift */,
-				E59097B6281187D200CDA144 /* OpenEcardExtensions.swift */,
+				4398414B29FA985900B91714 /* Debug */,
+				E5E69D882812FB8D00A3B66A /* EIDAttribute.swift */,
 				E5E69D822812FB4500A3B66A /* EIDInteractionEvent.swift */,
-				E5E69D842812FB6100A3B66A /* IDCardInteractionError.swift */,
-				E5E69D862812FB7A00A3B66A /* IDTask.swift */,
-				E5E69D882812FB8D00A3B66A /* IDCardAttribute.swift */,
-				E593E2652816845C00154EB0 /* AuthenticationTerms.swift */,
-				E593E2672816847900154EB0 /* EIDAuthenticationRequest.swift */,
-				E593E26D2816853A00154EB0 /* StopServiceHandler.swift */,
-				E593E26F2816856200154EB0 /* StartServiceHandler.swift */,
-				E593E2712816864800154EB0 /* ControllerCallback.swift */,
-				E593E2732816866200154EB0 /* EACInteraction.swift */,
-				E593E2752816868100154EB0 /* PINManagementInteraction.swift */,
+				E5E69D842812FB6100A3B66A /* EIDInteractionError.swift */,
+				430A933629DC540200607329 /* EIDInteractionFlowListener.swift */,
+				E1494266291E8A750059703B /* EIDInteractionManager.swift */,
+				4398414529F981BB00B91714 /* IdentificationInformation.swift */,
+				4398414729F9822200B91714 /* ScanOverlayMessages.swift */,
 			);
-			path = OpenECard;
+			path = EID;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -926,13 +890,13 @@
 			);
 			name = BundesIdent;
 			packageProductDependencies = (
-				E15C22FF2850F5A8005CCBB9 /* OpenEcard */,
 				E128E0B9288941DC00C5195F /* Sentry */,
 				E1BC3D8528B7E919007A7B39 /* LicensePlistViewController */,
 				D2B76A7928BE4B93000B442D /* Analytics */,
 				E144EBD528C63A31009B4900 /* MarkdownUI */,
 				B9F5055729361F69009FE297 /* TCACoordinators */,
 				43363E0629A79D6200E9FA23 /* UnleashProxyClientSwift */,
+				43269A6F2A0118B500093FD7 /* AusweisApp2SDKWrapper */,
 			);
 			productName = BundesIdent;
 			productReference = E5CEB27A281041330076B9FE /* BundesIdent.app */;
@@ -972,12 +936,12 @@
 			mainGroup = E5CEB271281041330076B9FE;
 			packageReferences = (
 				E13925B928410F3F00161F5C /* XCRemoteSwiftPackageReference "Cuckoo" */,
-				E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */,
-				E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */,
-				E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController.git" */,
+				E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */,
 				E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 				B9F5055629361F69009FE297 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
 				43363E0529A79D6200E9FA23 /* XCRemoteSwiftPackageReference "unleash-proxy-client-swift" */,
+				43269A6E2A0118B500093FD7 /* XCRemoteSwiftPackageReference "AusweisApp2Wrapper-iOS-SPM" */,
 			);
 			productRefGroup = E5CEB27B281041330076B9FE /* Products */;
 			projectDirPath = "";
@@ -1093,7 +1057,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PATH=$PATH:/opt/homebrew/bin\nlicense-plist --suppress-opening-directory --fail-if-missing-license --output-path BundesIdent/Generated --prefix Licenses\n";
+			shellScript = "PATH=$PATH:/opt/homebrew/bin\nlicense-plist --suppress-opening-directory --output-path BundesIdent/Generated --prefix Licenses\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1127,11 +1091,9 @@
 				D245421828CB9E68002600C9 /* IdentificationOverviewTests.swift in Sources */,
 				B95E687729473791004D956B /* RouteTests.swift in Sources */,
 				E13F9E3D288802500088E955 /* UUID+InitFromNumber.swift in Sources */,
-				E12B424828D8AB440032D65D /* ControllerCallbackTests.swift in Sources */,
 				D2C5915028CB86570048D379 /* MissingPINLetterTests.swift in Sources */,
 				B91E34512938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift in Sources */,
 				E135D6AC28B76A3500A32862 /* Matchable+BundesIdent.swift in Sources */,
-				E12CB30628494BD70039FD56 /* IDInteractionManagerTests.swift in Sources */,
 				E135D6AA28B7696400A32862 /* SetupCoordinatorTests.swift in Sources */,
 				E13F9E3B2886F3420088E955 /* IdentificationCoordinatorTests.swift in Sources */,
 				E13925C42841111100161F5C /* GeneratedMocks.swift in Sources */,
@@ -1159,12 +1121,11 @@
 				D278AC9A28FD388100BD0528 /* View+Synchronize.swift in Sources */,
 				E110400D281C389C004BA03E /* SetupIntro.swift in Sources */,
 				E1AB879E282283AB00C7FC94 /* Fonts.swift in Sources */,
+				4398414629F981BB00B91714 /* IdentificationInformation.swift in Sources */,
 				E16708BC283D824D001A1637 /* Scheduler+Animation.swift in Sources */,
 				E1C2D8BA28620E2B000E0F5B /* IdentificationPINScan.swift in Sources */,
 				4334B4D329A64F00001FF36C /* Markdown.swift in Sources */,
-				E593E26E2816853A00154EB0 /* StopServiceHandler.swift in Sources */,
 				E16708B3283D4ED2001A1637 /* SetupCoordinator.swift in Sources */,
-				E1658735299508D100FCF9C8 /* CancelId.swift in Sources */,
 				E1B0F5A82981437600143B82 /* SetupCANAlreadySetup.swift in Sources */,
 				43363E0929B01D4900E9FA23 /* ABTester.swift in Sources */,
 				E16708C0283E6A07001A1637 /* SetupScan.swift in Sources */,
@@ -1174,64 +1135,56 @@
 				B974FD0A29268A5C00B338E5 /* CANInput.swift in Sources */,
 				D28D280228B7A9F5008DA310 /* SetupDone.swift in Sources */,
 				B974FD08292685FC00B338E5 /* CANIntro.swift in Sources */,
-				E593E279281686DC00154EB0 /* IDInteractionManager.swift in Sources */,
-				E59097B5281153A100CDA144 /* NFCMessageProvider.swift in Sources */,
 				E16708AE283D4224001A1637 /* HomeView.swift in Sources */,
 				E193BE5929B9EE98008D7F39 /* AlreadySetupConfirmation.swift in Sources */,
-				E593E2662816845C00154EB0 /* AuthenticationTerms.swift in Sources */,
 				B9EB82DF2940A589002590F9 /* IdentificationCANCoordinator.swift in Sources */,
-				E593E2702816856200154EB0 /* StartServiceHandler.swift in Sources */,
 				E16708BE283E666A001A1637 /* Store+Empty.swift in Sources */,
 				E1CD8E9128214FDB008ADA2A /* SetupPINLetterIntro.swift in Sources */,
 				E1EB9FFA28B5288A007FF467 /* ScanBody.swift in Sources */,
 				E1BA4D36299299F5004E4C66 /* IdentifyDebugSequence.swift in Sources */,
 				D28D280328B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift in Sources */,
-				E5E69D852812FB6100A3B66A /* IDCardInteractionError.swift in Sources */,
+				E5E69D852812FB6100A3B66A /* EIDInteractionError.swift in Sources */,
 				E1EFB5C62858EB2A005C38C6 /* Shape+Fill.swift in Sources */,
 				D201402728C5E6FD0002A054 /* Box.swift in Sources */,
+				430A933729DC540200607329 /* EIDInteractionFlowListener.swift in Sources */,
 				E15D0EBC29095F740088EF4E /* IdentificationOverviewError.swift in Sources */,
-				E12CB30428494B0B0039FD56 /* OpenECardTypes.swift in Sources */,
 				E1EFB5C22858EAA2005C38C6 /* IdentificationOverviewLoaded.swift in Sources */,
-				E593E2682816847900154EB0 /* EIDAuthenticationRequest.swift in Sources */,
 				E16708BA283D7CA1001A1637 /* DialogButtons.swift in Sources */,
 				E1234DB12976E0BC00837872 /* SceneDelegate.swift in Sources */,
 				E1EFB5D5285C7D81005C38C6 /* IdentificationPersonalPIN.swift in Sources */,
-				E1DF0996294A0FF300199761 /* PreviewIDInteractionManager.swift in Sources */,
+				E1DF0996294A0FF300199761 /* PreviewEIDInteractionManager.swift in Sources */,
 				E1B0F5AA29829D8900143B82 /* SetupCANCoordinator.swift in Sources */,
 				E1A769FF28B940C6001E1F04 /* LaunchArgument.swift in Sources */,
+				E1494267291E8A750059703B /* EIDInteractionManager.swift in Sources */,
 				E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */,
 				B9DF15642913CCF1004E15E9 /* SetupPersonalPinConfirm.swift in Sources */,
 				E1EFB5C42858EB0F005C38C6 /* IdentificationOverviewLoading.swift in Sources */,
-				E1F2F3D728770F28004C8D4B /* IdentifiableCallback.swift in Sources */,
 				E1FFDF0C2875C7E9006DFE03 /* UUID+Zero.swift in Sources */,
 				E1AB87A4282413A700C7FC94 /* PINTextField.swift in Sources */,
 				E11EB2AD2853A8EA008B4042 /* SetupScreens.swift in Sources */,
 				E1F39DDA28588AB000D8D907 /* IdentificationCoordinator.swift in Sources */,
-				E1B6991C2869B31B00360273 /* DebugIDInteractionManager.swift in Sources */,
+				E1B6991C2869B31B00360273 /* DebugEIDInteractionManager.swift in Sources */,
 				E1F39DDC28588B0100D8D907 /* IdentificationScreens.swift in Sources */,
 				E1F39DD6285784DD00D8D907 /* IdentificationOverview.swift in Sources */,
 				E14C21B228B8BF9100192338 /* StorageManager.swift in Sources */,
 				B974FD042926657200B338E5 /* IdentificationCANPINForgotten.swift in Sources */,
 				E17604D1287E24F1007DFA10 /* DebugMenu.swift in Sources */,
 				E13F9E4128882A9C0088E955 /* Bundle+Version.swift in Sources */,
-				E593E2742816866200154EB0 /* EACInteraction.swift in Sources */,
 				D2C1F47428FD5267009709F2 /* View+FocusOnAppear.swift in Sources */,
 				E1AAACFB2837B9A200A51183 /* SetupPersonalPINInput.swift in Sources */,
 				E101325128EDDD7E006875F8 /* LoopingVideoPlayer.swift in Sources */,
 				E1CD8E93282156F2008ADA2A /* SetupTransportPIN.swift in Sources */,
-				E5E69D892812FB8D00A3B66A /* IDCardAttribute.swift in Sources */,
+				E5E69D892812FB8D00A3B66A /* EIDAttribute.swift in Sources */,
 				E16708B7283D7C2B001A1637 /* DialogView.swift in Sources */,
 				E128E0BC28898D3400C5195F /* AppDelegate.swift in Sources */,
 				B9A408A6292E231100EAB0B2 /* IdentificationCANScan.swift in Sources */,
 				E1AB87A02822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift in Sources */,
 				D28D27FF28B7A91B008DA310 /* MissingPINLetter.swift in Sources */,
 				B974FD062926714500B338E5 /* IdentificationCANOrderNewPIN.swift in Sources */,
-				E593E2762816868100154EB0 /* PINManagementInteraction.swift in Sources */,
 				E1531DC429AE4994008D5185 /* AlertState+Confirmation.swift in Sources */,
 				E106614C28EC8C0C00CA2DB9 /* SharedScan.swift in Sources */,
 				E1BA4D34299299CB004E4C66 /* ChangePINDebugSequence.swift in Sources */,
 				E1AB879A282281C400C7FC94 /* HeaderView.swift in Sources */,
-				E59097B7281187D200CDA144 /* OpenEcardExtensions.swift in Sources */,
 				E144EBD828C63A4D009B4900 /* AboutView.swift in Sources */,
 				E1F39DD8285791BD00D8D907 /* IdentifiableError.swift in Sources */,
 				D20EE42628E421AE0063537E /* IssueTracker.swift in Sources */,
@@ -1244,21 +1197,20 @@
 				E1CD8E9528215971008ADA2A /* PINEntryView.swift in Sources */,
 				E1B0F5A62981435C00143B82 /* SetupCANConfirmTransportPIN.swift in Sources */,
 				E13925B82840FB7700161F5C /* Types.swift in Sources */,
-				E13925C72841119400161F5C /* MockIDInteractionManager.swift in Sources */,
+				E13925C72841119400161F5C /* UnimplementedEIDInteractionManager.swift in Sources */,
 				43EE410329A3D89700A96953 /* BackButton.swift in Sources */,
 				E1BC3D7928B7E40B007A7B39 /* LicensesView.swift in Sources */,
 				E16708B1283D4EAC001A1637 /* Dependencies.swift in Sources */,
-				E593E2722816864800154EB0 /* ControllerCallback.swift in Sources */,
 				E1CD8E88281FF62F008ADA2A /* Colors.swift in Sources */,
 				E11EB2AB2853A8B6008B4042 /* Coordinator.swift in Sources */,
 				43363E0D29B6BFF300E9FA23 /* RemoteConfiguration.swift in Sources */,
 				E1234DB32976EA3900837872 /* BundLicensePlistViewController.swift in Sources */,
-				E5E69D872812FB7A00A3B66A /* IDTask.swift in Sources */,
 				D2B7BCFB28D2108900318B9F /* Effects.swift in Sources */,
 				43AE178929C3C1A700902E27 /* SetupIntroVariation.swift in Sources */,
 				E1AAACE828350FD500A51183 /* Array+Safe.swift in Sources */,
 				E16708B5283D4F25001A1637 /* Screens.swift in Sources */,
 				D21E682028BCEB0A0055EBFE /* Assets+Generated.swift in Sources */,
+				4398414829F9822200B91714 /* ScanOverlayMessages.swift in Sources */,
 				E5CEB27E281041330076B9FE /* BundesIdentApp.swift in Sources */,
 				E1CD8E8F2820395F008ADA2A /* BundButtonStyle.swift in Sources */,
 				B95FAA8929278F74009BDAC9 /* IdentificationCANPersonalPINInput.swift in Sources */,
@@ -1346,7 +1298,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 63;
+				CURRENT_PROJECT_VERSION = 65;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1367,7 +1319,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "BundesIdent Preview";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.9.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1499,7 +1451,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 63;
+				CURRENT_PROJECT_VERSION = 65;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1514,7 +1466,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "BundesIdent Preview";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1733,7 +1685,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 63;
+				CURRENT_PROJECT_VERSION = 65;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1754,7 +1706,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = BundesIdent;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.9.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1800,7 +1752,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 63;
+				CURRENT_PROJECT_VERSION = 65;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1815,7 +1767,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = BundesIdent;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1964,6 +1916,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		43269A6E2A0118B500093FD7 /* XCRemoteSwiftPackageReference "AusweisApp2Wrapper-iOS-SPM" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/digitalservicebund/AusweisApp2Wrapper-iOS-SPM";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		43363E0529A79D6200E9FA23 /* XCRemoteSwiftPackageReference "unleash-proxy-client-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Unleash/unleash-proxy-client-swift";
@@ -1980,7 +1940,7 @@
 				minimumVersion = 0.3.0;
 			};
 		};
-		E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */ = {
+		E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
 			requirement = {
@@ -2004,15 +1964,7 @@
 				minimumVersion = 2.0.0;
 			};
 		};
-		E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/TICESoftware/open-ecard-ios";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.1.2;
-			};
-		};
-		E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController.git" */ = {
+		E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/yhirano/LicensePlistViewController.git";
 			requirement = {
@@ -2023,6 +1975,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		43269A6F2A0118B500093FD7 /* AusweisApp2SDKWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43269A6E2A0118B500093FD7 /* XCRemoteSwiftPackageReference "AusweisApp2Wrapper-iOS-SPM" */;
+			productName = AusweisApp2SDKWrapper;
+		};
 		43363E0629A79D6200E9FA23 /* UnleashProxyClientSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 43363E0529A79D6200E9FA23 /* XCRemoteSwiftPackageReference "unleash-proxy-client-swift" */;
@@ -2039,7 +1996,7 @@
 		};
 		E128E0B9288941DC00C5195F /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */;
+			package = E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = Sentry;
 		};
 		E13925C1284110FD00161F5C /* Cuckoo */ = {
@@ -2052,14 +2009,9 @@
 			package = E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */;
 			productName = MarkdownUI;
 		};
-		E15C22FF2850F5A8005CCBB9 /* OpenEcard */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */;
-			productName = OpenEcard;
-		};
 		E1BC3D8528B7E919007A7B39 /* LicensePlistViewController */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController.git" */;
+			package = E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */;
 			productName = LicensePlistViewController;
 		};
 /* End XCSwiftPackageProductDependency section */

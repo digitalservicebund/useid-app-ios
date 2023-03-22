@@ -45,19 +45,16 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
         return actions
     }
     
-    func run(card: inout Card, subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>) -> [ChangePINDebugSequence] {
+    func run(card: inout Card, subject: PassthroughSubject<EIDInteractionEvent, EIDInteractionError>) -> [ChangePINDebugSequence] {
         switch self {
         case .cancelPINScan:
-            subject.send(.cardInteractionComplete)
-            subject.send(.requestChangedPIN(remainingAttempts: nil, pinCallback: { _, _ in
-                subject.send(.requestCardInsertion({ _ in }))
-            }))
+            subject.send(.pinRequested(remainingAttempts: nil))
+            subject.send(.newPINRequested)
+            subject.send(.cardInsertionRequested)
             return ChangePINDebugSequence.defaultActions(card: card)
         case .cancelCANScan:
-            subject.send(.cardInteractionComplete)
-            subject.send(.requestPINAndCAN({ _, _ in
-                subject.send(.requestCardInsertion({ _ in }))
-            }))
+            subject.send(.canRequested)
+            subject.send(.cardInsertionRequested)
             return [
                 .cancelCANScan,
                 .changePINSuccessfully,
@@ -69,36 +66,13 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
         case .changePINSuccessfully:
             card.remainingAttempts = 3
             subject.send(.cardRecognized)
-            subject.send(.cardInteractionComplete)
-            subject.send(.processCompletedSuccessfullyWithoutRedirect)
+            subject.send(.pinChangeSucceeded)
             subject.send(completion: .finished)
             return []
         case .runPINError(remainingAttempts: let remainingAttempts, cancelAction: let cancelAction):
-            
-            let secondCallback = {
-                subject.send(.cardRemoved)
-                subject.send(.requestCardInsertion({ _ in }))
-            }
-            
             card.remainingAttempts = remainingAttempts - 1
             
-            let firstCallback = { [card] in
-                subject.send(.cardRemoved)
-                subject.send(.requestCardInsertion({ _ in }))
-                subject.send(.cardRecognized)
-                subject.send(.cardInteractionComplete)
-                
-                if card.remainingAttempts >= 2 {
-                    subject.send(.requestChangedPIN(remainingAttempts: card.remainingAttempts, pinCallback: { _, _ in secondCallback() }))
-                } else if card.remainingAttempts == 1 {
-                    subject.send(.requestCANAndChangedPIN(pinCallback: { _, _, _ in secondCallback() }))
-                } else {
-                    subject.send(completion: .failure(.cardBlocked))
-                }
-            }
-            
             subject.send(.cardRecognized)
-            subject.send(.cardInteractionComplete)
             
             let cancelDebugSequence: ChangePINDebugSequence
             switch cancelAction {
@@ -107,39 +81,39 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
             }
             
             if card.remainingAttempts >= 2 {
-                subject.send(.requestChangedPIN(remainingAttempts: remainingAttempts, pinCallback: { _, _ in firstCallback() }))
+                subject.send(.pinRequested(remainingAttempts: remainingAttempts))
+                subject.send(.newPINRequested)
+                subject.send(.cardInsertionRequested)
+                subject.send(.cardRecognized)
+                subject.send(.pinRequested(remainingAttempts: card.remainingAttempts))
+                subject.send(.cardInsertionRequested)
                 return [.changePINSuccessfully, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: cancelAction), cancelDebugSequence]
             } else if card.remainingAttempts == 1 {
-                subject.send(.requestCANAndChangedPIN(pinCallback: { _, _, _ in }))
+                subject.send(.canRequested)
                 return [.changePINSuccessfully, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: cancelAction), .runCANError, cancelDebugSequence]
             } else {
-                subject.send(completion: .failure(.cardBlocked))
+                subject.send(.pukRequested)
                 return []
             }
         case .runNFCError:
-            subject.send(completion: .failure(.processFailed(resultCode: .INTERNAL_ERROR, redirectURL: nil, resultMinor: nil)))
+            subject.send(completion: .failure(.pinChangeFailed))
             return ChangePINDebugSequence.defaultActions(card: card)
         case .runCardSuspended:
             card.remainingAttempts = 1
-            subject.send(.requestCANAndChangedPIN(pinCallback: { _, _, _ in }))
+            subject.send(.canRequested)
             return [.cancelCANScan, .changePINSuccessfully, .runCANError, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: .can)]
         case .runCardDeactivated:
             subject.send(.cardRecognized)
-            subject.send(.cardInteractionComplete)
             subject.send(completion: .failure(.cardDeactivated))
             return []
         case .runCardBlocked:
             subject.send(.cardRecognized)
-            subject.send(.cardInteractionComplete)
-            subject.send(completion: .failure(.cardBlocked))
+            subject.send(.pukRequested)
             return []
         case .runCANError:
             subject.send(.cardRecognized)
-            subject.send(.cardInteractionComplete)
-            subject.send(.requestCANAndChangedPIN { _, _, _ in
-                subject.send(.requestCardInsertion { _ in })
-            })
-            subject.send(.cardRemoved)
+            subject.send(.canRequested)
+            subject.send(.cardInsertionRequested)
             return [.cancelCANScan, .changePINSuccessfully, .runCANError, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: .can)]
         }
     }

@@ -13,13 +13,13 @@ struct SetupCoordinator: ReducerProtocol {
     @Dependency(\.mainQueue) var mainQueue
     @Dependency(\.issueTracker) var issueTracker
     @Dependency(\.logger) var logger
-    @Dependency(\.idInteractionManager) var idInteractionManager
+    @Dependency(\.eIDInteractionManager) var eIDInteractionManager
     @Dependency(\.analytics) var analytics
 #if PREVIEW
-    @Dependency(\.previewIDInteractionManager) var previewIDInteractionManager
+    @Dependency(\.previewEIDInteractionManager) var previewEIDInteractionManager
 #endif
     
-    struct State: Equatable, IndexedRouterState, IDInteractionHandler {
+    struct State: Equatable, IndexedRouterState, EIDInteractionHandler {
         var transportPIN: String
         var attempt: Int
         var tokenURL: URL?
@@ -29,7 +29,7 @@ struct SetupCoordinator: ReducerProtocol {
         var availableDebugActions: [ChangePINDebugSequence] = []
 #endif
         
-        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             for (index, state) in states.enumerated().reversed() {
                 guard let action = state.screen.transformToLocalAction(event) else { continue }
                 return .routeAction(index, action: action)
@@ -100,7 +100,7 @@ struct SetupCoordinator: ReducerProtocol {
     indirect enum Action: Equatable, IndexedRouterAction {
         case routeAction(Int, action: SetupScreen.Action)
         case updateRoutes([Route<SetupScreen.State>])
-        case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
+        case eIDInteractionEvent(Result<EIDInteractionEvent, EIDInteractionError>)
         case end
         case confirmEnd
         case afterConfirmEnd
@@ -113,16 +113,18 @@ struct SetupCoordinator: ReducerProtocol {
     
     var body: some ReducerProtocol<State, Action> {
         Reduce<State, Action> { state, action in
+            enum SetupCancelID {}
+
             switch action {
 #if PREVIEW
             case .runDebugSequence(let debugSequence):
-                state.availableDebugActions = previewIDInteractionManager.runChangePIN(debugSequence: debugSequence)
+                state.availableDebugActions = previewEIDInteractionManager.runChangePIN(debugSequence: debugSequence)
                 return .none
             case .routeAction(_, action: .scan(.runDebugSequence(let sequence))),
                  .routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canScan(.runDebugSequence(let sequence))))):
                 return EffectTask(value: .runDebugSequence(sequence))
 #endif
-            case .idInteractionEvent(let result):
+            case .eIDInteractionEvent(let result):
                 guard let localAction = state.transformToLocalAction(result) else {
                     issueTracker.capture(error: SetupCoordinatorError.noScreenToHandleEIDInteractionEvents)
                     logger.error("No screen found to handle EIDInteractionEvents")
@@ -151,40 +153,34 @@ struct SetupCoordinator: ReducerProtocol {
             case .routeAction(_, action: .personalPINConfirm(.done(pin: let pin))):
                 state.routes.pop()
                 state.routes.push(.scan(SetupScan.State(transportPIN: state.transportPIN, newPIN: pin)))
-            case .routeAction(_, action: .scan(.shared(.initiateScan))),
-                 .routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canScan(.shared(.initiateScan))))):
+            case .routeAction(_, action: .scan(.changePIN)),
+                 .routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canScan(.changePIN)))):
                 let publisher: EIDInteractionPublisher
 #if PREVIEW
-                if previewIDInteractionManager.isDebugModeEnabled {
-                    let debuggableInteraction = previewIDInteractionManager.debuggableChangePIN()
+                if previewEIDInteractionManager.isDebugModeEnabled {
+                    let debuggableInteraction = previewEIDInteractionManager.debuggableChangePIN()
                     state.availableDebugActions = debuggableInteraction.sequence
                     publisher = debuggableInteraction.publisher
                 } else {
-                    publisher = idInteractionManager.changePIN(nfcMessagesProvider: SetupNFCMessageProvider())
+                    publisher = eIDInteractionManager.changePIN(messages: .setup)
                 }
 #else
-                publisher = idInteractionManager.changePIN(nfcMessagesProvider: SetupNFCMessageProvider())
+                publisher = eIDInteractionManager.changePIN(messages: .setup)
 #endif
-                return .concatenate(
-                    .trackEvent(category: "firstTimeUser",
-                                action: "buttonPressed",
-                                name: "scan",
-                                analytics: analytics),
-                    publisher
-                        .receive(on: mainQueue)
-                        .catchToEffect(Action.idInteractionEvent)
-                        .cancellable(id: CancelId.self, cancelInFlight: true)
-                )
+                return publisher
+                    .receive(on: mainQueue)
+                    .catchToEffect(Action.eIDInteractionEvent)
+                    .cancellable(id: SetupCancelID.self, cancelInFlight: true)
             case .routeAction(_, action: .scan(.scannedSuccessfully)):
                 state.routes.push(.done(SetupDone.State(tokenURL: state.tokenURL)))
             case .routeAction(_, action: .scan(.error(let errorState))):
                 state.routes.presentSheet(.error(errorState))
-            case .routeAction(_, action: .scan(.requestCANAndChangedPIN(pin: let pin, callback: let canAndChangedPINCallback))):
+                return .cancel(id: SetupCancelID.self)
+            case .routeAction(_, action: .scan(.requestCANAndChangedPIN(pin: let pin))):
                 let transportPINIsUnchecked = state.attempt == 0
                 state.routes.push(.setupCANCoordinator(SetupCANCoordinator.State(oldTransportPIN: state.transportPIN,
                                                                                  transportPIN: transportPINIsUnchecked ? state.transportPIN : nil,
                                                                                  pin: pin,
-                                                                                 callback: canAndChangedPINCallback,
                                                                                  tokenURL: state.tokenURL,
                                                                                  attempt: state.attempt,
                                                                                  goToCanIntroScreen: transportPINIsUnchecked)))

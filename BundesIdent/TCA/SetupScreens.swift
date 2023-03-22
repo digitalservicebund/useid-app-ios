@@ -3,7 +3,7 @@ import Foundation
 import Analytics
 
 struct SetupScreen: ReducerProtocol {
-    enum State: Equatable, IDInteractionHandler {
+    enum State: Equatable, EIDInteractionHandler {
         case intro(SetupIntro.State)
         case introVariation(SetupIntro.State)
         case alreadySetupConfirmation
@@ -19,7 +19,7 @@ struct SetupScreen: ReducerProtocol {
         case missingPINLetter(MissingPINLetter.State)
         case setupCANCoordinator(SetupCANCoordinator.State)
         
-        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             switch self {
             case .scan(let state):
                 guard let localAction = state.transformToLocalAction(event) else { return nil }

@@ -2,61 +2,34 @@ import ComposableArchitecture
 import SwiftUI
 
 struct IdentificationOverviewLoaded: ReducerProtocol {
-    @Dependency(\.uuid) var uuid
+
     struct State: Identifiable, Equatable {
         let id: UUID
-        let request: EIDAuthenticationRequest
-        var handler: IdentifiableCallback<FlaggedAttributes>
+        let identificationInformation: IdentificationInformation
         let canGoBackToSetupIntro: Bool
-        
-        // used when going back to the overview screen when we already received a pin handler
-        var pinHandler: PINCallback?
-        
-        init(id: UUID, request: EIDAuthenticationRequest, handler: IdentifiableCallback<FlaggedAttributes>, canGoBackToSetupIntro: Bool = false, pinHandler: PINCallback? = nil) {
+
+        init(id: UUID, identificationInformation: IdentificationInformation, canGoBackToSetupIntro: Bool = false) {
             self.id = id
-            self.request = request
-            self.handler = handler
+            self.identificationInformation = identificationInformation
             self.canGoBackToSetupIntro = canGoBackToSetupIntro
-            self.pinHandler = pinHandler
         }
         
-        var requiredReadAttributes: IdentifiedArrayOf<IDCardAttribute> {
-            let requiredAttributes = request.readAttributes.compactMap { (key: IDCardAttribute, isRequired: Bool) in
-                isRequired ? key : nil
-            }
-            return IdentifiedArrayOf(uniqueElements: requiredAttributes)
+        var requiredReadAttributes: IdentifiedArrayOf<EIDAttribute> {
+            IdentifiedArrayOf(uniqueElements: identificationInformation.request.requiredAttributes)
         }
     }
     
     enum Action: Equatable {
-        case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
         case moreInfo
-        case callbackReceived(EIDAuthenticationRequest, PINCallback)
-        case confirm
+        case confirm(IdentificationInformation)
         case failure(IdentifiableError)
     }
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
-        case .idInteractionEvent(.success(.requestPIN(remainingAttempts: nil, pinCallback: let handler))):
-            let pinHandler = PINCallback(id: uuid.callAsFunction(), callback: handler)
-            state.pinHandler = pinHandler
-            return EffectTask(value: .callbackReceived(state.request, pinHandler))
-        case .idInteractionEvent(.failure(let error)):
-            return EffectTask(value: .failure(IdentifiableError(error)))
-        case .idInteractionEvent:
-            return .none
         case .confirm:
-            if let pinHandler = state.pinHandler {
-                return EffectTask(value: .callbackReceived(state.request, pinHandler))
-            } else {
-                let dict = Dictionary(uniqueKeysWithValues: state.requiredReadAttributes.map { ($0, true) })
-                state.handler(dict)
-                return .none
-            }
-        case .failure:
             return .none
-        case .callbackReceived:
+        case .failure:
             return .none
         case .moreInfo:
             return .none
@@ -72,21 +45,21 @@ struct IdentificationOverviewLoadedView: View {
             VStack(alignment: .leading, spacing: 0) {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
-                        HeaderView(title: L10n.Identification.AttributeConsent.title(viewStore.request.subject),
+                        HeaderView(title: L10n.Identification.AttributeConsent.title(viewStore.identificationInformation.certificateDescription.subjectName),
                                    message: L10n.Identification.AttributeConsent.body)
                             .padding(.horizontal)
                         
                         attributesBox
                         
                         NavigationLink(L10n.Identification.AttributeConsent.moreInfo) {
-                            IdentificationAbout(request: viewStore.request)
+                            IdentificationAbout(request: viewStore.identificationInformation.certificateDescription)
                         }
                         .buttonStyle(BundTextButtonStyle())
                         .padding([.horizontal, .bottom])
                     }
                 }
                 DialogButtons(store: store.stateless,
-                              primary: .init(title: L10n.Identification.AttributeConsent.continue, action: .confirm))
+                              primary: .init(title: L10n.Identification.AttributeConsent.continue, action: .confirm(viewStore.identificationInformation)))
             }
             .navigationBarTitleDisplayMode(.inline)
         }

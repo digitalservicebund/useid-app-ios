@@ -3,7 +3,7 @@ import ComposableArchitecture
 import Analytics
 
 struct MissingPINLetter: ReducerProtocol {
-    @Dependency(\.analytics) var analytics: AnalyticsClient
+    @Dependency(\.analytics) var analytics
     
     struct State: Equatable {}
 

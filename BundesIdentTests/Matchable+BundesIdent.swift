@@ -1,9 +1,9 @@
 import Cuckoo
-import OpenEcard
 import Analytics
+import Foundation
 
 @testable import BundesIdent
 
-extension NFCMessages: Matchable {}
+extension ScanOverlayMessages: Matchable {}
 extension AnalyticsEvent: Matchable {}
 extension URL: Matchable {}

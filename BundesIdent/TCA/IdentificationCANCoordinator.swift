@@ -10,21 +10,19 @@ enum IdentificationCANCoordinatorError: CustomNSError {
     case canNilWhenTriedScan
     case pinNilWhenTriedScan
     case canIntroStateNotInRoutes
-    case pinCANCallbackNilWhenTriedScan
     case noScreenToHandleEIDInteractionEvents
 }
 
 struct IdentificationCANCoordinator: ReducerProtocol {
+    
     @Dependency(\.issueTracker) var issueTracker
     @Dependency(\.logger) var logger
     @Dependency(\.mainQueue) var mainQueue
+    
     struct State: Equatable, IndexedRouterState {
         var pin: String?
         var can: String?
-        var request: EIDAuthenticationRequest
-        var pinCANCallback: PINCANCallback
-        var tokenURL: URL
-        var authenticationSuccessful = false
+        var identificationInformation: IdentificationInformation
         var attempt: Int
         
         var swipeToDismiss: SwipeToDismissState {
@@ -38,7 +36,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
 #endif
         var states: [Route<IdentificationCANScreen.State>]
         
-        func transformToLocalInteractionHandler(event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationCANCoordinator.Action? {
+        func transformToLocalInteractionHandler(event: Result<EIDInteractionEvent, EIDInteractionError>) -> IdentificationCANCoordinator.Action? {
             for (index, state) in states.enumerated().reversed() {
                 guard let action = state.screen.transformToLocalAction(event) else { continue }
                 return .routeAction(index, action: action)
@@ -60,8 +58,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
     var body: some ReducerProtocol<State, Action> {
         Reduce<State, Action> { state, action in
             switch action {
-            case .routeAction(_, action: .canScan(.requestPINAndCAN(let pinCANCallback))):
-                state.pinCANCallback = pinCANCallback
+            case .routeAction(_, action: .canScan(.wrongCAN)):
                 state.routes.presentSheet(.canIncorrectInput(.init()))
                 return .none
             case .routeAction(_, action: .canPINForgotten(.end)):
@@ -85,8 +82,8 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                     state.routes.push(
                         .canScan(IdentificationCANScan.State(pin: pin,
                                                              can: can,
-                                                             pinCANCallback: state.pinCANCallback,
-                                                             shared: SharedScan.State(showInstructions: false)))
+                                                             identificationInformation: state.identificationInformation,
+                                                             shared: SharedScan.State(startOnAppear: true)))
                     )
                 } else {
                     issueTracker.capture(error: IdentificationCANCoordinatorError.pinNilWhenTriedScan)
@@ -104,8 +101,8 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                 state.routes.push(
                     .canScan(IdentificationCANScan.State(pin: pin,
                                                          can: can,
-                                                         pinCANCallback: state.pinCANCallback,
-                                                         shared: SharedScan.State(showInstructions: false)))
+                                                         identificationInformation: state.identificationInformation,
+                                                         shared: SharedScan.State(startOnAppear: true)))
                 )
                 
                 return .none
@@ -174,16 +171,12 @@ extension IdentificationCANCoordinator.State: AnalyticsView {
 }
 
 extension IdentificationCANCoordinator.State {
-    init(tokenURL: URL,
-         request: EIDAuthenticationRequest,
-         pinCANCallback: PINCANCallback,
+    init(identificationInformation: IdentificationInformation,
          pin: String?,
          attempt: Int,
          goToCanIntroScreen: Bool) {
         self.pin = pin
-        self.request = request
-        self.pinCANCallback = pinCANCallback
-        self.tokenURL = tokenURL
+        self.identificationInformation = identificationInformation
         self.attempt = attempt
         if goToCanIntroScreen {
             states = [.root(.canIntro(.init(shouldDismiss: true)))]

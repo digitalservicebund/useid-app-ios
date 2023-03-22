@@ -3,43 +3,50 @@ import ComposableArchitecture
 
 struct IdentificationAbout: View {
     
-    var request: EIDAuthenticationRequest
+    var request: CertificateDescription
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
-                Text(request.subject)
+                Text(request.subjectName)
                     .headingXL()
                 
                 Text(L10n.Identification.AttributeConsentInfo.providerInfo)
                     .headingL()
-                
-                Text(L10n.Identification.AttributeConsentInfo.provider)
-                    .headingM()
-                
-                VStack(alignment: .leading, spacing: 0) {
-                    Text(request.subject)
-                    Text(request.subjectURL)
-                }
-                .bodyLRegular()
-                
-                Text(L10n.Identification.AttributeConsentInfo.issuer)
-                    .headingM()
-                
-                VStack(alignment: .leading, spacing: 0) {
-                    Text(request.issuer)
-                    Text(request.issuerURL)
-                }
-                .bodyLRegular()
-                
-                Text(L10n.Identification.AttributeConsentInfo.terms)
-                    .headingM()
-                
-                Text(request.terms.description)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .bodyLRegular()
+
+                block(header: L10n.Identification.AttributeConsentInfo.provider,
+                      texts: [request.subjectName, request.subjectURL?.absoluteString])
+
+                block(header: L10n.Identification.AttributeConsentInfo.issuer,
+                      texts: [request.issuerName, request.issuerURL?.absoluteString])
+
+                block(header: L10n.Identification.AttributeConsentInfo.purpose,
+                      texts: [request.purpose])
+
+                block(header: L10n.Identification.AttributeConsentInfo.terms,
+                      texts: [request.termsOfUsage])
+
+                block(header: L10n.Identification.AttributeConsentInfo.validity,
+                      texts: [
+                          [request.effectiveDate, request.expirationDate]
+                              .map { "\($0.formatted(date: .numeric, time: .omitted))" }
+                              .joined(separator: " - ")
+                      ])
             }
             .padding(.horizontal)
+        }
+    }
+
+    private func block(header: String, texts: [String?]) -> some View {
+        Group {
+            Text(header)
+                .headingM()
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(texts.compactMap { $0 }, id: \.self) {
+                    Text($0)
+                }
+            }
+            .bodyLRegular()
         }
     }
 }

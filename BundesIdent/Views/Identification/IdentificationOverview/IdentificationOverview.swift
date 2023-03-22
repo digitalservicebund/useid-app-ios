@@ -3,23 +3,20 @@ import Analytics
 import ComposableArchitecture
 import TCACoordinators
 
-typealias PINCallback = IdentifiableCallback<String>
-typealias PINCANCallback = IdentifiableCallback<(String, String)>
-
 struct IdentificationOverview: ReducerProtocol {
     @Dependency(\.uuid) var uuid
     @Dependency(\.analytics) var analytics
-    enum State: Equatable, IDInteractionHandler {
+    enum State: Equatable, EIDInteractionHandler {
         case loading(IdentificationOverviewLoading.State)
         case loaded(IdentificationOverviewLoaded.State)
         case error(IdentificationOverviewErrorState)
         
-        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             switch self {
             case .loading:
-                return .loading(.idInteractionEvent(event))
+                return .loading(.eIDInteractionEvent(event))
             case .loaded:
-                return .loaded(.idInteractionEvent(event))
+                return nil
             case .error:
                 return nil
             }
@@ -79,10 +76,12 @@ struct IdentificationOverview: ReducerProtocol {
                                    action: "loadingFailed",
                                    name: "attributes",
                                    analytics: analytics)
-            case .loading(.done(let request, let callback)):
+            case .loading(.done(let request, let certificateDescription)):
+                let identificationInformation = IdentificationInformation(request: request,
+                                                                          certificateDescription: certificateDescription)
                 state = .loaded(IdentificationOverviewLoaded.State(id: uuid.callAsFunction(),
-                                                                   request: request,
-                                                                   handler: callback,
+                                                                   identificationInformation: identificationInformation,
+                                                                   
                                                                    canGoBackToSetupIntro: state.canGoBackToSetupIntro))
                 return .none
             default:

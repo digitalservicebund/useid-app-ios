@@ -3,7 +3,6 @@ import TCACoordinators
 import SwiftUI
 import Analytics
 import Sentry
-import OpenEcard
 
 enum HandleURLError: Error, CustomStringConvertible, CustomNSError {
     case componentsInvalid
@@ -24,7 +23,6 @@ enum HandleURLError: Error, CustomStringConvertible, CustomNSError {
 }
 
 struct Coordinator: ReducerProtocol {
-    @Dependency(\.idInteractionManager) var idInteractionManager
     @Dependency(\.analytics) var analytics
     @Dependency(\.issueTracker) var issueTracker
     @Dependency(\.mainQueue) var mainQueue
@@ -33,7 +31,7 @@ struct Coordinator: ReducerProtocol {
     @Dependency(\.appVersionProvider) var appVersionProvider
     @Dependency(\.abTester) var abTester
 #if PREVIEW
-    @Dependency(\.previewIDInteractionManager) var previewIDInteractionManager
+    @Dependency(\.previewEIDInteractionManager) var previewEIDInteractionManager
 #endif
     struct State: Equatable, IndexedRouterState {
         var routes: [Route<Screen.State>]
@@ -61,14 +59,12 @@ struct Coordinator: ReducerProtocol {
             issueTracker.capture(error: HandleURLError.noTCTokenURLQueryItem)
             return nil
         }
-        guard let encodedTCTokenURL = OpenEcardImp().prepareTCTokenURL(urlString) else {
+        guard let url = URL(string: urlString) else {
             issueTracker.capture(error: HandleURLError.tcTokenURLEncodingError)
             return nil
         }
         
-        var urlComponents = URLComponents(string: "http://127.0.0.1:24727/eID-Client")!
-        urlComponents.percentEncodedQueryItems = [URLQueryItem(name: "tcTokenURL", value: encodedTCTokenURL)]
-        return urlComponents.url
+        return url
     }
     
     func handleURL(state: inout State, _ url: URL) -> EffectTask<Action> {
@@ -232,7 +228,7 @@ struct Coordinator: ReducerProtocol {
             homeState = Home.State(appVersion: version,
                                    buildNumber: buildNumber,
                                    shouldShowVariation: isVariationActivated,
-                                   isDebugModeEnabled: previewIDInteractionManager.isDebugModeEnabled)
+                                   isDebugModeEnabled: previewEIDInteractionManager.isDebugModeEnabled)
 #else
             homeState = Home.State(appVersion: version,
                                    buildNumber: buildNumber,

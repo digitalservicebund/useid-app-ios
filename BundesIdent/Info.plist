@@ -15,32 +15,32 @@
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>MatomoHost</key>
+	<string>bund.matomo.cloud</string>
+	<key>MatomoSiteID</key>
+	<string>$(MATOMO_SITE_ID)</string>
 	<key>SentryHost</key>
 	<string>o1248831.ingest.sentry.io</string>
 	<key>SentryProjectID</key>
 	<string>$(SENTRY_PROJECT_ID)</string>
 	<key>SentryPublicKey</key>
 	<string>$(SENTRY_PUBLIC_KEY)</string>
-	<key>MatomoHost</key>
-	<string>bund.matomo.cloud</string>
-	<key>MatomoSiteID</key>
-	<string>$(MATOMO_SITE_ID)</string>
-	<key>UnleashURL</key>
-	<string>https://features.p.digitalservice.dev/api/frontend</string>
-	<key>UnleashClientKey</key>
-	<string>$(UNLEASH_CLIENT_KEY)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>BundesSans-DTP-Regular.otf</string>
 		<string>BundesSans-DTP-Bold.otf</string>
 	</array>
+	<key>UnleashClientKey</key>
+	<string>$(UNLEASH_CLIENT_KEY)</string>
+	<key>UnleashURL</key>
+	<string>https://features.p.digitalservice.dev/api/frontend</string>
 	<key>com.apple.developer.nfc.readersession.formats</key>
 	<array>
 		<string>TAG</string>
 	</array>
 	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
 	<array>
-		<string>A0000002471001</string>
+		<string>E80704007F00070302</string>
 	</array>
 </dict>
 </plist>
