@@ -3,18 +3,19 @@ import Combine
 import OpenEcard
 import CombineSchedulers
 import OSLog
+import AusweisApp2SDKWrapper
 
 extension OpenEcardImp: OpenEcardType {}
 
 class IDInteractionManager: IDInteractionManagerType {
     
-    private let openEcard: OpenEcardProtocol
-    private var context: ContextManagerProtocol?
     private let issueTracker: IssueTracker
     
-    init(openEcard: OpenEcardProtocol = OpenEcardImp(), issueTracker: IssueTracker) {
-        self.openEcard = openEcard
+    private let workflowController: WorkflowController
+    
+    init(workflowController: WorkflowController = AA2SDKWrapper.workflowController, issueTracker: IssueTracker) {
         self.issueTracker = issueTracker
+        self.workflowController = workflowController
     }
     
     func identify(tokenURL: URL, nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher {
@@ -26,16 +27,8 @@ class IDInteractionManager: IDInteractionManagerType {
     }
     
     private func start(startServiceHandler: StartServiceHandler, nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher {
-        let context = openEcard.context(nfcMessagesProvider)!
-        context.initializeContext(startServiceHandler)
-        self.context = context
-        return startServiceHandler.publisher
-            .handleEvents(receiveCompletion: { [context, issueTracker] _ in
-                startServiceHandler.cancel()
-                context.terminateContext(StopServiceHandler(issueTracker: issueTracker))
-            }, receiveCancel: { [context, issueTracker] in
-                startServiceHandler.cancel()
-                context.terminateContext(StopServiceHandler(issueTracker: issueTracker))
-            }).eraseToAnyPublisher()
+        let publisher = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+        workflowController.start()
+        return publisher.eraseToAnyPublisher()
     }
 }

@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "ausweisapp2-sdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Governikus/AusweisApp2-SDK-iOS",
+      "state" : {
+        "revision" : "599ae230f15f811508a01d99c65f9828ff75045d",
+        "version" : "1.26.3"
+      }
+    },
+    {
       "identity" : "combine-schedulers",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/combine-schedulers",
