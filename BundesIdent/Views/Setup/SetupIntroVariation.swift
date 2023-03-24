@@ -19,7 +19,7 @@ struct SetupIntroVariationView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(16)
                                 .foregroundColor(.blackish)
-                            Asset.pinSetupIOS.swiftUIImage
+                            Image(decorative: Asset.pinSetupIOS.name)
                                 .padding(.bottom, 16)
                         }
                         .background(Color.blue300)
