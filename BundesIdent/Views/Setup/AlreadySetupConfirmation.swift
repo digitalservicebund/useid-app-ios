@@ -26,6 +26,7 @@ struct AlreadySetupConfirmationView: View {
                         .foregroundColor(.green800)
                         .frame(width: 72, height: 72)
                         .padding(.top, 16)
+                        .accessibilityHidden(true)
                     Text(L10n.FirstTimeUser.AlreadySetupConfirmation.title)
                         .headingL()
                     Markdown(L10n.FirstTimeUser.AlreadySetupConfirmation.box)
