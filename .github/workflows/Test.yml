@@ -18,7 +18,7 @@ jobs:
           eval "$(/opt/homebrew/bin/brew shellenv)"
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: Restore dependencies
+      - name: Use cached dependencies
         uses: actions/cache@v3
         id: cache-dependencies
         env:
@@ -34,16 +34,6 @@ jobs:
       - name: Install brew dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: ./native_arch.sh brew bundle --no-lock
-      - name: Save dependencies
-        uses: actions/cache@v3
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        env:
-          cache-name: cache-dependencies
-        with:
-          path: |
-            vendor
-            .bundle
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock', 'Brewfile') }}
           
   lint:
     runs-on: [self-hosted, ARM64]
@@ -56,7 +46,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3       
       - name: Restore dependencies
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         env:
           cache-name: cache-dependencies
         with:
@@ -88,7 +78,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3          
       - name: Restore dependencies
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         env:
           cache-name: cache-dependencies
         with:
@@ -103,7 +93,7 @@ jobs:
             export LANGUAGE=en_US:en;
             bundle exec fastlane build_for_testing
       - name: Save DerivedData and SwiftPM folder
-        uses: actions/cache@v3
+        uses: actions/cache/save@v3
         env:
           cache-name: cache-derived-data
         with:
@@ -124,7 +114,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3       
       - name: Restore dependencies
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         env:
           cache-name: cache-dependencies
         with:
@@ -134,7 +124,7 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock', 'Brewfile') }}
           fail-on-cache-miss: true
       - name: Restore build data
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         env:
           cache-name: cache-derived-data
         with:
@@ -170,7 +160,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
       - name: Restore dependencies
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         env:
           cache-name: cache-dependencies
         with:
@@ -180,7 +170,7 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock', 'Brewfile') }}
           fail-on-cache-miss: true
       - name: Restore build data
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         env:
           cache-name: cache-derived-data
         with:

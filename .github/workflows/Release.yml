@@ -42,16 +42,6 @@ jobs:
       - name: Install brew dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: ./native_arch.sh brew bundle --no-lock
-      - name: Save dependencies
-        uses: actions/cache@v3
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        env:
-          cache-name: cache-dependencies
-        with:
-          path: |
-            vendor
-            .bundle
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock', 'Brewfile') }}
 
   buildForTesting:
     runs-on: [self-hosted, ARM64]
@@ -64,7 +54,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3          
       - name: Restore dependencies
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         env:
           cache-name: cache-dependencies
         with:
@@ -79,7 +69,7 @@ jobs:
             export LANGUAGE=en_US:en;
             bundle exec fastlane build_for_testing
       - name: Save DerivedData and SwiftPM folder
-        uses: actions/cache@v3
+        uses: actions/cache/save@v3
         env:
           cache-name: cache-derived-data
         with:
@@ -100,7 +90,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3       
       - name: Restore dependencies
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         env:
           cache-name: cache-dependencies
         with:
@@ -110,7 +100,7 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock', 'Brewfile') }}
           fail-on-cache-miss: true
       - name: Restore build data
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         env:
           cache-name: cache-derived-data
         with:
@@ -145,7 +135,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3        
       - name: Restore dependencies
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         id: cache-dependencies
         env:
           cache-name: cache-dependencies
@@ -154,6 +144,7 @@ jobs:
             vendor
             .bundle
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock', 'Brewfile') }}
+          fail-on-cache-miss: true
       - name: fastlane bump version and create tag
         env:
           VERSION: ${{ inputs.version }}
@@ -182,7 +173,7 @@ jobs:
         with:
           ref: ${{ needs.bumpVersion.outputs.gitTag }}
       - name: Restore dependencies
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         id: cache-dependencies
         env:
           cache-name: cache-dependencies
@@ -191,6 +182,7 @@ jobs:
             vendor
             .bundle
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock', 'Brewfile') }}  
+          fail-on-cache-miss: true
       - name: Install the Apple certificate and provisioning profile
         env:
           DISTRIBUTION_CERTIFICATE_P12_BASE64: ${{ secrets.DISTRIBUTION_CERTIFICATE_P12_BASE64 }}
@@ -265,7 +257,7 @@ jobs:
         with:
           ref: ${{ needs.bumpVersion.outputs.gitTag }}     
       - name: Restore dependencies
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         id: cache-dependencies
         env:
           cache-name: cache-dependencies
@@ -274,6 +266,7 @@ jobs:
             vendor
             .bundle
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock', 'Brewfile') }}  
+          fail-on-cache-miss: true
       - name: Install the Apple certificate and provisioning profile
         env:
           DISTRIBUTION_CERTIFICATE_P12_BASE64: ${{ secrets.DISTRIBUTION_CERTIFICATE_P12_BASE64 }}

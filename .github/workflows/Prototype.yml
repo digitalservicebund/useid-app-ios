@@ -44,16 +44,6 @@ jobs:
       - name: Brew bundle
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: ./native_arch.sh brew bundle --no-lock
-      - name: Save dependencies
-        uses: actions/cache@v3
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        env:
-          cache-name: cache-dependencies
-        with:
-          path: |
-            vendor
-            .bundle
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock', 'Brewfile') }}
 
   bumpVersion:
     runs-on: [self-hosted, ARM64]
@@ -68,7 +58,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3        
       - name: Restore dependencies
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         id: cache-dependencies
         env:
           cache-name: cache-dependencies
@@ -77,6 +67,7 @@ jobs:
             vendor
             .bundle
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock', 'Brewfile') }}
+          fail-on-cache-miss: true
       - name: fastlane bump version and create tag
         env:
           VERSION: ${{ inputs.version }}
@@ -105,7 +96,7 @@ jobs:
         with:
           ref: ${{ needs.bumpVersion.outputs.gitTag }}     
       - name: Restore dependencies
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         id: cache-dependencies
         env:
           cache-name: cache-dependencies
@@ -114,6 +105,7 @@ jobs:
             vendor
             .bundle
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Gemfile.lock', 'Brewfile') }}  
+          fail-on-cache-miss: true
       - name: Install the Apple certificate and provisioning profile
         env:
           DISTRIBUTION_CERTIFICATE_P12_BASE64: ${{ secrets.DISTRIBUTION_CERTIFICATE_P12_BASE64 }}
