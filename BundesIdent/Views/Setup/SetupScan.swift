@@ -165,8 +165,10 @@ struct SetupScan: ReducerProtocol {
         case .requestPUK:
             logger.info("PUK requested, so card is blocked. Callback not implemented yet.")
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
-        case .requestPIN,
-             .requestCAN,
+        case .requestPIN(remainingAttempts: _, pinCallback: let pinCallback):
+            pinCallback(state.transportPIN)
+            return .none
+        case .requestCAN,
              .requestPINAndCAN,
              .processCompletedSuccessfullyWithRedirect,
              .requestAuthenticationRequestConfirmation,
