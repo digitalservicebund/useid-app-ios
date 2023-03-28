@@ -170,22 +170,13 @@ struct SetupCANScan: ReducerProtocol {
             logger.info("PUK requested, so card is blocked. Callback not implemented yet.")
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
             
-        case .requestChangedPIN:
-            // This case should actually not happen but it does due to an Open-Ecard bug.
-            // Repro: After calling the canAndChangedPINCallback, the system scan overlay is presented. By tapping cancel or waiting on that screen too long,
-            // Expected: we get a new canAndChangedPINCallback to restart the scan overlay
-            // Actual: The event requestChangedPIN is triggered
-            //
-            // If we call the callback from this event, we get a new canAndChangedPINCallback but calling this one results in an openecard error (unexpected memory change) and we get a new canAndChangedPINCallback (this loops forever)
-            // Workaround: We cancel the current change pin management flow and start a new one. This results in two scans happening, similar to the normal setup pin flow.
-            
-            logger.info("Scan popup was closed (timeout or cancel).")
-            logger.debug("Open-Ecard bug triggered, preparing to restart the change pin management flow.")
-            state.shared.isScanning = false
-            state.canAndChangedPINCallback = nil
-            return EffectTask.cancel(id: CancelId.self)
-        case .requestPIN,
-             .requestCAN,
+        case .requestChangedPIN(remainingAttempts: _, pinCallback: let pinCallback):
+            pinCallback(state.transportPIN, state.newPIN)
+            return .none
+        case .requestPIN(remainingAttempts: _, pinCallback: let pinCallback):
+            pinCallback(state.transportPIN)
+            return .none
+        case .requestCAN,
              .requestPINAndCAN,
              .processCompletedSuccessfullyWithRedirect,
              .requestAuthenticationRequestConfirmation,
