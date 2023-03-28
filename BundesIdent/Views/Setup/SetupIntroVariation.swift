@@ -28,9 +28,9 @@ struct SetupIntroVariationView: View {
                 }
                 .padding(.horizontal)
                 DialogButtons(store: store.stateless,
-                              secondary: .init(title: L10n.FirstTimeUser.Intro.skipSetup,
+                              secondary: .init(title: L10n.FirstTimeUser.Intro.skipSetupVariation,
                                                action: .chooseSkipSetup(tokenURL: viewStore.tokenURL)),
-                              primary: .init(title: L10n.FirstTimeUser.Intro.startSetup,
+                              primary: .init(title: L10n.FirstTimeUser.Intro.startSetupVariation,
                                              action: .chooseStartSetup))
             }
             .toolbar {
