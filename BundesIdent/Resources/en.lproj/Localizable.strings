@@ -43,7 +43,9 @@
 "firstTimeUser_intro_body" = "You only need to set up your ID card once. If you already have a 6‑digit PIN, your ID card has been already set up.";
 "firstTimeUser_intro_box" = "**Please note:** If you already have a personal 6-digit PIN, your ID card has been already set up.";
 "firstTimeUser_intro_skipSetup" = "Already set up";
+"firstTimeUser_intro_skipSetupVariation" = "Already set up";
 "firstTimeUser_intro_startSetup" = "Set up online ID card now";
+"firstTimeUser_intro_startSetupVariation" = "Set up online ID card now";
 "firstTimeUser_intro_title" = "Have you already set up your online ID card?";
 "firstTimeUser_intro_titleVariation" = "Online ID card not set up yet?";
 "firstTimeUser_missingPINLetter_body" = "Do you need a new PIN? Order a PIN reset letter:\n\n**[www.pin-ruecksetzbrief-bestellen.de ↗](https://www.pin-ruecksetzbrief-bestellen.de)**";
@@ -100,6 +102,7 @@
 "home_more_title" = "More";
 "home_setup_body" = "Assign your personal PIN to your ID card. You can then identify yourself online with your ID.";
 "home_setup_setup" = "Set up online ID card";
+"home_setup_setupVariation" = "Set up online ID card";
 "home_setup_title" = "New ID card?";
 "home_version" = "Version %@";
 "identification_attributeConsentInfo_issuer" = "Issuer of the authorization certificate";
