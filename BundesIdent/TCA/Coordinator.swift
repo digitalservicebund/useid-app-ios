@@ -222,10 +222,16 @@ struct Coordinator: ReducerProtocol {
             let homeState: Home.State
             let version = appVersionProvider.version
             let buildNumber = appVersionProvider.buildNumber
+            let isVariationActivated = abTester.isVariationActivated(for: .setupIntroductionExplanation)
 #if PREVIEW
-            homeState = Home.State(appVersion: version, buildNumber: buildNumber, isDebugModeEnabled: previewIDInteractionManager.isDebugModeEnabled)
+            homeState = Home.State(appVersion: version,
+                                   buildNumber: buildNumber,
+                                   shouldShowVariation: isVariationActivated,
+                                   isDebugModeEnabled: previewIDInteractionManager.isDebugModeEnabled)
 #else
-            homeState = Home.State(appVersion: version, buildNumber: buildNumber)
+            homeState = Home.State(appVersion: version,
+                                   buildNumber: buildNumber,
+                                   shouldShowVariation: isVariationActivated)
 #endif
             state.routes = [.root(.home(homeState))]
             if let deferredTokenURL = state.deferredTokenURL {

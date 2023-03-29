@@ -12,6 +12,7 @@ struct Home: ReducerProtocol {
     struct State: Equatable {
         var appVersion: String
         var buildNumber: Int
+        var shouldShowVariation: Bool = false
         
 #if PREVIEW
         var isDebugModeEnabled: Bool = false
@@ -170,10 +171,12 @@ struct HomeView: View {
                 Text(L10n.Home.Setup.body)
                     .bodyMRegular()
             }
-            Button(L10n.Home.Setup.setup) {
-                ViewStore(store.stateless).send(.triggerSetup)
+            WithViewStore(store) { viewStore in
+                Button(viewStore.state.shouldShowVariation ? L10n.Home.Setup.setupVariation : L10n.Home.Setup.setup) {
+                    viewStore.send(.triggerSetup)
+                }
+                .buttonStyle(BundTextButtonStyle())
             }
-            .buttonStyle(BundTextButtonStyle())
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(24)
@@ -274,11 +277,13 @@ struct HomeView_Previews: PreviewProvider {
 #if PREVIEW
         HomeView(store: Store(initialState: Home.State(appVersion: "1.2.3",
                                                        buildNumber: 42,
+                                                       shouldShowVariation: true,
                                                        isDebugModeEnabled: false),
                               reducer: Home()))
 #else
         HomeView(store: Store(initialState: Home.State(appVersion: "1.2.3",
-                                                       buildNumber: 42),
+                                                       buildNumber: 42,
+                                                       shouldShowVariation: true),
                               reducer: Home()))
 #endif
     }
