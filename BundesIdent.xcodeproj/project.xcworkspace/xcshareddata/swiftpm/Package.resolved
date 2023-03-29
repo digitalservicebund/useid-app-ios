@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "ausweisapp2wrapper-ios-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Governikus/AusweisApp2Wrapper-iOS-SPM.git",
+      "state" : {
+        "revision" : "41eebf4cd89eb3451e249a20ef2d18a4088521ad",
+        "version" : "1.26.3"
+      }
+    },
+    {
       "identity" : "combine-schedulers",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/combine-schedulers",
