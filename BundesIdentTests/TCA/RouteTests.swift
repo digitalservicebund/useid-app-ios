@@ -85,12 +85,26 @@ final class RouteTests: XCTestCase {
                    value: Float?.none,
                    dimensions: [],
                    url: URL?.none)
+        verify(mockMatomoTracker)
+            .track(eventWithCategory: "firstTimeUser",
+                   action: "setupIntroOpened",
+                   name: "home",
+                   value: Float?.none,
+                   dimensions: [],
+                   url: URL?.none)
 
         verify(mockMatomoTracker).track(view: ["firstTimeUser", "intro"], url: URL?.none)
         endInteraction(mockMatomoTracker)
         store.send(.routeAction(1, action: .setupCoordinator(.routeAction(0, action: .intro(.chooseStartSetup)))))
 
         verify(mockMatomoTracker).track(view: ["firstTimeUser", "PINLetter"], url: URL?.none)
+        verify(mockMatomoTracker)
+            .track(eventWithCategory: "firstTimeUser",
+                   action: "buttonPressed",
+                   name: "startSetup",
+                   value: Float?.none,
+                   dimensions: [],
+                   url: URL?.none)
         endInteraction(mockMatomoTracker)
 
         store.send(.routeAction(1, action: .setupCoordinator(.routeAction(1, action: .transportPINIntro(.choosePINLetterMissing)))))
@@ -136,6 +150,13 @@ final class RouteTests: XCTestCase {
                    value: Float?.none,
                    dimensions: [],
                    url: URL?.none)
+        verify(mockMatomoTracker)
+            .track(eventWithCategory: "firstTimeUser",
+                   action: "setupIntroOpened",
+                   name: "home",
+                   value: Float?.none,
+                   dimensions: [],
+                   url: URL?.none)
 
         verify(mockMatomoTracker).track(view: ["firstTimeUser", "intro"], url: URL?.none)
         endInteraction(mockMatomoTracker)
@@ -143,6 +164,13 @@ final class RouteTests: XCTestCase {
         store.send(.routeAction(1, action: .setupCoordinator(.routeAction(0, action: .intro(.chooseStartSetup)))))
 
         verify(mockMatomoTracker).track(view: ["firstTimeUser", "PINLetter"], url: URL?.none)
+        verify(mockMatomoTracker)
+            .track(eventWithCategory: "firstTimeUser",
+                   action: "buttonPressed",
+                   name: "startSetup",
+                   value: Float?.none,
+                   dimensions: [],
+                   url: URL?.none)
         endInteraction(mockMatomoTracker)
 
         store.send(.routeAction(1, action: .setupCoordinator(.routeAction(1, action: .transportPINIntro(.choosePINLetterAvailable)))))
@@ -380,8 +408,8 @@ final class RouteTests: XCTestCase {
         endInteraction(mockMatomoTracker)
     }
 
-    private func endInteraction(_ mockMatomoTracker: MockMatomoTrackerProtocol) {
-        verifyNoMoreInteractions(mockMatomoTracker)
+    private func endInteraction(_ mockMatomoTracker: MockMatomoTrackerProtocol, file: StaticString = #filePath, line: UInt = #line) {
+        verifyNoMoreInteractions(mockMatomoTracker, file: file, line: line)
         clearInvocations(mockMatomoTracker)
     }
 
