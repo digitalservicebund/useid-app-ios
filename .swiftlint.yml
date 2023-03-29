@@ -1,6 +1,5 @@
 opt_in_rules:
   - array_init
-  - attributes
   - closure_end_indentation
   - closure_spacing
   - contains_over_first_not_nil
