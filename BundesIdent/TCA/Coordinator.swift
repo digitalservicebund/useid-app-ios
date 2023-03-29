@@ -78,10 +78,12 @@ struct Coordinator: ReducerProtocol {
         }
         
         let screen: Screen.State
+        var trackSetupSourceIfNeeded = EffectTask<Action>.none
         if storageManager.setupCompleted {
             screen = .identificationCoordinator(IdentificationCoordinator.State(tokenURL: tcTokenURL, canGoBackToSetupIntro: false))
         } else {
             screen = setupCoordinator(tokenURL: tcTokenURL)
+            trackSetupSourceIfNeeded = trackSetupIntroSource(hasTokenURL: true)
         }
         
         // In case setup or ident is shown, dismiss any shown sheets that screens
@@ -89,16 +91,18 @@ struct Coordinator: ReducerProtocol {
         if case .sheet(.identificationCoordinator, embedInNavigationView: _, onDismiss: _) = state.routes.last {
             return .concatenate(
                 EffectTask(value: .routeAction(state.routes.count - 1, action: .identificationCoordinator(.dismiss))),
-                dismiss(state: &state, show: screen)
+                dismiss(state: &state, show: screen),
+                trackSetupSourceIfNeeded
             )
         } else if case .sheet(.setupCoordinator, embedInNavigationView: _, onDismiss: _) = state.routes.last {
             return .concatenate(
                 EffectTask(value: .routeAction(state.routes.count - 1, action: .setupCoordinator(.dismiss))),
-                dismiss(state: &state, show: screen)
+                dismiss(state: &state, show: screen),
+                trackSetupSourceIfNeeded
             )
         } else {
             state.routes.presentSheet(screen)
-            return .none
+            return trackSetupSourceIfNeeded
         }
     }
     
@@ -122,10 +126,11 @@ struct Coordinator: ReducerProtocol {
             switch routeAction {
             case .home(.triggerSetup):
                 state.routes.presentSheet(setupCoordinator(tokenURL: nil))
-                return .trackEvent(category: "firstTimeUser",
-                                   action: "buttonPressed",
-                                   name: "start",
-                                   analytics: analytics)
+                return .concatenate(.trackEvent(category: "firstTimeUser",
+                                                action: "buttonPressed",
+                                                name: "start",
+                                                analytics: analytics),
+                                    trackSetupIntroSource())
             case .identificationCoordinator(.back(let tokenURL)):
                 return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
                     $0.dismiss()
@@ -251,6 +256,11 @@ struct Coordinator: ReducerProtocol {
             ? .introVariation(setupIntro)
             : .intro(setupIntro)
         return .setupCoordinator(SetupCoordinator.State(tokenURL: tokenURL, states: [.root(setupScreen)]))
+    }
+
+    private func trackSetupIntroSource(hasTokenURL: Bool = false) -> EffectTask<Action> {
+        let name = hasTokenURL ? "widget" : "home"
+        return .trackEvent(category: "firstTimeUser", action: "setupIntroOpened", name: name, analytics: analytics)
     }
 }
 
