@@ -72,6 +72,7 @@
 		E13925C42841111100161F5C /* GeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925C32841111100161F5C /* GeneratedMocks.swift */; };
 		E13925C72841119400161F5C /* MockIDInteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13925C62841119400161F5C /* MockIDInteractionManager.swift */; };
 		E13A632128B8010A00AB7A39 /* LocalizedStrings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */; };
+		E13E738029D43B69008460CD /* AusweisApp2SDKWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = E13E737F29D43B69008460CD /* AusweisApp2SDKWrapper */; };
 		E13F9E3B2886F3420088E955 /* IdentificationCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E3A2886F3420088E955 /* IdentificationCoordinatorTests.swift */; };
 		E13F9E3D288802500088E955 /* UUID+InitFromNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E3C288802500088E955 /* UUID+InitFromNumber.swift */; };
 		E13F9E3F288804140088E955 /* IdentificationPINScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F9E3E288804140088E955 /* IdentificationPINScanTests.swift */; };
@@ -120,7 +121,6 @@
 		E1AB87AC2825238D00C7FC94 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1AB87AA2825238D00C7FC94 /* Localizable.strings */; };
 		E1AB87EE299A981000C462C1 /* SetupCANUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB87ED299A981000C462C1 /* SetupCANUITests.swift */; };
 		E1AB87F0299AA49200C462C1 /* SetupCANCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB87EF299AA49200C462C1 /* SetupCANCoordinatorTests.swift */; };
-		E1B055AD29CB19C7004A6988 /* AA2SDKWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = E1B055AC29CB19C7004A6988 /* AA2SDKWrapper */; };
 		E1B0F5A62981435C00143B82 /* SetupCANConfirmTransportPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B0F5A52981435C00143B82 /* SetupCANConfirmTransportPIN.swift */; };
 		E1B0F5A82981437600143B82 /* SetupCANAlreadySetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B0F5A72981437600143B82 /* SetupCANAlreadySetup.swift */; };
 		E1B0F5AA29829D8900143B82 /* SetupCANCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B0F5A929829D8900143B82 /* SetupCANCoordinator.swift */; };
@@ -254,7 +254,6 @@
 		D2FD741028DDF63000C7C5E7 /* ScanErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanErrorTests.swift; sourceTree = "<group>"; };
 		E101325028EDDD7E006875F8 /* LoopingVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingVideoPlayer.swift; sourceTree = "<group>"; };
 		E106614B28EC8C0C00CA2DB9 /* SharedScan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedScan.swift; sourceTree = "<group>"; };
-		E10977B529CA1A2500BC3ABE /* AusweisApp2Wrapper-iOS-SPM */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "AusweisApp2Wrapper-iOS-SPM"; path = "../AusweisApp2Wrapper-iOS-SPM"; sourceTree = "<group>"; };
 		E110400C281C389C004BA03E /* SetupIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntro.swift; sourceTree = "<group>"; };
 		E11EB2A828537DE1008B4042 /* XCUITestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUITestHelper.swift; sourceTree = "<group>"; };
 		E11EB2AA2853A8B6008B4042 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
@@ -412,7 +411,7 @@
 				43363E0729A79D6200E9FA23 /* UnleashProxyClientSwift in Frameworks */,
 				E1BC3D8628B7E919007A7B39 /* LicensePlistViewController in Frameworks */,
 				D2B76A7A28BE4B93000B442D /* Analytics in Frameworks */,
-				E1B055AD29CB19C7004A6988 /* AA2SDKWrapper in Frameworks */,
+				E13E738029D43B69008460CD /* AusweisApp2SDKWrapper in Frameworks */,
 				E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */,
 				B9F5055829361F69009FE297 /* TCACoordinators in Frameworks */,
 				E128E0BA288941DC00C5195F /* Sentry in Frameworks */,
@@ -426,7 +425,6 @@
 			isa = PBXGroup;
 			children = (
 				D28BC72228BE0A44003C012C /* Analytics */,
-				E10977B529CA1A2500BC3ABE /* AusweisApp2Wrapper-iOS-SPM */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -948,7 +946,7 @@
 				E144EBD528C63A31009B4900 /* MarkdownUI */,
 				B9F5055729361F69009FE297 /* TCACoordinators */,
 				43363E0629A79D6200E9FA23 /* UnleashProxyClientSwift */,
-				E1B055AC29CB19C7004A6988 /* AA2SDKWrapper */,
+				E13E737F29D43B69008460CD /* AusweisApp2SDKWrapper */,
 			);
 			productName = BundesIdent;
 			productReference = E5CEB27A281041330076B9FE /* BundesIdent.app */;
@@ -994,6 +992,7 @@
 				E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 				B9F5055629361F69009FE297 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
 				43363E0529A79D6200E9FA23 /* XCRemoteSwiftPackageReference "unleash-proxy-client-swift" */,
+				E13E737E29D43B69008460CD /* XCRemoteSwiftPackageReference "AusweisApp2Wrapper-iOS-SPM" */,
 			);
 			productRefGroup = E5CEB27B281041330076B9FE /* Products */;
 			projectDirPath = "";
@@ -2013,6 +2012,14 @@
 				minimumVersion = 1.7.1;
 			};
 		};
+		E13E737E29D43B69008460CD /* XCRemoteSwiftPackageReference "AusweisApp2Wrapper-iOS-SPM" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Governikus/AusweisApp2Wrapper-iOS-SPM.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/gonzalezreal/MarkdownUI";
@@ -2064,6 +2071,11 @@
 			package = E13925B928410F3F00161F5C /* XCRemoteSwiftPackageReference "Cuckoo" */;
 			productName = Cuckoo;
 		};
+		E13E737F29D43B69008460CD /* AusweisApp2SDKWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E13E737E29D43B69008460CD /* XCRemoteSwiftPackageReference "AusweisApp2Wrapper-iOS-SPM" */;
+			productName = AusweisApp2SDKWrapper;
+		};
 		E144EBD528C63A31009B4900 /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */;
@@ -2073,10 +2085,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */;
 			productName = OpenEcard;
-		};
-		E1B055AC29CB19C7004A6988 /* AA2SDKWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AA2SDKWrapper;
 		};
 		E1BC3D8528B7E919007A7B39 /* LicensePlistViewController */ = {
 			isa = XCSwiftPackageProductDependency;
