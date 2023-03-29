@@ -131,8 +131,10 @@ struct SetupCoordinator: ReducerProtocol {
                 return EffectTask(value: localAction)
             case .routeAction(_, .intro(.chooseStartSetup)):
                 state.routes.push(.transportPINIntro)
+                return .trackEvent(category: "firstTimeUser", action: "buttonPressed", name: "startSetup", analytics: analytics)
             case .routeAction(_, .intro(.chooseSkipSetup(tokenURL: nil))):
                 state.routes.push(.alreadySetupConfirmation)
+                return .trackEvent(category: "firstTimeUser", action: "buttonPressed", name: "alreadySetup", analytics: analytics)
             case .routeAction(_, .transportPINIntro(.choosePINLetterAvailable)):
                 state.routes.push(.transportPIN(SetupTransportPIN.State()))
             case .routeAction(_, .transportPINIntro(.choosePINLetterMissing)):
