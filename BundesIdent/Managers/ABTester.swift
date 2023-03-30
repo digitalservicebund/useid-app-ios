@@ -13,7 +13,7 @@ enum ABTest: CaseIterable {
 #if PREVIEW
         case .test: return "bundesIdent.test"
 #endif
-        case .setupIntroductionExplanation: return "bundesIdent.setup_introduction_explanation"
+        case .setupIntroductionExplanation: return "bundesIdent.setup_introduction_explanation_03_23"
         }
     }
 }
