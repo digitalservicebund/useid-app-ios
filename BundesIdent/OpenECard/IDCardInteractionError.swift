@@ -2,11 +2,14 @@ import Foundation
 import OpenEcard
 
 enum IDCardInteractionError: Error, Equatable {
+    case unknownReader
     case frameworkError(message: String?)
     case unexpectedReadAttribute(String)
     case cardBlocked
     case cardDeactivated
     case processFailed(resultCode: ActivationResultCode, redirectURL: URL?, resultMinor: String?)
+    
+    case changingPINFailed
 }
 
 enum RedactedIDCardInteractionError: CustomNSError, Hashable {

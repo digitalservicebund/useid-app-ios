@@ -1,20 +1,38 @@
 import Foundation
 
+public struct CertificateDescription {
+    public let issuerName: String
+    public let issuerUrl: URL?
+    public let purpose: String
+    public let subjectName: String
+    public let subjectUrl: URL?
+    public let termsOfUsage: String
+    public let effectiveDate: Date
+    public let expirationDate: Date
+}
+
 enum EIDInteractionEvent: Equatable {
-    case requestCardInsertion((String) -> Void)
+    case requestCardInsertion((String) -> Void) // kein Callback
     case cardInteractionComplete
     case cardRecognized
     case cardRemoved
-    case requestCAN((_ can: String) -> Void)
-    case requestPIN(remainingAttempts: Int?, pinCallback: (_ pin: String) -> Void)
-    case requestPINAndCAN((_ pin: String, _ can: String) -> Void)
-    case requestPUK((String) -> Void)
-    case processCompletedSuccessfullyWithoutRedirect
-    case processCompletedSuccessfullyWithRedirect(url: URL)
+    case requestCAN((_ can: String) -> Void) // kein Callback
+    case requestPUK((String) -> Void) // kein Callback
+    case authenticationSucceeded(redirectUrl: URL?) // combine processCompletedSuccessfullyWithoutRedirect and processCompletedSuccessfullyWithRedirect
+    // case processCompletedSuccessfullyWithoutRedirect // onAuthCompleted ohne URL
+    // case processCompletedSuccessfullyWithRedirect(url: URL) // onAuthCompleted mit URL
     case authenticationStarted
-    case requestAuthenticationRequestConfirmation(EIDAuthenticationRequest, (FlaggedAttributes) -> Void)
-    case authenticationSuccessful
-    case pinManagementStarted
+    case requestAuthenticationRequestConfirmation(AuthenticationRequest, (FlaggedAttributes) -> Void) // kein Callback
+    // get rid off: case authenticationSuccessful
+    case changingPINStarted // was pinManagementStarted
+    case changingPINSucceeded // => success == true
+    
+    // NEW:
+    case authenticationCertificate(CertificateDescription)
+    
+    // GET RID OF:
+    case requestPINAndCAN((_ pin: String, _ can: String) -> Void)
+    case requestPIN(remainingAttempts: Int?, pinCallback: (_ pin: String) -> Void)
     case requestChangedPIN(remainingAttempts: Int?, pinCallback: (_ oldPIN: String, _ newPIN: String) -> Void)
     case requestCANAndChangedPIN(pinCallback: (_ oldPIN: String, _ can: String, _ newPIN: String) -> Void)
     
