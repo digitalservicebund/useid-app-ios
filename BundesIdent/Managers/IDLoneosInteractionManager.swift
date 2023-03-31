@@ -14,6 +14,7 @@ import AusweisApp2SDKWrapper
 struct AuthenticationRequest {
     var requiredAttributes: [IDCardAttribute]
     var transactionInfo: String?
+    var certificateDescription: CertificateDescription
 }
 
 extension AusweisApp2SDKWrapper.AuxiliaryData: Equatable {
@@ -35,6 +36,7 @@ extension AusweisApp2SDKWrapper.AccessRights: Equatable {
     }
 }
 
+// general InteractionWorkflow
 class SetupPINInteractionWorkflow: WorkflowCallbacks {
     
     private let workflowController: AusweisApp2SDKWrapper.WorkflowController
