@@ -175,7 +175,7 @@ struct SetupCoordinator: ReducerProtocol {
 //                        .catchToEffect(Action.idInteractionEvent)
 //                        .cancellable(id: CancelId.self, cancelInFlight: true)
 //                )
-                return SetupPINInteractionWorkflow()
+                return interactionWorkflow
                     .changePIN()
                     .receive(on: mainQueue)
                     .catchToEffect(Action.idInteractionEvent)

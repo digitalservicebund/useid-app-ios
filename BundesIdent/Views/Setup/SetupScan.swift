@@ -12,6 +12,7 @@ struct SetupScan: ReducerProtocol {
     @Dependency(\.logger) var logger
     @Dependency(\.storageManager) var storageManager
     @Dependency(\.uuid) var uuid
+    @Dependency(\.workflow) workflow
     
     struct State: Equatable, IDInteractionHandler {
         var transportPIN: String
@@ -165,8 +166,8 @@ struct SetupScan: ReducerProtocol {
         case .requestPUK:
             logger.info("PUK requested, so card is blocked. Callback not implemented yet.")
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
-        case .requestPIN(remainingAttempts: _, pinCallback: let pinCallback):
-            pinCallback(state.transportPIN)
+        case .requestPIN(remainingAttempts: _):
+            workflow.setPIN()
             return .none
         case .requestCAN,
              .requestPINAndCAN,
