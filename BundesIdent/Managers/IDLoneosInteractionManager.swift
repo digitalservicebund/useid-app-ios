@@ -6,8 +6,15 @@
 //
 
 import Foundation
-import AusweisApp2SDKWrapper
 import Combine
+
+#if !targetEnvironment(simulator)
+import AusweisApp2SDKWrapper
+
+struct AuthenticationRequest {
+    var requiredAttributes: [IDCardAttribute]
+    var transactionInfo: String?
+}
 
 extension AusweisApp2SDKWrapper.AuxiliaryData: Equatable {
     public static func == (lhs: AuxiliaryData, rhs: AuxiliaryData) -> Bool {
@@ -85,23 +92,25 @@ class SetupPINInteractionWorkflow: WorkflowCallbacks {
     }
     
     func onAccessRights(error: String?, accessRights: AccessRights?) {
-        // TODO: Unexpected event
+        // TODO: Unexpected event, as we never set access rights
+        if let error {
+            logger.error("onAccessRights error: \(error)")
+        }
+        
         guard let accessRights else {
-            // trigger error
+            logger.error("Access rights missing. Error: \(error)")
+            publisher.send(completion: .failure(.frameworkError(message: "Access rights missing. Error: \(error)")))
             return
         }
         
-        var flaggedAttributes: [IDCardAttribute: Bool] = [:]
-        
-        accessRights.requiredRights.compactMap { accessRight in
-            IDCardAttribute(rawValue: accessRight.rawValue)
-        }.forEach { cardAttribute in
-            flaggedAttributes[cardAttribute] = true
+        guard accessRights.requiredAccessRights == accessRights.effectiveAccessRights else {
+            workflowController.setAccesRights([])
+            return
         }
         
-        publisher.send(.requestAuthenticationRequestConfirmation(EIDAuthenticationRequest(issuer: "issuer", issuerURL: "issuerURL", subject: "subject", subjectURL: "subjectURL", validity: "validity", terms: AuthenticationTerms.text("terms"), transactionInfo: nil, readAttributes: flaggedAttributes), { [workflowController] _ in
-            workflowController.accept()
-        }))
+        let requiredRights = accessRights.requiredRights
+        let request = AuthenticationRequest(requiredAttributes: requiredRights, transactionInfo: accessRights.transactionInfo)
+        publisher.send(.requestAuthenticationRequestConfirmation(request))
     }
     
     func onApiLevel(error: String?, apiLevel: ApiLevel?) {
@@ -124,12 +133,23 @@ class SetupPINInteractionWorkflow: WorkflowCallbacks {
     func onInsertCard(error: String?) {
         print("onInsertCard: \(error)")
         if let error {
-            publisher.send(completion: .failure(.frameworkError(message: error)))
-            return
+            // this should not happen, so we just log it here instead of bailing out
+            logger.error(error)
         }
+        publisher.send(.requestCardInsertion)
     }
     
     func onAuthenticationCompleted(authResult: AusweisApp2SDKWrapper.AuthResult) {
+        // TODO: check if result.major could be success
+        if let errorResultData = authResult.result {
+            publisher.send(completion: .failure(.processFailed(redirectURL: errorResultData.url, resultMinor: errorResultData.resultMinor)))
+        } else {
+            if let url = authResult.url {
+                publisher.send(.processCompletedSuccessfullyWithRedirect(url: url))
+            } else {
+                publisher.send(.processCompletedSuccessfullyWithoutRedirect)
+            }
+        }
         print("onAuthenticationCompleted: \(authResult)")
         // TODO: Unexpected event
 //        if let error = authResult.error {
@@ -155,15 +175,17 @@ class SetupPINInteractionWorkflow: WorkflowCallbacks {
     
     func onWrapperError(error: AusweisApp2SDKWrapper.WrapperError) {
         print("onWrapperError: \(error)")
-        publisher.send(completion: .failure(.frameworkError(message: "\(error.msg) - \(error.error)")))
+        publisher.send(completion: .failure(.frameworkError(message: "onWrapperError: \(error.msg) - \(error.error)"))) // Yes
     }
     
     func onBadState(error: String) {
         print("onBadState")
+        publisher.send(completion: .failure(.frameworkError(message: "onBadState: \(error)")))
     }
     
     func onCertificate(certificateDescription: AusweisApp2SDKWrapper.CertificateDescription) {
         print("onCertificate: \(certificateDescription)")
+        publisher.send(.authenticationCertificate(CertificateDescription()))
     }
     
     func onEnterCan(error: String?, reader: AusweisApp2SDKWrapper.Reader) {
@@ -183,13 +205,12 @@ class SetupPINInteractionWorkflow: WorkflowCallbacks {
     
     func onEnterPin(error: String?, reader: AusweisApp2SDKWrapper.Reader) {
         print("onEnterPin: \(error), reader: \(reader)")
-        publisher.send(.requestPIN(remainingAttempts: reader.card?.pinRetryCounter, pinCallback: { [workflowController] pin in
-            workflowController.setPin(pin)
-        }))
+        publisher.send(.requestPIN(remainingAttempts: reader.card?.pinRetryCounter))
     }
     
     func onEnterPuk(error: String?, reader: AusweisApp2SDKWrapper.Reader) {
         print("onEnterPuk: \(error), reader: \(reader)")
+        publisher.send(.requestPUK)
     }
     
     func onInfo(versionInfo: AusweisApp2SDKWrapper.VersionInfo) {
@@ -207,6 +228,17 @@ class SetupPINInteractionWorkflow: WorkflowCallbacks {
 //        if reader?.card == nil {
 //            publisher.send(completion: .failure(.frameworkError(message: "Unknown card")))
 //        }
+        guard reader else {
+            logger.error("Unknown reader")
+            publisher.send(completion: .failure(.unknownReader))
+            return
+        }
+        
+        if let card = reader.card {
+            publisher.send(.cardRemoved)
+        } else {
+            publisher.send(.cardRecognized)
+        }
     }
     
     func onReaderList(readers: [AusweisApp2SDKWrapper.Reader]?) {
@@ -215,7 +247,7 @@ class SetupPINInteractionWorkflow: WorkflowCallbacks {
     }
     
     func onStatus(workflowProgress: AusweisApp2SDKWrapper.WorkflowProgress) {
-        print("onStatus: \(workflowProgress)")
+        logger.info("onStatus: \(workflowProgress, .privacy: .none)")
     }
     
     deinit {
@@ -223,3 +255,4 @@ class SetupPINInteractionWorkflow: WorkflowCallbacks {
         workflowController.stop()
     }
 }
+#endif

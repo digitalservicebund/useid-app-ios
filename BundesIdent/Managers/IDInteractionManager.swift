@@ -3,6 +3,7 @@ import Combine
 import OpenEcard
 import CombineSchedulers
 import OSLog
+#if !targetEnvironment(simulator)
 import AusweisApp2SDKWrapper
 
 class IDInteractionManager: IDInteractionManagerType {
@@ -26,6 +27,23 @@ class IDInteractionManager: IDInteractionManagerType {
     private func start(startServiceHandler: StartServiceHandler, nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher {
         let publisher = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
         workflowController.start()
-        return publisher.eraseToAnyPublisher()
+        return publisher.eraseToAnyPublisher() // onCancel: cancel workflow?
     }
+    
+    // providePIN(pin: String)
+    
+    // provideNewPIN(newPIN: String)
+    
+    // getCertificate()
+    
+    // provideCAN
+    
+    // providePUK
+    
+    // accept
+    
+    // deny
+    
+    // interrupt
 }
+#endif
