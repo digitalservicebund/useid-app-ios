@@ -12,7 +12,6 @@ struct SetupScan: ReducerProtocol {
     @Dependency(\.logger) var logger
     @Dependency(\.storageManager) var storageManager
     @Dependency(\.uuid) var uuid
-    @Dependency(\.workflow) workflow
     
     struct State: Equatable, IDInteractionHandler {
         var transportPIN: String
