@@ -63,9 +63,7 @@ class IDInteractionManager: WorkflowCallbacks {
     }
     
     func publisher() -> EIDInteractionPublisher {
-        publisher.handleEvents(receiveCompletion: { _ in
-            self.workflowController.stop()
-        }, receiveCancel: {
+        publisher.handleEvents(receiveCancel: {
             print("Cancelling")
             self.workflowController.cancel()
             self.postponedWorkflow = nil
@@ -124,7 +122,7 @@ class IDInteractionManager: WorkflowCallbacks {
     }
     
     func onChangePinStarted() {
-        publisher.send(.pinManagementStarted)
+        publisher.send(.pinChangeStarted)
     }
     
     func onAuthenticationStarted() {
@@ -132,184 +130,137 @@ class IDInteractionManager: WorkflowCallbacks {
     }
     
     func onAuthenticationStartFailed(error: String) {
-        publisher.send(completion: .failure(.frameworkError(message: error)))
-    }
-    
-    func onPinChangeStarted() {
-        publisher.send(.pinManagementStarted)
-    }
-    
-    func onRequestAccessRights(accessRights: AusweisApp2SDKWrapper.AccessRights) {
-        // TODO: Unexpected event
-        print("onRequestAccessRights: \(accessRights)")
-    }
-    
-    func onReceivedCertificate(certificateDescription: AusweisApp2SDKWrapper.CertificateDescription) {
-        // TODO: Unexpected event
-        print("onReceivedCertificate: \(certificateDescription)")
+        publisher.send(completion: .failure(.frameworkError(message: "onAuthenticationStartFailed: \(error)")))
     }
     
     func onAccessRights(error: String?, accessRights: AccessRights?) {
-        // TODO: Unexpected event, as we never set access rights
         if let error {
             logger.error("onAccessRights error: \(error)")
         }
         
         guard let accessRights else {
-            logger.error("Access rights missing. Error: \(error)")
+            // TODO: Check when this happens
+            logger.error("onAccessRights: Access rights missing.")
             publisher.send(completion: .failure(.frameworkError(message: "Access rights missing. Error: \(error)")))
             return
         }
         
         guard accessRights.requiredAccessRights == accessRights.effectiveAccessRights else {
-            workflowController.setAccesRights([])
+            workflowController.setAccessRights([])
             return
         }
         
-        let requiredRights = accessRights.requiredRights
+        let requiredRights = accessRights.requiredRights.map(IDCardAttribute.init)
         let request = AuthenticationRequest(requiredAttributes: requiredRights, transactionInfo: accessRights.transactionInfo)
-        publisher.send(.requestAuthenticationRequestConfirmation(request))
+        publisher.send(.authenticationRequestConfirmationRequested(request))
     }
     
     func onApiLevel(error: String?, apiLevel: ApiLevel?) {
-        // TODO: Unexpected event
-        print("onApiLevel: \(error), \(apiLevel)")
+        logger.warning("onApiLevel: \(error), \(apiLevel)")
     }
     
-    //    func onRequestAccessRights(accessRights: IDLoneos.AccessRights) {
-    ////        guard let certificateDescription = certificateDescription else { return } // TODO: Use instead of EIDAuthenticationRequest.preview
-    //        publisher.send(.requestAuthenticationRequestConfirmation(EIDAuthenticationRequest.preview, { [workflowController] acceptedRights in
-    //            // TODO: Remove all optional rights
-    //            workflowController.accept()
-    //        }))
-    //    }
-    //
-    //    func onReceivedCertificate(certificateDescription: IDLoneos.CertificateDescription) {
-    //        self.certificateDescription = certificateDescription
-    //    }
-    
     func onInsertCard(error: String?) {
-        print("onInsertCard: \(error)")
         if let error {
-            // this should not happen, so we just log it here instead of bailing out
-            logger.error(error)
+            // TODO: remove method names from logger
+            logger.error("onInsertCard: \(error)")
         }
-        publisher.send(.requestCardInsertion)
+        publisher.send(.cardInsertionRequested)
     }
     
     func onAuthenticationCompleted(authResult: AusweisApp2SDKWrapper.AuthResult) {
         // TODO: check if result.major could be success
         if let errorResultData = authResult.result {
+            // TODO: pass resultMajor up
             publisher.send(completion: .failure(.processFailed(redirectURL: errorResultData.url, resultMinor: errorResultData.resultMinor)))
         } else {
-            if let url = authResult.url {
-                publisher.send(.processCompletedSuccessfullyWithRedirect(url: url))
-            } else {
-                publisher.send(.processCompletedSuccessfullyWithoutRedirect)
-            }
+            publisher.send(.authenticationSucceeded(redirectUrl: url))
+            publisher.send(completion: .finished)
         }
-        print("onAuthenticationCompleted: \(authResult)")
-        // TODO: Unexpected event
-//        if let error = authResult.error {
-//            publisher.send(completion: .failure(.frameworkError(message: error.message)))
-//            publisher.send(completion: .finished)
-//            return
-//        }
-//
-//        publisher.send(.authenticationSuccessful)
-//        if let url = authResult.url {
-//            publisher.send(.processCompletedSuccessfullyWithRedirect(url: url))
-//        } else {
-//            publisher.send(.processCompletedSuccessfullyWithoutRedirect)
-//        }
-//        publisher.send(completion: .finished)
     }
-    
+
     func onChangePinCompleted(changePinResult: AusweisApp2SDKWrapper.ChangePinResult?) {
-        print("onChangePinCompleted: \(changePinResult)")
-        publisher.send(.processCompletedSuccessfullyWithoutRedirect)
-        publisher.send(completion: .finished)
+        if changePinResult.success == true {
+            publisher.send(.pinChangeSucceeded)
+            publisher.send(completion: .finished)
+        } else {
+            publisher.send(completion: .failure(.pinChangeFailed))
+        }
     }
     
     func onWrapperError(error: AusweisApp2SDKWrapper.WrapperError) {
-        print("onWrapperError: \(error)")
-        publisher.send(completion: .failure(.frameworkError(message: "onWrapperError: \(error.msg) - \(error.error)"))) // Yes
+        publisher.send(completion: .failure(.frameworkError(message: "onWrapperError: \(error.msg) - \(error.error)")))
     }
     
     func onBadState(error: String) {
-        print("onBadState")
         publisher.send(completion: .failure(.frameworkError(message: "onBadState: \(error)")))
     }
     
     func onCertificate(certificateDescription: AusweisApp2SDKWrapper.CertificateDescription) {
-        print("onCertificate: \(certificateDescription)")
-        publisher.send(.authenticationCertificate(CertificateDescription()))
+        publisher.send(.certificateDescriptionRetrieved(.init(certificateDescription)))
     }
-    
+
     func onEnterCan(error: String?, reader: AusweisApp2SDKWrapper.Reader) {
-        print("onEnterCan: \(error), reader: \(reader)")
-        workflowController.interrupt()
-        publisher.send(.requestCANAndChangedPIN(pinCallback: { [workflowController] oldPIN, can, newPIN in
-            workflowController.setCan(can)
-        }))
+        if let error {
+            logger.error("onEnterCan error: \(error)")
+        }
+        publisher.send(.canRequested)
     }
     
     func onEnterNewPin(error: String?, reader: AusweisApp2SDKWrapper.Reader) {
-        print("onEnterNewPin: \(error), reader: \(reader)")
-        publisher.send(.requestChangedPIN(remainingAttempts: reader.card?.pinRetryCounter, pinCallback: { [workflowController] oldPIN, newPIN in
-            workflowController.setNewPin(newPIN)
-        }))
+        if let error {
+            logger.error("onEnterNewPin error: \(error)")
+        }
+        publisher.send(.newPINRequested)
     }
     
     func onEnterPin(error: String?, reader: AusweisApp2SDKWrapper.Reader) {
-        print("onEnterPin: \(error), reader: \(reader)")
-        publisher.send(.requestPIN(remainingAttempts: reader.card?.pinRetryCounter))
+        if let error {
+            logger.error("onEnterPin error: \(error)")
+        }
+        publisher.send(.pinRequested(remainingAttempts: reader.card?.pinRetryCounter))
     }
     
     func onEnterPuk(error: String?, reader: AusweisApp2SDKWrapper.Reader) {
-        print("onEnterPuk: \(error), reader: \(reader)")
-        publisher.send(.requestPUK)
+        if let error {
+            logger.error("onEnterPuk error: \(error)")
+        }
+        publisher.send(.pukRequested)
     }
     
     func onInfo(versionInfo: AusweisApp2SDKWrapper.VersionInfo) {
-        print("onInfo: \(versionInfo)")
+        logger.info("onInfo: \(versionInfo)")
     }
     
     func onInternalError(error: String) {
-        print("onInternalError: \(error)")
-        publisher.send(completion: .failure(.frameworkError(message: error)))
+        publisher.send(completion: .failure(.frameworkError(message: "onInternalError error: \(error)")))
     }
     
     func onReader(reader: AusweisApp2SDKWrapper.Reader?) {
-        // TODO: Unexpected, we do not handle readers?
-        print("onReader: \(reader)")
-//        if reader?.card == nil {
-//            publisher.send(completion: .failure(.frameworkError(message: "Unknown card")))
-//        }
         guard reader else {
-            logger.error("Unknown reader")
+            logger.error("onReader: Unknown reader")
             publisher.send(completion: .failure(.unknownReader))
             return
         }
-        
+
+        // TODO: Decide about cardRemoved being sent for initial state (before cardRecognized)
+        // TODO: Sync with Android about usage of cardRecognized in general
         if let card = reader.card {
-            publisher.send(.cardRemoved)
-        } else {
             publisher.send(.cardRecognized)
+        } else {
+            publisher.send(.cardRemoved)
         }
     }
     
     func onReaderList(readers: [AusweisApp2SDKWrapper.Reader]?) {
-        // TODO: Unexpected, we do not handle readers?
-        print("onReaderList: \(readers)")
+        logger.info("onReaderList: \(readers)")
     }
     
     func onStatus(workflowProgress: AusweisApp2SDKWrapper.WorkflowProgress) {
-        logger.info("onStatus: \(workflowProgress, .privacy: .none)")
+        logger.info("onStatus: \(workflowProgress)")
     }
     
     deinit {
-        print("DEINIT should only be called when scanning done")
+        logger.error("Unexpected deinit")
         workflowController.stop()
     }
 }

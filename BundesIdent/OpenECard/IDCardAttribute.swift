@@ -1,4 +1,7 @@
 import Foundation
+#if !targetEnvironment(simulator)
+import AusweisApp2SDKWrapper
+#endif
 
 // TR-03110 (Part 4), Section 2.2.3
 enum IDCardAttribute: String, Equatable, Identifiable {
@@ -17,8 +20,42 @@ enum IDCardAttribute: String, Equatable, Identifiable {
     case DG19
     case RESTRICTED_IDENTIFICATION
     case AGE_VERIFICATION
+
+    // TODO: Only until we have strings for all AccessRight cases
+    case unknown
     
     var id: String { rawValue }
+
+#if !targetEnvironment(simulator)
+    init(_ accessRight: AccessRight) {
+        switch accessRight {
+        case .Address: self = .DG17
+        case .BirthName: self = .DG13
+        case .FamilyName: self = .DG05
+        case .GivenNames: self = .DG04
+        case .PlaceOfBirth: self = .DG09
+        case .DateOfBirth: self = .DG08
+        case .DoctoralDegree: self = .DG07
+        case .ArtisticName: self = .DG06
+        case .Pseudonym: self = .unknown // Spezielle Funktionen: Pseudonym / Pseudonym
+        case .ValidUntil: self = .DG03
+        case .Nationality: self = .DG10
+        case .IssuingCountry: self = .DG02
+        case .DocumentType: self = .DG01
+        case .ResidencePermitI: self = .unknown
+        case .ResidencePermitII: self = .unknown
+        case .CommunityID: self = .unknown // DG18
+        case .AddressVerification: self = .unknown // Spezielle Funktionen: Wohnortbestätigung / Address verification
+        case .AgeVerification: self = .AGE_VERIFICATION // Spezielle Funktionen: Altersbestätigung / Age verification
+        case .WriteAddress: self = .unknown
+        case .WriteCommunityID: self = .unknown
+        case .WriteResidencePermitI: self = .unknown
+        case .WriteResidencePermitII: self = .unknown
+        case .CanAllowed: self = .unknown
+        case .PinManagement: self = .unknown
+        }
+    }
+#endif
 }
 
 extension IDCardAttribute {
@@ -39,6 +76,8 @@ extension IDCardAttribute {
         case .DG19: return L10n.CardAttribute.dg19
         case .RESTRICTED_IDENTIFICATION: return L10n.CardAttribute.restrictedIdentification
         case .AGE_VERIFICATION: return L10n.CardAttribute.ageVerification
+
+        case .unknown: return ""
         }
     }
 }

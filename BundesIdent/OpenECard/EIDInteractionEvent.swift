@@ -1,4 +1,7 @@
 import Foundation
+#if !targetEnvironment(simulator)
+import AusweisApp2SDKWrapper
+#endif
 
 struct CertificateDescription: Equatable {
     public let issuerName: String
@@ -9,12 +12,24 @@ struct CertificateDescription: Equatable {
     public let termsOfUsage: String
     public let effectiveDate: Date
     public let expirationDate: Date
+
+#if !targetEnvironment(simulator)
+    init(_ description: AusweisApp2SDKWrapper.CertificateDescription) {
+        self.issuerName = description.issuerName
+        self.issuerUrl = description.issuerUrl
+        self.purpose = description.purpose
+        self.subjectName = description.subjectName
+        self.subjectUrl = description.subjectUrl
+        self.termsOfUsage = description.termsOfUsage
+        self.effectiveDate = description.validity.effectiveDate
+        self.expirationDate = description.validity.expirationDate
+    }
+#endif
 }
 
 struct AuthenticationRequest: Equatable {
     var requiredAttributes: [IDCardAttribute]
     var transactionInfo: String?
-    var certificateDescription: CertificateDescription
 }
 
 struct ScanOverlayMessages: Equatable {
@@ -25,19 +40,19 @@ struct ScanOverlayMessages: Equatable {
 }
 
 enum EIDInteractionEvent: Equatable {
-    case interactionStarted
     case cardInsertionRequested // TODO: Rename android
     case cardInteractionCompleted // TODO: Rename android
     case cardRecognized
     case cardRemoved
     case canRequested // TODO: Rename on android
     case pinRequested(remainingAttempts: Int?) // TODO: Rename on android
+    case newPINRequested // TODO: Rename on android
     case pukRequested // TODO: Rename on android
     case authenticationStarted
     case authenticationSucceeded(redirectUrl: URL?) // TODO: Tell android to remove suffix "WithRedirect"
     case authenticationRequestConfirmationRequested(AuthenticationRequest) // TODO: Rename on android
-    case changingPINStarted // was pinManagementStarted
-    case changingPINSucceeded
+    case pinChangeStarted // was pinManagementStarted
+    case pinChangeSucceeded // TODO: Rename android
     case certificateDescriptionRetrieved(CertificateDescription) // TODO: Rename on android
 }
 
@@ -53,8 +68,8 @@ enum RedactedEIDInteractionEventError: CustomNSError {
     case authenticationSucceededWithRedirect
     case authenticationSucceededWithoutRedirect
     case authenticationRequestConfirmationRequested
-    case changingPINStarted
-    case changingPINSucceeded
+    case pinChangeStarted
+    case pinChangeSucceeded
     case certificateDescriptionRetrieved
     
     init(_ eIDInteractionEvent: EIDInteractionEvent) {
@@ -70,8 +85,8 @@ enum RedactedEIDInteractionEventError: CustomNSError {
         case .authenticationSucceeded(redirectUrl: .some): self = .authenticationSucceededWithRedirect
         case .authenticationSucceeded(redirectUrl: .none): self = .authenticationSucceededWithoutRedirect
         case .authenticationRequestConfirmationRequested: self = .authenticationRequestConfirmationRequested
-        case .changingPINStarted: self = .changingPINStarted
-        case .changingPINSucceeded: self = .changingPINSucceeded
+        case .pinChangeStarted: self = .pinChangeStarted
+        case .pinChangeSucceeded: self = .pinChangeSucceeded
         case .certificateDescriptionRetrieved: self = .certificateDescriptionRetrieved
         }
     }
