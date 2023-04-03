@@ -63,6 +63,7 @@ enum RedactedEIDInteractionEventError: CustomNSError {
     case cardRemoved
     case canRequested
     case pinRequested
+    case newPINRequested
     case pukRequested
     case authenticationStarted
     case authenticationSucceededWithRedirect
@@ -80,6 +81,7 @@ enum RedactedEIDInteractionEventError: CustomNSError {
         case .cardRemoved: self = .cardRemoved
         case .canRequested: self = .canRequested
         case .pinRequested: self = .pinRequested
+        case .newPINRequested: self = .newPINRequested
         case .pukRequested: self = .pukRequested
         case .authenticationStarted: self = .authenticationStarted
         case .authenticationSucceeded(redirectUrl: .some): self = .authenticationSucceededWithRedirect
