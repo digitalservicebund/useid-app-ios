@@ -1,6 +1,6 @@
 import Foundation
 
-public struct CertificateDescription {
+struct CertificateDescription: Equatable {
     public let issuerName: String
     public let issuerUrl: URL?
     public let purpose: String
@@ -11,93 +11,68 @@ public struct CertificateDescription {
     public let expirationDate: Date
 }
 
+struct AuthenticationRequest: Equatable {
+    var requiredAttributes: [IDCardAttribute]
+    var transactionInfo: String?
+    var certificateDescription: CertificateDescription
+}
+
+struct ScanOverlayMessages: Equatable {
+    let sessionStarted: String
+    let sessionFailed: String
+    let sessionSucceeded: String
+    let sessionInProgress: String
+}
+
 enum EIDInteractionEvent: Equatable {
-    case requestCardInsertion((String) -> Void) // kein Callback
-    case cardInteractionComplete
+    case interactionStarted
+    case cardInsertionRequested // TODO: Rename android
+    case cardInteractionCompleted // TODO: Rename android
     case cardRecognized
     case cardRemoved
-    case requestCAN((_ can: String) -> Void) // kein Callback
-    case requestPUK((String) -> Void) // kein Callback
-    case authenticationSucceeded(redirectUrl: URL?) // combine processCompletedSuccessfullyWithoutRedirect and processCompletedSuccessfullyWithRedirect
-    // case processCompletedSuccessfullyWithoutRedirect // onAuthCompleted ohne URL
-    // case processCompletedSuccessfullyWithRedirect(url: URL) // onAuthCompleted mit URL
+    case canRequested // TODO: Rename on android
+    case pinRequested(remainingAttempts: Int?) // TODO: Rename on android
+    case pukRequested // TODO: Rename on android
     case authenticationStarted
-    case requestAuthenticationRequestConfirmation(AuthenticationRequest, (FlaggedAttributes) -> Void) // kein Callback
-    // get rid off: case authenticationSuccessful
+    case authenticationSucceeded(redirectUrl: URL?) // TODO: Tell android to remove suffix "WithRedirect"
+    case authenticationRequestConfirmationRequested(AuthenticationRequest) // TODO: Rename on android
     case changingPINStarted // was pinManagementStarted
-    case changingPINSucceeded // => success == true
-    
-    // NEW:
-    case authenticationCertificate(CertificateDescription)
-    
-    // GET RID OF:
-    case requestPINAndCAN((_ pin: String, _ can: String) -> Void)
-    case requestPIN(remainingAttempts: Int?, pinCallback: (_ pin: String) -> Void)
-    case requestChangedPIN(remainingAttempts: Int?, pinCallback: (_ oldPIN: String, _ newPIN: String) -> Void)
-    case requestCANAndChangedPIN(pinCallback: (_ oldPIN: String, _ can: String, _ newPIN: String) -> Void)
-    
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        switch (lhs, rhs) {
-        case (.requestCardInsertion, .requestCardInsertion): return true
-        case (.cardInteractionComplete, .cardInteractionComplete): return true
-        case (.cardRecognized, .cardRecognized): return true
-        case (.cardRemoved, .cardRemoved): return true
-        case (.requestCAN, .requestCAN): return true
-        case (.requestPIN(let lhsAttempts, _), .requestPIN(let rhsAttempts, _)):
-            return lhsAttempts == rhsAttempts
-        case (.requestPINAndCAN, .requestPINAndCAN): return true
-        case (.requestPUK, .requestPUK): return true
-        case (.processCompletedSuccessfullyWithoutRedirect, .processCompletedSuccessfullyWithoutRedirect): return true
-        case (.processCompletedSuccessfullyWithRedirect(let lhsURL), .processCompletedSuccessfullyWithRedirect(let rhsURL)):
-            return lhsURL == rhsURL
-        case (.authenticationStarted, .authenticationStarted): return true
-        case (.requestAuthenticationRequestConfirmation(let lhsRequest, _), .requestAuthenticationRequestConfirmation(let rhsRequest, _)): return lhsRequest == rhsRequest
-        case (.authenticationSuccessful, .authenticationSuccessful): return true
-        case (.pinManagementStarted, .pinManagementStarted): return true
-        case (.requestChangedPIN(let lhsAttempts, _), .requestChangedPIN(let rhsAttempts, _)):
-            return lhsAttempts == rhsAttempts
-        case (.requestCANAndChangedPIN, .requestCANAndChangedPIN): return true
-        default: return false
-        }
-    }
+    case changingPINSucceeded
+    case certificateDescriptionRetrieved(CertificateDescription) // TODO: Rename on android
 }
 
 enum RedactedEIDInteractionEventError: CustomNSError {
-    case requestCardInsertion
-    case cardInteractionComplete
+    case cardInsertionRequested
+    case cardInteractionCompleted
     case cardRecognized
     case cardRemoved
-    case requestCAN
-    case requestPIN
-    case requestPINAndCAN
-    case requestPUK
-    case processCompletedSuccessfullyWithoutRedirect
-    case processCompletedSuccessfullyWithRedirect
+    case canRequested
+    case pinRequested
+    case pukRequested
     case authenticationStarted
-    case requestAuthenticationRequestConfirmation
-    case authenticationSuccessful
-    case pinManagementStarted
-    case requestChangedPIN
-    case requestCANAndChangedPIN
+    case authenticationSucceededWithRedirect
+    case authenticationSucceededWithoutRedirect
+    case authenticationRequestConfirmationRequested
+    case changingPINStarted
+    case changingPINSucceeded
+    case certificateDescriptionRetrieved
     
     init(_ eIDInteractionEvent: EIDInteractionEvent) {
         switch eIDInteractionEvent {
-        case .requestCardInsertion: self = .requestCardInsertion
-        case .cardInteractionComplete: self = .cardInteractionComplete
+        case .cardInsertionRequested: self = .cardInsertionRequested
+        case .cardInteractionCompleted: self = .cardInteractionCompleted
         case .cardRecognized: self = .cardRecognized
         case .cardRemoved: self = .cardRemoved
-        case .requestCAN: self = .requestCAN
-        case .requestPIN: self = .requestPIN
-        case .requestPINAndCAN: self = .requestPINAndCAN
-        case .requestPUK: self = .requestPUK
-        case .processCompletedSuccessfullyWithoutRedirect: self = .processCompletedSuccessfullyWithoutRedirect
-        case .processCompletedSuccessfullyWithRedirect: self = .processCompletedSuccessfullyWithRedirect
+        case .canRequested: self = .canRequested
+        case .pinRequested: self = .pinRequested
+        case .pukRequested: self = .pukRequested
         case .authenticationStarted: self = .authenticationStarted
-        case .requestAuthenticationRequestConfirmation: self = .requestAuthenticationRequestConfirmation
-        case .authenticationSuccessful: self = .authenticationSuccessful
-        case .pinManagementStarted: self = .pinManagementStarted
-        case .requestChangedPIN: self = .requestChangedPIN
-        case .requestCANAndChangedPIN: self = .requestCANAndChangedPIN
+        case .authenticationSucceeded(redirectUrl: .some): self = .authenticationSucceededWithRedirect
+        case .authenticationSucceeded(redirectUrl: .none): self = .authenticationSucceededWithoutRedirect
+        case .authenticationRequestConfirmationRequested: self = .authenticationRequestConfirmationRequested
+        case .changingPINStarted: self = .changingPINStarted
+        case .changingPINSucceeded: self = .changingPINSucceeded
+        case .certificateDescriptionRetrieved: self = .certificateDescriptionRetrieved
         }
     }
     

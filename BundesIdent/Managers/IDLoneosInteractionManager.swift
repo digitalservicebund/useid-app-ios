@@ -11,12 +11,6 @@ import Combine
 #if !targetEnvironment(simulator)
 import AusweisApp2SDKWrapper
 
-struct AuthenticationRequest {
-    var requiredAttributes: [IDCardAttribute]
-    var transactionInfo: String?
-    var certificateDescription: CertificateDescription
-}
-
 extension AusweisApp2SDKWrapper.AuxiliaryData: Equatable {
     public static func == (lhs: AuxiliaryData, rhs: AuxiliaryData) -> Bool {
         lhs.ageVerificationDate == rhs.ageVerificationDate &&
@@ -36,11 +30,29 @@ extension AusweisApp2SDKWrapper.AccessRights: Equatable {
     }
 }
 
+enum Workflow {
+    case changePIN(userInfoMessages: AA2UserInfoMessages?, status: Bool)
+    case authentification(tcTokenUrl: URL, developerMode: Bool, userInfoMessages: AA2UserInfoMessages?, status: Bool)
+}
+
+extension AA2UserInfoMessage {
+    init(_ messages: ScanOverlayMessages) {
+        self.init(
+            sessionStarted: messages.sessionStarted,
+            sessionFailed: messages.sessionFailed,
+            sessionSucceeded: messages.sessionSucceeded,
+            sessionInProgress: messages.sessionInProgress
+        )
+    }
+}
+
 // general InteractionWorkflow
-class SetupPINInteractionWorkflow: WorkflowCallbacks {
+class IDInteractionManager: WorkflowCallbacks {
     
     private let workflowController: AusweisApp2SDKWrapper.WorkflowController
     private let publisher: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>
+    
+    private var postponedWorkflow: Workflow?
     
     init(workflowController: AusweisApp2SDKWrapper.WorkflowController = AA2SDKWrapper.workflowController) {
         self.workflowController = workflowController
@@ -50,21 +62,65 @@ class SetupPINInteractionWorkflow: WorkflowCallbacks {
         workflowController.start()
     }
     
-    func changePIN() -> EIDInteractionPublisher {
+    func publisher() -> EIDInteractionPublisher {
         publisher.handleEvents(receiveCompletion: { _ in
             self.workflowController.stop()
         }, receiveCancel: {
             print("Cancelling")
             self.workflowController.cancel()
+            self.postponedWorkflow = nil
         }).eraseToAnyPublisher()
     }
     
-    func onStarted() {
+    func identify(tokenURL: URL, messages: ScanOverlayMessages) {
+        let userInfoMessages = AA2UserInfoMessage(messages)
+        guard workflowController.isStarted else {
+            postponedWorkflow = Workflow.authentification(tokenURL: tokenURL,
+                                                          developerMode: false,
+                                                          userInfoMessages: userInfoMessages,
+                                                          status: true)
+            return
+        }
+        workflowController.startAuthentication(
+            withTcTokenUrl: tokenURL,
+            withDeveloperMode: false,
+            withUserInfoMessages: userInfoMessages,
+            withStatusMsgEnabled: true
+        )
+    }
+    
+    func changePIN(messages: ScanOverlayMessages) {
+        let userInfoMessages = AA2UserInfoMessage(messages)
+        guard workflowController.isStarted else {
+            postponedWorkflow = Workflow.changePIN(userInfoMessages: userInfoMessages,
+                                                   status: true)
+            return
+        }
         workflowController.startChangePin(
-            withUserInfoMessages: AA2UserInfoMessages(sessionStarted: "sessionStarted",
-                                                      sessionFailed: "sessionFailed",
-                                                      sessionSucceeded: "sessionSucceeded",
-                                                      sessionInProgress: "sessionInProgress"))
+            withUserInfoMessages: userInfoMessages,
+            withStatusMsgEnabled: true
+        )
+    }
+    
+    func onStarted() {
+        defer { postponedWorkflow = nil }
+        switch postponedWorkflow {
+        case .none:
+            return
+        case .changePIN(userInfoMessages: let userInfoMessages, status: let status):
+            workflowController.startChangePin(withUserInfoMessages: userInfoMessages,
+                                              withStatusMsgEnabled: status)
+        case .authentication(tcTokenURL: let tcTokenURL,
+                             developerMode: let developerMode,
+                             userInfoMessages: let userInfoMessages,
+                             status: let status):
+            workflowController.startAuthentication(
+                withTcTokenUrl: tcTokenURL,
+                withDeveloperMode: developerMode,
+                withUserInfoMessages: userInfoMessages,
+                withStatusMsgEnabled: status
+            )
+        }
     }
     
     func onChangePinStarted() {
