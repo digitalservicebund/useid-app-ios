@@ -115,10 +115,10 @@ struct SetupScan: ReducerProtocol {
         case .authenticationStarted:
             logger.info("Authentication started.")
             state.shared.isScanning = true
-        case .cardInteractionComplete:
-            logger.info("Card interaction complete.")
-        case .requestCardInsertion:
-            logger.info("Request Card insertion.")
+        case .cardInteractionCompleted:
+            logger.info("Card interaction completed.")
+        case .cardInsertionRequested:
+            logger.info("Card insertion requested.")
             state.shared.showProgressCaption = nil
             state.shared.isScanning = true
             state.shared.cardRecognized = false
@@ -130,49 +130,50 @@ struct SetupScan: ReducerProtocol {
             state.shared.showProgressCaption = ProgressCaption(title: L10n.FirstTimeUser.Scan.Progress.title,
                                                                body: L10n.FirstTimeUser.Scan.Progress.body)
             logger.info("Card removed.")
-        case .processCompletedSuccessfullyWithoutRedirect:
+        case .pinChangeSucceeded:
             return EffectTask(value: .scannedSuccessfully)
-        case .pinManagementStarted:
+        case .pinChangeStarted:
             logger.info("PIN Management started.")
-        case .requestChangedPIN(let newRemainingAttempts, let pinCallback):
-            logger.info("Providing changed PIN with \(String(describing: newRemainingAttempts)) remaining attempts.")
-            let remainingAttemptsBefore = state.remainingAttempts
-            state.remainingAttempts = newRemainingAttempts
-            
-            // This is our signal that the user canceled (for now)
-            guard let remainingAttempts = newRemainingAttempts else {
-                return EffectTask(value: .cancelScan)
-            }
-            
-            // Wrong transport/personal PIN provided
-            if let remainingAttemptsBefore,
-               remainingAttempts < remainingAttemptsBefore {
-                return EffectTask(value: .wrongTransportPIN(remainingAttempts: remainingAttempts))
-            }
-            
-            pinCallback(state.transportPIN, state.newPIN)
-        case .requestCANAndChangedPIN(let callback):
-            let callbackId = uuid.callAsFunction()
-            let canAndChangedPINCallback = CANAndChangedPINCallback(id: callbackId, callback: { payload in
-                callback(payload.oldPIN, payload.can, payload.newPIN)
-            })
-            logger.info("PIN and CAN request: \(callbackId)")
-            state.shared.isScanning = false
-            state.shared.scanAvailable = true
-            return EffectTask(value: .requestCANAndChangedPIN(pin: state.newPIN, callback: canAndChangedPINCallback))
-                .delay(for: 2, scheduler: mainQueue) // this delay is here to fix a bug where this particular screen was presented incorrectly
-                .eraseToEffect()
-        case .requestPUK:
+        case .newPINRequested:
+            // TODO: callback
+//            logger.info("Providing changed PIN with \(String(describing: newRemainingAttempts)) remaining attempts.")
+//            let remainingAttemptsBefore = state.remainingAttempts
+//            state.remainingAttempts = newRemainingAttempts
+//
+//            // This is our signal that the user canceled (for now)
+//            guard let remainingAttempts = newRemainingAttempts else {
+//                return EffectTask(value: .cancelScan)
+//            }
+//
+//            // Wrong transport/personal PIN provided
+//            if let remainingAttemptsBefore,
+//               remainingAttempts < remainingAttemptsBefore {
+//                return EffectTask(value: .wrongTransportPIN(remainingAttempts: remainingAttempts))
+//            }
+//
+//            pinCallback(state.transportPIN, state.newPIN)
+            return .none
+        case .canRequested: // + .newPINRequested?:
+            // TODO: two steps callback?
+//            let callbackId = uuid.callAsFunction()
+//            let canAndChangedPINCallback = CANAndChangedPINCallback(id: callbackId, callback: { payload in
+//                callback(payload.oldPIN, payload.can, payload.newPIN)
+//            })
+//            logger.info("PIN and CAN request: \(callbackId)")
+//            state.shared.isScanning = false
+//            state.shared.scanAvailable = true
+//            return EffectTask(value: .requestCANAndChangedPIN(pin: state.newPIN, callback: canAndChangedPINCallback))
+//                .delay(for: 2, scheduler: mainQueue) // this delay is here to fix a bug where this particular screen was presented incorrectly
+//                .eraseToEffect()
+            return .none
+        case .pukRequested:
             logger.info("PUK requested, so card is blocked. Callback not implemented yet.")
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
-        case .requestPIN(remainingAttempts: _):
-            workflow.setPIN()
+        case .pinRequested(remainingAttempts: _):
+            // TODO: callback
+            //workflow.setPIN()
             return .none
-        case .requestCAN,
-             .requestPINAndCAN,
-             .processCompletedSuccessfullyWithRedirect,
-             .requestAuthenticationRequestConfirmation,
-             .authenticationSuccessful:
+        case .authenticationSucceeded, .authenticationRequestConfirmationRequested, .certificateDescriptionRetrieved(_):
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             logger.error("Received unexpected event.")
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))

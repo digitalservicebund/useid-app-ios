@@ -8,8 +8,8 @@ import Sentry
 typealias NFCConfigType = NSObjectProtocol & NFCConfigProtocol
 
 protocol IDInteractionManagerType {
-    func identify(tokenURL: URL, nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher
-    func changePIN(nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher
+    func identify(tokenURL: URL, messages: ScanOverlayMessages) -> EIDInteractionPublisher
+    func changePIN(messages: ScanOverlayMessages) -> EIDInteractionPublisher
 }
 
 protocol OpenEcardType: OpenEcardProtocol {
@@ -57,8 +57,8 @@ protocol PreviewIDInteractionManagerType: IDInteractionManagerType, AnyObject {
     var isDebugModeEnabled: Bool { get set }
     var publishedIsDebugModeEnabled: AnyPublisher<Bool, Never> { get }
     
-    func identify(tokenURL: URL, nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher
-    func changePIN(nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher
+    func identify(tokenURL: URL, messages: ScanOverlayMessages) -> EIDInteractionPublisher
+    func changePIN(messages: ScanOverlayMessages) -> EIDInteractionPublisher
     func debuggableChangePIN() -> DebuggableInteraction<ChangePINDebugSequence>
     func debuggableIdentify(tokenURL: URL) -> DebuggableInteraction<IdentifyDebugSequence>
     func debuggableCANIdentify(tokenURL: URL) -> DebuggableInteraction<IdentifyDebugSequence>

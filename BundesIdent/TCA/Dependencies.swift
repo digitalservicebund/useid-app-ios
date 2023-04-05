@@ -12,8 +12,13 @@ enum LoggerKey: DependencyKey {
 
 #if PREVIEW
 enum PreviewIDInteractionManagerKey: DependencyKey {
-    static var liveValue: PreviewIDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: IDInteractionManager(issueTracker: SentryIssueTracker()),
+#if !targetEnvironment(simulator)
+    static var liveValue: PreviewIDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: IDInteractionManager(),
                                                                                         debugIDInteractionManager: DebugIDInteractionManager())
+#else
+    static var liveValue: PreviewIDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: MockIDInteractionManager(queue: DispatchQueue.main.eraseToAnyScheduler()),
+                                                                                        debugIDInteractionManager: DebugIDInteractionManager())
+#endif
 }
 
 extension DependencyValues {
@@ -26,10 +31,17 @@ extension DependencyValues {
 
 enum IDInteractionManagerKey: DependencyKey {
 #if PREVIEW
-    static var liveValue: IDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: IDInteractionManager(issueTracker: SentryIssueTracker()),
+#if !targetEnvironment(simulator) // Preview on device
+    static var liveValue: IDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: IDInteractionManager(),
                                                                                  debugIDInteractionManager: DebugIDInteractionManager())
-#else
-    static var liveValue: IDInteractionManagerType = IDInteractionManager(issueTracker: SentryIssueTracker())
+#else // Preview in simulator
+    static var liveValue: IDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: MockIDInteractionManager(queue: DispatchQueue.main.eraseToAnyScheduler()),
+                                                                                 debugIDInteractionManager: DebugIDInteractionManager())
+#endif
+#elseif !targetEnvironment(simulator) // Production on device
+    static var liveValue: IDInteractionManagerType = IDInteractionManager()
+#else // Production in simulator
+    static var liveValue: IDInteractionManagerType = MockIDInteractionManager(queue: DispatchQueue.main.eraseToAnyScheduler())
 #endif
     static var previewValue: IDInteractionManagerType = MockIDInteractionManager(queue: DispatchQueue.main.eraseToAnyScheduler())
 }

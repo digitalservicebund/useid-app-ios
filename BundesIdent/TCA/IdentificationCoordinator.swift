@@ -113,10 +113,12 @@ struct IdentificationCoordinator: ReducerProtocol {
                     state.availableDebugActions = debuggableInteraction.sequence
                     publisher = debuggableInteraction.publisher
                 } else {
-                    publisher = idInteractionManager.identify(tokenURL: state.tokenURL, nfcMessagesProvider: IdentificationNFCMessageProvider())
+#warning("messages")
+                    publisher = idInteractionManager.identify(tokenURL: state.tokenURL, messages: .init(sessionStarted: "", sessionFailed: "", sessionSucceeded: "", sessionInProgress: ""))
                 }
 #else
-                publisher = idInteractionManager.identify(tokenURL: state.tokenURL, nfcMessagesProvider: IdentificationNFCMessageProvider())
+#warning("messages")
+                publisher = idInteractionManager.identify(tokenURL: state.tokenURL, messages: .init(sessionStarted: "", sessionFailed: "", sessionSucceeded: "", sessionInProgress: ""))
 #endif
                 return publisher
                     .receive(on: mainQueue)

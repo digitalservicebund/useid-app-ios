@@ -40,20 +40,20 @@ struct ScanOverlayMessages: Equatable {
 }
 
 enum EIDInteractionEvent: Equatable {
-    case cardInsertionRequested // TODO: Rename android
-    case cardInteractionCompleted // TODO: Rename android
+    case cardInsertionRequested
+    case cardInteractionCompleted
     case cardRecognized
     case cardRemoved
-    case canRequested // TODO: Rename on android
-    case pinRequested(remainingAttempts: Int?) // TODO: Rename on android
-    case newPINRequested // TODO: Rename on android
-    case pukRequested // TODO: Rename on android
+    case canRequested
+    case pinRequested(remainingAttempts: Int?)
+    case newPINRequested
+    case pukRequested
     case authenticationStarted
-    case authenticationSucceeded(redirectUrl: URL?) // TODO: Tell android to remove suffix "WithRedirect"
-    case authenticationRequestConfirmationRequested(AuthenticationRequest) // TODO: Rename on android
-    case pinChangeStarted // was pinManagementStarted
-    case pinChangeSucceeded // TODO: Rename android
-    case certificateDescriptionRetrieved(CertificateDescription) // TODO: Rename on android
+    case authenticationSucceeded(redirectUrl: URL?)
+    case authenticationRequestConfirmationRequested(AuthenticationRequest)
+    case pinChangeStarted
+    case pinChangeSucceeded
+    case certificateDescriptionRetrieved(CertificateDescription)
 }
 
 enum RedactedEIDInteractionEventError: CustomNSError {

@@ -38,10 +38,12 @@ struct IdentificationOverviewLoaded: ReducerProtocol {
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
-        case .idInteractionEvent(.success(.requestPIN(remainingAttempts: nil, pinCallback: let handler))):
-            let pinHandler = PINCallback(id: uuid.callAsFunction(), callback: handler)
-            state.pinHandler = pinHandler
-            return EffectTask(value: .callbackReceived(state.request, pinHandler))
+        case .idInteractionEvent(.success(.pinRequested(remainingAttempts: nil))):
+            // TODO: callback
+//            let pinHandler = PINCallback(id: uuid.callAsFunction(), callback: handler)
+//            state.pinHandler = pinHandler
+//            return EffectTask(value: .callbackReceived(state.request, pinHandler))
+            return .none
         case .idInteractionEvent(.failure(let error)):
             return EffectTask(value: .failure(IdentifiableError(error)))
         case .idInteractionEvent:

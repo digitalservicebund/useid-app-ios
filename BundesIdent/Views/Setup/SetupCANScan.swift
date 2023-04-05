@@ -129,12 +129,12 @@ struct SetupCANScan: ReducerProtocol {
         case .authenticationStarted:
             logger.info("Authentication started.")
             state.shared.isScanning = true
-        case .pinManagementStarted:
-            logger.info("PIN Management started.")
-        case .cardInteractionComplete:
-            logger.info("Card interaction complete.")
-        case .requestCardInsertion:
-            logger.info("Request Card insertion.")
+        case .pinChangeStarted:
+            logger.info("PIN Change started.")
+        case .cardInteractionCompleted:
+            logger.info("Card interaction completed.")
+        case .cardInsertionRequested:
+            logger.info("Card insertion requested.")
             state.shared.showProgressCaption = nil
             state.shared.isScanning = true
             state.shared.cardRecognized = false
@@ -147,41 +147,44 @@ struct SetupCANScan: ReducerProtocol {
                                                                body: L10n.FirstTimeUser.Scan.Progress.body)
             logger.info("Card removed.")
             state.authenticationSuccessful = false
-        case .processCompletedSuccessfullyWithoutRedirect:
+        case .pinChangeSucceeded:
             return EffectTask(value: .scannedSuccessfully)
-        case .requestCANAndChangedPIN(pinCallback: let pinCallback):
-            let identifiedCallback = CANAndChangedPINCallback(id: uuid()) { payload in
-                pinCallback(payload.oldPIN, payload.can, payload.newPIN)
-            }
-            if state.canAndChangedPINCallback == nil {
-                logger.info("CAN and changed PIN requested after cancelling scan. Directly providing previous values to continue the flow.")
-                identifiedCallback(CANAndChangedPINCallbackPayload(can: state.can,
-                                                                   oldPIN: state.transportPIN,
-                                                                   newPIN: state.newPIN))
-                state.shared.isScanning = true
-                return .none
-            } else {
-                logger.info("Wrong CAN provided")
-                state.canAndChangedPINCallback = identifiedCallback
-                state.shared.isScanning = false
-                return EffectTask(value: .incorrectCAN(callback: identifiedCallback))
-            }
-        case .requestPUK:
+        case .canRequested:
+            return .none
+        case .pinRequested:
+            // TODO: callback
+//            let identifiedCallback = CANAndChangedPINCallback(id: uuid()) { payload in
+//                pinCallback(payload.oldPIN, payload.can, payload.newPIN)
+//            }
+//            if state.canAndChangedPINCallback == nil {
+//                logger.info("CAN and changed PIN requested after cancelling scan. Directly providing previous values to continue the flow.")
+//                identifiedCallback(CANAndChangedPINCallbackPayload(can: state.can,
+//                                                                   oldPIN: state.transportPIN,
+//                                                                   newPIN: state.newPIN))
+//                state.shared.isScanning = true
+//                return .none
+//            } else {
+//                logger.info("Wrong CAN provided")
+//                state.canAndChangedPINCallback = identifiedCallback
+//                state.shared.isScanning = false
+//                return EffectTask(value: .incorrectCAN(callback: identifiedCallback))
+//            }
+            return .none
+        case .pukRequested:
             logger.info("PUK requested, so card is blocked. Callback not implemented yet.")
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
             
-        case .requestChangedPIN(remainingAttempts: _, pinCallback: let pinCallback):
-            pinCallback(state.transportPIN, state.newPIN)
+        case .newPINRequested:
+            // TODO: callback
+//            pinCallback(state.transportPIN, state.newPIN)
             return .none
-        case .requestPIN(remainingAttempts: _, pinCallback: let pinCallback):
-            pinCallback(state.transportPIN)
+        case .pinRequested(remainingAttempts: _):
+            // TODO: callback
+//            pinCallback(state.transportPIN)
             return .none
-        case .requestCAN,
-             .requestPINAndCAN,
-             .processCompletedSuccessfullyWithRedirect,
-             .requestAuthenticationRequestConfirmation,
-             .authenticationSuccessful:
-            
+        case .authenticationSucceeded,
+             .authenticationRequestConfirmationRequested,
+             .certificateDescriptionRetrieved:
             // Make sure to restart the pin management flow
             state.canAndChangedPINCallback = nil
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))

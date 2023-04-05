@@ -6,13 +6,13 @@ import OpenEcard
 
 class PreviewIDInteractionManager: PreviewIDInteractionManagerType {
     
-    private let realIDInteractionManager: IDInteractionManager
+    private let realIDInteractionManager: IDInteractionManagerType
     private let debugIDInteractionManager: DebugIDInteractionManager
     
     @Published public var isDebugModeEnabled: Bool
     var publishedIsDebugModeEnabled: AnyPublisher<Bool, Never> { $isDebugModeEnabled.eraseToAnyPublisher() }
     
-    init(realIDInteractionManager: IDInteractionManager, debugIDInteractionManager: DebugIDInteractionManager) {
+    init(realIDInteractionManager: IDInteractionManagerType, debugIDInteractionManager: DebugIDInteractionManager) {
         self.realIDInteractionManager = realIDInteractionManager
         self.debugIDInteractionManager = debugIDInteractionManager
         
@@ -24,14 +24,14 @@ class PreviewIDInteractionManager: PreviewIDInteractionManagerType {
 #endif
     }
     
-    func identify(tokenURL: URL, nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher {
+    func identify(tokenURL: URL, messages: ScanOverlayMessages) -> EIDInteractionPublisher {
         precondition(!isDebugModeEnabled)
-        return realIDInteractionManager.identify(tokenURL: tokenURL, nfcMessagesProvider: nfcMessagesProvider)
+        return realIDInteractionManager.identify(tokenURL: tokenURL, messages: messages)
     }
     
-    func changePIN(nfcMessagesProvider: NFCConfigType) -> EIDInteractionPublisher {
+    func changePIN(messages: ScanOverlayMessages) -> EIDInteractionPublisher {
         precondition(!isDebugModeEnabled)
-        return realIDInteractionManager.changePIN(nfcMessagesProvider: nfcMessagesProvider)
+        return realIDInteractionManager.changePIN(messages: messages)
     }
     
     func debuggableChangePIN() -> DebuggableInteraction<ChangePINDebugSequence> {
