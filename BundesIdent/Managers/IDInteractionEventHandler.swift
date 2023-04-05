@@ -31,13 +31,13 @@ final class IDInteractionEventHandler: WorkflowCallbacks {
 
     func onStarted() {
         switch workflow {
-        case let .changePIN(userInfoMessages: userInfoMessages, status: status):
+        case .changePIN(userInfoMessages: let userInfoMessages, status: let status):
             workflowController.startChangePin(withUserInfoMessages: userInfoMessages,
                                               withStatusMsgEnabled: status)
-        case let .authentification(tcTokenUrl: tcTokenUrl,
-                                   developerMode: developerMode,
-                                   userInfoMessages: userInfoMessages,
-                                   status: status):
+        case .authentification(tcTokenUrl: let tcTokenUrl,
+                               developerMode: let developerMode,
+                               userInfoMessages: let userInfoMessages,
+                               status: let status):
             workflowController.startAuthentication(
                 withTcTokenUrl: tcTokenUrl,
                 withDeveloperMode: developerMode,
@@ -94,8 +94,9 @@ final class IDInteractionEventHandler: WorkflowCallbacks {
     }
 
     func onAuthenticationCompleted(authResult: AusweisApp2SDKWrapper.AuthResult) {
-        // TODO: Check if result.major could be success
-        if let errorResultData = authResult.result {
+        // TODO: Check if result.major could be success. Answer: Yes, it is.
+        // TODO: We need to check against resultmajor#ok, which should be implemented better than a check against a hardcoded string
+        if let errorResultData = authResult.result, errorResultData.major != "http://www.bsi.bund.de/ecard/api/1.1/resultmajor#ok" {
             // TODO: Pass result.major up
             subject.send(completion: .failure(.processFailed(resultCode: .CLIENT_ERROR, redirectURL: authResult.url, resultMinor: errorResultData.minor)))
         } else {
@@ -118,7 +119,7 @@ final class IDInteractionEventHandler: WorkflowCallbacks {
     }
 
     func onBadState(error: String) {
-        // TODO issueTracker instead
+        // TODO: issueTracker instead
         subject.send(completion: .failure(.frameworkError(message: "onBadState: \(error)")))
     }
 
@@ -165,7 +166,8 @@ final class IDInteractionEventHandler: WorkflowCallbacks {
     func onReader(reader: AusweisApp2SDKWrapper.Reader?) {
         guard let reader else {
             logger.error("onReader: Unknown reader")
-            subject.send(completion: .failure(.unknownReader))
+            // reader is nil when authentication is done
+            // subject.send(completion: .failure(.unknownReader))
             return
         }
 

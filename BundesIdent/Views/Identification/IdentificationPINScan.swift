@@ -17,12 +17,13 @@ struct IdentificationPINScan: ReducerProtocol {
     @Dependency(\.logger) var logger
     @Dependency(\.uuid) var uuid
     @Dependency(\.mainQueue) var mainQueue
+    @Dependency(\.idInteractionManager) var idInteractionManager
     
     struct State: Equatable, IDInteractionHandler {
-        let request: EIDAuthenticationRequest
-        
+        let authenticationInformation: AuthenticationInformation
         var pin: String
-        var pinCallback: PINCallback
+        var lastRemainingAttempts: Int?
+        
         var shared: SharedScan.State = .init()
         
         var authenticationSuccessful = false
@@ -30,6 +31,13 @@ struct IdentificationPINScan: ReducerProtocol {
 #if PREVIEW
         var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
+        
+        enum WorkflowState {
+            case shouldAccept
+            case setPin
+        }
+
+        var workflowState: WorkflowState = .shouldAccept
         
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
             .scanEvent(event)
@@ -64,7 +72,12 @@ struct IdentificationPINScan: ReducerProtocol {
             state.shared.showInstructions = false
             state.shared.cardRecognized = false
             guard !state.shared.isScanning else { return .none }
-            state.pinCallback(state.pin)
+            
+            switch state.workflowState {
+            case .shouldAccept: idInteractionManager.acceptAccessRights()
+            case .setPin: idInteractionManager.setPIN(pin: state.pin)
+            }
+            
             state.shared.isScanning = true
             
             return .trackEvent(category: "identification",
@@ -116,23 +129,41 @@ struct IdentificationPINScan: ReducerProtocol {
     }
     
     func handle(state: inout State, event: EIDInteractionEvent) -> EffectTask<IdentificationPINScan.Action> {
-//        switch event {
-//        case .requestPIN(remainingAttempts: let remainingAttempts, pinCallback: let callback):
-//            let callbackId = uuid.callAsFunction()
-//            state.pinCallback = PINCallback(id: callbackId, callback: callback)
-//            state.shared.isScanning = false
-//            state.shared.scanAvailable = true
-//            
-//            // This is our signal that the user canceled (for now)
-//            guard let remainingAttempts else {
-//                logger.info("Identification cancelled")
-//                if state.shared.cardRecognized {
-//                    issueTracker.capture(error: IdentificationScanError.cancelAfterCardRecognized)
-//                }
-//                return .none
-//            }
-//            logger.info("PIN request: \(callbackId)")
-//            return EffectTask(value: .wrongPIN(remainingAttempts: remainingAttempts))
+        switch event {
+        case .cardInsertionRequested:
+            logger.info("cardInsertionRequested")
+            return .none
+        case .cardRemoved:
+            logger.info("cardRemoved")
+            return .none
+        case .cardRecognized:
+            logger.info("cardRecognized")
+            return .none
+        case .pinRequested(remainingAttempts: let remainingAttempts):
+            state.workflowState = .setPin
+            state.shared.isScanning = false
+            state.shared.scanAvailable = true
+            
+            let lastRemainingAttempts = state.lastRemainingAttempts
+            state.lastRemainingAttempts = remainingAttempts
+            
+            if let remainingAttempts,
+               let lastRemainingAttempts,
+               remainingAttempts < lastRemainingAttempts {
+                idInteractionManager.interrupt()
+                return EffectTask(value: .wrongPIN(remainingAttempts: remainingAttempts))
+            } else {
+                idInteractionManager.setPIN(pin: state.pin)
+                return .none
+            }
+        case .authenticationSucceeded(redirectUrl: .some(let redirectUrl)):
+            logger.info("Authentication successfully with redirect.")
+            return EffectTask(value: .identifiedSuccessfully(redirectURL: redirectUrl))
+        case .authenticationSucceeded(redirectUrl: .none):
+            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: state.shared.scanAvailable)))
+        case .canRequested:
+            idInteractionManager.cancel()
+            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))
 //        case .requestPINAndCAN(let callback):
 //            let callbackId = uuid.callAsFunction()
 //            let pinCANCallback = PINCANCallback(id: callbackId, callback: callback)
@@ -168,12 +199,11 @@ struct IdentificationPINScan: ReducerProtocol {
 //            issueTracker.capture(error: RedactedEIDInteractionEventError(.processCompletedSuccessfullyWithoutRedirect))
 //            logger.error("Received unexpected event.")
 //            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(.processCompletedSuccessfullyWithoutRedirect), retry: state.shared.scanAvailable)))
-//        default:
-//            issueTracker.capture(error: RedactedEIDInteractionEventError(event))
-//            logger.error("Received unexpected event.")
-//            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))
-//        }
-        return .none
+        default:
+            issueTracker.capture(error: RedactedEIDInteractionEventError(event))
+            logger.error("Received unexpected event.")
+            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))
+        }
     }
 }
 
@@ -211,13 +241,12 @@ struct IdentificationPINScanView: View {
 
 struct IdentificationScan_Previews: PreviewProvider {
     static var previews: some View {
-        IdentificationPINScanView(store: Store(initialState: IdentificationPINScan.State(request: .preview,
-                                                                                         pin: "123456",
-                                                                                         pinCallback: PINCallback(id: .zero, callback: { _ in })),
+        IdentificationPINScanView(store: Store(initialState: IdentificationPINScan.State(authenticationInformation: .preview,
+                                                                                         pin: "123456"),
                                                reducer: IdentificationPINScan()))
-        IdentificationPINScanView(store: Store(initialState: IdentificationPINScan.State(request: .preview,
+        IdentificationPINScanView(store: Store(initialState: IdentificationPINScan.State(authenticationInformation: .preview,
                                                                                          pin: "123456",
-                                                                                         pinCallback: PINCallback(id: .zero, callback: { _ in }), shared: SharedScan.State(isScanning: true)),
+                                                                                         shared: SharedScan.State(isScanning: true)),
                                                reducer: IdentificationPINScan()))
     }
 }

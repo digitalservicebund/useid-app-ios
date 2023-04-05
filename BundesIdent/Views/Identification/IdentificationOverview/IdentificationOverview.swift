@@ -19,7 +19,7 @@ struct IdentificationOverview: ReducerProtocol {
             case .loading:
                 return .loading(.idInteractionEvent(event))
             case .loaded:
-                return .loaded(.idInteractionEvent(event))
+                return nil
             case .error:
                 return nil
             }
@@ -79,10 +79,9 @@ struct IdentificationOverview: ReducerProtocol {
                                    action: "loadingFailed",
                                    name: "attributes",
                                    analytics: analytics)
-            case .loading(.done(let request, let callback)):
+            case .loading(.done(let request, let certificateDescription)):
                 state = .loaded(IdentificationOverviewLoaded.State(id: uuid.callAsFunction(),
-                                                                   request: request,
-                                                                   handler: callback,
+                                                                   authenticationInformation: AuthenticationInformation(request: request, certificateDescription: certificateDescription),
                                                                    canGoBackToSetupIntro: state.canGoBackToSetupIntro))
                 return .none
             default:

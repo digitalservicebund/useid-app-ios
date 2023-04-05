@@ -73,6 +73,24 @@ class DebugIDInteractionManager: IDInteractionManagerType {
     func runIdentify(debugSequence: IdentifyDebugSequence) -> [IdentifyDebugSequence] {
         debugSequence.run(card: &card, subject: subject!)
     }
+    
+    func retrieveCertificateDescription() {
+        // TODO: What do we need to do here?
+    }
+    
+    func setPIN(pin: String) {
+        // TODO: What do we need to do here?
+    }
+    
+    func acceptAccessRights() {
+        // TODO: What do we need to do here?
+    }
+    
+    func interrupt() {}
+    
+    func cancel() {
+        // TODO: What do we need to do here?
+    }
 }
 #endif
 
@@ -95,6 +113,27 @@ extension EIDAuthenticationRequest {
             .DG05: false,
             .DG06: false
         ]
+    )
+}
+
+extension AuthenticationInformation {
+    static var preview: AuthenticationInformation = .init(request: .preview, certificateDescription: .preview)
+}
+
+extension AuthenticationRequest {
+    static var preview: AuthenticationRequest = .init(requiredAttributes: [.DG01, .DG02, .DG03, .DG04])
+}
+
+extension CertificateDescription {
+    static let preview = CertificateDescription(
+        issuerName: "Issuer",
+        issuerUrl: URL(string: "https://issuer.com")!,
+        purpose: "Purpose",
+        subjectName: "Subject",
+        subjectUrl: URL(string: "https://subject.com")!,
+        termsOfUsage: AuthenticationTerms.text("Terms").description,
+        effectiveDate: Date(),
+        expirationDate: Date().addingTimeInterval(24 * 60 * 60)
     )
 }
 

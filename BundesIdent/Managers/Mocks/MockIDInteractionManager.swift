@@ -19,4 +19,24 @@ struct MockIDInteractionManager: IDInteractionManagerType {
         subject.send(completion: .failure(.frameworkError(message: "Not implemented")))
         return subject.eraseToAnyPublisher()
     }
+    
+    func setPIN(pin: String) {
+        // not implemented
+    }
+    
+    func retrieveCertificateDescription() {
+        // not implemented
+    }
+    
+    func acceptAccessRights() {
+        // not implemented
+    }
+    
+    func interrupt() {
+        // not implemented
+    }
+    
+    func cancel() {
+        // not implemented
+    }
 }

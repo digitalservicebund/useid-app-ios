@@ -85,6 +85,26 @@ class IDInteractionManager: IDInteractionManagerType {
         return handler.publisher
     }
     
+    func retrieveCertificateDescription() {
+        workflowController.getCertificate()
+    }
+    
+    func setPIN(pin: String) {
+        workflowController.setPin(pin)
+    }
+    
+    func acceptAccessRights() {
+        workflowController.accept()
+    }
+    
+    func interrupt() {
+        workflowController.interrupt()
+    }
+    
+    func cancel() {
+        workflowController.cancel()
+    }
+    
     deinit {
         logger.error("Unexpected deinit")
         workflowController.stop()

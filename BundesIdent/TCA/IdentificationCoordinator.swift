@@ -113,11 +113,11 @@ struct IdentificationCoordinator: ReducerProtocol {
                     state.availableDebugActions = debuggableInteraction.sequence
                     publisher = debuggableInteraction.publisher
                 } else {
-#warning("messages")
+                    #warning("messages")
                     publisher = idInteractionManager.identify(tokenURL: state.tokenURL, messages: .init(sessionStarted: "", sessionFailed: "", sessionSucceeded: "", sessionInProgress: ""))
                 }
 #else
-#warning("messages")
+                #warning("messages")
                 publisher = idInteractionManager.identify(tokenURL: state.tokenURL, messages: .init(sessionStarted: "", sessionFailed: "", sessionSucceeded: "", sessionInProgress: ""))
 #endif
                 return publisher
@@ -130,15 +130,14 @@ struct IdentificationCoordinator: ReducerProtocol {
                  .routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.runDebugSequence(let sequence))))):
                 return EffectTask(value: .runDebugSequence(sequence))
 #endif
-            case .routeAction(_, action: .overview(.loaded(.callbackReceived(let request, let callback)))):
-                state.routes.push(.personalPIN(IdentificationPersonalPIN.State(request: request, callback: callback)))
+            case .routeAction(_, action: .overview(.loaded(.confirm(let authenticationInformation)))):
+                state.routes.push(.personalPIN(IdentificationPersonalPIN.State(authenticationInformation: authenticationInformation)))
                 return .none
-            case .routeAction(_, action: .personalPIN(.done(request: let request, pin: let pin, pinCallback: let pinCallback))):
+            case .routeAction(_, action: .personalPIN(.done(authenticationInformation: let authenticationInformation, pin: let pin))):
                 state.pin = pin
                 state.routes.push(
-                    .scan(IdentificationPINScan.State(request: request,
+                    .scan(IdentificationPINScan.State(authenticationInformation: authenticationInformation,
                                                       pin: pin,
-                                                      pinCallback: pinCallback,
                                                       shared: SharedScan.State(showInstructions: !storageManager.identifiedOnce)))
                 )
                 return .none

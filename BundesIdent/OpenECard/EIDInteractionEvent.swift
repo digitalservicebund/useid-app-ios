@@ -12,19 +12,26 @@ struct CertificateDescription: Equatable {
     public let termsOfUsage: String
     public let effectiveDate: Date
     public let expirationDate: Date
+}
 
 #if !targetEnvironment(simulator)
+extension CertificateDescription {
     init(_ description: AusweisApp2SDKWrapper.CertificateDescription) {
-        self.issuerName = description.issuerName
-        self.issuerUrl = description.issuerUrl
-        self.purpose = description.purpose
-        self.subjectName = description.subjectName
-        self.subjectUrl = description.subjectUrl
-        self.termsOfUsage = description.termsOfUsage
-        self.effectiveDate = description.validity.effectiveDate
-        self.expirationDate = description.validity.expirationDate
+        issuerName = description.issuerName
+        issuerUrl = description.issuerUrl
+        purpose = description.purpose
+        subjectName = description.subjectName
+        subjectUrl = description.subjectUrl
+        termsOfUsage = description.termsOfUsage
+        effectiveDate = description.validity.effectiveDate
+        expirationDate = description.validity.expirationDate
     }
+}
 #endif
+
+struct AuthenticationInformation: Equatable {
+    let request: AuthenticationRequest
+    let certificateDescription: CertificateDescription
 }
 
 struct AuthenticationRequest: Equatable {
