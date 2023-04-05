@@ -75,7 +75,7 @@ struct IdentificationPINScan: ReducerProtocol {
             
             switch state.workflowState {
             case .shouldAccept: idInteractionManager.acceptAccessRights()
-            case .setPin: idInteractionManager.setPIN(pin: state.pin)
+            case .setPin: idInteractionManager.setPIN(state.pin)
             }
             
             state.shared.isScanning = true
@@ -153,7 +153,7 @@ struct IdentificationPINScan: ReducerProtocol {
                 idInteractionManager.interrupt()
                 return EffectTask(value: .wrongPIN(remainingAttempts: remainingAttempts))
             } else {
-                idInteractionManager.setPIN(pin: state.pin)
+                idInteractionManager.setPIN(state.pin)
                 return .none
             }
         case .authenticationSucceeded(redirectUrl: .some(let redirectUrl)):

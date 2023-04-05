@@ -73,15 +73,23 @@ class DebugIDInteractionManager: IDInteractionManagerType {
     func runIdentify(debugSequence: IdentifyDebugSequence) -> [IdentifyDebugSequence] {
         debugSequence.run(card: &card, subject: subject!)
     }
-    
+
+    func setPIN(_ pin: String) {
+        // TODO: What do we need to do here?
+    }
+
+    func setNewPIN(_ pin: String) {
+        // TODO: What do we need to do here?
+    }
+
+    func setCAN(_ can: String) {
+        // TODO: What do we need to do here?
+    }
+
     func retrieveCertificateDescription() {
         // TODO: What do we need to do here?
     }
-    
-    func setPIN(pin: String) {
-        // TODO: What do we need to do here?
-    }
-    
+
     func acceptAccessRights() {
         // TODO: What do we need to do here?
     }

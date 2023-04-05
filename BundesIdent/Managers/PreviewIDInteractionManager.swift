@@ -58,28 +58,35 @@ class PreviewIDInteractionManager: PreviewIDInteractionManagerType {
         precondition(isDebugModeEnabled)
         return debugIDInteractionManager.runIdentify(debugSequence: debugSequence)
     }
+
+    func setPIN(_ pin: String) {
+        realIDInteractionManager.setPIN(pin)
+    }
+
+    func setNewPIN(_ pin: String) {
+        realIDInteractionManager.setNewPIN(pin)
+    }
+
+    func setCAN(_ can: String) {
+        realIDInteractionManager.setCAN(can)
+    }
     
     func retrieveCertificateDescription() {
         realIDInteractionManager.retrieveCertificateDescription()
         // we need to alter the current debug sequences in the debugIDInteractionManager here
     }
-    
-    func setPIN(pin: String) {
-        realIDInteractionManager.setPIN(pin: pin)
-        // we need to alter the current debug sequences in the debugIDInteractionManager here
-    }
-    
+
     func acceptAccessRights() {
         realIDInteractionManager.acceptAccessRights()
         // we need to alter the current debug sequences in the debugIDInteractionManager here
     }
     
-    func interrupt() {
-        realIDInteractionManager.interrupt()
-    }
-    
     func cancel() {
         realIDInteractionManager.cancel()
+    }
+
+    func interrupt() {
+        realIDInteractionManager.interrupt()
     }
 }
 
