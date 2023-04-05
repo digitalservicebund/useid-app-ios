@@ -177,23 +177,15 @@ struct SetupCoordinator: ReducerProtocol {
                         .catchToEffect(Action.idInteractionEvent)
                         .cancellable(id: CancelId.self, cancelInFlight: true)
                 )
-                return .none
-                // TODO: ??
-//                return interactionWorkflow
-//                    .changePIN()
-//                    .receive(on: mainQueue)
-//                    .catchToEffect(Action.idInteractionEvent)
-//                    .cancellable(id: CancelId.self, cancelInFlight: true)
             case .routeAction(_, action: .scan(.scannedSuccessfully)):
                 state.routes.push(.done(SetupDone.State(tokenURL: state.tokenURL)))
             case .routeAction(_, action: .scan(.error(let errorState))):
                 state.routes.presentSheet(.error(errorState))
-            case .routeAction(_, action: .scan(.requestCANAndChangedPIN(pin: let pin, callback: let canAndChangedPINCallback))):
+            case .routeAction(_, action: .scan(.requestCANAndChangedPIN(pin: let pin))):
                 let transportPINIsUnchecked = state.attempt == 0
                 state.routes.push(.setupCANCoordinator(SetupCANCoordinator.State(oldTransportPIN: state.transportPIN,
                                                                                  transportPIN: transportPINIsUnchecked ? state.transportPIN : nil,
                                                                                  pin: pin,
-                                                                                 callback: canAndChangedPINCallback,
                                                                                  tokenURL: state.tokenURL,
                                                                                  attempt: state.attempt,
                                                                                  goToCanIntroScreen: transportPINIsUnchecked)))

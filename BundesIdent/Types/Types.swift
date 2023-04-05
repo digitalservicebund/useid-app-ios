@@ -10,9 +10,11 @@ typealias NFCConfigType = NSObjectProtocol & NFCConfigProtocol
 protocol IDInteractionManagerType {
     func identify(tokenURL: URL, messages: ScanOverlayMessages) -> EIDInteractionPublisher
     func changePIN(messages: ScanOverlayMessages) -> EIDInteractionPublisher
-    
+
+    func setPIN(_ pin: String)
+    func setNewPIN(_ pin: String)
+    func setCAN(_ can: String)
     func retrieveCertificateDescription()
-    func setPIN(pin: String)
     func acceptAccessRights()
     func interrupt()
     func cancel()

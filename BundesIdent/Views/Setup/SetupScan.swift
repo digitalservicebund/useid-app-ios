@@ -12,6 +12,7 @@ struct SetupScan: ReducerProtocol {
     @Dependency(\.logger) var logger
     @Dependency(\.storageManager) var storageManager
     @Dependency(\.uuid) var uuid
+    @Dependency(\.idInteractionManager) var idInteractionManager
     
     struct State: Equatable, IDInteractionHandler {
         var transportPIN: String
@@ -32,7 +33,7 @@ struct SetupScan: ReducerProtocol {
         case onAppear
         case shared(SharedScan.Action)
         case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
-        case requestCANAndChangedPIN(pin: String, callback: CANAndChangedPINCallback)
+        case requestCANAndChangedPIN(pin: String)
         case wrongTransportPIN(remainingAttempts: Int)
         case error(ScanError.State)
         case cancelScan
@@ -133,9 +134,10 @@ struct SetupScan: ReducerProtocol {
         case .pinChangeSucceeded:
             return EffectTask(value: .scannedSuccessfully)
         case .pinChangeStarted:
-            logger.info("PIN Management started.")
+            logger.info("PIN change started.")
         case .newPINRequested:
-            // TODO: callback
+            idInteractionManager.setNewPIN(state.newPIN)
+            // TODO: remaning attempts?
 //            logger.info("Providing changed PIN with \(String(describing: newRemainingAttempts)) remaining attempts.")
 //            let remainingAttemptsBefore = state.remainingAttempts
 //            state.remainingAttempts = newRemainingAttempts
@@ -153,27 +155,20 @@ struct SetupScan: ReducerProtocol {
 //
 //            pinCallback(state.transportPIN, state.newPIN)
             return .none
-        case .canRequested: // + .newPINRequested?:
-            // TODO: two steps callback?
-//            let callbackId = uuid.callAsFunction()
-//            let canAndChangedPINCallback = CANAndChangedPINCallback(id: callbackId, callback: { payload in
-//                callback(payload.oldPIN, payload.can, payload.newPIN)
-//            })
-//            logger.info("PIN and CAN request: \(callbackId)")
-//            state.shared.isScanning = false
-//            state.shared.scanAvailable = true
-//            return EffectTask(value: .requestCANAndChangedPIN(pin: state.newPIN, callback: canAndChangedPINCallback))
-//                .delay(for: 2, scheduler: mainQueue) // this delay is here to fix a bug where this particular screen was presented incorrectly
-//                .eraseToEffect()
-            return .none
+        case .canRequested:
+            state.shared.isScanning = false
+            state.shared.scanAvailable = true
+            idInteractionManager.interrupt()
+            return EffectTask(value: .requestCANAndChangedPIN(pin: state.newPIN))
+                .delay(for: 2, scheduler: mainQueue) // this delay is here to fix a bug where this particular screen was presented incorrectly
+                .eraseToEffect()
         case .pukRequested:
             logger.info("PUK requested, so card is blocked. Callback not implemented yet.")
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
         case .pinRequested(remainingAttempts: _):
-            // TODO: callback
-            //workflow.setPIN()
+            idInteractionManager.setPIN(state.transportPIN)
             return .none
-        case .authenticationSucceeded, .authenticationRequestConfirmationRequested, .certificateDescriptionRetrieved(_):
+        case .authenticationSucceeded, .authenticationRequestConfirmationRequested, .certificateDescriptionRetrieved:
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             logger.error("Received unexpected event.")
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))

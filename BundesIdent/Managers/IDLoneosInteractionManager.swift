@@ -84,13 +84,21 @@ class IDInteractionManager: IDInteractionManagerType {
         workflowController.start()
         return handler.publisher
     }
+
+    func setPIN(_ pin: String) {
+        workflowController.setPin(pin)
+    }
+
+    func setNewPIN(_ pin: String) {
+        workflowController.setNewPin(pin)
+    }
+
+    func setCAN(_ can: String) {
+        workflowController.setCan(can)
+    }
     
     func retrieveCertificateDescription() {
         workflowController.getCertificate()
-    }
-    
-    func setPIN(pin: String) {
-        workflowController.setPin(pin)
     }
     
     func acceptAccessRights() {

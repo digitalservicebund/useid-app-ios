@@ -35,15 +35,15 @@ enum IDInteractionManagerKey: DependencyKey {
     static var liveValue: IDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: IDInteractionManager(),
                                                                                  debugIDInteractionManager: DebugIDInteractionManager())
 #else // Preview in simulator
-    static var liveValue: IDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: MockIDInteractionManager(queue: DispatchQueue.main.eraseToAnyScheduler()),
+    static var liveValue: IDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: MockIDInteractionManager(),
                                                                                  debugIDInteractionManager: DebugIDInteractionManager())
 #endif
 #elseif !targetEnvironment(simulator) // Production on device
     static var liveValue: IDInteractionManagerType = IDInteractionManager()
 #else // Production in simulator
-    static var liveValue: IDInteractionManagerType = MockIDInteractionManager(queue: DispatchQueue.main.eraseToAnyScheduler())
+    static var liveValue: IDInteractionManagerType = MockIDInteractionManager()
 #endif
-    static var previewValue: IDInteractionManagerType = MockIDInteractionManager(queue: DispatchQueue.main.eraseToAnyScheduler())
+    static var previewValue: IDInteractionManagerType = MockIDInteractionManager()
 }
 
 enum URLOpenerKey: DependencyKey {

@@ -11,12 +11,12 @@ struct SetupCANScan: ReducerProtocol {
     @Dependency(\.storageManager) var storageManager
     @Dependency(\.logger) var logger
     @Dependency(\.uuid) var uuid
+    @Dependency(\.idInteractionManager) var idInteractionManager
     
     struct State: Equatable, IDInteractionHandler {
         var transportPIN: String
         var newPIN: String
         var can: String
-        var canAndChangedPINCallback: CANAndChangedPINCallback?
         var shared: SharedScan.State = .init()
         
         var authenticationSuccessful = false
@@ -35,7 +35,7 @@ struct SetupCANScan: ReducerProtocol {
         case shared(SharedScan.Action)
         case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
         case wrongPIN(remainingAttempts: Int)
-        case incorrectCAN(callback: CANAndChangedPINCallback)
+        case incorrectCAN
         case scannedSuccessfully
         case error(ScanError.State)
         case cancelSetup
@@ -55,27 +55,12 @@ struct SetupCANScan: ReducerProtocol {
             return EffectTask(value: .shared(.startScan))
         case .shared(.startScan):
             guard !state.shared.isScanning else { return .none }
-            
             state.shared.isScanning = true
-            
-            let trackEvent: EffectTask<Action> = .trackEvent(category: "Setup",
-                                                             action: "buttonPressed",
-                                                             name: "canScan",
-                                                             analytics: analytics)
-            
-            guard let canAndChangedPINCallback = state.canAndChangedPINCallback else {
-                logger.info("Initiating a new scan")
-                return .concatenate(
-                    .cancel(id: CancelId.self),
-                    EffectTask(value: .shared(.initiateScan)),
-                    trackEvent
-                )
-            }
-            
-            logger.info("Calling CAN callback")
-            let payload = CANAndChangedPINCallbackPayload(can: state.can, oldPIN: state.transportPIN, newPIN: state.newPIN)
-            canAndChangedPINCallback(payload)
-            return trackEvent
+            idInteractionManager.setCAN(state.can)
+            return .trackEvent(category: "Setup",
+                               action: "buttonPressed",
+                               name: "canScan",
+                               analytics: analytics)
         case .scanEvent(.success(let event)):
             return handle(state: &state, event: event)
         case .scanEvent(.failure(let error)):
@@ -150,6 +135,11 @@ struct SetupCANScan: ReducerProtocol {
         case .pinChangeSucceeded:
             return EffectTask(value: .scannedSuccessfully)
         case .canRequested:
+            logger.info("Wrong CAN provided")
+            state.shared.isScanning = false
+            return EffectTask(value: .incorrectCAN)
+        case .pinRequested:
+            idInteractionManager.setPIN(state.transportPIN)
             return .none
         case .pinRequested:
             // TODO: callback
@@ -175,18 +165,11 @@ struct SetupCANScan: ReducerProtocol {
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
             
         case .newPINRequested:
-            // TODO: callback
-//            pinCallback(state.transportPIN, state.newPIN)
-            return .none
-        case .pinRequested(remainingAttempts: _):
-            // TODO: callback
-//            pinCallback(state.transportPIN)
+            idInteractionManager.setNewPIN(state.newPIN)
             return .none
         case .authenticationSucceeded,
              .authenticationRequestConfirmationRequested,
              .certificateDescriptionRetrieved:
-            // Make sure to restart the pin management flow
-            state.canAndChangedPINCallback = nil
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             logger.error("Received unexpected event.")
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))
@@ -232,14 +215,13 @@ struct SetupCANScan_Previews: PreviewProvider {
     static var previews: some View {
         SetupCANScanView(store: Store(initialState: SetupCANScan.State(transportPIN: "12345",
                                                                        newPIN: "123456",
-                                                                       can: "123456",
-                                                                       canAndChangedPINCallback: CANAndChangedPINCallback(id: .zero, callback: { _ in })),
+                                                                       can: "123456"),
                                       reducer: SetupCANScan()))
         
         SetupCANScanView(store: Store(initialState: SetupCANScan.State(transportPIN: "12345",
                                                                        newPIN: "123456",
                                                                        can: "123456",
-                                                                       canAndChangedPINCallback: CANAndChangedPINCallback(id: .zero, callback: { _ in }), shared: SharedScan.State(isScanning: true)),
+                                                                       shared: SharedScan.State(isScanning: true)),
                                       reducer: SetupCANScan()))
     }
 }
