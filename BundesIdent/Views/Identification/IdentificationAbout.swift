@@ -3,12 +3,13 @@ import ComposableArchitecture
 
 struct IdentificationAbout: View {
     
-    var request: EIDAuthenticationRequest
+    // TODO: We do not handle the purpose string, effective date and expirationDate
+    var request: CertificateDescription
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
-                Text(request.subject)
+                Text(request.subjectName)
                     .headingXL()
                 
                 Text(L10n.Identification.AttributeConsentInfo.providerInfo)
@@ -18,8 +19,8 @@ struct IdentificationAbout: View {
                     .headingM()
                 
                 VStack(alignment: .leading, spacing: 0) {
-                    Text(request.subject)
-                    Text(request.subjectURL)
+                    Text(request.subjectName)
+                    Text(request.subjectUrl?.absoluteString ?? "") // TODO: Handle with an if?
                 }
                 .bodyLRegular()
                 
@@ -27,15 +28,15 @@ struct IdentificationAbout: View {
                     .headingM()
                 
                 VStack(alignment: .leading, spacing: 0) {
-                    Text(request.issuer)
-                    Text(request.issuerURL)
+                    Text(request.issuerName)
+                    Text(request.issuerUrl?.absoluteString ?? "") // TODO: Handle with an if?
                 }
                 .bodyLRegular()
                 
                 Text(L10n.Identification.AttributeConsentInfo.terms)
                     .headingM()
                 
-                Text(request.terms.description)
+                Text(request.termsOfUsage)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .bodyLRegular()
             }

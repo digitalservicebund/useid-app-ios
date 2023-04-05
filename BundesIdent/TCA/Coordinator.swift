@@ -61,14 +61,12 @@ struct Coordinator: ReducerProtocol {
             issueTracker.capture(error: HandleURLError.noTCTokenURLQueryItem)
             return nil
         }
-        guard let encodedTCTokenURL = OpenEcardImp().prepareTCTokenURL(urlString) else {
+        guard let url = URL(string: urlString) else {
             issueTracker.capture(error: HandleURLError.tcTokenURLEncodingError)
             return nil
         }
         
-        var urlComponents = URLComponents(string: "http://127.0.0.1:24727/eID-Client")!
-        urlComponents.percentEncodedQueryItems = [URLQueryItem(name: "tcTokenURL", value: encodedTCTokenURL)]
-        return urlComponents.url
+        return url
     }
     
     func handleURL(state: inout State, _ url: URL) -> EffectTask<Action> {

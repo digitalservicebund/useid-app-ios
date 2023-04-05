@@ -5,10 +5,13 @@ import Sentry
 struct IdentificationOverviewLoading: ReducerProtocol {
     @Dependency(\.uuid) var uuid
     @Dependency(\.issueTracker) var issueTracker
+    @Dependency(\.logger) var logger
+    @Dependency(\.idInteractionManager) var idInteractionManager
     
     struct State: Equatable {
         var onAppearCalled: Bool
         var canGoBackToSetupIntro: Bool
+        var authenticationRequest: AuthenticationRequest?
         
         init(onAppearCalled: Bool = false, canGoBackToSetupIntro: Bool = false) {
             self.onAppearCalled = onAppearCalled
@@ -24,7 +27,7 @@ struct IdentificationOverviewLoading: ReducerProtocol {
         case onAppear
         case identify
         case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
-        case done(EIDAuthenticationRequest, IdentifiableCallback<FlaggedAttributes>)
+        case done(AuthenticationRequest, CertificateDescription)
         case failure(IdentifiableError)
 #if PREVIEW
         case runDebugSequence(IdentifyDebugSequence)
@@ -43,9 +46,15 @@ struct IdentificationOverviewLoading: ReducerProtocol {
         case .identify:
             return .none
         case .idInteractionEvent(.success(.authenticationRequestConfirmationRequested(let request))):
-            // TODO: callback
+            state.authenticationRequest = request
+            idInteractionManager.retrieveCertificateDescription()
             return .none
-            //return EffectTask(value: .done(request, IdentifiableCallback(id: uuid.callAsFunction(), callback: handler)))
+        case .idInteractionEvent(.success(.certificateDescriptionRetrieved(let certificateDescription))):
+            guard let authenticationRequest = state.authenticationRequest else {
+                logger.error("Missing authenticationRequest, this must not happen.")
+                return .none // EffectTask(value: .failure(<#T##IdentifiableError#>))
+            }
+            return EffectTask(value: .done(authenticationRequest, certificateDescription))
         case .idInteractionEvent(.failure(let error)):
             RedactedIDCardInteractionError(error).flatMap(issueTracker.capture(error:))
             return EffectTask(value: .failure(IdentifiableError(error)))
