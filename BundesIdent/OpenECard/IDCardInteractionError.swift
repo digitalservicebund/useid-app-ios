@@ -9,7 +9,7 @@ enum IDCardInteractionError: Error, Equatable {
     case cardDeactivated
     case processFailed(resultCode: ActivationResultCode, redirectURL: URL?, resultMinor: String?)
     
-    case pinChangeFailed // TODO: rename on Android
+    case pinChangeFailed
 }
 
 enum RedactedIDCardInteractionError: CustomNSError, Hashable {

@@ -27,37 +27,40 @@ class DebugIDInteractionManager: IDInteractionManagerType {
     private var card: Card = .init(remainingAttempts: 3)
     
     func debuggableIdentify(tokenURL: URL) -> DebuggableInteraction<IdentifyDebugSequence> {
-        DebuggableInteraction(publisher: identify(tokenURL: tokenURL, nfcMessagesProvider: IdentificationNFCMessageProvider(nfcMessages: .identification)),
+        // TODO: messages
+        DebuggableInteraction(publisher: identify(tokenURL: tokenURL, messages: .init(sessionStarted: "", sessionFailed: "", sessionSucceeded: "", sessionInProgress: "")),
                               sequence: .initial)
     }
     
     func debuggableCANIdentify(tokenURL: URL) -> DebuggableInteraction<IdentifyDebugSequence> {
-        DebuggableInteraction(publisher: identify(tokenURL: tokenURL, nfcMessagesProvider: IdentificationNFCMessageProvider(nfcMessages: .identification)),
+        // TODO: messages
+        DebuggableInteraction(publisher: identify(tokenURL: tokenURL, messages: .init(sessionStarted: "", sessionFailed: "", sessionSucceeded: "", sessionInProgress: "")),
                               sequence: .initialCAN)
     }
     
-    func identify(tokenURL: URL, nfcMessagesProvider: NSObjectProtocol & NFCConfigProtocol) -> EIDInteractionPublisher {
+    func identify(tokenURL: URL, messages: ScanOverlayMessages) -> EIDInteractionPublisher {
         let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
         self.subject = subject
         
         subject.send(.authenticationStarted)
-        subject.send(.requestCardInsertion({ _ in }))
+        subject.send(.cardInsertionRequested)
         
         return subject
             .eraseToAnyPublisher()
     }
     
     func debuggableChangePIN() -> DebuggableInteraction<ChangePINDebugSequence> {
-        DebuggableInteraction(publisher: changePIN(nfcMessagesProvider: SetupNFCMessageProvider()),
+        // TODO: messages
+        DebuggableInteraction(publisher: changePIN(messages: .init(sessionStarted: "", sessionFailed: "", sessionSucceeded: "", sessionInProgress: "")),
                               sequence: ChangePINDebugSequence.defaultActions(card: card))
     }
     
-    func changePIN(nfcMessagesProvider: NSObjectProtocol & NFCConfigProtocol) -> EIDInteractionPublisher {
+    func changePIN(messages: ScanOverlayMessages) -> EIDInteractionPublisher {
         let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
         self.subject = subject
         
         subject.send(.authenticationStarted)
-        subject.send(.requestCardInsertion({ _ in }))
+        subject.send(.cardInsertionRequested)
         
         return subject
             .eraseToAnyPublisher()

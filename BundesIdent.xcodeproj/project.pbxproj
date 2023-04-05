@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		430A933729DC540200607329 /* IDInteractionEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430A933629DC540200607329 /* IDInteractionEventHandler.swift */; };
 		432A180529C34B5E0033058B /* UnleashManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432A180429C34B5E0033058B /* UnleashManagerTests.swift */; };
 		4334B4D329A64F00001FF36C /* Markdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4334B4D229A64F00001FF36C /* Markdown.swift */; };
 		43363E0729A79D6200E9FA23 /* UnleashProxyClientSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 43363E0629A79D6200E9FA23 /* UnleashProxyClientSwift */; };
@@ -210,6 +211,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		430A933629DC540200607329 /* IDInteractionEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDInteractionEventHandler.swift; sourceTree = "<group>"; };
 		432A180429C34B5E0033058B /* UnleashManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnleashManagerTests.swift; sourceTree = "<group>"; };
 		4334B4D229A64F00001FF36C /* Markdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Markdown.swift; sourceTree = "<group>"; };
 		43363E0829B01D4900E9FA23 /* ABTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABTester.swift; sourceTree = "<group>"; };
@@ -788,6 +790,7 @@
 				E14C21B128B8BF9100192338 /* StorageManager.swift */,
 				43363E0829B01D4900E9FA23 /* ABTester.swift */,
 				E1494266291E8A750059703B /* IDLoneosInteractionManager.swift */,
+				430A933629DC540200607329 /* IDInteractionEventHandler.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1204,6 +1207,7 @@
 				E5E69D852812FB6100A3B66A /* IDCardInteractionError.swift in Sources */,
 				E1EFB5C62858EB2A005C38C6 /* Shape+Fill.swift in Sources */,
 				D201402728C5E6FD0002A054 /* Box.swift in Sources */,
+				430A933729DC540200607329 /* IDInteractionEventHandler.swift in Sources */,
 				E15D0EBC29095F740088EF4E /* IdentificationOverviewError.swift in Sources */,
 				E12CB30428494B0B0039FD56 /* OpenECardTypes.swift in Sources */,
 				E1EFB5C22858EAA2005C38C6 /* IdentificationOverviewLoaded.swift in Sources */,

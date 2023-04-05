@@ -116,63 +116,63 @@ struct IdentificationPINScan: ReducerProtocol {
     }
     
     func handle(state: inout State, event: EIDInteractionEvent) -> EffectTask<IdentificationPINScan.Action> {
-        switch event {
-        case .requestPIN(remainingAttempts: let remainingAttempts, pinCallback: let callback):
-            let callbackId = uuid.callAsFunction()
-            state.pinCallback = PINCallback(id: callbackId, callback: callback)
-            state.shared.isScanning = false
-            state.shared.scanAvailable = true
-            
-            // This is our signal that the user canceled (for now)
-            guard let remainingAttempts else {
-                logger.info("Identification cancelled")
-                if state.shared.cardRecognized {
-                    issueTracker.capture(error: IdentificationScanError.cancelAfterCardRecognized)
-                }
-                return .none
-            }
-            logger.info("PIN request: \(callbackId)")
-            return EffectTask(value: .wrongPIN(remainingAttempts: remainingAttempts))
-        case .requestPINAndCAN(let callback):
-            let callbackId = uuid.callAsFunction()
-            let pinCANCallback = PINCANCallback(id: callbackId, callback: callback)
-            logger.info("PIN and CAN request: \(callbackId)")
-            state.shared.isScanning = false
-            state.shared.scanAvailable = true
-            return EffectTask(value: .requestPINAndCAN(state.request, pinCANCallback))
-                .delay(for: 2, scheduler: mainQueue) // this delay is here to fix a bug where this particular screen was presented incorrectly
-                .eraseToEffect()
-        case .authenticationStarted:
-            logger.info("Authentication started.")
-            state.shared.isScanning = true
-        case .cardInteractionComplete:
-            logger.info("Card interaction complete.")
-        case .requestCardInsertion:
-            state.shared.isScanning = true
-        case .cardRecognized:
-            logger.info("Card recognized.")
-            state.shared.cardRecognized = true
-            state.shared.isScanning = true
-        case .authenticationSuccessful:
-            logger.info("Authentication succesful.")
-            state.shared.isScanning = true
-            state.authenticationSuccessful = true
-        case .cardRemoved:
-            logger.info("Card removed.")
-            state.authenticationSuccessful = false
-        case .processCompletedSuccessfullyWithRedirect(let redirect):
-            logger.info("Authentication successfully with redirect.")
-            return EffectTask(value: .identifiedSuccessfully(redirectURL: redirect))
-        case .processCompletedSuccessfullyWithoutRedirect:
-            state.shared.scanAvailable = false
-            issueTracker.capture(error: RedactedEIDInteractionEventError(.processCompletedSuccessfullyWithoutRedirect))
-            logger.error("Received unexpected event.")
-            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(.processCompletedSuccessfullyWithoutRedirect), retry: state.shared.scanAvailable)))
-        default:
-            issueTracker.capture(error: RedactedEIDInteractionEventError(event))
-            logger.error("Received unexpected event.")
-            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))
-        }
+//        switch event {
+//        case .requestPIN(remainingAttempts: let remainingAttempts, pinCallback: let callback):
+//            let callbackId = uuid.callAsFunction()
+//            state.pinCallback = PINCallback(id: callbackId, callback: callback)
+//            state.shared.isScanning = false
+//            state.shared.scanAvailable = true
+//            
+//            // This is our signal that the user canceled (for now)
+//            guard let remainingAttempts else {
+//                logger.info("Identification cancelled")
+//                if state.shared.cardRecognized {
+//                    issueTracker.capture(error: IdentificationScanError.cancelAfterCardRecognized)
+//                }
+//                return .none
+//            }
+//            logger.info("PIN request: \(callbackId)")
+//            return EffectTask(value: .wrongPIN(remainingAttempts: remainingAttempts))
+//        case .requestPINAndCAN(let callback):
+//            let callbackId = uuid.callAsFunction()
+//            let pinCANCallback = PINCANCallback(id: callbackId, callback: callback)
+//            logger.info("PIN and CAN request: \(callbackId)")
+//            state.shared.isScanning = false
+//            state.shared.scanAvailable = true
+//            return EffectTask(value: .requestPINAndCAN(state.request, pinCANCallback))
+//                .delay(for: 2, scheduler: mainQueue) // this delay is here to fix a bug where this particular screen was presented incorrectly
+//                .eraseToEffect()
+//        case .authenticationStarted:
+//            logger.info("Authentication started.")
+//            state.shared.isScanning = true
+//        case .cardInteractionComplete:
+//            logger.info("Card interaction complete.")
+//        case .requestCardInsertion:
+//            state.shared.isScanning = true
+//        case .cardRecognized:
+//            logger.info("Card recognized.")
+//            state.shared.cardRecognized = true
+//            state.shared.isScanning = true
+//        case .authenticationSuccessful:
+//            logger.info("Authentication succesful.")
+//            state.shared.isScanning = true
+//            state.authenticationSuccessful = true
+//        case .cardRemoved:
+//            logger.info("Card removed.")
+//            state.authenticationSuccessful = false
+//        case .processCompletedSuccessfullyWithRedirect(let redirect):
+//            logger.info("Authentication successfully with redirect.")
+//            return EffectTask(value: .identifiedSuccessfully(redirectURL: redirect))
+//        case .processCompletedSuccessfullyWithoutRedirect:
+//            state.shared.scanAvailable = false
+//            issueTracker.capture(error: RedactedEIDInteractionEventError(.processCompletedSuccessfullyWithoutRedirect))
+//            logger.error("Received unexpected event.")
+//            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(.processCompletedSuccessfullyWithoutRedirect), retry: state.shared.scanAvailable)))
+//        default:
+//            issueTracker.capture(error: RedactedEIDInteractionEventError(event))
+//            logger.error("Received unexpected event.")
+//            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))
+//        }
         return .none
     }
 }

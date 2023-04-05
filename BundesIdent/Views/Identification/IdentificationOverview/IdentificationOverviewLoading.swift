@@ -42,8 +42,10 @@ struct IdentificationOverviewLoading: ReducerProtocol {
             return EffectTask(value: .identify)
         case .identify:
             return .none
-        case .idInteractionEvent(.success(.requestAuthenticationRequestConfirmation(let request, let handler))):
-            return EffectTask(value: .done(request, IdentifiableCallback(id: uuid.callAsFunction(), callback: handler)))
+        case .idInteractionEvent(.success(.authenticationRequestConfirmationRequested(let request))):
+            // TODO: callback
+            return .none
+            //return EffectTask(value: .done(request, IdentifiableCallback(id: uuid.callAsFunction(), callback: handler)))
         case .idInteractionEvent(.failure(let error)):
             RedactedIDCardInteractionError(error).flatMap(issueTracker.capture(error:))
             return EffectTask(value: .failure(IdentifiableError(error)))

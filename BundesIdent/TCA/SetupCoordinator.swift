@@ -153,33 +153,37 @@ struct SetupCoordinator: ReducerProtocol {
                 state.routes.push(.scan(SetupScan.State(transportPIN: state.transportPIN, newPIN: pin)))
             case .routeAction(_, action: .scan(.shared(.initiateScan))),
                  .routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canScan(.shared(.initiateScan))))):
-//                let publisher: EIDInteractionPublisher
-                // #if PREVIEW
-//                if previewIDInteractionManager.isDebugModeEnabled {
-//                    let debuggableInteraction = previewIDInteractionManager.debuggableChangePIN()
-//                    state.availableDebugActions = debuggableInteraction.sequence
-//                    publisher = debuggableInteraction.publisher
-//                } else {
-//                    publisher = idInteractionManager.changePIN(nfcMessagesProvider: SetupNFCMessageProvider())
-//                }
-                // #else
-//                publisher = idInteractionManager.changePIN(nfcMessagesProvider: SetupNFCMessageProvider())
-                // #endif
-//                return .concatenate(
-//                    .trackEvent(category: "firstTimeUser",
-//                                action: "buttonPressed",
-//                                name: "scan",
-//                                analytics: analytics),
-//                    publisher
-//                        .receive(on: mainQueue)
-//                        .catchToEffect(Action.idInteractionEvent)
-//                        .cancellable(id: CancelId.self, cancelInFlight: true)
-//                )
-                return interactionWorkflow
-                    .changePIN()
-                    .receive(on: mainQueue)
-                    .catchToEffect(Action.idInteractionEvent)
-                    .cancellable(id: CancelId.self, cancelInFlight: true)
+                let publisher: EIDInteractionPublisher
+                 #if PREVIEW
+                if previewIDInteractionManager.isDebugModeEnabled {
+                    let debuggableInteraction = previewIDInteractionManager.debuggableChangePIN()
+                    state.availableDebugActions = debuggableInteraction.sequence
+                    publisher = debuggableInteraction.publisher
+                } else {
+                    // TODO: messages
+                    publisher = idInteractionManager.changePIN(messages: .init(sessionStarted: "", sessionFailed: "", sessionSucceeded: "", sessionInProgress: ""))
+                }
+                 #else
+                // TODO: messages
+                publisher = idInteractionManager.changePIN(messages: .init(sessionStarted: "", sessionFailed: "", sessionSucceeded: "", sessionInProgress: ""))
+                 #endif
+                return .concatenate(
+                    .trackEvent(category: "firstTimeUser",
+                                action: "buttonPressed",
+                                name: "scan",
+                                analytics: analytics),
+                    publisher
+                        .receive(on: mainQueue)
+                        .catchToEffect(Action.idInteractionEvent)
+                        .cancellable(id: CancelId.self, cancelInFlight: true)
+                )
+                return .none
+                // TODO: ??
+//                return interactionWorkflow
+//                    .changePIN()
+//                    .receive(on: mainQueue)
+//                    .catchToEffect(Action.idInteractionEvent)
+//                    .cancellable(id: CancelId.self, cancelInFlight: true)
             case .routeAction(_, action: .scan(.scannedSuccessfully)):
                 state.routes.push(.done(SetupDone.State(tokenURL: state.tokenURL)))
             case .routeAction(_, action: .scan(.error(let errorState))):
