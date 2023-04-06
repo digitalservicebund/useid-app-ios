@@ -94,7 +94,7 @@ protocol APIControllerType {
 //
 //    /**
 //     POST /users/:userId/:widgetSessionId/auth/complete
-//     (previously /events/:widgetSessionId/success)
+//     (previously /event-streams/:widgetSessionId/success)
 //     */
 //    func completeAuthentication(userId: UserId, widgetSessionId: String, authenticationDetails: AuthenticationDetails, refreshURL: URL) async throws
 }
@@ -188,7 +188,7 @@ class APIController: APIControllerType {
         }
         
         let payload = Payload(refreshAddress: redirectURL.absoluteString)
-        let req = HTTPRequest(method: .post, URI: "/events/{sessionId}/success", variables: ["sessionId": sessionId]) {
+        let req = HTTPRequest(method: .post, URI: "/event-streams/{sessionId}/success", variables: ["sessionId": sessionId]) {
             $0.body = .json(payload)
         }
         let response = try await req.fetch(client)
