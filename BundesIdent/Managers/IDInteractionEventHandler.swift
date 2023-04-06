@@ -164,7 +164,13 @@ final class IDInteractionEventHandler: WorkflowCallbacks {
 
         // TODO: Decide about cardRemoved being sent for initial state (before cardRecognized)
         if let card = reader.card {
-            subject.send(.cardRecognized)
+            // TODO: What do we do when the card is deactivated (meaning the online ausweisfunktion is not activated)
+            // Is this event the only info about that? How to tell the application?
+            if card.deactivated {
+                subject.send(completion: .failure(.cardDeactivated))
+            } else {
+                subject.send(.cardRecognized)
+            }
         } else {
             subject.send(.cardRemoved)
         }
