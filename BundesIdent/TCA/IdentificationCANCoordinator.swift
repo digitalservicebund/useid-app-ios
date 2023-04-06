@@ -15,15 +15,16 @@ enum IdentificationCANCoordinatorError: CustomNSError {
 }
 
 struct IdentificationCANCoordinator: ReducerProtocol {
+    
     @Dependency(\.issueTracker) var issueTracker
     @Dependency(\.logger) var logger
     @Dependency(\.mainQueue) var mainQueue
+    
     struct State: Equatable, IndexedRouterState {
         var pin: String?
         var can: String?
-        var request: EIDAuthenticationRequest
-        var pinCANCallback: PINCANCallback
-        var tokenURL: URL
+        var authenticationInformation: AuthenticationInformation
+        var tokenURL: URL // TODO: Get rid of?
         var authenticationSuccessful = false
         var attempt: Int
         
@@ -60,8 +61,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
     var body: some ReducerProtocol<State, Action> {
         Reduce<State, Action> { state, action in
             switch action {
-            case .routeAction(_, action: .canScan(.requestPINAndCAN(let pinCANCallback))):
-                state.pinCANCallback = pinCANCallback
+            case .routeAction(_, action: .canScan(.requestCAN)):
                 state.routes.presentSheet(.canIncorrectInput(.init()))
                 return .none
             case .routeAction(_, action: .canPINForgotten(.end)):
@@ -85,7 +85,6 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                     state.routes.push(
                         .canScan(IdentificationCANScan.State(pin: pin,
                                                              can: can,
-                                                             pinCANCallback: state.pinCANCallback,
                                                              shared: SharedScan.State(showInstructions: false)))
                     )
                 } else {
@@ -104,7 +103,6 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                 state.routes.push(
                     .canScan(IdentificationCANScan.State(pin: pin,
                                                          can: can,
-                                                         pinCANCallback: state.pinCANCallback,
                                                          shared: SharedScan.State(showInstructions: false)))
                 )
                 
@@ -175,14 +173,12 @@ extension IdentificationCANCoordinator.State: AnalyticsView {
 
 extension IdentificationCANCoordinator.State {
     init(tokenURL: URL,
-         request: EIDAuthenticationRequest,
-         pinCANCallback: PINCANCallback,
+         authenticationInformation: AuthenticationInformation,
          pin: String?,
          attempt: Int,
          goToCanIntroScreen: Bool) {
         self.pin = pin
-        self.request = request
-        self.pinCANCallback = pinCANCallback
+        self.authenticationInformation = authenticationInformation
         self.tokenURL = tokenURL
         self.attempt = attempt
         if goToCanIntroScreen {

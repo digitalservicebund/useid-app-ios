@@ -31,13 +31,7 @@ struct IdentificationPINScan: ReducerProtocol {
 #if PREVIEW
         var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
-        
-        enum WorkflowState {
-            case shouldAccept
-            case setPin
-        }
-
-        var workflowState: WorkflowState = .shouldAccept
+        var didAcceptAccessRights = false
         
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
             .scanEvent(event)
@@ -50,8 +44,7 @@ struct IdentificationPINScan: ReducerProtocol {
         case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
         case wrongPIN(remainingAttempts: Int)
         case identifiedSuccessfully(redirectURL: URL)
-        case requestPINAndCAN(EIDAuthenticationRequest, PINCANCallback)
-        case requestCAN(EIDAuthenticationRequest, PINCallback)
+        case requestCAN(AuthenticationInformation)
         case error(ScanError.State)
         case cancelIdentification
         case dismiss
@@ -73,9 +66,11 @@ struct IdentificationPINScan: ReducerProtocol {
             state.shared.cardRecognized = false
             guard !state.shared.isScanning else { return .none }
             
-            switch state.workflowState {
-            case .shouldAccept: idInteractionManager.acceptAccessRights()
-            case .setPin: idInteractionManager.setPIN(state.pin)
+            if state.didAcceptAccessRights {
+                idInteractionManager.setPIN(state.pin)
+            } else {
+                state.didAcceptAccessRights = true
+                idInteractionManager.acceptAccessRights()
             }
             
             state.shared.isScanning = true
@@ -120,6 +115,9 @@ struct IdentificationPINScan: ReducerProtocol {
         case .cancelIdentification:
             state.alert = AlertState.confirmEndInIdentification(.dismiss)
             return .none
+        case .dismiss:
+            idInteractionManager.cancel()
+            return .none
         case .dismissAlert:
             state.alert = nil
             return .none
@@ -140,7 +138,7 @@ struct IdentificationPINScan: ReducerProtocol {
             logger.info("cardRecognized")
             return .none
         case .pinRequested(remainingAttempts: let remainingAttempts):
-            state.workflowState = .setPin
+            logger.info("pinRequested: \(String(describing: remainingAttempts))")
             state.shared.isScanning = false
             state.shared.scanAvailable = true
             
@@ -156,49 +154,16 @@ struct IdentificationPINScan: ReducerProtocol {
                 idInteractionManager.setPIN(state.pin)
                 return .none
             }
-        case .authenticationSucceeded(redirectUrl: .some(let redirectUrl)):
+        case .authenticationSucceeded(redirectUrl: .some(let redirectURL)):
             logger.info("Authentication successfully with redirect.")
-            return EffectTask(value: .identifiedSuccessfully(redirectURL: redirectUrl))
+            return EffectTask(value: .identifiedSuccessfully(redirectURL: redirectURL))
         case .authenticationSucceeded(redirectUrl: .none):
+            issueTracker.capture(error: RedactedEIDInteractionEventError(.authenticationSucceeded(redirectUrl: nil)))
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: state.shared.scanAvailable)))
         case .canRequested:
-            idInteractionManager.cancel()
-            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))
-//        case .requestPINAndCAN(let callback):
-//            let callbackId = uuid.callAsFunction()
-//            let pinCANCallback = PINCANCallback(id: callbackId, callback: callback)
-//            logger.info("PIN and CAN request: \(callbackId)")
-//            state.shared.isScanning = false
-//            state.shared.scanAvailable = true
-//            return EffectTask(value: .requestPINAndCAN(state.request, pinCANCallback))
-//                .delay(for: 2, scheduler: mainQueue) // this delay is here to fix a bug where this particular screen was presented incorrectly
-//                .eraseToEffect()
-//        case .authenticationStarted:
-//            logger.info("Authentication started.")
-//            state.shared.isScanning = true
-//        case .cardInteractionComplete:
-//            logger.info("Card interaction complete.")
-//        case .requestCardInsertion:
-//            state.shared.isScanning = true
-//        case .cardRecognized:
-//            logger.info("Card recognized.")
-//            state.shared.cardRecognized = true
-//            state.shared.isScanning = true
-//        case .authenticationSuccessful:
-//            logger.info("Authentication succesful.")
-//            state.shared.isScanning = true
-//            state.authenticationSuccessful = true
-//        case .cardRemoved:
-//            logger.info("Card removed.")
-//            state.authenticationSuccessful = false
-//        case .processCompletedSuccessfullyWithRedirect(let redirect):
-//            logger.info("Authentication successfully with redirect.")
-//            return EffectTask(value: .identifiedSuccessfully(redirectURL: redirect))
-//        case .processCompletedSuccessfullyWithoutRedirect:
-//            state.shared.scanAvailable = false
-//            issueTracker.capture(error: RedactedEIDInteractionEventError(.processCompletedSuccessfullyWithoutRedirect))
-//            logger.error("Received unexpected event.")
-//            return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(.processCompletedSuccessfullyWithoutRedirect), retry: state.shared.scanAvailable)))
+            return EffectTask(value: .requestCAN(state.authenticationInformation))
+        case .pukRequested:
+            return EffectTask(value: .scanEvent(.failure(.cardBlocked)))
         default:
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             logger.error("Received unexpected event.")
