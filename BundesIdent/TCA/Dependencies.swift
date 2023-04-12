@@ -16,7 +16,7 @@ enum PreviewIDInteractionManagerKey: DependencyKey {
     static var liveValue: PreviewIDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: IDInteractionManager(),
                                                                                         debugIDInteractionManager: DebugIDInteractionManager())
 #else
-    static var liveValue: PreviewIDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: MockIDInteractionManager(queue: DispatchQueue.main.eraseToAnyScheduler()),
+    static var liveValue: PreviewIDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: MockIDInteractionManager(),
                                                                                         debugIDInteractionManager: DebugIDInteractionManager())
 #endif
 }
