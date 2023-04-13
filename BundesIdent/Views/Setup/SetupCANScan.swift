@@ -83,7 +83,7 @@ struct SetupCANScan: ReducerProtocol {
             return .none
         case .scannedSuccessfully:
             storageManager.setupCompleted = true
-            return .cancel(id: CancelId.self)
+            return .none
         case .shared(.showNFCInfo):
             state.alert = AlertState(title: TextState(L10n.HelpNFC.title),
                                      message: TextState(L10n.HelpNFC.body),

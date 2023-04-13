@@ -73,6 +73,7 @@ class IDInteractionManager: IDInteractionManagerType {
         guard !workflowController.isStarted else {
             logger.error("Tried to change PIN when workflow is started.")
             // TODO: Throw error
+            // TODO: Because we don’t get anything from AA2 for when scan is cancelled we should stop and start here instead.
             fatalError()
         }
 

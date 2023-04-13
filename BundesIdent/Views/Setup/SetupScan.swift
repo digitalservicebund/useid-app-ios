@@ -34,7 +34,7 @@ struct SetupScan: ReducerProtocol {
         case shared(SharedScan.Action)
         case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
         case requestCANAndChangedPIN(pin: String)
-        case wrongTransportPIN(remainingAttempts: Int)
+        case wrongTransportPIN
         case error(ScanError.State)
         case cancelScan
         case scannedSuccessfully
@@ -57,7 +57,13 @@ struct SetupScan: ReducerProtocol {
             state.shared.cardRecognized = false
             guard !state.shared.isScanning else { return .none }
             state.shared.isScanning = true
-            return EffectTask(value: .shared(.initiateScan))
+
+            if state.shared.attempt > 0 {
+                idInteractionManager.setPIN(state.transportPIN)
+                return .none
+            } else {
+                return EffectTask(value: .shared(.initiateScan))
+            }
         case .shared(.initiateScan):
             return .none
         case .scanEvent(.failure(let error)):
@@ -88,10 +94,10 @@ struct SetupScan: ReducerProtocol {
             return .cancel(id: CancelId.self)
         case .wrongTransportPIN:
             state.shared.isScanning = false
-            return .cancel(id: CancelId.self)
+            return .none
         case .scannedSuccessfully:
             storageManager.setupCompleted = true
-            return .cancel(id: CancelId.self)
+            return .none
         case .shared(.showNFCInfo):
             state.alert = AlertState(title: TextState(L10n.HelpNFC.title),
                                      message: TextState(L10n.HelpNFC.body),
@@ -136,26 +142,11 @@ struct SetupScan: ReducerProtocol {
         case .pinChangeStarted:
             logger.info("PIN change started.")
         case .newPINRequested:
+            logger.info("Providing new PIN.")
             idInteractionManager.setNewPIN(state.newPIN)
-            // TODO: remaning attempts?
-//            logger.info("Providing changed PIN with \(String(describing: newRemainingAttempts)) remaining attempts.")
-//            let remainingAttemptsBefore = state.remainingAttempts
-//            state.remainingAttempts = newRemainingAttempts
-//
-//            // This is our signal that the user canceled (for now)
-//            guard let remainingAttempts = newRemainingAttempts else {
-//                return EffectTask(value: .cancelScan)
-//            }
-//
-//            // Wrong transport/personal PIN provided
-//            if let remainingAttemptsBefore,
-//               remainingAttempts < remainingAttemptsBefore {
-//                return EffectTask(value: .wrongTransportPIN(remainingAttempts: remainingAttempts))
-//            }
-//
-//            pinCallback(state.transportPIN, state.newPIN)
             return .none
         case .canRequested:
+            logger.info("CAN requested.")
             state.shared.isScanning = false
             state.shared.scanAvailable = true
             idInteractionManager.interrupt()
@@ -165,7 +156,22 @@ struct SetupScan: ReducerProtocol {
         case .pukRequested:
             logger.info("PUK requested, so card is blocked. Callback not implemented yet.")
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
-        case .pinRequested(remainingAttempts: _):
+        case .pinRequested(remainingAttempts: let newRemainingAttempts):
+            logger.info("Providing PIN with \(String(describing: newRemainingAttempts)) remaining attempts.")
+            let remainingAttemptsBefore = state.remainingAttempts
+            state.remainingAttempts = newRemainingAttempts
+
+            // This is our signal that the user canceled (for now)
+            guard let remainingAttempts = newRemainingAttempts else {
+                return EffectTask(value: .cancelScan)
+            }
+
+            // Wrong transport/personal PIN provided
+            if let remainingAttemptsBefore,
+               remainingAttempts < remainingAttemptsBefore {
+                idInteractionManager.interrupt()
+                return EffectTask(value: .wrongTransportPIN)
+            }
             idInteractionManager.setPIN(state.transportPIN)
             return .none
         case .authenticationSucceeded, .authenticationRequestConfirmationRequested, .certificateDescriptionRetrieved:
