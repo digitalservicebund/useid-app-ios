@@ -180,7 +180,7 @@ class SetupCoordinatorTests: XCTestCase {
                                                                    ]),
                               reducer: SetupCoordinator())
         
-        store.send(.routeAction(0, action: .scan(.wrongTransportPIN(remainingAttempts: 3)))) {
+        store.send(.routeAction(0, action: .scan(.wrongTransportPIN))) {
             $0.routes = [
                 .root(.scan(.init(transportPIN: $0.transportPIN, newPIN: pin))),
                 .sheet(.incorrectTransportPIN(.init()))
