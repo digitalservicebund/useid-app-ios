@@ -121,9 +121,9 @@
 "identification_attributeConsentInfo_terms" = "Terms of usage";
 "identification_attributeConsentInfo_validity" = "Validity";
 "identification_attributeConsent_body" = "The service provider would like to access the following data from your ID card:";
-"identification_attributeConsent_continue" = "Grant release";
+"identification_attributeConsent_continue" = "Confirm";
 "identification_attributeConsent_moreInfo" = "More information";
-"identification_attributeConsent_title" = "Grant release for “%@”.";
+"identification_attributeConsent_title" = "Share data with “%@”.";
 "identification_can_incorrectInput_back" = "Back";
 "identification_can_incorrectInput_body" = "The number is at the bottom right of the front of your ID card.";
 "identification_can_incorrectInput_canInputLabel" = "CAN input, six digits";
