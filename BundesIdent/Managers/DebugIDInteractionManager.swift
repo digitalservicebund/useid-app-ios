@@ -27,14 +27,12 @@ class DebugIDInteractionManager: IDInteractionManagerType {
     private var card: Card = .init(remainingAttempts: 3)
     
     func debuggableIdentify(tokenURL: URL) -> DebuggableInteraction<IdentifyDebugSequence> {
-        // TODO: messages
-        DebuggableInteraction(publisher: identify(tokenURL: tokenURL, messages: .init(sessionStarted: "", sessionFailed: "", sessionSucceeded: "", sessionInProgress: "")),
+        DebuggableInteraction(publisher: identify(tokenURL: tokenURL, messages: .identification),
                               sequence: .initial)
     }
     
     func debuggableCANIdentify(tokenURL: URL) -> DebuggableInteraction<IdentifyDebugSequence> {
-        // TODO: messages
-        DebuggableInteraction(publisher: identify(tokenURL: tokenURL, messages: .init(sessionStarted: "", sessionFailed: "", sessionSucceeded: "", sessionInProgress: "")),
+        DebuggableInteraction(publisher: identify(tokenURL: tokenURL, messages: .identification),
                               sequence: .initialCAN)
     }
     
@@ -50,8 +48,7 @@ class DebugIDInteractionManager: IDInteractionManagerType {
     }
     
     func debuggableChangePIN() -> DebuggableInteraction<ChangePINDebugSequence> {
-        // TODO: messages
-        DebuggableInteraction(publisher: changePIN(messages: .init(sessionStarted: "", sessionFailed: "", sessionSucceeded: "", sessionInProgress: "")),
+        DebuggableInteraction(publisher: changePIN(messages: .setup),
                               sequence: ChangePINDebugSequence.defaultActions(card: card))
     }
     
