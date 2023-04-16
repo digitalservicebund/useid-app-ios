@@ -160,12 +160,10 @@ struct SetupCoordinator: ReducerProtocol {
                     state.availableDebugActions = debuggableInteraction.sequence
                     publisher = debuggableInteraction.publisher
                 } else {
-                    // TODO: messages
-                    publisher = idInteractionManager.changePIN(messages: .init(sessionStarted: "", sessionFailed: "", sessionSucceeded: "", sessionInProgress: ""))
+                    publisher = idInteractionManager.changePIN(messages: .setup)
                 }
                  #else
-                // TODO: messages
-                publisher = idInteractionManager.changePIN(messages: .init(sessionStarted: "", sessionFailed: "", sessionSucceeded: "", sessionInProgress: ""))
+                publisher = idInteractionManager.changePIN(messages: .setup)
                  #endif
                 return .concatenate(
                     .trackEvent(category: "firstTimeUser",

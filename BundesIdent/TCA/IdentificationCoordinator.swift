@@ -113,12 +113,10 @@ struct IdentificationCoordinator: ReducerProtocol {
                     state.availableDebugActions = debuggableInteraction.sequence
                     publisher = debuggableInteraction.publisher
                 } else {
-                    #warning("messages")
-                    publisher = idInteractionManager.identify(tokenURL: state.tokenURL, messages: .init(sessionStarted: "", sessionFailed: "", sessionSucceeded: "", sessionInProgress: ""))
+                    publisher = idInteractionManager.identify(tokenURL: state.tokenURL, messages: .identification)
                 }
 #else
-                #warning("messages")
-                publisher = idInteractionManager.identify(tokenURL: state.tokenURL, messages: .init(sessionStarted: "", sessionFailed: "", sessionSucceeded: "", sessionInProgress: ""))
+                publisher = idInteractionManager.identify(tokenURL: state.tokenURL, messages: .identification)
 #endif
                 return publisher
                     .receive(on: mainQueue)

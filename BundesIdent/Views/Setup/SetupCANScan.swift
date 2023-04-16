@@ -135,6 +135,7 @@ struct SetupCANScan: ReducerProtocol {
         case .pinChangeSucceeded:
             return EffectTask(value: .scannedSuccessfully)
         case .canRequested:
+            // TODO: Should’t go into incorrect CAN when resume after cancellation
             logger.info("Wrong CAN provided")
             state.shared.isScanning = false
             return EffectTask(value: .incorrectCAN)
