@@ -70,11 +70,11 @@ class IDInteractionManager: IDInteractionManagerType {
     }
     
     func changePIN(messages: ScanOverlayMessages) -> EIDInteractionPublisher {
-        guard !workflowController.isStarted else {
+        if workflowController.isStarted {
             logger.error("Tried to change PIN when workflow is started.")
-            // TODO: Throw error
-            // TODO: Because we don’t get anything from AA2 for when scan is cancelled we should stop and start here instead.
-            fatalError()
+            // This happens if the user cancels inside system scan overlay and press CTA again.
+            // TODO: Update when AA2 SDK handling of Cancel button is fixes
+            workflowController.stop()
         }
 
         let workflow = Workflow.changePIN(userInfoMessages: .init(messages), status: true)
