@@ -7,20 +7,11 @@ import AusweisApp2SDKWrapper
 
 final class IDInteractionEventHandler: WorkflowCallbacks {
     
-    var publisher: EIDInteractionPublisher {
-        subject.handleEvents(receiveCompletion: { _ in
-            print("Completed")
-            self.workflowController.stop()
-        }, receiveCancel: {
-            print("Cancelling")
-            self.workflowController.cancel()
-        }).eraseToAnyPublisher()
-    }
+    let subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>
 
     private let workflow: Workflow
     private let workflowController: AusweisApp2SDKWrapper.WorkflowController
     private let logger: Logger
-    private let subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>
 
     init(workflow: Workflow, workflowController: AusweisApp2SDKWrapper.WorkflowController) {
         self.workflow = workflow
