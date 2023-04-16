@@ -44,6 +44,7 @@ class IDInteractionManager: IDInteractionManagerType {
 
     private let workflowController: AusweisApp2SDKWrapper.WorkflowController
     private let logger: Logger
+    private var currentHandler: IDInteractionEventHandler?
 
     init(workflowController: AusweisApp2SDKWrapper.WorkflowController = AA2SDKWrapper.workflowController) {
         self.workflowController = workflowController
@@ -51,39 +52,40 @@ class IDInteractionManager: IDInteractionManagerType {
     }
     
     func identify(tokenURL: URL, messages: ScanOverlayMessages) -> EIDInteractionPublisher {
-        guard !workflowController.isStarted else {
-            logger.error("Tried to identify when workflow is started.")
-            // TODO: Throw error
-            fatalError()
-        }
-
-        let workflow = Workflow.authentification(tcTokenUrl: tokenURL,
+        return start(workflow: .authentification(tcTokenUrl: tokenURL,
                                                  developerMode: false,
                                                  userInfoMessages: AA2UserInfoMessages(messages),
-                                                 status: true)
-        let handler = IDInteractionEventHandler(workflow: workflow, workflowController: workflowController)
-
-        // TODO: Unregister when stopping
-        workflowController.registerCallbacks(handler)
-        workflowController.start()
-        return handler.publisher
+                                                 status: true))
     }
     
     func changePIN(messages: ScanOverlayMessages) -> EIDInteractionPublisher {
+        return start(workflow: .changePIN(userInfoMessages: .init(messages), status: true))
+    }
+
+    private func start(workflow: Workflow) -> EIDInteractionPublisher {
         if workflowController.isStarted {
-            logger.error("Tried to change PIN when workflow is started.")
-            // This happens if the user cancels inside system scan overlay and press CTA again.
+            // This happens if the user cancels inside the system scan overlay and taps CTA again.
             // TODO: Update when AA2 SDK handling of Cancel button is fixes
             workflowController.stop()
+            if let handler = currentHandler {
+                workflowController.unregisterCallbacks(handler)
+                currentHandler = nil
+            }
         }
 
-        let workflow = Workflow.changePIN(userInfoMessages: .init(messages), status: true)
         let handler = IDInteractionEventHandler(workflow: workflow, workflowController: workflowController)
+        currentHandler = handler
 
-        // TODO: Unregister when stopping
         workflowController.registerCallbacks(handler)
         workflowController.start()
-        return handler.publisher
+
+        return handler.subject.handleEvents(receiveCompletion: { _ in
+            self.workflowController.stop()
+            self.workflowController.unregisterCallbacks(handler)
+            self.currentHandler = nil
+        }, receiveCancel: {
+            self.workflowController.cancel()
+        }).eraseToAnyPublisher()
     }
 
     func setPIN(_ pin: String) {
@@ -112,11 +114,6 @@ class IDInteractionManager: IDInteractionManagerType {
     
     func cancel() {
         workflowController.cancel()
-    }
-    
-    deinit {
-        logger.error("Unexpected deinit")
-        workflowController.stop()
     }
 }
 #endif
