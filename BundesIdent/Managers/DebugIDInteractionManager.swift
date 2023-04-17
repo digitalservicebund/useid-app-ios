@@ -111,12 +111,12 @@ extension EIDAuthenticationRequest {
         terms: AuthenticationTerms.text("Terms"),
         transactionInfo: nil,
         readAttributes: [
-            .DG01: true,
-            .DG02: true,
-            .DG03: true,
-            .DG04: true,
-            .DG05: false,
-            .DG06: false
+            .documentType: true,
+            .issuingCountry: true,
+            .validUntil: true,
+            .givenNames: true,
+            .familyName: false,
+            .artisticName: false
         ]
     )
 }
@@ -126,7 +126,10 @@ extension AuthenticationInformation {
 }
 
 extension AuthenticationRequest {
-    static var preview: AuthenticationRequest = .init(requiredAttributes: [.DG01, .DG02, .DG03, .DG04])
+    static var preview: AuthenticationRequest = .init(requiredAttributes: [.documentType,
+                                                                           .issuingCountry,
+                                                                           .validUntil,
+                                                                           .artisticName])
 }
 
 extension CertificateDescription {

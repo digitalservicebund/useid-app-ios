@@ -5,54 +5,64 @@ import AusweisApp2SDKWrapper
 
 // TR-03110 (Part 4), Section 2.2.3
 enum IDCardAttribute: String, Equatable, Identifiable {
-    case DG01
-    case DG02
-    case DG03
-    case DG04
-    case DG05
-    case DG06
-    case DG07
-    case DG08
-    case DG09
-    case DG10
-    case DG13
-    case DG17
-    case DG19
-    case RESTRICTED_IDENTIFICATION
-    case AGE_VERIFICATION
+    case documentType // DG1
+    case issuingCountry // DG2
+    case validUntil // DG3
+    case givenNames // DG4
+    case familyName // DG5
+    case artisticName // DG6
+    case doctoralDegree // DG7
+    case dateOfBirth // DG8
+    case placeOfBirth // DG9
+    case nationality // DG10
+    case birthName // DG13
+    case address // DG17
+    case communityID // DG18
+    case residencePermitI // DG19
+    case residencePermitII // DG20
 
-    // TODO: Only until we have strings for all AccessRight cases
+    case addressVerification
+    case ageVerification
+    case pseudonym
+    case writeAddress
+    case writeCommunityID
+    case writeResidencePermitI
+    case writeResidencePermitII
+    case canAllowed
+    case pinManagement
+
     case unknown
-    
+
     var id: String { rawValue }
 
 #if !targetEnvironment(simulator)
     init(_ accessRight: AccessRight) {
         switch accessRight {
-        case .Address: self = .DG17
-        case .BirthName: self = .DG13
-        case .FamilyName: self = .DG05
-        case .GivenNames: self = .DG04
-        case .PlaceOfBirth: self = .DG09
-        case .DateOfBirth: self = .DG08
-        case .DoctoralDegree: self = .DG07
-        case .ArtisticName: self = .DG06
-        case .Pseudonym: self = .unknown // Spezielle Funktionen: Pseudonym / Pseudonym
-        case .ValidUntil: self = .DG03
-        case .Nationality: self = .DG10
-        case .IssuingCountry: self = .DG02
-        case .DocumentType: self = .DG01
-        case .ResidencePermitI: self = .unknown
-        case .ResidencePermitII: self = .unknown
-        case .CommunityID: self = .unknown // DG18
-        case .AddressVerification: self = .unknown // Spezielle Funktionen: Wohnortbestätigung / Address verification
-        case .AgeVerification: self = .AGE_VERIFICATION // Spezielle Funktionen: Altersbestätigung / Age verification
-        case .WriteAddress: self = .unknown
-        case .WriteCommunityID: self = .unknown
-        case .WriteResidencePermitI: self = .unknown
-        case .WriteResidencePermitII: self = .unknown
-        case .CanAllowed: self = .unknown
-        case .PinManagement: self = .unknown
+        case .Address: self = .address
+        case .BirthName: self = .birthName
+        case .FamilyName: self = .familyName
+        case .GivenNames: self = .givenNames
+        case .PlaceOfBirth: self = .placeOfBirth
+        case .DateOfBirth: self = .dateOfBirth
+        case .DoctoralDegree: self = .doctoralDegree
+        case .ArtisticName: self = .artisticName
+        case .Pseudonym: self = .pseudonym
+        case .ValidUntil: self = .validUntil
+        case .Nationality: self = .nationality
+        case .IssuingCountry: self = .issuingCountry
+        case .DocumentType: self = .documentType
+        case .ResidencePermitI: self = .residencePermitI
+        case .ResidencePermitII: self = .residencePermitII
+        case .CommunityID: self = .communityID
+        case .AddressVerification: self = .addressVerification
+        case .AgeVerification: self = .ageVerification
+        case .WriteAddress: self = .writeAddress
+        case .WriteCommunityID: self = .writeCommunityID
+        case .WriteResidencePermitI: self = .writeResidencePermitI
+        case .WriteResidencePermitII: self = .writeResidencePermitII
+        case .CanAllowed: self = .canAllowed
+        case .PinManagement: self = .pinManagement
+        @unknown default: self = .unknown
         }
     }
 #endif
@@ -61,23 +71,31 @@ enum IDCardAttribute: String, Equatable, Identifiable {
 extension IDCardAttribute {
     var localizedTitle: String {
         switch self {
-        case .DG01: return L10n.CardAttribute.dg01
-        case .DG02: return L10n.CardAttribute.dg02
-        case .DG03: return L10n.CardAttribute.dg03
-        case .DG04: return L10n.CardAttribute.dg04
-        case .DG05: return L10n.CardAttribute.dg05
-        case .DG06: return L10n.CardAttribute.dg06
-        case .DG07: return L10n.CardAttribute.dg07
-        case .DG08: return L10n.CardAttribute.dg08
-        case .DG09: return L10n.CardAttribute.dg09
-        case .DG10: return L10n.CardAttribute.dg10
-        case .DG13: return L10n.CardAttribute.dg13
-        case .DG17: return L10n.CardAttribute.dg17
-        case .DG19: return L10n.CardAttribute.dg19
-        case .RESTRICTED_IDENTIFICATION: return L10n.CardAttribute.restrictedIdentification
-        case .AGE_VERIFICATION: return L10n.CardAttribute.ageVerification
-
-        case .unknown: return ""
+        case .documentType: return L10n.CardAttribute.dg01
+        case .issuingCountry: return L10n.CardAttribute.dg02
+        case .validUntil: return L10n.CardAttribute.dg03
+        case .givenNames: return L10n.CardAttribute.dg04
+        case .familyName: return L10n.CardAttribute.dg05
+        case .artisticName: return L10n.CardAttribute.dg06
+        case .doctoralDegree: return L10n.CardAttribute.dg07
+        case .dateOfBirth: return L10n.CardAttribute.dg08
+        case .placeOfBirth: return L10n.CardAttribute.dg09
+        case .nationality: return L10n.CardAttribute.dg10
+        case .birthName: return L10n.CardAttribute.dg13
+        case .address: return L10n.CardAttribute.dg17
+        case .communityID: return L10n.CardAttribute.dg18
+        case .residencePermitI: return L10n.CardAttribute.dg19
+        case .residencePermitII: return L10n.CardAttribute.dg20
+        case .addressVerification: return L10n.CardAttribute.addressVerification
+        case .ageVerification: return L10n.CardAttribute.ageVerification
+        case .pseudonym: return L10n.CardAttribute.pseudonym
+        case .writeAddress: return L10n.CardAttribute.Write.dg17
+        case .writeCommunityID: return L10n.CardAttribute.Write.dg18
+        case .writeResidencePermitI: return L10n.CardAttribute.Write.dg19
+        case .writeResidencePermitII: return L10n.CardAttribute.Write.dg20
+        case .canAllowed: return L10n.CardAttribute.canAllowed
+        case .pinManagement: return L10n.CardAttribute.pinManagement
+        case .unknown: return L10n.CardAttribute.unknown
         }
     }
 }
