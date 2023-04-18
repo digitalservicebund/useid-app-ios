@@ -61,7 +61,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
     var body: some ReducerProtocol<State, Action> {
         Reduce<State, Action> { state, action in
             switch action {
-            case .routeAction(_, action: .canScan(.requestCAN)):
+            case .routeAction(_, action: .canScan(.scanEvent(.success(.canRequested)))):
                 state.routes.presentSheet(.canIncorrectInput(.init()))
                 return .none
             case .routeAction(_, action: .canPINForgotten(.end)):

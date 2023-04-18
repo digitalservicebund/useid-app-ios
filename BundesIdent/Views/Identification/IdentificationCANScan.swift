@@ -36,8 +36,6 @@ struct IdentificationCANScan: ReducerProtocol {
         case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
         case wrongPIN(remainingAttempts: Int)
         case identifiedSuccessfully(redirectURL: URL)
-        case requestPINAndCAN(PINCANCallback)
-        case requestCAN
         case error(ScanError.State)
         case cancelIdentification
         case dismiss
@@ -55,8 +53,8 @@ struct IdentificationCANScan: ReducerProtocol {
             }
             return EffectTask(value: .shared(.startScan))
         case .shared(.startScan):
-            guard !state.shared.isScanning else { return .none }
             idInteractionManager.setCAN(state.can)
+            guard !state.shared.isScanning else { return .none }
             state.shared.isScanning = true
             return .trackEvent(category: "identification",
                                action: "buttonPressed",
@@ -126,6 +124,7 @@ struct IdentificationCANScan: ReducerProtocol {
             return .none
         case .canRequested:
             // wrong can provided, identification coordinator will handle
+            idInteractionManager.interrupt()
             return .none
         case .pinRequested(remainingAttempts: let remainingAttempts):
             logger.info("pinRequested: \(String(describing: remainingAttempts))")
