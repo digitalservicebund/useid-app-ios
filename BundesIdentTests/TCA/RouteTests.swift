@@ -242,7 +242,7 @@ final class RouteTests: XCTestCase {
 
     func testIdentificationScanSuccessfulRoutes() {
         let pin = "123456"
-        let request = EIDAuthenticationRequest.preview
+        let request = AuthenticationRequest.preview
         let closure = { (_: FlaggedAttributes) in }
         let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let tokenURL = demoTokenURL
@@ -264,18 +264,18 @@ final class RouteTests: XCTestCase {
 
         store.send(.openURL(tokenURL))
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.idInteractionEvent(.success(.requestAuthenticationRequestConfirmation(request, closure))))))
+        store.send(.routeAction(1, action: .identificationCoordinator(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request))))))
 
         verify(mockMatomoTracker).track(view: ["identification", "attributes"], url: URL?.none)
         endInteraction(mockMatomoTracker)
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(0, action: .overview(.loaded(.callbackReceived(request, pinCallback)))))))
+        let authenticationInformation = AuthenticationInformation.preview
+        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(0, action: .overview(.loaded(.confirm(authenticationInformation)))))))
         verify(mockMatomoTracker).track(view: ["identification", "personalPIN"], url: URL?.none)
         endInteraction(mockMatomoTracker)
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(1, action: .personalPIN(.done(request: request,
-                                                                                                                 pin: pin,
-                                                                                                                 pinCallback: pinCallback))))))
+        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(1, action: .personalPIN(.done(authenticationInformation: authenticationInformation,
+                                                                                                                 pin: pin))))))
         verify(mockMatomoTracker).track(view: ["identification", "scan"], url: URL?.none)
         endInteraction(mockMatomoTracker)
 
@@ -293,7 +293,9 @@ final class RouteTests: XCTestCase {
 
     func testIdentificationWrongPINRoutes() {
         let pin = "123456"
-        let request = EIDAuthenticationRequest.preview
+        let request = AuthenticationRequest.preview
+        let certificate = CertificateDescription.preview
+        let authenticationInformation = AuthenticationInformation(request: request, certificateDescription: certificate)
         let closure = { (_: FlaggedAttributes) in }
         let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
@@ -316,18 +318,17 @@ final class RouteTests: XCTestCase {
 
         store.send(.openURL(tokenURL))
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.idInteractionEvent(.success(.requestAuthenticationRequestConfirmation(request, closure))))))
+        store.send(.routeAction(1, action: .identificationCoordinator(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request))))))
 
         verify(mockMatomoTracker).track(view: ["identification", "attributes"], url: URL?.none)
         endInteraction(mockMatomoTracker)
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(0, action: .overview(.loaded(.callbackReceived(request, pinCallback)))))))
+        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(0, action: .overview(.loaded(.confirm(authenticationInformation)))))))
         verify(mockMatomoTracker).track(view: ["identification", "personalPIN"], url: URL?.none)
         endInteraction(mockMatomoTracker)
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(1, action: .personalPIN(.done(request: request,
-                                                                                                                 pin: pin,
-                                                                                                                 pinCallback: pinCallback))))))
+        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(1, action: .personalPIN(.done(authenticationInformation: authenticationInformation,
+                                                                                                                 pin: pin))))))
         verify(mockMatomoTracker).track(view: ["identification", "scan"], url: URL?.none)
         endInteraction(mockMatomoTracker)
 
@@ -340,7 +341,7 @@ final class RouteTests: XCTestCase {
                                         url: URL?.none)
         endInteraction(mockMatomoTracker)
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(2, action: .scan(.requestPINAndCAN(request, pinCANCallback))))))
+        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(2, action: .scan(.requestCAN(authenticationInformation))))))
         verify(mockMatomoTracker).track(view: ["identification", "canPINForgotten"],
                                         url: URL?.none)
         endInteraction(mockMatomoTracker)
@@ -354,7 +355,7 @@ final class RouteTests: XCTestCase {
     func testIdentificationCANRoutes() {
         let pin = "123456"
         let can = "123456"
-        let request = EIDAuthenticationRequest.preview
+        let authenticationInformation = AuthenticationInformation.preview
         let closure = { (_: FlaggedAttributes) in }
         let callback = IdentifiableCallback<FlaggedAttributes>(id: UUID(number: 0), callback: closure)
         let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
@@ -363,9 +364,11 @@ final class RouteTests: XCTestCase {
         let initialCanRoutes: [Route<IdentificationCANScreen.State>] = [.root(.canPINForgotten(.init()))]
 
         let initialIdentificationRoutes: [Route<IdentificationScreen.State>] = [
-            .root(.overview(.loaded(.init(id: UUID(number: 0), request: request, handler: callback)))), .push(.personalPIN(.init(request: request, callback: pinCallback))),
-            .push(.scan(.init(request: request, pin: pin, pinCallback: pinCallback))),
-            .push(.identificationCANCoordinator(.init(request: request, pinCANCallback: pinCANCallback, tokenURL: tokenURL, attempt: 0, states: initialCanRoutes))),
+            .root(.overview(.loaded(.init(id: UUID(number: 0),
+                                          authenticationInformation: authenticationInformation)))),
+            .push(.personalPIN(.init(authenticationInformation: authenticationInformation))),
+            .push(.scan(.init(authenticationInformation: authenticationInformation, pin: pin))),
+            .push(.identificationCANCoordinator(.init(authenticationInformation: authenticationInformation, tokenURL: tokenURL, attempt: 0, states: initialCanRoutes))),
         ]
 
         let initialRoutes: [Route<Screen.State>] = [
@@ -402,7 +405,7 @@ final class RouteTests: XCTestCase {
                                         url: URL?.none)
         endInteraction(mockMatomoTracker)
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(3, action: .identificationCANCoordinator(.routeAction(4, action: .canScan(.requestPINAndCAN(pinCANCallback))))))))
+        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(3, action: .identificationCANCoordinator(.routeAction(4, action: .canScan(.scanEvent(.success(.canRequested)))))))))
         verify(mockMatomoTracker).track(view: ["identification", "canIncorrectInput"],
                                         url: URL?.none)
         endInteraction(mockMatomoTracker)

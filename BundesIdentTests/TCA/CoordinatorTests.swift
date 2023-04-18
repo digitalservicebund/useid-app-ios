@@ -46,7 +46,7 @@ final class CoordinatorTests: XCTestCase {
         let url = URL(string: "https://eid.digitalservicebund.de/eID-Client?tcTokenURL=https%3A%2F%2Feid.digitalservicebund.de%2Fapi%2Fv1%2Fidentification%2Fsessions%2F57a2537b-87c3-4170-83fb-3fbb9a245888%2Ftc-token&hash=fd143658f7b864701f56deb9fb134882010019a1797ef8019e406da8d875ae18")!
         let coordinator = Coordinator()
         let tcTokenURL = coordinator.extractTCTokenURL(url: url)
-        let expectedURL = URL(string: "http://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Feid.digitalservicebund.de%2Fapi%2Fv1%2Fidentification%2Fsessions%2F57a2537b-87c3-4170-83fb-3fbb9a245888%2Ftc-token")!
+        let expectedURL = URL(string: "https://eid.digitalservicebund.de/api/v1/identification/sessions/57a2537b-87c3-4170-83fb-3fbb9a245888/tc-token")!
         XCTAssertEqual(tcTokenURL, expectedURL)
     }
     
@@ -54,7 +54,7 @@ final class CoordinatorTests: XCTestCase {
         let url = URL(string: "bundesident://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Feid.digitalservicebund.de%2Fapi%2Fv1%2Fidentification%2Fsessions%2F57a2537b-87c3-4170-83fb-3fbb9a245888%2Ftc-token")!
         let coordinator = Coordinator()
         let tcTokenURL = coordinator.extractTCTokenURL(url: url)
-        let expectedURL = URL(string: "http://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Feid.digitalservicebund.de%2Fapi%2Fv1%2Fidentification%2Fsessions%2F57a2537b-87c3-4170-83fb-3fbb9a245888%2Ftc-token")!
+        let expectedURL = URL(string: "https://eid.digitalservicebund.de/api/v1/identification/sessions/57a2537b-87c3-4170-83fb-3fbb9a245888/tc-token")!
         XCTAssertEqual(tcTokenURL, expectedURL)
     }
     
@@ -85,9 +85,9 @@ final class CoordinatorTests: XCTestCase {
         }
 
         let tokenURL = URL(string: "bundesident://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Feid.digitalservicebund.de%2Fapi%2Fv1%2Fidentification%2Fsessions%2F57a2537b-87c3-4170-83fb-3fbb9a245888%2Ftc-token")!
-        let encodedTCTokenURL = URL(string: "http://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Feid.digitalservicebund.de%2Fapi%2Fv1%2Fidentification%2Fsessions%2F57a2537b-87c3-4170-83fb-3fbb9a245888%2Ftc-token")!
+        let tcTokenURL = URL(string: "https://eid.digitalservicebund.de/api/v1/identification/sessions/57a2537b-87c3-4170-83fb-3fbb9a245888/tc-token")!
         store.send(.openURL(tokenURL)) {
-            $0.routes = [home, .sheet(.setupCoordinator(SetupCoordinator.State(tokenURL: encodedTCTokenURL)), embedInNavigationView: false)]
+            $0.routes = [home, .sheet(.setupCoordinator(SetupCoordinator.State(tokenURL: tcTokenURL)), embedInNavigationView: false)]
         }
     }
 
@@ -123,13 +123,13 @@ final class CoordinatorTests: XCTestCase {
             $0.setupCompleted.get.thenReturn(false)
         }
 
-        let encodedTCTokenURL = URL(string: "http://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Feid.digitalservicebund.de%2Fapi%2Fv1%2Fidentification%2Fsessions%2F57a2537b-87c3-4170-83fb-3fbb9a245888%2Ftc-token")!
+        let tcTokenURL = URL(string: "https://eid.digitalservicebund.de/api/v1/identification/sessions/57a2537b-87c3-4170-83fb-3fbb9a245888/tc-token")!
         store.send(.remoteConfiguration(.done)) {
             $0.deferredTokenURL = nil
             $0.routes = [home]
         }
         store.receive(.openURL(tokenURL)) {
-            $0.routes = [home, .sheet(.setupCoordinator(SetupCoordinator.State(tokenURL: encodedTCTokenURL)), embedInNavigationView: false)]
+            $0.routes = [home, .sheet(.setupCoordinator(SetupCoordinator.State(tokenURL: tcTokenURL)), embedInNavigationView: false)]
         }
     }
 
@@ -143,7 +143,7 @@ final class CoordinatorTests: XCTestCase {
         }
 
         let tokenURL = URL(string: "bundesident://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Feid.digitalservicebund.de%2Fapi%2Fv1%2Fidentification%2Fsessions%2F57a2537b-87c3-4170-83fb-3fbb9a245888%2Ftc-token")!
-        let encodedTCTokenURL = URL(string: "http://127.0.0.1:24727/eID-Client?tcTokenURL=https%3A%2F%2Feid.digitalservicebund.de%2Fapi%2Fv1%2Fidentification%2Fsessions%2F57a2537b-87c3-4170-83fb-3fbb9a245888%2Ftc-token")!
+        let encodedTCTokenURL = URL(string: "https://eid.digitalservicebund.de/api/v1/identification/sessions/57a2537b-87c3-4170-83fb-3fbb9a245888/tc-token")!
         store.send(.openURL(tokenURL)) {
             $0.routes = [home, .sheet(.identificationCoordinator(IdentificationCoordinator.State(tokenURL: encodedTCTokenURL)), embedInNavigationView: false)]
         }

@@ -146,6 +146,8 @@ struct IdentificationCANScan: ReducerProtocol {
         case .authenticationSucceeded(redirectUrl: .none):
             issueTracker.capture(error: RedactedEIDInteractionEventError(.authenticationSucceeded(redirectUrl: nil)))
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: state.shared.scanAvailable)))
+        case .pukRequested:
+            return EffectTask(value: .scanEvent(.failure(.cardBlocked)))
         default:
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             logger.error("Received unexpected event.")

@@ -62,7 +62,6 @@
 		E1234DB32976EA3900837872 /* BundLicensePlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1234DB22976EA3900837872 /* BundLicensePlistViewController.swift */; };
 		E128E0BA288941DC00C5195F /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = E128E0B9288941DC00C5195F /* Sentry */; };
 		E128E0BC28898D3400C5195F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E128E0BB28898D3400C5195F /* AppDelegate.swift */; };
-		E12B424828D8AB440032D65D /* ControllerCallbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12B424728D8AB440032D65D /* ControllerCallbackTests.swift */; };
 		E12CB30428494B0B0039FD56 /* OpenECardTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB30328494B0B0039FD56 /* OpenECardTypes.swift */; };
 		E12CB30628494BD70039FD56 /* IDInteractionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB30528494BD70039FD56 /* IDInteractionManagerTests.swift */; };
 		E12CB30A284A2C700039FD56 /* InteractiveDismissableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB309284A2C700039FD56 /* InteractiveDismissableView.swift */; };
@@ -263,7 +262,6 @@
 		E1234DB02976E0BC00837872 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		E1234DB22976EA3900837872 /* BundLicensePlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundLicensePlistViewController.swift; sourceTree = "<group>"; };
 		E128E0BB28898D3400C5195F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E12B424728D8AB440032D65D /* ControllerCallbackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerCallbackTests.swift; sourceTree = "<group>"; };
 		E12B424928DA1A360032D65D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E12B424A28DA1A360032D65D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E12B424B28DA1A4B0032D65D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -437,14 +435,6 @@
 				D2A6773728B4DD5D0033373E /* Array+SafeTests.swift */,
 			);
 			path = Helpers;
-			sourceTree = "<group>";
-		};
-		D2D2DA7A28E5A9C500240CDF /* OpenECard */ = {
-			isa = PBXGroup;
-			children = (
-				E12B424728D8AB440032D65D /* ControllerCallbackTests.swift */,
-			);
-			path = OpenECard;
 			sourceTree = "<group>";
 		};
 		D2D2DA7B28E5A9D500240CDF /* TCA */ = {
@@ -684,7 +674,6 @@
 				E13925BD28410FE200161F5C /* Generated */,
 				D2D2DA7928E5A9B600240CDF /* Helpers */,
 				D2D2DA7C28E5AA2300240CDF /* Managers */,
-				D2D2DA7A28E5A9C500240CDF /* OpenECard */,
 				D2D2DA7B28E5A9D500240CDF /* TCA */,
 				D2D2DA7D28E5B5BD00240CDF /* Views */,
 				E13F9E3C288802500088E955 /* UUID+InitFromNumber.swift */,
@@ -1145,7 +1134,6 @@
 				D245421828CB9E68002600C9 /* IdentificationOverviewTests.swift in Sources */,
 				B95E687729473791004D956B /* RouteTests.swift in Sources */,
 				E13F9E3D288802500088E955 /* UUID+InitFromNumber.swift in Sources */,
-				E12B424828D8AB440032D65D /* ControllerCallbackTests.swift in Sources */,
 				D2C5915028CB86570048D379 /* MissingPINLetterTests.swift in Sources */,
 				B91E34512938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift in Sources */,
 				E135D6AC28B76A3500A32862 /* Matchable+BundesIdent.swift in Sources */,
