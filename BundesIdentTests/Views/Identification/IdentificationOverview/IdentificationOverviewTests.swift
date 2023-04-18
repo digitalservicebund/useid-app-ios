@@ -10,10 +10,12 @@ import TCACoordinators
 final class IdentificationOverviewTests: XCTestCase {
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var mockAnalyticsClient: MockAnalyticsClient!
+    var mockIDInteractionManager: MockIDInteractionManagerType!
     
     override func setUp() {
         scheduler = DispatchQueue.test
         mockAnalyticsClient = MockAnalyticsClient()
+        mockIDInteractionManager = MockIDInteractionManagerType()
         
         stub(mockAnalyticsClient) {
             $0.track(view: any()).thenDoNothing()
@@ -43,20 +45,32 @@ final class IdentificationOverviewTests: XCTestCase {
             reducer: IdentificationOverview()
         )
         store.dependencies.uuid = .incrementing
+        store.dependencies.idInteractionManager = mockIDInteractionManager
+        
         let request = AuthenticationRequest.preview
         let certificateDescription = CertificateDescription.preview
-        let authenticationInformation = AuthenticationInformation.preview
         
-        store.send(IdentificationOverview.Action.loading(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request)))))
+        stub(mockIDInteractionManager) {
+            $0.retrieveCertificateDescription().thenDoNothing()
+        }
+        
+        store.send(IdentificationOverview.Action.loading(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request))))) {
+            guard case .loading(var loadingState) = $0 else { return XCTFail("Invalid state") }
+            loadingState.authenticationRequest = request
+            $0 = .loading(loadingState)
+        }
+        
+        verify(mockIDInteractionManager).retrieveCertificateDescription()
+        
+        store.send(.loading(.idInteractionEvent(.success(.certificateDescriptionRetrieved(certificateDescription)))))
         
         store.receive(.loading(.done(request, certificateDescription))) {
-            $0 = .loaded(.init(id: UUID(number: 1),
+            $0 = .loaded(.init(id: UUID(number: 0),
                                authenticationInformation: AuthenticationInformation(request: request, certificateDescription: certificateDescription)))
         }
     }
     
     func testLoadedConfirm() {
-        let callbackExpectation = expectation(description: "Expect callback to be called")
         let authenticationInformation = AuthenticationInformation.preview
         
         let loadedState = IdentificationOverviewLoaded.State(id: UUID(number: 0), authenticationInformation: authenticationInformation)
@@ -64,12 +78,11 @@ final class IdentificationOverviewTests: XCTestCase {
             initialState: IdentificationOverview.State.loaded(loadedState),
             reducer: IdentificationOverview()
         )
-        
-        // TODO: We need to expect confirm on the mockIdInteractioManager
+        store.dependencies.idInteractionManager = mockIDInteractionManager
         
         store.send(IdentificationOverview.Action.loaded(.confirm(authenticationInformation)))
         
-        wait(for: [callbackExpectation], timeout: 1.0)
+        // mockIDInteractionManager.acceptAccessRights() is called later
     }
     
     func testCallingPINHandlerWhenConfirming() {

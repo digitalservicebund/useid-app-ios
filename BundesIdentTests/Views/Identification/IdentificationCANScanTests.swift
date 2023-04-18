@@ -21,6 +21,15 @@ final class IdentificationCANScanTests: XCTestCase {
             $0.track(view: any()).thenDoNothing()
             $0.track(event: any()).thenDoNothing()
         }
+        
+        stub(mockIDInteractionManager) {
+            $0.interrupt().thenDoNothing()
+            $0.setCAN(any()).thenDoNothing()
+        }
+    }
+    
+    override func tearDown() {
+        verifyNoMoreInteractions(mockIDInteractionManager)
     }
     
     func testOnAppearDoesTriggerScanningWhenNotAlreadyScanning() throws {
@@ -40,6 +49,8 @@ final class IdentificationCANScanTests: XCTestCase {
         store.receive(.shared(.startScan)) {
             $0.shared.isScanning = true
         }
+        
+        verify(mockIDInteractionManager).setCAN(can)
     }
     
     func testOnAppearIgnoredWhenAlreadyScanning() throws {
@@ -63,10 +74,13 @@ final class IdentificationCANScanTests: XCTestCase {
                                                                         shared: SharedScan.State(isScanning: true, showInstructions: false)),
                               reducer: IdentificationCANScan())
         store.dependencies.uuid = .incrementing
-        let newCallback = { (_: String, _: String) in }
+        store.dependencies.idInteractionManager = mockIDInteractionManager
+        
         store.send(.scanEvent(.success(.canRequested))) {
             $0.shared.isScanning = false
         }
+        
+        verify(mockIDInteractionManager).interrupt()
     }
     
     func testShowNFCInfo() {
@@ -97,6 +111,8 @@ final class IdentificationCANScanTests: XCTestCase {
                                                                         shared: SharedScan.State(isScanning: false, showInstructions: false)),
                               reducer: IdentificationCANScan())
         store.dependencies.analytics = mockAnalyticsClient
+        store.dependencies.idInteractionManager = mockIDInteractionManager
+        
         store.send(.shared(.startScan)) {
             $0.shared.isScanning = true
             $0.shared.showInstructions = false
@@ -105,5 +121,7 @@ final class IdentificationCANScanTests: XCTestCase {
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification",
                                                                 action: "buttonPressed",
                                                                 name: "canScan"))
+        
+        verify(mockIDInteractionManager).setCAN(can)
     }
 }
