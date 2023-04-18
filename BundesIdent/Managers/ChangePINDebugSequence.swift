@@ -48,12 +48,10 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
     func run(card: inout Card, subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>) -> [ChangePINDebugSequence] {
         switch self {
         case .cancelPINScan:
-            subject.send(.cardInteractionCompleted)
             subject.send(.pinRequested(remainingAttempts: nil))
             subject.send(.cardInsertionRequested)
             return ChangePINDebugSequence.defaultActions(card: card)
         case .cancelCANScan:
-            subject.send(.cardInteractionCompleted)
             subject.send(.pinRequested(remainingAttempts: nil))
             subject.send(.canRequested)
             subject.send(.cardInsertionRequested)
@@ -68,7 +66,6 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
         case .changePINSuccessfully:
             card.remainingAttempts = 3
             subject.send(.cardRecognized)
-            subject.send(.cardInteractionCompleted)
             subject.send(.pinChangeSucceeded)
             subject.send(completion: .finished)
             return []
@@ -76,7 +73,6 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
             card.remainingAttempts = remainingAttempts - 1
             
             subject.send(.cardRecognized)
-            subject.send(.cardInteractionCompleted)
             
             let cancelDebugSequence: ChangePINDebugSequence
             switch cancelAction {
@@ -89,7 +85,6 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
                 subject.send(.cardRemoved)
                 subject.send(.cardInsertionRequested)
                 subject.send(.cardRecognized)
-                subject.send(.cardInteractionCompleted)
 
                 if card.remainingAttempts >= 2 {
                     subject.send(.pinRequested(remainingAttempts: card.remainingAttempts))
@@ -122,17 +117,14 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
             return [.cancelCANScan, .changePINSuccessfully, .runCANError, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: .can)]
         case .runCardDeactivated:
             subject.send(.cardRecognized)
-            subject.send(.cardInteractionCompleted)
             subject.send(completion: .failure(.cardDeactivated))
             return []
         case .runCardBlocked:
             subject.send(.cardRecognized)
-            subject.send(.cardInteractionCompleted)
             subject.send(completion: .failure(.cardBlocked))
             return []
         case .runCANError:
             subject.send(.cardRecognized)
-            subject.send(.cardInteractionCompleted)
             subject.send(.canRequested)
             subject.send(.pinRequested(remainingAttempts: card.remainingAttempts))
             subject.send(.cardInsertionRequested)

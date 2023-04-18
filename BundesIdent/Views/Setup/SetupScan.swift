@@ -122,8 +122,6 @@ struct SetupScan: ReducerProtocol {
         case .authenticationStarted:
             logger.info("Authentication started.")
             state.shared.isScanning = true
-        case .cardInteractionCompleted:
-            logger.info("Card interaction completed.")
         case .cardInsertionRequested:
             logger.info("Card insertion requested.")
             state.shared.showProgressCaption = nil
