@@ -47,17 +47,32 @@ class IdentificationCoordinatorTests: XCTestCase {
         let store = TestStore(initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL),
                               reducer: IdentificationCoordinator())
         store.dependencies.uuid = .incrementing
-        let attributes = AuthenticationRequest.preview
-        let certificate = CertificateDescription.preview
+        store.dependencies.idInteractionManager = mockIDInteractionManager
         
         let request = AuthenticationRequest.preview
-        store.send(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request))))
+        let certificateDescription = CertificateDescription.preview
+        
+        stub(mockIDInteractionManager) {
+            $0.retrieveCertificateDescription().then { _ in
+                store.send(.idInteractionEvent(.success(.certificateDescriptionRetrieved(CertificateDescription.preview))))
+            }
+        }
+        
+        store.send(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request)))) {
+            guard case .overview(.loading(var loadingState)) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
+            loadingState.authenticationRequest = request
+            $0.routes[0].screen = .overview(.loading(loadingState))
+        }
         
         store.receive(.routeAction(0, action: .overview(.loading(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request)))))))
         
-        store.receive(.routeAction(0, action: .overview(.loading(.done(attributes, certificate))))) {
+        store.receive(.routeAction(0, action: .overview(.loading(.idInteractionEvent(.success(.certificateDescriptionRetrieved(CertificateDescription.preview)))))))
+        
+        store.receive(.routeAction(0, action: .overview(.loading(.done(.preview, .preview))))) {
             $0.routes = [
-                .sheet(.overview(.loaded(.init(id: UUID(number: 1), authenticationInformation: AuthenticationInformation(request: attributes, certificateDescription: certificate)))))
+                .sheet(.overview(.loaded(.init(id: UUID(number: 0),
+                                               authenticationInformation: AuthenticationInformation(request: request,
+                                                                                                    certificateDescription: certificateDescription)))))
             ]
         }
     }
@@ -142,6 +157,8 @@ class IdentificationCoordinatorTests: XCTestCase {
         store.dependencies.urlOpener = urlOpener
         store.dependencies.storageManager = mockStorageManager
         store.dependencies.analytics = mockAnalyticsClient
+        store.dependencies.idInteractionManager = mockIDInteractionManager
+        
         stub(mockStorageManager) {
             $0.identifiedOnce.get.thenReturn(false)
             $0.identifiedOnce.set(any()).thenDoNothing()

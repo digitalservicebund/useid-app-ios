@@ -121,6 +121,7 @@ struct IdentificationCANScan: ReducerProtocol {
             return .none
         case .canRequested:
             // wrong can provided, identification coordinator will handle
+            state.shared.isScanning = false
             idInteractionManager.interrupt()
             return .none
         case .pinRequested(remainingAttempts: let remainingAttempts):
