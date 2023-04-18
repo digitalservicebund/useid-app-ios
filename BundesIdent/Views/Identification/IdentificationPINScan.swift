@@ -161,6 +161,7 @@ struct IdentificationPINScan: ReducerProtocol {
             issueTracker.capture(error: RedactedEIDInteractionEventError(.authenticationSucceeded(redirectUrl: nil)))
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: state.shared.scanAvailable)))
         case .canRequested:
+            idInteractionManager.interrupt()
             return EffectTask(value: .requestCAN(state.authenticationInformation))
         case .pukRequested:
             return EffectTask(value: .scanEvent(.failure(.cardBlocked)))
