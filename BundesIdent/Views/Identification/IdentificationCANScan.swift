@@ -119,9 +119,6 @@ struct IdentificationCANScan: ReducerProtocol {
         case .cardInsertionRequested:
             logger.info("cardInsertionRequested")
             return .none
-        case .cardInteractionCompleted:
-            logger.info("cardInteractionCompleted")
-            return .none
         case .canRequested:
             // wrong can provided, identification coordinator will handle
             idInteractionManager.interrupt()

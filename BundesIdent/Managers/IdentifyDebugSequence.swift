@@ -57,12 +57,10 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             subject.send(.cardInsertionRequested)
             return [.identifySuccessfully, .missingRedirect, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: .pin), .runCardBlocked, .runCardSuspended, .runCardDeactivated, .cancelPINScan]
         case .cancelPINScan:
-            subject.send(.cardInteractionCompleted)
             subject.send(.pinRequested(remainingAttempts: nil))
             subject.send(.cardInsertionRequested)
             return [.identifySuccessfully, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: .pin), .runCardBlocked, .runCardSuspended, .runCardDeactivated, .cancelPINScan]
         case .cancelCANScan:
-            subject.send(.cardInteractionCompleted)
             subject.send(.pinRequested(remainingAttempts: nil))
             subject.send(.canRequested)
             subject.send(.cardInsertionRequested)
@@ -70,14 +68,12 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
         case .identifySuccessfully:
             card.remainingAttempts = 3
             subject.send(.cardRecognized)
-            subject.send(.cardInteractionCompleted)
             subject.send(.authenticationSucceeded(redirectUrl: URL(string: "https://example.org")!))
             subject.send(completion: .finished)
             return []
         case .missingRedirect:
             card.remainingAttempts = 3
             subject.send(.cardRecognized)
-            subject.send(.cardInteractionCompleted)
             subject.send(.authenticationSucceeded(redirectUrl: nil))
             subject.send(completion: .finished)
             return []
@@ -85,7 +81,6 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             card.remainingAttempts = remainingAttempts - 1
             
             subject.send(.cardRecognized)
-            subject.send(.cardInteractionCompleted)
             subject.send(.cardRemoved)
             
             if card.remainingAttempts >= 2 {
@@ -118,17 +113,14 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             return [.cancelCANScan, .identifySuccessfully, .runCANError, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: .can)]
         case .runCardDeactivated:
             subject.send(.cardRecognized)
-            subject.send(.cardInteractionCompleted)
             subject.send(completion: .failure(.cardDeactivated))
             return []
         case .runCardBlocked:
             subject.send(.cardRecognized)
-            subject.send(.cardInteractionCompleted)
             subject.send(completion: .failure(.cardBlocked))
             return []
         case .runCANError:
             subject.send(.cardRecognized)
-            subject.send(.cardInteractionCompleted)
             subject.send(.pinRequested(remainingAttempts: nil))
             subject.send(.canRequested)
             subject.send(.cardInsertionRequested)

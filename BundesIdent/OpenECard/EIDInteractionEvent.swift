@@ -58,7 +58,6 @@ struct ScanOverlayMessages: Equatable {
 
 enum EIDInteractionEvent: Equatable {
     case cardInsertionRequested
-    case cardInteractionCompleted
     case cardRecognized
     case cardRemoved
     case canRequested
@@ -75,7 +74,6 @@ enum EIDInteractionEvent: Equatable {
 
 enum RedactedEIDInteractionEventError: CustomNSError {
     case cardInsertionRequested
-    case cardInteractionCompleted
     case cardRecognized
     case cardRemoved
     case canRequested
@@ -93,7 +91,6 @@ enum RedactedEIDInteractionEventError: CustomNSError {
     init(_ eIDInteractionEvent: EIDInteractionEvent) {
         switch eIDInteractionEvent {
         case .cardInsertionRequested: self = .cardInsertionRequested
-        case .cardInteractionCompleted: self = .cardInteractionCompleted
         case .cardRecognized: self = .cardRecognized
         case .cardRemoved: self = .cardRemoved
         case .canRequested: self = .canRequested
