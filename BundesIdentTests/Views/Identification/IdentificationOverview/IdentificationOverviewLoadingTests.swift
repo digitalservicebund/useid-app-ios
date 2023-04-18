@@ -23,11 +23,14 @@ final class IdentificationOverviewLoadingTests: XCTestCase {
     }
     
     func testRecievedRequestConfirmationCallsDone() {
-        let request = EIDAuthenticationRequest.preview
+        let request = AuthenticationRequest.preview
         let handler: (FlaggedAttributes) -> Void = { attributes in }
         let store = TestStore(initialState: IdentificationOverviewLoading.State(), reducer: IdentificationOverviewLoading())
         store.dependencies.uuid = .constant(.zero)
-        store.send(.idInteractionEvent(.success(.requestAuthenticationRequestConfirmation(request, handler))))
-        store.receive(.done(request, IdentifiableCallback(id: .zero, callback: handler)))
+        store.send(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request))))
+        
+        let certificateDescription = CertificateDescription.preview
+        store.send(.idInteractionEvent(.success(.certificateDescriptionRetrieved(certificateDescription))))
+        store.receive(.done(request, certificateDescription))
     }
 }

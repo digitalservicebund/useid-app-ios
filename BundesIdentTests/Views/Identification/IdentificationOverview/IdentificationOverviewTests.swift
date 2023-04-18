@@ -43,72 +43,37 @@ final class IdentificationOverviewTests: XCTestCase {
             reducer: IdentificationOverview()
         )
         store.dependencies.uuid = .incrementing
-        let request = EIDAuthenticationRequest.preview
-        let handler: (FlaggedAttributes) -> Void = { attributes in }
+        let request = AuthenticationRequest.preview
+        let certificateDescription = CertificateDescription.preview
+        let authenticationInformation = AuthenticationInformation.preview
         
-        store.send(IdentificationOverview.Action.loading(.idInteractionEvent(.success(.requestAuthenticationRequestConfirmation(request, handler)))))
+        store.send(IdentificationOverview.Action.loading(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request)))))
         
-        let callback = IdentifiableCallback(id: UUID(number: 0), callback: handler)
-        store.receive(.loading(.done(request, callback))) {
+        store.receive(.loading(.done(request, certificateDescription))) {
             $0 = .loaded(.init(id: UUID(number: 1),
-                               request: request,
-                               handler: callback))
+                               authenticationInformation: AuthenticationInformation(request: request, certificateDescription: certificateDescription)))
         }
     }
     
     func testLoadedConfirm() {
         let callbackExpectation = expectation(description: "Expect callback to be called")
-        let request = EIDAuthenticationRequest.preview
+        let authenticationInformation = AuthenticationInformation.preview
         
-        let callback: (FlaggedAttributes) -> Void = { attributes in
-            XCTAssertEqual(attributes, [.DG01: true, .DG02: true, .DG03: true, .DG04: true])
-            callbackExpectation.fulfill()
-        }
-        
-        let identifiableCallback = IdentifiableCallback(id: UUID(number: 0), callback: callback)
-        
-        let loadedState = IdentificationOverviewLoaded.State(id: UUID(number: 0), request: request, handler: identifiableCallback)
+        let loadedState = IdentificationOverviewLoaded.State(id: UUID(number: 0), authenticationInformation: authenticationInformation)
         let store = TestStore(
             initialState: IdentificationOverview.State.loaded(loadedState),
             reducer: IdentificationOverview()
         )
         
-        store.send(IdentificationOverview.Action.loaded(.confirm))
+        // TODO: We need to expect confirm on the mockIdInteractioManager
+        
+        store.send(IdentificationOverview.Action.loaded(.confirm(authenticationInformation)))
         
         wait(for: [callbackExpectation], timeout: 1.0)
     }
     
-    func testReceivePINCallback() {
-        let request = EIDAuthenticationRequest.preview
-        let callback: (FlaggedAttributes) -> Void = { attributes in
-            XCTFail("Should not be called")
-        }
-        
-        let identifiableCallback = IdentifiableCallback(id: UUID(number: 0), callback: callback)
-        
-        let loadedState = IdentificationOverviewLoaded.State(id: UUID(number: 0), request: request, handler: identifiableCallback)
-        let store = TestStore(
-            initialState: IdentificationOverview.State.loaded(loadedState),
-            reducer: IdentificationOverview()
-        )
-        store.dependencies.uuid = .incrementing
-        let pinCallback: (String) -> Void = { _ in }
-        let identifiablePINCallback = PINCallback(id: UUID(number: 0), callback: pinCallback)
-        store.send(IdentificationOverview.Action.loaded(.idInteractionEvent(.success(.requestPIN(remainingAttempts: nil, pinCallback: pinCallback))))) {
-            let newLoadedState = IdentificationOverviewLoaded.State(
-                id: UUID(number: 0),
-                request: request,
-                handler: identifiableCallback,
-                pinHandler: identifiablePINCallback
-            )
-            $0 = .loaded(newLoadedState)
-        }
-        
-        store.receive(.loaded(.callbackReceived(request, identifiablePINCallback)))
-    }
-    
     func testCallingPINHandlerWhenConfirming() {
-        let request = EIDAuthenticationRequest.preview
+        let authenticationInformation = AuthenticationInformation.preview
         
         let callback: (FlaggedAttributes) -> Void = { attributes in
             XCTFail("Should not be called")
@@ -121,17 +86,15 @@ final class IdentificationOverviewTests: XCTestCase {
         
         let loadedState = IdentificationOverviewLoaded.State(
             id: UUID(number: 0),
-            request: request,
-            handler: identifiableCallback,
-            pinHandler: identifiablePINCallback
+            authenticationInformation: authenticationInformation
         )
         let store = TestStore(
             initialState: IdentificationOverview.State.loaded(loadedState),
             reducer: IdentificationOverview()
         )
         
-        store.send(IdentificationOverview.Action.loaded(.confirm))
+        store.send(IdentificationOverview.Action.loaded(.confirm(authenticationInformation)))
         
-        store.receive(.loaded(.callbackReceived(request, identifiablePINCallback)))
+        // TODO: Receive call on stub
     }
 }

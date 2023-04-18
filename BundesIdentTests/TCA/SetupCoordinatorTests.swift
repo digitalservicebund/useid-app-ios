@@ -230,7 +230,7 @@ class SetupCoordinatorTests: XCTestCase {
         }
         
         stub(mockIDInteractionManager) {
-            $0.changePIN(nfcMessagesProvider: any()).then { _ in
+            $0.changePIN(messages: any()).then { _ in
                 let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
                 scheduler.schedule {
                     subject.send(.authenticationStarted)
@@ -278,7 +278,7 @@ class SetupCoordinatorTests: XCTestCase {
         
         let requestCANAndChangedPINCallback: (String, String, String) -> Void = { _, _, _ in }
         
-        store.send(.routeAction(0, action: .scan(.scanEvent(.success(.requestCANAndChangedPIN(pinCallback: requestCANAndChangedPINCallback)))))) {
+        store.send(.routeAction(0, action: .scan(.scanEvent(.success(.canRequested))))) {
             guard case .scan(var scanState) = $0.states[0].screen else { return XCTFail() }
             scanState.shared.isScanning = false
             $0.states[0].screen = .scan(scanState)
@@ -288,12 +288,11 @@ class SetupCoordinatorTests: XCTestCase {
         
         let canAndChangedPINCallback = CANAndChangedPINCallback(id: .zero) { payload in }
         
-        store.receive(.routeAction(0, action: .scan(.requestCANAndChangedPIN(pin: newPIN, callback: canAndChangedPINCallback)))) {
+        store.receive(.routeAction(0, action: .scan(.requestCANAndChangedPIN(pin: newPIN)))) {
             $0.states.append(.push(.setupCANCoordinator(SetupCANCoordinator.State(
                 pin: newPIN,
                 transportPIN: oldPIN,
                 oldTransportPIN: oldPIN,
-                canAndChangedPINCallback: canAndChangedPINCallback,
                 tokenURL: demoTokenURL,
                 attempt: 0,
                 states: [
@@ -320,7 +319,7 @@ class SetupCoordinatorTests: XCTestCase {
         }
         
         stub(mockIDInteractionManager) { mock in
-            mock.changePIN(nfcMessagesProvider: any()).then { _ in
+            mock.changePIN(messages: any()).then { _ in
                 let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
                 scheduler.schedule {
                     subject.send(completion: .finished)
@@ -348,8 +347,7 @@ class SetupCoordinatorTests: XCTestCase {
     }
     
     func testCancelingOnConfirmTransportPINAsksForConfirmation() throws {
-        let canAndChangedPINCallback: CANAndChangedPINCallback = IdentifiableCallback(id: .zero, callback: { _ in })
-        let setupCANCoordinatorState = SetupCANCoordinator.State(pin: "123456", oldTransportPIN: "12345", canAndChangedPINCallback: canAndChangedPINCallback, attempt: 0, states: [
+        let setupCANCoordinatorState = SetupCANCoordinator.State(pin: "123456", oldTransportPIN: "12345", attempt: 0, states: [
             .root(.canConfirmTransportPIN(.init(transportPIN: "12345")))
         ])
         
@@ -367,8 +365,7 @@ class SetupCoordinatorTests: XCTestCase {
     }
     
     func testCancelingOnCANIntroAsksForConfirmation() throws {
-        let canAndChangedPINCallback: CANAndChangedPINCallback = IdentifiableCallback(id: .zero, callback: { _ in })
-        let setupCANCoordinatorState = SetupCANCoordinator.State(pin: "123456", oldTransportPIN: "12345", canAndChangedPINCallback: canAndChangedPINCallback, attempt: 0, states: [
+        let setupCANCoordinatorState = SetupCANCoordinator.State(pin: "123456", oldTransportPIN: "12345", attempt: 0, states: [
             .root(.canIntro(.init(shouldDismiss: true)))
         ])
         
@@ -389,8 +386,7 @@ class SetupCoordinatorTests: XCTestCase {
         let transportPIN = "12345"
         let newPIN = "123456"
         let can = "111111"
-        let canAndChangedPINCallback: CANAndChangedPINCallback = IdentifiableCallback(id: .zero, callback: { _ in })
-        let setupCANCoordinatorState = SetupCANCoordinator.State(pin: newPIN, oldTransportPIN: transportPIN, canAndChangedPINCallback: canAndChangedPINCallback, attempt: 0, states: [
+        let setupCANCoordinatorState = SetupCANCoordinator.State(pin: newPIN, oldTransportPIN: transportPIN, attempt: 0, states: [
             .root(.canScan(SetupCANScan.State(transportPIN: transportPIN, newPIN: newPIN, can: can)))
         ])
         
@@ -410,7 +406,7 @@ class SetupCoordinatorTests: XCTestCase {
         }
         
         stub(mockIDInteractionManager) {
-            $0.changePIN(nfcMessagesProvider: any()).then { _ in
+            $0.changePIN(messages: any()).then { _ in
                 let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
                 scheduler.schedule {
                     subject.send(.authenticationStarted)
@@ -444,7 +440,7 @@ class SetupCoordinatorTests: XCTestCase {
             $0.states[0].screen = .setupCANCoordinator(setupCANCoordinatorState)
         }
         
-        verify(mockIDInteractionManager).changePIN(nfcMessagesProvider: any())
+        verify(mockIDInteractionManager).changePIN(messages: any())
         verify(mockAnalyticsClient).track(event: any())
     }
 

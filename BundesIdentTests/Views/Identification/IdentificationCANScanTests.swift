@@ -10,9 +10,11 @@ final class IdentificationCANScanTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var mockAnalyticsClient: MockAnalyticsClient!
+    var mockIDInteractionManager: MockIDInteractionManagerType!
     
     override func setUp() {
         mockAnalyticsClient = MockAnalyticsClient()
+        mockIDInteractionManager = MockIDInteractionManagerType()
         scheduler = DispatchQueue.test
         
         stub(mockAnalyticsClient) {
@@ -28,10 +30,11 @@ final class IdentificationCANScanTests: XCTestCase {
         let store = TestStore(
             initialState: IdentificationCANScan.State(pin: pin,
                                                       can: can,
-                                                      pinCANCallback: pinCANCallback,
                                                       shared: SharedScan.State(isScanning: false, showInstructions: false)),
             reducer: IdentificationCANScan()
         )
+        store.dependencies.idInteractionManager = mockIDInteractionManager
+        
         store.dependencies.analytics = mockAnalyticsClient
         store.send(.onAppear)
         store.receive(.shared(.startScan)) {
@@ -45,54 +48,32 @@ final class IdentificationCANScanTests: XCTestCase {
         let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
         let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
                                                                         can: can,
-                                                                        pinCANCallback: pinCANCallback,
                                                                         shared: SharedScan.State(isScanning: true, showInstructions: false)),
                               reducer: IdentificationCANScan())
         
         store.send(.onAppear)
     }
     
-    func testCancellation() throws {
-        let pin = "123456"
-        let can = "123456"
-        let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
-        let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
-                                                                        can: can,
-                                                                        pinCANCallback: pinCANCallback,
-                                                                        shared: SharedScan.State(isScanning: true, showInstructions: false)),
-                              reducer: IdentificationCANScan())
-        store.dependencies.uuid = .incrementing
-        let newCallback = { (_: String, _: String) in }
-        store.send(.scanEvent(.success(.requestPINAndCAN(newCallback)))) {
-            $0.shared.isScanning = false
-            $0.pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: newCallback)
-        }
-    }
-    
     func testWrongCAN() throws {
         let pin = "123456"
         let can = "123456"
-        let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
+    
         let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
                                                                         can: can,
-                                                                        pinCANCallback: pinCANCallback,
                                                                         shared: SharedScan.State(isScanning: true, showInstructions: false)),
                               reducer: IdentificationCANScan())
         store.dependencies.uuid = .incrementing
         let newCallback = { (_: String, _: String) in }
-        store.send(.scanEvent(.success(.requestPINAndCAN(newCallback)))) {
+        store.send(.scanEvent(.success(.canRequested))) {
             $0.shared.isScanning = false
-            $0.pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: newCallback)
         }
     }
     
     func testShowNFCInfo() {
         let pin = "123456"
         let can = "123456"
-        let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
         let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
                                                                         can: can,
-                                                                        pinCANCallback: pinCANCallback,
                                                                         shared: SharedScan.State(isScanning: false, showInstructions: false)),
                               reducer: IdentificationCANScan())
         store.dependencies.analytics = mockAnalyticsClient
@@ -111,10 +92,8 @@ final class IdentificationCANScanTests: XCTestCase {
     func testStartScanTracking() {
         let pin = "123456"
         let can = "123456"
-        let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
         let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
                                                                         can: can,
-                                                                        pinCANCallback: pinCANCallback,
                                                                         shared: SharedScan.State(isScanning: false, showInstructions: false)),
                               reducer: IdentificationCANScan())
         store.dependencies.analytics = mockAnalyticsClient
