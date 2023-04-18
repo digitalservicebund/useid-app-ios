@@ -20,12 +20,12 @@
 "cardAttribute_dg20" = "Residence permit II";
 "cardAttribute_pinManagement" = "PIN Management";
 "cardAttribute_pseudonym" = "Pseudonym";
+"cardAttribute_restrictedIdentification" = "Provider and card-specific identifier";
 "cardAttribute_unknown" = "Unknown data group";
 "cardAttribute_write_dg17" = "Address (write access)";
 "cardAttribute_write_dg18" = "Community ID (write access)";
 "cardAttribute_write_dg19" = "Residence permit I (write access)";
 "cardAttribute_write_dg20" = "Residence permit II (write access)";
-"cardAttribute_restrictedIdentification" = "Provider and card-specific identifier";
 "cardInteraction_error_default" = "An error has occurred.";
 "cardInteraction_error_tagLost" = "Card has been removed";
 "cardInteraction_error_timeout" = "No ID card recognized.";
