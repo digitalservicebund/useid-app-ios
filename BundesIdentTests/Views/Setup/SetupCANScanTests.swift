@@ -41,6 +41,15 @@ class SetupCANScanTests: XCTestCase {
         stub(mockPreviewIDInteractionManager) {
             $0.isDebugModeEnabled.get.thenReturn(false)
         }
+        
+        stub(mockIDInteractionManager) {
+            $0.setCAN(any()).thenDoNothing()
+            $0.setPIN(any()).thenDoNothing()
+        }
+    }
+    
+    override func tearDown() {
+        verifyNoMoreInteractions(mockIDInteractionManager)
     }
     
     func testStartScan() throws {
@@ -52,12 +61,13 @@ class SetupCANScanTests: XCTestCase {
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.storageManager = mockStorageManager
+        store.dependencies.idInteractionManager = mockIDInteractionManager
         
         store.send(.shared(.startScan)) {
             $0.shared.isScanning = true
         }
         
-        store.receive(.shared(.initiateScan))
+        verify(mockIDInteractionManager).setCAN(can)
     }
     
     func testChangePINWithCANSuccess() throws {

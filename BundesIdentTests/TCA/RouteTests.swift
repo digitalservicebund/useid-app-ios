@@ -58,6 +58,14 @@ final class RouteTests: XCTestCase {
             $0.setupCompleted.get.thenReturn(true)
             $0.setupCompleted.set(any()).thenDoNothing()
         }
+        
+        stub(mockIDInteractionManager) {
+            $0.interrupt().thenDoNothing()
+            $0.cancel().thenDoNothing()
+            $0.setPIN(any()).thenDoNothing()
+            $0.setCAN(any()).thenDoNothing()
+            $0.retrieveCertificateDescription().thenDoNothing()
+        }
     }
 
     func testMissingPINLetterRoutes() {
@@ -243,6 +251,7 @@ final class RouteTests: XCTestCase {
     func testIdentificationScanSuccessfulRoutes() {
         let pin = "123456"
         let request = AuthenticationRequest.preview
+        let certificateDescription = CertificateDescription.preview
         let closure = { (_: FlaggedAttributes) in }
         let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let tokenURL = demoTokenURL
@@ -256,6 +265,7 @@ final class RouteTests: XCTestCase {
         store.dependencies.uuid = .incrementing
         store.dependencies.urlOpener = urlOpener
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
+        store.dependencies.idInteractionManager = mockIDInteractionManager
         store.send(.onAppear)
 
         verify(mockMatomoTracker).reset()
@@ -265,6 +275,10 @@ final class RouteTests: XCTestCase {
         store.send(.openURL(tokenURL))
 
         store.send(.routeAction(1, action: .identificationCoordinator(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request))))))
+        
+        verify(mockIDInteractionManager).retrieveCertificateDescription()
+        
+        store.send(.routeAction(1, action: .identificationCoordinator(.idInteractionEvent(.success(.certificateDescriptionRetrieved(certificateDescription))))))
 
         verify(mockMatomoTracker).track(view: ["identification", "attributes"], url: URL?.none)
         endInteraction(mockMatomoTracker)
@@ -289,6 +303,8 @@ final class RouteTests: XCTestCase {
                    url: URL?.none)
         verify(mockMatomoTracker).track(view: [], url: URL?.none)
         endInteraction(mockMatomoTracker)
+        
+        verify(mockIDInteractionManager).cancel()
     }
 
     func testIdentificationWrongPINRoutes() {
@@ -296,9 +312,6 @@ final class RouteTests: XCTestCase {
         let request = AuthenticationRequest.preview
         let certificate = CertificateDescription.preview
         let authenticationInformation = AuthenticationInformation(request: request, certificateDescription: certificate)
-        let closure = { (_: FlaggedAttributes) in }
-        let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
-        let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
         let tokenURL = demoTokenURL
         let root = Route<Screen.State>.root(.home(Home.State(appVersion: "1.0.0", buildNumber: 1)))
         let store = TestStore(initialState: Coordinator.State(routes: [root], remoteConfiguration: .init(finished: true)),
@@ -310,6 +323,7 @@ final class RouteTests: XCTestCase {
         store.dependencies.uuid = .incrementing
         store.dependencies.urlOpener = urlOpener
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
+        store.dependencies.idInteractionManager = mockIDInteractionManager
         store.send(.onAppear)
 
         verify(mockMatomoTracker).reset()
@@ -319,7 +333,9 @@ final class RouteTests: XCTestCase {
         store.send(.openURL(tokenURL))
 
         store.send(.routeAction(1, action: .identificationCoordinator(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request))))))
-
+        
+        store.send(.routeAction(1, action: .identificationCoordinator(.idInteractionEvent(.success(.certificateDescriptionRetrieved(certificate))))))
+        
         verify(mockMatomoTracker).track(view: ["identification", "attributes"], url: URL?.none)
         endInteraction(mockMatomoTracker)
 
@@ -383,6 +399,7 @@ final class RouteTests: XCTestCase {
         store.dependencies.storageManager = mockStorageManager
         store.dependencies.uuid = .incrementing
         store.dependencies.urlOpener = urlOpener
+        store.dependencies.idInteractionManager = mockIDInteractionManager
 
         store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(3, action: .identificationCANCoordinator(.routeAction(0, action: .canPINForgotten(.showCANIntro)))))))
         verify(mockMatomoTracker).track(view: ["identification", "canIntro"],

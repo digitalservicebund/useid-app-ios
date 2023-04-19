@@ -13,9 +13,10 @@ struct IdentificationOverviewLoading: ReducerProtocol {
         var canGoBackToSetupIntro: Bool
         var authenticationRequest: AuthenticationRequest?
         
-        init(onAppearCalled: Bool = false, canGoBackToSetupIntro: Bool = false) {
+        init(onAppearCalled: Bool = false, canGoBackToSetupIntro: Bool = false, authenticationRequest: AuthenticationRequest? = nil) {
             self.onAppearCalled = onAppearCalled
             self.canGoBackToSetupIntro = canGoBackToSetupIntro
+            self.authenticationRequest = authenticationRequest
         }
         
 #if PREVIEW
