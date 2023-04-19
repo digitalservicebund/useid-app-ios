@@ -22,12 +22,28 @@ final class IdentificationOverviewLoadingTests: XCTestCase {
         store.send(.onAppear)
     }
     
-    func testRecievedRequestConfirmationCallsDone() {
+    func testReceiveRequestConfirmationRetrievesCertificateDescription() {
         let request = AuthenticationRequest.preview
         let handler: (FlaggedAttributes) -> Void = { attributes in }
         let store = TestStore(initialState: IdentificationOverviewLoading.State(), reducer: IdentificationOverviewLoading())
-        store.dependencies.uuid = .constant(.zero)
-        store.send(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request))))
+        
+        let mockIDInteractionManager = MockIDInteractionManagerType()
+        stub(mockIDInteractionManager) {
+            $0.retrieveCertificateDescription().thenDoNothing()
+        }
+        store.dependencies.idInteractionManager = mockIDInteractionManager
+        
+        store.send(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request)))) {
+            $0.authenticationRequest = request
+        }
+        
+        verify(mockIDInteractionManager).retrieveCertificateDescription()
+    }
+    
+    func testReceiveCertificateCallsDone() {
+        let request = AuthenticationRequest.preview
+        let handler: (FlaggedAttributes) -> Void = { attributes in }
+        let store = TestStore(initialState: IdentificationOverviewLoading.State(authenticationRequest: .preview), reducer: IdentificationOverviewLoading())
         
         let certificateDescription = CertificateDescription.preview
         store.send(.idInteractionEvent(.success(.certificateDescriptionRetrieved(certificateDescription))))
