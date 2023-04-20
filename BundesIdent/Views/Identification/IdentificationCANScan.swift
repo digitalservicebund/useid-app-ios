@@ -162,13 +162,7 @@ struct IdentificationCANScanView: View {
     var store: Store<IdentificationCANScan.State, IdentificationCANScan.Action>
     
     var body: some View {
-        SharedScanView(store: store.scope(state: \.shared, action: IdentificationCANScan.Action.shared),
-                       instructionsTitle: L10n.Identification.ScanInstructions.title,
-                       instructionsBody: L10n.Identification.ScanInstructions.body,
-                       instructionsScanButtonTitle: L10n.Identification.Scan.scan,
-                       scanTitle: L10n.Identification.Scan.Title.ios,
-                       scanBody: L10n.Identification.Scan.Message.ios,
-                       scanButton: L10n.Identification.Scan.scan)
+        SharedScanView(store: store.scope(state: \.shared, action: IdentificationCANScan.Action.shared))
             .onAppear {
                 ViewStore(store).send(.onAppear)
             }
