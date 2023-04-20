@@ -72,26 +72,6 @@ final class IdentificationPINScanTests: XCTestCase {
         store.receive(.wrongPIN(remainingAttempts: 2))
     }
     
-    func testShowNFCInfo() {
-        let pin = "123456"
-        
-        let store = TestStore(initialState: IdentificationPINScan.State(authenticationInformation: .preview,
-                                                                        pin: pin,
-                                                                        shared: SharedScan.State(isScanning: false)),
-                              reducer: IdentificationPINScan())
-        store.dependencies.analytics = mockAnalyticsClient
-        store.send(.shared(.showNFCInfo)) {
-            $0.alert = AlertState(title: TextState(L10n.HelpNFC.title),
-                                  message: TextState(L10n.HelpNFC.body),
-                                  dismissButton: .cancel(TextState(L10n.General.ok),
-                                                         action: .send(.dismissAlert)))
-        }
-        
-        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification",
-                                                                action: "alertShown",
-                                                                name: "NFCInfo"))
-    }
-    
     func testStartScanTracking() {
         let pin = "123456"
         

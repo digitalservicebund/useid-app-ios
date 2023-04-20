@@ -83,26 +83,6 @@ final class IdentificationCANScanTests: XCTestCase {
         verify(mockIDInteractionManager).interrupt()
     }
     
-    func testShowNFCInfo() {
-        let pin = "123456"
-        let can = "123456"
-        let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
-                                                                        can: can,
-                                                                        shared: SharedScan.State(isScanning: false, showInstructions: false)),
-                              reducer: IdentificationCANScan())
-        store.dependencies.analytics = mockAnalyticsClient
-        store.send(.shared(.showNFCInfo)) {
-            $0.alert = AlertState(title: TextState(L10n.HelpNFC.title),
-                                  message: TextState(L10n.HelpNFC.body),
-                                  dismissButton: .cancel(TextState(L10n.General.ok),
-                                                         action: .send(.dismissAlert)))
-        }
-        
-        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification",
-                                                                action: "alertShown",
-                                                                name: "NFCInfo"))
-    }
-    
     func testStartScanTracking() {
         let pin = "123456"
         let can = "123456"

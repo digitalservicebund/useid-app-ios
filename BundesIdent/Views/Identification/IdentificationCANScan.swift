@@ -84,16 +84,6 @@ struct IdentificationCANScan: ReducerProtocol {
             return .concatenate(.trackEvent(category: "identification", action: "success", analytics: analytics),
                                 EffectTask(value: .dismiss),
                                 .openURL(redirectURL, urlOpener: urlOpener))
-        case .shared(.showNFCInfo):
-            state.alert = AlertState(title: TextState(L10n.HelpNFC.title),
-                                     message: TextState(L10n.HelpNFC.body),
-                                     dismissButton: .cancel(TextState(L10n.General.ok),
-                                                            action: .send(.dismissAlert)))
-            
-            return .trackEvent(category: "identification",
-                               action: "alertShown",
-                               name: "NFCInfo",
-                               analytics: analytics)
         case .cancelIdentification:
             state.alert = AlertState.confirmEndInIdentification(.dismiss)
             return .none

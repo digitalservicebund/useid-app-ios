@@ -20,7 +20,6 @@ struct SharedScan: ReducerProtocol {
     enum Action: Equatable {
         case startScan
         case initiateScan
-        case showNFCInfo
         case showHelp
     }
     
