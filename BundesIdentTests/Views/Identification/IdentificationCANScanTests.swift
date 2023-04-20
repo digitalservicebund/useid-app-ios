@@ -72,14 +72,12 @@ final class IdentificationCANScanTests: XCTestCase {
         let can = "123456"
         let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
                                                                         can: can,
-                                                                        shared: SharedScan.State(startOnAppear: true)),
+                                                                        shared: SharedScan.State()),
                               reducer: IdentificationCANScan())
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.idInteractionManager = mockIDInteractionManager
         
-        store.send(.shared(.startScan)) {
-            $0.shared.startOnAppear = true
-        }
+        store.send(.shared(.startScan))
         
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification",
                                                                 action: "buttonPressed",

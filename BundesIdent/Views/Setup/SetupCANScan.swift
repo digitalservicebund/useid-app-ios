@@ -7,10 +7,8 @@ struct SetupCANScan: ReducerProtocol {
     
     @Dependency(\.analytics) var analytics
     @Dependency(\.issueTracker) var issueTracker
-    @Dependency(\.urlOpener) var urlOpener
     @Dependency(\.storageManager) var storageManager
     @Dependency(\.logger) var logger
-    @Dependency(\.uuid) var uuid
     @Dependency(\.idInteractionManager) var idInteractionManager
     
     struct State: Equatable, IDInteractionHandler {
