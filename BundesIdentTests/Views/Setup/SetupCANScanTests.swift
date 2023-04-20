@@ -63,9 +63,7 @@ class SetupCANScanTests: XCTestCase {
         store.dependencies.storageManager = mockStorageManager
         store.dependencies.idInteractionManager = mockIDInteractionManager
         
-        store.send(.shared(.startScan)) {
-            $0.shared.isScanning = true
-        }
+        store.send(.shared(.startScan))
         
         verify(mockIDInteractionManager).setCAN(can)
     }
@@ -93,9 +91,7 @@ class SetupCANScanTests: XCTestCase {
         
         let cardInsertionCallback: (String) -> Void = { _ in }
         
-        store.send(.shared(.startScan)) {
-            $0.shared.isScanning = true
-        }
+        store.send(.shared(.startScan))
         
         store.send(.scanEvent(.success(.authenticationStarted)))
         store.send(.scanEvent(.success(.cardInsertionRequested)))
@@ -117,7 +113,7 @@ class SetupCANScanTests: XCTestCase {
         let store = TestStore(initialState: SetupCANScan.State(transportPIN: "12345",
                                                                newPIN: "123456",
                                                                can: "111111",
-                                                               shared: SharedScan.State(isScanning: true)),
+                                                               shared: SharedScan.State()),
                               reducer: SetupCANScan())
         
         store.dependencies.idInteractionManager = mockIDInteractionManager
@@ -137,9 +133,7 @@ class SetupCANScanTests: XCTestCase {
             }
         }
         
-        store.send(.scanEvent(.failure(.frameworkError(message: "Fail")))) {
-            $0.shared.isScanning = false
-        }
+        store.send(.scanEvent(.failure(.frameworkError(message: "Fail"))))
         
         store.receive(.error(ScanError.State(errorType: .idCardInteraction(.frameworkError(message: "Fail")), retry: true)))
     }
@@ -163,13 +157,10 @@ class SetupCANScanTests: XCTestCase {
 //
 //        // This is the event that gets published when the user waits too long on the scan overlay or when tapping on the cancel button
 //        store.send(.scanEvent(.success(.requestChangedPIN(remainingAttempts: nil, pinCallback: pinCallback)))) {
-//            $0.shared.isScanning = false
 //            $0.canAndChangedPINCallback = nil
 //        }
 //
-//        store.send(.shared(.startScan)) {
-//            $0.shared.isScanning = true
-//        }
+//        store.send(.shared(.startScan))
 //
 //        store.receive(.shared(.initiateScan))
 //    }

@@ -10,7 +10,6 @@ struct ProgressCaption: Equatable {
 struct SharedScan: ReducerProtocol {
     @Dependency(\.context) var context
     struct State: Equatable {
-        var isScanning: Bool = false
         var scanAvailable: Bool = true
         var showInstructions: Bool = true
         var attempt = 0
@@ -34,7 +33,6 @@ struct SharedScan: ReducerProtocol {
             switch action {
             case .startScan:
                 state.showInstructions.toggle()
-                state.isScanning.toggle()
                 return .none
             default:
                 return .none

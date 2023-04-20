@@ -57,24 +57,21 @@ struct IdentificationPINScan: ReducerProtocol {
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .onAppear:
-            guard !state.shared.showInstructions, !state.shared.isScanning else {
+            guard !state.shared.showInstructions else {
                 return .none
             }
             return EffectTask(value: .shared(.startScan))
         case .shared(.startScan):
             state.shared.showInstructions = false
             state.shared.cardRecognized = false
-            guard !state.shared.isScanning else { return .none }
-            
+
             if state.didAcceptAccessRights {
                 idInteractionManager.setPIN(state.pin)
             } else {
                 state.didAcceptAccessRights = true
                 idInteractionManager.acceptAccessRights()
             }
-            
-            state.shared.isScanning = true
-            
+
             return .trackEvent(category: "identification",
                                action: "buttonPressed",
                                name: "scan",
@@ -83,7 +80,7 @@ struct IdentificationPINScan: ReducerProtocol {
             return handle(state: &state, event: event)
         case .scanEvent(.failure(let error)):
             RedactedIDCardInteractionError(error).flatMap(issueTracker.capture(error:))
-            state.shared.isScanning = false
+
             switch error {
             case .cardDeactivated:
                 return EffectTask(value: .error(ScanError.State(errorType: .cardDeactivated, retry: false)))
@@ -93,7 +90,6 @@ struct IdentificationPINScan: ReducerProtocol {
                 return EffectTask(value: .error(ScanError.State(errorType: .idCardInteraction(error), retry: false)))
             }
         case .wrongPIN:
-            state.shared.isScanning = false
             return .none
         case .identifiedSuccessfully(let redirectURL):
             storageManager.setupCompleted = true
@@ -129,7 +125,6 @@ struct IdentificationPINScan: ReducerProtocol {
             return .none
         case .pinRequested(remainingAttempts: let remainingAttempts):
             logger.info("pinRequested: \(String(describing: remainingAttempts))")
-            state.shared.isScanning = false
             state.shared.scanAvailable = true
             
             let lastRemainingAttempts = state.lastRemainingAttempts
@@ -193,10 +188,6 @@ struct IdentificationScan_Previews: PreviewProvider {
     static var previews: some View {
         IdentificationPINScanView(store: Store(initialState: IdentificationPINScan.State(authenticationInformation: .preview,
                                                                                          pin: "123456"),
-                                               reducer: IdentificationPINScan()))
-        IdentificationPINScanView(store: Store(initialState: IdentificationPINScan.State(authenticationInformation: .preview,
-                                                                                         pin: "123456",
-                                                                                         shared: SharedScan.State(isScanning: true)),
                                                reducer: IdentificationPINScan()))
     }
 }

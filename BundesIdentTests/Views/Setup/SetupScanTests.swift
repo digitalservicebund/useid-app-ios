@@ -52,7 +52,6 @@ class SetupScanTests: XCTestCase {
         store.dependencies.storageManager = mockStorageManager
         
         store.send(.shared(.startScan)) {
-            $0.shared.isScanning = true
             $0.shared.showInstructions = false
         }
         
@@ -77,9 +76,7 @@ class SetupScanTests: XCTestCase {
             requestChangedPINExpectation.fulfill()
         }
         
-        store.send(.scanEvent(.success(.authenticationStarted))) {
-            $0.shared.isScanning = true
-        }
+        store.send(.scanEvent(.success(.authenticationStarted)))
         store.send(.scanEvent(.success(.cardInsertionRequested)))
 
         store.send(.scanEvent(.success(.cardRecognized))) {
@@ -108,7 +105,7 @@ class SetupScanTests: XCTestCase {
     func testScanFail() throws {
         let store = TestStore(initialState: SetupScan.State(transportPIN: "12345",
                                                             newPIN: "123456",
-                                                            shared: SharedScan.State(isScanning: true)),
+                                                            shared: SharedScan.State()),
                               reducer: SetupScan())
         store.dependencies.idInteractionManager = mockIDInteractionManager
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
@@ -127,9 +124,7 @@ class SetupScanTests: XCTestCase {
             }
         }
         
-        store.send(.scanEvent(.failure(.frameworkError(message: "Fail")))) {
-            $0.shared.isScanning = false
-        }
+        store.send(.scanEvent(.failure(.frameworkError(message: "Fail"))))
         
         store.receive(.error(ScanError.State(errorType: .idCardInteraction(.frameworkError(message: "Fail")), retry: true)))
     }

@@ -55,9 +55,6 @@ struct SetupScan: ReducerProtocol {
         case .shared(.startScan):
             state.shared.showInstructions = false
             state.shared.cardRecognized = false
-            guard !state.shared.isScanning else { return .none }
-            state.shared.isScanning = true
-
             if state.shared.attempt > 0 {
                 idInteractionManager.setPIN(state.transportPIN)
                 return .none
@@ -68,8 +65,7 @@ struct SetupScan: ReducerProtocol {
             return .none
         case .scanEvent(.failure(let error)):
             RedactedIDCardInteractionError(error).flatMap(issueTracker.capture(error:))
-            state.shared.isScanning = false
-                
+
             switch error {
             case .cardDeactivated:
                 state.shared.scanAvailable = false
@@ -84,16 +80,13 @@ struct SetupScan: ReducerProtocol {
         case .scanEvent(.success(let event)):
             return handle(state: &state, event: event)
         case .cancelScan:
-            state.shared.isScanning = false
             if state.shared.cardRecognized {
                 issueTracker.capture(error: SetupScanError.cancelAfterCardRecognized)
             }
             return .cancel(id: CancelId.self)
         case .error:
-            state.shared.isScanning = false
             return .cancel(id: CancelId.self)
         case .wrongTransportPIN:
-            state.shared.isScanning = false
             return .none
         case .scannedSuccessfully:
             storageManager.setupCompleted = true
@@ -112,14 +105,11 @@ struct SetupScan: ReducerProtocol {
         switch event {
         case .authenticationStarted:
             logger.info("Authentication started.")
-            state.shared.isScanning = true
         case .cardInsertionRequested:
             logger.info("Card insertion requested.")
-            state.shared.isScanning = true
             state.shared.cardRecognized = false
         case .cardRecognized:
             logger.info("Card recognized.")
-            state.shared.isScanning = true
             state.shared.cardRecognized = true
         case .cardRemoved:
             logger.info("Card removed.")
@@ -133,7 +123,6 @@ struct SetupScan: ReducerProtocol {
             return .none
         case .canRequested:
             logger.info("CAN requested.")
-            state.shared.isScanning = false
             state.shared.scanAvailable = true
             idInteractionManager.interrupt()
             return EffectTask(value: .requestCANAndChangedPIN(pin: state.newPIN))

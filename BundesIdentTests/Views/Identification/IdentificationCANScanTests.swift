@@ -39,30 +39,16 @@ final class IdentificationCANScanTests: XCTestCase {
         let store = TestStore(
             initialState: IdentificationCANScan.State(pin: pin,
                                                       can: can,
-                                                      shared: SharedScan.State(isScanning: false, showInstructions: false)),
+                                                      shared: SharedScan.State(showInstructions: false)),
             reducer: IdentificationCANScan()
         )
         store.dependencies.idInteractionManager = mockIDInteractionManager
         
         store.dependencies.analytics = mockAnalyticsClient
         store.send(.onAppear)
-        store.receive(.shared(.startScan)) {
-            $0.shared.isScanning = true
-        }
+        store.receive(.shared(.startScan))
         
         verify(mockIDInteractionManager).setCAN(can)
-    }
-    
-    func testOnAppearIgnoredWhenAlreadyScanning() throws {
-        let pin = "123456"
-        let can = "123456"
-        let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
-        let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
-                                                                        can: can,
-                                                                        shared: SharedScan.State(isScanning: true, showInstructions: false)),
-                              reducer: IdentificationCANScan())
-        
-        store.send(.onAppear)
     }
     
     func testWrongCAN() throws {
@@ -71,14 +57,12 @@ final class IdentificationCANScanTests: XCTestCase {
     
         let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
                                                                         can: can,
-                                                                        shared: SharedScan.State(isScanning: true, showInstructions: false)),
+                                                                        shared: SharedScan.State(showInstructions: false)),
                               reducer: IdentificationCANScan())
         store.dependencies.uuid = .incrementing
         store.dependencies.idInteractionManager = mockIDInteractionManager
         
-        store.send(.scanEvent(.success(.canRequested))) {
-            $0.shared.isScanning = false
-        }
+        store.send(.scanEvent(.success(.canRequested)))
         
         verify(mockIDInteractionManager).interrupt()
     }
@@ -88,13 +72,12 @@ final class IdentificationCANScanTests: XCTestCase {
         let can = "123456"
         let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
                                                                         can: can,
-                                                                        shared: SharedScan.State(isScanning: false, showInstructions: false)),
+                                                                        shared: SharedScan.State(showInstructions: false)),
                               reducer: IdentificationCANScan())
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.idInteractionManager = mockIDInteractionManager
         
         store.send(.shared(.startScan)) {
-            $0.shared.isScanning = true
             $0.shared.showInstructions = false
         }
         
