@@ -20,6 +20,7 @@ struct SetupScan: ReducerProtocol {
         var shared: SharedScan.State = .init()
         var remainingAttempts: Int?
         var alert: AlertState<SetupScan.Action>?
+        var isScanInitiated = false
 #if PREVIEW
         var availableDebugActions: [ChangePINDebugSequence] = []
 #endif
@@ -55,13 +56,14 @@ struct SetupScan: ReducerProtocol {
         case .shared(.startScan):
             state.shared.showInstructions = false
             state.shared.cardRecognized = false
-            if state.shared.attempt > 0 {
+            if state.isScanInitiated {
                 idInteractionManager.setPIN(state.transportPIN)
                 return .none
             } else {
                 return EffectTask(value: .shared(.initiateScan))
             }
         case .shared(.initiateScan):
+            state.isScanInitiated = true
             return .none
         case .scanEvent(.failure(let error)):
             RedactedIDCardInteractionError(error).flatMap(issueTracker.capture(error:))
