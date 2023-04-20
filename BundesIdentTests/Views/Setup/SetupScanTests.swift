@@ -133,21 +133,4 @@ class SetupScanTests: XCTestCase {
         
         store.receive(.error(ScanError.State(errorType: .idCardInteraction(.frameworkError(message: "Fail")), retry: true)))
     }
-    
-    func testShowNFCInfo() {
-        let store = TestStore(initialState: SetupScan.State(transportPIN: "12345", newPIN: "123456"),
-                              reducer: SetupScan())
-        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
-        store.dependencies.analytics = mockAnalyticsClient
-        store.send(.shared(.showNFCInfo)) {
-            $0.alert = AlertState(title: TextState(L10n.HelpNFC.title),
-                                  message: TextState(L10n.HelpNFC.body),
-                                  dismissButton: .cancel(TextState(L10n.General.ok),
-                                                         action: .send(.dismissAlert)))
-        }
-        
-        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "firstTimeUser",
-                                                                action: "alertShown",
-                                                                name: "NFCInfo"))
-    }
 }
