@@ -106,7 +106,7 @@ struct SetupCANCoordinator: ReducerProtocol {
                         .canScan(SetupCANScan.State(transportPIN: transportPIN,
                                                     newPIN: state.pin,
                                                     can: can,
-                                                    shared: SharedScan.State(showInstructions: false)))
+                                                    shared: SharedScan.State(startOnAppear: true)))
                     )
                 } else {
                     issueTracker.capture(error: IdentificationCANCoordinatorError.pinNilWhenTriedScan)
@@ -125,7 +125,7 @@ struct SetupCANCoordinator: ReducerProtocol {
                     .canScan(SetupCANScan.State(transportPIN: transportPIN,
                                                 newPIN: state.pin,
                                                 can: can,
-                                                shared: SharedScan.State(showInstructions: false)))
+                                                shared: SharedScan.State(startOnAppear: true)))
                 )
                 
                 return .none

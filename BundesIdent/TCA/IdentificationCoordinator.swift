@@ -136,7 +136,7 @@ struct IdentificationCoordinator: ReducerProtocol {
                 state.routes.push(
                     .scan(IdentificationPINScan.State(authenticationInformation: authenticationInformation,
                                                       pin: pin,
-                                                      shared: SharedScan.State(showInstructions: !storageManager.identifiedOnce)))
+                                                      shared: SharedScan.State(startOnAppear: storageManager.identifiedOnce)))
                 )
                 return .none
             case .routeAction(_, action: .scan(.error(let errorState))):

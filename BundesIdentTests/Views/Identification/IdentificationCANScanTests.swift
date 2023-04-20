@@ -39,7 +39,7 @@ final class IdentificationCANScanTests: XCTestCase {
         let store = TestStore(
             initialState: IdentificationCANScan.State(pin: pin,
                                                       can: can,
-                                                      shared: SharedScan.State(showInstructions: false)),
+                                                      shared: SharedScan.State(startOnAppear: true)),
             reducer: IdentificationCANScan()
         )
         store.dependencies.idInteractionManager = mockIDInteractionManager
@@ -57,7 +57,7 @@ final class IdentificationCANScanTests: XCTestCase {
     
         let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
                                                                         can: can,
-                                                                        shared: SharedScan.State(showInstructions: false)),
+                                                                        shared: SharedScan.State(startOnAppear: true)),
                               reducer: IdentificationCANScan())
         store.dependencies.uuid = .incrementing
         store.dependencies.idInteractionManager = mockIDInteractionManager
@@ -72,13 +72,13 @@ final class IdentificationCANScanTests: XCTestCase {
         let can = "123456"
         let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
                                                                         can: can,
-                                                                        shared: SharedScan.State(showInstructions: false)),
+                                                                        shared: SharedScan.State(startOnAppear: true)),
                               reducer: IdentificationCANScan())
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.idInteractionManager = mockIDInteractionManager
         
         store.send(.shared(.startScan)) {
-            $0.shared.showInstructions = false
+            $0.shared.startOnAppear = true
         }
         
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification",

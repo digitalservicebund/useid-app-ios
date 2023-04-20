@@ -52,7 +52,7 @@ class SetupScanTests: XCTestCase {
         store.dependencies.storageManager = mockStorageManager
         
         store.send(.shared(.startScan)) {
-            $0.shared.showInstructions = false
+            $0.shared.startOnAppear = true
         }
         
         store.receive(.shared(.initiateScan))

@@ -135,7 +135,7 @@ class IdentificationCoordinatorTests: XCTestCase {
             $0.routes.append(.push(.scan(IdentificationPINScan.State(
                 authenticationInformation: authenticationInformation,
                 pin: "123456",
-                shared: SharedScan.State(showInstructions: false)
+                shared: SharedScan.State(startOnAppear: true)
             ))))
         }
     }
