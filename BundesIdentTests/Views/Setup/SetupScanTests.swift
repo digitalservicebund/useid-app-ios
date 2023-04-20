@@ -90,12 +90,7 @@ class SetupScanTests: XCTestCase {
             $0.remainingAttempts = 3
         }
 
-        store.send(.scanEvent(.success(.cardRemoved))) {
-            $0.shared.showProgressCaption = ProgressCaption(title: L10n.FirstTimeUser.Scan.Progress.title,
-                                                            body: L10n.FirstTimeUser.Scan.Progress.body)
-        }
         store.send(.scanEvent(.success(.cardInsertionRequested))) {
-            $0.shared.showProgressCaption = nil
             $0.shared.cardRecognized = false
         }
         store.send(.scanEvent(.success(.cardRecognized))) {

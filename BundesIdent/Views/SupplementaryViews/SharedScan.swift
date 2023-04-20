@@ -12,7 +12,6 @@ struct SharedScan: ReducerProtocol {
     struct State: Equatable {
         var isScanning: Bool = false
         var scanAvailable: Bool = true
-        var showProgressCaption: ProgressCaption?
         var showInstructions: Bool = true
         var attempt = 0
         var cardRecognized: Bool = false

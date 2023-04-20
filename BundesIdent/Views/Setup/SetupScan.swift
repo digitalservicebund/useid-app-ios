@@ -124,7 +124,6 @@ struct SetupScan: ReducerProtocol {
             state.shared.isScanning = true
         case .cardInsertionRequested:
             logger.info("Card insertion requested.")
-            state.shared.showProgressCaption = nil
             state.shared.isScanning = true
             state.shared.cardRecognized = false
         case .cardRecognized:
@@ -132,8 +131,6 @@ struct SetupScan: ReducerProtocol {
             state.shared.isScanning = true
             state.shared.cardRecognized = true
         case .cardRemoved:
-            state.shared.showProgressCaption = ProgressCaption(title: L10n.FirstTimeUser.Scan.Progress.title,
-                                                               body: L10n.FirstTimeUser.Scan.Progress.body)
             logger.info("Card removed.")
         case .pinChangeSucceeded:
             return EffectTask(value: .scannedSuccessfully)
