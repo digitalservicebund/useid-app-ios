@@ -271,7 +271,6 @@ class IdentificationCoordinatorTests: XCTestCase {
     func testEndOnIncorrectPIN() {
         let pin = "123456"
         let authenticationInformation = AuthenticationInformation.preview
-        let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           pin: pin,
@@ -292,7 +291,6 @@ class IdentificationCoordinatorTests: XCTestCase {
     func testConfirmEndOnIncorrectPIN() {
         let pin = "123456"
         let authenticationInformation = AuthenticationInformation.preview
-        let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           pin: pin,
@@ -331,8 +329,6 @@ class IdentificationCoordinatorTests: XCTestCase {
     func testEnterIncorrectPINToPinForgotten() throws {
         let pin = "123456"
         let authenticationInformation = AuthenticationInformation.preview
-        let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
-        let newPINCANCallback = PINCANCallback(id: UUID(number: 1), callback: { _, _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           pin: pin,
@@ -365,8 +361,6 @@ class IdentificationCoordinatorTests: XCTestCase {
     func testRequestPINAndCANFromImmediateThirdAttemptToCANIntro() throws {
         let pin = "123456"
         let authenticationInformation = AuthenticationInformation.preview
-        let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
-        let newPINCANCallback = PINCANCallback(id: UUID(number: 1), callback: { _, _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           pin: pin,

@@ -55,7 +55,9 @@ class SetupScanTests: XCTestCase {
             $0.shared.startOnAppear = true
         }
         
-        store.receive(.shared(.initiateScan))
+        store.receive(.shared(.initiateScan)) {
+            $0.isScanInitiated = true
+        }
     }
     
     func testChangePINSuccess() throws {
@@ -69,13 +71,11 @@ class SetupScanTests: XCTestCase {
         store.dependencies.idInteractionManager = mockIDInteractionManager
         store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
         
-        let requestChangedPINExpectation = expectation(description: "requestCardInsertion callback")
-        let pinCallback: (String, String) -> Void = { actualOldPIN, actualNewPIN in
-            XCTAssertEqual(oldPIN, actualOldPIN)
-            XCTAssertEqual(newPIN, actualNewPIN)
-            requestChangedPINExpectation.fulfill()
+        stub(mockIDInteractionManager) { mock in
+            mock.setPIN(anyString()).thenDoNothing()
+            mock.setNewPIN(anyString()).thenDoNothing()
         }
-        
+
         store.send(.scanEvent(.success(.authenticationStarted)))
         store.send(.scanEvent(.success(.cardInsertionRequested)))
 
@@ -93,13 +93,15 @@ class SetupScanTests: XCTestCase {
         store.send(.scanEvent(.success(.cardRecognized))) {
             $0.shared.cardRecognized = true
         }
+        store.send(.scanEvent(.success(.newPINRequested)))
         store.send(.scanEvent(.success(.pinChangeSucceeded)))
 
         store.receive(.scannedSuccessfully)
 
         verify(mockStorageManager).setupCompleted.set(true)
-
-        wait(for: [requestChangedPINExpectation], timeout: 0.0)
+        verify(mockIDInteractionManager).setPIN(oldPIN)
+        verify(mockIDInteractionManager).setNewPIN(newPIN)
+        verifyNoMoreInteractions(mockIDInteractionManager)
     }
     
     func testScanFail() throws {

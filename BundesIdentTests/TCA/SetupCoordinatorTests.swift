@@ -240,16 +240,17 @@ class SetupCoordinatorTests: XCTestCase {
             }
         }
         
-        store.send(.routeAction(0, action: .scan(.shared(.initiateScan))))
+        store.send(.routeAction(0, action: .scan(.shared(.initiateScan)))) {
+            guard case .scan(var scanState) = $0.states[0].screen else { return XCTFail() }
+            scanState.isScanInitiated = true
+            $0.states[0].screen = .scan(scanState)
+        }
         
         scheduler.advance()
         
         store.receive(.idInteractionEvent(.success(.authenticationStarted)))
         
-        store.receive(.routeAction(0, action: .scan(.scanEvent(.success(.authenticationStarted))))) {
-            guard case .scan(var scanState) = $0.states[0].screen else { return XCTFail() }
-            $0.states[0].screen = .scan(scanState)
-        }
+        store.receive(.routeAction(0, action: .scan(.scanEvent(.success(.authenticationStarted)))))
     }
     
     func testStartingCANFlow() {
@@ -335,8 +336,12 @@ class SetupCoordinatorTests: XCTestCase {
         store.dependencies.idInteractionManager = mockIDInteractionManager
         store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
         
-        store.send(.routeAction(0, action: .scan(.shared(.initiateScan))))
-        
+        store.send(.routeAction(0, action: .scan(.shared(.initiateScan)))) {
+            guard case .scan(var scanState) = $0.states[0].screen else { return XCTFail() }
+            scanState.isScanInitiated = true
+            $0.states[0].screen = .scan(scanState)
+        }
+
         scheduler.advance()
         
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "firstTimeUser",
