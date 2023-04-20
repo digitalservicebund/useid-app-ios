@@ -49,13 +49,11 @@ struct SetupCANScan: ReducerProtocol {
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .onAppear:
-            guard !state.shared.showInstructions, !state.shared.isScanning else {
+            guard !state.shared.showInstructions else {
                 return .none
             }
             return EffectTask(value: .shared(.startScan))
         case .shared(.startScan):
-            guard !state.shared.isScanning else { return .none }
-            state.shared.isScanning = true
             idInteractionManager.setCAN(state.can)
             return .trackEvent(category: "Setup",
                                action: "buttonPressed",
@@ -65,8 +63,7 @@ struct SetupCANScan: ReducerProtocol {
             return handle(state: &state, event: event)
         case .scanEvent(.failure(let error)):
             RedactedIDCardInteractionError(error).flatMap(issueTracker.capture(error:))
-            state.shared.isScanning = false
-            
+
             switch error {
             case .cardDeactivated:
                 state.shared.scanAvailable = false
@@ -79,7 +76,6 @@ struct SetupCANScan: ReducerProtocol {
                 return EffectTask(value: .error(ScanError.State(errorType: .idCardInteraction(error), retry: state.shared.scanAvailable)))
             }
         case .wrongPIN:
-            state.shared.isScanning = false
             return .none
         case .scannedSuccessfully:
             storageManager.setupCompleted = true
@@ -103,16 +99,13 @@ struct SetupCANScan: ReducerProtocol {
         switch event {
         case .authenticationStarted:
             logger.info("Authentication started.")
-            state.shared.isScanning = true
         case .pinChangeStarted:
             logger.info("PIN Change started.")
         case .cardInsertionRequested:
             logger.info("Card insertion requested.")
-            state.shared.isScanning = true
             state.shared.cardRecognized = false
         case .cardRecognized:
             logger.info("Card recognized.")
-            state.shared.isScanning = true
             state.shared.cardRecognized = true
         case .cardRemoved:
             logger.info("Card removed.")
@@ -120,31 +113,10 @@ struct SetupCANScan: ReducerProtocol {
         case .pinChangeSucceeded:
             return EffectTask(value: .scannedSuccessfully)
         case .canRequested:
-            // TODO: Should’t go into incorrect CAN when resume after cancellation
             logger.info("Wrong CAN provided")
-            state.shared.isScanning = false
             return EffectTask(value: .incorrectCAN)
         case .pinRequested:
             idInteractionManager.setPIN(state.transportPIN)
-            return .none
-        case .pinRequested:
-            // TODO: callback
-//            let identifiedCallback = CANAndChangedPINCallback(id: uuid()) { payload in
-//                pinCallback(payload.oldPIN, payload.can, payload.newPIN)
-//            }
-//            if state.canAndChangedPINCallback == nil {
-//                logger.info("CAN and changed PIN requested after cancelling scan. Directly providing previous values to continue the flow.")
-//                identifiedCallback(CANAndChangedPINCallbackPayload(can: state.can,
-//                                                                   oldPIN: state.transportPIN,
-//                                                                   newPIN: state.newPIN))
-//                state.shared.isScanning = true
-//                return .none
-//            } else {
-//                logger.info("Wrong CAN provided")
-//                state.canAndChangedPINCallback = identifiedCallback
-//                state.shared.isScanning = false
-//                return EffectTask(value: .incorrectCAN(callback: identifiedCallback))
-//            }
             return .none
         case .pukRequested:
             logger.info("PUK requested, so card is blocked. Callback not implemented yet.")
@@ -197,13 +169,7 @@ struct SetupCANScan_Previews: PreviewProvider {
                                                                        newPIN: "123456",
                                                                        can: "123456"),
                                       reducer: SetupCANScan()))
-        
-        SetupCANScanView(store: Store(initialState: SetupCANScan.State(transportPIN: "12345",
-                                                                       newPIN: "123456",
-                                                                       can: "123456",
-                                                                       shared: SharedScan.State(isScanning: true)),
-                                      reducer: SetupCANScan()))
-    }
+        }
 }
 
 #endif

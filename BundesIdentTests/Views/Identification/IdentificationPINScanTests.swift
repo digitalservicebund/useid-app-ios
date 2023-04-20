@@ -31,29 +31,19 @@ final class IdentificationPINScanTests: XCTestCase {
         let store = TestStore(
             initialState: IdentificationPINScan.State(authenticationInformation: .preview,
                                                       pin: pin,
-                                                      shared: SharedScan.State(isScanning: false, showInstructions: true)),
+                                                      shared: SharedScan.State(showInstructions: true)),
             reducer: IdentificationPINScan()
         )
         
         store.send(.onAppear)
     }
-    
-    func testOnAppearIgnoredWhenAlreadyScanning() throws {
-        let pin = "123456"
-        let store = TestStore(initialState: IdentificationPINScan.State(authenticationInformation: .preview,
-                                                                        pin: pin,
-                                                                        shared: SharedScan.State(isScanning: true)),
-                              reducer: IdentificationPINScan())
-        
-        store.send(.onAppear)
-    }
-    
+
     func testWrongPIN() throws {
         let pin = "123456"
         let store = TestStore(initialState: IdentificationPINScan.State(authenticationInformation: .preview,
                                                                         pin: pin,
                                                                         lastRemainingAttempts: 3,
-                                                                        shared: SharedScan.State(isScanning: true)),
+                                                                        shared: SharedScan.State()),
                               reducer: IdentificationPINScan())
         store.dependencies.uuid = .incrementing
         store.dependencies.idInteractionManager = mockIDInteractionManager
@@ -63,7 +53,6 @@ final class IdentificationPINScanTests: XCTestCase {
         }
         
         store.send(.scanEvent(.success(.pinRequested(remainingAttempts: 2)))) {
-            $0.shared.isScanning = false
             $0.lastRemainingAttempts = 2
         }
         
@@ -77,7 +66,7 @@ final class IdentificationPINScanTests: XCTestCase {
         
         let store = TestStore(initialState: IdentificationPINScan.State(authenticationInformation: .preview,
                                                                         pin: pin,
-                                                                        shared: SharedScan.State(isScanning: false)),
+                                                                        shared: SharedScan.State()),
                               reducer: IdentificationPINScan())
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.idInteractionManager = mockIDInteractionManager
@@ -87,7 +76,6 @@ final class IdentificationPINScanTests: XCTestCase {
         
         store.send(.shared(.startScan)) {
             $0.didAcceptAccessRights = true
-            $0.shared.isScanning = true
             $0.shared.showInstructions = false
         }
         

@@ -248,7 +248,6 @@ class SetupCoordinatorTests: XCTestCase {
         
         store.receive(.routeAction(0, action: .scan(.scanEvent(.success(.authenticationStarted))))) {
             guard case .scan(var scanState) = $0.states[0].screen else { return XCTFail() }
-            scanState.shared.isScanning = true
             $0.states[0].screen = .scan(scanState)
         }
     }
@@ -259,7 +258,7 @@ class SetupCoordinatorTests: XCTestCase {
         let store = TestStore(initialState: SetupCoordinator.State(transportPIN: oldPIN,
                                                                    tokenURL: demoTokenURL,
                                                                    states: [
-                                                                       .root(.scan(SetupScan.State(transportPIN: oldPIN, newPIN: newPIN, shared: SharedScan.State(isScanning: true))))
+                                                                       .root(.scan(SetupScan.State(transportPIN: oldPIN, newPIN: newPIN, shared: SharedScan.State())))
                                                                    ]),
                               reducer: SetupCoordinator())
         
@@ -280,7 +279,6 @@ class SetupCoordinatorTests: XCTestCase {
         
         store.send(.routeAction(0, action: .scan(.scanEvent(.success(.canRequested))))) {
             guard case .scan(var scanState) = $0.states[0].screen else { return XCTFail() }
-            scanState.shared.isScanning = false
             $0.states[0].screen = .scan(scanState)
         }
         
@@ -435,7 +433,6 @@ class SetupCoordinatorTests: XCTestCase {
         store.receive(.routeAction(0, action: .setupCANCoordinator(.routeAction(0, action: .canScan(.scanEvent(.success(.authenticationStarted))))))) {
             guard case .setupCANCoordinator(var setupCANCoordinatorState) = $0.states[0].screen else { return XCTFail() }
             guard case .canScan(var canScanState) = setupCANCoordinatorState.states[0].screen else { return XCTFail() }
-            canScanState.shared.isScanning = true
             setupCANCoordinatorState.states[0].screen = .canScan(canScanState)
             $0.states[0].screen = .setupCANCoordinator(setupCANCoordinatorState)
         }
