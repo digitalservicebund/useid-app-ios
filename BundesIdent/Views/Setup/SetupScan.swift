@@ -196,13 +196,7 @@ struct SetupScanView: View {
     }
     
     var body: some View {
-        SharedScanView(store: store.scope(state: \.shared, action: SetupScan.Action.shared),
-                       instructionsTitle: L10n.FirstTimeUser.ScanInstructions.title,
-                       instructionsBody: L10n.FirstTimeUser.ScanInstructions.body,
-                       instructionsScanButtonTitle: L10n.FirstTimeUser.Scan.scan,
-                       scanTitle: L10n.FirstTimeUser.Scan.Title.ios,
-                       scanBody: L10n.FirstTimeUser.Scan.Body.ios,
-                       scanButton: L10n.FirstTimeUser.Scan.scan)
+        SharedScanView(store: store.scope(state: \.shared, action: SetupScan.Action.shared))
             .interactiveDismissDisabled()
             .onAppear {
                 ViewStore(store).send(.onAppear)
