@@ -57,12 +57,9 @@ struct IdentificationPINScan: ReducerProtocol {
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .onAppear:
-            guard !state.shared.showInstructions else {
-                return .none
-            }
-            return EffectTask(value: .shared(.startScan))
+            return state.shared.startOnAppear ? EffectTask(value: .shared(.startScan)) : .none
         case .shared(.startScan):
-            state.shared.showInstructions = false
+            state.shared.startOnAppear = true
             state.shared.cardRecognized = false
 
             if state.didAcceptAccessRights {

@@ -54,7 +54,7 @@ struct SetupScan: ReducerProtocol {
         case .onAppear:
             return .none
         case .shared(.startScan):
-            state.shared.showInstructions = false
+            state.shared.startOnAppear = true
             state.shared.cardRecognized = false
             if state.isScanInitiated {
                 idInteractionManager.setPIN(state.transportPIN)

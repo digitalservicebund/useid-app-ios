@@ -34,7 +34,7 @@ class SetupCANCoordinatorTests: XCTestCase {
                 .canScan(SetupCANScan.State(transportPIN: transportPIN,
                                             newPIN: pin,
                                             can: can,
-                                            shared: .init(showInstructions: false)))
+                                            shared: .init(startOnAppear: true)))
             ))
         }
         
@@ -78,7 +78,7 @@ class SetupCANCoordinatorTests: XCTestCase {
                 .canScan(SetupCANScan.State(transportPIN: newTransportPIN,
                                             newPIN: pin,
                                             can: can,
-                                            shared: .init(showInstructions: false)))
+                                            shared: .init(startOnAppear: true)))
             ))
         }
     }

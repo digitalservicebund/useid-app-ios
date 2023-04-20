@@ -10,10 +10,10 @@ struct ProgressCaption: Equatable {
 struct SharedScan: ReducerProtocol {
     @Dependency(\.context) var context
     struct State: Equatable {
-        var scanAvailable: Bool = true
-        var showInstructions: Bool = true
+        var scanAvailable = true
+        var startOnAppear = false
         var attempt = 0
-        var cardRecognized: Bool = false
+        var cardRecognized = false
     }
 
     enum Action: Equatable {
@@ -32,7 +32,7 @@ struct SharedScan: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .startScan:
-                state.showInstructions.toggle()
+                state.startOnAppear.toggle()
                 return .none
             default:
                 return .none

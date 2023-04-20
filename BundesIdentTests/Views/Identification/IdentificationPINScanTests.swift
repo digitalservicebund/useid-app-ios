@@ -31,7 +31,7 @@ final class IdentificationPINScanTests: XCTestCase {
         let store = TestStore(
             initialState: IdentificationPINScan.State(authenticationInformation: .preview,
                                                       pin: pin,
-                                                      shared: SharedScan.State(showInstructions: true)),
+                                                      shared: SharedScan.State()),
             reducer: IdentificationPINScan()
         )
         
@@ -76,7 +76,7 @@ final class IdentificationPINScanTests: XCTestCase {
         
         store.send(.shared(.startScan)) {
             $0.didAcceptAccessRights = true
-            $0.shared.showInstructions = false
+            $0.shared.startOnAppear = true
         }
         
         verify(mockIDInteractionManager).acceptAccessRights()

@@ -66,7 +66,7 @@ class IdentificationCANCoordinatorTests: XCTestCase {
             $0.routes.append(.push(
                 .canScan(IdentificationCANScan.State(pin: pin,
                                                      can: can,
-                                                     shared: SharedScan.State(showInstructions: false)))))
+                                                     shared: SharedScan.State(startOnAppear: true)))))
         }
         
         store.send(.routeAction(2, action: .canScan(.scanEvent(.success(.canRequested))))) {
@@ -141,7 +141,7 @@ class IdentificationCANCoordinatorTests: XCTestCase {
             .push(.canInput(CANInput.State(pushesToPINEntry: false))),
             .push(.canScan(IdentificationCANScan.State(pin: pin,
                                                        can: can,
-                                                       shared: SharedScan.State(showInstructions: false)))),
+                                                       shared: SharedScan.State(startOnAppear: true)))),
             .sheet(.canIncorrectInput(CANIncorrectInput.State()))
         ]
         
