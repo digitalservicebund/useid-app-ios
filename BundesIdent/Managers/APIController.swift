@@ -162,7 +162,7 @@ class APIController: APIControllerType {
     }
     
     func validateTCTokenURL(sessionId: String, tokenId: String) async throws -> Bool {
-        let req = try HTTPRequest(method: .get, URI: "/identification/sessions/{sessionId}/tokens/{tokenId}", variables: ["sessionId": sessionId, "tokenId": tokenId])
+        let req = try HTTPRequest(method: .get, URI: "/sessions/{sessionId}/time-based-tokens/{tokenId}", variables: ["sessionId": sessionId, "tokenId": tokenId])
         let response = try await req.fetch(client)
         
         switch response.statusCode {
