@@ -176,7 +176,7 @@ class APIController: APIControllerType {
     
     func retrieveTransactionInfo(sessionId: String) async throws -> TransactionInfo {
         return TransactionInfo.preview
-        let req = try HTTPRequest(method: .get, URI: "/identification/sessions/{sessionId}/transaction-info", variables: ["sessionId": sessionId])
+        let req = try HTTPRequest(method: .get, URI: "/transaction-infos/{sessionId}", variables: ["sessionId": sessionId])
         let response = try await req.fetch(client)
         let transactionInfo = try response.decode(TransactionInfo.self, decoder: jsonDecoder)
         return transactionInfo
