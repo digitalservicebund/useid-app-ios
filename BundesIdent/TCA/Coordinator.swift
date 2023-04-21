@@ -3,7 +3,6 @@ import TCACoordinators
 import SwiftUI
 import Analytics
 import Sentry
-import OpenEcard
 
 enum HandleURLError: Error, CustomStringConvertible, CustomNSError {
     case componentsInvalid

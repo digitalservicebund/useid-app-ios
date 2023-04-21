@@ -1,7 +1,6 @@
 import Dependencies
 import Analytics
 import UIKit
-import OpenEcard
 import OSLog
 
 enum LoggerKey: DependencyKey {
