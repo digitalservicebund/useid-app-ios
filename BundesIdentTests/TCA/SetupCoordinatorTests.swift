@@ -275,18 +275,14 @@ class SetupCoordinatorTests: XCTestCase {
         stub(mockPreviewIDInteractionManager) {
             $0.isDebugModeEnabled.get.thenReturn(false)
         }
-        
-        let requestCANAndChangedPINCallback: (String, String, String) -> Void = { _, _, _ in }
-        
-        store.send(.routeAction(0, action: .scan(.scanEvent(.success(.canRequested))))) {
-            guard case .scan(var scanState) = $0.states[0].screen else { return XCTFail() }
-            $0.states[0].screen = .scan(scanState)
+        stub(mockIDInteractionManager) {
+            $0.interrupt().thenDoNothing()
         }
+
+        store.send(.routeAction(0, action: .scan(.scanEvent(.success(.canRequested)))))
         
         scheduler.advance(by: .seconds(2))
-        
-        let canAndChangedPINCallback = CANAndChangedPINCallback(id: .zero) { payload in }
-        
+                
         store.receive(.routeAction(0, action: .scan(.requestCANAndChangedPIN(pin: newPIN)))) {
             $0.states.append(.push(.setupCANCoordinator(SetupCANCoordinator.State(
                 pin: newPIN,
