@@ -435,12 +435,7 @@ class SetupCoordinatorTests: XCTestCase {
         
         store.receive(.idInteractionEvent(.success(.authenticationStarted)))
         
-        store.receive(.routeAction(0, action: .setupCANCoordinator(.routeAction(0, action: .canScan(.scanEvent(.success(.authenticationStarted))))))) {
-            guard case .setupCANCoordinator(var setupCANCoordinatorState) = $0.states[0].screen else { return XCTFail() }
-            guard case .canScan(var canScanState) = setupCANCoordinatorState.states[0].screen else { return XCTFail() }
-            setupCANCoordinatorState.states[0].screen = .canScan(canScanState)
-            $0.states[0].screen = .setupCANCoordinator(setupCANCoordinatorState)
-        }
+        store.receive(.routeAction(0, action: .setupCANCoordinator(.routeAction(0, action: .canScan(.scanEvent(.success(.authenticationStarted)))))))
         
         verify(mockIDInteractionManager).changePIN(messages: any())
         verify(mockAnalyticsClient).track(event: any())
