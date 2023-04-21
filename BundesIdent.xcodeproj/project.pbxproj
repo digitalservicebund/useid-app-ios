@@ -86,7 +86,6 @@
 		E1531DC629AF695E008D5185 /* SetupCANScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1531DC529AF695E008D5185 /* SetupCANScanTests.swift */; };
 		E156DD02287EF9C200C88914 /* XCUITestDeeplinking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E156DD01287EF9C200C88914 /* XCUITestDeeplinking.swift */; };
 		E15776A0286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */; };
-		E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */ = {isa = PBXBuildFile; productRef = E15C22FF2850F5A8005CCBB9 /* OpenEcard */; };
 		E15D0EBC29095F740088EF4E /* IdentificationOverviewError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15D0EBB29095F740088EF4E /* IdentificationOverviewError.swift */; };
 		E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */; };
 		E1658735299508D100FCF9C8 /* CancelId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1658734299508D100FCF9C8 /* CancelId.swift */; };
@@ -386,7 +385,6 @@
 				E1BC3D8628B7E919007A7B39 /* LicensePlistViewController in Frameworks */,
 				D2B76A7A28BE4B93000B442D /* Analytics in Frameworks */,
 				E13E738029D43B69008460CD /* AusweisApp2SDKWrapper in Frameworks */,
-				E15C23002850F5A8005CCBB9 /* OpenEcard in Frameworks */,
 				B9F5055829361F69009FE297 /* TCACoordinators in Frameworks */,
 				E128E0BA288941DC00C5195F /* Sentry in Frameworks */,
 			);
@@ -892,7 +890,6 @@
 			);
 			name = BundesIdent;
 			packageProductDependencies = (
-				E15C22FF2850F5A8005CCBB9 /* OpenEcard */,
 				E128E0B9288941DC00C5195F /* Sentry */,
 				E1BC3D8528B7E919007A7B39 /* LicensePlistViewController */,
 				D2B76A7928BE4B93000B442D /* Analytics */,
@@ -939,7 +936,6 @@
 			mainGroup = E5CEB271281041330076B9FE;
 			packageReferences = (
 				E13925B928410F3F00161F5C /* XCRemoteSwiftPackageReference "Cuckoo" */,
-				E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */,
 				E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */,
 				E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
@@ -1968,14 +1964,6 @@
 				minimumVersion = 2.0.0;
 			};
 		};
-		E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/TICESoftware/open-ecard-ios";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.1.2;
-			};
-		};
 		E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/yhirano/LicensePlistViewController.git";
@@ -2020,11 +2008,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */;
 			productName = MarkdownUI;
-		};
-		E15C22FF2850F5A8005CCBB9 /* OpenEcard */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */;
-			productName = OpenEcard;
 		};
 		E1BC3D8528B7E919007A7B39 /* LicensePlistViewController */ = {
 			isa = XCSwiftPackageProductDependency;

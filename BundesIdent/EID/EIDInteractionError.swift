@@ -1,5 +1,11 @@
 import Foundation
-import OpenEcard
+
+enum ActivationResultCode: String {
+    case INTERNAL_ERROR
+    case DEPENDING_HOST_UNREACHABLE
+    case CLIENT_ERROR
+    case BAD_REQUEST
+}
 
 enum EIDInteractionError: Error, Equatable {
     case unknownReader

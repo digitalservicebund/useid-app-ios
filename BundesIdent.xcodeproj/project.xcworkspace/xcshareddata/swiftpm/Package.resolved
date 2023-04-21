@@ -73,15 +73,6 @@
       }
     },
     {
-      "identity" : "open-ecard-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/TICESoftware/open-ecard-ios",
-      "state" : {
-        "revision" : "e9065acbc4bfacbfe6c4d5b90746692293eb852e",
-        "version" : "2.1.2"
-      }
-    },
-    {
       "identity" : "sentry-cocoa",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
