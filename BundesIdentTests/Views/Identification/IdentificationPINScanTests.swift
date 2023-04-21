@@ -24,10 +24,7 @@ final class IdentificationPINScanTests: XCTestCase {
     }
     
     func testOnAppearDoesNotTriggerScanningWhenInstructionsShown() throws {
-        let request = EIDAuthenticationRequest.preview
         let pin = "123456"
-        let pinCallback = PINCallback(id: UUID(number: 0)) { pin in
-        }
         let store = TestStore(
             initialState: IdentificationPINScan.State(authenticationInformation: .preview,
                                                       pin: pin,

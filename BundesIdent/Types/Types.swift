@@ -4,6 +4,7 @@ import Foundation
 import Combine
 import Sentry
 
+
 protocol IDInteractionManagerType {
     func identify(tokenURL: URL, messages: ScanOverlayMessages) -> EIDInteractionPublisher
     func changePIN(messages: ScanOverlayMessages) -> EIDInteractionPublisher

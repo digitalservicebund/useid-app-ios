@@ -1,5 +1,4 @@
 import Foundation
-import OpenEcard
 import Combine
 
 #if PREVIEW
@@ -101,26 +100,6 @@ class DebugIDInteractionManager: IDInteractionManagerType {
 
 #if DEBUG || PREVIEW
 
-extension EIDAuthenticationRequest {
-    static let preview = EIDAuthenticationRequest(
-        issuer: "Issuer",
-        issuerURL: "https://issuer.com",
-        subject: "Subject",
-        subjectURL: "https://subject.com",
-        validity: "Validity",
-        terms: AuthenticationTerms.text("Terms"),
-        transactionInfo: nil,
-        readAttributes: [
-            .documentType: true,
-            .issuingCountry: true,
-            .validUntil: true,
-            .givenNames: true,
-            .familyName: false,
-            .artisticName: false
-        ]
-    )
-}
-
 extension AuthenticationInformation {
     static var preview: AuthenticationInformation = .init(request: .preview, certificateDescription: .preview)
 }
@@ -139,7 +118,7 @@ extension CertificateDescription {
         purpose: "Purpose",
         subjectName: "Subject",
         subjectUrl: URL(string: "https://subject.com")!,
-        termsOfUsage: AuthenticationTerms.text("Terms").description,
+        termsOfUsage: "Terms",
         effectiveDate: Date(),
         expirationDate: Date().addingTimeInterval(24 * 60 * 60)
     )
