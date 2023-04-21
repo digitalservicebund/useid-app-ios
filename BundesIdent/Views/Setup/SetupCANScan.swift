@@ -109,6 +109,7 @@ struct SetupCANScan: ReducerProtocol {
             return EffectTask(value: .scannedSuccessfully)
         case .canRequested:
             logger.info("Wrong CAN provided")
+            idInteractionManager.interrupt()
             return EffectTask(value: .incorrectCAN)
         case .pinRequested:
             idInteractionManager.setPIN(state.transportPIN)
