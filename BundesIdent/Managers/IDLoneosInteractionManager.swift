@@ -52,20 +52,19 @@ class IDInteractionManager: IDInteractionManagerType {
     }
     
     func identify(tokenURL: URL, messages: ScanOverlayMessages) -> EIDInteractionPublisher {
-        return start(workflow: .authentification(tcTokenUrl: tokenURL,
-                                                 developerMode: false,
-                                                 userInfoMessages: AA2UserInfoMessages(messages),
-                                                 status: true))
+        start(workflow: .authentification(tcTokenUrl: tokenURL,
+                                          developerMode: false,
+                                          userInfoMessages: AA2UserInfoMessages(messages),
+                                          status: true))
     }
     
     func changePIN(messages: ScanOverlayMessages) -> EIDInteractionPublisher {
-        return start(workflow: .changePIN(userInfoMessages: .init(messages), status: true))
+        start(workflow: .changePIN(userInfoMessages: .init(messages), status: true))
     }
 
     private func start(workflow: Workflow) -> EIDInteractionPublisher {
         if workflowController.isStarted {
-            // This happens if the user cancels inside the system scan overlay and taps CTA again.
-            // TODO: Update when AA2 SDK handling of Cancel button is fixes
+            logger.error("Starting the flow while it was already started.")
             workflowController.stop()
             if let handler = currentHandler {
                 workflowController.unregisterCallbacks(handler)
@@ -78,14 +77,15 @@ class IDInteractionManager: IDInteractionManagerType {
 
         workflowController.registerCallbacks(handler)
         workflowController.start()
-
-        return handler.subject.handleEvents(receiveCompletion: { _ in
+        
+        let stopWorkflow = { [weak self] in
+            guard let self else { return }
             self.workflowController.stop()
             self.workflowController.unregisterCallbacks(handler)
             self.currentHandler = nil
-        }, receiveCancel: {
-            self.workflowController.cancel()
-        }).eraseToAnyPublisher()
+        }
+
+        return handler.subject.handleEvents(receiveCompletion: { _ in stopWorkflow() }, receiveCancel: stopWorkflow).eraseToAnyPublisher()
     }
 
     func setPIN(_ pin: String) {
