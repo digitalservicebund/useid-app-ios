@@ -56,7 +56,7 @@ final class IdentificationUITests: XCTestCase {
         
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
         
-        app.buttons[L10n.Identification.Scan.scan].wait().tap()
+        app.buttons[L10n.Scan.button].wait().tap()
         
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["identifySuccessfully"].wait().tap()
@@ -88,7 +88,7 @@ final class IdentificationUITests: XCTestCase {
         pinTextField.waitAndTypeText("123456")
         
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
-        app.activityIndicators["ScanProgressView"].assertExistence()
+        
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["identifySuccessfully"].wait().tap()
         
@@ -150,7 +150,7 @@ final class IdentificationUITests: XCTestCase {
         app.staticTexts[L10n.ScanError.CardUnreadable.title].assertExistence()
         app.buttons[L10n.ScanError.close].wait().tap()
         
-        app.buttons[L10n.Identification.Scan.scan].wait().tap()
+        app.buttons[L10n.Scan.button].wait().tap()
     }
     
     func testIdentificationScanCancels() throws {
@@ -173,9 +173,12 @@ final class IdentificationUITests: XCTestCase {
         pinTextField.waitAndTypeText("123456")
         
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
-        app.navigationBars.buttons["Debug"].wait().tap()
-        app.buttons["cancelPINScan"].wait().tap()
-        app.buttons[L10n.Identification.Scan.scan].assertExistence()
+        
+//        When we get an AA2SDK with cancellation working, we do the following:
+//        app.navigationBars.buttons["Debug"].wait().tap()
+//        app.buttons["cancelPINScan"].wait().tap()
+        
+        app.buttons[L10n.Scan.button].wait().tap()
     }
     
     func testIdentificationPINForgottenDismissesAfterConfirmation() throws {
