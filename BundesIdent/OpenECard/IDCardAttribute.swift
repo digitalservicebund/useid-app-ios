@@ -31,12 +31,10 @@ enum IDCardAttribute: String, Equatable, Identifiable {
     case canAllowed
     case pinManagement
 
-    case unknown
-
     var id: String { rawValue }
 
 #if !targetEnvironment(simulator)
-    init(_ accessRight: AccessRight) {
+    init(_ accessRight: AccessRight) throws {
         switch accessRight {
         case .Address: self = .address
         case .BirthName: self = .birthName
@@ -62,7 +60,7 @@ enum IDCardAttribute: String, Equatable, Identifiable {
         case .WriteResidencePermitII: self = .writeResidencePermitII
         case .CanAllowed: self = .canAllowed
         case .PinManagement: self = .pinManagement
-        @unknown default: self = .unknown
+        @unknown default: throw IDCardInteractionError.unexpectedReadAttribute(accessRight.rawValue)
         }
     }
 #endif
@@ -95,7 +93,6 @@ extension IDCardAttribute {
         case .writeResidencePermitII: return L10n.CardAttribute.Write.dg20
         case .canAllowed: return L10n.CardAttribute.canAllowed
         case .pinManagement: return L10n.CardAttribute.pinManagement
-        case .unknown: return L10n.CardAttribute.unknown
         }
     }
 }

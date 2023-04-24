@@ -20,7 +20,6 @@
 "cardAttribute_dg20" = "Aufenthaltstitel II";
 "cardAttribute_pinManagement" = "PIN Management";
 "cardAttribute_pseudonym" = "Pseudonym";
-"cardAttribute_unknown" = "Unbekannte Datengruppe";
 "cardAttribute_write_dg17" = "Adresse (Schreibrechte)";
 "cardAttribute_write_dg18" = "Wohnort-ID (Schreibrechte)";
 "cardAttribute_write_dg19" = "Aufenthaltstitel I (Schreibrechte)";
