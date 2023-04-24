@@ -20,7 +20,6 @@
 "cardAttribute_dg20" = "Residence permit II";
 "cardAttribute_pinManagement" = "PIN Management";
 "cardAttribute_pseudonym" = "Pseudonym";
-"cardAttribute_unknown" = "Unknown data group";
 "cardAttribute_write_dg17" = "Address (write access)";
 "cardAttribute_write_dg18" = "Community ID (write access)";
 "cardAttribute_write_dg19" = "Residence permit I (write access)";

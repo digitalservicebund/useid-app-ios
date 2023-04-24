@@ -67,9 +67,17 @@ final class IDInteractionEventHandler: WorkflowCallbacks {
             return
         }
 
-        let requiredRights = accessRights.requiredRights.map(IDCardAttribute.init)
-        let request = AuthenticationRequest(requiredAttributes: requiredRights, transactionInfo: accessRights.transactionInfo)
-        subject.send(.authenticationRequestConfirmationRequested(request))
+        do {
+            let requiredRights = try accessRights.requiredRights.map(try IDCardAttribute.init)
+            let request = AuthenticationRequest(requiredAttributes: requiredRights, transactionInfo: accessRights.transactionInfo)
+            subject.send(.authenticationRequestConfirmationRequested(request))
+        } catch IDCardInteractionError.unexpectedReadAttribute(let attribute) {
+            subject.send(completion: .failure(.unexpectedReadAttribute(attribute)))
+            return
+        } catch {
+            subject.send(completion: .failure(.frameworkError(message: nil)))
+            return
+        }
     }
 
     func onApiLevel(error: String?, apiLevel: ApiLevel?) {
