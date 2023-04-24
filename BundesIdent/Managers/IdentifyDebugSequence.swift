@@ -41,7 +41,7 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
         }
     }
     
-    func run(card: inout Card, subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>) -> [IdentifyDebugSequence] {
+    func run(card: inout Card, subject: PassthroughSubject<EIDInteractionEvent, EIDInteractionError>) -> [IdentifyDebugSequence] {
         switch self {
         case .loadError:
             subject.send(completion: .failure(.processFailed(resultCode: .DEPENDING_HOST_UNREACHABLE, redirectURL: nil, resultMinor: nil)))

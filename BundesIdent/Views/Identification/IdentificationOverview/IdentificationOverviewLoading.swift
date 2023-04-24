@@ -27,7 +27,7 @@ struct IdentificationOverviewLoading: ReducerProtocol {
     enum Action: Equatable {
         case onAppear
         case identify
-        case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
+        case idInteractionEvent(Result<EIDInteractionEvent, EIDInteractionError>)
         case done(AuthenticationRequest, CertificateDescription)
         case failure(IdentifiableError)
 #if PREVIEW
@@ -57,7 +57,7 @@ struct IdentificationOverviewLoading: ReducerProtocol {
             }
             return EffectTask(value: .done(authenticationRequest, certificateDescription))
         case .idInteractionEvent(.failure(let error)):
-            RedactedIDCardInteractionError(error).flatMap(issueTracker.capture(error:))
+            RedactedEIDInteractionError(error).flatMap(issueTracker.capture(error:))
             return EffectTask(value: .failure(IdentifiableError(error)))
         case .idInteractionEvent:
             return .none

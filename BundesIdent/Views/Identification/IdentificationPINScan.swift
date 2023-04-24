@@ -4,7 +4,7 @@ import Combine
 import Sentry
 
 enum IdentificationScanError: Error, Equatable, CustomNSError {
-    case idCardInteraction(IDCardInteractionError)
+    case eIDInteraction(EIDInteractionError)
     case unexpectedEvent(EIDInteractionEvent)
     case cancelAfterCardRecognized
 }
@@ -33,7 +33,7 @@ struct IdentificationPINScan: ReducerProtocol {
 #endif
         var didAcceptAccessRights = false
         
-        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             .scanEvent(event)
         }
     }
@@ -41,7 +41,7 @@ struct IdentificationPINScan: ReducerProtocol {
     enum Action: Equatable {
         case onAppear
         case shared(SharedScan.Action)
-        case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
+        case scanEvent(Result<EIDInteractionEvent, EIDInteractionError>)
         case wrongPIN(remainingAttempts: Int)
         case identifiedSuccessfully(redirectURL: URL)
         case requestCAN(AuthenticationInformation)
@@ -76,7 +76,7 @@ struct IdentificationPINScan: ReducerProtocol {
         case .scanEvent(.success(let event)):
             return handle(state: &state, event: event)
         case .scanEvent(.failure(let error)):
-            RedactedIDCardInteractionError(error).flatMap(issueTracker.capture(error:))
+            RedactedEIDInteractionError(error).flatMap(issueTracker.capture(error:))
 
             switch error {
             case .cardDeactivated:
@@ -84,7 +84,7 @@ struct IdentificationPINScan: ReducerProtocol {
             case .cardBlocked:
                 return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
             default:
-                return EffectTask(value: .error(ScanError.State(errorType: .idCardInteraction(error), retry: false)))
+                return EffectTask(value: .error(ScanError.State(errorType: .eIDInteraction(error), retry: false)))
             }
         case .wrongPIN:
             return .none

@@ -2,7 +2,7 @@ import Foundation
 import Combine
 import OSLog
 
-typealias EIDInteractionPublisher = AnyPublisher<EIDInteractionEvent, IDCardInteractionError>
+typealias EIDInteractionPublisher = AnyPublisher<EIDInteractionEvent, EIDInteractionError>
 typealias FlaggedAttributes = [IDCardAttribute: Bool]
 
 #if !targetEnvironment(simulator)

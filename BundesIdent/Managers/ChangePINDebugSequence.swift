@@ -45,7 +45,7 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
         return actions
     }
     
-    func run(card: inout Card, subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>) -> [ChangePINDebugSequence] {
+    func run(card: inout Card, subject: PassthroughSubject<EIDInteractionEvent, EIDInteractionError>) -> [ChangePINDebugSequence] {
         switch self {
         case .cancelPINScan:
             subject.send(.pinRequested(remainingAttempts: nil))

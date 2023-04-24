@@ -29,7 +29,7 @@ struct SetupCoordinator: ReducerProtocol {
         var availableDebugActions: [ChangePINDebugSequence] = []
 #endif
         
-        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             for (index, state) in states.enumerated().reversed() {
                 guard let action = state.screen.transformToLocalAction(event) else { continue }
                 return .routeAction(index, action: action)
@@ -100,7 +100,7 @@ struct SetupCoordinator: ReducerProtocol {
     indirect enum Action: Equatable, IndexedRouterAction {
         case routeAction(Int, action: SetupScreen.Action)
         case updateRoutes([Route<SetupScreen.State>])
-        case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
+        case idInteractionEvent(Result<EIDInteractionEvent, EIDInteractionError>)
         case end
         case confirmEnd
         case afterConfirmEnd

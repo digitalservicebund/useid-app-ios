@@ -1,7 +1,7 @@
 import Foundation
 import OpenEcard
 
-enum IDCardInteractionError: Error, Equatable {
+enum EIDInteractionError: Error, Equatable {
     case unknownReader
     case frameworkError(message: String?)
     case unexpectedReadAttribute(String)
@@ -12,14 +12,14 @@ enum IDCardInteractionError: Error, Equatable {
     case pinChangeFailed
 }
 
-enum RedactedIDCardInteractionError: CustomNSError, Hashable {
+enum RedactedEIDInteractionError: CustomNSError, Hashable {
     // TODO: The message is lost, e.g. onWrapperError vs. onBadState
     case frameworkError
     case unexpectedReadAttribute
     case processFailed(resultCode: ActivationResultCode, resultMinor: String?)
     
-    init?(_ idCardInteractionError: IDCardInteractionError) {
-        switch idCardInteractionError {
+    init?(_ eIDInteractionError: EIDInteractionError) {
+        switch eIDInteractionError {
         case .frameworkError:
             self = .frameworkError
         case .unexpectedReadAttribute:

@@ -118,7 +118,7 @@ class SetupScanTests: XCTestCase {
         let queue = scheduler!
         stub(mockIDInteractionManager) { mock in
             mock.changePIN(messages: any()).then { _ in
-                let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+                let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
                 queue.schedule {
                     subject.send(completion: .failure(.frameworkError(message: "Fail")))
                 }
@@ -128,6 +128,6 @@ class SetupScanTests: XCTestCase {
         
         store.send(.scanEvent(.failure(.frameworkError(message: "Fail"))))
         
-        store.receive(.error(ScanError.State(errorType: .idCardInteraction(.frameworkError(message: "Fail")), retry: true)))
+        store.receive(.error(ScanError.State(errorType: .eIDInteraction(.frameworkError(message: "Fail")), retry: true)))
     }
 }

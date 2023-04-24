@@ -231,7 +231,7 @@ class SetupCoordinatorTests: XCTestCase {
         
         stub(mockIDInteractionManager) {
             $0.changePIN(messages: any()).then { _ in
-                let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+                let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
                 scheduler.schedule {
                     subject.send(.authenticationStarted)
                     subject.send(completion: .finished)
@@ -315,7 +315,7 @@ class SetupCoordinatorTests: XCTestCase {
         
         stub(mockIDInteractionManager) { mock in
             mock.changePIN(messages: any()).then { _ in
-                let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+                let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
                 scheduler.schedule {
                     subject.send(completion: .finished)
                 }
@@ -406,7 +406,7 @@ class SetupCoordinatorTests: XCTestCase {
         
         stub(mockIDInteractionManager) {
             $0.changePIN(messages: any()).then { _ in
-                let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+                let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
                 scheduler.schedule {
                     subject.send(.authenticationStarted)
                     subject.send(completion: .finished)

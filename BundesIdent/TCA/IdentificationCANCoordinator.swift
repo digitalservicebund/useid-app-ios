@@ -39,7 +39,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
 #endif
         var states: [Route<IdentificationCANScreen.State>]
         
-        func transformToLocalInteractionHandler(event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationCANCoordinator.Action? {
+        func transformToLocalInteractionHandler(event: Result<EIDInteractionEvent, EIDInteractionError>) -> IdentificationCANCoordinator.Action? {
             for (index, state) in states.enumerated().reversed() {
                 guard let action = state.screen.transformToLocalAction(event) else { continue }
                 return .routeAction(index, action: action)
