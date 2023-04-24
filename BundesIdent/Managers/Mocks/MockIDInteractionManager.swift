@@ -5,13 +5,13 @@ import Combine
 struct MockIDInteractionManager: IDInteractionManagerType {
 
     func changePIN(messages: ScanOverlayMessages) -> EIDInteractionPublisher {
-        let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+        let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
         subject.send(completion: .failure(.frameworkError(message: "Not implemented")))
         return subject.eraseToAnyPublisher()
     }
     
     func identify(tokenURL: URL, messages: ScanOverlayMessages) -> EIDInteractionPublisher {
-        let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+        let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
         subject.send(completion: .failure(.frameworkError(message: "Not implemented")))
         return subject.eraseToAnyPublisher()
     }

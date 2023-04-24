@@ -22,7 +22,7 @@ enum CancelAction: Equatable {
 }
 
 class DebugIDInteractionManager: IDInteractionManagerType {
-    private var subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>?
+    private var subject: PassthroughSubject<EIDInteractionEvent, EIDInteractionError>?
     private var card: Card = .init(remainingAttempts: 3)
     
     func debuggableIdentify(tokenURL: URL) -> DebuggableInteraction<IdentifyDebugSequence> {
@@ -36,7 +36,7 @@ class DebugIDInteractionManager: IDInteractionManagerType {
     }
     
     func identify(tokenURL: URL, messages: ScanOverlayMessages) -> EIDInteractionPublisher {
-        let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+        let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
         self.subject = subject
         
         subject.send(.authenticationStarted)
@@ -52,7 +52,7 @@ class DebugIDInteractionManager: IDInteractionManagerType {
     }
     
     func changePIN(messages: ScanOverlayMessages) -> EIDInteractionPublisher {
-        let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+        let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
         self.subject = subject
         
         subject.send(.authenticationStarted)

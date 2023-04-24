@@ -117,7 +117,7 @@ class SetupCANScanTests: XCTestCase {
         
         store.send(.scanEvent(.failure(.frameworkError(message: "Fail"))))
         
-        store.receive(.error(ScanError.State(errorType: .idCardInteraction(.frameworkError(message: "Fail")), retry: true)))
+        store.receive(.error(ScanError.State(errorType: .eIDInteraction(.frameworkError(message: "Fail")), retry: true)))
 
         verifyNoMoreInteractions(mockIDInteractionManager)
     }

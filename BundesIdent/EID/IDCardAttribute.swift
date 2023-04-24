@@ -60,7 +60,7 @@ enum IDCardAttribute: String, Equatable, Identifiable {
         case .WriteResidencePermitII: self = .writeResidencePermitII
         case .CanAllowed: self = .canAllowed
         case .PinManagement: self = .pinManagement
-        @unknown default: throw IDCardInteractionError.unexpectedReadAttribute(accessRight.rawValue)
+        @unknown default: throw EIDInteractionError.unexpectedReadAttribute(accessRight.rawValue)
         }
     }
 #endif

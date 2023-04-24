@@ -14,7 +14,7 @@ struct IdentificationOverview: ReducerProtocol {
         case loaded(IdentificationOverviewLoaded.State)
         case error(IdentificationOverviewErrorState)
         
-        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             switch self {
             case .loading:
                 return .loading(.idInteractionEvent(event))

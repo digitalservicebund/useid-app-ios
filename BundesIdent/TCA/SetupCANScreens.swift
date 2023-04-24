@@ -33,7 +33,7 @@ struct SetupCANScreen: ReducerProtocol {
             }
         }
         
-        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             switch self {
             case .canScan(let state):
                 guard let localAction = state.transformToLocalAction(event) else { return nil }

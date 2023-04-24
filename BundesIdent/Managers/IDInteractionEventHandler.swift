@@ -7,7 +7,7 @@ import AusweisApp2SDKWrapper
 
 final class IDInteractionEventHandler: WorkflowCallbacks {
     
-    let subject: PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>
+    let subject: PassthroughSubject<EIDInteractionEvent, EIDInteractionError>
 
     private let workflow: Workflow
     private let workflowController: AusweisApp2SDKWrapper.WorkflowController
@@ -17,7 +17,7 @@ final class IDInteractionEventHandler: WorkflowCallbacks {
         self.workflow = workflow
         self.workflowController = workflowController
         logger = Logger(category: String(describing: Self.self))
-        subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+        subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
     }
 
     func onStarted() {
@@ -71,7 +71,7 @@ final class IDInteractionEventHandler: WorkflowCallbacks {
             let requiredRights = try accessRights.requiredRights.map(try IDCardAttribute.init)
             let request = AuthenticationRequest(requiredAttributes: requiredRights, transactionInfo: accessRights.transactionInfo)
             subject.send(.authenticationRequestConfirmationRequested(request))
-        } catch IDCardInteractionError.unexpectedReadAttribute(let attribute) {
+        } catch EIDInteractionError.unexpectedReadAttribute(let attribute) {
             subject.send(completion: .failure(.unexpectedReadAttribute(attribute)))
             return
         } catch {

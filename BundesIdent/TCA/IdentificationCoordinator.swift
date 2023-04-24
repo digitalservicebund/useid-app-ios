@@ -8,7 +8,7 @@ import Analytics
 
 protocol IDInteractionHandler {
     associatedtype LocalAction
-    func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> LocalAction?
+    func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> LocalAction?
 }
 
 enum SwipeToDismissState: Equatable {
@@ -52,7 +52,7 @@ struct IdentificationCoordinator: ReducerProtocol {
 #endif
         var states: [Route<IdentificationScreen.State>]
         
-        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> IdentificationCoordinator.Action? {
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> IdentificationCoordinator.Action? {
             for (index, state) in states.enumerated().reversed() {
                 guard let action = state.screen.transformToLocalAction(event) else { continue }
                 return .routeAction(index, action: action)
@@ -64,7 +64,7 @@ struct IdentificationCoordinator: ReducerProtocol {
     enum Action: Equatable, IndexedRouterAction {
         case routeAction(Int, action: IdentificationScreen.Action)
         case updateRoutes([Route<IdentificationScreen.State>])
-        case idInteractionEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
+        case idInteractionEvent(Result<EIDInteractionEvent, EIDInteractionError>)
         case scanError(ScanError.State)
         case swipeToDismiss
         case afterConfirmEnd

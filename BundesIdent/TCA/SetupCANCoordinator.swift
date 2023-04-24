@@ -59,7 +59,7 @@ struct SetupCANCoordinator: ReducerProtocol {
         
         typealias LocalAction = Action
         
-        func transformToLocalInteractionHandler(event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
+        func transformToLocalInteractionHandler(event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             for (index, state) in states.enumerated().reversed() {
                 guard let action = state.screen.transformToLocalAction(event) else { continue }
                 return .routeAction(index, action: action)

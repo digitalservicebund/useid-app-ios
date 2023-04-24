@@ -23,7 +23,7 @@ struct SetupCANScan: ReducerProtocol {
         var availableDebugActions: [ChangePINDebugSequence] = []
 #endif
         
-        func transformToLocalAction(_ event: Result<EIDInteractionEvent, IDCardInteractionError>) -> Action? {
+        func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             .scanEvent(event)
         }
     }
@@ -31,7 +31,7 @@ struct SetupCANScan: ReducerProtocol {
     enum Action: Equatable {
         case onAppear
         case shared(SharedScan.Action)
-        case scanEvent(Result<EIDInteractionEvent, IDCardInteractionError>)
+        case scanEvent(Result<EIDInteractionEvent, EIDInteractionError>)
         case wrongPIN(remainingAttempts: Int)
         case incorrectCAN
         case scannedSuccessfully
@@ -57,7 +57,7 @@ struct SetupCANScan: ReducerProtocol {
         case .scanEvent(.success(let event)):
             return handle(state: &state, event: event)
         case .scanEvent(.failure(let error)):
-            RedactedIDCardInteractionError(error).flatMap(issueTracker.capture(error:))
+            RedactedEIDInteractionError(error).flatMap(issueTracker.capture(error:))
 
             switch error {
             case .cardDeactivated:
@@ -68,7 +68,7 @@ struct SetupCANScan: ReducerProtocol {
                 return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: state.shared.scanAvailable)))
             default:
                 state.shared.scanAvailable = true
-                return EffectTask(value: .error(ScanError.State(errorType: .idCardInteraction(error), retry: state.shared.scanAvailable)))
+                return EffectTask(value: .error(ScanError.State(errorType: .eIDInteraction(error), retry: state.shared.scanAvailable)))
             }
         case .wrongPIN:
             return .none

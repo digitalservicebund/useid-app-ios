@@ -252,7 +252,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         store.dependencies.idInteractionManager = mockIDInteractionManager
         store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
         
-        let subject = PassthroughSubject<EIDInteractionEvent, IDCardInteractionError>()
+        let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
         stub(mockIDInteractionManager) {
             $0.identify(tokenURL: demoTokenURL, messages: ScanOverlayMessages.identification).thenReturn(subject.eraseToAnyPublisher())
         }

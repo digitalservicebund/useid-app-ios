@@ -161,7 +161,7 @@
 		E5CEB282281041340076B9FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5CEB281281041340076B9FE /* Assets.xcassets */; };
 		E5CEB285281041340076B9FE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5CEB284281041340076B9FE /* Preview Assets.xcassets */; };
 		E5E69D832812FB4500A3B66A /* EIDInteractionEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D822812FB4500A3B66A /* EIDInteractionEvent.swift */; };
-		E5E69D852812FB6100A3B66A /* IDCardInteractionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D842812FB6100A3B66A /* IDCardInteractionError.swift */; };
+		E5E69D852812FB6100A3B66A /* EIDInteractionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D842812FB6100A3B66A /* EIDInteractionError.swift */; };
 		E5E69D892812FB8D00A3B66A /* IDCardAttribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D882812FB8D00A3B66A /* IDCardAttribute.swift */; };
 		F43622A72850D6C9008AEBB9 /* ScanError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43622A62850D6C9008AEBB9 /* ScanError.swift */; };
 /* End PBXBuildFile section */
@@ -356,7 +356,7 @@
 		E5CEB29428104F920076B9FE /* BundesIdent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BundesIdent.entitlements; sourceTree = "<group>"; };
 		E5CEB295281050BE0076B9FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E5E69D822812FB4500A3B66A /* EIDInteractionEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIDInteractionEvent.swift; sourceTree = "<group>"; };
-		E5E69D842812FB6100A3B66A /* IDCardInteractionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDCardInteractionError.swift; sourceTree = "<group>"; };
+		E5E69D842812FB6100A3B66A /* EIDInteractionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIDInteractionError.swift; sourceTree = "<group>"; };
 		E5E69D882812FB8D00A3B66A /* IDCardAttribute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDCardAttribute.swift; sourceTree = "<group>"; };
 		F43622A62850D6C9008AEBB9 /* ScanError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -785,7 +785,7 @@
 				E1BC3D7A28B7E5C0007A7B39 /* Generated */,
 				E15FCE40282BFD4A00CD7AD6 /* Helpers */,
 				E593E277281686D000154EB0 /* Managers */,
-				E5CEB28B2810466C0076B9FE /* OpenECard */,
+				E5CEB28B2810466C0076B9FE /* EID */,
 				E5CEB283281041340076B9FE /* Preview Content */,
 				E1CD8E89281FFCA0008ADA2A /* Resources */,
 				E16708AF283D4E9E001A1637 /* TCA */,
@@ -822,14 +822,14 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		E5CEB28B2810466C0076B9FE /* OpenECard */ = {
+		E5CEB28B2810466C0076B9FE /* EID */ = {
 			isa = PBXGroup;
 			children = (
 				E5E69D822812FB4500A3B66A /* EIDInteractionEvent.swift */,
-				E5E69D842812FB6100A3B66A /* IDCardInteractionError.swift */,
+				E5E69D842812FB6100A3B66A /* EIDInteractionError.swift */,
 				E5E69D882812FB8D00A3B66A /* IDCardAttribute.swift */,
 			);
-			path = OpenECard;
+			path = EID;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -940,12 +940,12 @@
 			packageReferences = (
 				E13925B928410F3F00161F5C /* XCRemoteSwiftPackageReference "Cuckoo" */,
 				E15C22FE2850F5A8005CCBB9 /* XCRemoteSwiftPackageReference "open-ecard-ios" */,
-				E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */,
-				E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController.git" */,
+				E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */,
 				E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 				B9F5055629361F69009FE297 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
 				43363E0529A79D6200E9FA23 /* XCRemoteSwiftPackageReference "unleash-proxy-client-swift" */,
-				E13E737E29D43B69008460CD /* XCRemoteSwiftPackageReference "AusweisApp2Wrapper-iOS-SPM.git" */,
+				E13E737E29D43B69008460CD /* XCRemoteSwiftPackageReference "AusweisApp2Wrapper-iOS-SPM" */,
 			);
 			productRefGroup = E5CEB27B281041330076B9FE /* Products */;
 			projectDirPath = "";
@@ -1147,7 +1147,7 @@
 				E1EB9FFA28B5288A007FF467 /* ScanBody.swift in Sources */,
 				E1BA4D36299299F5004E4C66 /* IdentifyDebugSequence.swift in Sources */,
 				D28D280328B7A9F5008DA310 /* SetupIncorrectTransportPIN.swift in Sources */,
-				E5E69D852812FB6100A3B66A /* IDCardInteractionError.swift in Sources */,
+				E5E69D852812FB6100A3B66A /* EIDInteractionError.swift in Sources */,
 				E1EFB5C62858EB2A005C38C6 /* Shape+Fill.swift in Sources */,
 				D201402728C5E6FD0002A054 /* Box.swift in Sources */,
 				430A933729DC540200607329 /* IDInteractionEventHandler.swift in Sources */,
@@ -1936,7 +1936,7 @@
 				minimumVersion = 0.3.0;
 			};
 		};
-		E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */ = {
+		E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
 			requirement = {
@@ -1952,7 +1952,7 @@
 				minimumVersion = 1.7.1;
 			};
 		};
-		E13E737E29D43B69008460CD /* XCRemoteSwiftPackageReference "AusweisApp2Wrapper-iOS-SPM.git" */ = {
+		E13E737E29D43B69008460CD /* XCRemoteSwiftPackageReference "AusweisApp2Wrapper-iOS-SPM" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Governikus/AusweisApp2Wrapper-iOS-SPM.git";
 			requirement = {
@@ -1976,7 +1976,7 @@
 				minimumVersion = 2.1.2;
 			};
 		};
-		E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController.git" */ = {
+		E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/yhirano/LicensePlistViewController.git";
 			requirement = {
@@ -2003,7 +2003,7 @@
 		};
 		E128E0B9288941DC00C5195F /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */;
+			package = E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = Sentry;
 		};
 		E13925C1284110FD00161F5C /* Cuckoo */ = {
@@ -2013,7 +2013,7 @@
 		};
 		E13E737F29D43B69008460CD /* AusweisApp2SDKWrapper */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E13E737E29D43B69008460CD /* XCRemoteSwiftPackageReference "AusweisApp2Wrapper-iOS-SPM.git" */;
+			package = E13E737E29D43B69008460CD /* XCRemoteSwiftPackageReference "AusweisApp2Wrapper-iOS-SPM" */;
 			productName = AusweisApp2SDKWrapper;
 		};
 		E144EBD528C63A31009B4900 /* MarkdownUI */ = {
@@ -2028,7 +2028,7 @@
 		};
 		E1BC3D8528B7E919007A7B39 /* LicensePlistViewController */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController.git" */;
+			package = E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */;
 			productName = LicensePlistViewController;
 		};
 /* End XCSwiftPackageProductDependency section */
