@@ -15,7 +15,6 @@ protocol IDInteractionManagerType {
     func retrieveCertificateDescription()
     func acceptAccessRights()
     func interrupt()
-    func cancel()
 }
 
 protocol StorageManagerType: AnyObject {
