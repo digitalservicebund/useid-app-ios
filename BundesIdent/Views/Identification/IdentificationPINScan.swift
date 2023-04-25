@@ -136,11 +136,11 @@ struct IdentificationPINScan: ReducerProtocol {
                 idInteractionManager.setPIN(state.pin)
                 return .none
             }
-        case .authenticationSucceeded(redirectUrl: .some(let redirectURL)):
+        case .authenticationSucceeded(redirectURL: .some(let redirectURL)):
             logger.info("Authentication successfully with redirect.")
             return EffectTask(value: .identifiedSuccessfully(redirectURL: redirectURL))
-        case .authenticationSucceeded(redirectUrl: .none):
-            issueTracker.capture(error: RedactedEIDInteractionEventError(.authenticationSucceeded(redirectUrl: nil)))
+        case .authenticationSucceeded(redirectURL: .none):
+            issueTracker.capture(error: RedactedEIDInteractionEventError(.authenticationSucceeded(redirectURL: nil)))
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: state.shared.scanAvailable)))
         case .canRequested:
             idInteractionManager.interrupt()
