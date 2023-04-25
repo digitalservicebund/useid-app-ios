@@ -113,6 +113,7 @@ struct SetupCANScan: ReducerProtocol {
             return .none
         case .pukRequested:
             logger.info("PUK requested, so card is blocked. Callback not implemented yet.")
+            idInteractionManager.interrupt()
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
             
         case .newPINRequested:

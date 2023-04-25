@@ -144,6 +144,7 @@ struct IdentificationPINScan: ReducerProtocol {
             idInteractionManager.interrupt()
             return EffectTask(value: .requestCAN(state.authenticationInformation))
         case .pukRequested:
+            idInteractionManager.interrupt()
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
         default:
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))

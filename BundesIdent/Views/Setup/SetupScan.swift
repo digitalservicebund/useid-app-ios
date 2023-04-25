@@ -129,6 +129,7 @@ struct SetupScan: ReducerProtocol {
                 .eraseToEffect()
         case .pukRequested:
             logger.info("PUK requested, so card is blocked. Callback not implemented yet.")
+            idInteractionManager.interrupt()
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
         case .pinRequested(remainingAttempts: let newRemainingAttempts):
             logger.info("Providing PIN with \(String(describing: newRemainingAttempts)) remaining attempts.")
