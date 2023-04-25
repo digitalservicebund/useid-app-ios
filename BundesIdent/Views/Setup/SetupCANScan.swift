@@ -63,9 +63,6 @@ struct SetupCANScan: ReducerProtocol {
             case .cardDeactivated:
                 state.shared.scanAvailable = false
                 return EffectTask(value: .error(ScanError.State(errorType: .cardDeactivated, retry: state.shared.scanAvailable)))
-            case .cardBlocked:
-                state.shared.scanAvailable = false
-                return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: state.shared.scanAvailable)))
             default:
                 state.shared.scanAvailable = true
                 return EffectTask(value: .error(ScanError.State(errorType: .eIDInteraction(error), retry: state.shared.scanAvailable)))

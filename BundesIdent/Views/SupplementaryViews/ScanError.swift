@@ -56,7 +56,7 @@ struct ScanError: ReducerProtocol {
             guard !retry else { return nil }
             
             switch errorType {
-            case .cardDeactivated, .cardBlocked, .help, .eIDInteraction(.cardDeactivated), .eIDInteraction(.cardBlocked):
+            case .cardDeactivated, .cardBlocked, .help, .eIDInteraction(.cardDeactivated):
                 return nil
             case .eIDInteraction, .unexpectedEvent:
                 return .init(title: L10n.ScanError.Box.title, message: L10n.ScanError.Box.body, style: .error)

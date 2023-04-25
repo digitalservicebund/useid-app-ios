@@ -81,8 +81,6 @@ struct IdentificationPINScan: ReducerProtocol {
             switch error {
             case .cardDeactivated:
                 return EffectTask(value: .error(ScanError.State(errorType: .cardDeactivated, retry: false)))
-            case .cardBlocked:
-                return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
             default:
                 return EffectTask(value: .error(ScanError.State(errorType: .eIDInteraction(error), retry: false)))
             }
@@ -146,7 +144,7 @@ struct IdentificationPINScan: ReducerProtocol {
             idInteractionManager.interrupt()
             return EffectTask(value: .requestCAN(state.authenticationInformation))
         case .pukRequested:
-            return EffectTask(value: .scanEvent(.failure(.cardBlocked)))
+            return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
         default:
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             logger.error("Received unexpected event.")

@@ -98,7 +98,7 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             return []
         case .runCardBlocked:
             subject.send(.cardRecognized)
-            subject.send(completion: .failure(.cardBlocked))
+            subject.send(.pukRequested)
             return []
         case .runCANError:
             subject.send(.cardRecognized)

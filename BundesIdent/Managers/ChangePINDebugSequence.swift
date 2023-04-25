@@ -94,7 +94,7 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
                 subject.send(.canRequested)
                 return [.changePINSuccessfully, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: cancelAction), .runCANError, cancelDebugSequence]
             } else {
-                subject.send(completion: .failure(.cardBlocked))
+                subject.send(.pukRequested)
                 return []
             }
         case .runNFCError:
@@ -110,7 +110,7 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
             return []
         case .runCardBlocked:
             subject.send(.cardRecognized)
-            subject.send(completion: .failure(.cardBlocked))
+            subject.send(.pukRequested)
             return []
         case .runCANError:
             subject.send(.cardRecognized)
