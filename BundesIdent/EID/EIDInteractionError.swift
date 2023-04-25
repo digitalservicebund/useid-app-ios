@@ -4,7 +4,6 @@ enum EIDInteractionError: Error, Equatable {
     case unknownReader
     case frameworkError(message: String?)
     case unexpectedReadAttribute(String)
-    case cardBlocked
     case cardDeactivated
     case authenticationFailed(resultMajor: String, resultMinor: String?, refreshURL: URL?)
     case pinChangeFailed
