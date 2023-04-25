@@ -91,10 +91,6 @@ class DebugIDInteractionManager: IDInteractionManagerType {
     }
     
     func interrupt() {}
-    
-    func cancel() {
-        // TODO: What do we need to do here?
-    }
 }
 #endif
 

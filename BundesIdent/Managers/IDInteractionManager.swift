@@ -114,9 +114,5 @@ class IDInteractionManager: IDInteractionManagerType {
     func interrupt() {
         workflowController.interrupt()
     }
-    
-    func cancel() {
-        workflowController.cancel()
-    }
 }
 #endif

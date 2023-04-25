@@ -39,8 +39,4 @@ struct MockIDInteractionManager: IDInteractionManagerType {
     func interrupt() {
         // not implemented
     }
-    
-    func cancel() {
-        // not implemented
-    }
 }

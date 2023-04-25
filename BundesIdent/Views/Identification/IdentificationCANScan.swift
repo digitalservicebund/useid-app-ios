@@ -79,8 +79,7 @@ struct IdentificationCANScan: ReducerProtocol {
             state.alert = AlertState.confirmEndInIdentification(.dismiss)
             return .none
         case .dismiss:
-            idInteractionManager.cancel()
-            return .none
+            return .cancel(id: CancelId.self)
         case .dismissAlert:
             state.alert = nil
             return .none

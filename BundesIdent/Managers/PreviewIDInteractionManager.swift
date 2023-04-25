@@ -79,10 +79,6 @@ class PreviewIDInteractionManager: PreviewIDInteractionManagerType {
         realIDInteractionManager.acceptAccessRights()
         // we need to alter the current debug sequences in the debugIDInteractionManager here
     }
-    
-    func cancel() {
-        realIDInteractionManager.cancel()
-    }
 
     func interrupt() {
         realIDInteractionManager.interrupt()
