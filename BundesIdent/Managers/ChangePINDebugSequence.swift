@@ -98,7 +98,7 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
                 return []
             }
         case .runNFCError:
-            subject.send(completion: .failure(.processFailed(resultCode: .INTERNAL_ERROR, redirectURL: nil, resultMinor: nil)))
+            subject.send(completion: .failure(.pinChangeFailed))
             return ChangePINDebugSequence.defaultActions(card: card)
         case .runCardSuspended:
             card.remainingAttempts = 1

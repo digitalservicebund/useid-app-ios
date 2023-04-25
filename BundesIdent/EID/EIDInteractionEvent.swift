@@ -65,7 +65,7 @@ enum EIDInteractionEvent: Equatable {
     case newPINRequested
     case pukRequested
     case authenticationStarted
-    case authenticationSucceeded(redirectUrl: URL?)
+    case authenticationSucceeded(redirectURL: URL?)
     case authenticationRequestConfirmationRequested(AuthenticationRequest)
     case pinChangeStarted
     case pinChangeSucceeded
@@ -98,8 +98,8 @@ enum RedactedEIDInteractionEventError: CustomNSError {
         case .newPINRequested: self = .newPINRequested
         case .pukRequested: self = .pukRequested
         case .authenticationStarted: self = .authenticationStarted
-        case .authenticationSucceeded(redirectUrl: .some): self = .authenticationSucceededWithRedirect
-        case .authenticationSucceeded(redirectUrl: .none): self = .authenticationSucceededWithoutRedirect
+        case .authenticationSucceeded(redirectURL: .some): self = .authenticationSucceededWithRedirect
+        case .authenticationSucceeded(redirectURL: .none): self = .authenticationSucceededWithoutRedirect
         case .authenticationRequestConfirmationRequested: self = .authenticationRequestConfirmationRequested
         case .pinChangeStarted: self = .pinChangeStarted
         case .pinChangeSucceeded: self = .pinChangeSucceeded

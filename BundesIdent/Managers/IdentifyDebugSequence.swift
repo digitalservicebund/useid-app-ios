@@ -44,7 +44,7 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
     func run(card: inout Card, subject: PassthroughSubject<EIDInteractionEvent, EIDInteractionError>) -> [IdentifyDebugSequence] {
         switch self {
         case .loadError:
-            subject.send(completion: .failure(.processFailed(resultCode: .DEPENDING_HOST_UNREACHABLE, redirectURL: nil, resultMinor: nil)))
+            subject.send(completion: .failure(.authenticationFailed(resultMajor: "error", resultMinor: "debugError", refreshURL: nil)))
             return []
         case .requestAuthorization:
             subject.send(.authenticationRequestConfirmationRequested(.init(requiredAttributes: [.givenNames, .familyName, .dateOfBirth])))
@@ -53,13 +53,13 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
         case .identifySuccessfully:
             card.remainingAttempts = 3
             subject.send(.cardRecognized)
-            subject.send(.authenticationSucceeded(redirectUrl: URL(string: "https://example.org")!))
+            subject.send(.authenticationSucceeded(redirectURL: URL(string: "https://example.org")!))
             subject.send(completion: .finished)
             return []
         case .missingRedirect:
             card.remainingAttempts = 3
             subject.send(.cardRecognized)
-            subject.send(.authenticationSucceeded(redirectUrl: nil))
+            subject.send(.authenticationSucceeded(redirectURL: nil))
             subject.send(completion: .finished)
             return []
         case .runPINError(initial: let initial, remainingAttempts: let remainingAttempts):
@@ -83,7 +83,7 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             
             return [.identifySuccessfully, .runPINError(initial: false, remainingAttempts: card.remainingAttempts), .runCANError]
         case .runNFCError:
-            subject.send(completion: .failure(.processFailed(resultCode: .INTERNAL_ERROR, redirectURL: nil, resultMinor: nil)))
+            subject.send(completion: .failure(.authenticationFailed(resultMajor: "error", resultMinor: "debugError", refreshURL: nil)))
             return []
         case .runCardSuspended:
             card.remainingAttempts = 1

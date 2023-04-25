@@ -7,16 +7,16 @@ enum EIDInteractionError: Error, Equatable {
     case unexpectedReadAttribute(String)
     case cardBlocked
     case cardDeactivated
-    case processFailed(resultCode: ActivationResultCode, redirectURL: URL?, resultMinor: String?)
-    
+    case authenticationFailed(resultMajor: String, resultMinor: String?, refreshURL: URL?)
     case pinChangeFailed
+    case authenticationBadRequest
 }
 
 enum RedactedEIDInteractionError: CustomNSError, Hashable {
     // TODO: The message is lost, e.g. onWrapperError vs. onBadState
     case frameworkError
     case unexpectedReadAttribute
-    case processFailed(resultCode: ActivationResultCode, resultMinor: String?)
+    case authenticationFailed(resultMajor: String, resultMinor: String?)
     
     init?(_ eIDInteractionError: EIDInteractionError) {
         switch eIDInteractionError {
@@ -24,8 +24,8 @@ enum RedactedEIDInteractionError: CustomNSError, Hashable {
             self = .frameworkError
         case .unexpectedReadAttribute:
             self = .unexpectedReadAttribute
-        case .processFailed(let resultCode, _, let resultMinor):
-            self = .processFailed(resultCode: resultCode, resultMinor: resultMinor)
+        case .authenticationFailed(let resultMajor, let resultMinor, _):
+            self = .authenticationFailed(resultMajor: resultMajor, resultMinor: resultMinor)
         default:
             return nil
         }
@@ -35,8 +35,8 @@ enum RedactedEIDInteractionError: CustomNSError, Hashable {
         switch self {
         case .frameworkError, .unexpectedReadAttribute:
             return [NSDebugDescriptionErrorKey: "\(self)"]
-        case .processFailed(let resultCode, let resultMinor):
-            return [NSDebugDescriptionErrorKey: "processFailed(resultCode: \(resultCode.rawValue), resultMinor: \(String(describing: resultMinor))"]
+        case .authenticationFailed(let resultMajor, let resultMinor):
+            return [NSDebugDescriptionErrorKey: "authenticationFailed(resultMajor: \(resultMajor), resultMinor: \(String(describing: resultMinor))"]
         }
     }
 }

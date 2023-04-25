@@ -93,14 +93,36 @@ final class IDInteractionEventHandler: WorkflowCallbacks {
     }
 
     func onAuthenticationCompleted(authResult: AusweisApp2SDKWrapper.AuthResult) {
-        // TODO: Check if result.major could be success. Answer: Yes, it is.
-        // TODO: We need to check against resultmajor#ok, which should be implemented better than a check against a hardcoded string
-        if let errorResultData = authResult.result, errorResultData.major != "http://www.bsi.bund.de/ecard/api/1.1/resultmajor#ok" {
-            // TODO: Pass result.major up
-            subject.send(completion: .failure(.processFailed(resultCode: .CLIENT_ERROR, redirectURL: authResult.url, resultMinor: errorResultData.minor)))
+        if let resultData = authResult.result,
+           let refreshURLOrCommunicationErrorAddress = authResult.url,
+           let refreshURLOrCommunicationErrorAddressComponents = URLComponents(url: refreshURLOrCommunicationErrorAddress,
+                                                                               resolvingAgainstBaseURL: false),
+           let resultMajorSuffix = resultData.major.split(separator: "#").last {
+            let resultMajor = String(resultMajorSuffix)
+            var queryItems = refreshURLOrCommunicationErrorAddressComponents.queryItems ?? []
+            queryItems.append(URLQueryItem(name: "ResultMajor", value: resultMajor))
+            if resultMajor == "ok" {
+                var refreshURLComponents = refreshURLOrCommunicationErrorAddressComponents
+                refreshURLComponents.queryItems = queryItems
+                subject.send(.authenticationSucceeded(redirectURL: refreshURLComponents.url))
+                subject.send(completion: .finished)
+            } else {
+                var resultMinor: String? = nil
+                if let resultMinorSuffix = resultData.minor?.split(separator: "#").last {
+                    resultMinor = String(resultMinorSuffix)
+                    queryItems.append(URLQueryItem(name: "ResultMinor", value: resultMinor))
+                }
+                if resultMinor == "trustedChannelEstablishmentFailed", let resultMessage = resultData.reason {
+                    queryItems.append(URLQueryItem(name: "ResultMessage", value: resultMessage))
+                }
+                var errorAddressComponents = refreshURLOrCommunicationErrorAddressComponents
+                errorAddressComponents.queryItems = queryItems
+                subject.send(completion: .failure(.authenticationFailed(resultMajor: resultMajor,
+                                                                        resultMinor: resultMinor,
+                                                                        refreshURL: errorAddressComponents.url)))
+            }
         } else {
-            subject.send(.authenticationSucceeded(redirectUrl: authResult.url))
-            subject.send(completion: .finished)
+            subject.send(completion: .failure(.authenticationBadRequest))
         }
     }
 
