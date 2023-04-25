@@ -45,15 +45,13 @@ struct ScanOverlayMessages: Equatable {
     let sessionSucceeded: String
     let sessionInProgress: String
 
-    // TODO: Update keys for single scan
-    static let setup: Self = .init(sessionStarted: L10n.FirstTimeUser.Scan.ProvideCard.first,
-                                   sessionFailed: L10n.CardInteraction.Error.default,
-                                   sessionSucceeded: L10n.FirstTimeUser.Scan.ScanSuccess.second,
-                                   sessionInProgress: L10n.FirstTimeUser.Scan.CardRecognized.first)
-    static let identification: Self = .init(sessionStarted: L10n.Identification.Scan.provideCard,
-                                            sessionFailed: L10n.CardInteraction.Error.default,
-                                            sessionSucceeded: L10n.Identification.Scan.scanSuccess,
-                                            sessionInProgress: L10n.Identification.Scan.cardRecognized)
+    static let setup: Self = .unified
+    static let identification: Self = .unified
+
+    private static let unified: Self = .init(sessionStarted: L10n.Scan.Overlay.started,
+                                             sessionFailed: L10n.Scan.Overlay.failed,
+                                             sessionSucceeded: L10n.Scan.Overlay.succeeded,
+                                             sessionInProgress: L10n.Scan.Overlay.progress)
 }
 
 enum EIDInteractionEvent: Equatable {
