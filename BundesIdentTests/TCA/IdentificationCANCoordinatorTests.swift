@@ -66,7 +66,8 @@ class IdentificationCANCoordinatorTests: XCTestCase {
             $0.routes.append(.push(
                 .canScan(IdentificationCANScan.State(pin: pin,
                                                      can: can,
-                                                     shared: SharedScan.State(startOnAppear: true)))))
+                                                     shared: SharedScan.State(startOnAppear: true,
+                                                                              forceDismissButtonTitle: L10n.Identification.Scan.forceDismiss)))))
         }
         
         store.send(.routeAction(2, action: .canScan(.scanEvent(.success(.canRequested))))) {

@@ -56,7 +56,9 @@ class SetupCANScanTests: XCTestCase {
             mock.setCAN(anyString()).thenDoNothing()
         }
 
-        store.send(.shared(.startScan))
+        store.send(.shared(.startScan)) {
+            $0.shared.preventSecondScanningAttempt = true
+        }
         
         verify(mockIDInteractionManager).setCAN(can)
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "Setup",
@@ -82,7 +84,9 @@ class SetupCANScanTests: XCTestCase {
             mock.setNewPIN(anyString()).thenDoNothing()
         }
 
-        store.send(.shared(.startScan))
+        store.send(.shared(.startScan)) {
+            $0.shared.preventSecondScanningAttempt = true
+        }
         
         store.send(.scanEvent(.success(.authenticationStarted)))
         store.send(.scanEvent(.success(.cardInsertionRequested)))

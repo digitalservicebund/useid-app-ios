@@ -46,7 +46,9 @@ final class IdentificationCANScanTests: XCTestCase {
         
         store.dependencies.analytics = mockAnalyticsClient
         store.send(.onAppear)
-        store.receive(.shared(.startScan))
+        store.receive(.shared(.startScan)) {
+            $0.shared.preventSecondScanningAttempt = true
+        }
         
         verify(mockIDInteractionManager).setCAN(can)
     }
@@ -77,7 +79,9 @@ final class IdentificationCANScanTests: XCTestCase {
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.idInteractionManager = mockIDInteractionManager
         
-        store.send(.shared(.startScan))
+        store.send(.shared(.startScan)) {
+            $0.shared.preventSecondScanningAttempt = true
+        }
         
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification",
                                                                 action: "buttonPressed",

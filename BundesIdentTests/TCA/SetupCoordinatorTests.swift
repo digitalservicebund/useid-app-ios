@@ -203,7 +203,9 @@ class SetupCoordinatorTests: XCTestCase {
             $0.attempt = 1
             $0.transportPIN = newTransportPIN
             $0.routes = [
-                .root(.scan(.init(transportPIN: newTransportPIN, newPIN: pin, shared: .init(attempt: 1))))
+                .root(.scan(.init(transportPIN: newTransportPIN,
+                                  newPIN: pin,
+                                  shared: .init(attempt: 1, forceDismissButtonTitle: L10n.FirstTimeUser.Scan.forceDismiss))))
             ]
         }
     }
