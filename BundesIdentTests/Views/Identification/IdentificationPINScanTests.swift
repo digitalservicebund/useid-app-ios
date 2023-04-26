@@ -74,6 +74,7 @@ final class IdentificationPINScanTests: XCTestCase {
         store.send(.shared(.startScan)) {
             $0.didAcceptAccessRights = true
             $0.shared.startOnAppear = true
+            $0.shared.preventSecondScanningAttempt = true
         }
         
         verify(mockIDInteractionManager).acceptAccessRights()
