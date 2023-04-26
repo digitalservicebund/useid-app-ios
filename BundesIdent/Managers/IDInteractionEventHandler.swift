@@ -68,7 +68,7 @@ final class IDInteractionEventHandler: WorkflowCallbacks {
         }
 
         do {
-            let requiredRights = try accessRights.requiredRights.map(IDCardAttribute.init)
+            let requiredRights = try accessRights.requiredRights.map(EIDAttribute.init)
             let request = AuthenticationRequest(requiredAttributes: requiredRights, transactionInfo: accessRights.transactionInfo)
             subject.send(.authenticationRequestConfirmationRequested(request))
         } catch EIDInteractionError.unexpectedReadAttribute(let attribute) {
@@ -212,6 +212,70 @@ final class IDInteractionEventHandler: WorkflowCallbacks {
 
     func onStatus(workflowProgress: AusweisApp2SDKWrapper.WorkflowProgress) {
         logger.info("onStatus: \(String(describing: workflowProgress))")
+    }
+}
+
+extension CertificateDescription {
+    init(_ description: AusweisApp2SDKWrapper.CertificateDescription) {
+        issuerName = description.issuerName
+        issuerUrl = description.issuerUrl
+        purpose = description.purpose
+        subjectName = description.subjectName
+        subjectUrl = description.subjectUrl
+        termsOfUsage = description.termsOfUsage
+        effectiveDate = description.validity.effectiveDate
+        expirationDate = description.validity.expirationDate
+    }
+}
+
+extension EIDAttribute {
+    init(_ accessRight: AccessRight) throws {
+        switch accessRight {
+        case .Address: self = .address
+        case .BirthName: self = .birthName
+        case .FamilyName: self = .familyName
+        case .GivenNames: self = .givenNames
+        case .PlaceOfBirth: self = .placeOfBirth
+        case .DateOfBirth: self = .dateOfBirth
+        case .DoctoralDegree: self = .doctoralDegree
+        case .ArtisticName: self = .artisticName
+        case .Pseudonym: self = .pseudonym
+        case .ValidUntil: self = .validUntil
+        case .Nationality: self = .nationality
+        case .IssuingCountry: self = .issuingCountry
+        case .DocumentType: self = .documentType
+        case .ResidencePermitI: self = .residencePermitI
+        case .ResidencePermitII: self = .residencePermitII
+        case .CommunityID: self = .communityID
+        case .AddressVerification: self = .addressVerification
+        case .AgeVerification: self = .ageVerification
+        case .WriteAddress: self = .writeAddress
+        case .WriteCommunityID: self = .writeCommunityID
+        case .WriteResidencePermitI: self = .writeResidencePermitI
+        case .WriteResidencePermitII: self = .writeResidencePermitII
+        case .CanAllowed: self = .canAllowed
+        case .PinManagement: self = .pinManagement
+        @unknown default: throw EIDInteractionError.unexpectedReadAttribute(accessRight.rawValue)
+        }
+    }
+}
+
+extension AusweisApp2SDKWrapper.AuxiliaryData: Equatable {
+    public static func == (lhs: AuxiliaryData, rhs: AuxiliaryData) -> Bool {
+        lhs.ageVerificationDate == rhs.ageVerificationDate &&
+            lhs.communityId == rhs.communityId &&
+            lhs.requiredAge == rhs.requiredAge &&
+            lhs.validityDate == rhs.validityDate
+    }
+}
+
+extension AusweisApp2SDKWrapper.AccessRights: Equatable {
+    public static func == (lhs: AusweisApp2SDKWrapper.AccessRights, rhs: AusweisApp2SDKWrapper.AccessRights) -> Bool {
+        lhs.effectiveRights == rhs.effectiveRights &&
+            lhs.requiredRights == rhs.requiredRights &&
+            lhs.optionalRights == rhs.optionalRights &&
+            lhs.transactionInfo == rhs.transactionInfo &&
+            lhs.auxiliaryData == rhs.auxiliaryData
     }
 }
 

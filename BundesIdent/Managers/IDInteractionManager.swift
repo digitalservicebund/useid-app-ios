@@ -3,29 +3,10 @@ import Combine
 import OSLog
 
 typealias EIDInteractionPublisher = AnyPublisher<EIDInteractionEvent, EIDInteractionError>
-typealias FlaggedAttributes = [IDCardAttribute: Bool]
+typealias FlaggedAttributes = [EIDAttribute: Bool]
 
 #if !targetEnvironment(simulator)
 import AusweisApp2SDKWrapper
-
-extension AusweisApp2SDKWrapper.AuxiliaryData: Equatable {
-    public static func == (lhs: AuxiliaryData, rhs: AuxiliaryData) -> Bool {
-        lhs.ageVerificationDate == rhs.ageVerificationDate &&
-            lhs.communityId == rhs.communityId &&
-            lhs.requiredAge == rhs.requiredAge &&
-            lhs.validityDate == rhs.validityDate
-    }
-}
-
-extension AusweisApp2SDKWrapper.AccessRights: Equatable {
-    public static func == (lhs: AusweisApp2SDKWrapper.AccessRights, rhs: AusweisApp2SDKWrapper.AccessRights) -> Bool {
-        lhs.effectiveRights == rhs.effectiveRights &&
-            lhs.requiredRights == rhs.requiredRights &&
-            lhs.optionalRights == rhs.optionalRights &&
-            lhs.transactionInfo == rhs.transactionInfo &&
-            lhs.auxiliaryData == rhs.auxiliaryData
-    }
-}
 
 enum Workflow {
     case changePIN(userInfoMessages: AA2UserInfoMessages?, status: Bool)

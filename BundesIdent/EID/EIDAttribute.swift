@@ -4,7 +4,7 @@ import AusweisApp2SDKWrapper
 #endif
 
 // TR-03110 (Part 4), Section 2.2.3
-enum IDCardAttribute: String, Equatable, Identifiable {
+enum EIDAttribute: String, Equatable, Identifiable {
     case documentType // DG1
     case issuingCountry // DG2
     case validUntil // DG3
@@ -32,41 +32,9 @@ enum IDCardAttribute: String, Equatable, Identifiable {
     case pinManagement
 
     var id: String { rawValue }
-
-#if !targetEnvironment(simulator)
-    init(_ accessRight: AccessRight) throws {
-        switch accessRight {
-        case .Address: self = .address
-        case .BirthName: self = .birthName
-        case .FamilyName: self = .familyName
-        case .GivenNames: self = .givenNames
-        case .PlaceOfBirth: self = .placeOfBirth
-        case .DateOfBirth: self = .dateOfBirth
-        case .DoctoralDegree: self = .doctoralDegree
-        case .ArtisticName: self = .artisticName
-        case .Pseudonym: self = .pseudonym
-        case .ValidUntil: self = .validUntil
-        case .Nationality: self = .nationality
-        case .IssuingCountry: self = .issuingCountry
-        case .DocumentType: self = .documentType
-        case .ResidencePermitI: self = .residencePermitI
-        case .ResidencePermitII: self = .residencePermitII
-        case .CommunityID: self = .communityID
-        case .AddressVerification: self = .addressVerification
-        case .AgeVerification: self = .ageVerification
-        case .WriteAddress: self = .writeAddress
-        case .WriteCommunityID: self = .writeCommunityID
-        case .WriteResidencePermitI: self = .writeResidencePermitI
-        case .WriteResidencePermitII: self = .writeResidencePermitII
-        case .CanAllowed: self = .canAllowed
-        case .PinManagement: self = .pinManagement
-        @unknown default: throw EIDInteractionError.unexpectedReadAttribute(accessRight.rawValue)
-        }
-    }
-#endif
 }
 
-extension IDCardAttribute {
+extension EIDAttribute {
     var localizedTitle: String {
         switch self {
         case .documentType: return L10n.CardAttribute.dg01

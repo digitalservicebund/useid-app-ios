@@ -21,7 +21,7 @@ struct IdentificationOverviewLoaded: ReducerProtocol {
             self.pinHandler = pinHandler
         }
         
-        var requiredReadAttributes: IdentifiedArrayOf<IDCardAttribute> {
+        var requiredReadAttributes: IdentifiedArrayOf<EIDAttribute> {
             IdentifiedArrayOf(uniqueElements: authenticationInformation.request.requiredAttributes)
         }
     }
