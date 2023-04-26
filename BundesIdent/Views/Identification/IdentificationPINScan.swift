@@ -143,6 +143,8 @@ struct IdentificationPINScan: ReducerProtocol {
         case .canRequested:
             idInteractionManager.interrupt()
             return EffectTask(value: .requestCAN(state.authenticationInformation))
+                .delay(for: 2, scheduler: mainQueue) // this delay is here to fix a bug where this particular screen was presented incorrectly
+                .eraseToEffect()
         case .pukRequested:
             idInteractionManager.interrupt()
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
