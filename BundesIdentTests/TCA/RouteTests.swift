@@ -61,7 +61,6 @@ final class RouteTests: XCTestCase {
         
         stub(mockIDInteractionManager) {
             $0.interrupt().thenDoNothing()
-            $0.cancel().thenDoNothing()
             $0.setPIN(any()).thenDoNothing()
             $0.setCAN(any()).thenDoNothing()
             $0.retrieveCertificateDescription().thenDoNothing()
@@ -303,8 +302,6 @@ final class RouteTests: XCTestCase {
                    url: URL?.none)
         verify(mockMatomoTracker).track(view: [], url: URL?.none)
         endInteraction(mockMatomoTracker)
-        
-        verify(mockIDInteractionManager).cancel()
     }
 
     func testIdentificationWrongPINRoutes() {

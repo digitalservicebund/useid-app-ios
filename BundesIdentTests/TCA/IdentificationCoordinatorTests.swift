@@ -164,10 +164,6 @@ class IdentificationCoordinatorTests: XCTestCase {
             $0.identifiedOnce.set(any()).thenDoNothing()
         }
         
-        stub(mockIDInteractionManager) {
-            $0.cancel().thenDoNothing()
-        }
-        
         store.send(.routeAction(0, action: .scan(.identifiedSuccessfully(redirectURL: redirect))))
         store.receive(.routeAction(0, action: IdentificationScreen.Action.scan(IdentificationPINScan.Action.dismiss)))
         
