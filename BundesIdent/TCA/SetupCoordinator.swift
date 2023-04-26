@@ -190,6 +190,8 @@ struct SetupCoordinator: ReducerProtocol {
                 return .none
             case .routeAction(_, action: .scan(.shared(.showHelp))):
                 state.routes.presentSheet(.error(ScanError.State(errorType: .help, retry: true)))
+            case .routeAction(_, action: .scan(.shared(.forceDismiss))):
+                return EffectTask(value: .afterConfirmEnd)
             case .routeAction(_, action: .error(.retry)):
                 state.routes.dismiss()
             case .routeAction(_, action: .error(.end)):

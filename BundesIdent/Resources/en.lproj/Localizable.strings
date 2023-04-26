@@ -83,6 +83,7 @@
 "firstTimeUser_scan_cardConnected_second" = "Do not move the ID card.";
 "firstTimeUser_scan_cardRecognized_first" = "Do not move the ID card.";
 "firstTimeUser_scan_cardRecognized_second" = "Do not move the ID card.";
+"firstTimeUser_scan_forceDismiss" = "End setup";
 "firstTimeUser_scan_progress_body" = "Step 1 completed.\nStep 2 is being performed.";
 "firstTimeUser_scan_progress_title" = "Do not move the ID card.";
 "firstTimeUser_scan_provideCard_first" = "Hold your ID card close to the top back of the iPhone.";
@@ -167,6 +168,7 @@
 "identification_scanInstructions_title" = "How to retrieve data from your ID card.";
 "identification_scan_cardConnected" = "Do not move the ID card.";
 "identification_scan_cardRecognized" = "Do not move the ID card.";
+"identification_scan_forceDismiss" = "End identification process";
 "identification_scan_message_iOS" = "The app does not use the camera, but the NFC sensors in the iPhone and ID to check your PIN and retrieve the required data. Therefore, make sure the ID and iPhone touch each other during the data retrieval.";
 "identification_scan_provideCard" = "Hold your ID card close to the top back of the iPhone.";
 "identification_scan_scan" = "Retrieve data now";

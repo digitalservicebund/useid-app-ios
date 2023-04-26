@@ -16,7 +16,7 @@ struct IdentificationCANScan: ReducerProtocol {
     struct State: Equatable, IDInteractionHandler {
         var pin: String
         var can: String
-        var shared: SharedScan.State = .init()
+        var shared: SharedScan.State = .init(forceDismissButtonTitle: L10n.Identification.Scan.forceDismiss)
         
         var lastRemainingAttempts: Int?
         var authenticationSuccessful = false
@@ -50,6 +50,7 @@ struct IdentificationCANScan: ReducerProtocol {
         case .onAppear:
             return state.shared.startOnAppear ? EffectTask(value: .shared(.startScan)) : .none
         case .shared(.startScan):
+            state.shared.preventSecondScanningAttempt = true
             idInteractionManager.setCAN(state.can)
             return .trackEvent(category: "identification",
                                action: "buttonPressed",

@@ -83,6 +83,7 @@
 "firstTimeUser_scan_cardConnected_second" = "Ausweis nicht bewegen.";
 "firstTimeUser_scan_cardRecognized_first" = "Ausweis nicht bewegen.";
 "firstTimeUser_scan_cardRecognized_second" = "Ausweis nicht bewegen.";
+"firstTimeUser_scan_forceDismiss" = "Einrichtung beenden";
 "firstTimeUser_scan_progress_body" = "Schritt 1 erledigt.\nSchritt 2 wird durchgeführt.";
 "firstTimeUser_scan_progress_title" = "Ausweis nicht bewegen.";
 "firstTimeUser_scan_provideCard_first" = "Berühren Sie Ihren Ausweis mit der oberen Rückseite des iPhones.";
@@ -167,6 +168,7 @@
 "identification_scanInstructions_title" = "So rufen Sie die Daten von Ihrem Ausweis ab.";
 "identification_scan_cardConnected" = "Ausweis nicht bewegen.";
 "identification_scan_cardRecognized" = "Ausweis nicht bewegen.";
+"identification_scan_forceDismiss" = "Ausweisen beenden";
 "identification_scan_message_iOS" = "Die App nutzt nicht die Kamera, sondern die NFC‑Sensoren in iPhone und Ausweis, um Ihre PIN zu überprüfen und die benötigten Daten abzurufen. Deswegen müssen sich Ausweis und iPhone während des Datenabrufs direkt berühren.";
 "identification_scan_provideCard" = "Berühren Sie Ihren Ausweis mit der oberen Rückseite des iPhones.";
 "identification_scan_scan" = "Jetzt Daten abrufen";
