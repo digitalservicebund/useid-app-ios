@@ -58,7 +58,7 @@ final class IDInteractionEventHandler: WorkflowCallbacks {
         guard let accessRights else {
             // TODO: Check when this happens
             logger.error("onAccessRights: Access rights missing.")
-            subject.send(completion: .failure(.frameworkError(message: "Access rights missing. Error: \(error)")))
+            subject.send(completion: .failure(.frameworkError(message: "Access rights missing. Error: \(String(describing: error))")))
             return
         }
 
@@ -68,7 +68,7 @@ final class IDInteractionEventHandler: WorkflowCallbacks {
         }
 
         do {
-            let requiredRights = try accessRights.requiredRights.map(try IDCardAttribute.init)
+            let requiredRights = try accessRights.requiredRights.map(IDCardAttribute.init)
             let request = AuthenticationRequest(requiredAttributes: requiredRights, transactionInfo: accessRights.transactionInfo)
             subject.send(.authenticationRequestConfirmationRequested(request))
         } catch EIDInteractionError.unexpectedReadAttribute(let attribute) {
