@@ -24,7 +24,7 @@ struct IdentificationPINScan: ReducerProtocol {
         var pin: String
         var lastRemainingAttempts: Int?
         
-        var shared: SharedScan.State = .init()
+        var shared: SharedScan.State = .init(forceDismissButtonTitle: L10n.Identification.Scan.forceDismiss)
         
         var authenticationSuccessful = false
         var alert: AlertState<Action>?
@@ -59,6 +59,7 @@ struct IdentificationPINScan: ReducerProtocol {
         case .onAppear:
             return state.shared.startOnAppear ? EffectTask(value: .shared(.startScan)) : .none
         case .shared(.startScan):
+            state.shared.preventSecondScanningAttempt = true
             state.shared.startOnAppear = true
             state.shared.cardRecognized = false
 

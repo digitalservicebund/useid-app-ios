@@ -106,7 +106,8 @@ struct SetupCANCoordinator: ReducerProtocol {
                         .canScan(SetupCANScan.State(transportPIN: transportPIN,
                                                     newPIN: state.pin,
                                                     can: can,
-                                                    shared: SharedScan.State(startOnAppear: true)))
+                                                    shared: SharedScan.State(startOnAppear: true,
+                                                                             forceDismissButtonTitle: L10n.FirstTimeUser.Scan.forceDismiss)))
                     )
                 } else {
                     issueTracker.capture(error: IdentificationCANCoordinatorError.pinNilWhenTriedScan)
@@ -125,7 +126,8 @@ struct SetupCANCoordinator: ReducerProtocol {
                     .canScan(SetupCANScan.State(transportPIN: transportPIN,
                                                 newPIN: state.pin,
                                                 can: can,
-                                                shared: SharedScan.State(startOnAppear: true)))
+                                                shared: SharedScan.State(startOnAppear: true,
+                                                                         forceDismissButtonTitle: L10n.FirstTimeUser.Scan.forceDismiss)))
                 )
                 
                 return .none
@@ -165,6 +167,8 @@ struct SetupCANCoordinator: ReducerProtocol {
             case .routeAction(_, action: .canScan(.shared(.showHelp))):
                 state.routes.presentSheet(.error(ScanError.State(errorType: .help, retry: true)))
                 return .none
+            case .routeAction(_, action: .canScan(.shared(.forceDismiss))):
+                return EffectTask(value: .afterConfirmEnd)
             case .routeAction(_, action: .error(.retry)):
                 state.routes.dismiss()
                 return .none

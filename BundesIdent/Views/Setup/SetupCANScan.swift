@@ -15,7 +15,7 @@ struct SetupCANScan: ReducerProtocol {
         var transportPIN: String
         var newPIN: String
         var can: String
-        var shared: SharedScan.State = .init()
+        var shared: SharedScan.State = .init(forceDismissButtonTitle: L10n.FirstTimeUser.Scan.forceDismiss)
         
         var authenticationSuccessful = false
         var alert: AlertState<SetupCANScan.Action>?
@@ -50,6 +50,7 @@ struct SetupCANScan: ReducerProtocol {
             return state.shared.startOnAppear ? EffectTask(value: .shared(.startScan)) : .none
         case .shared(.startScan):
             idInteractionManager.setCAN(state.can)
+            state.shared.preventSecondScanningAttempt = true
             return .trackEvent(category: "Setup",
                                action: "buttonPressed",
                                name: "canScan",
