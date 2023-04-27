@@ -251,8 +251,6 @@ final class RouteTests: XCTestCase {
         let pin = "123456"
         let request = IdentificationRequest.preview
         let certificateDescription = CertificateDescription.preview
-        let closure = { (_: FlaggedAttributes) in }
-        let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let tokenURL = demoTokenURL
         let root = Route<Screen.State>.root(.home(Home.State(appVersion: "1.0.0", buildNumber: 1)))
         let store = TestStore(initialState: Coordinator.State(routes: [root], remoteConfiguration: .init(finished: true)),

@@ -84,21 +84,4 @@ final class IdentificationOverviewTests: XCTestCase {
         
         // mockIDInteractionManager.acceptAccessRights() is called later
     }
-    
-    func testCallingPINHandlerWhenConfirming() {
-        let identificationInformation = IdentificationInformation.preview
-        
-        let loadedState = IdentificationOverviewLoaded.State(
-            id: UUID(number: 0),
-            identificationInformation: identificationInformation
-        )
-        let store = TestStore(
-            initialState: IdentificationOverview.State.loaded(loadedState),
-            reducer: IdentificationOverview()
-        )
-        
-        store.send(IdentificationOverview.Action.loaded(.confirm(identificationInformation)))
-        
-        // TODO: Receive call on stub
-    }
 }

@@ -33,11 +33,9 @@ final class IdentificationCANScanTests: XCTestCase {
     }
     
     func testOnAppearDoesTriggerScanningWhenNotAlreadyScanning() throws {
-        let pin = "123456"
         let can = "123456"
-        let pinCANCallback = PINCANCallback(id: UUID(number: 0)) { pin, can in }
         let store = TestStore(
-            initialState: IdentificationCANScan.State(pin: pin,
+            initialState: IdentificationCANScan.State(pin: "123456",
                                                       can: can,
                                                       shared: SharedScan.State(startOnAppear: true)),
             reducer: IdentificationCANScan()

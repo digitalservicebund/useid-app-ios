@@ -190,7 +190,6 @@ class IdentificationCoordinatorTests: XCTestCase {
     func testScanToError() throws {
         let pin = "123456"
         let identificationInformation = IdentificationInformation.preview
-        let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           pin: pin,

@@ -7,15 +7,11 @@ struct IdentificationOverviewLoaded: ReducerProtocol {
         let id: UUID
         let identificationInformation: IdentificationInformation
         let canGoBackToSetupIntro: Bool
-        
-        // used when going back to the overview screen when we already received a pin handler
-        var pinHandler: PINCallback?
-        
-        init(id: UUID, identificationInformation: IdentificationInformation, canGoBackToSetupIntro: Bool = false, pinHandler: PINCallback? = nil) {
+
+        init(id: UUID, identificationInformation: IdentificationInformation, canGoBackToSetupIntro: Bool = false) {
             self.id = id
             self.identificationInformation = identificationInformation
             self.canGoBackToSetupIntro = canGoBackToSetupIntro
-            self.pinHandler = pinHandler
         }
         
         var requiredReadAttributes: IdentifiedArrayOf<EIDAttribute> {
