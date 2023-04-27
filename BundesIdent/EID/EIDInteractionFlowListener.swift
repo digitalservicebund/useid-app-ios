@@ -217,10 +217,10 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
 extension CertificateDescription {
     init(_ description: AusweisApp2SDKWrapper.CertificateDescription) {
         issuerName = description.issuerName
-        issuerUrl = description.issuerUrl
+        issuerURL = description.issuerUrl
         purpose = description.purpose
         subjectName = description.subjectName
-        subjectUrl = description.subjectUrl
+        subjectURL = description.subjectUrl
         termsOfUsage = description.termsOfUsage
         effectiveDate = description.validity.effectiveDate
         expirationDate = description.validity.expirationDate

@@ -12,10 +12,10 @@ struct IdentificationRequest: Equatable {
 
 struct CertificateDescription: Equatable {
     public let issuerName: String
-    public let issuerUrl: URL?
+    public let issuerURL: URL?
     public let purpose: String
     public let subjectName: String
-    public let subjectUrl: URL?
+    public let subjectURL: URL?
     public let termsOfUsage: String
     public let effectiveDate: Date
     public let expirationDate: Date

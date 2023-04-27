@@ -109,12 +109,12 @@ extension IdentificationRequest {
 
 extension CertificateDescription {
     static let preview = CertificateDescription(
-        issuerName: "Issuer",
-        issuerUrl: URL(string: "https://issuer.com")!,
-        purpose: "Purpose",
-        subjectName: "Subject",
-        subjectUrl: URL(string: "https://subject.com")!,
-        termsOfUsage: "Terms",
+        issuerName: "Issuer name placeholder",
+        issuerURL: URL(string: "https://issuer.com")!,
+        purpose: "Purpose placeholder",
+        subjectName: "Subject placeholder",
+        subjectURL: URL(string: "https://subject.com")!,
+        termsOfUsage: "Terms of usage placeholder",
         effectiveDate: Date(),
         expirationDate: Date().addingTimeInterval(24 * 60 * 60)
     )
