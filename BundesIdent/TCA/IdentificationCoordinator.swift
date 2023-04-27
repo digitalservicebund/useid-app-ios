@@ -144,8 +144,7 @@ struct IdentificationCoordinator: ReducerProtocol {
                 return .none
             case .routeAction(_, action: .scan(.requestCAN(let authenticationInformation))):
                 let pinIsUnchecked = state.attempt == 0
-                state.routes.push(.identificationCANCoordinator(.init(tokenURL: state.tokenURL,
-                                                                      authenticationInformation: authenticationInformation,
+                state.routes.push(.identificationCANCoordinator(.init(authenticationInformation: authenticationInformation,
                                                                       pin: pinIsUnchecked ? state.pin : nil,
                                                                       attempt: state.attempt,
                                                                       goToCanIntroScreen: pinIsUnchecked)))

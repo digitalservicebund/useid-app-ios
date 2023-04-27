@@ -343,8 +343,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         }
         
         store.send(.routeAction(0, action: .scan(.requestCAN(authenticationInformation)))) {
-            $0.routes.append(.push(.identificationCANCoordinator(.init(tokenURL: $0.tokenURL,
-                                                                       authenticationInformation: authenticationInformation,
+            $0.routes.append(.push(.identificationCANCoordinator(.init(authenticationInformation: authenticationInformation,
                                                                        pin: nil,
                                                                        attempt: $0.attempt,
                                                                        goToCanIntroScreen: false))))
@@ -365,8 +364,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         )
         
         store.send(.routeAction(1, action: .scan(.requestCAN(authenticationInformation)))) {
-            $0.routes.append(.push(.identificationCANCoordinator(.init(tokenURL: $0.tokenURL,
-                                                                       authenticationInformation: authenticationInformation,
+            $0.routes.append(.push(.identificationCANCoordinator(.init(authenticationInformation: authenticationInformation,
                                                                        pin: $0.pin!,
                                                                        attempt: $0.attempt,
                                                                        goToCanIntroScreen: true))))

@@ -381,7 +381,9 @@ final class RouteTests: XCTestCase {
                                           authenticationInformation: authenticationInformation)))),
             .push(.personalPIN(.init(authenticationInformation: authenticationInformation))),
             .push(.scan(.init(authenticationInformation: authenticationInformation, pin: pin))),
-            .push(.identificationCANCoordinator(.init(authenticationInformation: authenticationInformation, tokenURL: tokenURL, attempt: 0, states: initialCanRoutes))),
+            .push(.identificationCANCoordinator(.init(authenticationInformation: authenticationInformation,
+                                                      attempt: 0,
+                                                      states: initialCanRoutes))),
         ]
 
         let initialRoutes: [Route<Screen.State>] = [

@@ -24,7 +24,6 @@ struct IdentificationCANCoordinator: ReducerProtocol {
         var pin: String?
         var can: String?
         var authenticationInformation: AuthenticationInformation
-        var tokenURL: URL // TODO: Get rid of?
         var authenticationSuccessful = false
         var attempt: Int
         
@@ -176,14 +175,12 @@ extension IdentificationCANCoordinator.State: AnalyticsView {
 }
 
 extension IdentificationCANCoordinator.State {
-    init(tokenURL: URL,
-         authenticationInformation: AuthenticationInformation,
+    init(authenticationInformation: AuthenticationInformation,
          pin: String?,
          attempt: Int,
          goToCanIntroScreen: Bool) {
         self.pin = pin
         self.authenticationInformation = authenticationInformation
-        self.tokenURL = tokenURL
         self.attempt = attempt
         if goToCanIntroScreen {
             states = [.root(.canIntro(.init(shouldDismiss: true)))]

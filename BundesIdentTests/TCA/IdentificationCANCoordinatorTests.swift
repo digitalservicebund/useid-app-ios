@@ -48,7 +48,6 @@ class IdentificationCANCoordinatorTests: XCTestCase {
             initialState: IdentificationCANCoordinator.State(pin: pin,
                                                              can: can,
                                                              authenticationInformation: .preview,
-                                                             tokenURL: demoTokenURL,
                                                              attempt: 0,
                                                              states: [
                                                                  .root(.canIntro(CANIntro.State(shouldDismiss: true)))
@@ -85,7 +84,6 @@ class IdentificationCANCoordinatorTests: XCTestCase {
             initialState: IdentificationCANCoordinator.State(pin: pin,
                                                              can: can,
                                                              authenticationInformation: .preview,
-                                                             tokenURL: demoTokenURL,
                                                              attempt: 0,
                                                              states: [
                                                                  .root(.canScan(.init(pin: pin,
@@ -119,7 +117,6 @@ class IdentificationCANCoordinatorTests: XCTestCase {
             initialState: IdentificationCANCoordinator.State(pin: pin,
                                                              can: can,
                                                              authenticationInformation: .preview,
-                                                             tokenURL: demoTokenURL,
                                                              attempt: 0,
                                                              states: [
                                                                  .root(.canScan(.init(pin: pin,
@@ -150,7 +147,6 @@ class IdentificationCANCoordinatorTests: XCTestCase {
             initialState: IdentificationCANCoordinator.State(pin: pin,
                                                              can: can,
                                                              authenticationInformation: .preview,
-                                                             tokenURL: demoTokenURL,
                                                              attempt: 0,
                                                              states: oldRoutes),
             reducer: IdentificationCANCoordinator()
