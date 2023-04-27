@@ -235,7 +235,7 @@ class SetupCoordinatorTests: XCTestCase {
             $0.changePIN(messages: any()).then { _ in
                 let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
                 scheduler.schedule {
-                    subject.send(.authenticationStarted)
+                    subject.send(.identificationStarted)
                     subject.send(completion: .finished)
                 }
                 return subject.eraseToAnyPublisher()
@@ -250,9 +250,9 @@ class SetupCoordinatorTests: XCTestCase {
         
         scheduler.advance()
         
-        store.receive(.eIDInteractionEvent(.success(.authenticationStarted)))
+        store.receive(.eIDInteractionEvent(.success(.identificationStarted)))
         
-        store.receive(.routeAction(0, action: .scan(.scanEvent(.success(.authenticationStarted)))))
+        store.receive(.routeAction(0, action: .scan(.scanEvent(.success(.identificationStarted)))))
     }
     
     func testStartingCANFlow() {
@@ -410,7 +410,7 @@ class SetupCoordinatorTests: XCTestCase {
             $0.changePIN(messages: any()).then { _ in
                 let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
                 scheduler.schedule {
-                    subject.send(.authenticationStarted)
+                    subject.send(.identificationStarted)
                     subject.send(completion: .finished)
                 }
                 return subject.eraseToAnyPublisher()
@@ -431,9 +431,9 @@ class SetupCoordinatorTests: XCTestCase {
         
         scheduler.advance()
         
-        store.receive(.eIDInteractionEvent(.success(.authenticationStarted)))
+        store.receive(.eIDInteractionEvent(.success(.identificationStarted)))
         
-        store.receive(.routeAction(0, action: .setupCANCoordinator(.routeAction(0, action: .canScan(.scanEvent(.success(.authenticationStarted)))))))
+        store.receive(.routeAction(0, action: .setupCANCoordinator(.routeAction(0, action: .canScan(.scanEvent(.success(.identificationStarted)))))))
         
         verify(mockEIDInteractionManager).changePIN(messages: any())
         verify(mockAnalyticsClient).track(event: any())

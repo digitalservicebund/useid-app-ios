@@ -4,7 +4,7 @@ import ComposableArchitecture
 import Analytics
 
 struct SetupPersonalPINConfirm: ReducerProtocol {
-    @Dependency(\.analytics) var analytics: AnalyticsClient
+    @Dependency(\.analytics) var analytics
     
     struct State: Equatable {
         var enteredPIN1: String

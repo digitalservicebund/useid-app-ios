@@ -38,8 +38,7 @@ struct IdentificationCoordinator: ReducerProtocol {
         var tokenURL: URL
         var pin: String?
         var attempt: Int = 0
-        var authenticationSuccessful = false
-        
+
         var swipeToDismiss: SwipeToDismissState {
             guard let lastScreen = states.last?.screen else { return .allow }
             return lastScreen.swipeToDismissState
@@ -128,13 +127,13 @@ struct IdentificationCoordinator: ReducerProtocol {
                  .routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.runDebugSequence(let sequence))))):
                 return EffectTask(value: .runDebugSequence(sequence))
 #endif
-            case .routeAction(_, action: .overview(.loaded(.confirm(let authenticationInformation)))):
-                state.routes.push(.personalPIN(IdentificationPersonalPIN.State(authenticationInformation: authenticationInformation)))
+            case .routeAction(_, action: .overview(.loaded(.confirm(let identificationInformation)))):
+                state.routes.push(.personalPIN(IdentificationPersonalPIN.State(identificationInformation: identificationInformation)))
                 return .none
-            case .routeAction(_, action: .personalPIN(.done(authenticationInformation: let authenticationInformation, pin: let pin))):
+            case .routeAction(_, action: .personalPIN(.done(identificationInformation: let identificationInformation, pin: let pin))):
                 state.pin = pin
                 state.routes.push(
-                    .scan(IdentificationPINScan.State(authenticationInformation: authenticationInformation,
+                    .scan(IdentificationPINScan.State(identificationInformation: identificationInformation,
                                                       pin: pin,
                                                       shared: SharedScan.State(startOnAppear: storageManager.identifiedOnce, forceDismissButtonTitle: L10n.Identification.Scan.forceDismiss)))
                 )
@@ -142,9 +141,9 @@ struct IdentificationCoordinator: ReducerProtocol {
             case .routeAction(_, action: .scan(.error(let errorState))):
                 state.routes.presentSheet(.error(errorState))
                 return .none
-            case .routeAction(_, action: .scan(.requestCAN(let authenticationInformation))):
+            case .routeAction(_, action: .scan(.requestCAN(let identificationInformation))):
                 let pinIsUnchecked = state.attempt == 0
-                state.routes.push(.identificationCANCoordinator(.init(authenticationInformation: authenticationInformation,
+                state.routes.push(.identificationCANCoordinator(.init(identificationInformation: identificationInformation,
                                                                       pin: pinIsUnchecked ? state.pin : nil,
                                                                       attempt: state.attempt,
                                                                       goToCanIntroScreen: pinIsUnchecked)))
@@ -268,15 +267,15 @@ extension IdentificationCoordinator.State {
 
 /*
  Happy path loading token until scanning:
- .authenticationStarted
- .requestAuthenticationRequestConfirmation
+ .identificationStarted
+ .requestIdentificationRequestConfirmation
  .cardInteractionComplete
  .requestPIN(remainingAttempts: nil)
  .requestCardInsertion
  
  Happy path identification:
  .cardRecognized
- .authenticationSuccessful
+ .identificationSuccessful
  .processCompletedSuccessfully
  
  Wrong pin identification:
@@ -287,7 +286,7 @@ extension IdentificationCoordinator.State {
  
  Card removed before process finished:
  .cardRecognized
- .authenticationSuccessful (optional)
+ .identificationSuccessful (optional)
  .cardRemoved // difference from happy path?
  .processCompletedSuccessfully // not really successful
  

@@ -47,16 +47,16 @@ final class IdentificationOverviewTests: XCTestCase {
         store.dependencies.uuid = .incrementing
         store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         
-        let request = AuthenticationRequest.preview
+        let request = IdentificationRequest.preview
         let certificateDescription = CertificateDescription.preview
         
         stub(mockEIDInteractionManager) {
             $0.retrieveCertificateDescription().thenDoNothing()
         }
         
-        store.send(IdentificationOverview.Action.loading(.eIDInteractionEvent(.success(.authenticationRequestConfirmationRequested(request))))) {
+        store.send(IdentificationOverview.Action.loading(.eIDInteractionEvent(.success(.identificationRequestConfirmationRequested(request))))) {
             guard case .loading(var loadingState) = $0 else { return XCTFail("Invalid state") }
-            loadingState.authenticationRequest = request
+            loadingState.identificationRequest = request
             $0 = .loading(loadingState)
         }
         
@@ -66,38 +66,38 @@ final class IdentificationOverviewTests: XCTestCase {
         
         store.receive(.loading(.done(request, certificateDescription))) {
             $0 = .loaded(.init(id: UUID(number: 0),
-                               authenticationInformation: AuthenticationInformation(request: request, certificateDescription: certificateDescription)))
+                               identificationInformation: .init(request: request, certificateDescription: certificateDescription)))
         }
     }
     
     func testLoadedConfirm() {
-        let authenticationInformation = AuthenticationInformation.preview
+        let identificationInformation = IdentificationInformation.preview
         
-        let loadedState = IdentificationOverviewLoaded.State(id: UUID(number: 0), authenticationInformation: authenticationInformation)
+        let loadedState = IdentificationOverviewLoaded.State(id: UUID(number: 0), identificationInformation: identificationInformation)
         let store = TestStore(
             initialState: IdentificationOverview.State.loaded(loadedState),
             reducer: IdentificationOverview()
         )
         store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         
-        store.send(IdentificationOverview.Action.loaded(.confirm(authenticationInformation)))
+        store.send(IdentificationOverview.Action.loaded(.confirm(identificationInformation)))
         
         // mockIDInteractionManager.acceptAccessRights() is called later
     }
     
     func testCallingPINHandlerWhenConfirming() {
-        let authenticationInformation = AuthenticationInformation.preview
+        let identificationInformation = IdentificationInformation.preview
         
         let loadedState = IdentificationOverviewLoaded.State(
             id: UUID(number: 0),
-            authenticationInformation: authenticationInformation
+            identificationInformation: identificationInformation
         )
         let store = TestStore(
             initialState: IdentificationOverview.State.loaded(loadedState),
             reducer: IdentificationOverview()
         )
         
-        store.send(IdentificationOverview.Action.loaded(.confirm(authenticationInformation)))
+        store.send(IdentificationOverview.Action.loaded(.confirm(identificationInformation)))
         
         // TODO: Receive call on stub
     }

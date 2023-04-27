@@ -23,7 +23,7 @@ final class IdentificationOverviewLoadingTests: XCTestCase {
     }
     
     func testReceiveRequestConfirmationRetrievesCertificateDescription() {
-        let request = AuthenticationRequest.preview
+        let request = IdentificationRequest.preview
         let store = TestStore(initialState: IdentificationOverviewLoading.State(), reducer: IdentificationOverviewLoading())
         
         let mockEIDInteractionManager = MockEIDInteractionManagerType()
@@ -32,16 +32,16 @@ final class IdentificationOverviewLoadingTests: XCTestCase {
         }
         store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         
-        store.send(.eIDInteractionEvent(.success(.authenticationRequestConfirmationRequested(request)))) {
-            $0.authenticationRequest = request
+        store.send(.eIDInteractionEvent(.success(.identificationRequestConfirmationRequested(request)))) {
+            $0.identificationRequest = request
         }
         
         verify(mockEIDInteractionManager).retrieveCertificateDescription()
     }
     
     func testReceiveCertificateCallsDone() {
-        let request = AuthenticationRequest.preview
-        let store = TestStore(initialState: IdentificationOverviewLoading.State(authenticationRequest: .preview), reducer: IdentificationOverviewLoading())
+        let request = IdentificationRequest.preview
+        let store = TestStore(initialState: IdentificationOverviewLoading.State(identificationRequest: .preview), reducer: IdentificationOverviewLoading())
         
         let certificateDescription = CertificateDescription.preview
         store.send(.eIDInteractionEvent(.success(.certificateDescriptionRetrieved(certificateDescription))))

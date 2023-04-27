@@ -42,7 +42,6 @@ struct SetupCANCoordinator: ReducerProtocol {
         var can: String?
         var oldTransportPIN: String
         var tokenURL: URL?
-        var authenticationSuccessful = false
         var attempt: Int
         
         var swipeToDismiss: SwipeToDismissState {

@@ -10,7 +10,6 @@ struct IdentificationCANScan: ReducerProtocol {
     @Dependency(\.urlOpener) var urlOpener
     @Dependency(\.storageManager) var storageManager
     @Dependency(\.logger) var logger
-    @Dependency(\.uuid) var uuid
     @Dependency(\.eIDInteractionManager) var eIDInteractionManager
     
     struct State: Equatable, EIDInteractionHandler {
@@ -19,7 +18,6 @@ struct IdentificationCANScan: ReducerProtocol {
         var shared: SharedScan.State = .init(forceDismissButtonTitle: L10n.Identification.Scan.forceDismiss)
         
         var lastRemainingAttempts: Int?
-        var authenticationSuccessful = false
         var alert: AlertState<IdentificationCANScan.Action>?
 #if PREVIEW
         var availableDebugActions: [IdentifyDebugSequence] = []
@@ -119,11 +117,11 @@ struct IdentificationCANScan: ReducerProtocol {
                 eIDInteractionManager.setPIN(state.pin)
                 return .none
             }
-        case .authenticationSucceeded(redirectURL: .some(let redirectURL)):
-            logger.info("Authentication successfully with redirect.")
+        case .identificationSucceeded(redirectURL: .some(let redirectURL)):
+            logger.info("Identification successfully with redirect.")
             return EffectTask(value: .identifiedSuccessfully(redirectURL: redirectURL))
-        case .authenticationSucceeded(redirectURL: .none):
-            issueTracker.capture(error: RedactedEIDInteractionEventError(.authenticationSucceeded(redirectURL: nil)))
+        case .identificationSucceeded(redirectURL: .none):
+            issueTracker.capture(error: RedactedEIDInteractionEventError(.identificationSucceeded(redirectURL: nil)))
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: state.shared.scanAvailable)))
         case .pukRequested:
             eIDInteractionManager.interrupt()

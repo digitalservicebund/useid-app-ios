@@ -5,16 +5,16 @@ enum EIDInteractionError: Error, Equatable {
     case frameworkError(message: String?)
     case unexpectedReadAttribute(String)
     case cardDeactivated
-    case authenticationFailed(resultMajor: String, resultMinor: String?, refreshURL: URL?)
+    case identificationFailed(resultMajor: String, resultMinor: String?, refreshURL: URL?)
     case pinChangeFailed
-    case authenticationBadRequest
+    case identificationFailedWithBadRequest
 }
 
 enum RedactedEIDInteractionError: CustomNSError, Hashable {
     // TODO: The message is lost, e.g. onWrapperError vs. onBadState
     case frameworkError
     case unexpectedReadAttribute
-    case authenticationFailed(resultMajor: String, resultMinor: String?)
+    case identificationFailed(resultMajor: String, resultMinor: String?)
     
     init?(_ eIDInteractionError: EIDInteractionError) {
         switch eIDInteractionError {
@@ -22,8 +22,8 @@ enum RedactedEIDInteractionError: CustomNSError, Hashable {
             self = .frameworkError
         case .unexpectedReadAttribute:
             self = .unexpectedReadAttribute
-        case .authenticationFailed(let resultMajor, let resultMinor, _):
-            self = .authenticationFailed(resultMajor: resultMajor, resultMinor: resultMinor)
+        case .identificationFailed(let resultMajor, let resultMinor, _):
+            self = .identificationFailed(resultMajor: resultMajor, resultMinor: resultMinor)
         default:
             return nil
         }
@@ -33,8 +33,8 @@ enum RedactedEIDInteractionError: CustomNSError, Hashable {
         switch self {
         case .frameworkError, .unexpectedReadAttribute:
             return [NSDebugDescriptionErrorKey: "\(self)"]
-        case .authenticationFailed(let resultMajor, let resultMinor):
-            return [NSDebugDescriptionErrorKey: "authenticationFailed(resultMajor: \(resultMajor), resultMinor: \(String(describing: resultMinor))"]
+        case .identificationFailed(let resultMajor, let resultMinor):
+            return [NSDebugDescriptionErrorKey: "identificationFailed(resultMajor: \(resultMajor), resultMinor: \(String(describing: resultMinor))"]
         }
     }
 }

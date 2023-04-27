@@ -43,7 +43,7 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
     }
 
     func onAuthenticationStarted() {
-        subject.send(.authenticationStarted)
+        subject.send(.identificationStarted)
     }
 
     func onAuthenticationStartFailed(error: String) {
@@ -68,9 +68,9 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
         }
 
         do {
-            let requiredRights = try accessRights.requiredRights.map(EIDAttribute.init)
-            let request = AuthenticationRequest(requiredAttributes: requiredRights, transactionInfo: accessRights.transactionInfo)
-            subject.send(.authenticationRequestConfirmationRequested(request))
+            let requiredAttributes = try accessRights.requiredRights.map(EIDAttribute.init)
+            let request = IdentificationRequest(requiredAttributes: requiredAttributes, transactionInfo: accessRights.transactionInfo)
+            subject.send(.identificationRequestConfirmationRequested(request))
         } catch EIDInteractionError.unexpectedReadAttribute(let attribute) {
             subject.send(completion: .failure(.unexpectedReadAttribute(attribute)))
             return
@@ -104,7 +104,7 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
             if resultMajor == "ok" {
                 var refreshURLComponents = refreshURLOrCommunicationErrorAddressComponents
                 refreshURLComponents.queryItems = queryItems
-                subject.send(.authenticationSucceeded(redirectURL: refreshURLComponents.url))
+                subject.send(.identificationSucceeded(redirectURL: refreshURLComponents.url))
                 subject.send(completion: .finished)
             } else {
                 var resultMinor: String? = nil
@@ -117,12 +117,12 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
                 }
                 var errorAddressComponents = refreshURLOrCommunicationErrorAddressComponents
                 errorAddressComponents.queryItems = queryItems
-                subject.send(completion: .failure(.authenticationFailed(resultMajor: resultMajor,
+                subject.send(completion: .failure(.identificationFailed(resultMajor: resultMajor,
                                                                         resultMinor: resultMinor,
                                                                         refreshURL: errorAddressComponents.url)))
             }
         } else {
-            subject.send(completion: .failure(.authenticationBadRequest))
+            subject.send(completion: .failure(.identificationFailedWithBadRequest))
         }
     }
 
@@ -187,7 +187,7 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
     func onReader(reader: AusweisApp2SDKWrapper.Reader?) {
         guard let reader else {
             logger.error("onReader: Unknown reader")
-            // reader is nil when authentication is done
+            // reader is nil when identification is done
             // subject.send(completion: .failure(.unknownReader))
             return
         }

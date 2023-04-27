@@ -4,7 +4,7 @@ import ComposableArchitecture
 
 struct IdentificationPersonalPIN: ReducerProtocol {
     struct State: Equatable {
-        var authenticationInformation: AuthenticationInformation
+        var identificationInformation: IdentificationInformation
         @BindingState var enteredPIN: String = ""
         
         var doneButtonEnabled: Bool {
@@ -14,7 +14,7 @@ struct IdentificationPersonalPIN: ReducerProtocol {
 
     enum Action: BindableAction, Equatable {
         case onAppear
-        case done(authenticationInformation: AuthenticationInformation, pin: String)
+        case done(identificationInformation: IdentificationInformation, pin: String)
         case binding(BindingAction<IdentificationPersonalPIN.State>)
     }
 
@@ -45,10 +45,10 @@ struct IdentificationPersonalPINView: View {
                                      doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                           title: L10n.Identification.PersonalPIN.continue,
                                                                           handler: { pin in
-                                                                              viewStore.send(.done(authenticationInformation: viewStore.authenticationInformation, pin: pin))
-                                                                          }))
-                                                                          .focused($pinEntryFocused)
-                                                                          .headingL()
+                            viewStore.send(.done(identificationInformation: viewStore.identificationInformation, pin: pin))
+                        }))
+                        .focused($pinEntryFocused)
+                        .headingL()
                     }
                     Spacer()
                 }
@@ -72,12 +72,12 @@ struct IdentificationPersonalPINView: View {
 struct IdentificationPersonalPIN_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            IdentificationPersonalPINView(store: Store(initialState: IdentificationPersonalPIN.State(authenticationInformation: .preview, enteredPIN: "12345"),
+            IdentificationPersonalPINView(store: Store(initialState: IdentificationPersonalPIN.State(identificationInformation: .preview, enteredPIN: "12345"),
                                                        reducer: IdentificationPersonalPIN()))
         }
         .previewDevice("iPhone 12")
         NavigationView {
-            IdentificationPersonalPINView(store: Store(initialState: IdentificationPersonalPIN.State(authenticationInformation: .preview),
+            IdentificationPersonalPINView(store: Store(initialState: IdentificationPersonalPIN.State(identificationInformation: .preview),
                                                        reducer: IdentificationPersonalPIN()))
         }
         .previewDevice("iPhone 12")

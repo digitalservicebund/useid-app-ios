@@ -44,22 +44,22 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
     func run(card: inout Card, subject: PassthroughSubject<EIDInteractionEvent, EIDInteractionError>) -> [IdentifyDebugSequence] {
         switch self {
         case .loadError:
-            subject.send(completion: .failure(.authenticationFailed(resultMajor: "error", resultMinor: "debugError", refreshURL: nil)))
+            subject.send(completion: .failure(.identificationFailed(resultMajor: "error", resultMinor: "debugError", refreshURL: nil)))
             return []
         case .requestAuthorization:
-            subject.send(.authenticationRequestConfirmationRequested(.init(requiredAttributes: [.givenNames, .familyName, .dateOfBirth])))
+            subject.send(.identificationRequestConfirmationRequested(.init(requiredAttributes: [.givenNames, .familyName, .dateOfBirth])))
             subject.send(.certificateDescriptionRetrieved(CertificateDescription.preview))
             return [.identifySuccessfully, .missingRedirect, .runPINError(initial: true, remainingAttempts: card.remainingAttempts), .runCardBlocked, .runCardSuspended, .runCardDeactivated]
         case .identifySuccessfully:
             card.remainingAttempts = 3
             subject.send(.cardRecognized)
-            subject.send(.authenticationSucceeded(redirectURL: URL(string: "https://example.org")!))
+            subject.send(.identificationSucceeded(redirectURL: URL(string: "https://example.org")!))
             subject.send(completion: .finished)
             return []
         case .missingRedirect:
             card.remainingAttempts = 3
             subject.send(.cardRecognized)
-            subject.send(.authenticationSucceeded(redirectURL: nil))
+            subject.send(.identificationSucceeded(redirectURL: nil))
             subject.send(completion: .finished)
             return []
         case .runPINError(initial: let initial, remainingAttempts: let remainingAttempts):
@@ -83,7 +83,7 @@ enum IdentifyDebugSequence: Identifiable, Equatable {
             
             return [.identifySuccessfully, .runPINError(initial: false, remainingAttempts: card.remainingAttempts), .runCANError]
         case .runNFCError:
-            subject.send(completion: .failure(.authenticationFailed(resultMajor: "error", resultMinor: "debugError", refreshURL: nil)))
+            subject.send(completion: .failure(.identificationFailed(resultMajor: "error", resultMinor: "debugError", refreshURL: nil)))
             return []
         case .runCardSuspended:
             card.remainingAttempts = 1

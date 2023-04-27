@@ -80,8 +80,11 @@ struct IdentificationOverview: ReducerProtocol {
                                    name: "attributes",
                                    analytics: analytics)
             case .loading(.done(let request, let certificateDescription)):
+                let identificationInformation = IdentificationInformation(request: request,
+                                                                          certificateDescription: certificateDescription)
                 state = .loaded(IdentificationOverviewLoaded.State(id: uuid.callAsFunction(),
-                                                                   authenticationInformation: AuthenticationInformation(request: request, certificateDescription: certificateDescription),
+                                                                   identificationInformation: identificationInformation,
+
                                                                    canGoBackToSetupIntro: state.canGoBackToSetupIntro))
                 return .none
             default:

@@ -5,27 +5,27 @@ struct IdentificationOverviewLoaded: ReducerProtocol {
 
     struct State: Identifiable, Equatable {
         let id: UUID
-        let authenticationInformation: AuthenticationInformation
+        let identificationInformation: IdentificationInformation
         let canGoBackToSetupIntro: Bool
         
         // used when going back to the overview screen when we already received a pin handler
         var pinHandler: PINCallback?
         
-        init(id: UUID, authenticationInformation: AuthenticationInformation, canGoBackToSetupIntro: Bool = false, pinHandler: PINCallback? = nil) {
+        init(id: UUID, identificationInformation: IdentificationInformation, canGoBackToSetupIntro: Bool = false, pinHandler: PINCallback? = nil) {
             self.id = id
-            self.authenticationInformation = authenticationInformation
+            self.identificationInformation = identificationInformation
             self.canGoBackToSetupIntro = canGoBackToSetupIntro
             self.pinHandler = pinHandler
         }
         
         var requiredReadAttributes: IdentifiedArrayOf<EIDAttribute> {
-            IdentifiedArrayOf(uniqueElements: authenticationInformation.request.requiredAttributes)
+            IdentifiedArrayOf(uniqueElements: identificationInformation.request.requiredAttributes)
         }
     }
     
     enum Action: Equatable {
         case moreInfo
-        case confirm(AuthenticationInformation)
+        case confirm(IdentificationInformation)
         case failure(IdentifiableError)
     }
     
@@ -49,21 +49,21 @@ struct IdentificationOverviewLoadedView: View {
             VStack(alignment: .leading, spacing: 0) {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
-                        HeaderView(title: L10n.Identification.AttributeConsent.title(viewStore.authenticationInformation.certificateDescription.subjectName),
+                        HeaderView(title: L10n.Identification.AttributeConsent.title(viewStore.identificationInformation.certificateDescription.subjectName),
                                    message: L10n.Identification.AttributeConsent.body)
                             .padding(.horizontal)
                         
                         attributesBox
                         
                         NavigationLink(L10n.Identification.AttributeConsent.moreInfo) {
-                            IdentificationAbout(request: viewStore.authenticationInformation.certificateDescription)
+                            IdentificationAbout(request: viewStore.identificationInformation.certificateDescription)
                         }
                         .buttonStyle(BundTextButtonStyle())
                         .padding([.horizontal, .bottom])
                     }
                 }
                 DialogButtons(store: store.stateless,
-                              primary: .init(title: L10n.Identification.AttributeConsent.continue, action: .confirm(viewStore.authenticationInformation)))
+                              primary: .init(title: L10n.Identification.AttributeConsent.continue, action: .confirm(viewStore.identificationInformation)))
             }
             .navigationBarTitleDisplayMode(.inline)
         }

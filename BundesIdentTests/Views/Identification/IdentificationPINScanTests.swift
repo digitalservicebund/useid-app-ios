@@ -26,7 +26,7 @@ final class IdentificationPINScanTests: XCTestCase {
     func testOnAppearDoesNotTriggerScanningWhenInstructionsShown() throws {
         let pin = "123456"
         let store = TestStore(
-            initialState: IdentificationPINScan.State(authenticationInformation: .preview,
+            initialState: IdentificationPINScan.State(identificationInformation: .preview,
                                                       pin: pin,
                                                       shared: SharedScan.State()),
             reducer: IdentificationPINScan()
@@ -37,7 +37,7 @@ final class IdentificationPINScanTests: XCTestCase {
 
     func testWrongPIN() throws {
         let pin = "123456"
-        let store = TestStore(initialState: IdentificationPINScan.State(authenticationInformation: .preview,
+        let store = TestStore(initialState: IdentificationPINScan.State(identificationInformation: .preview,
                                                                         pin: pin,
                                                                         lastRemainingAttempts: 3,
                                                                         shared: SharedScan.State()),
@@ -61,7 +61,7 @@ final class IdentificationPINScanTests: XCTestCase {
     func testStartScanTracking() {
         let pin = "123456"
         
-        let store = TestStore(initialState: IdentificationPINScan.State(authenticationInformation: .preview,
+        let store = TestStore(initialState: IdentificationPINScan.State(identificationInformation: .preview,
                                                                         pin: pin,
                                                                         shared: SharedScan.State()),
                               reducer: IdentificationPINScan())

@@ -49,7 +49,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         store.dependencies.uuid = .incrementing
         store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         
-        let request = AuthenticationRequest.preview
+        let request = IdentificationRequest.preview
         let certificateDescription = CertificateDescription.preview
         
         stub(mockEIDInteractionManager) {
@@ -58,47 +58,47 @@ class IdentificationCoordinatorTests: XCTestCase {
             }
         }
         
-        store.send(.eIDInteractionEvent(.success(.authenticationRequestConfirmationRequested(request)))) {
+        store.send(.eIDInteractionEvent(.success(.identificationRequestConfirmationRequested(request)))) {
             guard case .overview(.loading(var loadingState)) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
-            loadingState.authenticationRequest = request
+            loadingState.identificationRequest = request
             $0.routes[0].screen = .overview(.loading(loadingState))
         }
         
-        store.receive(.routeAction(0, action: .overview(.loading(.eIDInteractionEvent(.success(.authenticationRequestConfirmationRequested(request)))))))
+        store.receive(.routeAction(0, action: .overview(.loading(.eIDInteractionEvent(.success(.identificationRequestConfirmationRequested(request)))))))
         
         store.receive(.routeAction(0, action: .overview(.loading(.eIDInteractionEvent(.success(.certificateDescriptionRetrieved(CertificateDescription.preview)))))))
         
         store.receive(.routeAction(0, action: .overview(.loading(.done(.preview, .preview))))) {
             $0.routes = [
                 .sheet(.overview(.loaded(.init(id: UUID(number: 0),
-                                               authenticationInformation: AuthenticationInformation(request: request,
-                                                                                                    certificateDescription: certificateDescription)))))
+                                               identificationInformation: .init(request: request,
+                                                                                certificateDescription: certificateDescription)))))
             ]
         }
     }
     
     func testOverviewLoadedToPINEntry() throws {
-        let authenticationInformation = AuthenticationInformation.preview
+        let identificationInformation = IdentificationInformation.preview
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           states: [
                                                               .root(.overview(.loaded(.init(id: UUID(number: 0),
-                                                                                            authenticationInformation: authenticationInformation))))
+                                                                                            identificationInformation: identificationInformation))))
                                                           ]),
             reducer: IdentificationCoordinator()
         )
         
-        store.send(.routeAction(0, action: .overview(.loaded(.confirm(authenticationInformation))))) {
-            $0.routes.append(.push(.personalPIN(IdentificationPersonalPIN.State(authenticationInformation: authenticationInformation))))
+        store.send(.routeAction(0, action: .overview(.loaded(.confirm(identificationInformation))))) {
+            $0.routes.append(.push(.personalPIN(IdentificationPersonalPIN.State(identificationInformation: identificationInformation))))
         }
     }
     
     func testPINEntryToScanFirstTime() throws {
-        let authenticationInformation = AuthenticationInformation.preview
+        let identificationInformation = IdentificationInformation.preview
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           states: [
-                                                              .root(.personalPIN(.init(authenticationInformation: authenticationInformation)))
+                                                              .root(.personalPIN(.init(identificationInformation: identificationInformation)))
                                                           ]),
             reducer: IdentificationCoordinator()
         )
@@ -107,18 +107,18 @@ class IdentificationCoordinatorTests: XCTestCase {
             $0.identifiedOnce.get.thenReturn(false)
         }
         
-        store.send(.routeAction(0, action: .personalPIN(.done(authenticationInformation: authenticationInformation, pin: "123456")))) {
+        store.send(.routeAction(0, action: .personalPIN(.done(identificationInformation: identificationInformation, pin: "123456")))) {
             $0.pin = "123456"
-            $0.routes.append(.push(.scan(IdentificationPINScan.State(authenticationInformation: authenticationInformation, pin: "123456"))))
+            $0.routes.append(.push(.scan(IdentificationPINScan.State(identificationInformation: identificationInformation, pin: "123456"))))
         }
     }
     
     func testPINEntryToScanAfterIdentifyingOnce() throws {
-        let authenticationInformation = AuthenticationInformation.preview
+        let identificationInformation = IdentificationInformation.preview
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           states: [
-                                                              .root(.personalPIN(.init(authenticationInformation: authenticationInformation)))
+                                                              .root(.personalPIN(.init(identificationInformation: identificationInformation)))
                                                           ]),
             reducer: IdentificationCoordinator()
         )
@@ -127,10 +127,10 @@ class IdentificationCoordinatorTests: XCTestCase {
             $0.identifiedOnce.get.thenReturn(true)
         }
         
-        store.send(.routeAction(0, action: .personalPIN(.done(authenticationInformation: authenticationInformation, pin: "123456")))) {
+        store.send(.routeAction(0, action: .personalPIN(.done(identificationInformation: identificationInformation, pin: "123456")))) {
             $0.pin = "123456"
             $0.routes.append(.push(.scan(IdentificationPINScan.State(
-                authenticationInformation: authenticationInformation,
+                identificationInformation: identificationInformation,
                 pin: "123456",
                 shared: SharedScan.State(startOnAppear: true, forceDismissButtonTitle: L10n.Identification.Scan.forceDismiss)
             ))))
@@ -140,13 +140,12 @@ class IdentificationCoordinatorTests: XCTestCase {
     func testScanSuccess() throws {
         let redirect = URL(string: "https://example.com")!
         let pin = "123456"
-        let authenticationInformation = AuthenticationInformation.preview
-        let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
+        let identificationInformation = IdentificationInformation.preview
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           pin: pin,
                                                           states: [
-                                                              .root(.scan(.init(authenticationInformation: authenticationInformation,
+                                                              .root(.scan(.init(identificationInformation: identificationInformation,
                                                                                 pin: pin)))
                                                           ]),
             reducer: IdentificationCoordinator()
@@ -172,12 +171,12 @@ class IdentificationCoordinatorTests: XCTestCase {
     
     func testScanToIncorrectPIN() throws {
         let pin = "123456"
-        let authenticationInformation = AuthenticationInformation.preview
+        let identificationInformation = IdentificationInformation.preview
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           pin: pin,
                                                           states: [
-                                                              .root(.scan(.init(authenticationInformation: authenticationInformation,
+                                                              .root(.scan(.init(identificationInformation: identificationInformation,
                                                                                 pin: pin)))
                                                           ]),
             reducer: IdentificationCoordinator()
@@ -190,13 +189,13 @@ class IdentificationCoordinatorTests: XCTestCase {
     
     func testScanToError() throws {
         let pin = "123456"
-        let authenticationInformation = AuthenticationInformation.preview
+        let identificationInformation = IdentificationInformation.preview
         let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           pin: pin,
                                                           states: [
-                                                              .root(.scan(.init(authenticationInformation: authenticationInformation,
+                                                              .root(.scan(.init(identificationInformation: identificationInformation,
                                                                                 pin: pin)))
                                                           ]),
             reducer: IdentificationCoordinator()
@@ -210,13 +209,12 @@ class IdentificationCoordinatorTests: XCTestCase {
     
     func testIncorrectPINToScan() throws {
         let pin = "123456"
-        let authenticationInformation = AuthenticationInformation.preview
-        let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
+        let identificationInformation = IdentificationInformation.preview
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           pin: pin,
                                                           states: [
-                                                              .root(.scan(.init(authenticationInformation: authenticationInformation,
+                                                              .root(.scan(.init(identificationInformation: identificationInformation,
                                                                                 pin: pin))),
                                                               .sheet(.incorrectPersonalPIN(IdentificationIncorrectPersonalPIN.State(enteredPIN: "112233", remainingAttempts: 2)))
                                                           ]),
@@ -252,23 +250,23 @@ class IdentificationCoordinatorTests: XCTestCase {
         
         store.send(.routeAction(0, action: .overview(.loading(.identify))))
         
-        subject.send(.authenticationStarted)
+        subject.send(.identificationStarted)
         subject.send(completion: .finished)
         
         scheduler.advance()
         
-        store.receive(.eIDInteractionEvent(.success(.authenticationStarted)))
-        store.receive(.routeAction(0, action: .overview(.loading(.eIDInteractionEvent(.success(.authenticationStarted))))))
+        store.receive(.eIDInteractionEvent(.success(.identificationStarted)))
+        store.receive(.routeAction(0, action: .overview(.loading(.eIDInteractionEvent(.success(.identificationStarted))))))
     }
     
     func testEndOnIncorrectPIN() {
         let pin = "123456"
-        let authenticationInformation = AuthenticationInformation.preview
+        let identificationInformation = IdentificationInformation.preview
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           pin: pin,
                                                           states: [
-                                                              .root(.scan(IdentificationPINScan.State(authenticationInformation: authenticationInformation, pin: pin))),
+                                                              .root(.scan(IdentificationPINScan.State(identificationInformation: identificationInformation, pin: pin))),
                                                               .sheet(.incorrectPersonalPIN(IdentificationIncorrectPersonalPIN.State(remainingAttempts: 2)))
                                                           ]),
             reducer: IdentificationCoordinator()
@@ -283,12 +281,12 @@ class IdentificationCoordinatorTests: XCTestCase {
     
     func testConfirmEndOnIncorrectPIN() {
         let pin = "123456"
-        let authenticationInformation = AuthenticationInformation.preview
+        let identificationInformation = IdentificationInformation.preview
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           pin: pin,
                                                           states: [
-                                                              .root(.scan(IdentificationPINScan.State(authenticationInformation: authenticationInformation, pin: pin))),
+                                                              .root(.scan(IdentificationPINScan.State(identificationInformation: identificationInformation, pin: pin))),
                                                               .sheet(.incorrectPersonalPIN(IdentificationIncorrectPersonalPIN.State(remainingAttempts: 2)))
                                                           ]),
             reducer: IdentificationCoordinator()
@@ -321,12 +319,12 @@ class IdentificationCoordinatorTests: XCTestCase {
     
     func testEnterIncorrectPINToPinForgotten() throws {
         let pin = "123456"
-        let authenticationInformation = AuthenticationInformation.preview
+        let identificationInformation = IdentificationInformation.preview
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           pin: pin,
                                                           states: [
-                                                              .root(.scan(.init(authenticationInformation: authenticationInformation,
+                                                              .root(.scan(.init(identificationInformation: identificationInformation,
                                                                                 pin: pin))),
                                                               .sheet(.incorrectPersonalPIN(IdentificationIncorrectPersonalPIN.State(enteredPIN: "112233", remainingAttempts: 2)))
                                                           ]),
@@ -342,8 +340,8 @@ class IdentificationCoordinatorTests: XCTestCase {
             $0.routes = [.root(.scan(scanState))]
         }
         
-        store.send(.routeAction(0, action: .scan(.requestCAN(authenticationInformation)))) {
-            $0.routes.append(.push(.identificationCANCoordinator(.init(authenticationInformation: authenticationInformation,
+        store.send(.routeAction(0, action: .scan(.requestCAN(identificationInformation)))) {
+            $0.routes.append(.push(.identificationCANCoordinator(.init(identificationInformation: identificationInformation,
                                                                        pin: nil,
                                                                        attempt: $0.attempt,
                                                                        goToCanIntroScreen: false))))
@@ -352,19 +350,19 @@ class IdentificationCoordinatorTests: XCTestCase {
     
     func testRequestPINAndCANFromImmediateThirdAttemptToCANIntro() throws {
         let pin = "123456"
-        let authenticationInformation = AuthenticationInformation.preview
+        let identificationInformation = IdentificationInformation.preview
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           pin: pin,
                                                           states: [
-                                                              .root(.personalPIN(.init(authenticationInformation: authenticationInformation))),
-                                                              .push(.scan(.init(authenticationInformation: authenticationInformation, pin: pin)))
+                                                              .root(.personalPIN(.init(identificationInformation: identificationInformation))),
+                                                              .push(.scan(.init(identificationInformation: identificationInformation, pin: pin)))
                                                           ]),
             reducer: IdentificationCoordinator()
         )
         
-        store.send(.routeAction(1, action: .scan(.requestCAN(authenticationInformation)))) {
-            $0.routes.append(.push(.identificationCANCoordinator(.init(authenticationInformation: authenticationInformation,
+        store.send(.routeAction(1, action: .scan(.requestCAN(identificationInformation)))) {
+            $0.routes.append(.push(.identificationCANCoordinator(.init(identificationInformation: identificationInformation,
                                                                        pin: $0.pin!,
                                                                        attempt: $0.attempt,
                                                                        goToCanIntroScreen: true))))

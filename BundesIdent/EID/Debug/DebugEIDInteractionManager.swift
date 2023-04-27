@@ -39,7 +39,7 @@ class DebugEIDInteractionManager: EIDInteractionManagerType {
         let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
         self.subject = subject
         
-        subject.send(.authenticationStarted)
+        subject.send(.identificationStarted)
         subject.send(.cardInsertionRequested)
         
         return subject
@@ -55,7 +55,7 @@ class DebugEIDInteractionManager: EIDInteractionManagerType {
         let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
         self.subject = subject
         
-        subject.send(.authenticationStarted)
+        subject.send(.identificationStarted)
         subject.send(.cardInsertionRequested)
         
         return subject
@@ -96,15 +96,15 @@ class DebugEIDInteractionManager: EIDInteractionManagerType {
 
 #if DEBUG || PREVIEW
 
-extension AuthenticationInformation {
-    static var preview: AuthenticationInformation = .init(request: .preview, certificateDescription: .preview)
+extension IdentificationInformation {
+    static var preview: Self = .init(request: .preview, certificateDescription: .preview)
 }
 
-extension AuthenticationRequest {
-    static var preview: AuthenticationRequest = .init(requiredAttributes: [.documentType,
-                                                                           .issuingCountry,
-                                                                           .validUntil,
-                                                                           .artisticName])
+extension IdentificationRequest {
+    static var preview: Self = .init(requiredAttributes: [.documentType,
+                                                          .issuingCountry,
+                                                          .validUntil,
+                                                          .artisticName])
 }
 
 extension CertificateDescription {

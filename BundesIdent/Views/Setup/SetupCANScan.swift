@@ -17,7 +17,6 @@ struct SetupCANScan: ReducerProtocol {
         var can: String
         var shared: SharedScan.State = .init(forceDismissButtonTitle: L10n.FirstTimeUser.Scan.forceDismiss)
         
-        var authenticationSuccessful = false
         var alert: AlertState<SetupCANScan.Action>?
 #if PREVIEW
         var availableDebugActions: [ChangePINDebugSequence] = []
@@ -90,8 +89,8 @@ struct SetupCANScan: ReducerProtocol {
     
     func handle(state: inout State, event: EIDInteractionEvent) -> EffectTask<SetupCANScan.Action> {
         switch event {
-        case .authenticationStarted:
-            logger.info("Authentication started.")
+        case .identificationStarted:
+            logger.info("Identification started.")
         case .pinChangeStarted:
             logger.info("PIN Change started.")
         case .cardInsertionRequested:
@@ -102,7 +101,6 @@ struct SetupCANScan: ReducerProtocol {
             state.shared.cardRecognized = true
         case .cardRemoved:
             logger.info("Card removed.")
-            state.authenticationSuccessful = false
         case .pinChangeSucceeded:
             return EffectTask(value: .scannedSuccessfully)
         case .canRequested:
@@ -120,8 +118,8 @@ struct SetupCANScan: ReducerProtocol {
         case .newPINRequested:
             eIDInteractionManager.setNewPIN(state.newPIN)
             return .none
-        case .authenticationSucceeded,
-             .authenticationRequestConfirmationRequested,
+        case .identificationSucceeded,
+             .identificationRequestConfirmationRequested,
              .certificateDescriptionRetrieved:
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             logger.error("Received unexpected event.")

@@ -1,11 +1,11 @@
 import Foundation
 
-struct AuthenticationInformation: Equatable {
-    let request: AuthenticationRequest
+struct IdentificationInformation: Equatable {
+    let request: IdentificationRequest
     let certificateDescription: CertificateDescription
 }
 
-struct AuthenticationRequest: Equatable {
+struct IdentificationRequest: Equatable {
     var requiredAttributes: [EIDAttribute]
     var transactionInfo: String?
 }

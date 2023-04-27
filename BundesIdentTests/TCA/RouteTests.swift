@@ -249,7 +249,7 @@ final class RouteTests: XCTestCase {
 
     func testIdentificationScanSuccessfulRoutes() {
         let pin = "123456"
-        let request = AuthenticationRequest.preview
+        let request = IdentificationRequest.preview
         let certificateDescription = CertificateDescription.preview
         let closure = { (_: FlaggedAttributes) in }
         let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
@@ -273,7 +273,7 @@ final class RouteTests: XCTestCase {
 
         store.send(.openURL(tokenURL))
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.eIDInteractionEvent(.success(.authenticationRequestConfirmationRequested(request))))))
+        store.send(.routeAction(1, action: .identificationCoordinator(.eIDInteractionEvent(.success(.identificationRequestConfirmationRequested(request))))))
         
         verify(mockEIDInteractionManager).retrieveCertificateDescription()
         
@@ -282,12 +282,12 @@ final class RouteTests: XCTestCase {
         verify(mockMatomoTracker).track(view: ["identification", "attributes"], url: URL?.none)
         endInteraction(mockMatomoTracker)
 
-        let authenticationInformation = AuthenticationInformation.preview
-        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(0, action: .overview(.loaded(.confirm(authenticationInformation)))))))
+        let identificationInformation = IdentificationInformation.preview
+        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(0, action: .overview(.loaded(.confirm(identificationInformation)))))))
         verify(mockMatomoTracker).track(view: ["identification", "personalPIN"], url: URL?.none)
         endInteraction(mockMatomoTracker)
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(1, action: .personalPIN(.done(authenticationInformation: authenticationInformation,
+        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(1, action: .personalPIN(.done(identificationInformation: identificationInformation,
                                                                                                                  pin: pin))))))
         verify(mockMatomoTracker).track(view: ["identification", "scan"], url: URL?.none)
         endInteraction(mockMatomoTracker)
@@ -306,9 +306,9 @@ final class RouteTests: XCTestCase {
 
     func testIdentificationWrongPINRoutes() {
         let pin = "123456"
-        let request = AuthenticationRequest.preview
+        let request = IdentificationRequest.preview
         let certificate = CertificateDescription.preview
-        let authenticationInformation = AuthenticationInformation(request: request, certificateDescription: certificate)
+        let identificationInformation = IdentificationInformation(request: request, certificateDescription: certificate)
         let tokenURL = demoTokenURL
         let root = Route<Screen.State>.root(.home(Home.State(appVersion: "1.0.0", buildNumber: 1)))
         let store = TestStore(initialState: Coordinator.State(routes: [root], remoteConfiguration: .init(finished: true)),
@@ -329,18 +329,18 @@ final class RouteTests: XCTestCase {
 
         store.send(.openURL(tokenURL))
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.eIDInteractionEvent(.success(.authenticationRequestConfirmationRequested(request))))))
+        store.send(.routeAction(1, action: .identificationCoordinator(.eIDInteractionEvent(.success(.identificationRequestConfirmationRequested(request))))))
         
         store.send(.routeAction(1, action: .identificationCoordinator(.eIDInteractionEvent(.success(.certificateDescriptionRetrieved(certificate))))))
         
         verify(mockMatomoTracker).track(view: ["identification", "attributes"], url: URL?.none)
         endInteraction(mockMatomoTracker)
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(0, action: .overview(.loaded(.confirm(authenticationInformation)))))))
+        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(0, action: .overview(.loaded(.confirm(identificationInformation)))))))
         verify(mockMatomoTracker).track(view: ["identification", "personalPIN"], url: URL?.none)
         endInteraction(mockMatomoTracker)
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(1, action: .personalPIN(.done(authenticationInformation: authenticationInformation,
+        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(1, action: .personalPIN(.done(identificationInformation: identificationInformation,
                                                                                                                  pin: pin))))))
         verify(mockMatomoTracker).track(view: ["identification", "scan"], url: URL?.none)
         endInteraction(mockMatomoTracker)
@@ -354,7 +354,7 @@ final class RouteTests: XCTestCase {
                                         url: URL?.none)
         endInteraction(mockMatomoTracker)
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(2, action: .scan(.requestCAN(authenticationInformation))))))
+        store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(2, action: .scan(.requestCAN(identificationInformation))))))
         verify(mockMatomoTracker).track(view: ["identification", "canPINForgotten"],
                                         url: URL?.none)
         endInteraction(mockMatomoTracker)
@@ -368,20 +368,16 @@ final class RouteTests: XCTestCase {
     func testIdentificationCANRoutes() {
         let pin = "123456"
         let can = "123456"
-        let authenticationInformation = AuthenticationInformation.preview
-        let closure = { (_: FlaggedAttributes) in }
-        let callback = IdentifiableCallback<FlaggedAttributes>(id: UUID(number: 0), callback: closure)
-        let pinCallback = PINCallback(id: UUID(number: 0), callback: { _ in })
-        let pinCANCallback = PINCANCallback(id: UUID(number: 0), callback: { _, _ in })
+        let identificationInformation = IdentificationInformation.preview
         let tokenURL = URL(string: "https://example.com")!
         let initialCanRoutes: [Route<IdentificationCANScreen.State>] = [.root(.canPINForgotten(.init()))]
 
         let initialIdentificationRoutes: [Route<IdentificationScreen.State>] = [
             .root(.overview(.loaded(.init(id: UUID(number: 0),
-                                          authenticationInformation: authenticationInformation)))),
-            .push(.personalPIN(.init(authenticationInformation: authenticationInformation))),
-            .push(.scan(.init(authenticationInformation: authenticationInformation, pin: pin))),
-            .push(.identificationCANCoordinator(.init(authenticationInformation: authenticationInformation,
+                                          identificationInformation: identificationInformation)))),
+            .push(.personalPIN(.init(identificationInformation: identificationInformation))),
+            .push(.scan(.init(identificationInformation: identificationInformation, pin: pin))),
+            .push(.identificationCANCoordinator(.init(identificationInformation: identificationInformation,
                                                       attempt: 0,
                                                       states: initialCanRoutes))),
         ]

@@ -8,9 +8,9 @@ enum EIDInteractionEvent: Equatable {
     case pinRequested(remainingAttempts: Int?)
     case newPINRequested
     case pukRequested
-    case authenticationStarted
-    case authenticationSucceeded(redirectURL: URL?)
-    case authenticationRequestConfirmationRequested(AuthenticationRequest)
+    case identificationStarted
+    case identificationSucceeded(redirectURL: URL?)
+    case identificationRequestConfirmationRequested(IdentificationRequest)
     case pinChangeStarted
     case pinChangeSucceeded
     case certificateDescriptionRetrieved(CertificateDescription)
@@ -24,10 +24,10 @@ enum RedactedEIDInteractionEventError: CustomNSError {
     case pinRequested
     case newPINRequested
     case pukRequested
-    case authenticationStarted
-    case authenticationSucceededWithRedirect
-    case authenticationSucceededWithoutRedirect
-    case authenticationRequestConfirmationRequested
+    case identificationStarted
+    case identificationSucceededWithRedirect
+    case identificationSucceededWithoutRedirect
+    case identificationRequestConfirmationRequested
     case pinChangeStarted
     case pinChangeSucceeded
     case certificateDescriptionRetrieved
@@ -41,10 +41,10 @@ enum RedactedEIDInteractionEventError: CustomNSError {
         case .pinRequested: self = .pinRequested
         case .newPINRequested: self = .newPINRequested
         case .pukRequested: self = .pukRequested
-        case .authenticationStarted: self = .authenticationStarted
-        case .authenticationSucceeded(redirectURL: .some): self = .authenticationSucceededWithRedirect
-        case .authenticationSucceeded(redirectURL: .none): self = .authenticationSucceededWithoutRedirect
-        case .authenticationRequestConfirmationRequested: self = .authenticationRequestConfirmationRequested
+        case .identificationStarted: self = .identificationStarted
+        case .identificationSucceeded(redirectURL: .some): self = .identificationSucceededWithRedirect
+        case .identificationSucceeded(redirectURL: .none): self = .identificationSucceededWithoutRedirect
+        case .identificationRequestConfirmationRequested: self = .identificationRequestConfirmationRequested
         case .pinChangeStarted: self = .pinChangeStarted
         case .pinChangeSucceeded: self = .pinChangeSucceeded
         case .certificateDescriptionRetrieved: self = .certificateDescriptionRetrieved

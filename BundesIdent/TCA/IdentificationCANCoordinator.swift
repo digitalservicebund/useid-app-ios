@@ -23,8 +23,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
     struct State: Equatable, IndexedRouterState {
         var pin: String?
         var can: String?
-        var authenticationInformation: AuthenticationInformation
-        var authenticationSuccessful = false
+        var identificationInformation: IdentificationInformation
         var attempt: Int
         
         var swipeToDismiss: SwipeToDismissState {
@@ -175,12 +174,12 @@ extension IdentificationCANCoordinator.State: AnalyticsView {
 }
 
 extension IdentificationCANCoordinator.State {
-    init(authenticationInformation: AuthenticationInformation,
+    init(identificationInformation: IdentificationInformation,
          pin: String?,
          attempt: Int,
          goToCanIntroScreen: Bool) {
         self.pin = pin
-        self.authenticationInformation = authenticationInformation
+        self.identificationInformation = identificationInformation
         self.attempt = attempt
         if goToCanIntroScreen {
             states = [.root(.canIntro(.init(shouldDismiss: true)))]

@@ -2,16 +2,13 @@ import SwiftUI
 import ComposableArchitecture
 import Combine
 import Sentry
-import Analytics
 import OSLog
 
 struct SetupScan: ReducerProtocol {
-    @Dependency(\.analytics) var analytics
     @Dependency(\.issueTracker) var issueTracker
     @Dependency(\.mainQueue) var mainQueue
     @Dependency(\.logger) var logger
     @Dependency(\.storageManager) var storageManager
-    @Dependency(\.uuid) var uuid
     @Dependency(\.eIDInteractionManager) var eIDInteractionManager
     
     struct State: Equatable, EIDInteractionHandler {
@@ -103,8 +100,8 @@ struct SetupScan: ReducerProtocol {
     
     func handle(state: inout State, event: EIDInteractionEvent) -> EffectTask<SetupScan.Action> {
         switch event {
-        case .authenticationStarted:
-            logger.info("Authentication started.")
+        case .identificationStarted:
+            logger.info("Identification started.")
         case .cardInsertionRequested:
             logger.info("Card insertion requested.")
             state.shared.cardRecognized = false
@@ -150,7 +147,7 @@ struct SetupScan: ReducerProtocol {
             }
             eIDInteractionManager.setPIN(state.transportPIN)
             return .none
-        case .authenticationSucceeded, .authenticationRequestConfirmationRequested, .certificateDescriptionRetrieved:
+        case .identificationSucceeded, .identificationRequestConfirmationRequested, .certificateDescriptionRetrieved:
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             logger.error("Received unexpected event.")
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))

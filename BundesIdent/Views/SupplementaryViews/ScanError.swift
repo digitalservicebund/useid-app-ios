@@ -45,7 +45,7 @@ struct ScanError: ReducerProtocol {
         var primaryButton: DialogButtons<ScanError.Action>.ButtonConfiguration {
             if retry {
                 return .init(title: L10n.ScanError.close, action: .retry)
-            } else if case .eIDInteraction(.authenticationFailed(_, _, let url)) = errorType, let url {
+            } else if case .eIDInteraction(.identificationFailed(_, _, let url)) = errorType, let url {
                 return .init(title: L10n.ScanError.redirect, action: .end(redirectURL: url))
             } else {
                 return .init(title: L10n.ScanError.close, action: .end(redirectURL: nil))

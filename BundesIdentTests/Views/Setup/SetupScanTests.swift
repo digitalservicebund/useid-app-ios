@@ -77,7 +77,7 @@ class SetupScanTests: XCTestCase {
             mock.setNewPIN(anyString()).thenDoNothing()
         }
 
-        store.send(.scanEvent(.success(.authenticationStarted)))
+        store.send(.scanEvent(.success(.identificationStarted)))
         store.send(.scanEvent(.success(.cardInsertionRequested)))
 
         store.send(.scanEvent(.success(.cardRecognized))) {

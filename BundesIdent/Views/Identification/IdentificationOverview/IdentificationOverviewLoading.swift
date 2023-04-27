@@ -3,7 +3,6 @@ import SwiftUI
 import Sentry
 
 struct IdentificationOverviewLoading: ReducerProtocol {
-    @Dependency(\.uuid) var uuid
     @Dependency(\.issueTracker) var issueTracker
     @Dependency(\.logger) var logger
     @Dependency(\.eIDInteractionManager) var eIDInteractionManager
@@ -11,12 +10,12 @@ struct IdentificationOverviewLoading: ReducerProtocol {
     struct State: Equatable {
         var onAppearCalled: Bool
         var canGoBackToSetupIntro: Bool
-        var authenticationRequest: AuthenticationRequest?
+        var identificationRequest: IdentificationRequest?
         
-        init(onAppearCalled: Bool = false, canGoBackToSetupIntro: Bool = false, authenticationRequest: AuthenticationRequest? = nil) {
+        init(onAppearCalled: Bool = false, canGoBackToSetupIntro: Bool = false, identificationRequest: IdentificationRequest? = nil) {
             self.onAppearCalled = onAppearCalled
             self.canGoBackToSetupIntro = canGoBackToSetupIntro
-            self.authenticationRequest = authenticationRequest
+            self.identificationRequest = identificationRequest
         }
         
 #if PREVIEW
@@ -28,7 +27,7 @@ struct IdentificationOverviewLoading: ReducerProtocol {
         case onAppear
         case identify
         case eIDInteractionEvent(Result<EIDInteractionEvent, EIDInteractionError>)
-        case done(AuthenticationRequest, CertificateDescription)
+        case done(IdentificationRequest, CertificateDescription)
         case failure(IdentifiableError)
 #if PREVIEW
         case runDebugSequence(IdentifyDebugSequence)
@@ -46,16 +45,16 @@ struct IdentificationOverviewLoading: ReducerProtocol {
             return EffectTask(value: .identify)
         case .identify:
             return .none
-        case .eIDInteractionEvent(.success(.authenticationRequestConfirmationRequested(let request))):
-            state.authenticationRequest = request
+        case .eIDInteractionEvent(.success(.identificationRequestConfirmationRequested(let request))):
+            state.identificationRequest = request
             eIDInteractionManager.retrieveCertificateDescription()
             return .none
         case .eIDInteractionEvent(.success(.certificateDescriptionRetrieved(let certificateDescription))):
-            guard let authenticationRequest = state.authenticationRequest else {
-                logger.error("Missing authenticationRequest, this must not happen.")
+            guard let identificationRequest = state.identificationRequest else {
+                logger.error("Missing identificationRequest, this must not happen.")
                 return .none // EffectTask(value: .failure(<#T##IdentifiableError#>))
             }
-            return EffectTask(value: .done(authenticationRequest, certificateDescription))
+            return EffectTask(value: .done(identificationRequest, certificateDescription))
         case .eIDInteractionEvent(.failure(let error)):
             RedactedEIDInteractionError(error).flatMap(issueTracker.capture(error:))
             return EffectTask(value: .failure(IdentifiableError(error)))

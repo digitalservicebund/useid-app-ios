@@ -35,7 +35,7 @@ final class ScanErrorReducerTests: XCTestCase {
     
     func testReducerWithoutRedirectURL() {
         let store = TestStore(
-            initialState: ScanError.State(errorType: .eIDInteraction(.authenticationFailed(resultMajor: "",
+            initialState: ScanError.State(errorType: .eIDInteraction(.identificationFailed(resultMajor: "",
                                                                                            resultMinor: "",
                                                                                            refreshURL: nil)),
                                           retry: false),
@@ -50,7 +50,7 @@ final class ScanErrorReducerTests: XCTestCase {
     
     func testReducerOpensRedirectURL() {
         let store = TestStore(
-            initialState: ScanError.State(errorType: .eIDInteraction(.authenticationFailed(resultMajor: "",
+            initialState: ScanError.State(errorType: .eIDInteraction(.identificationFailed(resultMajor: "",
                                                                                            resultMinor: "",
                                                                                            refreshURL: redirectURL)),
                                           retry: false),
@@ -73,7 +73,7 @@ final class ScanErrorStateTests: XCTestCase {
     }
     
     func testRedirectErrorPrimaryButton() {
-        let state = ScanError.State(errorType: .eIDInteraction(.authenticationFailed(resultMajor: "",
+        let state = ScanError.State(errorType: .eIDInteraction(.identificationFailed(resultMajor: "",
                                                                                      resultMinor: "",
                                                                                      refreshURL: redirectURL)),
                                     retry: false)
@@ -95,7 +95,7 @@ final class ScanErrorStateTests: XCTestCase {
     }
     
     func testBoxWithoutRetry() {
-        let state = ScanError.State(errorType: .eIDInteraction(.authenticationFailed(resultMajor: "",
+        let state = ScanError.State(errorType: .eIDInteraction(.identificationFailed(resultMajor: "",
                                                                                      resultMinor: "",
                                                                                      refreshURL: redirectURL)),
                                     retry: false)
