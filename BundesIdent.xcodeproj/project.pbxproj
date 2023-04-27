@@ -15,7 +15,7 @@
 		43363E0B29B0C41300E9FA23 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43363E0A29B0C41300E9FA23 /* LaunchView.swift */; };
 		43363E0D29B6BFF300E9FA23 /* RemoteConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43363E0C29B6BFF300E9FA23 /* RemoteConfiguration.swift */; };
 		43363E0F29BB164200E9FA23 /* RemoteConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43363E0E29BB164200E9FA23 /* RemoteConfigurationTests.swift */; };
-		4398414629F981BB00B91714 /* AuthenticationInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4398414529F981BB00B91714 /* AuthenticationInformation.swift */; };
+		4398414629F981BB00B91714 /* IdentificationInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4398414529F981BB00B91714 /* IdentificationInformation.swift */; };
 		4398414829F9822200B91714 /* ScanOverlayMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4398414729F9822200B91714 /* ScanOverlayMessages.swift */; };
 		43AE178929C3C1A700902E27 /* SetupIntroVariation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AE178829C3C1A700902E27 /* SetupIntroVariation.swift */; };
 		43EE410329A3D89700A96953 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EE410229A3D89700A96953 /* BackButton.swift */; };
@@ -205,7 +205,7 @@
 		43363E0A29B0C41300E9FA23 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		43363E0C29B6BFF300E9FA23 /* RemoteConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfiguration.swift; sourceTree = "<group>"; };
 		43363E0E29BB164200E9FA23 /* RemoteConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigurationTests.swift; sourceTree = "<group>"; };
-		4398414529F981BB00B91714 /* AuthenticationInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationInformation.swift; sourceTree = "<group>"; };
+		4398414529F981BB00B91714 /* IdentificationInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationInformation.swift; sourceTree = "<group>"; };
 		4398414729F9822200B91714 /* ScanOverlayMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanOverlayMessages.swift; sourceTree = "<group>"; };
 		43AE178829C3C1A700902E27 /* SetupIntroVariation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntroVariation.swift; sourceTree = "<group>"; };
 		43EE410229A3D89700A96953 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
@@ -825,12 +825,12 @@
 			isa = PBXGroup;
 			children = (
 				4398414B29FA985900B91714 /* Debug */,
-				4398414529F981BB00B91714 /* AuthenticationInformation.swift */,
 				E5E69D882812FB8D00A3B66A /* EIDAttribute.swift */,
 				E5E69D822812FB4500A3B66A /* EIDInteractionEvent.swift */,
 				E5E69D842812FB6100A3B66A /* EIDInteractionError.swift */,
 				430A933629DC540200607329 /* EIDInteractionFlowListener.swift */,
 				E1494266291E8A750059703B /* EIDInteractionManager.swift */,
+				4398414529F981BB00B91714 /* IdentificationInformation.swift */,
 				4398414729F9822200B91714 /* ScanOverlayMessages.swift */,
 			);
 			path = EID;
@@ -1127,7 +1127,7 @@
 				D278AC9A28FD388100BD0528 /* View+Synchronize.swift in Sources */,
 				E110400D281C389C004BA03E /* SetupIntro.swift in Sources */,
 				E1AB879E282283AB00C7FC94 /* Fonts.swift in Sources */,
-				4398414629F981BB00B91714 /* AuthenticationInformation.swift in Sources */,
+				4398414629F981BB00B91714 /* IdentificationInformation.swift in Sources */,
 				E16708BC283D824D001A1637 /* Scheduler+Animation.swift in Sources */,
 				E1C2D8BA28620E2B000E0F5B /* IdentificationPINScan.swift in Sources */,
 				4334B4D329A64F00001FF36C /* Markdown.swift in Sources */,
