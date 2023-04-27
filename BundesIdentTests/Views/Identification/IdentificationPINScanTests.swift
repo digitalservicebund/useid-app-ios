@@ -10,11 +10,11 @@ final class IdentificationPINScanTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var mockAnalyticsClient: MockAnalyticsClient!
-    var mockIDInteractionManager: MockIDInteractionManagerType!
+    var mockEIDInteractionManager: MockEIDInteractionManagerType!
     
     override func setUp() {
         mockAnalyticsClient = MockAnalyticsClient()
-        mockIDInteractionManager = MockIDInteractionManagerType()
+        mockEIDInteractionManager = MockEIDInteractionManagerType()
         scheduler = DispatchQueue.test
         
         stub(mockAnalyticsClient) {
@@ -43,9 +43,9 @@ final class IdentificationPINScanTests: XCTestCase {
                                                                         shared: SharedScan.State()),
                               reducer: IdentificationPINScan())
         store.dependencies.uuid = .incrementing
-        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         
-        stub(mockIDInteractionManager) {
+        stub(mockEIDInteractionManager) {
             $0.interrupt().thenDoNothing()
         }
         
@@ -53,7 +53,7 @@ final class IdentificationPINScanTests: XCTestCase {
             $0.lastRemainingAttempts = 2
         }
         
-        verify(mockIDInteractionManager).interrupt()
+        verify(mockEIDInteractionManager).interrupt()
         
         store.receive(.wrongPIN(remainingAttempts: 2))
     }
@@ -66,8 +66,8 @@ final class IdentificationPINScanTests: XCTestCase {
                                                                         shared: SharedScan.State()),
                               reducer: IdentificationPINScan())
         store.dependencies.analytics = mockAnalyticsClient
-        store.dependencies.idInteractionManager = mockIDInteractionManager
-        stub(mockIDInteractionManager) {
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
+        stub(mockEIDInteractionManager) {
             $0.acceptAccessRights().thenDoNothing()
         }
         
@@ -77,7 +77,7 @@ final class IdentificationPINScanTests: XCTestCase {
             $0.shared.preventSecondScanningAttempt = true
         }
         
-        verify(mockIDInteractionManager).acceptAccessRights()
+        verify(mockEIDInteractionManager).acceptAccessRights()
         
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "identification",
                                                                 action: "buttonPressed",

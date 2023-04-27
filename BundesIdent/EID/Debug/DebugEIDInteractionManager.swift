@@ -21,7 +21,7 @@ enum CancelAction: Equatable {
     case can
 }
 
-class DebugIDInteractionManager: IDInteractionManagerType {
+class DebugEIDInteractionManager: EIDInteractionManagerType {
     private var subject: PassthroughSubject<EIDInteractionEvent, EIDInteractionError>?
     private var card: Card = .init(remainingAttempts: 3)
     

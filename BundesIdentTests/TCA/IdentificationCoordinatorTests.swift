@@ -10,19 +10,19 @@ import Analytics
 class IdentificationCoordinatorTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
-    var mockIDInteractionManager: MockIDInteractionManagerType!
+    var mockEIDInteractionManager: MockEIDInteractionManagerType!
     var mockStorageManager: MockStorageManagerType!
     var mockAnalyticsClient: MockAnalyticsClient!
-    var mockPreviewIDInteractionManager: MockPreviewIDInteractionManagerType!
+    var mockPreviewEIDInteractionManager: MockPreviewEIDInteractionManagerType!
     var openedURL: URL?
     var urlOpener: ((URL) -> Void)!
     
     override func setUp() {
-        mockIDInteractionManager = MockIDInteractionManagerType()
+        mockEIDInteractionManager = MockEIDInteractionManagerType()
         mockStorageManager = MockStorageManagerType()
         scheduler = DispatchQueue.test
         mockAnalyticsClient = MockAnalyticsClient()
-        mockPreviewIDInteractionManager = MockPreviewIDInteractionManagerType()
+        mockPreviewEIDInteractionManager = MockPreviewEIDInteractionManagerType()
         urlOpener = { self.openedURL = $0 }
         
         stub(mockStorageManager) {
@@ -34,7 +34,7 @@ class IdentificationCoordinatorTests: XCTestCase {
             $0.track(event: any()).thenDoNothing()
         }
         
-        stub(mockPreviewIDInteractionManager) {
+        stub(mockPreviewEIDInteractionManager) {
             $0.isDebugModeEnabled.get.thenReturn(false)
         }
     }
@@ -47,26 +47,26 @@ class IdentificationCoordinatorTests: XCTestCase {
         let store = TestStore(initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL),
                               reducer: IdentificationCoordinator())
         store.dependencies.uuid = .incrementing
-        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         
         let request = AuthenticationRequest.preview
         let certificateDescription = CertificateDescription.preview
         
-        stub(mockIDInteractionManager) {
+        stub(mockEIDInteractionManager) {
             $0.retrieveCertificateDescription().then { _ in
-                store.send(.idInteractionEvent(.success(.certificateDescriptionRetrieved(CertificateDescription.preview))))
+                store.send(.eIDInteractionEvent(.success(.certificateDescriptionRetrieved(CertificateDescription.preview))))
             }
         }
         
-        store.send(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request)))) {
+        store.send(.eIDInteractionEvent(.success(.authenticationRequestConfirmationRequested(request)))) {
             guard case .overview(.loading(var loadingState)) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
             loadingState.authenticationRequest = request
             $0.routes[0].screen = .overview(.loading(loadingState))
         }
         
-        store.receive(.routeAction(0, action: .overview(.loading(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request)))))))
+        store.receive(.routeAction(0, action: .overview(.loading(.eIDInteractionEvent(.success(.authenticationRequestConfirmationRequested(request)))))))
         
-        store.receive(.routeAction(0, action: .overview(.loading(.idInteractionEvent(.success(.certificateDescriptionRetrieved(CertificateDescription.preview)))))))
+        store.receive(.routeAction(0, action: .overview(.loading(.eIDInteractionEvent(.success(.certificateDescriptionRetrieved(CertificateDescription.preview)))))))
         
         store.receive(.routeAction(0, action: .overview(.loading(.done(.preview, .preview))))) {
             $0.routes = [
@@ -79,7 +79,6 @@ class IdentificationCoordinatorTests: XCTestCase {
     
     func testOverviewLoadedToPINEntry() throws {
         let authenticationInformation = AuthenticationInformation.preview
-        let closure = { (attributes: FlaggedAttributes) in }
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           states: [
@@ -96,7 +95,6 @@ class IdentificationCoordinatorTests: XCTestCase {
     
     func testPINEntryToScanFirstTime() throws {
         let authenticationInformation = AuthenticationInformation.preview
-        let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           states: [
@@ -117,7 +115,6 @@ class IdentificationCoordinatorTests: XCTestCase {
     
     func testPINEntryToScanAfterIdentifyingOnce() throws {
         let authenticationInformation = AuthenticationInformation.preview
-        let callback = PINCallback(id: UUID(number: 0), callback: { _ in })
         let store = TestStore(
             initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
                                                           states: [
@@ -157,7 +154,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         store.dependencies.urlOpener = urlOpener
         store.dependencies.storageManager = mockStorageManager
         store.dependencies.analytics = mockAnalyticsClient
-        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         
         stub(mockStorageManager) {
             $0.identifiedOnce.get.thenReturn(false)
@@ -245,11 +242,11 @@ class IdentificationCoordinatorTests: XCTestCase {
             reducer: IdentificationCoordinator()
         )
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
-        store.dependencies.idInteractionManager = mockIDInteractionManager
-        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
+        store.dependencies.previewEIDInteractionManager = mockPreviewEIDInteractionManager
         
         let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
-        stub(mockIDInteractionManager) {
+        stub(mockEIDInteractionManager) {
             $0.identify(tokenURL: demoTokenURL, messages: ScanOverlayMessages.identification).thenReturn(subject.eraseToAnyPublisher())
         }
         
@@ -260,8 +257,8 @@ class IdentificationCoordinatorTests: XCTestCase {
         
         scheduler.advance()
         
-        store.receive(.idInteractionEvent(.success(.authenticationStarted)))
-        store.receive(.routeAction(0, action: .overview(.loading(.idInteractionEvent(.success(.authenticationStarted))))))
+        store.receive(.eIDInteractionEvent(.success(.authenticationStarted)))
+        store.receive(.routeAction(0, action: .overview(.loading(.eIDInteractionEvent(.success(.authenticationStarted))))))
     }
     
     func testEndOnIncorrectPIN() {

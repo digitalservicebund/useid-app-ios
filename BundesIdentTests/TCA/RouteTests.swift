@@ -29,7 +29,7 @@ final class RouteTests: XCTestCase {
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var mockAnalyticsClient: MatomoAnalyticsClient!
     var mockIssueTracker: MockIssueTracker!
-    var mockIDInteractionManager = MockIDInteractionManagerType()
+    var mockEIDInteractionManager = MockEIDInteractionManagerType()
     var mockStorageManager = MockStorageManagerType()
     var mockMatomoTracker = MockMatomoTrackerProtocol()
     var openedURL: URL?
@@ -59,7 +59,7 @@ final class RouteTests: XCTestCase {
             $0.setupCompleted.set(any()).thenDoNothing()
         }
         
-        stub(mockIDInteractionManager) {
+        stub(mockEIDInteractionManager) {
             $0.interrupt().thenDoNothing()
             $0.setPIN(any()).thenDoNothing()
             $0.setCAN(any()).thenDoNothing()
@@ -264,7 +264,7 @@ final class RouteTests: XCTestCase {
         store.dependencies.uuid = .incrementing
         store.dependencies.urlOpener = urlOpener
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
-        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         store.send(.onAppear)
 
         verify(mockMatomoTracker).reset()
@@ -273,11 +273,11 @@ final class RouteTests: XCTestCase {
 
         store.send(.openURL(tokenURL))
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request))))))
+        store.send(.routeAction(1, action: .identificationCoordinator(.eIDInteractionEvent(.success(.authenticationRequestConfirmationRequested(request))))))
         
-        verify(mockIDInteractionManager).retrieveCertificateDescription()
+        verify(mockEIDInteractionManager).retrieveCertificateDescription()
         
-        store.send(.routeAction(1, action: .identificationCoordinator(.idInteractionEvent(.success(.certificateDescriptionRetrieved(certificateDescription))))))
+        store.send(.routeAction(1, action: .identificationCoordinator(.eIDInteractionEvent(.success(.certificateDescriptionRetrieved(certificateDescription))))))
 
         verify(mockMatomoTracker).track(view: ["identification", "attributes"], url: URL?.none)
         endInteraction(mockMatomoTracker)
@@ -320,7 +320,7 @@ final class RouteTests: XCTestCase {
         store.dependencies.uuid = .incrementing
         store.dependencies.urlOpener = urlOpener
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
-        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         store.send(.onAppear)
 
         verify(mockMatomoTracker).reset()
@@ -329,9 +329,9 @@ final class RouteTests: XCTestCase {
 
         store.send(.openURL(tokenURL))
 
-        store.send(.routeAction(1, action: .identificationCoordinator(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request))))))
+        store.send(.routeAction(1, action: .identificationCoordinator(.eIDInteractionEvent(.success(.authenticationRequestConfirmationRequested(request))))))
         
-        store.send(.routeAction(1, action: .identificationCoordinator(.idInteractionEvent(.success(.certificateDescriptionRetrieved(certificate))))))
+        store.send(.routeAction(1, action: .identificationCoordinator(.eIDInteractionEvent(.success(.certificateDescriptionRetrieved(certificate))))))
         
         verify(mockMatomoTracker).track(view: ["identification", "attributes"], url: URL?.none)
         endInteraction(mockMatomoTracker)
@@ -396,7 +396,7 @@ final class RouteTests: XCTestCase {
         store.dependencies.storageManager = mockStorageManager
         store.dependencies.uuid = .incrementing
         store.dependencies.urlOpener = urlOpener
-        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
 
         store.send(.routeAction(1, action: .identificationCoordinator(.routeAction(3, action: .identificationCANCoordinator(.routeAction(0, action: .canPINForgotten(.showCANIntro)))))))
         verify(mockMatomoTracker).track(view: ["identification", "canIntro"],

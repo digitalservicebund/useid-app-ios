@@ -6,7 +6,7 @@ import SwiftUI
 import ComposableArchitecture
 import Analytics
 
-protocol IDInteractionHandler {
+protocol EIDInteractionHandler {
     associatedtype LocalAction
     func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> LocalAction?
 }
@@ -26,15 +26,15 @@ enum IdentificationCoordinatorError: CustomNSError {
 }
 
 struct IdentificationCoordinator: ReducerProtocol {
-    @Dependency(\.idInteractionManager) var idInteractionManager
+    @Dependency(\.eIDInteractionManager) var eIDInteractionManager
     @Dependency(\.issueTracker) var issueTracker
     @Dependency(\.logger) var logger
     @Dependency(\.mainQueue) var mainQueue
     @Dependency(\.storageManager) var storageManager
 #if PREVIEW
-    @Dependency(\.previewIDInteractionManager) var previewIDInteractionManager
+    @Dependency(\.previewEIDInteractionManager) var previewEIDInteractionManager
 #endif
-    struct State: Equatable, IndexedRouterState, IDInteractionHandler {
+    struct State: Equatable, IndexedRouterState, EIDInteractionHandler {
         var tokenURL: URL
         var pin: String?
         var attempt: Int = 0
@@ -64,7 +64,7 @@ struct IdentificationCoordinator: ReducerProtocol {
     enum Action: Equatable, IndexedRouterAction {
         case routeAction(Int, action: IdentificationScreen.Action)
         case updateRoutes([Route<IdentificationScreen.State>])
-        case idInteractionEvent(Result<EIDInteractionEvent, EIDInteractionError>)
+        case eIDInteractionEvent(Result<EIDInteractionEvent, EIDInteractionError>)
         case scanError(ScanError.State)
         case swipeToDismiss
         case afterConfirmEnd
@@ -81,14 +81,14 @@ struct IdentificationCoordinator: ReducerProtocol {
             switch action {
 #if PREVIEW
             case .runDebugSequence(let debugSequence):
-                state.availableDebugActions = previewIDInteractionManager.runIdentify(debugSequence: debugSequence)
+                state.availableDebugActions = previewEIDInteractionManager.runIdentify(debugSequence: debugSequence)
                 return .none
 #endif
             case .routeAction(_, action: .scan(.wrongPIN(remainingAttempts: let remainingAttempts))):
                 state.routes.presentSheet(.incorrectPersonalPIN(IdentificationIncorrectPersonalPIN.State(error: .incorrect,
                                                                                                          remainingAttempts: remainingAttempts)))
                 return .none
-            case .idInteractionEvent(let result):
+            case .eIDInteractionEvent(let result):
                 guard let localAction = state.transformToLocalAction(result) else {
                     issueTracker.capture(error: IdentificationCoordinatorError.noScreenToHandleEIDInteractionEvents)
                     logger.error("No screen found to handle EIDInteractionEvents")
@@ -108,19 +108,19 @@ struct IdentificationCoordinator: ReducerProtocol {
             case .routeAction(_, action: .overview(.loading(.identify))):
                 let publisher: EIDInteractionPublisher
 #if PREVIEW
-                if previewIDInteractionManager.isDebugModeEnabled {
-                    let debuggableInteraction = previewIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
+                if previewEIDInteractionManager.isDebugModeEnabled {
+                    let debuggableInteraction = previewEIDInteractionManager.debuggableIdentify(tokenURL: state.tokenURL)
                     state.availableDebugActions = debuggableInteraction.sequence
                     publisher = debuggableInteraction.publisher
                 } else {
-                    publisher = idInteractionManager.identify(tokenURL: state.tokenURL, messages: .identification)
+                    publisher = eIDInteractionManager.identify(tokenURL: state.tokenURL, messages: .identification)
                 }
 #else
-                publisher = idInteractionManager.identify(tokenURL: state.tokenURL, messages: .identification)
+                publisher = eIDInteractionManager.identify(tokenURL: state.tokenURL, messages: .identification)
 #endif
                 return publisher
                     .receive(on: mainQueue)
-                    .catchToEffect(IdentificationCoordinator.Action.idInteractionEvent)
+                    .catchToEffect(IdentificationCoordinator.Action.eIDInteractionEvent)
                     .cancellable(id: CancelId.self, cancelInFlight: true)
 #if PREVIEW
             case .routeAction(_, action: .overview(.loading(.runDebugSequence(let sequence)))),

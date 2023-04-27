@@ -6,7 +6,7 @@ struct IdentificationOverviewLoading: ReducerProtocol {
     @Dependency(\.uuid) var uuid
     @Dependency(\.issueTracker) var issueTracker
     @Dependency(\.logger) var logger
-    @Dependency(\.idInteractionManager) var idInteractionManager
+    @Dependency(\.eIDInteractionManager) var eIDInteractionManager
     
     struct State: Equatable {
         var onAppearCalled: Bool
@@ -27,7 +27,7 @@ struct IdentificationOverviewLoading: ReducerProtocol {
     enum Action: Equatable {
         case onAppear
         case identify
-        case idInteractionEvent(Result<EIDInteractionEvent, EIDInteractionError>)
+        case eIDInteractionEvent(Result<EIDInteractionEvent, EIDInteractionError>)
         case done(AuthenticationRequest, CertificateDescription)
         case failure(IdentifiableError)
 #if PREVIEW
@@ -46,20 +46,20 @@ struct IdentificationOverviewLoading: ReducerProtocol {
             return EffectTask(value: .identify)
         case .identify:
             return .none
-        case .idInteractionEvent(.success(.authenticationRequestConfirmationRequested(let request))):
+        case .eIDInteractionEvent(.success(.authenticationRequestConfirmationRequested(let request))):
             state.authenticationRequest = request
-            idInteractionManager.retrieveCertificateDescription()
+            eIDInteractionManager.retrieveCertificateDescription()
             return .none
-        case .idInteractionEvent(.success(.certificateDescriptionRetrieved(let certificateDescription))):
+        case .eIDInteractionEvent(.success(.certificateDescriptionRetrieved(let certificateDescription))):
             guard let authenticationRequest = state.authenticationRequest else {
                 logger.error("Missing authenticationRequest, this must not happen.")
                 return .none // EffectTask(value: .failure(<#T##IdentifiableError#>))
             }
             return EffectTask(value: .done(authenticationRequest, certificateDescription))
-        case .idInteractionEvent(.failure(let error)):
+        case .eIDInteractionEvent(.failure(let error)):
             RedactedEIDInteractionError(error).flatMap(issueTracker.capture(error:))
             return EffectTask(value: .failure(IdentifiableError(error)))
-        case .idInteractionEvent:
+        case .eIDInteractionEvent:
             return .none
         case .done:
             return .none

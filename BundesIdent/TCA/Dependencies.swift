@@ -10,39 +10,32 @@ enum LoggerKey: DependencyKey {
 }
 
 #if PREVIEW
-enum PreviewIDInteractionManagerKey: DependencyKey {
+enum PreviewEIDInteractionManagerKey: DependencyKey {
+    typealias Value = PreviewEIDInteractionManagerType
 #if !targetEnvironment(simulator)
-    static var liveValue: PreviewIDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: IDInteractionManager(),
-                                                                                        debugIDInteractionManager: DebugIDInteractionManager())
+    static var liveValue: Value = PreviewEIDInteractionManager(real: EIDInteractionManager(), debug: .init())
 #else
-    static var liveValue: PreviewIDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: MockIDInteractionManager(),
-                                                                                        debugIDInteractionManager: DebugIDInteractionManager())
+    static var liveValue: Value = PreviewEIDInteractionManager(real: UnimplementedEIDInteractionManager(), debug: .init())
 #endif
 }
 
 extension DependencyValues {
-    var previewIDInteractionManager: PreviewIDInteractionManagerType {
-        get { self[PreviewIDInteractionManagerKey.self] }
-        set { self[PreviewIDInteractionManagerKey.self] = newValue }
+    var previewEIDInteractionManager: PreviewEIDInteractionManagerType {
+        get { self[PreviewEIDInteractionManagerKey.self] }
+        set { self[PreviewEIDInteractionManagerKey.self] = newValue }
     }
 }
 #endif
 
-enum IDInteractionManagerKey: DependencyKey {
+enum EIDInteractionManagerKey: DependencyKey {
 #if PREVIEW
-#if !targetEnvironment(simulator) // Preview on device
-    static var liveValue: IDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: IDInteractionManager(),
-                                                                                 debugIDInteractionManager: DebugIDInteractionManager())
-#else // Preview in simulator
-    static var liveValue: IDInteractionManagerType = PreviewIDInteractionManager(realIDInteractionManager: MockIDInteractionManager(),
-                                                                                 debugIDInteractionManager: DebugIDInteractionManager())
+    static var liveValue: EIDInteractionManagerType = PreviewEIDInteractionManagerKey.liveValue
+#elseif !targetEnvironment(simulator)
+    static var liveValue: EIDInteractionManagerType = EIDInteractionManager()
+#else
+    static var liveValue: EIDInteractionManagerType = UnimplementedEIDInteractionManager()
 #endif
-#elseif !targetEnvironment(simulator) // Production on device
-    static var liveValue: IDInteractionManagerType = IDInteractionManager()
-#else // Production in simulator
-    static var liveValue: IDInteractionManagerType = MockIDInteractionManager()
-#endif
-    static var previewValue: IDInteractionManagerType = MockIDInteractionManager()
+    static var previewValue: EIDInteractionManagerType = UnimplementedEIDInteractionManager()
 }
 
 enum URLOpenerKey: DependencyKey {
@@ -74,9 +67,9 @@ enum AppVersionProviderKey: DependencyKey {
 }
 
 extension DependencyValues {
-    var idInteractionManager: IDInteractionManagerType {
-        get { self[IDInteractionManagerKey.self] }
-        set { self[IDInteractionManagerKey.self] = newValue }
+    var eIDInteractionManager: EIDInteractionManagerType {
+        get { self[EIDInteractionManagerKey.self] }
+        set { self[EIDInteractionManagerKey.self] = newValue }
     }
     
     var storageManager: StorageManagerType {

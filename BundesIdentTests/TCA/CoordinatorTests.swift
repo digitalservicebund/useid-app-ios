@@ -12,9 +12,9 @@ final class CoordinatorTests: XCTestCase {
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var mockAnalyticsClient: MockAnalyticsClient!
     var mockIssueTracker: MockIssueTracker!
-    var mockIDInteractionManager = MockIDInteractionManagerType()
+    var mockEIDInteractionManager = MockEIDInteractionManagerType()
     var mockStorageManager = MockStorageManagerType()
-    var mockPreviewIDInteractionManager = MockPreviewIDInteractionManagerType()
+    var mockPreviewEIDInteractionManager = MockPreviewEIDInteractionManagerType()
     var mockAppVersionProvider = MockAppVersionProvider()
 
     override func setUp() {
@@ -32,7 +32,7 @@ final class CoordinatorTests: XCTestCase {
             $0.capture(error: any()).thenDoNothing()
         }
 
-        stub(mockPreviewIDInteractionManager) {
+        stub(mockPreviewEIDInteractionManager) {
             $0.isDebugModeEnabled.get.thenReturn(false)
         }
 
@@ -116,7 +116,7 @@ final class CoordinatorTests: XCTestCase {
                               reducer: Coordinator())
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.storageManager = mockStorageManager
-        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        store.dependencies.previewEIDInteractionManager = mockPreviewEIDInteractionManager
         store.dependencies.appVersionProvider = mockAppVersionProvider
 
         stub(mockStorageManager) {

@@ -12,9 +12,9 @@ struct SetupScan: ReducerProtocol {
     @Dependency(\.logger) var logger
     @Dependency(\.storageManager) var storageManager
     @Dependency(\.uuid) var uuid
-    @Dependency(\.idInteractionManager) var idInteractionManager
+    @Dependency(\.eIDInteractionManager) var eIDInteractionManager
     
-    struct State: Equatable, IDInteractionHandler {
+    struct State: Equatable, EIDInteractionHandler {
         var transportPIN: String
         var newPIN: String
         var shared: SharedScan.State = .init(forceDismissButtonTitle: L10n.FirstTimeUser.Scan.forceDismiss)
@@ -58,7 +58,7 @@ struct SetupScan: ReducerProtocol {
             state.shared.cardRecognized = false
             state.shared.preventSecondScanningAttempt = true
             if state.isScanInitiated {
-                idInteractionManager.setPIN(state.transportPIN)
+                eIDInteractionManager.setPIN(state.transportPIN)
                 return .none
             } else {
                 return EffectTask(value: .shared(.initiateScan))
@@ -119,18 +119,18 @@ struct SetupScan: ReducerProtocol {
             logger.info("PIN change started.")
         case .newPINRequested:
             logger.info("Providing new PIN.")
-            idInteractionManager.setNewPIN(state.newPIN)
+            eIDInteractionManager.setNewPIN(state.newPIN)
             return .none
         case .canRequested:
             logger.info("CAN requested.")
             state.shared.scanAvailable = true
-            idInteractionManager.interrupt()
+            eIDInteractionManager.interrupt()
             return EffectTask(value: .requestCANAndChangedPIN(pin: state.newPIN))
                 .delay(for: 2, scheduler: mainQueue) // this delay is here to fix a bug where this particular screen was presented incorrectly
                 .eraseToEffect()
         case .pukRequested:
             logger.info("PUK requested, so card is blocked. Callback not implemented yet.")
-            idInteractionManager.interrupt()
+            eIDInteractionManager.interrupt()
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
         case .pinRequested(remainingAttempts: let newRemainingAttempts):
             logger.info("Providing PIN with \(String(describing: newRemainingAttempts)) remaining attempts.")
@@ -145,10 +145,10 @@ struct SetupScan: ReducerProtocol {
             // Wrong transport/personal PIN provided
             if let remainingAttemptsBefore,
                remainingAttempts < remainingAttemptsBefore {
-                idInteractionManager.interrupt()
+                eIDInteractionManager.interrupt()
                 return EffectTask(value: .wrongTransportPIN)
             }
-            idInteractionManager.setPIN(state.transportPIN)
+            eIDInteractionManager.setPIN(state.transportPIN)
             return .none
         case .authenticationSucceeded, .authenticationRequestConfirmationRequested, .certificateDescriptionRetrieved:
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))

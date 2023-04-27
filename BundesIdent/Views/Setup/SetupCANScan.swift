@@ -9,9 +9,9 @@ struct SetupCANScan: ReducerProtocol {
     @Dependency(\.issueTracker) var issueTracker
     @Dependency(\.storageManager) var storageManager
     @Dependency(\.logger) var logger
-    @Dependency(\.idInteractionManager) var idInteractionManager
+    @Dependency(\.eIDInteractionManager) var eIDInteractionManager
     
-    struct State: Equatable, IDInteractionHandler {
+    struct State: Equatable, EIDInteractionHandler {
         var transportPIN: String
         var newPIN: String
         var can: String
@@ -49,7 +49,7 @@ struct SetupCANScan: ReducerProtocol {
         case .onAppear:
             return state.shared.startOnAppear ? EffectTask(value: .shared(.startScan)) : .none
         case .shared(.startScan):
-            idInteractionManager.setCAN(state.can)
+            eIDInteractionManager.setCAN(state.can)
             state.shared.preventSecondScanningAttempt = true
             return .trackEvent(category: "Setup",
                                action: "buttonPressed",
@@ -107,18 +107,18 @@ struct SetupCANScan: ReducerProtocol {
             return EffectTask(value: .scannedSuccessfully)
         case .canRequested:
             logger.info("Wrong CAN provided")
-            idInteractionManager.interrupt()
+            eIDInteractionManager.interrupt()
             return EffectTask(value: .incorrectCAN)
         case .pinRequested:
-            idInteractionManager.setPIN(state.transportPIN)
+            eIDInteractionManager.setPIN(state.transportPIN)
             return .none
         case .pukRequested:
             logger.info("PUK requested, so card is blocked. Callback not implemented yet.")
-            idInteractionManager.interrupt()
+            eIDInteractionManager.interrupt()
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
             
         case .newPINRequested:
-            idInteractionManager.setNewPIN(state.newPIN)
+            eIDInteractionManager.setNewPIN(state.newPIN)
             return .none
         case .authenticationSucceeded,
              .authenticationRequestConfirmationRequested,

@@ -2,10 +2,7 @@ import ComposableArchitecture
 import SwiftUI
 
 struct IdentificationOverviewLoaded: ReducerProtocol {
-    
-    @Dependency(\.uuid) var uuid
-    @Dependency(\.idInteractionManager) var idInteractionManager
-    
+
     struct State: Identifiable, Equatable {
         let id: UUID
         let authenticationInformation: AuthenticationInformation

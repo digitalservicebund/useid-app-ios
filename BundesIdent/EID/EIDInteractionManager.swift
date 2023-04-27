@@ -24,11 +24,11 @@ extension AusweisApp2SDKWrapper.AA2UserInfoMessages {
     }
 }
 
-class IDInteractionManager: IDInteractionManagerType {
+class EIDInteractionManager: EIDInteractionManagerType {
 
     private let workflowController: AusweisApp2SDKWrapper.WorkflowController
     private let logger: Logger
-    private var currentHandler: IDInteractionEventHandler?
+    private var currentFlowListener: EIDInteractionFlowListener?
 
     init(workflowController: AusweisApp2SDKWrapper.WorkflowController = AA2SDKWrapper.workflowController) {
         self.workflowController = workflowController
@@ -50,26 +50,26 @@ class IDInteractionManager: IDInteractionManagerType {
         if workflowController.isStarted {
             logger.error("Starting the flow while it was already started.")
             workflowController.stop()
-            if let handler = currentHandler {
-                workflowController.unregisterCallbacks(handler)
-                currentHandler = nil
+            if let flowListener = currentFlowListener {
+                workflowController.unregisterCallbacks(flowListener)
+                currentFlowListener = nil
             }
         }
 
-        let handler = IDInteractionEventHandler(workflow: workflow, workflowController: workflowController)
-        currentHandler = handler
+        let flowListener = EIDInteractionFlowListener(workflow: workflow, workflowController: workflowController)
+        currentFlowListener = flowListener
 
-        workflowController.registerCallbacks(handler)
+        workflowController.registerCallbacks(flowListener)
         workflowController.start()
         
         let stopWorkflow = { [weak self] in
             guard let self else { return }
             self.workflowController.stop()
-            self.workflowController.unregisterCallbacks(handler)
-            self.currentHandler = nil
+            self.workflowController.unregisterCallbacks(flowListener)
+            self.currentFlowListener = nil
         }
 
-        return handler.subject.handleEvents(receiveCompletion: { _ in stopWorkflow() }, receiveCancel: stopWorkflow).eraseToAnyPublisher()
+        return flowListener.subject.handleEvents(receiveCompletion: { _ in stopWorkflow() }, receiveCancel: stopWorkflow).eraseToAnyPublisher()
     }
 
     func setPIN(_ pin: String) {

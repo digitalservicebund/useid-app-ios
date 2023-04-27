@@ -5,7 +5,7 @@ import OSLog
 #if !targetEnvironment(simulator)
 import AusweisApp2SDKWrapper
 
-final class IDInteractionEventHandler: WorkflowCallbacks {
+final class EIDInteractionFlowListener: WorkflowCallbacks {
     
     let subject: PassthroughSubject<EIDInteractionEvent, EIDInteractionError>
 

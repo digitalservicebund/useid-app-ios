@@ -219,13 +219,13 @@ class SetupCoordinatorTests: XCTestCase {
                                                                    ]),
                               reducer: SetupCoordinator())
         
-        let mockPreviewIDInteractionManager = MockPreviewIDInteractionManagerType()
-        let mockIDInteractionManager = MockIDInteractionManagerType()
+        let mockPreviewIDInteractionManager = MockPreviewEIDInteractionManagerType()
+        let mockIDInteractionManager = MockEIDInteractionManagerType()
         
         let scheduler = DispatchQueue.test
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
-        store.dependencies.idInteractionManager = mockIDInteractionManager
-        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockIDInteractionManager
+        store.dependencies.previewEIDInteractionManager = mockPreviewIDInteractionManager
         
         stub(mockPreviewIDInteractionManager) {
             $0.isDebugModeEnabled.get.thenReturn(false)
@@ -250,7 +250,7 @@ class SetupCoordinatorTests: XCTestCase {
         
         scheduler.advance()
         
-        store.receive(.idInteractionEvent(.success(.authenticationStarted)))
+        store.receive(.eIDInteractionEvent(.success(.authenticationStarted)))
         
         store.receive(.routeAction(0, action: .scan(.scanEvent(.success(.authenticationStarted)))))
     }
@@ -265,19 +265,19 @@ class SetupCoordinatorTests: XCTestCase {
                                                                    ]),
                               reducer: SetupCoordinator())
         
-        let mockPreviewIDInteractionManager = MockPreviewIDInteractionManagerType()
-        let mockIDInteractionManager = MockIDInteractionManagerType()
+        let mockPreviewEIDInteractionManager = MockPreviewEIDInteractionManagerType()
+        let mockEIDInteractionManager = MockEIDInteractionManagerType()
         
         let scheduler = DispatchQueue.test
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
-        store.dependencies.idInteractionManager = mockIDInteractionManager
-        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
+        store.dependencies.previewEIDInteractionManager = mockPreviewEIDInteractionManager
         store.dependencies.uuid = .incrementing
         
-        stub(mockPreviewIDInteractionManager) {
+        stub(mockPreviewEIDInteractionManager) {
             $0.isDebugModeEnabled.get.thenReturn(false)
         }
-        stub(mockIDInteractionManager) {
+        stub(mockEIDInteractionManager) {
             $0.interrupt().thenDoNothing()
         }
 
@@ -307,15 +307,15 @@ class SetupCoordinatorTests: XCTestCase {
         
         let scheduler = DispatchQueue.test
         let mockAnalyticsClient = MockAnalyticsClient()
-        let mockIDInteractionManager = MockIDInteractionManagerType()
-        let mockPreviewIDInteractionManager = MockPreviewIDInteractionManagerType()
+        let mockEIDInteractionManager = MockEIDInteractionManagerType()
+        let mockPreviewEIDInteractionManager = MockPreviewEIDInteractionManagerType()
         
         stub(mockAnalyticsClient) {
             $0.track(view: any()).thenDoNothing()
             $0.track(event: any()).thenDoNothing()
         }
         
-        stub(mockIDInteractionManager) { mock in
+        stub(mockEIDInteractionManager) { mock in
             mock.changePIN(messages: any()).then { _ in
                 let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
                 scheduler.schedule {
@@ -325,14 +325,14 @@ class SetupCoordinatorTests: XCTestCase {
             }
         }
         
-        stub(mockPreviewIDInteractionManager) {
+        stub(mockPreviewEIDInteractionManager) {
             $0.isDebugModeEnabled.get.thenReturn(false)
         }
         
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
         store.dependencies.analytics = mockAnalyticsClient
-        store.dependencies.idInteractionManager = mockIDInteractionManager
-        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
+        store.dependencies.previewEIDInteractionManager = mockPreviewEIDInteractionManager
         
         store.send(.routeAction(0, action: .scan(.shared(.initiateScan)))) {
             guard case .scan(var scanState) = $0.states[0].screen else { return XCTFail() }
@@ -398,15 +398,15 @@ class SetupCoordinatorTests: XCTestCase {
                               reducer: SetupCoordinator())
         
         let scheduler = DispatchQueue.test
-        let mockPreviewIDInteractionManager = MockPreviewIDInteractionManagerType()
-        let mockIDInteractionManager = MockIDInteractionManagerType()
+        let mockPreviewEIDInteractionManager = MockPreviewEIDInteractionManagerType()
+        let mockEIDInteractionManager = MockEIDInteractionManagerType()
         let mockAnalyticsClient = MockAnalyticsClient()
         
-        stub(mockPreviewIDInteractionManager) {
+        stub(mockPreviewEIDInteractionManager) {
             $0.isDebugModeEnabled.get.thenReturn(false)
         }
         
-        stub(mockIDInteractionManager) {
+        stub(mockEIDInteractionManager) {
             $0.changePIN(messages: any()).then { _ in
                 let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
                 scheduler.schedule {
@@ -423,19 +423,19 @@ class SetupCoordinatorTests: XCTestCase {
         }
         
         store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
-        store.dependencies.idInteractionManager = mockIDInteractionManager
-        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
+        store.dependencies.previewEIDInteractionManager = mockPreviewEIDInteractionManager
         store.dependencies.analytics = mockAnalyticsClient
         
         store.send(.routeAction(0, action: .setupCANCoordinator(.routeAction(0, action: .canScan(.shared(.initiateScan))))))
         
         scheduler.advance()
         
-        store.receive(.idInteractionEvent(.success(.authenticationStarted)))
+        store.receive(.eIDInteractionEvent(.success(.authenticationStarted)))
         
         store.receive(.routeAction(0, action: .setupCANCoordinator(.routeAction(0, action: .canScan(.scanEvent(.success(.authenticationStarted)))))))
         
-        verify(mockIDInteractionManager).changePIN(messages: any())
+        verify(mockEIDInteractionManager).changePIN(messages: any())
         verify(mockAnalyticsClient).track(event: any())
     }
 

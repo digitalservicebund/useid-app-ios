@@ -12,15 +12,15 @@ class SetupCANScanTests: XCTestCase {
     var mockAnalyticsClient: MockAnalyticsClient!
     var mockIssueTracker: MockIssueTracker!
     var mockStorageManager: MockStorageManagerType!
-    var mockIDInteractionManager: MockIDInteractionManagerType!
-    var mockPreviewIDInteractionManager: MockPreviewIDInteractionManagerType!
+    var mockEIDInteractionManager: MockEIDInteractionManagerType!
+    var mockPreviewEIDInteractionManager: MockPreviewEIDInteractionManagerType!
     
     override func setUp() {
         mockAnalyticsClient = MockAnalyticsClient()
         mockIssueTracker = MockIssueTracker()
         mockStorageManager = MockStorageManagerType()
-        mockIDInteractionManager = MockIDInteractionManagerType()
-        mockPreviewIDInteractionManager = MockPreviewIDInteractionManagerType()
+        mockEIDInteractionManager = MockEIDInteractionManagerType()
+        mockPreviewEIDInteractionManager = MockPreviewEIDInteractionManagerType()
         
         stub(mockAnalyticsClient) {
             $0.track(view: any()).thenDoNothing()
@@ -36,11 +36,11 @@ class SetupCANScanTests: XCTestCase {
             when($0.setupCompleted.set(true)).thenDoNothing()
         }
         
-        stub(mockPreviewIDInteractionManager) {
+        stub(mockPreviewEIDInteractionManager) {
             $0.isDebugModeEnabled.get.thenReturn(false)
         }
         
-        stub(mockIDInteractionManager) {
+        stub(mockEIDInteractionManager) {
             $0.setCAN(any()).thenDoNothing()
             $0.setPIN(any()).thenDoNothing()
         }
@@ -51,8 +51,8 @@ class SetupCANScanTests: XCTestCase {
         let store = TestStore(initialState: SetupCANScan.State(transportPIN: "12345", newPIN: "123456", can: can),
                               reducer: SetupCANScan())
         store.dependencies.analytics = mockAnalyticsClient
-        store.dependencies.idInteractionManager = mockIDInteractionManager
-        stub(mockIDInteractionManager) { mock in
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
+        stub(mockEIDInteractionManager) { mock in
             mock.setCAN(anyString()).thenDoNothing()
         }
 
@@ -60,11 +60,11 @@ class SetupCANScanTests: XCTestCase {
             $0.shared.preventSecondScanningAttempt = true
         }
         
-        verify(mockIDInteractionManager).setCAN(can)
+        verify(mockEIDInteractionManager).setCAN(can)
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "Setup",
                                                                 action: "buttonPressed",
                                                                 name: "canScan"))
-        verifyNoMoreInteractions(mockIDInteractionManager)
+        verifyNoMoreInteractions(mockEIDInteractionManager)
     }
     
     func testChangePINWithCANSuccess() throws {
@@ -76,9 +76,9 @@ class SetupCANScanTests: XCTestCase {
                               reducer: SetupCANScan())
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.storageManager = mockStorageManager
-        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
 
-        stub(mockIDInteractionManager) { mock in
+        stub(mockEIDInteractionManager) { mock in
             mock.setCAN(anyString()).thenDoNothing()
             mock.setPIN(anyString()).thenDoNothing()
             mock.setNewPIN(anyString()).thenDoNothing()
@@ -102,10 +102,10 @@ class SetupCANScanTests: XCTestCase {
         store.receive(.scannedSuccessfully)
         
         verify(mockStorageManager).setupCompleted.set(true)
-        verify(mockIDInteractionManager).setCAN(can)
-        verify(mockIDInteractionManager).setPIN(oldPIN)
-        verify(mockIDInteractionManager).setNewPIN(newPIN)
-        verifyNoMoreInteractions(mockIDInteractionManager)
+        verify(mockEIDInteractionManager).setCAN(can)
+        verify(mockEIDInteractionManager).setPIN(oldPIN)
+        verify(mockEIDInteractionManager).setNewPIN(newPIN)
+        verifyNoMoreInteractions(mockEIDInteractionManager)
     }
     
     func testScanFail() throws {
@@ -115,15 +115,15 @@ class SetupCANScanTests: XCTestCase {
                                                                shared: SharedScan.State()),
                               reducer: SetupCANScan())
         
-        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         store.dependencies.issueTracker = mockIssueTracker
-        store.dependencies.previewIDInteractionManager = mockPreviewIDInteractionManager
+        store.dependencies.previewEIDInteractionManager = mockPreviewEIDInteractionManager
         
         store.send(.scanEvent(.failure(.frameworkError(message: "Fail"))))
         
         store.receive(.error(ScanError.State(errorType: .eIDInteraction(.frameworkError(message: "Fail")), retry: true)))
 
-        verifyNoMoreInteractions(mockIDInteractionManager)
+        verifyNoMoreInteractions(mockEIDInteractionManager)
     }
 
 // TODO: Bring back when we have a cancellation/timeout event from AA2 SDK.

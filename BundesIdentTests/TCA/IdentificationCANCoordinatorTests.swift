@@ -10,14 +10,14 @@ import Analytics
 class IdentificationCANCoordinatorTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
-    var mockIDInteractionManager: MockIDInteractionManagerType!
+    var mockEIDInteractionManager: MockEIDInteractionManagerType!
     var mockStorageManager: MockStorageManagerType!
     var mockAnalyticsClient: MockAnalyticsClient!
     var openedURL: URL?
     var urlOpener: ((URL) -> Void)!
     
     override func setUp() {
-        mockIDInteractionManager = MockIDInteractionManagerType()
+        mockEIDInteractionManager = MockEIDInteractionManagerType()
         mockStorageManager = MockStorageManagerType()
         scheduler = DispatchQueue.test
         mockAnalyticsClient = MockAnalyticsClient()
@@ -32,7 +32,7 @@ class IdentificationCANCoordinatorTests: XCTestCase {
             $0.track(event: any()).thenDoNothing()
         }
         
-        stub(mockIDInteractionManager) {
+        stub(mockEIDInteractionManager) {
             $0.interrupt().thenDoNothing()
         }
     }
@@ -55,7 +55,7 @@ class IdentificationCANCoordinatorTests: XCTestCase {
                                                              ]),
             reducer: IdentificationCANCoordinator()
         )
-        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         
         store.send(.routeAction(0, action: .canIntro(.showInput(shouldDismiss: true)))) {
             $0.routes.append(.push(.canInput(CANInput.State(pushesToPINEntry: false))))
@@ -74,7 +74,7 @@ class IdentificationCANCoordinatorTests: XCTestCase {
             $0.routes.append(.sheet(.canIncorrectInput(.init())))
         }
         
-        verify(mockIDInteractionManager).interrupt()
+        verify(mockEIDInteractionManager).interrupt()
     }
     
     func testCanScanWrongCANToScan() throws {
@@ -93,13 +93,13 @@ class IdentificationCANCoordinatorTests: XCTestCase {
                                                              ]),
             reducer: IdentificationCANCoordinator()
         )
-        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         
         store.send(.routeAction(0, action: .canScan(.scanEvent(.success(.canRequested))))) {
             $0.routes.append(.sheet(.canIncorrectInput(.init())))
         }
         
-        verify(mockIDInteractionManager).interrupt()
+        verify(mockEIDInteractionManager).interrupt()
         
         store.send(.routeAction(1, action: .canIncorrectInput(.done(can: enteredCan)))) {
             guard case .canScan(var scanState) = $0.routes[0].screen else { return XCTFail("Unexpected state") }

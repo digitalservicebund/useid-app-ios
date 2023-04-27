@@ -32,8 +32,8 @@ enum RedactedEIDInteractionEventError: CustomNSError {
     case pinChangeSucceeded
     case certificateDescriptionRetrieved
     
-    init(_ eIDInteractionEvent: EIDInteractionEvent) {
-        switch eIDInteractionEvent {
+    init(_ event: EIDInteractionEvent) {
+        switch event {
         case .cardInsertionRequested: self = .cardInsertionRequested
         case .cardRecognized: self = .cardRecognized
         case .cardRemoved: self = .cardRemoved

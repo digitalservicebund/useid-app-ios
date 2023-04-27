@@ -3,7 +3,7 @@ import Foundation
 import Analytics
 
 struct SetupScreen: ReducerProtocol {
-    enum State: Equatable, IDInteractionHandler {
+    enum State: Equatable, EIDInteractionHandler {
         case intro(SetupIntro.State)
         case introVariation(SetupIntro.State)
         case alreadySetupConfirmation

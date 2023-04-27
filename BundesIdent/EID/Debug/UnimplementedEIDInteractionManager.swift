@@ -2,7 +2,7 @@ import Foundation
 import CombineSchedulers
 import Combine
 
-struct MockIDInteractionManager: IDInteractionManagerType {
+struct UnimplementedEIDInteractionManager: EIDInteractionManagerType {
 
     func changePIN(messages: ScanOverlayMessages) -> EIDInteractionPublisher {
         let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()

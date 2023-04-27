@@ -4,7 +4,7 @@ import Analytics
 
 struct IdentificationScreen: ReducerProtocol {
     
-    enum State: Equatable, IDInteractionHandler {
+    enum State: Equatable, EIDInteractionHandler {
         case overview(IdentificationOverview.State)
         case personalPIN(IdentificationPersonalPIN.State)
         case incorrectPersonalPIN(IdentificationIncorrectPersonalPIN.State)

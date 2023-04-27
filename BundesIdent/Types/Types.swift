@@ -5,7 +5,7 @@ import Combine
 import Sentry
 
 
-protocol IDInteractionManagerType {
+protocol EIDInteractionManagerType {
     func identify(tokenURL: URL, messages: ScanOverlayMessages) -> EIDInteractionPublisher
     func changePIN(messages: ScanOverlayMessages) -> EIDInteractionPublisher
 
@@ -45,7 +45,7 @@ protocol UnleashClientWrapper: AnyObject {
 }
 
 #if PREVIEW
-protocol PreviewIDInteractionManagerType: IDInteractionManagerType, AnyObject {
+protocol PreviewEIDInteractionManagerType: EIDInteractionManagerType, AnyObject {
     var isDebugModeEnabled: Bool { get set }
     var publishedIsDebugModeEnabled: AnyPublisher<Bool, Never> { get }
     

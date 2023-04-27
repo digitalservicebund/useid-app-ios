@@ -4,7 +4,7 @@ import Analytics
 
 struct IdentificationCANScreen: ReducerProtocol {
     
-    enum State: Equatable, IDInteractionHandler {
+    enum State: Equatable, EIDInteractionHandler {
         case canScan(IdentificationCANScan.State)
         case canPINForgotten(IdentificationCANPINForgotten.State)
         case canOrderNewPIN(IdentificationCANOrderNewPIN.State)

@@ -3,17 +3,17 @@ import Foundation
 
 #if PREVIEW
 
-class PreviewIDInteractionManager: PreviewIDInteractionManagerType {
+class PreviewEIDInteractionManager: PreviewEIDInteractionManagerType {
     
-    private let realIDInteractionManager: IDInteractionManagerType
-    private let debugIDInteractionManager: DebugIDInteractionManager
+    private let realManager: EIDInteractionManagerType
+    private let debugManager: DebugEIDInteractionManager
     
     @Published public var isDebugModeEnabled: Bool
     var publishedIsDebugModeEnabled: AnyPublisher<Bool, Never> { $isDebugModeEnabled.eraseToAnyPublisher() }
     
-    init(realIDInteractionManager: IDInteractionManagerType, debugIDInteractionManager: DebugIDInteractionManager) {
-        self.realIDInteractionManager = realIDInteractionManager
-        self.debugIDInteractionManager = debugIDInteractionManager
+    init(real: EIDInteractionManagerType, debug: DebugEIDInteractionManager) {
+        self.realManager = real
+        self.debugManager = debug
         
 #if targetEnvironment(simulator)
         // Always mock except in unit tests
@@ -25,63 +25,63 @@ class PreviewIDInteractionManager: PreviewIDInteractionManagerType {
     
     func identify(tokenURL: URL, messages: ScanOverlayMessages) -> EIDInteractionPublisher {
         precondition(!isDebugModeEnabled)
-        return realIDInteractionManager.identify(tokenURL: tokenURL, messages: messages)
+        return realManager.identify(tokenURL: tokenURL, messages: messages)
     }
     
     func changePIN(messages: ScanOverlayMessages) -> EIDInteractionPublisher {
         precondition(!isDebugModeEnabled)
-        return realIDInteractionManager.changePIN(messages: messages)
+        return realManager.changePIN(messages: messages)
     }
     
     func debuggableChangePIN() -> DebuggableInteraction<ChangePINDebugSequence> {
         precondition(isDebugModeEnabled)
-        return debugIDInteractionManager.debuggableChangePIN()
+        return debugManager.debuggableChangePIN()
     }
     
     func debuggableIdentify(tokenURL: URL) -> DebuggableInteraction<IdentifyDebugSequence> {
         precondition(isDebugModeEnabled)
-        return debugIDInteractionManager.debuggableIdentify(tokenURL: tokenURL)
+        return debugManager.debuggableIdentify(tokenURL: tokenURL)
     }
     
     func debuggableCANIdentify(tokenURL: URL) -> DebuggableInteraction<IdentifyDebugSequence> {
         precondition(isDebugModeEnabled)
-        return debugIDInteractionManager.debuggableCANIdentify(tokenURL: tokenURL)
+        return debugManager.debuggableCANIdentify(tokenURL: tokenURL)
     }
     
     func runChangePIN(debugSequence: ChangePINDebugSequence) -> [ChangePINDebugSequence] {
         precondition(isDebugModeEnabled)
-        return debugIDInteractionManager.runChangePIN(debugSequence: debugSequence)
+        return debugManager.runChangePIN(debugSequence: debugSequence)
     }
     
     func runIdentify(debugSequence: IdentifyDebugSequence) -> [IdentifyDebugSequence] {
         precondition(isDebugModeEnabled)
-        return debugIDInteractionManager.runIdentify(debugSequence: debugSequence)
+        return debugManager.runIdentify(debugSequence: debugSequence)
     }
 
     func setPIN(_ pin: String) {
-        realIDInteractionManager.setPIN(pin)
+        realManager.setPIN(pin)
     }
 
     func setNewPIN(_ pin: String) {
-        realIDInteractionManager.setNewPIN(pin)
+        realManager.setNewPIN(pin)
     }
 
     func setCAN(_ can: String) {
-        realIDInteractionManager.setCAN(can)
+        realManager.setCAN(can)
     }
     
     func retrieveCertificateDescription() {
-        realIDInteractionManager.retrieveCertificateDescription()
-        // we need to alter the current debug sequences in the debugIDInteractionManager here
+        realManager.retrieveCertificateDescription()
+        // TODO: we need to alter the current debug sequences in the debugEIDInteractionManager here
     }
 
     func acceptAccessRights() {
-        realIDInteractionManager.acceptAccessRights()
-        // we need to alter the current debug sequences in the debugIDInteractionManager here
+        realManager.acceptAccessRights()
+        // TODO: we need to alter the current debug sequences in the debugEIDInteractionManager here
     }
 
     func interrupt() {
-        realIDInteractionManager.interrupt()
+        realManager.interrupt()
     }
 }
 

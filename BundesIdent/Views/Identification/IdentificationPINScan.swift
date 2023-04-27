@@ -17,9 +17,9 @@ struct IdentificationPINScan: ReducerProtocol {
     @Dependency(\.logger) var logger
     @Dependency(\.uuid) var uuid
     @Dependency(\.mainQueue) var mainQueue
-    @Dependency(\.idInteractionManager) var idInteractionManager
+    @Dependency(\.eIDInteractionManager) var eIDInteractionManager
     
-    struct State: Equatable, IDInteractionHandler {
+    struct State: Equatable, EIDInteractionHandler {
         let authenticationInformation: AuthenticationInformation
         var pin: String
         var lastRemainingAttempts: Int?
@@ -64,10 +64,10 @@ struct IdentificationPINScan: ReducerProtocol {
             state.shared.cardRecognized = false
 
             if state.didAcceptAccessRights {
-                idInteractionManager.setPIN(state.pin)
+                eIDInteractionManager.setPIN(state.pin)
             } else {
                 state.didAcceptAccessRights = true
-                idInteractionManager.acceptAccessRights()
+                eIDInteractionManager.acceptAccessRights()
             }
 
             return .trackEvent(category: "identification",
@@ -128,10 +128,10 @@ struct IdentificationPINScan: ReducerProtocol {
             if let remainingAttempts,
                let lastRemainingAttempts,
                remainingAttempts < lastRemainingAttempts {
-                idInteractionManager.interrupt()
+                eIDInteractionManager.interrupt()
                 return EffectTask(value: .wrongPIN(remainingAttempts: remainingAttempts))
             } else {
-                idInteractionManager.setPIN(state.pin)
+                eIDInteractionManager.setPIN(state.pin)
                 return .none
             }
         case .authenticationSucceeded(redirectURL: .some(let redirectURL)):
@@ -141,12 +141,12 @@ struct IdentificationPINScan: ReducerProtocol {
             issueTracker.capture(error: RedactedEIDInteractionEventError(.authenticationSucceeded(redirectURL: nil)))
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: state.shared.scanAvailable)))
         case .canRequested:
-            idInteractionManager.interrupt()
+            eIDInteractionManager.interrupt()
             return EffectTask(value: .requestCAN(state.authenticationInformation))
                 .delay(for: 2, scheduler: mainQueue) // this delay is here to fix a bug where this particular screen was presented incorrectly
                 .eraseToEffect()
         case .pukRequested:
-            idInteractionManager.interrupt()
+            eIDInteractionManager.interrupt()
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
         default:
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))

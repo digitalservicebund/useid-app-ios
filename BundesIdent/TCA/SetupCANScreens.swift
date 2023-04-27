@@ -5,7 +5,7 @@ import Analytics
 
 struct SetupCANScreen: ReducerProtocol {
     
-    enum State: Equatable, IDInteractionHandler {
+    enum State: Equatable, EIDInteractionHandler {
         case canAlreadySetup(SetupCANAlreadySetup.State)
         case canConfirmTransportPIN(SetupCANConfirmTransportPIN.State)
         case missingPIN(MissingPINLetter.State)

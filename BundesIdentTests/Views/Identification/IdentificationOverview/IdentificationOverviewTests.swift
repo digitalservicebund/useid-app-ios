@@ -10,12 +10,12 @@ import TCACoordinators
 final class IdentificationOverviewTests: XCTestCase {
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var mockAnalyticsClient: MockAnalyticsClient!
-    var mockIDInteractionManager: MockIDInteractionManagerType!
+    var mockEIDInteractionManager: MockEIDInteractionManagerType!
     
     override func setUp() {
         scheduler = DispatchQueue.test
         mockAnalyticsClient = MockAnalyticsClient()
-        mockIDInteractionManager = MockIDInteractionManagerType()
+        mockEIDInteractionManager = MockEIDInteractionManagerType()
         
         stub(mockAnalyticsClient) {
             $0.track(view: any()).thenDoNothing()
@@ -45,24 +45,24 @@ final class IdentificationOverviewTests: XCTestCase {
             reducer: IdentificationOverview()
         )
         store.dependencies.uuid = .incrementing
-        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         
         let request = AuthenticationRequest.preview
         let certificateDescription = CertificateDescription.preview
         
-        stub(mockIDInteractionManager) {
+        stub(mockEIDInteractionManager) {
             $0.retrieveCertificateDescription().thenDoNothing()
         }
         
-        store.send(IdentificationOverview.Action.loading(.idInteractionEvent(.success(.authenticationRequestConfirmationRequested(request))))) {
+        store.send(IdentificationOverview.Action.loading(.eIDInteractionEvent(.success(.authenticationRequestConfirmationRequested(request))))) {
             guard case .loading(var loadingState) = $0 else { return XCTFail("Invalid state") }
             loadingState.authenticationRequest = request
             $0 = .loading(loadingState)
         }
         
-        verify(mockIDInteractionManager).retrieveCertificateDescription()
+        verify(mockEIDInteractionManager).retrieveCertificateDescription()
         
-        store.send(.loading(.idInteractionEvent(.success(.certificateDescriptionRetrieved(certificateDescription)))))
+        store.send(.loading(.eIDInteractionEvent(.success(.certificateDescriptionRetrieved(certificateDescription)))))
         
         store.receive(.loading(.done(request, certificateDescription))) {
             $0 = .loaded(.init(id: UUID(number: 0),
@@ -78,7 +78,7 @@ final class IdentificationOverviewTests: XCTestCase {
             initialState: IdentificationOverview.State.loaded(loadedState),
             reducer: IdentificationOverview()
         )
-        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         
         store.send(IdentificationOverview.Action.loaded(.confirm(authenticationInformation)))
         
@@ -87,15 +87,6 @@ final class IdentificationOverviewTests: XCTestCase {
     
     func testCallingPINHandlerWhenConfirming() {
         let authenticationInformation = AuthenticationInformation.preview
-        
-        let callback: (FlaggedAttributes) -> Void = { attributes in
-            XCTFail("Should not be called")
-        }
-        
-        let identifiableCallback = IdentifiableCallback(id: UUID(number: 0), callback: callback)
-        
-        let pinCallback: (String) -> Void = { _ in }
-        let identifiablePINCallback = PINCallback(id: UUID(number: 0), callback: pinCallback)
         
         let loadedState = IdentificationOverviewLoaded.State(
             id: UUID(number: 0),

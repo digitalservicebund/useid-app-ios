@@ -14,7 +14,7 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
             return XCTFail("Effect should not be nil")
         }
         
-        XCTAssertEqual(effect, .routeAction(0, action: .overview(.loading(.idInteractionEvent(.failure(.cardDeactivated))))))
+        XCTAssertEqual(effect, .routeAction(0, action: .overview(.loading(.eIDInteractionEvent(.failure(.cardDeactivated))))))
     }
     
     func testTransformToLocalInteractionHandlerLastState() throws {
@@ -30,7 +30,7 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
             return XCTFail("Effect should not be nil")
         }
         
-        XCTAssertEqual(effect, .routeAction(1, action: .overview(.loading(.idInteractionEvent(.failure(.cardDeactivated))))))
+        XCTAssertEqual(effect, .routeAction(1, action: .overview(.loading(.eIDInteractionEvent(.failure(.cardDeactivated))))))
     }
     
     func testNoTransformToLocalInteractionHandler() throws {
@@ -58,7 +58,7 @@ final class IdentificationCoordinatorStateTests: XCTestCase {
             return XCTFail("Effect should not be nil")
         }
         
-        XCTAssertEqual(effect, .routeAction(0, action: .overview(.loading(.idInteractionEvent(.failure(.cardDeactivated))))))
+        XCTAssertEqual(effect, .routeAction(0, action: .overview(.loading(.eIDInteractionEvent(.failure(.cardDeactivated))))))
     }
 
 }

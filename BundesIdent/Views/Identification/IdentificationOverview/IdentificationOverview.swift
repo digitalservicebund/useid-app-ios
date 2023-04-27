@@ -9,7 +9,7 @@ typealias PINCANCallback = IdentifiableCallback<(String, String)>
 struct IdentificationOverview: ReducerProtocol {
     @Dependency(\.uuid) var uuid
     @Dependency(\.analytics) var analytics
-    enum State: Equatable, IDInteractionHandler {
+    enum State: Equatable, EIDInteractionHandler {
         case loading(IdentificationOverviewLoading.State)
         case loaded(IdentificationOverviewLoaded.State)
         case error(IdentificationOverviewErrorState)
@@ -17,7 +17,7 @@ struct IdentificationOverview: ReducerProtocol {
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             switch self {
             case .loading:
-                return .loading(.idInteractionEvent(event))
+                return .loading(.eIDInteractionEvent(event))
             case .loaded:
                 return nil
             case .error:

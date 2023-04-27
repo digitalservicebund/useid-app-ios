@@ -34,7 +34,6 @@ struct SetupCANCoordinator: ReducerProtocol {
     @Dependency(\.issueTracker) var issueTracker
     @Dependency(\.logger) var logger
     @Dependency(\.mainQueue) var mainQueue
-    @Dependency(\.idInteractionManager) var idInteractionManager
     
     struct State: Equatable, IndexedRouterState {
         

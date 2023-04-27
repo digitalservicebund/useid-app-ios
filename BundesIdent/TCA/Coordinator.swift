@@ -23,7 +23,6 @@ enum HandleURLError: Error, CustomStringConvertible, CustomNSError {
 }
 
 struct Coordinator: ReducerProtocol {
-    @Dependency(\.idInteractionManager) var idInteractionManager
     @Dependency(\.analytics) var analytics
     @Dependency(\.issueTracker) var issueTracker
     @Dependency(\.mainQueue) var mainQueue
@@ -32,7 +31,7 @@ struct Coordinator: ReducerProtocol {
     @Dependency(\.appVersionProvider) var appVersionProvider
     @Dependency(\.abTester) var abTester
 #if PREVIEW
-    @Dependency(\.previewIDInteractionManager) var previewIDInteractionManager
+    @Dependency(\.previewEIDInteractionManager) var previewEIDInteractionManager
 #endif
     struct State: Equatable, IndexedRouterState {
         var routes: [Route<Screen.State>]
@@ -229,7 +228,7 @@ struct Coordinator: ReducerProtocol {
             homeState = Home.State(appVersion: version,
                                    buildNumber: buildNumber,
                                    shouldShowVariation: isVariationActivated,
-                                   isDebugModeEnabled: previewIDInteractionManager.isDebugModeEnabled)
+                                   isDebugModeEnabled: previewEIDInteractionManager.isDebugModeEnabled)
 #else
             homeState = Home.State(appVersion: version,
                                    buildNumber: buildNumber,

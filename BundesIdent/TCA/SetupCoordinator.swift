@@ -13,13 +13,13 @@ struct SetupCoordinator: ReducerProtocol {
     @Dependency(\.mainQueue) var mainQueue
     @Dependency(\.issueTracker) var issueTracker
     @Dependency(\.logger) var logger
-    @Dependency(\.idInteractionManager) var idInteractionManager
+    @Dependency(\.eIDInteractionManager) var eIDInteractionManager
     @Dependency(\.analytics) var analytics
 #if PREVIEW
-    @Dependency(\.previewIDInteractionManager) var previewIDInteractionManager
+    @Dependency(\.previewEIDInteractionManager) var previewEIDInteractionManager
 #endif
     
-    struct State: Equatable, IndexedRouterState, IDInteractionHandler {
+    struct State: Equatable, IndexedRouterState, EIDInteractionHandler {
         var transportPIN: String
         var attempt: Int
         var tokenURL: URL?
@@ -100,7 +100,7 @@ struct SetupCoordinator: ReducerProtocol {
     indirect enum Action: Equatable, IndexedRouterAction {
         case routeAction(Int, action: SetupScreen.Action)
         case updateRoutes([Route<SetupScreen.State>])
-        case idInteractionEvent(Result<EIDInteractionEvent, EIDInteractionError>)
+        case eIDInteractionEvent(Result<EIDInteractionEvent, EIDInteractionError>)
         case end
         case confirmEnd
         case afterConfirmEnd
@@ -116,13 +116,13 @@ struct SetupCoordinator: ReducerProtocol {
             switch action {
 #if PREVIEW
             case .runDebugSequence(let debugSequence):
-                state.availableDebugActions = previewIDInteractionManager.runChangePIN(debugSequence: debugSequence)
+                state.availableDebugActions = previewEIDInteractionManager.runChangePIN(debugSequence: debugSequence)
                 return .none
             case .routeAction(_, action: .scan(.runDebugSequence(let sequence))),
                  .routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canScan(.runDebugSequence(let sequence))))):
                 return EffectTask(value: .runDebugSequence(sequence))
 #endif
-            case .idInteractionEvent(let result):
+            case .eIDInteractionEvent(let result):
                 guard let localAction = state.transformToLocalAction(result) else {
                     issueTracker.capture(error: SetupCoordinatorError.noScreenToHandleEIDInteractionEvents)
                     logger.error("No screen found to handle EIDInteractionEvents")
@@ -155,15 +155,15 @@ struct SetupCoordinator: ReducerProtocol {
                  .routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canScan(.shared(.initiateScan))))):
                 let publisher: EIDInteractionPublisher
                  #if PREVIEW
-                if previewIDInteractionManager.isDebugModeEnabled {
-                    let debuggableInteraction = previewIDInteractionManager.debuggableChangePIN()
+                if previewEIDInteractionManager.isDebugModeEnabled {
+                    let debuggableInteraction = previewEIDInteractionManager.debuggableChangePIN()
                     state.availableDebugActions = debuggableInteraction.sequence
                     publisher = debuggableInteraction.publisher
                 } else {
-                    publisher = idInteractionManager.changePIN(messages: .setup)
+                    publisher = eIDInteractionManager.changePIN(messages: .setup)
                 }
                  #else
-                publisher = idInteractionManager.changePIN(messages: .setup)
+                publisher = eIDInteractionManager.changePIN(messages: .setup)
                  #endif
                 return .concatenate(
                     .trackEvent(category: "firstTimeUser",
@@ -172,7 +172,7 @@ struct SetupCoordinator: ReducerProtocol {
                                 analytics: analytics),
                     publisher
                         .receive(on: mainQueue)
-                        .catchToEffect(Action.idInteractionEvent)
+                        .catchToEffect(Action.eIDInteractionEvent)
                         .cancellable(id: CancelId.self, cancelInFlight: true)
                 )
             case .routeAction(_, action: .scan(.scannedSuccessfully)):

@@ -11,9 +11,9 @@ struct IdentificationCANScan: ReducerProtocol {
     @Dependency(\.storageManager) var storageManager
     @Dependency(\.logger) var logger
     @Dependency(\.uuid) var uuid
-    @Dependency(\.idInteractionManager) var idInteractionManager
+    @Dependency(\.eIDInteractionManager) var eIDInteractionManager
     
-    struct State: Equatable, IDInteractionHandler {
+    struct State: Equatable, EIDInteractionHandler {
         var pin: String
         var can: String
         var shared: SharedScan.State = .init(forceDismissButtonTitle: L10n.Identification.Scan.forceDismiss)
@@ -51,7 +51,7 @@ struct IdentificationCANScan: ReducerProtocol {
             return state.shared.startOnAppear ? EffectTask(value: .shared(.startScan)) : .none
         case .shared(.startScan):
             state.shared.preventSecondScanningAttempt = true
-            idInteractionManager.setCAN(state.can)
+            eIDInteractionManager.setCAN(state.can)
             return .trackEvent(category: "identification",
                                action: "buttonPressed",
                                name: "canScan",
@@ -101,7 +101,7 @@ struct IdentificationCANScan: ReducerProtocol {
             logger.info("cardInsertionRequested")
             return .none
         case .canRequested:
-            idInteractionManager.interrupt()
+            eIDInteractionManager.interrupt()
             return .none
         case .pinRequested(remainingAttempts: let remainingAttempts):
             logger.info("pinRequested: \(String(describing: remainingAttempts))")
@@ -113,10 +113,10 @@ struct IdentificationCANScan: ReducerProtocol {
             if let remainingAttempts,
                let lastRemainingAttempts,
                remainingAttempts < lastRemainingAttempts {
-                idInteractionManager.interrupt()
+                eIDInteractionManager.interrupt()
                 return EffectTask(value: .wrongPIN(remainingAttempts: remainingAttempts))
             } else {
-                idInteractionManager.setPIN(state.pin)
+                eIDInteractionManager.setPIN(state.pin)
                 return .none
             }
         case .authenticationSucceeded(redirectURL: .some(let redirectURL)):
@@ -126,7 +126,7 @@ struct IdentificationCANScan: ReducerProtocol {
             issueTracker.capture(error: RedactedEIDInteractionEventError(.authenticationSucceeded(redirectURL: nil)))
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: state.shared.scanAvailable)))
         case .pukRequested:
-            idInteractionManager.interrupt()
+            eIDInteractionManager.interrupt()
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
         default:
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))

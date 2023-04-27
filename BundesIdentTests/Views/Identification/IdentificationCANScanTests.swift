@@ -10,11 +10,11 @@ final class IdentificationCANScanTests: XCTestCase {
     
     var scheduler: TestSchedulerOf<DispatchQueue>!
     var mockAnalyticsClient: MockAnalyticsClient!
-    var mockIDInteractionManager: MockIDInteractionManagerType!
+    var mockEIDInteractionManager: MockEIDInteractionManagerType!
     
     override func setUp() {
         mockAnalyticsClient = MockAnalyticsClient()
-        mockIDInteractionManager = MockIDInteractionManagerType()
+        mockEIDInteractionManager = MockEIDInteractionManagerType()
         scheduler = DispatchQueue.test
         
         stub(mockAnalyticsClient) {
@@ -22,14 +22,14 @@ final class IdentificationCANScanTests: XCTestCase {
             $0.track(event: any()).thenDoNothing()
         }
         
-        stub(mockIDInteractionManager) {
+        stub(mockEIDInteractionManager) {
             $0.interrupt().thenDoNothing()
             $0.setCAN(any()).thenDoNothing()
         }
     }
     
     override func tearDown() {
-        verifyNoMoreInteractions(mockIDInteractionManager)
+        verifyNoMoreInteractions(mockEIDInteractionManager)
     }
     
     func testOnAppearDoesTriggerScanningWhenNotAlreadyScanning() throws {
@@ -42,7 +42,7 @@ final class IdentificationCANScanTests: XCTestCase {
                                                       shared: SharedScan.State(startOnAppear: true)),
             reducer: IdentificationCANScan()
         )
-        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         
         store.dependencies.analytics = mockAnalyticsClient
         store.send(.onAppear)
@@ -50,7 +50,7 @@ final class IdentificationCANScanTests: XCTestCase {
             $0.shared.preventSecondScanningAttempt = true
         }
         
-        verify(mockIDInteractionManager).setCAN(can)
+        verify(mockEIDInteractionManager).setCAN(can)
     }
     
     func testWrongCAN() throws {
@@ -62,11 +62,11 @@ final class IdentificationCANScanTests: XCTestCase {
                                                                         shared: SharedScan.State(startOnAppear: true)),
                               reducer: IdentificationCANScan())
         store.dependencies.uuid = .incrementing
-        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         
         store.send(.scanEvent(.success(.canRequested)))
         
-        verify(mockIDInteractionManager).interrupt()
+        verify(mockEIDInteractionManager).interrupt()
     }
     
     func testStartScanTracking() {
@@ -77,7 +77,7 @@ final class IdentificationCANScanTests: XCTestCase {
                                                                         shared: SharedScan.State()),
                               reducer: IdentificationCANScan())
         store.dependencies.analytics = mockAnalyticsClient
-        store.dependencies.idInteractionManager = mockIDInteractionManager
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         
         store.send(.shared(.startScan)) {
             $0.shared.preventSecondScanningAttempt = true
@@ -87,6 +87,6 @@ final class IdentificationCANScanTests: XCTestCase {
                                                                 action: "buttonPressed",
                                                                 name: "canScan"))
         
-        verify(mockIDInteractionManager).setCAN(can)
+        verify(mockEIDInteractionManager).setCAN(can)
     }
 }
