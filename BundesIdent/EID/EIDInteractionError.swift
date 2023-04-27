@@ -1,29 +1,34 @@
 import Foundation
 
 enum EIDInteractionError: Error, Equatable {
-    case unknownReader
-    case frameworkError(message: String?)
-    case unexpectedReadAttribute(String)
     case cardDeactivated
+
+    case frameworkError(_ error: String? = nil, callback: String = #function, message: String? = nil)
     case identificationFailed(resultMajor: String, resultMinor: String?, refreshURL: URL?)
-    case pinChangeFailed
     case identificationFailedWithBadRequest
+    case pinChangeFailed
+    case unexpectedReadAttribute(String)
 }
 
 enum RedactedEIDInteractionError: CustomNSError, Hashable {
-    // TODO: The message is lost, e.g. onWrapperError vs. onBadState
-    case frameworkError
-    case unexpectedReadAttribute
+    case frameworkError(callback: String, message: String?)
     case identificationFailed(resultMajor: String, resultMinor: String?)
-    
+    case identificationFailedWithBadRequest
+    case pinChangeFailed
+    case unexpectedReadAttribute
+
     init?(_ eIDInteractionError: EIDInteractionError) {
         switch eIDInteractionError {
-        case .frameworkError:
-            self = .frameworkError
+        case .frameworkError(_, let callback, let message):
+            self = .frameworkError(callback: callback, message: message)
         case .unexpectedReadAttribute:
             self = .unexpectedReadAttribute
         case .identificationFailed(let resultMajor, let resultMinor, _):
             self = .identificationFailed(resultMajor: resultMajor, resultMinor: resultMinor)
+        case .identificationFailedWithBadRequest:
+            self = .identificationFailedWithBadRequest
+        case .pinChangeFailed:
+            self = .pinChangeFailed
         default:
             return nil
         }
@@ -31,10 +36,20 @@ enum RedactedEIDInteractionError: CustomNSError, Hashable {
     
     var errorUserInfo: [String: Any] {
         switch self {
-        case .frameworkError, .unexpectedReadAttribute:
-            return [NSDebugDescriptionErrorKey: "\(self)"]
+        case .frameworkError(callback: let callback, message: let message):
+            var description = "frameworkError(callback: \(callback)"
+            if let message {
+                description += ", message: \(message)"
+            }
+            return [NSDebugDescriptionErrorKey: description]
         case .identificationFailed(let resultMajor, let resultMinor):
-            return [NSDebugDescriptionErrorKey: "identificationFailed(resultMajor: \(resultMajor), resultMinor: \(String(describing: resultMinor))"]
+            var description = "identificationFailed(resultMajor: \(resultMajor)"
+            if let resultMinor {
+                description += ", resultMinor: \(resultMinor)"
+            }
+            return [NSDebugDescriptionErrorKey: description]
+        case .unexpectedReadAttribute, .identificationFailedWithBadRequest, .pinChangeFailed:
+            return [NSDebugDescriptionErrorKey: "\(self)"]
         }
     }
 }

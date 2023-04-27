@@ -47,7 +47,7 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
     }
 
     func onAuthenticationStartFailed(error: String) {
-        subject.send(completion: .failure(.frameworkError(message: "onAuthenticationStartFailed: \(error)")))
+        subject.send(completion: .failure(.frameworkError(error)))
     }
 
     func onAccessRights(error: String?, accessRights: AccessRights?) {
@@ -58,7 +58,7 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
         guard let accessRights else {
             // TODO: Check when this happens
             logger.error("onAccessRights: Access rights missing.")
-            subject.send(completion: .failure(.frameworkError(message: "Access rights missing. Error: \(String(describing: error))")))
+            subject.send(completion: .failure(.frameworkError(error, message: "Access rights missing")))
             return
         }
 
@@ -75,7 +75,7 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
             subject.send(completion: .failure(.unexpectedReadAttribute(attribute)))
             return
         } catch {
-            subject.send(completion: .failure(.frameworkError(message: nil)))
+            subject.send(completion: .failure(.frameworkError(message: "Failed to map EIAttribute")))
             return
         }
     }
@@ -136,12 +136,12 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
     }
 
     func onWrapperError(error: AusweisApp2SDKWrapper.WrapperError) {
-        subject.send(completion: .failure(.frameworkError(message: "onWrapperError: \(error.msg) - \(error.error)")))
+        subject.send(completion: .failure(.frameworkError("\(error.msg) - \(error.error)")))
     }
 
     func onBadState(error: String) {
         // TODO: issueTracker instead
-        subject.send(completion: .failure(.frameworkError(message: "onBadState: \(error)")))
+        subject.send(completion: .failure(.frameworkError(error)))
     }
 
     func onCertificate(certificateDescription: AusweisApp2SDKWrapper.CertificateDescription) {
@@ -181,14 +181,13 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
     }
 
     func onInternalError(error: String) {
-        subject.send(completion: .failure(.frameworkError(message: "onInternalError error: \(error)")))
+        subject.send(completion: .failure(.frameworkError(error)))
     }
 
     func onReader(reader: AusweisApp2SDKWrapper.Reader?) {
         guard let reader else {
             logger.error("onReader: Unknown reader")
             // reader is nil when identification is done
-            // subject.send(completion: .failure(.unknownReader))
             return
         }
 

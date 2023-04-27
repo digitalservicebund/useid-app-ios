@@ -5,7 +5,8 @@ import LicensePlistViewController
 struct LicensesView: UIViewControllerRepresentable {
     
     func makeUIViewController(context: Context) -> LicensePlistViewController {
-        BundLicensePlistViewController(fileNamed: "Licenses", tableViewStyle: .insetGrouped)
+        print(RedactedEIDInteractionError(.frameworkError("original error", message: "message"))?.errorUserInfo)
+        return BundLicensePlistViewController(fileNamed: "Licenses", tableViewStyle: .insetGrouped)
     }
     
     func updateUIViewController(_ uiViewController: LicensePlistViewController, context: Context) {}
