@@ -93,7 +93,7 @@ final class UnleashManager: ABTester {
     }
 }
 
-private enum UnleashError: CustomNSError {
+enum UnleashError: CustomNSError {
     case requestTookTooLong(TimeInterval)
     case requestFailed(NSError)
 }
