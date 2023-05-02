@@ -77,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/immobiliare/RealHTTP.git",
       "state" : {
-        "revision" : "d904f5592e4810875a7c26b5dc392c7584a64bed",
-        "version" : "1.8.1"
+        "revision" : "c0ffb265eae8684da02ad20cfcc147c23463ad95",
+        "version" : "1.8.3"
       }
     },
     {

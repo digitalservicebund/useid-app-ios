@@ -91,7 +91,7 @@ struct Coordinator: ReducerProtocol {
         }
         
         // swiftlint:disable:next force_try
-        let sessionIdRegex = try! NSRegularExpression(pattern: "\\/sessions\\/([a-f0-9-]*)\\/tc-token", options: .caseInsensitive)
+        let sessionIdRegex = try! NSRegularExpression(pattern: "\\/tc-tokens\\/([a-f0-9-]*)", options: .caseInsensitive)
         let range = NSRange(location: 0, length: urlString.utf16.count)
         let matches = sessionIdRegex.matches(in: urlString, range: range)
         
