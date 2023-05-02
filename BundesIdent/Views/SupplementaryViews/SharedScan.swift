@@ -10,27 +10,13 @@ struct ProgressCaption: Equatable {
 struct SharedScan: ReducerProtocol {
     @Dependency(\.context) var context
     struct State: Equatable {
-
         var scanAvailable = true
         var startOnAppear = false
         var attempt = 0
         var cardRecognized = false
         // TODO: Wait for AA2 fix or delete this TODO for release
         var preventSecondScanningAttempt = false
-        let forceDismissButtonTitle: String
-        init(scanAvailable: Bool = true,
-             startOnAppear: Bool = false,
-             attempt: Int = 0,
-             cardRecognized: Bool = false,
-             preventSecondScanningAttempt: Bool = false,
-             forceDismissButtonTitle: String = L10n.FirstTimeUser.ConfirmEnd.confirm) {
-            self.scanAvailable = scanAvailable
-            self.startOnAppear = startOnAppear
-            self.attempt = attempt
-            self.cardRecognized = cardRecognized
-            self.preventSecondScanningAttempt = preventSecondScanningAttempt
-            self.forceDismissButtonTitle = forceDismissButtonTitle
-        }
+        var forceDismissButtonTitle: String = L10n.FirstTimeUser.ConfirmEnd.confirm
     }
 
     enum Action: Equatable {

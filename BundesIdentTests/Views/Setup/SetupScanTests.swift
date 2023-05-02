@@ -53,7 +53,6 @@ class SetupScanTests: XCTestCase {
         
         store.send(.shared(.startScan)) {
             $0.shared.startOnAppear = true
-            $0.shared.preventSecondScanningAttempt = true
         }
         
         store.receive(.shared(.initiateScan)) {

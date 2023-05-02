@@ -132,7 +132,7 @@ class IdentificationCoordinatorTests: XCTestCase {
             $0.routes.append(.push(.scan(IdentificationPINScan.State(
                 identificationInformation: identificationInformation,
                 pin: "123456",
-                shared: SharedScan.State(startOnAppear: true, forceDismissButtonTitle: L10n.Identification.Scan.forceDismiss)
+                shared: SharedScan.State(startOnAppear: true)
             ))))
         }
     }
