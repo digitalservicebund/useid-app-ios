@@ -15,7 +15,7 @@ struct SetupScan: ReducerProtocol {
         var transportPIN: String
         var newPIN: String
         var shared: SharedScan.State = .init()
-        var remainingAttempts: Int?
+        var lastRemainingAttempts: Int?
         var alert: AlertState<SetupScan.Action>?
         var isScanInitiated = false
 #if PREVIEW
@@ -34,7 +34,6 @@ struct SetupScan: ReducerProtocol {
         case requestCANAndChangedPIN(pin: String)
         case wrongTransportPIN
         case error(ScanError.State)
-        case cancelScan
         case scannedSuccessfully
         case dismissAlert
 #if PREVIEW
@@ -75,11 +74,6 @@ struct SetupScan: ReducerProtocol {
             }
         case .scanEvent(.success(let event)):
             return handle(state: &state, event: event)
-        case .cancelScan:
-            if state.shared.cardRecognized {
-                issueTracker.capture(error: SetupScanError.cancelAfterCardRecognized)
-            }
-            return .cancel(id: CancelId.self)
         case .error:
             return .cancel(id: CancelId.self)
         case .wrongTransportPIN:
@@ -114,6 +108,9 @@ struct SetupScan: ReducerProtocol {
         case .pinChangeStarted:
             logger.info("PIN change started.")
         case .pinChangeCancelled:
+            if state.shared.cardRecognized {
+                issueTracker.capture(error: SetupScanError.cancelAfterCardRecognized)
+            }
             state.isScanInitiated = false
             return .cancel(id: CancelId.self)
         case .newPINRequested:
@@ -132,24 +129,21 @@ struct SetupScan: ReducerProtocol {
             eIDInteractionManager.interrupt()
             state.shared.scanAvailable = false
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
-        case .pinRequested(remainingAttempts: let newRemainingAttempts):
-            logger.info("Providing PIN with \(String(describing: newRemainingAttempts)) remaining attempts.")
-            let remainingAttemptsBefore = state.remainingAttempts
-            state.remainingAttempts = newRemainingAttempts
+        case .pinRequested(remainingAttempts: let remainingAttempts):
+            logger.info("Providing PIN with \(String(describing: remainingAttempts)) remaining attempts.")
 
-            // This is our signal that the user canceled (for now)
-            guard let remainingAttempts = newRemainingAttempts else {
-                return EffectTask(value: .cancelScan)
-            }
+            let lastRemainingAttempts = state.lastRemainingAttempts
+            state.lastRemainingAttempts = remainingAttempts
 
-            // Wrong transport/personal PIN provided
-            if let remainingAttemptsBefore,
-               remainingAttempts < remainingAttemptsBefore {
+            if let remainingAttempts,
+               let lastRemainingAttempts,
+               remainingAttempts < lastRemainingAttempts {
                 eIDInteractionManager.interrupt()
                 return EffectTask(value: .wrongTransportPIN)
+            } else {
+                eIDInteractionManager.setPIN(state.transportPIN)
+                return .none
             }
-            eIDInteractionManager.setPIN(state.transportPIN)
-            return .none
         case .identificationSucceeded,
              .identificationRequestConfirmationRequested,
              .identificationCancelled,
