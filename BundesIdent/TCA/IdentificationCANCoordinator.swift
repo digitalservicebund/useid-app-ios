@@ -83,8 +83,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                     state.routes.push(
                         .canScan(IdentificationCANScan.State(pin: pin,
                                                              can: can,
-                                                             shared: SharedScan.State(startOnAppear: true,
-                                                                                      forceDismissButtonTitle: L10n.Identification.Scan.forceDismiss)))
+                                                             shared: SharedScan.State(startOnAppear: true)))
                     )
                 } else {
                     issueTracker.capture(error: IdentificationCANCoordinatorError.pinNilWhenTriedScan)
@@ -102,8 +101,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                 state.routes.push(
                     .canScan(IdentificationCANScan.State(pin: pin,
                                                          can: can,
-                                                         shared: SharedScan.State(startOnAppear: true,
-                                                                                  forceDismissButtonTitle: L10n.Identification.Scan.forceDismiss)))
+                                                         shared: SharedScan.State(startOnAppear: true)))
                 )
                 
                 return .none
@@ -130,8 +128,6 @@ struct IdentificationCANCoordinator: ReducerProtocol {
             case .routeAction(_, action: .canScan(.shared(.showHelp))):
                 state.routes.presentSheet(.error(ScanError.State(errorType: .help, retry: true)))
                 return .none
-            case .routeAction(_, action: .canScan(.shared(.forceDismiss))):
-                return EffectTask(value: .afterConfirmEnd)
             case .routeAction(_, action: .canScan(.error(let errorState))):
                 state.routes.presentSheet(.error(errorState))
                 return .none

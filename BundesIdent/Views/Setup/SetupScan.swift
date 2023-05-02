@@ -14,7 +14,7 @@ struct SetupScan: ReducerProtocol {
     struct State: Equatable, EIDInteractionHandler {
         var transportPIN: String
         var newPIN: String
-        var shared: SharedScan.State = .init(forceDismissButtonTitle: L10n.FirstTimeUser.Scan.forceDismiss)
+        var shared: SharedScan.State = .init()
         var remainingAttempts: Int?
         var alert: AlertState<SetupScan.Action>?
         var isScanInitiated = false
@@ -53,7 +53,6 @@ struct SetupScan: ReducerProtocol {
         case .shared(.startScan):
             state.shared.startOnAppear = true
             state.shared.cardRecognized = false
-            state.shared.preventSecondScanningAttempt = true
             if state.isScanInitiated {
                 eIDInteractionManager.setPIN(state.transportPIN)
                 return .none
@@ -88,7 +87,7 @@ struct SetupScan: ReducerProtocol {
         case .scannedSuccessfully:
             storageManager.setupCompleted = true
             return .none
-        case .shared(.showHelp), .shared(.forceDismiss):
+        case .shared(.showHelp):
             return .none
         case .requestCANAndChangedPIN:
             return .none

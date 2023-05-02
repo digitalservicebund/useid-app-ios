@@ -14,16 +14,12 @@ struct SharedScan: ReducerProtocol {
         var startOnAppear = false
         var attempt = 0
         var cardRecognized = false
-        // TODO: Wait for AA2 fix or delete this TODO for release
-        var preventSecondScanningAttempt = false
-        var forceDismissButtonTitle: String = L10n.FirstTimeUser.ConfirmEnd.confirm
     }
 
     enum Action: Equatable {
         case startScan
         case initiateScan
         case showHelp
-        case forceDismiss
     }
     
     var body: some ReducerProtocol<State, Action> {
@@ -37,7 +33,6 @@ struct SharedScan: ReducerProtocol {
             switch action {
             case .startScan:
                 state.startOnAppear.toggle()
-                state.preventSecondScanningAttempt.toggle()
                 return .none
             default:
                 return .none
@@ -65,10 +60,7 @@ struct SharedScanView: View {
 
                     ScanBody(helpTapped: { viewStore.send(.showHelp) })
                 }
-                DialogButtons(store: store.stateless,
-                              primary: viewStore.preventSecondScanningAttempt
-                              ? .init(title: viewStore.forceDismissButtonTitle, action: .forceDismiss)
-                              : .init(title: L10n.Scan.button, action: .startScan))
+                DialogButtons(store: store.stateless, primary: .init(title: L10n.Scan.button, action: .startScan))
             }
             .onChange(of: viewStore.state.attempt, perform: { _ in
                 viewStore.send(.startScan, animation: .easeInOut)
@@ -88,8 +80,8 @@ struct SharedScanView: View {
 
 struct SharedScan_Previews: PreviewProvider {
 
-    static var store = Store<SharedScan.State, SharedScan.Action>(initialState: .init(forceDismissButtonTitle: "End flow"),
-                                                                  reducer: SharedScan())
+    static var store: Store<SharedScan.State, SharedScan.Action> = Store(initialState: SharedScan.State(),
+                                                                         reducer: SharedScan())
 
     static var previews: some View {
         NavigationView {
