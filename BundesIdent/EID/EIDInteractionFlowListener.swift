@@ -126,8 +126,8 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
         }
     }
 
-    func onChangePinCompleted(changePinResult: AusweisApp2SDKWrapper.ChangePinResult?) {
-        if changePinResult?.success == true {
+    func onChangePinCompleted(changePinResult: AusweisApp2SDKWrapper.ChangePinResult) {
+        if changePinResult.success {
             subject.send(.pinChangeSucceeded)
             subject.send(completion: .finished)
         } else {
