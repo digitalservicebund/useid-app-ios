@@ -159,7 +159,7 @@ final class IdentificationCANUITests: XCTestCase {
 //        app.navigationBars.buttons["Debug"].wait().tap()
 //        app.buttons["cancelCANScan"].wait().tap()
         
-        app.buttons[L10n.Identification.Scan.forceDismiss].assertExistence()
+        app.buttons[L10n.Scan.button].assertExistence()
     }
     
     func testIdentificationCANAfterTwoAttemptsToCardBlocked() throws {

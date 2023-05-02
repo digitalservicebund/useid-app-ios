@@ -178,7 +178,7 @@ final class IdentificationUITests: XCTestCase {
 //        app.navigationBars.buttons["Debug"].wait().tap()
 //        app.buttons["cancelPINScan"].wait().tap()
         
-        app.buttons[L10n.Identification.Scan.forceDismiss].wait().tap()
+        app.buttons[L10n.Scan.button].wait().tap()
     }
     
     func testIdentificationPINForgottenDismissesAfterConfirmation() throws {
