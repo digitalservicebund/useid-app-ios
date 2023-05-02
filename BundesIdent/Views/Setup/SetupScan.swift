@@ -114,7 +114,7 @@ struct SetupScan: ReducerProtocol {
         case .pinChangeStarted:
             logger.info("PIN change started.")
         case .pinChangeCancelled:
-            // TODO: Cancel in setup. Is this enough?
+            state.isScanInitiated = false
             return .cancel(id: CancelId.self)
         case .newPINRequested:
             logger.info("Providing new PIN.")

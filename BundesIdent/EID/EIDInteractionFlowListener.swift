@@ -130,6 +130,8 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
         if changePinResult.success {
             subject.send(.pinChangeSucceeded)
             subject.send(completion: .finished)
+        } else if changePinResult.reason == "User_Cancelled" {
+            subject.send(.pinChangeCancelled)
         } else {
             subject.send(completion: .failure(.pinChangeFailed))
         }
