@@ -123,6 +123,9 @@ struct IdentificationCANScan: ReducerProtocol {
         case .identificationSucceeded(redirectURL: .none):
             issueTracker.capture(error: RedactedEIDInteractionEventError(.identificationSucceeded(redirectURL: nil)))
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: state.shared.scanAvailable)))
+        case .identificationCancelled:
+            // TODO: Cancel in identification. Handle restart.
+            return .cancel(id: CancelId.self)
         case .pukRequested:
             eIDInteractionManager.interrupt()
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))

@@ -103,6 +103,9 @@ struct SetupCANScan: ReducerProtocol {
             logger.info("Card removed.")
         case .pinChangeSucceeded:
             return EffectTask(value: .scannedSuccessfully)
+        case .pinChangeCancelled:
+            // TODO: Cancel in setup. Is this enough?
+            return .cancel(id: CancelId.self)
         case .canRequested:
             logger.info("Wrong CAN provided")
             eIDInteractionManager.interrupt()
@@ -121,6 +124,7 @@ struct SetupCANScan: ReducerProtocol {
             return .none
         case .identificationSucceeded,
              .identificationRequestConfirmationRequested,
+             .identificationCancelled,
              .certificateDescriptionRetrieved:
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             logger.error("Received unexpected event.")

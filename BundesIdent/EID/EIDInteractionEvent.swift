@@ -11,8 +11,10 @@ enum EIDInteractionEvent: Equatable {
     case identificationStarted
     case identificationSucceeded(redirectURL: URL?)
     case identificationRequestConfirmationRequested(IdentificationRequest)
+    case identificationCancelled
     case pinChangeStarted
     case pinChangeSucceeded
+    case pinChangeCancelled
     case certificateDescriptionRetrieved(CertificateDescription)
 }
 
@@ -28,8 +30,10 @@ enum RedactedEIDInteractionEventError: CustomNSError {
     case identificationSucceededWithRedirect
     case identificationSucceededWithoutRedirect
     case identificationRequestConfirmationRequested
+    case identificationCancelled
     case pinChangeStarted
     case pinChangeSucceeded
+    case pinChangeCancelled
     case certificateDescriptionRetrieved
     
     init(_ event: EIDInteractionEvent) {
@@ -45,8 +49,10 @@ enum RedactedEIDInteractionEventError: CustomNSError {
         case .identificationSucceeded(redirectURL: .some): self = .identificationSucceededWithRedirect
         case .identificationSucceeded(redirectURL: .none): self = .identificationSucceededWithoutRedirect
         case .identificationRequestConfirmationRequested: self = .identificationRequestConfirmationRequested
+        case .identificationCancelled: self = .identificationCancelled
         case .pinChangeStarted: self = .pinChangeStarted
         case .pinChangeSucceeded: self = .pinChangeSucceeded
+        case .pinChangeCancelled: self = .pinChangeCancelled
         case .certificateDescriptionRetrieved: self = .certificateDescriptionRetrieved
         }
     }

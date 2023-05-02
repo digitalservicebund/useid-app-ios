@@ -114,6 +114,9 @@ struct SetupScan: ReducerProtocol {
             return EffectTask(value: .scannedSuccessfully)
         case .pinChangeStarted:
             logger.info("PIN change started.")
+        case .pinChangeCancelled:
+            // TODO: Cancel in setup. Is this enough?
+            return .cancel(id: CancelId.self)
         case .newPINRequested:
             logger.info("Providing new PIN.")
             eIDInteractionManager.setNewPIN(state.newPIN)
@@ -148,7 +151,10 @@ struct SetupScan: ReducerProtocol {
             }
             eIDInteractionManager.setPIN(state.transportPIN)
             return .none
-        case .identificationSucceeded, .identificationRequestConfirmationRequested, .certificateDescriptionRetrieved:
+        case .identificationSucceeded,
+             .identificationRequestConfirmationRequested,
+             .identificationCancelled,
+             .certificateDescriptionRetrieved:
             issueTracker.capture(error: RedactedEIDInteractionEventError(event))
             logger.error("Received unexpected event.")
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: true)))
