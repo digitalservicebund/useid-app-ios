@@ -106,6 +106,8 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
                 refreshURLComponents.queryItems = queryItems
                 subject.send(.identificationSucceeded(redirectURL: refreshURLComponents.url))
                 subject.send(completion: .finished)
+            } else if resultData.reason == "User_Cancelled" {
+                subject.send(.identificationCancelled)
             } else {
                 var resultMinor: String? = nil
                 if let resultMinorSuffix = resultData.minor?.split(separator: "#").last {

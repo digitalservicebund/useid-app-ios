@@ -30,6 +30,7 @@ struct IdentificationPINScan: ReducerProtocol {
         var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
         var didAcceptAccessRights = false
+        var shouldRestartAfterCancellation = false
         
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             .scanEvent(event)
@@ -47,6 +48,7 @@ struct IdentificationPINScan: ReducerProtocol {
         case cancelIdentification
         case dismiss
         case dismissAlert
+        case restartAfterCancellation
 #if PREVIEW
         case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -60,7 +62,10 @@ struct IdentificationPINScan: ReducerProtocol {
             state.shared.startOnAppear = true
             state.shared.cardRecognized = false
 
-            if state.didAcceptAccessRights {
+            if state.shouldRestartAfterCancellation {
+                state.shouldRestartAfterCancellation = false
+                return EffectTask(value: .restartAfterCancellation)
+            } else if state.didAcceptAccessRights {
                 eIDInteractionManager.setPIN(state.pin)
             } else {
                 state.didAcceptAccessRights = true
@@ -106,6 +111,13 @@ struct IdentificationPINScan: ReducerProtocol {
     
     func handle(state: inout State, event: EIDInteractionEvent) -> EffectTask<IdentificationPINScan.Action> {
         switch event {
+        case .identificationStarted:
+            logger.info("Silent identification started after cancellation.")
+            return .none
+        case .identificationRequestConfirmationRequested:
+            // TODO: Check that nothing changed from the last time
+            eIDInteractionManager.acceptAccessRights()
+            return .none
         case .cardInsertionRequested:
             logger.info("cardInsertionRequested")
             return .none
@@ -138,7 +150,7 @@ struct IdentificationPINScan: ReducerProtocol {
             issueTracker.capture(error: RedactedEIDInteractionEventError(.identificationSucceeded(redirectURL: nil)))
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: state.shared.scanAvailable)))
         case .identificationCancelled:
-            // TODO: Cancel in identification. Handle restart.
+            state.shouldRestartAfterCancellation = true
             return .cancel(id: CancelId.self)
         case .canRequested:
             eIDInteractionManager.interrupt()
