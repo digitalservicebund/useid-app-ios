@@ -15,6 +15,7 @@ struct IdentificationCANScan: ReducerProtocol {
     struct State: Equatable, EIDInteractionHandler {
         var pin: String
         var can: String
+        var identificationInformation: IdentificationInformation
         var shared: SharedScan.State = .init()
         
         var lastRemainingAttempts: Int?
@@ -22,6 +23,7 @@ struct IdentificationCANScan: ReducerProtocol {
 #if PREVIEW
         var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
+        var shouldRestartAfterCancellation = false
         
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             .scanEvent(event)
@@ -38,6 +40,7 @@ struct IdentificationCANScan: ReducerProtocol {
         case cancelIdentification
         case dismiss
         case dismissAlert
+        case restartAfterCancellation
 #if PREVIEW
         case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -48,7 +51,12 @@ struct IdentificationCANScan: ReducerProtocol {
         case .onAppear:
             return state.shared.startOnAppear ? EffectTask(value: .shared(.startScan)) : .none
         case .shared(.startScan):
-            eIDInteractionManager.setCAN(state.can)
+            if state.shouldRestartAfterCancellation {
+                state.shouldRestartAfterCancellation = false
+                return EffectTask(value: .restartAfterCancellation)
+            } else {
+                eIDInteractionManager.setCAN(state.can)
+            }
             return .trackEvent(category: "identification",
                                action: "buttonPressed",
                                name: "canScan",
@@ -76,6 +84,8 @@ struct IdentificationCANScan: ReducerProtocol {
         case .cancelIdentification:
             state.alert = AlertState.confirmEndInIdentification(.dismiss)
             return .none
+        case .restartAfterCancellation:
+            return .none
         case .dismiss:
             return .cancel(id: CancelId.self)
         case .dismissAlert:
@@ -88,6 +98,9 @@ struct IdentificationCANScan: ReducerProtocol {
     
     func handle(state: inout State, event: EIDInteractionEvent) -> EffectTask<IdentificationCANScan.Action> {
         switch event {
+        case .identificationStarted:
+            logger.info("identificationStarted")
+            return .none
         case .cardRecognized:
             logger.info("cardRecognized")
             return .none
@@ -123,8 +136,19 @@ struct IdentificationCANScan: ReducerProtocol {
             issueTracker.capture(error: RedactedEIDInteractionEventError(.identificationSucceeded(redirectURL: nil)))
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: state.shared.scanAvailable)))
         case .identificationCancelled:
-            // TODO: Cancel in identification. Handle restart.
+            state.shouldRestartAfterCancellation = true
             return .cancel(id: CancelId.self)
+        case .identificationRequestConfirmationRequested(let request):
+            
+            // Equality check of the two attribute arrays is fine, as they are already sorted by the AusweisApp2
+            guard state.identificationInformation.request == request else {
+                issueTracker.capture(error: RedactedEIDInteractionError.identificationFailedWithRequestMismatch)
+                logger.error("Old identification request and restartet one are not equal. Aborting identification.")
+                return EffectTask(value: .error(ScanError.State(errorType: .identificationRequestMismatch,
+                                                                retry: false)))
+            }
+            eIDInteractionManager.acceptAccessRights()
+            return .none
         case .pukRequested:
             eIDInteractionManager.interrupt()
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
@@ -166,7 +190,8 @@ struct IdentificationCANScanView: View {
 struct IdentificationCANScan_Previews: PreviewProvider {
     static var previews: some View {
         IdentificationCANScanView(store: Store(initialState: IdentificationCANScan.State(pin: "123456",
-                                                                                         can: "123456"),
+                                                                                         can: "123456",
+                                                                                         identificationInformation: .preview),
                                                reducer: IdentificationCANScan()))
     }
 }

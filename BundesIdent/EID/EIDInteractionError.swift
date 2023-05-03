@@ -6,6 +6,7 @@ enum EIDInteractionError: Error, Equatable {
     case frameworkError(_ error: String? = nil, callback: String = #function, message: String? = nil)
     case identificationFailed(resultMajor: String, resultMinor: String?, refreshURL: URL?)
     case identificationFailedWithBadRequest
+    case identificationFailedWithRequestMismatch(old: IdentificationRequest, new: IdentificationRequest)
     case pinChangeFailed
     case unexpectedReadAttribute(String)
 }
@@ -14,6 +15,7 @@ enum RedactedEIDInteractionError: CustomNSError, Hashable {
     case frameworkError(callback: String, message: String?)
     case identificationFailed(resultMajor: String, resultMinor: String?)
     case identificationFailedWithBadRequest
+    case identificationFailedWithRequestMismatch
     case pinChangeFailed
     case unexpectedReadAttribute
 
@@ -27,6 +29,8 @@ enum RedactedEIDInteractionError: CustomNSError, Hashable {
             self = .identificationFailed(resultMajor: resultMajor, resultMinor: resultMinor)
         case .identificationFailedWithBadRequest:
             self = .identificationFailedWithBadRequest
+        case .identificationFailedWithRequestMismatch:
+            self = .identificationFailedWithRequestMismatch
         case .pinChangeFailed:
             self = .pinChangeFailed
         default:
@@ -48,7 +52,10 @@ enum RedactedEIDInteractionError: CustomNSError, Hashable {
                 description += ", resultMinor: \(resultMinor)"
             }
             return [NSDebugDescriptionErrorKey: description]
-        case .unexpectedReadAttribute, .identificationFailedWithBadRequest, .pinChangeFailed:
+        case .unexpectedReadAttribute,
+             .identificationFailedWithBadRequest,
+             .pinChangeFailed,
+             .identificationFailedWithRequestMismatch:
             return [NSDebugDescriptionErrorKey: "\(self)"]
         }
     }

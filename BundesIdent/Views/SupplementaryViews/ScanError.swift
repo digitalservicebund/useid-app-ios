@@ -8,6 +8,7 @@ enum ScanErrorType: Equatable {
     case help
     case eIDInteraction(EIDInteractionError)
     case unexpectedEvent(EIDInteractionEvent)
+    case identificationRequestMismatch
 }
 
 struct ScanError: ReducerProtocol {
@@ -26,6 +27,8 @@ struct ScanError: ReducerProtocol {
                  .unexpectedEvent,
                  .help:
                 return L10n.ScanError.CardUnreadable.title
+            case .identificationRequestMismatch:
+                return L10n.ScanError.Unknown.title
             }
         }
         
@@ -39,6 +42,8 @@ struct ScanError: ReducerProtocol {
                  .unexpectedEvent,
                  .help:
                 return L10n.ScanError.CardUnreadable.body
+            case .identificationRequestMismatch:
+                return L10n.ScanError.Unknown.body
             }
         }
         
@@ -58,7 +63,7 @@ struct ScanError: ReducerProtocol {
             switch errorType {
             case .cardDeactivated, .cardBlocked, .help, .eIDInteraction(.cardDeactivated):
                 return nil
-            case .eIDInteraction, .unexpectedEvent:
+            case .eIDInteraction, .unexpectedEvent, .identificationRequestMismatch:
                 return .init(title: L10n.ScanError.Box.title, message: L10n.ScanError.Box.body, style: .error)
             }
         }
@@ -89,6 +94,8 @@ extension ScanErrorType: AnalyticsView {
             return ["cardDeactivated"]
         case .cardBlocked:
             return ["cardBlocked"]
+        case .identificationRequestMismatch:
+            return ["identificationRequestMismatch"]
         case .eIDInteraction, .unexpectedEvent:
             return ["cardUnreadable"]
         }

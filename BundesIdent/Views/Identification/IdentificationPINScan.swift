@@ -114,8 +114,15 @@ struct IdentificationPINScan: ReducerProtocol {
         case .identificationStarted:
             logger.info("Silent identification started after cancellation.")
             return .none
-        case .identificationRequestConfirmationRequested:
-            // TODO: Check that nothing changed from the last time
+        case .identificationRequestConfirmationRequested(let request):
+            
+            // Equality check of the two attribute arrays is fine, as they are already sorted by the AusweisApp2
+            guard state.identificationInformation.request == request else {
+                issueTracker.capture(error: RedactedEIDInteractionError.identificationFailedWithRequestMismatch)
+                logger.error("Old identification request and restartet one are not equal. Aborting identification.")
+                return EffectTask(value: .error(ScanError.State(errorType: .identificationRequestMismatch,
+                                                                retry: false)))
+            }
             eIDInteractionManager.acceptAccessRights()
             return .none
         case .cardInsertionRequested:

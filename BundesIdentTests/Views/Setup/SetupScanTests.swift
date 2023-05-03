@@ -84,7 +84,7 @@ class SetupScanTests: XCTestCase {
         }
         
         store.send(.scanEvent(.success(.pinRequested(remainingAttempts: 3)))) {
-            $0.remainingAttempts = 3
+            $0.lastRemainingAttempts = 3
         }
 
         store.send(.scanEvent(.success(.cardInsertionRequested))) {

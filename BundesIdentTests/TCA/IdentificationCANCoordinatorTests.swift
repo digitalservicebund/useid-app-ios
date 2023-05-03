@@ -65,6 +65,7 @@ class IdentificationCANCoordinatorTests: XCTestCase {
             $0.routes.append(.push(
                 .canScan(IdentificationCANScan.State(pin: pin,
                                                      can: can,
+                                                     identificationInformation: .preview,
                                                      shared: SharedScan.State(startOnAppear: true)))))
         }
         
@@ -86,7 +87,8 @@ class IdentificationCANCoordinatorTests: XCTestCase {
                                                              attempt: 0,
                                                              states: [
                                                                  .root(.canScan(.init(pin: pin,
-                                                                                      can: can)))
+                                                                                      can: can,
+                                                                                      identificationInformation: .preview)))
                                                              ]),
             reducer: IdentificationCANCoordinator()
         )
@@ -119,7 +121,8 @@ class IdentificationCANCoordinatorTests: XCTestCase {
                                                              attempt: 0,
                                                              states: [
                                                                  .root(.canScan(.init(pin: pin,
-                                                                                      can: can)))
+                                                                                      can: can,
+                                                                                      identificationInformation: .preview)))
                                                              ]),
             reducer: IdentificationCANCoordinator()
         )
@@ -138,6 +141,7 @@ class IdentificationCANCoordinatorTests: XCTestCase {
             .push(.canInput(CANInput.State(pushesToPINEntry: false))),
             .push(.canScan(IdentificationCANScan.State(pin: pin,
                                                        can: can,
+                                                       identificationInformation: .preview,
                                                        shared: SharedScan.State(startOnAppear: true)))),
             .sheet(.canIncorrectInput(CANIncorrectInput.State()))
         ]

@@ -83,6 +83,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                     state.routes.push(
                         .canScan(IdentificationCANScan.State(pin: pin,
                                                              can: can,
+                                                             identificationInformation: state.identificationInformation,
                                                              shared: SharedScan.State(startOnAppear: true)))
                     )
                 } else {
@@ -101,6 +102,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                 state.routes.push(
                     .canScan(IdentificationCANScan.State(pin: pin,
                                                          can: can,
+                                                         identificationInformation: state.identificationInformation,
                                                          shared: SharedScan.State(startOnAppear: true)))
                 )
                 

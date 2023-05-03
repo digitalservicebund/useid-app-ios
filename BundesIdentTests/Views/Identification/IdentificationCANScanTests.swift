@@ -37,6 +37,7 @@ final class IdentificationCANScanTests: XCTestCase {
         let store = TestStore(
             initialState: IdentificationCANScan.State(pin: "123456",
                                                       can: can,
+                                                      identificationInformation: .preview,
                                                       shared: SharedScan.State(startOnAppear: true)),
             reducer: IdentificationCANScan()
         )
@@ -55,6 +56,7 @@ final class IdentificationCANScanTests: XCTestCase {
     
         let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
                                                                         can: can,
+                                                                        identificationInformation: .preview,
                                                                         shared: SharedScan.State(startOnAppear: true)),
                               reducer: IdentificationCANScan())
         store.dependencies.uuid = .incrementing
@@ -70,6 +72,7 @@ final class IdentificationCANScanTests: XCTestCase {
         let can = "123456"
         let store = TestStore(initialState: IdentificationCANScan.State(pin: pin,
                                                                         can: can,
+                                                                        identificationInformation: .preview,
                                                                         shared: SharedScan.State()),
                               reducer: IdentificationCANScan())
         store.dependencies.analytics = mockAnalyticsClient
