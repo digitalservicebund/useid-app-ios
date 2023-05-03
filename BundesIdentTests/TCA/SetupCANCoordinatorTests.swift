@@ -47,7 +47,6 @@ class SetupCANCoordinatorTests: XCTestCase {
         let pin = "123456"
         let transportPIN = "12345"
         let can = "123456"
-        let canAndChangedPINCallback = CANAndChangedPINCallback(id: UUID(number: 0), callback: { _ in })
         let store = TestStore(
             initialState: SetupCANCoordinator.State(pin: pin,
                                                     transportPIN: transportPIN,

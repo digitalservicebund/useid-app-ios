@@ -6,21 +6,6 @@ import SwiftUI
 import ComposableArchitecture
 import Analytics
 
-struct CANAndChangedPINCallbackPayload: Equatable {
-    let can: String
-    let oldPIN: String
-    let newPIN: String
-}
-
-typealias CANAndChangedPINCallback = IdentifiableCallback<CANAndChangedPINCallbackPayload>
-
-struct ChangedPINCallbackPayload: Equatable {
-    let oldPIN: String
-    let newPIN: String
-}
-
-typealias ChangedPINCallback = IdentifiableCallback<ChangedPINCallbackPayload>
-
 enum SetupCANCoordinatorError: CustomNSError {
     case canNilWhenTriedScan
     case pinNilWhenTriedScan

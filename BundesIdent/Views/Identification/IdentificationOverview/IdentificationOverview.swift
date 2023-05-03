@@ -3,9 +3,6 @@ import Analytics
 import ComposableArchitecture
 import TCACoordinators
 
-typealias PINCallback = IdentifiableCallback<String>
-typealias PINCANCallback = IdentifiableCallback<(String, String)>
-
 struct IdentificationOverview: ReducerProtocol {
     @Dependency(\.uuid) var uuid
     @Dependency(\.analytics) var analytics
@@ -84,7 +81,7 @@ struct IdentificationOverview: ReducerProtocol {
                                                                           certificateDescription: certificateDescription)
                 state = .loaded(IdentificationOverviewLoaded.State(id: uuid.callAsFunction(),
                                                                    identificationInformation: identificationInformation,
-
+                                                                   
                                                                    canGoBackToSetupIntro: state.canGoBackToSetupIntro))
                 return .none
             default:
