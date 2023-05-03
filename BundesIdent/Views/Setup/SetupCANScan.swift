@@ -16,7 +16,8 @@ struct SetupCANScan: ReducerProtocol {
         var newPIN: String
         var can: String
         var shared: SharedScan.State = .init()
-        
+        var shouldRestartAfterCancellation = false
+
         var alert: AlertState<SetupCANScan.Action>?
 #if PREVIEW
         var availableDebugActions: [ChangePINDebugSequence] = []
@@ -38,6 +39,7 @@ struct SetupCANScan: ReducerProtocol {
         case cancelSetup
         case dismiss
         case dismissAlert
+        case restartAfterCancellation
 #if PREVIEW
         case runDebugSequence(ChangePINDebugSequence)
 #endif
@@ -48,7 +50,12 @@ struct SetupCANScan: ReducerProtocol {
         case .onAppear:
             return state.shared.startOnAppear ? EffectTask(value: .shared(.startScan)) : .none
         case .shared(.startScan):
-            eIDInteractionManager.setCAN(state.can)
+            if state.shouldRestartAfterCancellation {
+                return EffectTask(value: .restartAfterCancellation)
+            } else {
+                eIDInteractionManager.setCAN(state.can)
+            }
+            // TODO: Always track for button press (iff)
             return .trackEvent(category: "Setup",
                                action: "buttonPressed",
                                name: "canScan",
@@ -103,12 +110,18 @@ struct SetupCANScan: ReducerProtocol {
         case .pinChangeSucceeded:
             return EffectTask(value: .scannedSuccessfully)
         case .pinChangeCancelled:
-            // TODO: Cancel in setup. Is this enough?
+            state.shouldRestartAfterCancellation = true
             return .cancel(id: CancelId.self)
         case .canRequested:
-            logger.info("Wrong CAN provided")
-            eIDInteractionManager.interrupt()
-            return EffectTask(value: .incorrectCAN)
+            if state.shouldRestartAfterCancellation {
+                state.shouldRestartAfterCancellation = false
+                eIDInteractionManager.setCAN(state.can)
+                return .none
+            } else {
+                logger.info("Wrong CAN provided")
+                eIDInteractionManager.interrupt()
+                return EffectTask(value: .incorrectCAN)
+            }
         case .pinRequested:
             eIDInteractionManager.setPIN(state.transportPIN)
             return .none
