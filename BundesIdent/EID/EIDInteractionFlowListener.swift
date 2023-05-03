@@ -56,8 +56,7 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
         }
 
         guard let accessRights else {
-            // TODO: Check when this happens
-            logger.error("onAccessRights: Access rights missing.")
+            logger.error("onAccessRights: Access rights missing")
             subject.send(completion: .failure(.frameworkError(error, message: "Access rights missing")))
             return
         }
@@ -75,7 +74,7 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
             subject.send(completion: .failure(.unexpectedReadAttribute(attribute)))
             return
         } catch {
-            subject.send(completion: .failure(.frameworkError(message: "Failed to map EIAttribute")))
+            subject.send(completion: .failure(.frameworkError(String(describing: error), message: "Failed to map EIDAttribute")))
             return
         }
     }
@@ -144,7 +143,6 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
     }
 
     func onBadState(error: String) {
-        // TODO: issueTracker instead
         subject.send(completion: .failure(.frameworkError(error)))
     }
 
