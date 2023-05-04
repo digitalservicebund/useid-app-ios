@@ -32,7 +32,7 @@ final class IdentificationPINScanTests: XCTestCase {
             reducer: IdentificationPINScan()
         )
         
-        store.send(.onAppear)
+        store.send(.shared(.onAppear))
     }
 
     func testWrongPIN() throws {
@@ -71,9 +71,8 @@ final class IdentificationPINScanTests: XCTestCase {
             $0.acceptAccessRights().thenDoNothing()
         }
         
-        store.send(.shared(.startScan)) {
+        store.send(.shared(.startScan(userInitiated: true))) {
             $0.didAcceptAccessRights = true
-            $0.shared.startOnAppear = true
         }
         
         verify(mockEIDInteractionManager).acceptAccessRights()

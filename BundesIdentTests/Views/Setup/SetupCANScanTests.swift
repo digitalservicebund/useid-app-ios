@@ -56,7 +56,7 @@ class SetupCANScanTests: XCTestCase {
             mock.setCAN(anyString()).thenDoNothing()
         }
 
-        store.send(.shared(.startScan))
+        store.send(.shared(.startScan(userInitiated: true)))
         
         verify(mockEIDInteractionManager).setCAN(can)
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "Setup",
@@ -82,7 +82,7 @@ class SetupCANScanTests: XCTestCase {
             mock.setNewPIN(anyString()).thenDoNothing()
         }
 
-        store.send(.shared(.startScan))
+        store.send(.shared(.startScan(userInitiated: true)))
         
         store.send(.scanEvent(.success(.identificationStarted)))
         store.send(.scanEvent(.success(.cardInsertionRequested)))

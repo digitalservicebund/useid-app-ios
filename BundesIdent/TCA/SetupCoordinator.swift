@@ -166,16 +166,10 @@ struct SetupCoordinator: ReducerProtocol {
                  #else
                 publisher = eIDInteractionManager.changePIN(messages: .setup)
                  #endif
-                return .concatenate(
-                    .trackEvent(category: "firstTimeUser",
-                                action: "buttonPressed",
-                                name: "scan",
-                                analytics: analytics),
-                    publisher
-                        .receive(on: mainQueue)
-                        .catchToEffect(Action.eIDInteractionEvent)
-                        .cancellable(id: CancelId.self, cancelInFlight: true)
-                )
+                return publisher
+                    .receive(on: mainQueue)
+                    .catchToEffect(Action.eIDInteractionEvent)
+                    .cancellable(id: CancelId.self, cancelInFlight: true)
             case .routeAction(_, action: .scan(.scannedSuccessfully)):
                 state.routes.push(.done(SetupDone.State(tokenURL: state.tokenURL)))
             case .routeAction(_, action: .scan(.error(let errorState))):

@@ -10,7 +10,8 @@ struct SetupScan: ReducerProtocol {
     @Dependency(\.logger) var logger
     @Dependency(\.storageManager) var storageManager
     @Dependency(\.eIDInteractionManager) var eIDInteractionManager
-    
+    @Dependency(\.analytics) var analytics
+
     struct State: Equatable, EIDInteractionHandler {
         var transportPIN: String
         var newPIN: String
@@ -28,7 +29,6 @@ struct SetupScan: ReducerProtocol {
     }
     
     enum Action: Equatable {
-        case onAppear
         case shared(SharedScan.Action)
         case scanEvent(Result<EIDInteractionEvent, EIDInteractionError>)
         case requestCANAndChangedPIN(pin: String)
@@ -40,53 +40,62 @@ struct SetupScan: ReducerProtocol {
         case runDebugSequence(ChangePINDebugSequence)
 #endif
     }
-    
-    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-        switch action {
-#if PREVIEW
-        case .runDebugSequence:
-            return .none
-#endif
-        case .onAppear:
-            return .none
-        case .shared(.startScan):
-            state.shared.startOnAppear = true
-            if state.isScanInitiated {
-                eIDInteractionManager.setPIN(state.transportPIN)
-                return .none
-            } else {
-                return EffectTask(value: .shared(.initiateScan))
-            }
-        case .shared(.initiateScan):
-            state.isScanInitiated = true
-            return .none
-        case .scanEvent(.failure(let error)):
-            RedactedEIDInteractionError(error).flatMap(issueTracker.capture(error:))
 
-            switch error {
-            case .cardDeactivated:
-                state.shared.scanAvailable = false
-                return EffectTask(value: .error(ScanError.State(errorType: .cardDeactivated, retry: state.shared.scanAvailable)))
-            default:
-                state.shared.scanAvailable = true
-                return EffectTask(value: .error(ScanError.State(errorType: .eIDInteraction(error), retry: state.shared.scanAvailable)))
+    var body: some ReducerProtocol<State, Action> {
+        Scope(state: \.shared, action: /Action.shared) {
+            SharedScan()
+        }
+        Reduce { state, action in
+            switch action {
+    #if PREVIEW
+            case .runDebugSequence:
+                return .none
+    #endif
+            case .shared(.startScan(let userInitiated)):
+                var trackingEvent = EffectTask<Action>.none
+                if userInitiated {
+                    trackingEvent = .trackEvent(category: "firstTimeUser",
+                                                action: "buttonPressed",
+                                                name: "scan",
+                                                analytics: analytics)
+                }
+                if state.isScanInitiated {
+                    eIDInteractionManager.setPIN(state.transportPIN)
+                    return trackingEvent
+                } else {
+                    return .concatenate(EffectTask(value: .shared(.initiateScan)), trackingEvent)
+                }
+            case .shared(.initiateScan):
+                state.isScanInitiated = true
+                return .none
+            case .shared:
+                return .none
+            case .scanEvent(.failure(let error)):
+                RedactedEIDInteractionError(error).flatMap(issueTracker.capture(error:))
+
+                switch error {
+                case .cardDeactivated:
+                    state.shared.scanAvailable = false
+                    return EffectTask(value: .error(ScanError.State(errorType: .cardDeactivated, retry: state.shared.scanAvailable)))
+                default:
+                    state.shared.scanAvailable = true
+                    return EffectTask(value: .error(ScanError.State(errorType: .eIDInteraction(error), retry: state.shared.scanAvailable)))
+                }
+            case .scanEvent(.success(let event)):
+                return handle(state: &state, event: event)
+            case .error:
+                return .cancel(id: CancelId.self)
+            case .wrongTransportPIN:
+                return .none
+            case .scannedSuccessfully:
+                storageManager.setupCompleted = true
+                return .none
+            case .requestCANAndChangedPIN:
+                return .none
+            case .dismissAlert:
+                state.alert = nil
+                return .none
             }
-        case .scanEvent(.success(let event)):
-            return handle(state: &state, event: event)
-        case .error:
-            return .cancel(id: CancelId.self)
-        case .wrongTransportPIN:
-            return .none
-        case .scannedSuccessfully:
-            storageManager.setupCompleted = true
-            return .none
-        case .shared(.showHelp):
-            return .none
-        case .requestCANAndChangedPIN:
-            return .none
-        case .dismissAlert:
-            state.alert = nil
-            return .none
         }
     }
     
@@ -164,9 +173,6 @@ struct SetupScanView: View {
     var body: some View {
         SharedScanView(store: store.scope(state: \.shared, action: SetupScan.Action.shared))
             .interactiveDismissDisabled()
-            .onAppear {
-                ViewStore(store).send(.onAppear)
-            }
 #if PREVIEW
             .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: SetupScan.Action.runDebugSequence)
 #endif

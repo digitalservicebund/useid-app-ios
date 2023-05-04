@@ -37,7 +37,6 @@ struct IdentificationPINScan: ReducerProtocol {
     }
     
     enum Action: Equatable {
-        case onAppear
         case shared(SharedScan.Action)
         case scanEvent(Result<EIDInteractionEvent, EIDInteractionError>)
         case wrongPIN(remainingAttempts: Int)
@@ -53,57 +52,62 @@ struct IdentificationPINScan: ReducerProtocol {
 #endif
     }
     
-    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-        switch action {
-        case .onAppear:
-            return state.shared.startOnAppear ? EffectTask(value: .shared(.startScan)) : .none
-        case .shared(.startScan):
-            state.shared.startOnAppear = true
-
-            if state.shouldRestartAfterCancellation {
-                state.shouldRestartAfterCancellation = false
-                return EffectTask(value: .restartAfterCancellation)
-            } else if state.didAcceptAccessRights {
-                eIDInteractionManager.setPIN(state.pin)
-            } else {
-                state.didAcceptAccessRights = true
-                eIDInteractionManager.acceptAccessRights()
-            }
-
-            return .trackEvent(category: "identification",
-                               action: "buttonPressed",
-                               name: "scan",
-                               analytics: analytics)
-        case .scanEvent(.success(let event)):
-            return handle(state: &state, event: event)
-        case .scanEvent(.failure(let error)):
-            RedactedEIDInteractionError(error).flatMap(issueTracker.capture(error:))
-
-            switch error {
-            case .cardDeactivated:
-                return EffectTask(value: .error(ScanError.State(errorType: .cardDeactivated, retry: false)))
+    var body: some ReducerProtocol<State, Action> {
+        Scope(state: \.shared, action: /Action.shared) {
+            SharedScan()
+        }
+        Reduce { state, action in
+            switch action {
+            case .shared(.startScan(let userInitiated)):
+                var trackingEvent = EffectTask<Action>.none
+                if userInitiated {
+                    trackingEvent = .trackEvent(category: "identification",
+                                                action: "buttonPressed",
+                                                name: "scan",
+                                                analytics: analytics)
+                }
+                if state.shouldRestartAfterCancellation {
+                    state.shouldRestartAfterCancellation = false
+                    return .concatenate(EffectTask(value: .restartAfterCancellation), trackingEvent)
+                } else if state.didAcceptAccessRights {
+                    eIDInteractionManager.setPIN(state.pin)
+                    return trackingEvent
+                } else {
+                    state.didAcceptAccessRights = true
+                    eIDInteractionManager.acceptAccessRights()
+                    return trackingEvent
+                }
+            case .scanEvent(.success(let event)):
+                return handle(state: &state, event: event)
+            case .scanEvent(.failure(let error)):
+                RedactedEIDInteractionError(error).flatMap(issueTracker.capture(error:))
+                
+                switch error {
+                case .cardDeactivated:
+                    return EffectTask(value: .error(ScanError.State(errorType: .cardDeactivated, retry: false)))
+                default:
+                    return EffectTask(value: .error(ScanError.State(errorType: .eIDInteraction(error), retry: false)))
+                }
+            case .wrongPIN:
+                return .none
+            case .identifiedSuccessfully(let redirectURL):
+                storageManager.setupCompleted = true
+                storageManager.identifiedOnce = true
+                
+                return .concatenate(.trackEvent(category: "identification", action: "success", analytics: analytics),
+                                    EffectTask(value: .dismiss),
+                                    .openURL(redirectURL, urlOpener: urlOpener))
+            case .cancelIdentification:
+                state.alert = AlertState.confirmEndInIdentification(.dismiss)
+                return .none
+            case .dismiss:
+                return .cancel(id: CancelId.self)
+            case .dismissAlert:
+                state.alert = nil
+                return .none
             default:
-                return EffectTask(value: .error(ScanError.State(errorType: .eIDInteraction(error), retry: false)))
+                return .none
             }
-        case .wrongPIN:
-            return .none
-        case .identifiedSuccessfully(let redirectURL):
-            storageManager.setupCompleted = true
-            storageManager.identifiedOnce = true
-            
-            return .concatenate(.trackEvent(category: "identification", action: "success", analytics: analytics),
-                                EffectTask(value: .dismiss),
-                                .openURL(redirectURL, urlOpener: urlOpener))
-        case .cancelIdentification:
-            state.alert = AlertState.confirmEndInIdentification(.dismiss)
-            return .none
-        case .dismiss:
-            return .cancel(id: CancelId.self)
-        case .dismissAlert:
-            state.alert = nil
-            return .none
-        default:
-            return .none
         }
     }
     
@@ -176,9 +180,6 @@ struct IdentificationPINScanView: View {
     
     var body: some View {
         SharedScanView(store: store.scope(state: \.shared, action: IdentificationPINScan.Action.shared))
-            .onAppear {
-                ViewStore(store).send(.onAppear)
-            }
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

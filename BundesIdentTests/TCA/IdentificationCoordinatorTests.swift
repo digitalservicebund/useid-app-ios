@@ -400,7 +400,7 @@ class IdentificationCoordinatorTests: XCTestCase {
             $0.routes[0].screen = .scan(scanState)
         }
         
-        store.send(.routeAction(0, action: .scan(.shared(.startScan)))) {
+        store.send(.routeAction(0, action: .scan(.shared(.startScan(userInitiated: true))))) {
             guard case .scan(var scanState) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
             scanState.shouldRestartAfterCancellation = false
             $0.routes[0].screen = .scan(scanState)

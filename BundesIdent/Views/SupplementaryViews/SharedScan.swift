@@ -8,7 +8,7 @@ struct ProgressCaption: Equatable {
 }
 
 struct SharedScan: ReducerProtocol {
-    @Dependency(\.context) var context
+
     struct State: Equatable {
         var scanAvailable = true
         var startOnAppear = false
@@ -16,23 +16,26 @@ struct SharedScan: ReducerProtocol {
     }
 
     enum Action: Equatable {
-        case startScan
+        case onAppear
+        case onButtonTap
+        case onAttemptChange
+
+        case startScan(userInitiated: Bool)
         case initiateScan
         case showHelp
     }
     
     var body: some ReducerProtocol<State, Action> {
-        if context == .preview {
-            Reduce(preview())
-        }
-    }
-    
-    func preview() -> some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
-            case .startScan:
-                state.startOnAppear.toggle()
-                return .none
+            case .onAppear where state.startOnAppear,
+                 .onAttemptChange:
+                return EffectTask(value: .startScan(userInitiated: false))
+            case .onButtonTap:
+                if !state.startOnAppear {
+                    state.startOnAppear = true
+                }
+                return EffectTask(value: .startScan(userInitiated: true))
             default:
                 return .none
             }
@@ -59,11 +62,14 @@ struct SharedScanView: View {
 
                     ScanBody(helpTapped: { viewStore.send(.showHelp) })
                 }
-                DialogButtons(store: store.stateless, primary: .init(title: L10n.Scan.button, action: .startScan))
+                DialogButtons(store: store.stateless, primary: .init(title: L10n.Scan.button, action: .onButtonTap))
             }
             .onChange(of: viewStore.state.attempt, perform: { _ in
-                viewStore.send(.startScan, animation: .easeInOut)
+                viewStore.send(.onAttemptChange, animation: .easeInOut)
             })
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
         }
     }
     

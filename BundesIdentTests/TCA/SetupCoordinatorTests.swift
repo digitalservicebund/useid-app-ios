@@ -297,54 +297,6 @@ class SetupCoordinatorTests: XCTestCase {
         }
     }
     
-    func testStartScanTracking() {
-        let store = TestStore(initialState: SetupCoordinator.State(transportPIN: "12345",
-                                                                   states: [
-                                                                       .root(.scan(SetupScan.State(transportPIN: "12345", newPIN: "123456")))
-                                                                   ]), reducer: SetupCoordinator())
-        
-        let scheduler = DispatchQueue.test
-        let mockAnalyticsClient = MockAnalyticsClient()
-        let mockEIDInteractionManager = MockEIDInteractionManagerType()
-        let mockPreviewEIDInteractionManager = MockPreviewEIDInteractionManagerType()
-        
-        stub(mockAnalyticsClient) {
-            $0.track(view: any()).thenDoNothing()
-            $0.track(event: any()).thenDoNothing()
-        }
-        
-        stub(mockEIDInteractionManager) { mock in
-            mock.changePIN(messages: any()).then { _ in
-                let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
-                scheduler.schedule {
-                    subject.send(completion: .finished)
-                }
-                return subject.eraseToAnyPublisher()
-            }
-        }
-        
-        stub(mockPreviewEIDInteractionManager) {
-            $0.isDebugModeEnabled.get.thenReturn(false)
-        }
-        
-        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
-        store.dependencies.analytics = mockAnalyticsClient
-        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
-        store.dependencies.previewEIDInteractionManager = mockPreviewEIDInteractionManager
-        
-        store.send(.routeAction(0, action: .scan(.shared(.initiateScan)))) {
-            guard case .scan(var scanState) = $0.states[0].screen else { return XCTFail() }
-            scanState.isScanInitiated = true
-            $0.states[0].screen = .scan(scanState)
-        }
-
-        scheduler.advance()
-        
-        verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "firstTimeUser",
-                                                                action: "buttonPressed",
-                                                                name: "scan"))
-    }
-    
     func testCancelingOnConfirmTransportPINAsksForConfirmation() throws {
         let setupCANCoordinatorState = SetupCANCoordinator.State(pin: "123456", oldTransportPIN: "12345", attempt: 0, states: [
             .root(.canConfirmTransportPIN(.init(transportPIN: "12345")))

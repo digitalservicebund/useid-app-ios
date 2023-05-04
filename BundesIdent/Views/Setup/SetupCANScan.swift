@@ -29,7 +29,6 @@ struct SetupCANScan: ReducerProtocol {
     }
     
     enum Action: Equatable {
-        case onAppear
         case shared(SharedScan.Action)
         case scanEvent(Result<EIDInteractionEvent, EIDInteractionError>)
         case wrongPIN(remainingAttempts: Int)
@@ -44,52 +43,58 @@ struct SetupCANScan: ReducerProtocol {
         case runDebugSequence(ChangePINDebugSequence)
 #endif
     }
-    
-    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-        switch action {
-        case .onAppear:
-            return state.shared.startOnAppear ? EffectTask(value: .shared(.startScan)) : .none
-        case .shared(.startScan):
-            if state.shouldRestartAfterCancellation {
-                return EffectTask(value: .restartAfterCancellation)
-            } else {
-                eIDInteractionManager.setCAN(state.can)
-            }
-            // TODO: Always track for button press (iff)
-            return .trackEvent(category: "Setup",
-                               action: "buttonPressed",
-                               name: "canScan",
-                               analytics: analytics)
-        case .scanEvent(.success(let event)):
-            return handle(state: &state, event: event)
-        case .scanEvent(.failure(let error)):
-            RedactedEIDInteractionError(error).flatMap(issueTracker.capture(error:))
 
-            switch error {
-            case .cardDeactivated:
-                state.shared.scanAvailable = false
-                return EffectTask(value: .error(ScanError.State(errorType: .cardDeactivated, retry: state.shared.scanAvailable)))
+    var body: some ReducerProtocol<State, Action> {
+        Scope(state: \.shared, action: /Action.shared) {
+            SharedScan()
+        }
+        Reduce { state, action in
+            switch action {
+            case .shared(.startScan(let userInitiated)):
+                var trackingEvent = EffectTask<Action>.none
+                if userInitiated {
+                    trackingEvent = .trackEvent(category: "Setup",
+                                                action: "buttonPressed",
+                                                name: "canScan",
+                                                analytics: analytics)
+                }
+                if state.shouldRestartAfterCancellation {
+                    return .concatenate(EffectTask(value: .restartAfterCancellation), trackingEvent)
+                } else {
+                    eIDInteractionManager.setCAN(state.can)
+                    return trackingEvent
+                }
+            case .scanEvent(.success(let event)):
+                return handle(state: &state, event: event)
+            case .scanEvent(.failure(let error)):
+                RedactedEIDInteractionError(error).flatMap(issueTracker.capture(error:))
+
+                switch error {
+                case .cardDeactivated:
+                    state.shared.scanAvailable = false
+                    return EffectTask(value: .error(ScanError.State(errorType: .cardDeactivated, retry: state.shared.scanAvailable)))
+                default:
+                    state.shared.scanAvailable = true
+                    return EffectTask(value: .error(ScanError.State(errorType: .eIDInteraction(error), retry: state.shared.scanAvailable)))
+                }
+            case .wrongPIN:
+                return .none
+            case .scannedSuccessfully:
+                storageManager.setupCompleted = true
+                return .none
+            case .cancelSetup:
+                state.alert = AlertState(title: TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.title),
+                                         message: TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.message),
+                                         primaryButton: .destructive(TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.confirm),
+                                                                     action: .send(.dismiss)),
+                                         secondaryButton: .cancel(TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.deny)))
+                return .none
+            case .dismissAlert:
+                state.alert = nil
+                return .none
             default:
-                state.shared.scanAvailable = true
-                return EffectTask(value: .error(ScanError.State(errorType: .eIDInteraction(error), retry: state.shared.scanAvailable)))
+                return .none
             }
-        case .wrongPIN:
-            return .none
-        case .scannedSuccessfully:
-            storageManager.setupCompleted = true
-            return .none
-        case .cancelSetup:
-            state.alert = AlertState(title: TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.title),
-                                     message: TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.message),
-                                     primaryButton: .destructive(TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.confirm),
-                                                                 action: .send(.dismiss)),
-                                     secondaryButton: .cancel(TextState(verbatim: L10n.FirstTimeUser.ConfirmEnd.deny)))
-            return .none
-        case .dismissAlert:
-            state.alert = nil
-            return .none
-        default:
-            return .none
         }
     }
     
@@ -148,9 +153,6 @@ struct SetupCANScanView: View {
     
     var body: some View {
         SharedScanView(store: store.scope(state: \.shared, action: SetupCANScan.Action.shared))
-            .onAppear {
-                ViewStore(store).send(.onAppear)
-            }
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

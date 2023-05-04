@@ -207,7 +207,7 @@ class IdentificationCANCoordinatorTests: XCTestCase {
             $0.routes[0].screen = .canScan(scanState)
         }
         
-        store.send(.routeAction(0, action: .canScan(.shared(.startScan)))) {
+        store.send(.routeAction(0, action: .canScan(.shared(.startScan(userInitiated: true))))) {
             guard case .canScan(var scanState) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
             scanState.shouldRestartAfterCancellation = false
             $0.routes[0].screen = .canScan(scanState)
