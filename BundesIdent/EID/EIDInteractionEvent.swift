@@ -3,6 +3,9 @@ import Foundation
 enum EIDInteractionEvent: Equatable {
     case cardInsertionRequested
     case cardRecognized
+    case canRequested
+    case pinRequested(remainingAttempts: Int?)
+    case newPINRequested
     case pukRequested
     case identificationStarted
     case identificationSucceeded(redirectURL: URL?)
