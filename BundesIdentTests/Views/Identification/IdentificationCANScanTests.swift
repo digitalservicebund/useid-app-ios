@@ -63,6 +63,7 @@ final class IdentificationCANScanTests: XCTestCase {
         store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         
         store.send(.scanEvent(.success(.canRequested)))
+        store.receive(.wrongCAN)
         
         verify(mockEIDInteractionManager).interrupt()
     }

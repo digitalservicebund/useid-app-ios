@@ -367,4 +367,60 @@ class IdentificationCoordinatorTests: XCTestCase {
                                                                        goToCanIntroScreen: true))))
         }
     }
+    
+    func testCancellationAndRestartingFlow() throws {
+        let pin = "123456"
+        
+        let oldRoutes: [Route<IdentificationScreen.State>] = [
+            .root(.scan(IdentificationPINScan.State(identificationInformation: .preview,
+                                                    pin: pin,
+                                                    shared: SharedScan.State(startOnAppear: true))))
+        ]
+        
+        let store = TestStore(
+            initialState: IdentificationCoordinator.State(tokenURL: demoTokenURL,
+                                                          pin: pin,
+                                                          attempt: 0,
+                                                          states: oldRoutes),
+            reducer: IdentificationCoordinator()
+        )
+        
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
+        store.dependencies.previewEIDInteractionManager = mockPreviewEIDInteractionManager
+        
+        let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
+        stub(mockEIDInteractionManager) {
+            $0.identify(tokenURL: demoTokenURL, messages: ScanOverlayMessages.identification).thenReturn(subject.eraseToAnyPublisher())
+        }
+        
+        store.send(.routeAction(0, action: .scan(.scanEvent(.success(.identificationCancelled))))) {
+            guard case .scan(var scanState) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
+            scanState.shouldRestartAfterCancellation = true
+            $0.routes[0].screen = .scan(scanState)
+        }
+        
+        store.send(.routeAction(0, action: .scan(.shared(.startScan)))) {
+            guard case .scan(var scanState) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
+            scanState.shouldRestartAfterCancellation = false
+            $0.routes[0].screen = .scan(scanState)
+        }
+        
+        scheduler.advance()
+        
+        store.receive(.routeAction(0, action: .scan(.restartAfterCancellation)))
+        
+        stub(mockEIDInteractionManager) {
+            $0.acceptAccessRights().thenDoNothing()
+        }
+        
+        store.send(.routeAction(0, action: .scan(.scanEvent(.success(.identificationStarted)))))
+        
+        let identificationRequest = IdentificationRequest.preview
+        store.send(.routeAction(0, action: .scan(.scanEvent(.success(.identificationRequestConfirmationRequested(identificationRequest))))))
+        
+        verify(mockEIDInteractionManager).acceptAccessRights()
+        
+        store.send(.routeAction(0, action: .scan(.dismiss))) // cancels the scanning
+    }
 }

@@ -69,7 +69,9 @@ class IdentificationCANCoordinatorTests: XCTestCase {
                                                      shared: SharedScan.State(startOnAppear: true)))))
         }
         
-        store.send(.routeAction(2, action: .canScan(.scanEvent(.success(.canRequested))))) {
+        store.send(.routeAction(2, action: .canScan(.scanEvent(.success(.canRequested)))))
+        
+        store.receive(.routeAction(2, action: .canScan(.wrongCAN))) {
             $0.routes.append(.sheet(.canIncorrectInput(.init())))
         }
         
@@ -94,7 +96,8 @@ class IdentificationCANCoordinatorTests: XCTestCase {
         )
         store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         
-        store.send(.routeAction(0, action: .canScan(.scanEvent(.success(.canRequested))))) {
+        store.send(.routeAction(0, action: .canScan(.scanEvent(.success(.canRequested)))))
+        store.receive(.routeAction(0, action: .canScan(.wrongCAN))) {
             $0.routes.append(.sheet(.canIncorrectInput(.init())))
         }
         
@@ -174,5 +177,62 @@ class IdentificationCANCoordinatorTests: XCTestCase {
         store.receive(.updateRoutes(updatedRoutes)) {
             $0.routes = updatedRoutes
         }
+    }
+    
+    func testCancellationAndRestartingFlow() throws {
+        let pin = "123456"
+        let can = "123456"
+        
+        let oldRoutes: [Route<IdentificationCANScreen.State>] = [
+            .root(.canScan(IdentificationCANScan.State(pin: pin,
+                                                       can: can,
+                                                       identificationInformation: .preview,
+                                                       shared: SharedScan.State(startOnAppear: true))))
+        ]
+        
+        let store = TestStore(
+            initialState: IdentificationCANCoordinator.State(pin: pin,
+                                                             can: can,
+                                                             identificationInformation: .preview,
+                                                             attempt: 0,
+                                                             states: oldRoutes),
+            reducer: IdentificationCANCoordinator()
+        )
+        
+        store.dependencies.mainQueue = scheduler.eraseToAnyScheduler()
+        
+        store.send(.routeAction(0, action: .canScan(.scanEvent(.success(.identificationCancelled))))) {
+            guard case .canScan(var scanState) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
+            scanState.shouldRestartAfterCancellation = true
+            $0.routes[0].screen = .canScan(scanState)
+        }
+        
+        store.send(.routeAction(0, action: .canScan(.shared(.startScan)))) {
+            guard case .canScan(var scanState) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
+            scanState.shouldRestartAfterCancellation = false
+            $0.routes[0].screen = .canScan(scanState)
+        }
+        
+        store.receive(.routeAction(0, action: .canScan(.restartAfterCancellation)))
+        
+        store.dependencies.eIDInteractionManager = mockEIDInteractionManager
+        
+        stub(mockEIDInteractionManager) {
+            $0.setCAN(any()).thenDoNothing()
+        }
+        
+        store.send(.routeAction(0, action: .canScan(.scanEvent(.success(.identificationStarted))))) {
+            guard case .canScan(var scanState) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
+            scanState.shouldProvideCAN = true
+            $0.routes[0].screen = .canScan(scanState)
+        }
+        
+        store.send(.routeAction(0, action: .canScan(.scanEvent(.success(.canRequested))))) {
+            guard case .canScan(var scanState) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
+            scanState.shouldProvideCAN = false
+            $0.routes[0].screen = .canScan(scanState)
+        }
+        
+        verify(mockEIDInteractionManager).setCAN(can)
     }
 }

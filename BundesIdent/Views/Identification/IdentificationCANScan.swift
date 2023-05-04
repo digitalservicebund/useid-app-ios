@@ -24,6 +24,7 @@ struct IdentificationCANScan: ReducerProtocol {
         var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
         var shouldRestartAfterCancellation = false
+        var shouldProvideCAN = false
         
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             .scanEvent(event)
@@ -35,6 +36,7 @@ struct IdentificationCANScan: ReducerProtocol {
         case shared(SharedScan.Action)
         case scanEvent(Result<EIDInteractionEvent, EIDInteractionError>)
         case wrongPIN(remainingAttempts: Int)
+        case wrongCAN
         case identifiedSuccessfully(redirectURL: URL)
         case error(ScanError.State)
         case cancelIdentification
@@ -100,6 +102,7 @@ struct IdentificationCANScan: ReducerProtocol {
         switch event {
         case .identificationStarted:
             logger.info("identificationStarted")
+            state.shouldProvideCAN = true
             return .none
         case .cardRecognized:
             logger.info("cardRecognized")
@@ -108,8 +111,13 @@ struct IdentificationCANScan: ReducerProtocol {
             logger.info("cardInsertionRequested")
             return .none
         case .canRequested:
+            if state.shouldProvideCAN {
+                state.shouldProvideCAN = false
+                eIDInteractionManager.setCAN(state.can)
+                return .none
+            }
             eIDInteractionManager.interrupt()
-            return .none
+            return .send(.wrongCAN)
         case .pinRequested(remainingAttempts: let remainingAttempts):
             logger.info("pinRequested: \(String(describing: remainingAttempts))")
             state.shared.scanAvailable = true
