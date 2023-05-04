@@ -188,8 +188,8 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
 
     func onReader(reader: AusweisApp2SDKWrapper.Reader?) {
         guard let reader else {
-            logger.error("onReader: Unknown reader")
             // reader is nil when identification is done
+            logger.info("onReader: Reader is nil")
             return
         }
 
@@ -200,8 +200,7 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
                 subject.send(.cardRecognized)
             }
         } else {
-            // TODO: Decide about cardRemoved being sent for initial state (before cardRecognized)
-            subject.send(.cardRemoved)
+            logger.info("onReader: Card is nil")
         }
     }
 

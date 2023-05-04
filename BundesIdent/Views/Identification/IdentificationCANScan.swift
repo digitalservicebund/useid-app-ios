@@ -104,9 +104,6 @@ struct IdentificationCANScan: ReducerProtocol {
         case .cardRecognized:
             logger.info("cardRecognized")
             return .none
-        case .cardRemoved:
-            logger.info("cardRemoved")
-            return .none
         case .cardInsertionRequested:
             logger.info("cardInsertionRequested")
             return .none

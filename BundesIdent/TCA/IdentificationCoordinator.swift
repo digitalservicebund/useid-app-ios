@@ -282,12 +282,10 @@ extension IdentificationCoordinator.State {
  .cardRecognized
  .cardInteractionComplete
  .requestPIN(remainingAttempts: 3)
- .cardRemoved
- 
+
  Card removed before process finished:
  .cardRecognized
  .identificationSuccessful (optional)
- .cardRemoved // difference from happy path?
  .processCompletedSuccessfully // not really successful
  
  Wrong card:

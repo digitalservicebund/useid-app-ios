@@ -128,9 +128,6 @@ struct IdentificationPINScan: ReducerProtocol {
         case .cardInsertionRequested:
             logger.info("cardInsertionRequested")
             return .none
-        case .cardRemoved:
-            logger.info("cardRemoved")
-            return .none
         case .cardRecognized:
             logger.info("cardRecognized")
             return .none

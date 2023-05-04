@@ -127,7 +127,7 @@ struct SetupError_Previews: PreviewProvider {
                                    reducer: ScanError()))
         ScanErrorView(store: Store(initialState: .init(errorType: .cardBlocked, retry: false),
                                    reducer: ScanError()))
-        ScanErrorView(store: Store(initialState: .init(errorType: .unexpectedEvent(.cardRemoved), retry: true),
+        ScanErrorView(store: Store(initialState: .init(errorType: .unexpectedEvent(.cardRecognized), retry: true),
                                    reducer: ScanError()))
     }
 }

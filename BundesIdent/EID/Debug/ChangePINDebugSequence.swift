@@ -83,11 +83,9 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
             if card.remainingAttempts >= 2 {
                 subject.send(.pinRequested(remainingAttempts: remainingAttempts))
                 subject.send(.newPINRequested)
-                subject.send(.cardRemoved)
                 subject.send(.cardInsertionRequested)
                 subject.send(.cardRecognized)
                 subject.send(.pinRequested(remainingAttempts: card.remainingAttempts))
-                subject.send(.cardRemoved)
                 subject.send(.cardInsertionRequested)
                 return [.changePINSuccessfully, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: cancelAction), cancelDebugSequence]
             } else if card.remainingAttempts == 1 {
@@ -116,7 +114,6 @@ enum ChangePINDebugSequence: Identifiable, Equatable {
             subject.send(.cardRecognized)
             subject.send(.canRequested)
             subject.send(.cardInsertionRequested)
-            subject.send(.cardRemoved)
             return [.cancelCANScan, .changePINSuccessfully, .runCANError, .runPINError(remainingAttempts: card.remainingAttempts, cancelAction: .can)]
         }
     }

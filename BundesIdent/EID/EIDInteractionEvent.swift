@@ -3,10 +3,6 @@ import Foundation
 enum EIDInteractionEvent: Equatable {
     case cardInsertionRequested
     case cardRecognized
-    case cardRemoved
-    case canRequested
-    case pinRequested(remainingAttempts: Int?)
-    case newPINRequested
     case pukRequested
     case identificationStarted
     case identificationSucceeded(redirectURL: URL?)
@@ -21,7 +17,6 @@ enum EIDInteractionEvent: Equatable {
 enum RedactedEIDInteractionEventError: CustomNSError {
     case cardInsertionRequested
     case cardRecognized
-    case cardRemoved
     case canRequested
     case pinRequested
     case newPINRequested
@@ -40,7 +35,6 @@ enum RedactedEIDInteractionEventError: CustomNSError {
         switch event {
         case .cardInsertionRequested: self = .cardInsertionRequested
         case .cardRecognized: self = .cardRecognized
-        case .cardRemoved: self = .cardRemoved
         case .canRequested: self = .canRequested
         case .pinRequested: self = .pinRequested
         case .newPINRequested: self = .newPINRequested

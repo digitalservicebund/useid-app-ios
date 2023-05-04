@@ -231,7 +231,7 @@ final class RouteTests: XCTestCase {
         let pin = "123456"
         let transportPIN = "123456"
         let store = testStore(setupScanRoutes(pin: pin, transportPIN: transportPIN))
-        store.send(.routeAction(1, action: .setupCoordinator(.routeAction(5, action: .scan(.error(.init(errorType: .unexpectedEvent(.cardRemoved), retry: true)))))))
+        store.send(.routeAction(1, action: .setupCoordinator(.routeAction(5, action: .scan(.error(.init(errorType: .unexpectedEvent(.cardRecognized), retry: true)))))))
         verify(mockMatomoTracker).track(view: ["firstTimeUser", "cardUnreadable"], url: URL?.none)
         verify(mockMatomoTracker).reset()
         endInteraction(mockMatomoTracker)
