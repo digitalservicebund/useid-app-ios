@@ -72,12 +72,10 @@ class PreviewEIDInteractionManager: PreviewEIDInteractionManagerType {
     
     func retrieveCertificateDescription() {
         realManager.retrieveCertificateDescription()
-        // TODO: we need to alter the current debug sequences in the debugEIDInteractionManager here
     }
 
     func acceptAccessRights() {
         realManager.acceptAccessRights()
-        // TODO: we need to alter the current debug sequences in the debugEIDInteractionManager here
     }
 
     func interrupt() {

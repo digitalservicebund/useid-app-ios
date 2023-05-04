@@ -70,25 +70,15 @@ class DebugEIDInteractionManager: EIDInteractionManagerType {
         debugSequence.run(card: &card, subject: subject!)
     }
 
-    func setPIN(_ pin: String) {
-        // TODO: What do we need to do here?
-    }
+    func setPIN(_ pin: String) {}
 
-    func setNewPIN(_ pin: String) {
-        // TODO: What do we need to do here?
-    }
+    func setNewPIN(_ pin: String) {}
 
-    func setCAN(_ can: String) {
-        // TODO: What do we need to do here?
-    }
+    func setCAN(_ can: String) {}
 
-    func retrieveCertificateDescription() {
-        // TODO: What do we need to do here?
-    }
+    func retrieveCertificateDescription() {}
 
-    func acceptAccessRights() {
-        // TODO: What do we need to do here?
-    }
+    func acceptAccessRights() {}
     
     func interrupt() {}
 }
