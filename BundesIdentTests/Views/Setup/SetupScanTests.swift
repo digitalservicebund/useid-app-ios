@@ -79,20 +79,14 @@ class SetupScanTests: XCTestCase {
         store.send(.scanEvent(.success(.identificationStarted)))
         store.send(.scanEvent(.success(.cardInsertionRequested)))
 
-        store.send(.scanEvent(.success(.cardRecognized))) {
-            $0.shared.cardRecognized = true
-        }
+        store.send(.scanEvent(.success(.cardRecognized)))
         
         store.send(.scanEvent(.success(.pinRequested(remainingAttempts: 3)))) {
             $0.lastRemainingAttempts = 3
         }
 
-        store.send(.scanEvent(.success(.cardInsertionRequested))) {
-            $0.shared.cardRecognized = false
-        }
-        store.send(.scanEvent(.success(.cardRecognized))) {
-            $0.shared.cardRecognized = true
-        }
+        store.send(.scanEvent(.success(.cardInsertionRequested)))
+        store.send(.scanEvent(.success(.cardRecognized)))
         store.send(.scanEvent(.success(.newPINRequested)))
         store.send(.scanEvent(.success(.pinChangeSucceeded)))
 
