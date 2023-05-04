@@ -101,10 +101,8 @@ struct SetupCANScan: ReducerProtocol {
             logger.info("PIN Change started.")
         case .cardInsertionRequested:
             logger.info("Card insertion requested.")
-            state.shared.cardRecognized = false
         case .cardRecognized:
             logger.info("Card recognized.")
-            state.shared.cardRecognized = true
         case .pinChangeSucceeded:
             return EffectTask(value: .scannedSuccessfully)
         case .pinChangeCancelled:

@@ -6,7 +6,6 @@ import Sentry
 enum IdentificationScanError: Error, Equatable, CustomNSError {
     case eIDInteraction(EIDInteractionError)
     case unexpectedEvent(EIDInteractionEvent)
-    case cancelAfterCardRecognized
 }
 
 struct IdentificationPINScan: ReducerProtocol {
@@ -60,7 +59,6 @@ struct IdentificationPINScan: ReducerProtocol {
             return state.shared.startOnAppear ? EffectTask(value: .shared(.startScan)) : .none
         case .shared(.startScan):
             state.shared.startOnAppear = true
-            state.shared.cardRecognized = false
 
             if state.shouldRestartAfterCancellation {
                 state.shouldRestartAfterCancellation = false

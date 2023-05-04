@@ -51,7 +51,6 @@ struct SetupScan: ReducerProtocol {
             return .none
         case .shared(.startScan):
             state.shared.startOnAppear = true
-            state.shared.cardRecognized = false
             if state.isScanInitiated {
                 eIDInteractionManager.setPIN(state.transportPIN)
                 return .none
@@ -97,18 +96,13 @@ struct SetupScan: ReducerProtocol {
             logger.info("Identification started.")
         case .cardInsertionRequested:
             logger.info("Card insertion requested.")
-            state.shared.cardRecognized = false
         case .cardRecognized:
             logger.info("Card recognized.")
-            state.shared.cardRecognized = true
         case .pinChangeSucceeded:
             return EffectTask(value: .scannedSuccessfully)
         case .pinChangeStarted:
             logger.info("PIN change started.")
         case .pinChangeCancelled:
-            if state.shared.cardRecognized {
-                issueTracker.capture(error: SetupScanError.cancelAfterCardRecognized)
-            }
             state.isScanInitiated = false
             return .cancel(id: CancelId.self)
         case .newPINRequested:
@@ -157,7 +151,6 @@ struct SetupScan: ReducerProtocol {
 enum SetupScanError: Error, Equatable, CustomNSError {
     case eIDInteraction(EIDInteractionError)
     case unexpectedEvent(EIDInteractionEvent)
-    case cancelAfterCardRecognized
 }
 
 struct SetupScanView: View {

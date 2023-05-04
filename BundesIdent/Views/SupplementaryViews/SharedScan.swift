@@ -13,7 +13,6 @@ struct SharedScan: ReducerProtocol {
         var scanAvailable = true
         var startOnAppear = false
         var attempt = 0
-        var cardRecognized = false
     }
 
     enum Action: Equatable {
