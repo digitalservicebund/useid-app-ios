@@ -10,7 +10,6 @@ enum IdentificationCANCoordinatorError: CustomNSError {
     case canNilWhenTriedScan
     case pinNilWhenTriedScan
     case canIntroStateNotInRoutes
-    case pinCANCallbackNilWhenTriedScan
     case noScreenToHandleEIDInteractionEvents
 }
 
