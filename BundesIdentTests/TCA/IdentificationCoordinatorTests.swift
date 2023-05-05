@@ -408,7 +408,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         
         scheduler.advance()
         
-        store.receive(.routeAction(0, action: .scan(.restartAfterCancellation)))
+        store.receive(.routeAction(0, action: .scan(.identify)))
         
         stub(mockEIDInteractionManager) {
             $0.acceptAccessRights().thenDoNothing()

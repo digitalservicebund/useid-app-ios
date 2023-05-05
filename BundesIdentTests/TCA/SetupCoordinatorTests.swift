@@ -208,7 +208,7 @@ class SetupCoordinatorTests: XCTestCase {
         }
     }
     
-    func testInitiateScan() {
+    func testChangePIN() {
         let oldPIN = "12345"
         let newPIN = "123456"
         let store = TestStore(initialState: SetupCoordinator.State(transportPIN: oldPIN,
@@ -240,11 +240,7 @@ class SetupCoordinatorTests: XCTestCase {
             }
         }
         
-        store.send(.routeAction(0, action: .scan(.shared(.initiateScan)))) {
-            guard case .scan(var scanState) = $0.states[0].screen else { return XCTFail() }
-            scanState.isScanInitiated = true
-            $0.states[0].screen = .scan(scanState)
-        }
+        store.send(.routeAction(0, action: .scan(.changePIN)))
         
         scheduler.advance()
         

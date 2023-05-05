@@ -72,7 +72,7 @@ final class IdentificationPINScanTests: XCTestCase {
         }
         
         store.send(.shared(.startScan(userInitiated: true))) {
-            $0.didAcceptAccessRights = true
+            $0.shouldContinueAfterInterruption = true
         }
         
         verify(mockEIDInteractionManager).acceptAccessRights()

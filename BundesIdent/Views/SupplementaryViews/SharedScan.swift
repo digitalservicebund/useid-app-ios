@@ -21,7 +21,6 @@ struct SharedScan: ReducerProtocol {
         case onAttemptChange
 
         case startScan(userInitiated: Bool)
-        case initiateScan
         case showHelp
     }
     

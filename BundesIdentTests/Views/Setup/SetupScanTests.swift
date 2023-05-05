@@ -42,7 +42,7 @@ class SetupScanTests: XCTestCase {
         }
     }
     
-    func testInitiateScan() throws {
+    func testChangePIN() throws {
         let oldPIN = "12345"
         let newPIN = "123456"
         let store = TestStore(initialState: SetupScan.State(transportPIN: oldPIN, newPIN: newPIN),
@@ -51,11 +51,11 @@ class SetupScanTests: XCTestCase {
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.storageManager = mockStorageManager
 
-        store.send(.shared(.startScan(userInitiated: false)))
-
-        store.receive(.shared(.initiateScan)) {
-            $0.isScanInitiated = true
+        store.send(.shared(.startScan(userInitiated: false))) {
+            $0.shouldRestartAfterCancellation = true
         }
+
+        store.receive(.changePIN)
 
         verifyNoMoreInteractions(mockAnalyticsClient)
     }
@@ -69,10 +69,11 @@ class SetupScanTests: XCTestCase {
         store.dependencies.analytics = mockAnalyticsClient
         store.dependencies.storageManager = mockStorageManager
 
-        store.send(.shared(.startScan(userInitiated: true)))
-        store.receive(.shared(.initiateScan)) {
-            $0.isScanInitiated = true
+        store.send(.shared(.startScan(userInitiated: true))) {
+            $0.shouldRestartAfterCancellation = true
         }
+
+        store.receive(.changePIN)
 
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "firstTimeUser",
                                                                 action: "buttonPressed",

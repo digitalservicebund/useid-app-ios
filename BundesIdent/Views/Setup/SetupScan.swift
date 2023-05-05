@@ -18,7 +18,7 @@ struct SetupScan: ReducerProtocol {
         var shared: SharedScan.State = .init()
         var lastRemainingAttempts: Int?
         var alert: AlertState<SetupScan.Action>?
-        var isScanInitiated = false
+        var shouldRestartAfterCancellation = false
 #if PREVIEW
         var availableDebugActions: [ChangePINDebugSequence] = []
 #endif
@@ -36,6 +36,7 @@ struct SetupScan: ReducerProtocol {
         case error(ScanError.State)
         case scannedSuccessfully
         case dismissAlert
+        case changePIN
 #if PREVIEW
         case runDebugSequence(ChangePINDebugSequence)
 #endif
@@ -59,17 +60,16 @@ struct SetupScan: ReducerProtocol {
                                                 name: "scan",
                                                 analytics: analytics)
                 }
-                if state.isScanInitiated {
+                if state.shouldRestartAfterCancellation {
+                    state.shouldRestartAfterCancellation = false
                     eIDInteractionManager.setPIN(state.transportPIN)
                     return trackingEvent
                 } else {
-                    return .concatenate(EffectTask(value: .shared(.initiateScan)), trackingEvent)
+                    state.shouldRestartAfterCancellation = true
+                    return .concatenate(EffectTask(value: .changePIN), trackingEvent)
                 }
-            case .shared(.initiateScan):
-                state.isScanInitiated = true
-                return .none
-            case .shared:
-                return .none
+            case .scanEvent(.success(let event)):
+                return handle(state: &state, event: event)
             case .scanEvent(.failure(let error)):
                 RedactedEIDInteractionError(error).flatMap(issueTracker.capture(error:))
 
@@ -81,19 +81,15 @@ struct SetupScan: ReducerProtocol {
                     state.shared.scanAvailable = true
                     return EffectTask(value: .error(ScanError.State(errorType: .eIDInteraction(error), retry: state.shared.scanAvailable)))
                 }
-            case .scanEvent(.success(let event)):
-                return handle(state: &state, event: event)
             case .error:
                 return .cancel(id: CancelId.self)
-            case .wrongTransportPIN:
-                return .none
             case .scannedSuccessfully:
                 storageManager.setupCompleted = true
                 return .none
-            case .requestCANAndChangedPIN:
-                return .none
             case .dismissAlert:
                 state.alert = nil
+                return .none
+            case .changePIN, .shared, .requestCANAndChangedPIN, .wrongTransportPIN:
                 return .none
             }
         }
@@ -112,7 +108,7 @@ struct SetupScan: ReducerProtocol {
         case .pinChangeStarted:
             logger.info("PIN change started.")
         case .pinChangeCancelled:
-            state.isScanInitiated = false
+            state.shouldRestartAfterCancellation = false
             return .cancel(id: CancelId.self)
         case .newPINRequested:
             logger.info("Providing new PIN.")

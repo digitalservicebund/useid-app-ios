@@ -41,7 +41,7 @@ struct IdentificationCANScan: ReducerProtocol {
         case cancelIdentification
         case dismiss
         case dismissAlert
-        case restartAfterCancellation
+        case identify
 #if PREVIEW
         case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -63,7 +63,7 @@ struct IdentificationCANScan: ReducerProtocol {
                 }
                 if state.shouldRestartAfterCancellation {
                     state.shouldRestartAfterCancellation = false
-                    return .concatenate(EffectTask(value: .restartAfterCancellation), trackingEvent)
+                    return .concatenate(EffectTask(value: .identify), trackingEvent)
                 } else {
                     eIDInteractionManager.setCAN(state.can)
                     return trackingEvent
@@ -91,7 +91,7 @@ struct IdentificationCANScan: ReducerProtocol {
             case .cancelIdentification:
                 state.alert = AlertState.confirmEndInIdentification(.dismiss)
                 return .none
-            case .restartAfterCancellation:
+            case .identify:
                 return .none
             case .dismiss:
                 return .cancel(id: CancelId.self)

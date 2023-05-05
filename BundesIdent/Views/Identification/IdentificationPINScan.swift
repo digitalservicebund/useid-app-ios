@@ -28,7 +28,7 @@ struct IdentificationPINScan: ReducerProtocol {
 #if PREVIEW
         var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
-        var didAcceptAccessRights = false
+        var shouldContinueAfterInterruption = false
         var shouldRestartAfterCancellation = false
         
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
@@ -46,7 +46,7 @@ struct IdentificationPINScan: ReducerProtocol {
         case cancelIdentification
         case dismiss
         case dismissAlert
-        case restartAfterCancellation
+        case identify
 #if PREVIEW
         case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -68,12 +68,13 @@ struct IdentificationPINScan: ReducerProtocol {
                 }
                 if state.shouldRestartAfterCancellation {
                     state.shouldRestartAfterCancellation = false
-                    return .concatenate(EffectTask(value: .restartAfterCancellation), trackingEvent)
-                } else if state.didAcceptAccessRights {
+                    return .concatenate(EffectTask(value: .identify), trackingEvent)
+                } else if state.shouldContinueAfterInterruption {
+                    state.shouldContinueAfterInterruption = false
                     eIDInteractionManager.setPIN(state.pin)
                     return trackingEvent
                 } else {
-                    state.didAcceptAccessRights = true
+                    state.shouldContinueAfterInterruption = true
                     eIDInteractionManager.acceptAccessRights()
                     return trackingEvent
                 }

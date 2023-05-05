@@ -105,8 +105,8 @@ struct IdentificationCoordinator: ReducerProtocol {
                     EffectTask(value: .back(tokenURL: state.tokenURL))
                 )
             case .routeAction(_, action: .overview(.loading(.identify))),
-                 .routeAction(_, action: .scan(.restartAfterCancellation)),
-                 .routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.restartAfterCancellation)))):
+                 .routeAction(_, action: .scan(.identify)),
+                 .routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.identify)))):
                 let publisher: EIDInteractionPublisher
 #if PREVIEW
                 if previewEIDInteractionManager.isDebugModeEnabled {

@@ -38,7 +38,7 @@ struct SetupCANScan: ReducerProtocol {
         case cancelSetup
         case dismiss
         case dismissAlert
-        case restartAfterCancellation
+        case changePIN
 #if PREVIEW
         case runDebugSequence(ChangePINDebugSequence)
 #endif
@@ -59,7 +59,7 @@ struct SetupCANScan: ReducerProtocol {
                                                 analytics: analytics)
                 }
                 if state.shouldRestartAfterCancellation {
-                    return .concatenate(EffectTask(value: .restartAfterCancellation), trackingEvent)
+                    return .concatenate(EffectTask(value: .changePIN), trackingEvent)
                 } else {
                     eIDInteractionManager.setCAN(state.can)
                     return trackingEvent

@@ -213,7 +213,7 @@ class IdentificationCANCoordinatorTests: XCTestCase {
             $0.routes[0].screen = .canScan(scanState)
         }
         
-        store.receive(.routeAction(0, action: .canScan(.restartAfterCancellation)))
+        store.receive(.routeAction(0, action: .canScan(.identify)))
         
         store.dependencies.eIDInteractionManager = mockEIDInteractionManager
         
