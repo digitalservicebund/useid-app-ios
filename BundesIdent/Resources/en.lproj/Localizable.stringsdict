@@ -15,7 +15,7 @@
 			<key>zero</key>
 			<string>You have no more attempts.</string>
 			<key>one</key>
-			<string>You have one more attempt.</string>
+			<string>You have 1 more attempt.</string>
 			<key>other</key>
 			<string>You still have %lld attempts.</string>
 		</dict>
@@ -33,7 +33,7 @@
 			<key>zero</key>
 			<string>You have no more attempts.</string>
 			<key>one</key>
-			<string>You have one more attempt.</string>
+			<string>You have 1 more attempt.</string>
 			<key>other</key>
 			<string>You still have %lld attempts.</string>
 		</dict>
