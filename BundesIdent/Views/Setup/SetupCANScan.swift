@@ -112,7 +112,7 @@ struct SetupCANScan: ReducerProtocol {
             return EffectTask(value: .scannedSuccessfully)
         case .pinChangeCancelled:
             state.shouldRestartAfterCancellation = true
-            return .cancel(id: CancelId.self)
+            return .none
         case .canRequested:
             if state.shouldRestartAfterCancellation {
                 state.shouldRestartAfterCancellation = false

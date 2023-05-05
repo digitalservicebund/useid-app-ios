@@ -101,8 +101,6 @@ struct IdentificationPINScan: ReducerProtocol {
             case .cancelIdentification:
                 state.alert = AlertState.confirmEndInIdentification(.dismiss)
                 return .none
-            case .dismiss:
-                return .cancel(id: CancelId.self)
             case .dismissAlert:
                 state.alert = nil
                 return .none
@@ -158,7 +156,7 @@ struct IdentificationPINScan: ReducerProtocol {
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: state.shared.scanAvailable)))
         case .identificationCancelled:
             state.shouldRestartAfterCancellation = true
-            return .cancel(id: CancelId.self)
+            return .none
         case .canRequested:
             eIDInteractionManager.interrupt()
             return EffectTask(value: .requestCAN(state.identificationInformation))

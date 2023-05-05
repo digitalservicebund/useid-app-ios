@@ -81,15 +81,13 @@ struct SetupScan: ReducerProtocol {
                     state.shared.scanAvailable = true
                     return EffectTask(value: .error(ScanError.State(errorType: .eIDInteraction(error), retry: state.shared.scanAvailable)))
                 }
-            case .error:
-                return .cancel(id: CancelId.self)
             case .scannedSuccessfully:
                 storageManager.setupCompleted = true
                 return .none
             case .dismissAlert:
                 state.alert = nil
                 return .none
-            case .changePIN, .shared, .requestCANAndChangedPIN, .wrongTransportPIN:
+            case .changePIN, .shared, .requestCANAndChangedPIN, .wrongTransportPIN, .error:
                 return .none
             }
         }
@@ -109,7 +107,7 @@ struct SetupScan: ReducerProtocol {
             logger.info("PIN change started.")
         case .pinChangeCancelled:
             state.shouldRestartAfterCancellation = false
-            return .cancel(id: CancelId.self)
+            return .none
         case .newPINRequested:
             logger.info("Providing new PIN.")
             eIDInteractionManager.setNewPIN(state.newPIN)

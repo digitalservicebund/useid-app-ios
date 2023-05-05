@@ -90,7 +90,6 @@
 		E15776A0286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */; };
 		E15D0EBC29095F740088EF4E /* IdentificationOverviewError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15D0EBB29095F740088EF4E /* IdentificationOverviewError.swift */; };
 		E15FCE42282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */; };
-		E1658735299508D100FCF9C8 /* CancelId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1658734299508D100FCF9C8 /* CancelId.swift */; };
 		E166AF7028FEC6C7004EE034 /* LogAnalyticsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E166AF6F28FEC6C7004EE034 /* LogAnalyticsClient.swift */; };
 		E16708AE283D4224001A1637 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708AD283D4224001A1637 /* HomeView.swift */; };
 		E16708B1283D4EAC001A1637 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16708B0283D4EAC001A1637 /* Dependencies.swift */; };
@@ -276,7 +275,6 @@
 		E157769F286EEF6300BA4610 /* IdentificationIncorrectPersonalPIN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentificationIncorrectPersonalPIN.swift; sourceTree = "<group>"; };
 		E15D0EBB29095F740088EF4E /* IdentificationOverviewError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewError.swift; sourceTree = "<group>"; };
 		E15FCE41282BFD4A00CD7AD6 /* LocalizedStrings+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LocalizedStrings+Generated.swift"; sourceTree = "<group>"; };
-		E1658734299508D100FCF9C8 /* CancelId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelId.swift; sourceTree = "<group>"; };
 		E166AF6B28FEAD38004EE034 /* Default.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Default.xcconfig; sourceTree = "<group>"; };
 		E166AF6F28FEC6C7004EE034 /* LogAnalyticsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogAnalyticsClient.swift; sourceTree = "<group>"; };
 		E16708AD283D4224001A1637 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -574,7 +572,6 @@
 				E166AF6F28FEC6C7004EE034 /* LogAnalyticsClient.swift */,
 				D29C542E28FFD9580064AB41 /* Logger+Catetory.swift */,
 				B9AF23D22930BD1300BD12DF /* Constants.swift */,
-				E1658734299508D100FCF9C8 /* CancelId.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1129,7 +1126,6 @@
 				E1C2D8BA28620E2B000E0F5B /* IdentificationPINScan.swift in Sources */,
 				4334B4D329A64F00001FF36C /* Markdown.swift in Sources */,
 				E16708B3283D4ED2001A1637 /* SetupCoordinator.swift in Sources */,
-				E1658735299508D100FCF9C8 /* CancelId.swift in Sources */,
 				E1B0F5A82981437600143B82 /* SetupCANAlreadySetup.swift in Sources */,
 				43363E0929B01D4900E9FA23 /* ABTester.swift in Sources */,
 				E16708C0283E6A07001A1637 /* SetupScan.swift in Sources */,

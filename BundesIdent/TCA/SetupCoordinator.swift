@@ -113,6 +113,8 @@ struct SetupCoordinator: ReducerProtocol {
     
     var body: some ReducerProtocol<State, Action> {
         Reduce<State, Action> { state, action in
+            enum SetupCancelID {}
+
             switch action {
 #if PREVIEW
             case .runDebugSequence(let debugSequence):
@@ -168,11 +170,12 @@ struct SetupCoordinator: ReducerProtocol {
                 return publisher
                     .receive(on: mainQueue)
                     .catchToEffect(Action.eIDInteractionEvent)
-                    .cancellable(id: CancelId.self, cancelInFlight: true)
+                    .cancellable(id: SetupCancelID.self, cancelInFlight: true)
             case .routeAction(_, action: .scan(.scannedSuccessfully)):
                 state.routes.push(.done(SetupDone.State(tokenURL: state.tokenURL)))
             case .routeAction(_, action: .scan(.error(let errorState))):
                 state.routes.presentSheet(.error(errorState))
+                return .cancel(id: SetupCancelID.self)
             case .routeAction(_, action: .scan(.requestCANAndChangedPIN(pin: let pin))):
                 let transportPINIsUnchecked = state.attempt == 0
                 state.routes.push(.setupCANCoordinator(SetupCANCoordinator.State(oldTransportPIN: state.transportPIN,

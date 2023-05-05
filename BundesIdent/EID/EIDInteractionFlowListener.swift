@@ -114,6 +114,7 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
             } else if resultData.reason == "User_Cancelled" {
                 logger.info("[aa2] onAuthenticationCompleted: user cancelled")
                 subject.send(.identificationCancelled)
+                subject.send(completion: .finished)
             } else {
                 var resultMinor: String? = nil
                 if let resultMinorSuffix = resultData.minor?.split(separator: "#").last {
@@ -143,6 +144,7 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
         } else if changePinResult.reason == "User_Cancelled" {
             logger.info("[aa2] onChangePinCompleted: user cancelled")
             subject.send(.pinChangeCancelled)
+            subject.send(completion: .finished)
         } else {
             logger.error("[aa2] onChangePinCompleted error: \(String(describing: changePinResult.reason))")
             subject.send(completion: .failure(.pinChangeFailed))

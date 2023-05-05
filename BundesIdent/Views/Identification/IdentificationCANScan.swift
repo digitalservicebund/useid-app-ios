@@ -93,8 +93,6 @@ struct IdentificationCANScan: ReducerProtocol {
                 return .none
             case .identify:
                 return .none
-            case .dismiss:
-                return .cancel(id: CancelId.self)
             case .dismissAlert:
                 state.alert = nil
                 return .none
@@ -148,7 +146,7 @@ struct IdentificationCANScan: ReducerProtocol {
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: state.shared.scanAvailable)))
         case .identificationCancelled:
             state.shouldRestartAfterCancellation = true
-            return .cancel(id: CancelId.self)
+            return .none
         case .identificationRequestConfirmationRequested(let request):
             
             // Equality check of the two attribute arrays is fine, as they are already sorted by the AusweisApp2

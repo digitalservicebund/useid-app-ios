@@ -77,6 +77,8 @@ struct IdentificationCoordinator: ReducerProtocol {
     
     var body: some ReducerProtocol<State, Action> {
         Reduce<State, Action> { state, action in
+            enum IdentificationCancelID {}
+
             switch action {
 #if PREVIEW
             case .runDebugSequence(let debugSequence):
@@ -101,7 +103,7 @@ struct IdentificationCoordinator: ReducerProtocol {
                 return .none
             case .routeAction(_, action: .overview(.back)):
                 return EffectTask.merge(
-                    .cancel(id: CancelId.self),
+                    .cancel(id: IdentificationCancelID.self),
                     EffectTask(value: .back(tokenURL: state.tokenURL))
                 )
             case .routeAction(_, action: .overview(.loading(.identify))),
@@ -122,7 +124,7 @@ struct IdentificationCoordinator: ReducerProtocol {
                 return publisher
                     .receive(on: mainQueue)
                     .catchToEffect(IdentificationCoordinator.Action.eIDInteractionEvent)
-                    .cancellable(id: CancelId.self, cancelInFlight: true)
+                    .cancellable(id: IdentificationCancelID.self, cancelInFlight: true)
 #if PREVIEW
             case .routeAction(_, action: .overview(.loading(.runDebugSequence(let sequence)))),
                  .routeAction(_, action: .scan(.runDebugSequence(let sequence))),
@@ -186,6 +188,9 @@ struct IdentificationCoordinator: ReducerProtocol {
             case .dismissAlert:
                 state.alert = nil
                 return .none
+            case .routeAction(_, action: .scan(.dismiss)),
+                    .routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.dismiss)))):
+                return .cancel(id: IdentificationCancelID.self)
             default:
                 return .none
             }
