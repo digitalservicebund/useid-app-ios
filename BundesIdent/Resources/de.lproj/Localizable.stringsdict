@@ -15,7 +15,7 @@
 			<key>zero</key>
 			<string>Sie haben keine Versuche mehr.</string>
 			<key>one</key>
-			<string>Sie haben noch einen Versuch.</string>
+			<string>Sie haben noch 1 Versuch.</string>
 			<key>other</key>
 			<string>Sie haben noch %lld Versuche.</string>
 		</dict>
@@ -33,7 +33,7 @@
 			<key>zero</key>
 			<string>Sie haben keine Versuche mehr.</string>
 			<key>one</key>
-			<string>Sie haben noch einen Versuch.</string>
+			<string>Sie haben noch 1 Versuch.</string>
 			<key>other</key>
 			<string>Sie haben noch %lld Versuche.</string>
 		</dict>
