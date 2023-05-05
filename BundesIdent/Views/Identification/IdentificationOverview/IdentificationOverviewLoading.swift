@@ -51,8 +51,10 @@ struct IdentificationOverviewLoading: ReducerProtocol {
             return .none
         case .eIDInteractionEvent(.success(.certificateDescriptionRetrieved(let certificateDescription))):
             guard let identificationRequest = state.identificationRequest else {
-                logger.error("Missing identificationRequest, this must not happen.")
-                return .none // EffectTask(value: .failure(<#T##IdentifiableError#>))
+                logger.error("Missing identificationRequest")
+                let error = EIDInteractionError.frameworkError("Missing identificationRequest")
+                RedactedEIDInteractionError(error).flatMap(issueTracker.capture(error:))
+                return EffectTask(value: .failure(IdentifiableError(error)))
             }
             return EffectTask(value: .done(identificationRequest, certificateDescription))
         case .eIDInteractionEvent(.failure(let error)):
