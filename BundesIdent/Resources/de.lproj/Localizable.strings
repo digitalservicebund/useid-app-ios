@@ -164,7 +164,7 @@
 "identification_personalPIN_error_incorrect_title" = "Inkorrekte persönliche PIN";
 "identification_personalPIN_missingPIN" = "PIN nicht vorhanden";
 "identification_personalPIN_textFieldLabel" = "Persönliche PIN, sechsstellig";
-"identification_personalPIN_title" = "Geben Sie die persönliche PIN Ihres Ausweises ein.";
+"identification_personalPIN_title" = "Geben Sie Ihre persönliche Ausweis‑PIN ein.";
 "identification_scanInstructions_body" = "Halten Sie im nächsten Schritt Ihren Ausweis dicht an die obere Rückseite des iPhones. Achten Sie darauf, dass Ihr Ausweis das Gerät direkt berührt.";
 "identification_scanInstructions_title" = "So rufen Sie die Daten von Ihrem Ausweis ab.";
 "identification_scan_cardConnected" = "Ausweis nicht bewegen.";
