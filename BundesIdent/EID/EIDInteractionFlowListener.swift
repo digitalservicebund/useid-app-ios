@@ -39,24 +39,27 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
     }
 
     func onChangePinStarted() {
+        logger.info("[aa2] onChangePinStarted")
         subject.send(.pinChangeStarted)
     }
 
     func onAuthenticationStarted() {
+        logger.info("[aa2] onAuthenticationStarted")
         subject.send(.identificationStarted)
     }
 
     func onAuthenticationStartFailed(error: String) {
+        logger.error("[aa2] onAuthenticationStartFailed error: \(error)")
         subject.send(completion: .failure(.frameworkError(error)))
     }
 
     func onAccessRights(error: String?, accessRights: AccessRights?) {
         if let error {
-            logger.error("onAccessRights error: \(error)")
+            logger.error("[aa2] onAccessRights error: \(error)")
         }
 
         guard let accessRights else {
-            logger.error("onAccessRights: Access rights missing")
+            logger.error("[aa2] onAccessRights: access rights missing")
             subject.send(completion: .failure(.frameworkError(error, message: "Access rights missing")))
             return
         }
@@ -69,24 +72,26 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
         do {
             let requiredAttributes = try accessRights.requiredRights.map(EIDAttribute.init)
             let request = IdentificationRequest(requiredAttributes: requiredAttributes, transactionInfo: accessRights.transactionInfo)
+            logger.info("[aa2] onAccessRights")
             subject.send(.identificationRequestConfirmationRequested(request))
         } catch EIDInteractionError.unexpectedReadAttribute(let attribute) {
+            logger.error("[aa2] onAccessRights: unexpected attribute")
             subject.send(completion: .failure(.unexpectedReadAttribute(attribute)))
             return
         } catch {
+            logger.error("[aa2] onAccessRights: failed to map attributes")
             subject.send(completion: .failure(.frameworkError(String(describing: error), message: "Failed to map EIDAttribute")))
             return
         }
     }
 
     func onApiLevel(error: String?, apiLevel: ApiLevel?) {
-        logger.warning("onApiLevel: \(String(describing: error)), \(String(describing: apiLevel))")
+        logger.warning("[aa2] onApiLevel error: \(String(describing: error)), apiLevel: \(String(describing: apiLevel))")
     }
 
     func onInsertCard(error: String?) {
         if let error {
-            // TODO: Remove duplicated method names from logger
-            logger.error("onInsertCard: \(String(describing: error))")
+            logger.error("[aa2] onInsertCard error: \(error)")
         }
         subject.send(.cardInsertionRequested)
     }
@@ -101,11 +106,13 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
             var queryItems = refreshURLOrCommunicationErrorAddressComponents.queryItems ?? []
             queryItems.append(URLQueryItem(name: "ResultMajor", value: resultMajor))
             if resultMajor == "ok" {
+                logger.info("[aa2] onAuthenticationCompleted: success")
                 var refreshURLComponents = refreshURLOrCommunicationErrorAddressComponents
                 refreshURLComponents.queryItems = queryItems
                 subject.send(.identificationSucceeded(redirectURL: refreshURLComponents.url))
                 subject.send(completion: .finished)
             } else if resultData.reason == "User_Cancelled" {
+                logger.info("[aa2] onAuthenticationCompleted: user cancelled")
                 subject.send(.identificationCancelled)
             } else {
                 var resultMinor: String? = nil
@@ -118,6 +125,7 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
                 }
                 var errorAddressComponents = refreshURLOrCommunicationErrorAddressComponents
                 errorAddressComponents.queryItems = queryItems
+                logger.error("[aa2] onAuthenticationCompleted error minor: \(String(describing: resultMinor))")
                 subject.send(completion: .failure(.identificationFailed(resultMajor: resultMajor,
                                                                         resultMinor: resultMinor,
                                                                         refreshURL: errorAddressComponents.url)))
@@ -129,87 +137,99 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
 
     func onChangePinCompleted(changePinResult: AusweisApp2SDKWrapper.ChangePinResult) {
         if changePinResult.success {
+            logger.info("[aa2] onChangePinCompleted: success")
             subject.send(.pinChangeSucceeded)
             subject.send(completion: .finished)
         } else if changePinResult.reason == "User_Cancelled" {
+            logger.info("[aa2] onChangePinCompleted: user cancelled")
             subject.send(.pinChangeCancelled)
         } else {
+            logger.error("[aa2] onChangePinCompleted error: \(String(describing: changePinResult.reason))")
             subject.send(completion: .failure(.pinChangeFailed))
         }
     }
 
     func onWrapperError(error: AusweisApp2SDKWrapper.WrapperError) {
+        logger.error("[aa2] onWrapperError: \(String(describing: error))")
         subject.send(completion: .failure(.frameworkError("\(error.msg) - \(error.error)")))
     }
 
     func onBadState(error: String) {
+        logger.error("[aa2] onBadState error: \(error)")
         subject.send(completion: .failure(.frameworkError(error)))
     }
 
     func onCertificate(certificateDescription: AusweisApp2SDKWrapper.CertificateDescription) {
+        logger.info("[aa2] onCertificate")
         subject.send(.certificateDescriptionRetrieved(.init(certificateDescription)))
     }
 
     func onEnterCan(error: String?, reader: AusweisApp2SDKWrapper.Reader) {
         if let error {
-            logger.error("onEnterCan error: \(error)")
+            logger.error("[aa2] onEnterCan error: \(error)")
         }
+        logger.info("[aa2] onEnterCan")
         subject.send(.canRequested)
     }
 
     func onEnterNewPin(error: String?, reader: AusweisApp2SDKWrapper.Reader) {
         if let error {
-            logger.error("onEnterNewPin error: \(error)")
+            logger.error("[aa2] onEnterNewPin error: \(error)")
         }
+        logger.info("[aa2] onEnterNewPin")
         subject.send(.newPINRequested)
     }
 
     func onEnterPin(error: String?, reader: AusweisApp2SDKWrapper.Reader) {
         if let error {
-            logger.error("onEnterPin error: \(error)")
+            logger.error("[aa2] onEnterPin error: \(error)")
         }
+        logger.info("[aa2] onEnterPin")
         subject.send(.pinRequested(remainingAttempts: reader.card?.pinRetryCounter))
     }
 
     func onEnterPuk(error: String?, reader: AusweisApp2SDKWrapper.Reader) {
         if let error {
-            logger.error("onEnterPuk error: \(error)")
+            logger.error("[aa2] onEnterPuk error: \(error)")
         }
+        logger.info("[aa2] onEnterPuk")
         subject.send(.pukRequested)
     }
 
     func onInfo(versionInfo: AusweisApp2SDKWrapper.VersionInfo) {
-        logger.info("onInfo: \(String(describing: versionInfo))")
+        logger.warning("[aa2] onInfo: \(String(describing: versionInfo))")
     }
 
     func onInternalError(error: String) {
+        logger.error("[aa2] onInternalError: \(error)")
         subject.send(completion: .failure(.frameworkError(error)))
     }
 
     func onReader(reader: AusweisApp2SDKWrapper.Reader?) {
         guard let reader else {
-            // reader is nil when identification is done
-            logger.info("onReader: Reader is nil")
+            // reader is nil after a flow is finished
+            logger.info("[aa2] onReader: reader is nil")
             return
         }
 
         if let card = reader.card {
+            logger.info("[aa2] onReader card: \(String(describing: card))")
             if card.deactivated {
                 subject.send(completion: .failure(.cardDeactivated))
             } else {
                 subject.send(.cardRecognized)
             }
         } else {
-            logger.info("onReader: Card is nil")
+            logger.info("[aa2] onReader: card is nil")
         }
     }
 
     func onReaderList(readers: [AusweisApp2SDKWrapper.Reader]?) {
-        logger.info("onReaderList: \(String(describing: readers))")
+        logger.warning("[aa2] onReaderList: \(String(describing: readers))")
     }
 
     func onStatus(workflowProgress: AusweisApp2SDKWrapper.WorkflowProgress) {
-        logger.info("onStatus: \(String(describing: workflowProgress))")
+        logger.warning("[aa2] onStatus: \(String(describing: workflowProgress))")
     }
 }
 
