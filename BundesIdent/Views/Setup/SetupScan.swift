@@ -48,10 +48,10 @@ struct SetupScan: ReducerProtocol {
         }
         Reduce { state, action in
             switch action {
-    #if PREVIEW
+#if PREVIEW
             case .runDebugSequence:
                 return .none
-    #endif
+#endif
             case .shared(.startScan(let userInitiated)):
                 var trackingEvent = EffectTask<Action>.none
                 if userInitiated {

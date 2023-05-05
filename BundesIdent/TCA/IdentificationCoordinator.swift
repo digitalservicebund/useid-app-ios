@@ -189,7 +189,7 @@ struct IdentificationCoordinator: ReducerProtocol {
                 state.alert = nil
                 return .none
             case .routeAction(_, action: .scan(.dismiss)),
-                    .routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.dismiss)))):
+                 .routeAction(_, action: .identificationCANCoordinator(.routeAction(_, action: .canScan(.dismiss)))):
                 return .cancel(id: IdentificationCancelID.self)
             default:
                 return .none

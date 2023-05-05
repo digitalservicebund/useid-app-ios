@@ -12,8 +12,8 @@ class PreviewEIDInteractionManager: PreviewEIDInteractionManagerType {
     var publishedIsDebugModeEnabled: AnyPublisher<Bool, Never> { $isDebugModeEnabled.eraseToAnyPublisher() }
     
     init(real: EIDInteractionManagerType, debug: DebugEIDInteractionManager) {
-        self.realManager = real
-        self.debugManager = debug
+        realManager = real
+        debugManager = debug
         
 #if targetEnvironment(simulator)
         // Always mock except in unit tests

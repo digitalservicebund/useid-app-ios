@@ -91,10 +91,12 @@ extension IdentificationInformation {
 }
 
 extension IdentificationRequest {
-    static var preview: Self = .init(requiredAttributes: [.documentType,
-                                                          .issuingCountry,
-                                                          .validUntil,
-                                                          .artisticName])
+    static var preview: Self = .init(requiredAttributes: [
+        .documentType,
+        .issuingCountry,
+        .validUntil,
+        .artisticName
+    ])
 }
 
 extension CertificateDescription {

@@ -18,9 +18,11 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
         static let minor = "ResultMinor"
         static let message = "ResultMessage"
     }
+
     private enum ResultMajor {
         static let ok = "ok"
     }
+
     private enum ResultSpecialError {
         static let userCancelled = "User_Cancelled"
         static let tceFailed = "trustedChannelEstablishmentFailed"
@@ -129,7 +131,7 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
                 subject.send(.identificationCancelled)
                 subject.send(completion: .finished)
             } else {
-                var resultMinor: String? = nil
+                var resultMinor: String?
                 if let resultMinorSuffix = resultData.minor?.split(separator: "#").last {
                     resultMinor = String(resultMinorSuffix)
                     queryItems.append(URLQueryItem(name: ResultKey.minor, value: resultMinor))

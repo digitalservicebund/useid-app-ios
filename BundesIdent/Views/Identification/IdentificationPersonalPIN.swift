@@ -45,10 +45,10 @@ struct IdentificationPersonalPINView: View {
                                      doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
                                                                           title: L10n.Identification.PersonalPIN.continue,
                                                                           handler: { pin in
-                            viewStore.send(.done(identificationInformation: viewStore.identificationInformation, pin: pin))
-                        }))
-                        .focused($pinEntryFocused)
-                        .headingL()
+                                                                              viewStore.send(.done(identificationInformation: viewStore.identificationInformation, pin: pin))
+                                                                          }))
+                                                                          .focused($pinEntryFocused)
+                                                                          .headingL()
                     }
                     Spacer()
                 }

@@ -156,7 +156,7 @@ struct SetupCoordinator: ReducerProtocol {
             case .routeAction(_, action: .scan(.changePIN)),
                  .routeAction(_, action: .setupCANCoordinator(.routeAction(_, action: .canScan(.changePIN)))):
                 let publisher: EIDInteractionPublisher
-                 #if PREVIEW
+#if PREVIEW
                 if previewEIDInteractionManager.isDebugModeEnabled {
                     let debuggableInteraction = previewEIDInteractionManager.debuggableChangePIN()
                     state.availableDebugActions = debuggableInteraction.sequence
@@ -164,9 +164,9 @@ struct SetupCoordinator: ReducerProtocol {
                 } else {
                     publisher = eIDInteractionManager.changePIN(messages: .setup)
                 }
-                 #else
+#else
                 publisher = eIDInteractionManager.changePIN(messages: .setup)
-                 #endif
+#endif
                 return publisher
                     .receive(on: mainQueue)
                     .catchToEffect(Action.eIDInteractionEvent)

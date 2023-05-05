@@ -177,7 +177,7 @@ struct SetupCANScan_Previews: PreviewProvider {
                                                                        newPIN: "123456",
                                                                        can: "123456"),
                                       reducer: SetupCANScan()))
-        }
+    }
 }
 
 #endif

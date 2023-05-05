@@ -27,16 +27,18 @@ struct IdentificationAbout: View {
                       texts: [request.termsOfUsage])
 
                 block(header: L10n.Identification.AttributeConsentInfo.validity,
-                      texts: [[request.effectiveDate, request.expirationDate]
-                        .map { "\($0.formatted(date: .numeric, time: .omitted))" }
-                        .joined(separator: " - ")])
+                      texts: [
+                          [request.effectiveDate, request.expirationDate]
+                              .map { "\($0.formatted(date: .numeric, time: .omitted))" }
+                              .joined(separator: " - ")
+                      ])
             }
             .padding(.horizontal)
         }
     }
 
     private func block(header: String, texts: [String?]) -> some View {
-        return Group {
+        Group {
             Text(header)
                 .headingM()
             VStack(alignment: .leading, spacing: 0) {

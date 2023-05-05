@@ -5,7 +5,7 @@ import LicensePlistViewController
 struct LicensesView: UIViewControllerRepresentable {
     
     func makeUIViewController(context: Context) -> LicensePlistViewController {
-        return BundLicensePlistViewController(fileNamed: "Licenses", tableViewStyle: .insetGrouped)
+        BundLicensePlistViewController(fileNamed: "Licenses", tableViewStyle: .insetGrouped)
     }
     
     func updateUIViewController(_ uiViewController: LicensePlistViewController, context: Context) {}
