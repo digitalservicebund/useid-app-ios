@@ -13,6 +13,19 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
     private let workflowController: AusweisApp2SDKWrapper.WorkflowController
     private let logger: Logger
 
+    private enum ResultKey {
+        static let major = "ResultMajor"
+        static let minor = "ResultMinor"
+        static let message = "ResultMessage"
+    }
+    private enum ResultMajor {
+        static let ok = "ok"
+    }
+    private enum ResultSpecialError {
+        static let userCancelled = "User_Cancelled"
+        static let tceFailed = "trustedChannelEstablishmentFailed"
+    }
+
     init(workflow: Workflow, workflowController: AusweisApp2SDKWrapper.WorkflowController) {
         self.workflow = workflow
         self.workflowController = workflowController
@@ -104,14 +117,14 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
            let resultMajorSuffix = resultData.major.split(separator: "#").last {
             let resultMajor = String(resultMajorSuffix)
             var queryItems = refreshURLOrCommunicationErrorAddressComponents.queryItems ?? []
-            queryItems.append(URLQueryItem(name: "ResultMajor", value: resultMajor))
-            if resultMajor == "ok" {
+            queryItems.append(URLQueryItem(name: ResultKey.major, value: resultMajor))
+            if resultMajor == ResultMajor.ok {
                 logger.info("[aa2] onAuthenticationCompleted: success")
                 var refreshURLComponents = refreshURLOrCommunicationErrorAddressComponents
                 refreshURLComponents.queryItems = queryItems
                 subject.send(.identificationSucceeded(redirectURL: refreshURLComponents.url))
                 subject.send(completion: .finished)
-            } else if resultData.reason == "User_Cancelled" {
+            } else if resultData.reason == ResultSpecialError.userCancelled {
                 logger.info("[aa2] onAuthenticationCompleted: user cancelled")
                 subject.send(.identificationCancelled)
                 subject.send(completion: .finished)
@@ -119,10 +132,10 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
                 var resultMinor: String? = nil
                 if let resultMinorSuffix = resultData.minor?.split(separator: "#").last {
                     resultMinor = String(resultMinorSuffix)
-                    queryItems.append(URLQueryItem(name: "ResultMinor", value: resultMinor))
+                    queryItems.append(URLQueryItem(name: ResultKey.minor, value: resultMinor))
                 }
-                if resultMinor == "trustedChannelEstablishmentFailed", let resultMessage = resultData.reason {
-                    queryItems.append(URLQueryItem(name: "ResultMessage", value: resultMessage))
+                if resultMinor == ResultSpecialError.tceFailed, let resultMessage = resultData.reason {
+                    queryItems.append(URLQueryItem(name: ResultKey.message, value: resultMessage))
                 }
                 var errorAddressComponents = refreshURLOrCommunicationErrorAddressComponents
                 errorAddressComponents.queryItems = queryItems
@@ -141,7 +154,7 @@ final class EIDInteractionFlowListener: WorkflowCallbacks {
             logger.info("[aa2] onChangePinCompleted: success")
             subject.send(.pinChangeSucceeded)
             subject.send(completion: .finished)
-        } else if changePinResult.reason == "User_Cancelled" {
+        } else if changePinResult.reason == ResultSpecialError.userCancelled {
             logger.info("[aa2] onChangePinCompleted: user cancelled")
             subject.send(.pinChangeCancelled)
             subject.send(completion: .finished)
