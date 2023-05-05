@@ -120,30 +120,23 @@ class SetupCANScanTests: XCTestCase {
         verifyNoMoreInteractions(mockEIDInteractionManager)
     }
 
-// TODO: Bring back when we have a cancellation/timeout event from AA2 SDK.
-//    func testCancellationOfScanOverlay() {
-//        let pin = "111111"
-//        let transportPIN = "12345"
-//        let can = "333333"
-//        let canAndChangedPINCallback = CANAndChangedPINCallback(id: UUID(number: 0)) { _ in }
-//        let store = TestStore(
-//            initialState: SetupCANScan.State(transportPIN: transportPIN,
-//                                             newPIN: pin,
-//                                             can: can),
-//            reducer: SetupCANScan()
-//        )
-//
-//        let pinCallback: (String, String) -> Void = { _, _ in
-//            XCTFail("Callback should not be called")
-//        }
-//
-//        // This is the event that gets published when the user waits too long on the scan overlay or when tapping on the cancel button
-//        store.send(.scanEvent(.success(.requestChangedPIN(remainingAttempts: nil, pinCallback: pinCallback)))) {
-//            $0.canAndChangedPINCallback = nil
-//        }
-//
-//        store.send(.shared(.startScan))
-//
-//        store.receive(.shared(.initiateScan))
-//    }
+    func testCancellationOfScanOverlay() {
+        let pin = "111111"
+        let transportPIN = "12345"
+        let can = "333333"
+        let store = TestStore(
+            initialState: SetupCANScan.State(transportPIN: transportPIN,
+                                             newPIN: pin,
+                                             can: can),
+            reducer: SetupCANScan()
+        )
+
+        store.send(.scanEvent(.success(.pinChangeCancelled))) {
+            $0.shouldRestartAfterCancellation = true
+        }
+
+        store.send(.shared(.startScan(userInitiated: true)))
+
+        store.receive(.changePIN)
+    }
 }
