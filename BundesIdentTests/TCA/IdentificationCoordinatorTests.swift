@@ -403,6 +403,7 @@ class IdentificationCoordinatorTests: XCTestCase {
         store.send(.routeAction(0, action: .scan(.shared(.startScan(userInitiated: true))))) {
             guard case .scan(var scanState) = $0.routes[0].screen else { return XCTFail("Unexpected state") }
             scanState.shouldRestartAfterCancellation = false
+            scanState.shared.scanAvailable = false
             $0.routes[0].screen = .scan(scanState)
         }
         

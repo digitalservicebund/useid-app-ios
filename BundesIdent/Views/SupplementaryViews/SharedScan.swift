@@ -62,6 +62,7 @@ struct SharedScanView: View {
                     ScanBody(helpTapped: { viewStore.send(.showHelp) })
                 }
                 DialogButtons(store: store.stateless, primary: .init(title: L10n.Scan.button, action: .onButtonTap))
+                    .disabled(!viewStore.scanAvailable)
             }
             .onChange(of: viewStore.state.attempt, perform: { _ in
                 viewStore.send(.onAttemptChange, animation: .easeInOut)

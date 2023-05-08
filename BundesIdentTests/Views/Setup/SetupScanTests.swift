@@ -53,6 +53,7 @@ class SetupScanTests: XCTestCase {
 
         store.send(.shared(.startScan(userInitiated: false))) {
             $0.shouldRestartAfterCancellation = true
+            $0.shared.scanAvailable = false
         }
 
         store.receive(.changePIN)
@@ -71,6 +72,7 @@ class SetupScanTests: XCTestCase {
 
         store.send(.shared(.startScan(userInitiated: true))) {
             $0.shouldRestartAfterCancellation = true
+            $0.shared.scanAvailable = false
         }
 
         store.receive(.changePIN)
@@ -96,7 +98,9 @@ class SetupScanTests: XCTestCase {
             mock.setNewPIN(anyString()).thenDoNothing()
         }
 
-        store.send(.scanEvent(.success(.identificationStarted)))
+        store.send(.scanEvent(.success(.pinChangeStarted))) {
+            $0.shared.scanAvailable = false
+        }
         store.send(.scanEvent(.success(.cardInsertionRequested)))
 
         store.send(.scanEvent(.success(.cardRecognized)))

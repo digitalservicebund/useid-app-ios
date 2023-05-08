@@ -59,6 +59,7 @@ struct IdentificationPINScan: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .shared(.startScan(let userInitiated)):
+                state.shared.scanAvailable = false
                 var trackingEvent = EffectTask<Action>.none
                 if userInitiated {
                     trackingEvent = .trackEvent(category: "identification",
@@ -82,7 +83,7 @@ struct IdentificationPINScan: ReducerProtocol {
                 return handle(state: &state, event: event)
             case .scanEvent(.failure(let error)):
                 RedactedEIDInteractionError(error).flatMap(issueTracker.capture(error:))
-                
+                state.shared.scanAvailable = false
                 switch error {
                 case .cardDeactivated:
                     return EffectTask(value: .error(ScanError.State(errorType: .cardDeactivated, retry: false)))
@@ -114,6 +115,7 @@ struct IdentificationPINScan: ReducerProtocol {
         switch event {
         case .identificationStarted:
             logger.info("Silent identification started after cancellation.")
+            state.shared.scanAvailable = false
             return .none
         case .identificationRequestConfirmationRequested(let request):
             
@@ -134,7 +136,6 @@ struct IdentificationPINScan: ReducerProtocol {
             return .none
         case .pinRequested(remainingAttempts: let remainingAttempts):
             logger.info("pinRequested: \(String(describing: remainingAttempts))")
-            state.shared.scanAvailable = true
             
             let lastRemainingAttempts = state.lastRemainingAttempts
             state.lastRemainingAttempts = remainingAttempts
@@ -143,6 +144,7 @@ struct IdentificationPINScan: ReducerProtocol {
                let lastRemainingAttempts,
                remainingAttempts < lastRemainingAttempts {
                 eIDInteractionManager.interrupt()
+                state.shared.scanAvailable = true
                 return EffectTask(value: .wrongPIN(remainingAttempts: remainingAttempts))
             } else {
                 eIDInteractionManager.setPIN(state.pin)
@@ -156,13 +158,16 @@ struct IdentificationPINScan: ReducerProtocol {
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: state.shared.scanAvailable)))
         case .identificationCancelled:
             state.shouldRestartAfterCancellation = true
+            state.shared.scanAvailable = true
             return .none
         case .canRequested:
+            state.shared.scanAvailable = false
             eIDInteractionManager.interrupt()
             return EffectTask(value: .requestCAN(state.identificationInformation))
                 .delay(for: 2, scheduler: mainQueue) // this delay is here to fix a bug where this particular screen was presented incorrectly
                 .eraseToEffect()
         case .pukRequested:
+            state.shared.scanAvailable = false
             eIDInteractionManager.interrupt()
             return EffectTask(value: .error(ScanError.State(errorType: .cardBlocked, retry: false)))
         default:

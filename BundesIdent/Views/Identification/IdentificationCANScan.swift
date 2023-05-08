@@ -54,6 +54,7 @@ struct IdentificationCANScan: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .shared(.startScan(let userInitiated)):
+                state.shared.scanAvailable = false
                 var trackingEvent = EffectTask<Action>.none
                 if userInitiated {
                     trackingEvent = .trackEvent(category: "identification",
@@ -72,6 +73,7 @@ struct IdentificationCANScan: ReducerProtocol {
                 return handle(state: &state, event: event)
             case .scanEvent(.failure(let error)):
                 RedactedEIDInteractionError(error).flatMap(issueTracker.capture(error:))
+                state.shared.scanAvailable = false
                 
                 switch error {
                 case .cardDeactivated:
@@ -107,6 +109,7 @@ struct IdentificationCANScan: ReducerProtocol {
         case .identificationStarted:
             logger.info("identificationStarted")
             state.shouldProvideCAN = true
+            state.shared.scanAvailable = false
             return .none
         case .cardRecognized:
             logger.info("cardRecognized")
@@ -146,6 +149,7 @@ struct IdentificationCANScan: ReducerProtocol {
             return EffectTask(value: .error(ScanError.State(errorType: .unexpectedEvent(event), retry: state.shared.scanAvailable)))
         case .identificationCancelled:
             state.shouldRestartAfterCancellation = true
+            state.shared.scanAvailable = true
             return .none
         case .identificationRequestConfirmationRequested(let request):
             

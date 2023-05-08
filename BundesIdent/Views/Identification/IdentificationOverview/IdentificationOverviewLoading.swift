@@ -93,7 +93,7 @@ struct IdentificationOverviewLoadingView: View {
             ViewStore(store.stateless).send(.onAppear)
         }
 #if PREVIEW
-            .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: IdentificationOverviewLoading.Action.runDebugSequence)
+        .identifyDebugMenu(store: store.scope(state: \.availableDebugActions), action: IdentificationOverviewLoading.Action.runDebugSequence)
 #endif
     }
 }

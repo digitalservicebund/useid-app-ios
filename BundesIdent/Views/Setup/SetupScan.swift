@@ -53,6 +53,7 @@ struct SetupScan: ReducerProtocol {
                 return .none
 #endif
             case .shared(.startScan(let userInitiated)):
+                state.shared.scanAvailable = false
                 var trackingEvent = EffectTask<Action>.none
                 if userInitiated {
                     trackingEvent = .trackEvent(category: "firstTimeUser",
@@ -95,8 +96,6 @@ struct SetupScan: ReducerProtocol {
     
     func handle(state: inout State, event: EIDInteractionEvent) -> EffectTask<SetupScan.Action> {
         switch event {
-        case .identificationStarted:
-            logger.info("Identification started.")
         case .cardInsertionRequested:
             logger.info("Card insertion requested.")
         case .cardRecognized:
@@ -105,8 +104,10 @@ struct SetupScan: ReducerProtocol {
             return EffectTask(value: .scannedSuccessfully)
         case .pinChangeStarted:
             logger.info("PIN change started.")
+            state.shared.scanAvailable = false
         case .pinChangeCancelled:
             state.shouldRestartAfterCancellation = false
+            state.shared.scanAvailable = true
             return .none
         case .newPINRequested:
             logger.info("Providing new PIN.")
@@ -114,7 +115,7 @@ struct SetupScan: ReducerProtocol {
             return .none
         case .canRequested:
             logger.info("CAN requested.")
-            state.shared.scanAvailable = true
+            state.shared.scanAvailable = false
             eIDInteractionManager.interrupt()
             return EffectTask(value: .requestCANAndChangedPIN(pin: state.newPIN))
                 .delay(for: 2, scheduler: mainQueue) // this delay is here to fix a bug where this particular screen was presented incorrectly
@@ -139,7 +140,8 @@ struct SetupScan: ReducerProtocol {
                 eIDInteractionManager.setPIN(state.transportPIN)
                 return .none
             }
-        case .identificationSucceeded,
+        case .identificationStarted,
+             .identificationSucceeded,
              .identificationRequestConfirmationRequested,
              .identificationCancelled,
              .certificateDescriptionRetrieved:

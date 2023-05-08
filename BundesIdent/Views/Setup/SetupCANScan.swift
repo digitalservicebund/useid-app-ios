@@ -51,6 +51,7 @@ struct SetupCANScan: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .shared(.startScan(let userInitiated)):
+                state.shared.scanAvailable = false
                 var trackingEvent = EffectTask<Action>.none
                 if userInitiated {
                     trackingEvent = .trackEvent(category: "Setup",
@@ -100,10 +101,9 @@ struct SetupCANScan: ReducerProtocol {
     
     func handle(state: inout State, event: EIDInteractionEvent) -> EffectTask<SetupCANScan.Action> {
         switch event {
-        case .identificationStarted:
-            logger.info("Identification started.")
         case .pinChangeStarted:
             logger.info("PIN Change started.")
+            state.shared.scanAvailable = false
         case .cardInsertionRequested:
             logger.info("Card insertion requested.")
         case .cardRecognized:
@@ -112,6 +112,7 @@ struct SetupCANScan: ReducerProtocol {
             return EffectTask(value: .scannedSuccessfully)
         case .pinChangeCancelled:
             state.shouldRestartAfterCancellation = true
+            state.shared.scanAvailable = true
             return .none
         case .canRequested:
             if state.shouldRestartAfterCancellation {
@@ -135,7 +136,8 @@ struct SetupCANScan: ReducerProtocol {
         case .newPINRequested:
             eIDInteractionManager.setNewPIN(state.newPIN)
             return .none
-        case .identificationSucceeded,
+        case .identificationStarted,
+             .identificationSucceeded,
              .identificationRequestConfirmationRequested,
              .identificationCancelled,
              .certificateDescriptionRetrieved:

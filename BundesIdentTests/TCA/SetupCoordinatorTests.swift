@@ -233,7 +233,7 @@ class SetupCoordinatorTests: XCTestCase {
             $0.changePIN(messages: any()).then { _ in
                 let subject = PassthroughSubject<EIDInteractionEvent, EIDInteractionError>()
                 scheduler.schedule {
-                    subject.send(.identificationStarted)
+                    subject.send(.pinChangeStarted)
                     subject.send(completion: .finished)
                 }
                 return subject.eraseToAnyPublisher()
@@ -244,9 +244,13 @@ class SetupCoordinatorTests: XCTestCase {
         
         scheduler.advance()
         
-        store.receive(.eIDInteractionEvent(.success(.identificationStarted)))
+        store.receive(.eIDInteractionEvent(.success(.pinChangeStarted)))
         
-        store.receive(.routeAction(0, action: .scan(.scanEvent(.success(.identificationStarted)))))
+        store.receive(.routeAction(0, action: .scan(.scanEvent(.success(.pinChangeStarted))))) {
+            guard case .scan(var state) = $0.states[0].screen else { return XCTFail() }
+            state.shared.scanAvailable = false
+            $0.states[0].screen = .scan(state)
+        }
     }
     
     func testStartingCANFlow() {
@@ -275,7 +279,11 @@ class SetupCoordinatorTests: XCTestCase {
             $0.interrupt().thenDoNothing()
         }
 
-        store.send(.routeAction(0, action: .scan(.scanEvent(.success(.canRequested)))))
+        store.send(.routeAction(0, action: .scan(.scanEvent(.success(.canRequested))))) {
+            guard case .scan(var state) = $0.states[0].screen else { return XCTFail() }
+            state.shared.scanAvailable = false
+            $0.states[0].screen = .scan(state)
+        }
         
         scheduler.advance(by: .seconds(2))
                 

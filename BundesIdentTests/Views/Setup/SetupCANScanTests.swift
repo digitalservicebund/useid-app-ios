@@ -56,7 +56,9 @@ class SetupCANScanTests: XCTestCase {
             mock.setCAN(anyString()).thenDoNothing()
         }
 
-        store.send(.shared(.startScan(userInitiated: true)))
+        store.send(.shared(.startScan(userInitiated: true))) {
+            $0.shared.scanAvailable = false
+        }
         
         verify(mockEIDInteractionManager).setCAN(can)
         verify(mockAnalyticsClient).track(event: AnalyticsEvent(category: "Setup",
@@ -82,9 +84,11 @@ class SetupCANScanTests: XCTestCase {
             mock.setNewPIN(anyString()).thenDoNothing()
         }
 
-        store.send(.shared(.startScan(userInitiated: true)))
+        store.send(.shared(.startScan(userInitiated: true))) {
+            $0.shared.scanAvailable = false
+        }
         
-        store.send(.scanEvent(.success(.identificationStarted)))
+        store.send(.scanEvent(.success(.pinChangeStarted)))
         store.send(.scanEvent(.success(.cardInsertionRequested)))
         
         store.send(.scanEvent(.success(.cardRecognized)))
@@ -130,12 +134,19 @@ class SetupCANScanTests: XCTestCase {
                                              can: can),
             reducer: SetupCANScan()
         )
+        
+        store.send(.scanEvent(.success(.pinChangeStarted))) {
+            $0.shared.scanAvailable = false
+        }
 
         store.send(.scanEvent(.success(.pinChangeCancelled))) {
             $0.shouldRestartAfterCancellation = true
+            $0.shared.scanAvailable = true
         }
 
-        store.send(.shared(.startScan(userInitiated: true)))
+        store.send(.shared(.startScan(userInitiated: true))) {
+            $0.shared.scanAvailable = false
+        }
 
         store.receive(.changePIN)
     }
