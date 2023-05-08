@@ -1,7 +1,19 @@
 import SwiftUI
 import ComposableArchitecture
+import StoreKit
+
+internal extension UIApplication {
+    static var activeScene: UIWindowScene? {
+        let foregroundActiveScene = shared.connectedScenes.first { $0.activationState == .foregroundActive }
+        let foregroundInactiveScene = shared.connectedScenes.first { $0.activationState == .foregroundInactive }
+        return (foregroundActiveScene ?? foregroundInactiveScene) as? UIWindowScene
+    }
+}
 
 struct SetupDone: ReducerProtocol {
+    
+    @Dependency(\.logger) var logger
+    
     struct State: Equatable {
         var tokenURL: URL?
         
@@ -17,18 +29,35 @@ struct SetupDone: ReducerProtocol {
     }
 
     enum Action: Equatable {
+        case onInitialAppear
         case done
         case triggerIdentification(tokenURL: URL)
     }
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-        .none
+        switch action {
+        case .onInitialAppear:
+            guard state.tokenURL == nil else { return .none }
+            guard let scene = UIApplication.activeScene else {
+                logger.warning("Could not determine active scene to ask for review")
+                return .none
+            }
+            SKStoreReviewController.requestReview(in: scene)
+            return .none
+        default:
+            return .none
+        }
     }
 }
 
 struct SetupDoneView: View {
     
     var store: Store<SetupDone.State, SetupDone.Action>
+    @State var didAppear = false
+    
+    init(_ store: Store<SetupDone.State, SetupDone.Action>) {
+        self.store = store
+    }
     
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -36,6 +65,11 @@ struct SetupDoneView: View {
                        title: L10n.FirstTimeUser.Done.title,
                        imageMeta: ImageMeta(asset: Asset.eiDs),
                        primaryButton: viewStore.primaryButton)
+                .onAppear {
+                    guard !didAppear else { return }
+                    didAppear = true
+                    viewStore.send(.onInitialAppear)
+                }
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(false)
@@ -46,6 +80,6 @@ struct SetupDoneView: View {
 
 struct SetupDone_Previews: PreviewProvider {
     static var previews: some View {
-        SetupDoneView(store: Store(initialState: SetupDone.State(), reducer: SetupDone()))
+        SetupDoneView(Store(initialState: SetupDone.State(), reducer: SetupDone()))
     }
 }

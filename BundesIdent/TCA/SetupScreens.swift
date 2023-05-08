@@ -67,16 +67,17 @@ struct SetupScreen: ReducerProtocol {
         Scope(state: /State.incorrectTransportPIN, action: /Action.incorrectTransportPIN) {
             SetupIncorrectTransportPIN()
         }
-
         Scope(state: /State.missingPINLetter, action: /Action.missingPINLetter) {
             MissingPINLetter()
         }
-        
         Scope(state: /State.error, action: /Action.error) {
             ScanError()
         }
         Scope(state: /State.setupCANCoordinator, action: /Action.setupCANCoordinator) {
             SetupCANCoordinator()
+        }
+        Scope(state: /State.done, action: /Action.done) {
+            SetupDone()
         }
     }
 }
