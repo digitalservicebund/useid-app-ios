@@ -49,22 +49,14 @@ struct StartView: View {
                     .accessibilityAddTraits(.isHeader)
                     .padding(.bottom, 40)
                 
-//            Button("Ich will mich ausweisen") {
-//                showPopover = true
-//            }
-//            .buttonStyle(BundButtonStyle(isOnDark: false))
-//            .padding(.vertical)
-//            .popover(isPresented: $showPopover) {
-//                IdentificationInfoView()
-//            }
-            
-            NavigationLink(destination:
-                IdentificationInfoView()
-            ) {
-                Text("Ich will mich ausweisen")
+            Button("Ich will mich ausweisen") {
+                showPopover = true
             }
             .buttonStyle(BundButtonStyle(isOnDark: false))
             .padding(.vertical)
+            .popover(isPresented: $showPopover) {
+                IdentificationInfoView()
+            }
         }
         .padding()
         .background(Color.white)

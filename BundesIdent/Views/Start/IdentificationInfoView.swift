@@ -12,32 +12,42 @@ import MarkdownUI
 
 struct IdentificationInfoView: View {
     
+    @Environment(\.presentationMode) var presentationMode
+    
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Spacer()
-                Image(asset: Asset.widgetSwitch)
-                Spacer()
-            }
-            .padding(.top, 32)
-            
-            Text("Sie wollen sich bei einem Service ausweisen?")
-                .headingL(color: .black)
+        NavigationView {
+            VStack(alignment: .leading) {
+                Button("Abbrechen") {
+                    presentationMode.wrappedValue.dismiss()
+                }
+                .bodyMRegular(color: .blue800)
                 .padding(.vertical)
-            
-            Markdown("Suchen Sie auf der Internetseite Ihres Services nach der Option **\"Mit BundesIdent ausweisen**\". Tippen Sie darauf und starten Sie Ihre Identifizierung.")
-                .markdownTheme(.bund)
-                .padding(.vertical)
-           
-            Spacer()
-            NavigationLink(destination: WaitingForIdentView()) {
-                Text("Verstanden")
+                    
+                    
+                HStack {
+                    Spacer()
+                    Image(asset: Asset.widgetSwitch)
+                    Spacer()
+                }
+                .padding(.top, 32)
+                
+                Text("Sie wollen sich bei einem Service ausweisen?")
+                    .headingL(color: .black)
+                    .padding(.vertical)
+                
+                Markdown("Suchen Sie auf der Internetseite Ihres Services nach der Option **\"Mit BundesIdent ausweisen**\". Tippen Sie darauf und starten Sie Ihre Identifizierung.")
+                    .markdownTheme(.bund)
+                    .padding(.vertical)
+                
+                Spacer()
+                NavigationLink(destination: WaitingForIdentView()) {
+                    Text("Verstanden")
+                }
+                .buttonStyle(BundButtonStyle())
             }
-            .buttonStyle(BundButtonStyle())
+            .padding(.horizontal, 16)
+            .padding(.bottom)
         }
-        .padding(.horizontal, 16)
-        .padding(.bottom)
-        .navigationBarBackButtonHidden(true)
     }
 }
 
