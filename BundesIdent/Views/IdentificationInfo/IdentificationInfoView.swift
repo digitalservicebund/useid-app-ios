@@ -8,28 +8,8 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct IdentificationInfo: ReducerProtocol {
-    enum Action: Equatable {
-        case triggerIdentificationLoading
-    }
-
-    struct State: Equatable {
-        
-    }
-    
-    var body: some ReducerProtocol<State, Action> {
-        Reduce<State, Action> { state, action in
-            switch action {
-            case .triggerIdentificationLoading:
-                return .none
-            }
-        }
-    }
-}
 
 struct IdentificationInfoView: View {
-    let store: Store<IdentificationInfo.State, IdentificationInfo.Action>
-    
     
     @ViewBuilder
     private var textPlaceholder: some View {
@@ -69,23 +49,17 @@ struct IdentificationInfoView: View {
                 .padding()
             
             Spacer()
-            Button("Identifizieren") {
-                
+            NavigationLink(destination: WaitingForIdentView()) {
+                Text("Identifizieren")
             }
             .buttonStyle(BundButtonStyle())
         }
         .padding(8)
-       
-        
     }
 }
 
 struct IdentificationInfo_Previews: PreviewProvider {
     static var previews: some View {
-        IdentificationInfoView(
-            store: Store(
-                initialState: IdentificationInfo.State(),
-                reducer: IdentificationInfo())
-        )
+        IdentificationInfoView()
     }
 }

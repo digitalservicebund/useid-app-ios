@@ -5,7 +5,6 @@ struct Screen: ReducerProtocol {
     enum State: Equatable {
         case launch
         case home(Home.State)
-        case identificationInfo(IdentificationInfo.State)
         case setupCoordinator(SetupCoordinator.State)
         case identificationCoordinator(IdentificationCoordinator.State)
     }
@@ -13,7 +12,6 @@ struct Screen: ReducerProtocol {
     enum Action: Equatable {
         case launch(Launch.Action)
         case home(Home.Action)
-        case identificationInfo(IdentificationInfo.Action)
         case setupCoordinator(SetupCoordinator.Action)
         case identificationCoordinator(IdentificationCoordinator.Action)
     }
@@ -24,9 +22,6 @@ struct Screen: ReducerProtocol {
         }
         Scope(state: /State.home, action: /Action.home) {
             Home()
-        }
-        Scope(state: /State.identificationInfo, action: /Action.identificationInfo) {
-            IdentificationInfo()
         }
         Scope(state: /State.setupCoordinator, action: /Action.setupCoordinator) {
             SetupCoordinator()
@@ -44,8 +39,6 @@ extension Screen.State: AnalyticsView {
             return []
         case .home(let state):
             return state.route
-        case .identificationInfo:
-            return []
         case .setupCoordinator(let state):
             return ["firstTimeUser"] + state.route
         case .identificationCoordinator(let state):

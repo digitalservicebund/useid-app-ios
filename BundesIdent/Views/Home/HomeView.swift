@@ -127,13 +127,13 @@ struct HomeView: View {
                             .padding()
                     }.padding(.bottom, 100)
                     
-                    WithViewStore(store) { viewStore in
-                        Button("Jetzt ausweisen") {
-                            viewStore.send(.triggerIdentificationInfo)
-                        }
-                        .buttonStyle(BundButtonStyle(isOnDark: true))
-                        .padding()
+                    NavigationLink(destination:
+                        IdentificationInfoView()
+                    ) {
+                        Text("Jetzt ausweisen")
                     }
+                    .buttonStyle(BundButtonStyle(isOnDark: true))
+                    .padding()
                 }
             }
             .cornerRadius(8)

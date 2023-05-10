@@ -127,9 +127,6 @@ struct Coordinator: ReducerProtocol {
                                                 name: "start",
                                                 analytics: analytics),
                                     trackSetupIntroSource())
-            case .home(.triggerIdentificationInfo):
-                state.routes.presentCover(Screen.State.identificationInfo(.init()))
-                return .none
             case .identificationCoordinator(.back(let tokenURL)):
                 return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
                     $0.dismiss()
@@ -296,9 +293,6 @@ struct CoordinatorView: View {
                 CaseLet(state: /Screen.State.home,
                         action: Screen.Action.home,
                         then: HomeView.init)
-                CaseLet(state: /Screen.State.identificationInfo,
-                        action: Screen.Action.identificationInfo,
-                        then: IdentificationInfoView.init)
                 CaseLet(state: /Screen.State.setupCoordinator,
                         action: Screen.Action.setupCoordinator) { caseStore in
                     NavigationView {
