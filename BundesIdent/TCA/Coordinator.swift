@@ -127,6 +127,9 @@ struct Coordinator: ReducerProtocol {
                                                 name: "start",
                                                 analytics: analytics),
                                     trackSetupIntroSource())
+            case .home(.triggerSelbstauskunft):
+                state.routes.presentSheet(.selbstauskunft)
+                return .none
             case .identificationCoordinator(.back(let tokenURL)):
                 return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
                     $0.dismiss()
@@ -148,6 +151,13 @@ struct Coordinator: ReducerProtocol {
                     $0.dismiss()
                     $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(tokenURL: tokenURL,
                                                                                                canGoBackToSetupIntro: false)))
+                }
+            case .selbstauskunft(.triggerIdentification(let tokenURL)):
+                return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
+                    $0.dismiss()
+                    $0.presentSheet(.identificationCoordinator(IdentificationCoordinator.State(tokenURL: tokenURL,
+                                                                                               canGoBackToSetupIntro: false,
+                                                                                               shouldShowSelbstauskunft: true)))
                 }
 #if PREVIEW
             case .home(.triggerIdentification(let tokenURL)):
@@ -287,6 +297,9 @@ struct CoordinatorView: View {
     var body: some View {
         TCARouter(store) { screen in
             SwitchStore(screen) {
+                CaseLet(state: /Screen.State.selbstauskunft,
+                        action: Screen.Action.selbstauskunft,
+                        then: WidgetSelbstauskunftView.init)
                 CaseLet(state: /Screen.State.launch,
                         action: Screen.Action.launch,
                         then: LaunchView.init)

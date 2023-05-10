@@ -3,6 +3,7 @@ import Analytics
 
 struct Screen: ReducerProtocol {
     enum State: Equatable {
+        case selbstauskunft
         case launch
         case home(Home.State)
         case setupCoordinator(SetupCoordinator.State)
@@ -10,6 +11,7 @@ struct Screen: ReducerProtocol {
     }
     
     enum Action: Equatable {
+        case selbstauskunft(WidgetSelbstauskunft.Action)
         case launch(Launch.Action)
         case home(Home.Action)
         case setupCoordinator(SetupCoordinator.Action)
@@ -17,6 +19,9 @@ struct Screen: ReducerProtocol {
     }
     
     var body: some ReducerProtocol<State, Action> {
+        Scope(state: /State.selbstauskunft, action: /Action.selbstauskunft) {
+            WidgetSelbstauskunft()
+        }
         Scope(state: /State.launch, action: /Action.launch) {
             Launch()
         }
@@ -35,7 +40,7 @@ struct Screen: ReducerProtocol {
 extension Screen.State: AnalyticsView {
     var route: [String] {
         switch self {
-        case .launch:
+        case .launch, .selbstauskunft:
             return []
         case .home(let state):
             return state.route

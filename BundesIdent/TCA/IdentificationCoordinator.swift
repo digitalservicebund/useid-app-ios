@@ -50,7 +50,8 @@ struct IdentificationCoordinator: ReducerProtocol {
         var availableDebugActions: [IdentifyDebugSequence] = []
 #endif
         var states: [Route<IdentificationScreen.State>]
-        
+        var shouldShowSelbstauskunft: Bool
+
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> IdentificationCoordinator.Action? {
             for (index, state) in states.enumerated().reversed() {
                 guard let action = state.screen.transformToLocalAction(event) else { continue }
@@ -139,7 +140,8 @@ struct IdentificationCoordinator: ReducerProtocol {
                 state.routes.push(
                     .scan(IdentificationPINScan.State(identificationInformation: identificationInformation,
                                                       pin: pin,
-                                                      shared: SharedScan.State(startOnAppear: storageManager.identifiedOnce)))
+                                                      shared: SharedScan.State(startOnAppear: storageManager.identifiedOnce),
+                                                      shouldShowSelbstauskunft: state.shouldShowSelbstauskunft))
                 )
                 return .none
             case .routeAction(_, action: .scan(.error(let errorState))):
@@ -264,9 +266,10 @@ extension IdentificationCoordinator.State: AnalyticsView {
 }
 
 extension IdentificationCoordinator.State {
-    init(tokenURL: URL, canGoBackToSetupIntro: Bool = false) {
+    init(tokenURL: URL, canGoBackToSetupIntro: Bool = false, shouldShowSelbstauskunft: Bool = false) {
         self.tokenURL = tokenURL
         states = [.root(.overview(.loading(IdentificationOverviewLoading.State(canGoBackToSetupIntro: canGoBackToSetupIntro))))]
+        self.shouldShowSelbstauskunft = shouldShowSelbstauskunft
     }
 }
 

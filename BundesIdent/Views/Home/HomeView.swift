@@ -31,6 +31,7 @@ struct Home: ReducerProtocol {
     enum Action: Equatable {
         case task
         case triggerSetup
+        case triggerSelbstauskunft
 #if PREVIEW
         case triggerIdentification(tokenURL: URL)
         case setDebugModeEnabled(Bool)
@@ -93,6 +94,7 @@ struct HomeView: View {
                         previewView
 #endif
                         setupActionView
+                        selbstauskunftActionView
                         listView
                         Spacer(minLength: 0)
                         versionView
@@ -182,7 +184,28 @@ struct HomeView: View {
         .padding(24)
         .grouped()
     }
-    
+
+    @ViewBuilder
+    private var selbstauskunftActionView: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Ausweisfunktion testen")
+                    .headingM()
+                Text("Überprüfen Sie, ob Ihr Ausweis einsatzbereit ist.")
+                    .bodyMRegular()
+            }
+            WithViewStore(store) { viewStore in
+                Button("Ausweisfunktion testen") {
+                    viewStore.send(.triggerSelbstauskunft)
+                }
+                .buttonStyle(BundTextButtonStyle())
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(24)
+        .grouped()
+    }
+
     @ViewBuilder
     private var listView: some View {
         VStack(alignment: .leading) {

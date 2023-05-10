@@ -34,6 +34,8 @@ struct IdentificationPINScan: ReducerProtocol {
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             .scanEvent(event)
         }
+
+        var shouldShowSelbstauskunft: Bool
     }
     
     enum Action: Equatable {
@@ -95,10 +97,15 @@ struct IdentificationPINScan: ReducerProtocol {
             case .identifiedSuccessfully(let redirectURL):
                 storageManager.setupCompleted = true
                 storageManager.identifiedOnce = true
-                
-                return .concatenate(.trackEvent(category: "identification", action: "success", analytics: analytics),
-                                    EffectTask(value: .dismiss),
-                                    .openURL(redirectURL, urlOpener: urlOpener))
+
+                if state.shouldShowSelbstauskunft {
+                    // TODO: navigate to web view
+                    return .none
+                } else {
+                    return .concatenate(.trackEvent(category: "identification", action: "success", analytics: analytics),
+                                        EffectTask(value: .dismiss),
+                                        .openURL(redirectURL, urlOpener: urlOpener))
+                }
             case .cancelIdentification:
                 state.alert = AlertState.confirmEndInIdentification(.dismiss)
                 return .none
@@ -204,7 +211,8 @@ struct IdentificationPINScanView: View {
 struct IdentificationScan_Previews: PreviewProvider {
     static var previews: some View {
         IdentificationPINScanView(store: Store(initialState: IdentificationPINScan.State(identificationInformation: .preview,
-                                                                                         pin: "123456"),
+                                                                                         pin: "123456",
+                                                                                         shouldShowSelbstauskunft: false),
                                                reducer: IdentificationPINScan()))
     }
 }
