@@ -163,6 +163,7 @@
 		E5E69D852812FB6100A3B66A /* EIDInteractionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D842812FB6100A3B66A /* EIDInteractionError.swift */; };
 		E5E69D892812FB8D00A3B66A /* EIDAttribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E69D882812FB8D00A3B66A /* EIDAttribute.swift */; };
 		F43622A72850D6C9008AEBB9 /* ScanError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43622A62850D6C9008AEBB9 /* ScanError.swift */; };
+		F448D4842A0B85B3007156EF /* WaitingForIdentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F448D4832A0B85B3007156EF /* WaitingForIdentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -358,6 +359,7 @@
 		E5E69D842812FB6100A3B66A /* EIDInteractionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIDInteractionError.swift; sourceTree = "<group>"; };
 		E5E69D882812FB8D00A3B66A /* EIDAttribute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIDAttribute.swift; sourceTree = "<group>"; };
 		F43622A62850D6C9008AEBB9 /* ScanError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanError.swift; sourceTree = "<group>"; };
+		F448D4832A0B85B3007156EF /* WaitingForIdentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingForIdentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -622,6 +624,7 @@
 				E16708AD283D4224001A1637 /* HomeView.swift */,
 				E1BC3D7828B7E40B007A7B39 /* LicensesView.swift */,
 				E1234DB22976EA3900837872 /* BundLicensePlistViewController.swift */,
+				F448D4832A0B85B3007156EF /* WaitingForIdentView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1174,6 +1177,7 @@
 				E1AAACFB2837B9A200A51183 /* SetupPersonalPINInput.swift in Sources */,
 				E101325128EDDD7E006875F8 /* LoopingVideoPlayer.swift in Sources */,
 				E1CD8E93282156F2008ADA2A /* SetupTransportPIN.swift in Sources */,
+				F448D4842A0B85B3007156EF /* WaitingForIdentView.swift in Sources */,
 				E5E69D892812FB8D00A3B66A /* EIDAttribute.swift in Sources */,
 				E16708B7283D7C2B001A1637 /* DialogView.swift in Sources */,
 				E128E0BC28898D3400C5195F /* AppDelegate.swift in Sources */,
