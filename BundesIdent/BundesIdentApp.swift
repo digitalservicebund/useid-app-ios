@@ -60,29 +60,45 @@ struct BundesIdentApp: App {
     var body: some Scene {
         WindowGroup {
             if !XCTestDynamicOverlay._XCTIsTesting {
-                CoordinatorView(store: store)
-                    .onOpenURL { url in
-                        ViewStore(store.stateless).send(.openURL(url))
-                    }
-                    .onAppear {
-                        let viewStore = ViewStore(store.stateless)
-                        viewStore.send(.onAppear)
-                        
+                TabView {
+                    
+                    StartView()
+                        .tabItem {
+                            Label("Home", systemImage: "house")
+                        }
+                    
+                    Text("Ausprobieren? Coming soon 😉")
+                        .tabItem {
+                            Label("Ausprobieren", systemImage: "eyedropper")
+                        }
+                    
+                    CoordinatorView(store: store)
+                        .tabItem {
+                            Label("Mehr", systemImage: "ellipses")
+                        }
+                }
+                .onOpenURL { url in
+                    ViewStore(store.stateless).send(.openURL(url))
+                }
+                .onAppear {
+                    let viewStore = ViewStore(store.stateless)
+                    viewStore.send(.onAppear)
+
 #if PREVIEW
-                        if CommandLine.arguments.contains(LaunchArgument.useDemoTokenURL) {
-                            viewStore.send(.openURL(demoTokenURL))
-                        }
-                        
-                        if CommandLine.arguments.contains(LaunchArgument.uiTesting) {
-                            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-                            windowScene?.windows.first?.layer.speed = 100
-                            UIView.setAnimationsEnabled(false)
-                        }
+                    if CommandLine.arguments.contains(LaunchArgument.useDemoTokenURL) {
+                        viewStore.send(.openURL(demoTokenURL))
+                    }
+
+                    if CommandLine.arguments.contains(LaunchArgument.uiTesting) {
+                        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                        windowScene?.windows.first?.layer.speed = 100
+                        UIView.setAnimationsEnabled(false)
+                    }
 #endif
-                    }
-                    .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
-                        ViewStore(store.stateless).send(.didEnterBackground)
-                    }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
+                    ViewStore(store.stateless).send(.didEnterBackground)
+                }
             }
         }
     }
