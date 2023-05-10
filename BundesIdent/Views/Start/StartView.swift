@@ -9,6 +9,8 @@ import SwiftUI
 
 struct StartView: View {
     
+    @State private var showPopover = false
+    
     @ViewBuilder
     private var availableServices: some View {
         VStack(alignment: .leading) {
@@ -47,10 +49,17 @@ struct StartView: View {
                     .accessibilityAddTraits(.isHeader)
                     .padding(.bottom, 40)
                 
-            
+//            Button("Ich will mich ausweisen") {
+//                showPopover = true
+//            }
+//            .buttonStyle(BundButtonStyle(isOnDark: false))
+//            .padding(.vertical)
+//            .popover(isPresented: $showPopover) {
+//                IdentificationInfoView()
+//            }
             
             NavigationLink(destination:
-                            IdentificationInfoView()
+                IdentificationInfoView()
             ) {
                 Text("Ich will mich ausweisen")
             }

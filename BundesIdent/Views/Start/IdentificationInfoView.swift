@@ -7,54 +7,37 @@
 
 import ComposableArchitecture
 import SwiftUI
+import MarkdownUI
 
 
 struct IdentificationInfoView: View {
-    
-    @ViewBuilder
-    private var textPlaceholder: some View {
-        VStack(alignment: .leading) {
-            Color.gray
-                .frame(width: 200, height: 30)
-                .padding(.bottom, 8)
-                .cornerRadius(1)
-            Color.gray
-                .frame(width: 300, height: 30)
-                .padding(.bottom)
-                .cornerRadius(1)
-        }
-    }
     
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
                 Spacer()
-                VStack {
-                    Image(asset: Asset.homeIcon)
-                        .padding(24)
-                    Text("So funktioniert das Identifizieren")
-                        .headingL(color: .blue800)
-                        .accessibilityAddTraits(.isHeader)
-                        .padding(.bottom, 16)
-                        .padding(.horizontal, 36)
-                }
+                Image(asset: Asset.widgetSwitch)
                 Spacer()
             }
+            .padding(.top, 32)
             
-            textPlaceholder
-                .padding()
-            textPlaceholder
-                .padding()
-            textPlaceholder
-                .padding()
+            Text("Sie wollen sich bei einem Service ausweisen?")
+                .headingL(color: .black)
+                .padding(.vertical)
             
+            Markdown("Suchen Sie auf der Internetseite Ihres Services nach der Option **\"Mit BundesIdent ausweisen**\". Tippen Sie darauf und starten Sie Ihre Identifizierung.")
+                .markdownTheme(.bund)
+                .padding(.vertical)
+           
             Spacer()
             NavigationLink(destination: WaitingForIdentView()) {
-                Text("Identifizieren")
+                Text("Verstanden")
             }
             .buttonStyle(BundButtonStyle())
         }
-        .padding(8)
+        .padding(.horizontal, 16)
+        .padding(.bottom)
+        .navigationBarBackButtonHidden(true)
     }
 }
 
