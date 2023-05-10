@@ -41,7 +41,7 @@ struct IdentificationInfoView: View {
                 
                 Spacer()
                 NavigationLink(destination: WaitingForIdentView()) {
-                    Text("Los legen")
+                    Text("Loslegen")
                 }
                 .buttonStyle(BundButtonStyle())
             }
