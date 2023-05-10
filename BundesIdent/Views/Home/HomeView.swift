@@ -31,6 +31,7 @@ struct Home: ReducerProtocol {
     enum Action: Equatable {
         case task
         case triggerSetup
+        case triggerIdentificationInfo
 #if PREVIEW
         case triggerIdentification(tokenURL: URL)
         case setDebugModeEnabled(Bool)
@@ -111,33 +112,38 @@ struct HomeView: View {
     @ViewBuilder
     private var headerView: some View {
         VStack(spacing: 0) {
-            Image(asset: Asset.homeIcon)
-                .padding(24)
-            Text(L10n.Home.Header.title)
-                .bodyLBold(color: .blue800)
-                .accessibilityAddTraits(.isHeader)
-                .padding(.bottom, 8)
-                .padding(.horizontal, 36)
-#if PREVIEW
-                .onTapGesture {
-                    ViewStore(store.stateless).send(.triggerIdentification(tokenURL: demoTokenURL))
+            ZStack {
+                Color.blue800
+                VStack(alignment: .leading) {
+                    HStack(alignment: .top) {
+                        Text("Willkommen bei BundesIdent!")
+                            .headingL(color: .blue100)
+                            .accessibilityAddTraits(.isHeader)
+                            .padding()
+                        
+                        Spacer()
+                        
+                        Image(asset: Asset.homeIcon)
+                            .padding()
+                    }.padding(.bottom, 100)
+                    
+                    WithViewStore(store) { viewStore in
+                        Button("Jetzt ausweisen") {
+                            viewStore.send(.triggerIdentificationInfo)
+                        }
+                        .buttonStyle(BundButtonStyle(isOnDark: true))
+                        .padding()
+                    }
                 }
+            }
+            .cornerRadius(8)
+            
+#if PREVIEW
+//                .onTapGesture {
+//                    ViewStore(store.stateless).send(.triggerIdentification(tokenURL: demoTokenURL))
+//                }
 #endif
-            Text(L10n.Home.Header.infoText)
-                .font(.bundCustom(size: 20, relativeTo: .body))
-                .foregroundColor(.blackish)
-                .multilineTextAlignment(.center)
-                .padding(.bottom, 10)
             
-            Text(L10n.Home.Header.infoCTA)
-                .headingM()
-                .padding(.bottom, 10)
-            
-            ImageMeta(asset: Asset.abstractWidget).image
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .padding(.horizontal)
-                .padding(.bottom, 36)
         }
         .padding(EdgeInsets(top: 60, leading: 24, bottom: 20, trailing: 24))
         .background(LinearGradient(colors: [.blue100, .blue200], startPoint: .top, endPoint: .bottom))
