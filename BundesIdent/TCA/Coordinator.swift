@@ -128,7 +128,7 @@ struct Coordinator: ReducerProtocol {
                                                 analytics: analytics),
                                     trackSetupIntroSource())
             case .home(.triggerSelbstauskunft):
-                state.routes.presentSheet(.selbstauskunft(.init()))
+                state.routes.presentSheet(.selbstauskunft(.init(url: "https://demo.useid.dev.ds4g.net")))
                 return .none
             case .identificationCoordinator(.back(let tokenURL)):
                 return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
@@ -299,7 +299,7 @@ struct CoordinatorView: View {
             SwitchStore(screen) {
                 CaseLet(state: /Screen.State.selbstauskunft,
                         action: Screen.Action.selbstauskunft,
-                        then: WidgetSelbstauskunftView.init)
+                        then: WebIdentificationView.init)
                 CaseLet(state: /Screen.State.launch,
                         action: Screen.Action.launch,
                         then: LaunchView.init)

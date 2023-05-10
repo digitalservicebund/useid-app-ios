@@ -11,7 +11,7 @@ struct IdentificationScreen: ReducerProtocol {
         case scan(IdentificationPINScan.State)
         case error(ScanError.State)
         case identificationCANCoordinator(IdentificationCANCoordinator.State)
-        case selbstauskunft(WidgetSelbstauskunft.State)
+        case selbstauskunft(WebIdentification.State)
         
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             switch self {
@@ -52,7 +52,7 @@ struct IdentificationScreen: ReducerProtocol {
         case scan(IdentificationPINScan.Action)
         case error(ScanError.Action)
         case identificationCANCoordinator(IdentificationCANCoordinator.Action)
-        case selbstauskunft(WidgetSelbstauskunft.Action)
+        case selbstauskunft(WebIdentification.Action)
     }
     
     var body: some ReducerProtocol<State, Action> {

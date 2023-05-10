@@ -145,7 +145,7 @@ struct IdentificationCoordinator: ReducerProtocol {
                 )
                 return .none
             case .routeAction(_, action: .scan(.selbstauskunft(url: let url))):
-                state.routes.push(.selbstauskunft(WidgetSelbstauskunft.State(url: url.absoluteString)))
+                state.routes.push(.selbstauskunft(WebIdentification.State(url: url.absoluteString)))
                 return .none
             case .routeAction(_, action: .scan(.error(let errorState))):
                 state.routes.presentSheet(.error(errorState))
@@ -331,7 +331,7 @@ struct IdentificationCoordinatorView: View {
                             then: IdentificationCANCoordinatorView.init)
                     CaseLet(state: /IdentificationScreen.State.selbstauskunft,
                             action: IdentificationScreen.Action.selbstauskunft,
-                            then: WidgetSelbstauskunftView.init)
+                            then: WebIdentificationView.init)
                 }
             }
             .alert(store.scope(state: \.alert), dismiss: IdentificationCoordinator.Action.dismissAlert)

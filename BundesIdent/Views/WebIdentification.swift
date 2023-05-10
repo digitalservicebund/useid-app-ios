@@ -1,11 +1,11 @@
 import SwiftUI
-import ComposableArchitecture
 import WebKit
+import ComposableArchitecture
 
-struct WidgetSelbstauskunft: ReducerProtocol {
+struct WebIdentification: ReducerProtocol {
 
     struct State: Equatable {
-        var url = "https://demo.useid.dev.ds4g.net"
+        var url: String
     }
 
     enum Action: Equatable {
@@ -17,26 +17,20 @@ struct WidgetSelbstauskunft: ReducerProtocol {
     }
 }
 
-struct WidgetSelbstauskunftView: View {
+struct WebIdentificationView: View {
 
-    var store: StoreOf<WidgetSelbstauskunft>
+    var store: StoreOf<WebIdentification>
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            WebView(url: viewStore.url) { url in
+            IdentificationOverridingWebView(url: viewStore.url) { url in
                 viewStore.send(.triggerIdentification(tokenURL: url))
             }
         }
     }
 }
 
-struct WidgetSelbstauskunftView_Previews: PreviewProvider {
-    static var previews: some View {
-        WidgetSelbstauskunftView(store: .init(initialState: .init(), reducer: WidgetSelbstauskunft()))
-    }
-}
-
-struct WebView: UIViewRepresentable {
+private struct IdentificationOverridingWebView: UIViewRepresentable {
     let url: String
     let onTriggerIdentification: (URL) -> Void
 
@@ -46,15 +40,15 @@ struct WebView: UIViewRepresentable {
         return view
     }
 
-    func updateUIView(_ view: WKWebView, context: UIViewRepresentableContext<WebView>) {
+    func updateUIView(_ view: WKWebView, context: UIViewRepresentableContext<IdentificationOverridingWebView>) {
         let request = URLRequest(url: URL(string: url)!)
         view.load(request)
     }
 
     class Coordinator: NSObject, WKNavigationDelegate {
-        var view: WebView
+        var view: IdentificationOverridingWebView
 
-        init(_ parent: WebView) {
+        init(_ parent: IdentificationOverridingWebView) {
             self.view = parent
         }
 
@@ -62,7 +56,6 @@ struct WebView: UIViewRepresentable {
                      decidePolicyFor navigationAction: WKNavigationAction,
                      decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             if let navigationURL = navigationAction.request.url,
-               navigationURL.absoluteString.contains("eID-Client") == true,
                let tokenURL = extractTCTokenURL(url: navigationURL) {
                 view.onTriggerIdentification(tokenURL)
                 decisionHandler(.cancel)
@@ -73,21 +66,11 @@ struct WebView: UIViewRepresentable {
 
         func extractTCTokenURL(url: URL) -> URL? {
             guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-                  let queryItems = components.queryItems else {
-                //issueTracker.capture(error: HandleURLError.componentsInvalid)
-                return nil
-            }
-            guard let queryItem = queryItems.last(where: { $0.name == "tcTokenURL" && $0.value != nil }),
-                  let urlString = queryItem.value else {
-                //issueTracker.capture(error: HandleURLError.noTCTokenURLQueryItem)
-                return nil
-            }
-            guard let url = URL(string: urlString) else {
-                //issueTracker.capture(error: HandleURLError.tcTokenURLEncodingError)
-                return nil
-            }
+                  let queryItems = components.queryItems,
+                  let urlString = queryItems.last(where: { $0.name == "tcTokenURL" && $0.value != nil })?.value
+            else { return nil }
 
-            return url
+            return URL(string: urlString)
         }
     }
 
