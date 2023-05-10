@@ -11,6 +11,7 @@ struct IdentificationScreen: ReducerProtocol {
         case scan(IdentificationPINScan.State)
         case error(ScanError.State)
         case identificationCANCoordinator(IdentificationCANCoordinator.State)
+        case selbstauskunft(WidgetSelbstauskunft.State)
         
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             switch self {
@@ -39,6 +40,7 @@ struct IdentificationScreen: ReducerProtocol {
             case .incorrectPersonalPIN: return .allow
             case .error: return .allow
             case .identificationCANCoordinator: return .allow
+            case .selbstauskunft: return .allow
             }
         }
     }
@@ -50,6 +52,7 @@ struct IdentificationScreen: ReducerProtocol {
         case scan(IdentificationPINScan.Action)
         case error(ScanError.Action)
         case identificationCANCoordinator(IdentificationCANCoordinator.Action)
+        case selbstauskunft(WidgetSelbstauskunft.Action)
     }
     
     var body: some ReducerProtocol<State, Action> {
@@ -90,6 +93,8 @@ extension IdentificationScreen.State: AnalyticsView {
             return state.errorType.route
         case .identificationCANCoordinator(let state):
             return state.route
+        case .selbstauskunft:
+            return []
         }
     }
 }

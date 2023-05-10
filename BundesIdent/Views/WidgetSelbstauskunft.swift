@@ -3,7 +3,10 @@ import ComposableArchitecture
 import WebKit
 
 struct WidgetSelbstauskunft: ReducerProtocol {
-    typealias State = Void
+
+    struct State: Equatable {
+        var url = "https://demo.useid.dev.ds4g.net"
+    }
 
     enum Action: Equatable {
         case triggerIdentification(tokenURL: URL)
@@ -20,7 +23,7 @@ struct WidgetSelbstauskunftView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            WebView(url: "https://demo.useid.dev.ds4g.net") { url in
+            WebView(url: viewStore.url) { url in
                 viewStore.send(.triggerIdentification(tokenURL: url))
             }
         }
@@ -29,7 +32,7 @@ struct WidgetSelbstauskunftView: View {
 
 struct WidgetSelbstauskunftView_Previews: PreviewProvider {
     static var previews: some View {
-        WidgetSelbstauskunftView(store: .empty)
+        WidgetSelbstauskunftView(store: .init(initialState: .init(), reducer: WidgetSelbstauskunft()))
     }
 }
 

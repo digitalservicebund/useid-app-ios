@@ -49,6 +49,7 @@ struct IdentificationPINScan: ReducerProtocol {
         case dismiss
         case dismissAlert
         case identify
+        case selbstauskunft(url: URL)
 #if PREVIEW
         case runDebugSequence(IdentifyDebugSequence)
 #endif
@@ -99,8 +100,7 @@ struct IdentificationPINScan: ReducerProtocol {
                 storageManager.identifiedOnce = true
 
                 if state.shouldShowSelbstauskunft {
-                    // TODO: navigate to web view
-                    return .none
+                    return EffectTask(value: .selbstauskunft(url: redirectURL))
                 } else {
                     return .concatenate(.trackEvent(category: "identification", action: "success", analytics: analytics),
                                         EffectTask(value: .dismiss),
