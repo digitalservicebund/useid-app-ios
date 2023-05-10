@@ -84,10 +84,6 @@ struct HomeView: View {
         NavigationView {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
-                    overscrollBackground
-                    
-                    headerView
-                        .padding(.bottom, 24)
                     
                     VStack(alignment: .leading, spacing: 16) {
 #if PREVIEW
@@ -102,51 +98,10 @@ struct HomeView: View {
                 }
             }
             .navigationBarHidden(true)
-            .ignoresSafeArea(.container, edges: .top)
             .task {
                 await ViewStore(store.stateless).send(.task).finish()
             }
         }
-    }
-    
-    @ViewBuilder
-    private var headerView: some View {
-        VStack(spacing: 0) {
-            ZStack {
-                Color.blue800
-                VStack(alignment: .leading) {
-                    HStack(alignment: .top) {
-                        Text("Willkommen bei BundesIdent!")
-                            .headingL(color: .blue100)
-                            .accessibilityAddTraits(.isHeader)
-                            .padding()
-                        
-                        Spacer()
-                        
-                        Image(asset: Asset.homeIcon)
-                            .padding()
-                    }.padding(.bottom, 100)
-                    
-                    NavigationLink(destination:
-                        IdentificationInfoView()
-                    ) {
-                        Text("Jetzt ausweisen")
-                    }
-                    .buttonStyle(BundButtonStyle(isOnDark: true))
-                    .padding()
-                }
-            }
-            .cornerRadius(8)
-            
-#if PREVIEW
-//                .onTapGesture {
-//                    ViewStore(store.stateless).send(.triggerIdentification(tokenURL: demoTokenURL))
-//                }
-#endif
-            
-        }
-        .padding(EdgeInsets(top: 60, leading: 24, bottom: 20, trailing: 24))
-        .background(LinearGradient(colors: [.blue100, .blue200], startPoint: .top, endPoint: .bottom))
     }
     
 #if PREVIEW
@@ -253,15 +208,6 @@ struct HomeView: View {
         Divider()
             .foregroundColor(.neutral300)
             .padding(.vertical, 16)
-    }
-    
-    @ViewBuilder
-    private var overscrollBackground: some View {
-        let height = 1000.0
-        Color.blue100
-            .frame(height: height)
-            .offset(y: -height)
-            .padding(.bottom, -height)
     }
     
     @ViewBuilder

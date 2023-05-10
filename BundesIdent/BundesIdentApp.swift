@@ -74,7 +74,7 @@ struct BundesIdentApp: App {
                     
                     CoordinatorView(store: store)
                         .tabItem {
-                            Label("Mehr", systemImage: "ellipses")
+                            Label("Mehr", systemImage: "ellipsis")
                         }
                 }
                 .onOpenURL { url in

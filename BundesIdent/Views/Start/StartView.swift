@@ -9,36 +9,81 @@ import SwiftUI
 
 struct StartView: View {
     
+    @ViewBuilder
+    private var availableServices: some View {
+        VStack(alignment: .leading) {
+            Text("Verfügbar bei:")
+                .bodyMBold(color: .gray)
+                .padding(.vertical)
+            
+            ScrollView(.horizontal) {
+                HStack(spacing: 25) {
+                    ForEach(0..<5) { _ in
+                            HStack {
+                                Text("Bundesagentur für Arbeit")
+                                    .bodyMBold(color: .blue700)
+                                    .padding()
+                                   
+                            }
+                            .background(.white)
+                            .cornerRadius(8)
+                        }
+                    }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var identTile: some View {
+        VStack(alignment: .leading) {
+            
+                Text("Willkommen bei BundesIdent!")
+                    .headingXL(color: .black)
+                    .accessibilityAddTraits(.isHeader)
+                    .padding(.vertical)
+            
+                Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.")
+                    .bodyMRegular(color: .black)
+                    .accessibilityAddTraits(.isHeader)
+                    .padding(.bottom, 40)
+                
+            
+            
+            NavigationLink(destination:
+                            IdentificationInfoView()
+            ) {
+                Text("Ich will mich ausweisen")
+            }
+            .buttonStyle(BundButtonStyle(isOnDark: false))
+            .padding(.vertical)
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(8)
+    }
+    
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                ZStack {
-                    Color.blue800
-                    VStack(alignment: .leading) {
-                        HStack(alignment: .top) {
-                            Text("Willkommen bei BundesIdent!")
-                                .headingL(color: .blue100)
-                                .accessibilityAddTraits(.isHeader)
-                                .padding()
-                            
-                            Spacer()
-                            
-                            Image(asset: Asset.homeIcon)
-                                .padding()
-                        }.padding(.bottom, 100)
-                        
-                        NavigationLink(destination:
-                                        IdentificationInfoView()
-                        ) {
-                            Text("Jetzt ausweisen")
-                        }
-                        .buttonStyle(BundButtonStyle(isOnDark: true))
-                        .padding()
-                    }
-                }
-                .cornerRadius(8)
+                
+                Image(asset: Asset.eagle)
+                    .padding(.top, 20)
+                
+                Text("BundesIdent App")
+                    .bodyMBold(color: .neutral900)
+                    .padding(.top)
+                    .padding(.bottom, 48)
+               
+
+                identTile
+                
+//                availableServices
+                
+                Spacer()
                 
             }
+            .padding(.horizontal)
+            .background(Color.blue100)
         }
     }
 }
