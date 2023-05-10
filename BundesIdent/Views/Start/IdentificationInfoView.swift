@@ -29,7 +29,7 @@ struct IdentificationInfoView: View {
                     Image(asset: Asset.widgetSwitch)
                     Spacer()
                 }
-                .padding(.top, 32)
+                .padding(.vertical, 32)
                 
                 Text("Sie wollen sich bei einem Service ausweisen?")
                     .headingL(color: .black)
@@ -41,7 +41,7 @@ struct IdentificationInfoView: View {
                 
                 Spacer()
                 NavigationLink(destination: WaitingForIdentView()) {
-                    Text("Verstanden")
+                    Text("Los legen")
                 }
                 .buttonStyle(BundButtonStyle())
             }
