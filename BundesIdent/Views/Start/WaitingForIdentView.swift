@@ -6,11 +6,20 @@ struct WaitingForIdentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text(" o  o  o  o")
-                    .bodyLBold(color: .blue800)
-                    .padding(.bottom, 10)
-                Text("Auf Identifikation warten")
-                    .bodyLBold(color: .blue800)
+                Spacer()
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: Color.blue900))
+                    .scaleEffect(3)
+                    .frame(maxWidth: .infinity)
+                    .padding(50)
+                Text("Starten Sie Ihre Identifizierung im Browser.")
+                    .headingL(color: .black)
+                    .multilineTextAlignment(.center)
+                Spacer()
+                Text("Anschließend werden Sie zurück in die App geleitet und durch den Online-Ausweis Prozess geführt.")
+                    .bodyMRegular(color: .neutral900)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 80)
             }
         }
     }
