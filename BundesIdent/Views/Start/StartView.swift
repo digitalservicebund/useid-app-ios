@@ -45,7 +45,7 @@ struct StartView: View {
                     .padding(.vertical)
             
                 Text("Schnell und sicher ausweisen.")
-                    .bodyMRegular(color: .black)
+                    .bodyLRegular(color: .black)
                     .accessibilityAddTraits(.isHeader)
                     .padding(.bottom, 40)
                 

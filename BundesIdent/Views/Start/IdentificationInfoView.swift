@@ -35,9 +35,14 @@ struct IdentificationInfoView: View {
                     .headingL(color: .black)
                     .padding(.vertical)
                 
-                Markdown("Suchen Sie auf der Internetseite Ihres Services nach der Option **\"Mit BundesIdent ausweisen**\". Tippen Sie darauf und starten Sie Ihre Identifizierung.")
-                    .markdownTheme(.bund)
-                    .padding(.vertical)
+                Text("Suchen Sie auf der Internetseite Ihres Services nach der Option \"Mit BundesIdent ausweisen\". Tippen Sie darauf und starten Sie Ihre Identifizierung.")
+                    .bodyLRegular(color: .black)
+                    
+               
+                
+//                Markdown("Suchen Sie auf der Internetseite Ihres Services nach der Option **\"Mit BundesIdent ausweisen**\". Tippen Sie darauf und starten Sie Ihre Identifizierung.")
+//                    .markdownTheme(.bund)
+//                    .padding(.vertical)
                 
                 Spacer()
                 NavigationLink(destination: WaitingForIdentView()) {

@@ -120,48 +120,22 @@ struct HomeView: View {
             Text("Häufige Fragen").headingM()//.padding(.horizontal, 24)
             ScrollView(.horizontal) {
                 HStack(spacing: 25) {
-                    faq("Wie geht das Auslesen des Ausweises?", """
+                    FaqTile(question: "Wie geht das Auslesen des Ausweises?", text: """
 Ihre Ausweisdaten sind auf der Chip-Karte in Ihrem Online-Ausweis verschlüsselt gespeichert und können von einem Smartphone und der App sicher ausgelesen werden. Voraussetzung: Das Smartphone verfügt über eine NFC-Schnittstelle (Near-Field-Communication-Schnittstelle). Nahezu jedes aktuelle Smartphone ist mit einer solchen NFC-Schnittstelle ausgezeichnet.
                         
 Nach Eingabe Ihrer 6-stelligen persönlichen PIN werden Ihre Ausweisdaten entschlüsselt und Sie können sich online ausweisen. Für die Entschlüsselung legen Sie im Anschluss Ihr Smartphone auf Ihren Ausweis.
 
 Wenn Sie den Online-Ausweis zum ersten Mal verwenden, leitet Sie die App durch die Erstaktivierung. Dabei legen Sie Ihre 6-stellige persönliche PIN fest, mit der Sie sich in Zukunft online ausweisen können.
 """)
-                    faq("Was sind die Voraussetzungen?", "tbd")
-                    faq("Wie funktioniert die Identifizierung?", "tbd")
-                    faq("Welche PIN ist die richtige?", "tbd")
-                    faq("Ist der Ausweis bereits eingerichtet?", "tbd")
-                }.popover(isPresented: $showModal) {
-                    VStack(alignment: .leading) {
-                        Spacer()
-                        Text(headline).headingL()
-                        Text(text).bodyMRegular()
-                        Spacer()
-                        Button("Schließen") { showModal = false }
-                            .buttonStyle(BundButtonStyle(isOnDark: false))
-                            .padding(.vertical)
-                    }.padding()
+                    FaqTile(question: "Was sind die Voraussetzungen?", text: "tbd")
+                    FaqTile(question: "Wie funktioniert die Identifizierung?", text: "tbd")
+                    FaqTile(question: "Welche PIN ist die richtige?", text: "tbd")
+                    FaqTile(question: "Ist der Ausweis bereits eingerichtet?", text: "tbd")
                 }
             }
         }
     }
     
-    func faq(_ question: String, _ content: String) -> some View {
-        VStack {
-            Button(action: {
-                headline = question
-                text = content
-                showModal = true
-            }, label: {
-                Text(question).bodyMBold().multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: 140)
-                    .frame(height: 50)
-                    .padding(24)
-            })
-            .grouped()
-        }
-    }
     
 #if PREVIEW
     @ViewBuilder
