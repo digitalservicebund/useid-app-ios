@@ -118,7 +118,7 @@ struct HomeView: View {
     private var faqView: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Häufige Fragen").headingM()//.padding(.horizontal, 24)
-            ScrollView(.horizontal) {
+            ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 25) {
                     FaqTile(question: "Wie geht das Auslesen des Ausweises?", text: """
 Ihre Ausweisdaten sind auf der Chip-Karte in Ihrem Online-Ausweis verschlüsselt gespeichert und können von einem Smartphone und der App sicher ausgelesen werden. Voraussetzung: Das Smartphone verfügt über eine NFC-Schnittstelle (Near-Field-Communication-Schnittstelle). Nahezu jedes aktuelle Smartphone ist mit einer solchen NFC-Schnittstelle ausgezeichnet.
