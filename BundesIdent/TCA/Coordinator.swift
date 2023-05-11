@@ -128,7 +128,7 @@ struct Coordinator: ReducerProtocol {
                                                 analytics: analytics),
                                     trackSetupIntroSource())
             case .home(.triggerSelbstauskunft):
-                state.routes.presentSheet(.selbstauskunft(.init(url: "https://demo.useid.dev.ds4g.net")))
+                state.routes.presentSheet(.selbstauskunft(.init(url: "https://demo.useid.dev.ds4g.net?view=app")))
                 return .none
             case .identificationCoordinator(.back(let tokenURL)):
                 return EffectTask.routeWithDelaysIfUnsupported(state.routes, scheduler: mainQueue) {
