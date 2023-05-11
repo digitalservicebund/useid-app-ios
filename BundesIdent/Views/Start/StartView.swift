@@ -44,7 +44,7 @@ struct StartView: View {
                     .accessibilityAddTraits(.isHeader)
                     .padding(.vertical)
             
-                Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.")
+                Text("Schnell und sicher ausweisen.")
                     .bodyMRegular(color: .black)
                     .accessibilityAddTraits(.isHeader)
                     .padding(.bottom, 40)
