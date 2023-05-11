@@ -79,6 +79,15 @@ extension Home.State: AnalyticsView {
 
 struct HomeView: View {
     let store: Store<Home.State, Home.Action>
+    @State var showModal = false
+    @State var headline: String
+    @State var text: String
+    
+    init(store: Store<Home.State, Home.Action>) {
+        self.store = store
+        self.headline = ""
+        self.text = ""
+    }
     
     var body: some View {
         NavigationView {
@@ -90,6 +99,7 @@ struct HomeView: View {
                         previewView
 #endif
                         setupActionView
+                        faqView
                         listView
                         Spacer(minLength: 0)
                         versionView
@@ -101,6 +111,55 @@ struct HomeView: View {
             .task {
                 await ViewStore(store.stateless).send(.task).finish()
             }
+        }
+    }
+    
+    
+    private var faqView: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Häufige Fragen").headingM()//.padding(.horizontal, 24)
+            ScrollView(.horizontal) {
+                HStack(spacing: 25) {
+                    faq("Wie geht das Auslesen des Ausweises?", """
+Ihre Ausweisdaten sind auf der Chip-Karte in Ihrem Online-Ausweis verschlüsselt gespeichert und können von einem Smartphone und der App sicher ausgelesen werden. Voraussetzung: Das Smartphone verfügt über eine NFC-Schnittstelle (Near-Field-Communication-Schnittstelle). Nahezu jedes aktuelle Smartphone ist mit einer solchen NFC-Schnittstelle ausgezeichnet.
+                        
+Nach Eingabe Ihrer 6-stelligen persönlichen PIN werden Ihre Ausweisdaten entschlüsselt und Sie können sich online ausweisen. Für die Entschlüsselung legen Sie im Anschluss Ihr Smartphone auf Ihren Ausweis.
+
+Wenn Sie den Online-Ausweis zum ersten Mal verwenden, leitet Sie die App durch die Erstaktivierung. Dabei legen Sie Ihre 6-stellige persönliche PIN fest, mit der Sie sich in Zukunft online ausweisen können.
+""")
+                    faq("Was sind die Voraussetzungen?", "tbd")
+                    faq("Wie funktioniert die Identifizierung?", "tbd")
+                    faq("Welche PIN ist die richtige?", "tbd")
+                    faq("Ist der Ausweis bereits eingerichtet?", "tbd")
+                }.popover(isPresented: $showModal) {
+                    VStack(alignment: .leading) {
+                        Spacer()
+                        Text(headline).headingL()
+                        Text(text).bodyMRegular()
+                        Spacer()
+                        Button("Schließen") { showModal = false }
+                            .buttonStyle(BundButtonStyle(isOnDark: false))
+                            .padding(.vertical)
+                    }.padding()
+                }
+            }
+        }
+    }
+    
+    func faq(_ question: String, _ content: String) -> some View {
+        VStack {
+            Button(action: {
+                headline = question
+                text = content
+                showModal = true
+            }, label: {
+                Text(question).bodyMBold().multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: 140)
+                    .frame(height: 50)
+                    .padding(24)
+            })
+            .grouped()
         }
     }
     
@@ -125,10 +184,11 @@ struct HomeView: View {
     
     @ViewBuilder
     private var setupActionView: some View {
+        Text(L10n.Home.Setup.title)
+            .headingM()
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 8) {
-                Text(L10n.Home.Setup.title)
-                    .headingM()
+
                 Text(L10n.Home.Setup.body)
                     .bodyMRegular()
             }
@@ -146,6 +206,7 @@ struct HomeView: View {
     
     @ViewBuilder
     private var listView: some View {
+        Text("Rechtliches").headingM()//.padding(.horizontal, 24)
         VStack(alignment: .leading) {
             VStack(alignment: .leading, spacing: 0) {
                 NavigationLink {
