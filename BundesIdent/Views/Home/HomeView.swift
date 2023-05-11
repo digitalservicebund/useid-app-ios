@@ -133,7 +133,7 @@ Wenn Sie den Online-Ausweis zum ersten Mal verwenden, leitet Sie die App durch d
                     FaqTile(question: "Ist der Ausweis bereits eingerichtet?", text: "tbd")
                 }
             }
-        }
+        }.padding(24).grouped()
     }
     
     
@@ -158,11 +158,10 @@ Wenn Sie den Online-Ausweis zum ersten Mal verwenden, leitet Sie die App durch d
     
     @ViewBuilder
     private var setupActionView: some View {
-        Text(L10n.Home.Setup.title)
-            .headingM()
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 8) {
-
+                Text(L10n.Home.Setup.title)
+                    .headingM()
                 Text(L10n.Home.Setup.body)
                     .bodyMRegular()
             }
@@ -180,7 +179,6 @@ Wenn Sie den Online-Ausweis zum ersten Mal verwenden, leitet Sie die App durch d
     
     @ViewBuilder
     private var listView: some View {
-        Text("Rechtliches").headingM()//.padding(.horizontal, 24)
         VStack(alignment: .leading) {
             VStack(alignment: .leading, spacing: 0) {
                 NavigationLink {
