@@ -8,16 +8,16 @@ struct LoadingDots: View {
     @State var isRunningDotTwo = 2
     @State var isRunningDotThree = 2
     
-    let timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 0.3, on: .main, in: .common).autoconnect()
         
     
     private func bouncingDot(isRunning: Int) -> some View {
         Circle()
             .frame(width: 20, height: 20)
             .foregroundColor(isRunning == 2 ? .blue200 : .blue800)
-            .offset(y: isRunning == 0 ? 0 : 30)
+            .offset(y: isRunning == 0 ? 0 : 40)
             .animation(
-                .easeInOut(duration: 0.5)
+                .easeInOut(duration: 1)
                 .repeatCount(1, autoreverses: true),
                 value: isRunning
             )
