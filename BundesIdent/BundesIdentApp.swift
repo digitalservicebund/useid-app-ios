@@ -10,6 +10,7 @@ struct BundesIdentApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var store: Store<Coordinator.State, Coordinator.Action>
+    @State private var selectedTab = 0
     
     init() {
         let config = AppConfig(bundle: Bundle.main)
@@ -60,7 +61,7 @@ struct BundesIdentApp: App {
     var body: some Scene {
         WindowGroup {
             if !XCTestDynamicOverlay._XCTIsTesting {
-                TabView {
+                TabView(selection: $selectedTab) {
                     
                     StartView()
                         .tabItem {
@@ -76,8 +77,10 @@ struct BundesIdentApp: App {
                         .tabItem {
                             Label("Mehr", systemImage: "ellipsis")
                         }
+                        .tag(2)
                 }
                 .onOpenURL { url in
+                    selectedTab = 2
                     ViewStore(store.stateless).send(.openURL(url))
                 }
                 .onAppear {
