@@ -39,14 +39,18 @@ struct IdentificationAbout: View {
 
     private func block(header: String, texts: [String?]) -> some View {
         Group {
-            Text(header)
-                .headingM()
-            VStack(alignment: .leading, spacing: 0) {
-                ForEach(texts.compactMap { $0 }, id: \.self) {
-                    Text($0)
+            if texts.contains(where: { $0?.isEmpty != false }) {
+                EmptyView()
+            } else {
+                Text(header)
+                    .headingM()
+                VStack(alignment: .leading, spacing: 0) {
+                    ForEach(texts.compactMap { $0 }, id: \.self) {
+                        Text($0)
+                    }
                 }
+                .bodyLRegular()
             }
-            .bodyLRegular()
         }
     }
 }
