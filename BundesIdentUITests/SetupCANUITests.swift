@@ -50,7 +50,9 @@ final class SetupCANUITests: XCTestCase {
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
-        
+
+        app.buttons["Not Now"].wait().tap()
+
         app.buttons[L10n.FirstTimeUser.Done.close].wait().tap()
         
         app.assertBeingOnHome()
@@ -106,6 +108,8 @@ final class SetupCANUITests: XCTestCase {
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
+
+        app.buttons["Not Now"].wait().tap()
         
         app.buttons[L10n.FirstTimeUser.Done.close].wait().tap()
         
@@ -179,6 +183,8 @@ final class SetupCANUITests: XCTestCase {
 
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
+
+        app.buttons["Not Now"].wait().tap()
         
         app.buttons[L10n.FirstTimeUser.Done.close].wait().tap()
         

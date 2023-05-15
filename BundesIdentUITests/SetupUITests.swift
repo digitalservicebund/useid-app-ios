@@ -35,6 +35,8 @@ final class SetupUITests: XCTestCase {
         
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
+
+        app.buttons["Not Now"].wait().tap()
         
         app.staticTexts[L10n.FirstTimeUser.Done.title].assertExistence()
         
@@ -204,6 +206,8 @@ final class SetupUITests: XCTestCase {
         
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
+
+        app.buttons["Not Now"].wait().tap()
         
         app.staticTexts[L10n.FirstTimeUser.Done.title].assertExistence()
         
