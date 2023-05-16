@@ -62,7 +62,9 @@ final class IdentificationUITests: XCTestCase {
         app.buttons["identifySuccessfully"].wait().tap()
         
         let safari = XCUIApplication(bundleIdentifier: SafariIdentifiers.bundleId.rawValue)
-        XCTAssertEqual(safari.state, .runningForeground)
+        guard safari.wait(for: .runningForeground, timeout: 5.0) else {
+            return XCTFail("Safari is not in the foreground")
+        }
         
         app.activate()
         app.assertBeingOnHome()
@@ -93,7 +95,9 @@ final class IdentificationUITests: XCTestCase {
         app.buttons["identifySuccessfully"].wait().tap()
         
         let safari = XCUIApplication(bundleIdentifier: SafariIdentifiers.bundleId.rawValue)
-        XCTAssertEqual(safari.state, .runningForeground)
+        guard safari.wait(for: .runningForeground, timeout: 5.0) else {
+            return XCTFail("Safari is not in the foreground")
+        }
         
         app.activate()
         app.assertBeingOnHome()
