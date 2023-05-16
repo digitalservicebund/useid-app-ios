@@ -295,19 +295,11 @@ struct CoordinatorView: View {
                         then: HomeView.init)
                 CaseLet(state: /Screen.State.setupCoordinator,
                         action: Screen.Action.setupCoordinator) { caseStore in
-                    NavigationView {
-                        SetupCoordinatorView(store: caseStore)
-                    }
-                    .accentColor(Asset.accentColor.swiftUIColor)
-                    .ignoresSafeArea(.keyboard)
+                    SetupCoordinatorView(store: caseStore)
                 }
                 CaseLet(state: /Screen.State.identificationCoordinator,
                         action: Screen.Action.identificationCoordinator) { caseStore in
-                    NavigationView {
-                        IdentificationCoordinatorView(store: caseStore)
-                    }
-                    .accentColor(Asset.accentColor.swiftUIColor)
-                    .ignoresSafeArea(.keyboard)
+                    IdentificationCoordinatorView(store: caseStore)
                 }
             }
         }

@@ -243,51 +243,47 @@ struct SetupCANCoordinatorView: View {
     let store: StoreOf<SetupCANCoordinator>
     
     var body: some View {
-        WithViewStore(store) { viewStore in
-            TCARouter(store) { screen in
-                SwitchStore(screen) {
-                    CaseLet(state: /SetupCANScreen.State.canConfirmTransportPIN,
-                            action: SetupCANScreen.Action.canConfirmTransportPIN,
-                            then: SetupCANConfirmTransportPINView.init)
-                    CaseLet(state: /SetupCANScreen.State.canAlreadySetup,
-                            action: SetupCANScreen.Action.canAlreadySetup,
-                            then: SetupCANAlreadySetupView.init)
-                    CaseLet(state: /SetupCANScreen.State.missingPIN,
-                            action: SetupCANScreen.Action.missingPIN,
-                            then: MissingPINLetterView.init)
-                    CaseLet(state: /SetupCANScreen.State.canIntro,
-                            action: SetupCANScreen.Action.canIntro,
-                            then: CANIntroView.init)
-                    CaseLet(state: /SetupCANScreen.State.canInput,
-                            action: SetupCANScreen.Action.canInput,
-                            then: CANInputView.init)
-                    CaseLet(state: /SetupCANScreen.State.canTransportPINInput,
-                            action: SetupCANScreen.Action.canTransportPINInput,
-                            then: SetupTransportPINView.init)
-                    CaseLet(state: /SetupCANScreen.State.canIncorrectInput,
-                            action: SetupCANScreen.Action.canIncorrectInput,
-                            then: CANIncorrectInputView.init)
-                    CaseLet(state: /SetupCANScreen.State.canScan,
-                            action: SetupCANScreen.Action.canScan,
-                            then: SetupCANScanView.init)
-                    CaseLet(state: /SetupCANScreen.State.error,
-                            action: SetupCANScreen.Action.error,
-                            then: ScanErrorView.init)
-                    Default {
-                        SwitchStore(screen) {
-                            CaseLet(state: /SetupCANScreen.State.setupCoordinator,
-                                    action: SetupCANScreen.Action.setupCoordinator,
-                                    then: SetupCoordinatorView.init)
-                        }
+        TCARouter(store) { screen in
+            SwitchStore(screen) {
+                CaseLet(state: /SetupCANScreen.State.canConfirmTransportPIN,
+                        action: SetupCANScreen.Action.canConfirmTransportPIN,
+                        then: SetupCANConfirmTransportPINView.init)
+                CaseLet(state: /SetupCANScreen.State.canAlreadySetup,
+                        action: SetupCANScreen.Action.canAlreadySetup,
+                        then: SetupCANAlreadySetupView.init)
+                CaseLet(state: /SetupCANScreen.State.missingPIN,
+                        action: SetupCANScreen.Action.missingPIN,
+                        then: MissingPINLetterView.init)
+                CaseLet(state: /SetupCANScreen.State.canIntro,
+                        action: SetupCANScreen.Action.canIntro,
+                        then: CANIntroView.init)
+                CaseLet(state: /SetupCANScreen.State.canInput,
+                        action: SetupCANScreen.Action.canInput,
+                        then: CANInputView.init)
+                CaseLet(state: /SetupCANScreen.State.canTransportPINInput,
+                        action: SetupCANScreen.Action.canTransportPINInput,
+                        then: SetupTransportPINView.init)
+                CaseLet(state: /SetupCANScreen.State.canIncorrectInput,
+                        action: SetupCANScreen.Action.canIncorrectInput,
+                        then: CANIncorrectInputView.init)
+                CaseLet(state: /SetupCANScreen.State.canScan,
+                        action: SetupCANScreen.Action.canScan,
+                        then: SetupCANScanView.init)
+                CaseLet(state: /SetupCANScreen.State.error,
+                        action: SetupCANScreen.Action.error,
+                        then: ScanErrorView.init)
+                Default {
+                    SwitchStore(screen) {
+                        CaseLet(state: /SetupCANScreen.State.setupCoordinator,
+                                action: SetupCANScreen.Action.setupCoordinator,
+                                then: SetupCoordinatorView.init)
                     }
                 }
             }
-            .navigationBarHidden(false)
-            .alert(store.scope(state: \.alert), dismiss: SetupCANCoordinator.Action.dismissAlert)
-            .interactiveDismissDisabled(viewStore.swipeToDismiss != .allow) {
-                viewStore.send(.swipeToDismiss)
-            }
         }
+        .navigationBarHidden(false)
+        .alert(store.scope(state: \.alert), dismiss: SetupCANCoordinator.Action.dismissAlert)
+        .interactiveDismissDisabled()
     }
     
 }

@@ -64,6 +64,7 @@ struct CANIncorrectInputView: View {
                 .padding(.horizontal)
             }
             .navigationBarHidden(false)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     BackButton {
@@ -76,9 +77,7 @@ struct CANIncorrectInputView: View {
                     pinEntryFocused = true
                 }
             }
-            .interactiveDismissDisabled(true, onAttemptToDismiss: {
-                ViewStore(store).send(.end)
-            })
+            .interactiveDismissDisabled()
         }
     }
 }

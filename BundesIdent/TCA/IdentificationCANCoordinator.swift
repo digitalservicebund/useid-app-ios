@@ -225,39 +225,35 @@ struct IdentificationCANCoordinatorView: View {
     let store: Store<IdentificationCANCoordinator.State, IdentificationCANCoordinator.Action>
     
     var body: some View {
-        WithViewStore(store) { viewStore in
-            TCARouter(store) { screen in
-                SwitchStore(screen) {
-                    CaseLet(state: /IdentificationCANScreen.State.error,
-                            action: IdentificationCANScreen.Action.error,
-                            then: ScanErrorView.init)
-                    CaseLet(state: /IdentificationCANScreen.State.canPINForgotten,
-                            action: IdentificationCANScreen.Action.canPINForgotten,
-                            then: IdentificationCANPINForgottenView.init)
-                    CaseLet(state: /IdentificationCANScreen.State.canOrderNewPIN,
-                            action: IdentificationCANScreen.Action.orderNewPIN,
-                            then: IdentificationCANOrderNewPINView.init)
-                    CaseLet(state: /IdentificationCANScreen.State.canIntro,
-                            action: IdentificationCANScreen.Action.canIntro,
-                            then: CANIntroView.init)
-                    CaseLet(state: /IdentificationCANScreen.State.canInput,
-                            action: IdentificationCANScreen.Action.canInput,
-                            then: CANInputView.init)
-                    CaseLet(state: /IdentificationCANScreen.State.canPersonalPINInput,
-                            action: IdentificationCANScreen.Action.canPersonalPINInput,
-                            then: IdentificationCANPersonalPINInputView.init)
-                    CaseLet(state: /IdentificationCANScreen.State.canIncorrectInput,
-                            action: IdentificationCANScreen.Action.canIncorrectInput,
-                            then: CANIncorrectInputView.init)
-                    CaseLet(state: /IdentificationCANScreen.State.canScan,
-                            action: IdentificationCANScreen.Action.canScan,
-                            then: IdentificationCANScanView.init)
-                }
-            }
-            .alert(store.scope(state: \.alert), dismiss: IdentificationCANCoordinator.Action.dismissAlert)
-            .interactiveDismissDisabled(viewStore.swipeToDismiss != .allow) {
-                viewStore.send(IdentificationCANCoordinator.Action.swipeToDismiss)
+        TCARouter(store) { screen in
+            SwitchStore(screen) {
+                CaseLet(state: /IdentificationCANScreen.State.error,
+                        action: IdentificationCANScreen.Action.error,
+                        then: ScanErrorView.init)
+                CaseLet(state: /IdentificationCANScreen.State.canPINForgotten,
+                        action: IdentificationCANScreen.Action.canPINForgotten,
+                        then: IdentificationCANPINForgottenView.init)
+                CaseLet(state: /IdentificationCANScreen.State.canOrderNewPIN,
+                        action: IdentificationCANScreen.Action.orderNewPIN,
+                        then: IdentificationCANOrderNewPINView.init)
+                CaseLet(state: /IdentificationCANScreen.State.canIntro,
+                        action: IdentificationCANScreen.Action.canIntro,
+                        then: CANIntroView.init)
+                CaseLet(state: /IdentificationCANScreen.State.canInput,
+                        action: IdentificationCANScreen.Action.canInput,
+                        then: CANInputView.init)
+                CaseLet(state: /IdentificationCANScreen.State.canPersonalPINInput,
+                        action: IdentificationCANScreen.Action.canPersonalPINInput,
+                        then: IdentificationCANPersonalPINInputView.init)
+                CaseLet(state: /IdentificationCANScreen.State.canIncorrectInput,
+                        action: IdentificationCANScreen.Action.canIncorrectInput,
+                        then: CANIncorrectInputView.init)
+                CaseLet(state: /IdentificationCANScreen.State.canScan,
+                        action: IdentificationCANScreen.Action.canScan,
+                        then: IdentificationCANScanView.init)
             }
         }
+        .alert(store.scope(state: \.alert), dismiss: IdentificationCANCoordinator.Action.dismissAlert)
+        .interactiveDismissDisabled()
     }
 }

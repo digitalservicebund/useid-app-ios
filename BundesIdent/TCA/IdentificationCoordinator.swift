@@ -302,34 +302,38 @@ struct IdentificationCoordinatorView: View {
     let store: Store<IdentificationCoordinator.State, IdentificationCoordinator.Action>
     
     var body: some View {
-        WithViewStore(store) { viewStore in
-            TCARouter(store) { screen in
-                SwitchStore(screen) {
-                    CaseLet(state: /IdentificationScreen.State.overview,
-                            action: IdentificationScreen.Action.overview,
-                            then: IdentificationOverviewView.init)
-                    CaseLet(state: /IdentificationScreen.State.personalPIN,
-                            action: IdentificationScreen.Action.personalPIN,
-                            then: IdentificationPersonalPINView.init)
-                    CaseLet(state: /IdentificationScreen.State.incorrectPersonalPIN,
-                            action: IdentificationScreen.Action.incorrectPersonalPIN,
-                            then: IdentificationIncorrectPersonalPINView.init)
-                    CaseLet(state: /IdentificationScreen.State.scan,
-                            action: IdentificationScreen.Action.scan,
-                            then: IdentificationPINScanView.init)
-                    CaseLet(state: /IdentificationScreen.State.error,
-                            action: IdentificationScreen.Action.error,
-                            then: ScanErrorView.init)
-                    CaseLet(state: /IdentificationScreen.State.identificationCANCoordinator,
-                            action: IdentificationScreen.Action.identificationCANCoordinator,
-                            then: IdentificationCANCoordinatorView.init)
+        WithViewStore(store, observe: \.swipeToDismiss) { viewStore in
+            NavigationView {
+                TCARouter(store) { screen in
+                    SwitchStore(screen) {
+                        CaseLet(state: /IdentificationScreen.State.overview,
+                                action: IdentificationScreen.Action.overview,
+                                then: IdentificationOverviewView.init)
+                        CaseLet(state: /IdentificationScreen.State.personalPIN,
+                                action: IdentificationScreen.Action.personalPIN,
+                                then: IdentificationPersonalPINView.init)
+                        CaseLet(state: /IdentificationScreen.State.incorrectPersonalPIN,
+                                action: IdentificationScreen.Action.incorrectPersonalPIN,
+                                then: IdentificationIncorrectPersonalPINView.init)
+                        CaseLet(state: /IdentificationScreen.State.scan,
+                                action: IdentificationScreen.Action.scan,
+                                then: IdentificationPINScanView.init)
+                        CaseLet(state: /IdentificationScreen.State.error,
+                                action: IdentificationScreen.Action.error,
+                                then: ScanErrorView.init)
+                        CaseLet(state: /IdentificationScreen.State.identificationCANCoordinator,
+                                action: IdentificationScreen.Action.identificationCANCoordinator,
+                                then: IdentificationCANCoordinatorView.init)
+                    }
                 }
             }
             .alert(store.scope(state: \.alert), dismiss: IdentificationCoordinator.Action.dismissAlert)
             .navigationBarHidden(false)
-            .interactiveDismissDisabled(viewStore.swipeToDismiss != .allow) {
+            .interactiveDismissDisabled(viewStore.state != .allow) {
                 viewStore.send(IdentificationCoordinator.Action.swipeToDismiss)
             }
         }
+        .accentColor(Asset.accentColor.swiftUIColor)
+        .ignoresSafeArea(.keyboard)
     }
 }
