@@ -178,7 +178,7 @@ struct Coordinator: ReducerProtocol {
             Screen()
         }
 #if DEBUG
-        ._printChanges(.log({ logger.debug("\($0)") }))
+            ._printChanges(.log({ logger.debug("\($0)") }))
 #endif
         Reduce(tracking)
     }
