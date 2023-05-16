@@ -36,7 +36,8 @@ final class SetupUITests: XCTestCase {
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
 
-        app.buttons["Not Now"].wait().tap()
+        // tap dismiss button on app review dialog
+        app.windows.firstMatch.buttons.firstMatch.wait().tap()
         
         app.staticTexts[L10n.FirstTimeUser.Done.title].assertExistence()
         
@@ -209,8 +210,9 @@ final class SetupUITests: XCTestCase {
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
 
-        app.buttons["Not Now"].wait().tap()
-        
+        // tap dismiss button on app review dialog
+        app.windows.firstMatch.buttons.firstMatch.wait().tap()
+
         app.staticTexts[L10n.FirstTimeUser.Done.title].assertExistence()
         
         app.buttons[L10n.FirstTimeUser.Done.close].wait().tap()

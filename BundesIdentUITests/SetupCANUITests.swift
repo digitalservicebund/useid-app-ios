@@ -51,7 +51,8 @@ final class SetupCANUITests: XCTestCase {
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
 
-        app.buttons["Not Now"].wait().tap()
+        // tap dismiss button on app review dialog
+        app.windows.firstMatch.buttons.firstMatch.wait().tap()
 
         app.buttons[L10n.FirstTimeUser.Done.close].wait().tap()
         
@@ -109,8 +110,9 @@ final class SetupCANUITests: XCTestCase {
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
 
-        app.buttons["Not Now"].wait().tap()
-        
+        // tap dismiss button on app review dialog
+        app.windows.firstMatch.buttons.firstMatch.wait().tap()
+
         app.buttons[L10n.FirstTimeUser.Done.close].wait().tap()
         
         app.assertBeingOnHome()
@@ -184,8 +186,9 @@ final class SetupCANUITests: XCTestCase {
         app.navigationBars.buttons["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
 
-        app.buttons["Not Now"].wait().tap()
-        
+        // tap dismiss button on app review dialog
+        app.windows.firstMatch.buttons.firstMatch.wait().tap()
+
         app.buttons[L10n.FirstTimeUser.Done.close].wait().tap()
         
         app.assertBeingOnHome()
