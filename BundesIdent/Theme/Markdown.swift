@@ -12,6 +12,7 @@ extension Theme {
         .link {
             FontWeight(.bold)
             ForegroundColor(.accentColor)
+            UnderlineStyle(.init(pattern: .solid, color: .accentColor))
         }
         .bulletedListMarker { _ in
             Text("• ")
