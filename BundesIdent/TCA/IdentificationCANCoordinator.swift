@@ -69,6 +69,9 @@ struct IdentificationCANCoordinator: ReducerProtocol {
             case .routeAction(_, action: .canPINForgotten(.showCANIntro)):
                 state.routes.push(.canIntro(CANIntro.State(shouldDismiss: false)))
                 return .none
+            case .routeAction(_, action: .canScan(.scanEvent(.success(.pukRequested)))):
+                state.routes.push(.pukCoordinator(PUKCoordinator.State()))
+                return .none
             case .routeAction(_, action: .canIntro(.showInput(let shouldDismiss))):
                 state.routes.push(.canInput(CANInput.State(pushesToPINEntry: !shouldDismiss)))
                 return .none
@@ -251,6 +254,13 @@ struct IdentificationCANCoordinatorView: View {
                 CaseLet(state: /IdentificationCANScreen.State.canScan,
                         action: IdentificationCANScreen.Action.canScan,
                         then: IdentificationCANScanView.init)
+                Default {
+                    SwitchStore(screen) { _ in
+                        CaseLet(state: /IdentificationScreen.State.pukCoordinator,
+                                action: IdentificationScreen.Action.pukCoordinator,
+                                then: PUKCoordinatorView.init)
+                    }
+                }
             }
         }
         .alert(store.scope(state: \.alert), dismiss: IdentificationCANCoordinator.Action.dismissAlert)

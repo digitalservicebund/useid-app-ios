@@ -152,6 +152,12 @@ struct IdentificationCoordinator: ReducerProtocol {
                                                                       attempt: state.attempt,
                                                                       goToCanIntroScreen: pinIsUnchecked)))
                 return .none
+            case .routeAction(let index, action: .scan(.scanEvent(.success(.pukRequested)))):
+                guard case .scan(let scanState) = state.routes[index].screen else { fatalError("Scan state not available but got scan action") }
+                let identificationInformation = scanState.identificationInformation
+                let pinIsUnchecked = state.attempt == 0
+                state.routes.push(.pukCoordinator(.init()))
+                return .none
             case .routeAction(_, action: .scan(.shared(.showHelp))):
                 state.routes.presentSheet(.error(ScanError.State(errorType: .help, retry: true)))
                 return .none
@@ -324,6 +330,9 @@ struct IdentificationCoordinatorView: View {
                         CaseLet(state: /IdentificationScreen.State.identificationCANCoordinator,
                                 action: IdentificationScreen.Action.identificationCANCoordinator,
                                 then: IdentificationCANCoordinatorView.init)
+                        CaseLet(state: /IdentificationScreen.State.pukCoordinator,
+                                action: IdentificationScreen.Action.pukCoordinator,
+                                then: PUKCoordinatorView.init)
                     }
                 }
             }

@@ -104,6 +104,8 @@
 		E17604D1287E24F1007DFA10 /* DebugMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17604D0287E24F1007DFA10 /* DebugMenu.swift */; };
 		E18E223A285349D200221DB1 /* IdentificationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18E2239285349D200221DB1 /* IdentificationUITests.swift */; };
 		E193BE5929B9EE98008D7F39 /* AlreadySetupConfirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E193BE5829B9EE98008D7F39 /* AlreadySetupConfirmation.swift */; };
+		E19B4F992A15233B00E64DF1 /* PUKCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19B4F982A15233B00E64DF1 /* PUKCoordinator.swift */; };
+		E19B4F9B2A178D4200E64DF1 /* PUKViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19B4F9A2A178D4200E64DF1 /* PUKViews.swift */; };
 		E19D26AF282557B00005B111 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = E19D26B1282557B00005B111 /* Localizable.stringsdict */; };
 		E1A769FD28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A769FC28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift */; };
 		E1A769FF28B940C6001E1F04 /* LaunchArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A769FE28B940C6001E1F04 /* LaunchArgument.swift */; };
@@ -294,6 +296,8 @@
 		E18E2239285349D200221DB1 /* IdentificationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationUITests.swift; sourceTree = "<group>"; };
 		E18E224228534A8500221DB1 /* UITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UITests.xctestplan; sourceTree = "<group>"; };
 		E193BE5829B9EE98008D7F39 /* AlreadySetupConfirmation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlreadySetupConfirmation.swift; sourceTree = "<group>"; };
+		E19B4F982A15233B00E64DF1 /* PUKCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUKCoordinator.swift; sourceTree = "<group>"; };
+		E19B4F9A2A178D4200E64DF1 /* PUKViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUKViews.swift; sourceTree = "<group>"; };
 		E19D26B0282557B00005B111 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E1A769FC28B934C3001E1F04 /* XCUIApplication+LaunchArguments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+LaunchArguments.swift"; sourceTree = "<group>"; };
 		E1A769FE28B940C6001E1F04 /* LaunchArgument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchArgument.swift; sourceTree = "<group>"; };
@@ -594,6 +598,7 @@
 				E16708B2283D4ED2001A1637 /* SetupCoordinator.swift */,
 				E11EB2AC2853A8EA008B4042 /* SetupScreens.swift */,
 				43363E0C29B6BFF300E9FA23 /* RemoteConfiguration.swift */,
+				E19B4F982A15233B00E64DF1 /* PUKCoordinator.swift */,
 			);
 			path = TCA;
 			sourceTree = "<group>";
@@ -676,6 +681,7 @@
 				E13F9E392886F2EE0088E955 /* Identification */,
 				E1B0F5AD29830A0A00143B82 /* Shared CAN */,
 				43363E0A29B0C41300E9FA23 /* LaunchView.swift */,
+				E19B4F9A2A178D4200E64DF1 /* PUKViews.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1167,6 +1173,7 @@
 				E11EB2AD2853A8EA008B4042 /* SetupScreens.swift in Sources */,
 				E1F39DDA28588AB000D8D907 /* IdentificationCoordinator.swift in Sources */,
 				E1B6991C2869B31B00360273 /* DebugEIDInteractionManager.swift in Sources */,
+				E19B4F992A15233B00E64DF1 /* PUKCoordinator.swift in Sources */,
 				E1F39DDC28588B0100D8D907 /* IdentificationScreens.swift in Sources */,
 				E1F39DD6285784DD00D8D907 /* IdentificationOverview.swift in Sources */,
 				E14C21B228B8BF9100192338 /* StorageManager.swift in Sources */,
@@ -1175,6 +1182,7 @@
 				E13F9E4128882A9C0088E955 /* Bundle+Version.swift in Sources */,
 				D2C1F47428FD5267009709F2 /* View+FocusOnAppear.swift in Sources */,
 				E1AAACFB2837B9A200A51183 /* SetupPersonalPINInput.swift in Sources */,
+				E19B4F9B2A178D4200E64DF1 /* PUKViews.swift in Sources */,
 				E101325128EDDD7E006875F8 /* LoopingVideoPlayer.swift in Sources */,
 				E1CD8E93282156F2008ADA2A /* SetupTransportPIN.swift in Sources */,
 				E5E69D892812FB8D00A3B66A /* EIDAttribute.swift in Sources */,

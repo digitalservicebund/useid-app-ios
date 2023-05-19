@@ -11,6 +11,7 @@ struct IdentificationScreen: ReducerProtocol {
         case scan(IdentificationPINScan.State)
         case error(ScanError.State)
         case identificationCANCoordinator(IdentificationCANCoordinator.State)
+        case pukCoordinator(PUKCoordinator.State)
         
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             switch self {
@@ -25,6 +26,11 @@ struct IdentificationScreen: ReducerProtocol {
                     return nil
                 }
                 return .identificationCANCoordinator(localAction)
+            case .pukCoordinator(let state):
+                guard let localAction = state.transformToLocalInteractionHandler(event: event) else {
+                    return nil
+                }
+                return .pukCoordinator(localAction)
             default:
                 return nil
             }
@@ -39,6 +45,7 @@ struct IdentificationScreen: ReducerProtocol {
             case .incorrectPersonalPIN: return .allow
             case .error: return .allow
             case .identificationCANCoordinator: return .allow
+            case .pukCoordinator(let state): return state.swipeToDismiss
             }
         }
     }
@@ -50,6 +57,7 @@ struct IdentificationScreen: ReducerProtocol {
         case scan(IdentificationPINScan.Action)
         case error(ScanError.Action)
         case identificationCANCoordinator(IdentificationCANCoordinator.Action)
+        case pukCoordinator(PUKCoordinator.Action)
     }
     
     var body: some ReducerProtocol<State, Action> {
@@ -72,6 +80,9 @@ struct IdentificationScreen: ReducerProtocol {
         Scope(state: /State.identificationCANCoordinator, action: /Action.identificationCANCoordinator) {
             IdentificationCANCoordinator()
         }
+        Scope(state: /State.pukCoordinator, action: /Action.pukCoordinator) {
+            PUKCoordinator(flow: .ident)
+        }
     }
 }
 
@@ -89,6 +100,8 @@ extension IdentificationScreen.State: AnalyticsView {
         case .error(let state):
             return state.errorType.route
         case .identificationCANCoordinator(let state):
+            return state.route
+        case .pukCoordinator(let state):
             return state.route
         }
     }

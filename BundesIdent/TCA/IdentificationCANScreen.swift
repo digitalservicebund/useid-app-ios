@@ -13,6 +13,7 @@ struct IdentificationCANScreen: ReducerProtocol {
         case canPersonalPINInput(IdentificationCANPersonalPINInput.State)
         case canIncorrectInput(CANIncorrectInput.State)
         case error(ScanError.State)
+        case pukCoordinator(PUKCoordinator.State)
         
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
             switch self {
@@ -35,6 +36,7 @@ struct IdentificationCANScreen: ReducerProtocol {
             case .canPersonalPINInput: return .block
             case .canIncorrectInput: return .allowAfterConfirmation()
             case .error: return .allow
+            case .pukCoordinator(let state): return state.swipeToDismiss
             }
         }
     }
@@ -48,6 +50,7 @@ struct IdentificationCANScreen: ReducerProtocol {
         case canPersonalPINInput(IdentificationCANPersonalPINInput.Action)
         case canIncorrectInput(CANIncorrectInput.Action)
         case error(ScanError.Action)
+        case pukCoordinator(PUKCoordinator.Action)
     }
     
     var body: some ReducerProtocol<State, Action> {
@@ -76,6 +79,9 @@ struct IdentificationCANScreen: ReducerProtocol {
         Scope(state: /State.error, action: /Action.error) {
             ScanError()
         }
+        Scope(state: /State.pukCoordinator, action: /Action.pukCoordinator) {
+            PUKCoordinator(flow: .ident)
+        }
     }
 }
 
@@ -96,6 +102,8 @@ extension IdentificationCANScreen.State: AnalyticsView {
             return ["canPersonalPINInput"]
         case .canIncorrectInput:
             return ["canIncorrectInput"]
+        case .pukCoordinator(let state):
+            return ["puk"] // TODO: Analytics
         case .error(let state):
             return state.errorType.route
         }
