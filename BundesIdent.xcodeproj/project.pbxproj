@@ -19,6 +19,7 @@
 		4398414629F981BB00B91714 /* IdentificationInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4398414529F981BB00B91714 /* IdentificationInformation.swift */; };
 		4398414829F9822200B91714 /* ScanOverlayMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4398414729F9822200B91714 /* ScanOverlayMessages.swift */; };
 		43AE178929C3C1A700902E27 /* SetupIntroVariation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AE178829C3C1A700902E27 /* SetupIntroVariation.swift */; };
+		43BBC5332A177B57008212B7 /* LinkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BBC5322A177B57008212B7 /* LinkButton.swift */; };
 		43EE410329A3D89700A96953 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EE410229A3D89700A96953 /* BackButton.swift */; };
 		B91E34512938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E34502938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift */; };
 		B922901E294203360018D671 /* IdentificationCANCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B922901D294203360018D671 /* IdentificationCANCoordinatorTests.swift */; };
@@ -206,6 +207,7 @@
 		4398414529F981BB00B91714 /* IdentificationInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationInformation.swift; sourceTree = "<group>"; };
 		4398414729F9822200B91714 /* ScanOverlayMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanOverlayMessages.swift; sourceTree = "<group>"; };
 		43AE178829C3C1A700902E27 /* SetupIntroVariation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIntroVariation.swift; sourceTree = "<group>"; };
+		43BBC5322A177B57008212B7 /* LinkButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkButton.swift; sourceTree = "<group>"; };
 		43EE410229A3D89700A96953 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
 		B91E34502938C0B9005BE658 /* IdentificationOverviewLoadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationOverviewLoadingTests.swift; sourceTree = "<group>"; };
 		B922901D294203360018D671 /* IdentificationCANCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationCANCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -602,6 +604,7 @@
 				E144EBD728C63A4D009B4900 /* AboutView.swift */,
 				43EE410229A3D89700A96953 /* BackButton.swift */,
 				D201402628C5E6FD0002A054 /* Box.swift */,
+				43BBC5322A177B57008212B7 /* LinkButton.swift */,
 				E17604D0287E24F1007DFA10 /* DebugMenu.swift */,
 				E16708B9283D7CA1001A1637 /* DialogButtons.swift */,
 				E16708B6283D7C2B001A1637 /* DialogView.swift */,
@@ -936,8 +939,8 @@
 			mainGroup = E5CEB271281041330076B9FE;
 			packageReferences = (
 				E13925B928410F3F00161F5C /* XCRemoteSwiftPackageReference "Cuckoo" */,
-				E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */,
-				E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController.git" */,
+				E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */,
 				E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 				B9F5055629361F69009FE297 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
 				43363E0529A79D6200E9FA23 /* XCRemoteSwiftPackageReference "unleash-proxy-client-swift" */,
@@ -1180,6 +1183,7 @@
 				B9A408A6292E231100EAB0B2 /* IdentificationCANScan.swift in Sources */,
 				E1AB87A02822972A00C7FC94 /* SetupPersonalPINIntroScreen.swift in Sources */,
 				D28D27FF28B7A91B008DA310 /* MissingPINLetter.swift in Sources */,
+				43BBC5332A177B57008212B7 /* LinkButton.swift in Sources */,
 				B974FD062926714500B338E5 /* IdentificationCANOrderNewPIN.swift in Sources */,
 				E1531DC429AE4994008D5185 /* AlertState+Confirmation.swift in Sources */,
 				E106614C28EC8C0C00CA2DB9 /* SharedScan.swift in Sources */,
@@ -1940,7 +1944,7 @@
 				minimumVersion = 0.3.0;
 			};
 		};
-		E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */ = {
+		E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
 			requirement = {
@@ -1964,7 +1968,7 @@
 				minimumVersion = 2.0.0;
 			};
 		};
-		E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController.git" */ = {
+		E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/yhirano/LicensePlistViewController.git";
 			requirement = {
@@ -1996,7 +2000,7 @@
 		};
 		E128E0B9288941DC00C5195F /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa.git" */;
+			package = E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = Sentry;
 		};
 		E13925C1284110FD00161F5C /* Cuckoo */ = {
@@ -2011,7 +2015,7 @@
 		};
 		E1BC3D8528B7E919007A7B39 /* LicensePlistViewController */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController.git" */;
+			package = E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */;
 			productName = LicensePlistViewController;
 		};
 /* End XCSwiftPackageProductDependency section */

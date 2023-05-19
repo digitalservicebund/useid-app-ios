@@ -83,33 +83,6 @@ struct BundTextButtonStyle: ButtonStyle {
     }
 }
 
-struct BundLinkButtonStyle: ButtonStyle {
-
-    @Environment(\.isEnabled) var isEnabled: Bool
-
-    func makeBody(configuration: Configuration) -> some View {
-        let color = color(configuration: configuration)
-        if #available(iOS 16.0, *) {
-            configuration.label
-                .bodyLBold(color: color)
-                .minimumScaleFactor(0.5)
-                .underline()
-        } else {
-            configuration.label
-                .bodyLBold(color: color)
-                .minimumScaleFactor(0.5)
-                .overlay(Rectangle().fill(color).frame(height: 1.5).offset(y: -1.5), alignment: .bottom)
-        }
-    }
-
-    private func color(configuration: Configuration) -> Color {
-        guard isEnabled else {
-            return .neutral900
-        }
-        return configuration.isPressed ? .blue600 : .blue800
-    }
-}
-
 private func backgroundColor(configuration: ButtonStyleConfiguration,
                              isEnabled: Bool,
                              isPrimary: Bool,
