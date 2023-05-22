@@ -9,7 +9,7 @@ struct IdentificationCANScreen: ReducerProtocol {
         case canPINForgotten(IdentificationCANPINForgotten.State)
         case canOrderNewPIN(IdentificationCANOrderNewPIN.State)
         case canIntro(CANIntro.State)
-        case canInput(CANInput.State)
+        case canInput(InputFeature.State)
         case canPersonalPINInput(IdentificationCANPersonalPINInput.State)
         case canIncorrectInput(CANIncorrectInput.State)
         case error(ScanError.State)
@@ -46,7 +46,7 @@ struct IdentificationCANScreen: ReducerProtocol {
         case canPINForgotten(IdentificationCANPINForgotten.Action)
         case orderNewPIN(IdentificationCANOrderNewPIN.Action)
         case canIntro(CANIntro.Action)
-        case canInput(CANInput.Action)
+        case canInput(InputFeature.Action)
         case canPersonalPINInput(IdentificationCANPersonalPINInput.Action)
         case canIncorrectInput(CANIncorrectInput.Action)
         case error(ScanError.Action)
@@ -67,7 +67,7 @@ struct IdentificationCANScreen: ReducerProtocol {
             CANIntro()
         }
         Scope(state: /State.canInput, action: /Action.canInput) {
-            CANInput()
+            InputFeature()
         }
         
         Scope(state: /State.canPersonalPINInput, action: /Action.canPersonalPINInput) {

@@ -195,6 +195,8 @@ extension SetupCANCoordinator.State {
         self.tokenURL = tokenURL
         self.attempt = attempt
         
+        // TODO: store shouldDismiss in state
+        
         if goToCanIntroScreen {
             states = [.root(.canIntro(.init(shouldDismiss: true)))]
         } else {

@@ -6,7 +6,7 @@ struct IdentificationScreen: ReducerProtocol {
     
     enum State: Equatable, EIDInteractionHandler {
         case overview(IdentificationOverview.State)
-        case personalPIN(IdentificationPersonalPIN.State)
+        case personalPIN(InputFeature.State)
         case incorrectPersonalPIN(IdentificationIncorrectPersonalPIN.State)
         case scan(IdentificationPINScan.State)
         case error(ScanError.State)
@@ -52,7 +52,7 @@ struct IdentificationScreen: ReducerProtocol {
     
     enum Action: Equatable {
         case overview(IdentificationOverview.Action)
-        case personalPIN(IdentificationPersonalPIN.Action)
+        case personalPIN(InputFeature.Action)
         case incorrectPersonalPIN(IdentificationIncorrectPersonalPIN.Action)
         case scan(IdentificationPINScan.Action)
         case error(ScanError.Action)
@@ -65,7 +65,7 @@ struct IdentificationScreen: ReducerProtocol {
             IdentificationOverview()
         }
         Scope(state: /State.personalPIN, action: /Action.personalPIN) {
-            IdentificationPersonalPIN()
+            InputFeature()
         }
         Scope(state: /IdentificationScreen.State.incorrectPersonalPIN,
               action: /IdentificationScreen.Action.incorrectPersonalPIN) {

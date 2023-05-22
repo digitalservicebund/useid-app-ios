@@ -13,7 +13,14 @@ struct PUKCoordinatorView: View {
                         then: PUKPINLetterView.init)
                 CaseLet(state: /PUKScreen.State.pukInput,
                         action: PUKScreen.Action.pukInput,
-                        then: PUKInputView.init)
+                        then: {
+                            InputView(
+                                input: .puk,
+                                title: L10n.Input.Puk.title,
+                                message: L10n.Input.Puk.body,
+                                store: $0
+                            )
+                        })
                 CaseLet(state: /PUKScreen.State.scan,
                         action: PUKScreen.Action.scan,
                         then: PUKScanView.init)
@@ -23,60 +30,6 @@ struct PUKCoordinatorView: View {
         .interactiveDismissDisabled()
     }
 }
-
-struct PUKInputView: View {
-    var store: StoreOf<PUKInput>
-    @FocusState private var inputFocused: Bool
-    
-    var body: some View {
-        ScrollView {
-            WithViewStore(store) { viewStore in
-                VStack(alignment: .leading, spacing: 24) {
-                    HeaderView(title: L10n.Identification.Can.Input.title, // TODO: Text
-                               message: L10n.Identification.Can.Input.body)
-                    VStack {
-                        Spacer()
-                        PINEntryView(pin: viewStore.binding(\.$digits),
-                                     maxDigits: Constants.PUK_DIGIT_COUNT,
-                                     groupEvery: nil,
-                                     showPIN: true,
-                                     label: L10n.Identification.Can.Input.canInputLabel,
-                                     backgroundColor: .neutral100,
-                                     doneConfiguration: DoneConfiguration(enabled: viewStore.doneButtonEnabled,
-                                                                          title: L10n.Identification.Can.Input.continue,
-                                                                          handler: { can in
-                                                                              viewStore.send(.done(puk: viewStore.digits))
-                                                                          }))
-                                                                          .focused($inputFocused)
-                                                                          .headingL()
-                    }
-                    Spacer()
-                }
-            }
-            .padding(.horizontal)
-        }
-        .navigationBarHidden(false)
-        .focusOnAppear {
-            if !UIAccessibility.isVoiceOverRunning {
-                inputFocused = true
-            }
-        }
-        .interactiveDismissDisabled(true)
-    }
-}
-
-#if DEBUG
-
-struct PUKInput_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            PUKInputView(store: .init(initialState: .init(), reducer: PUKInput()))
-        }
-        .previewDevice("iPhone 12")
-    }
-}
-
-#endif
 
 struct PUKPINLetterView: View {
     

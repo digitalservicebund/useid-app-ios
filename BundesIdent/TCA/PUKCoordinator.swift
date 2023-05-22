@@ -20,38 +20,6 @@ struct PUKPINLetter: ReducerProtocol {
     }
 }
 
-// TODO: Reuse PUKInput for IncorrectPUK as well
-struct PUKInput: ReducerProtocol {
-    
-    var showIncorrect = false
-    
-    struct State: Equatable {
-        @BindingState var digits = ""
-        var doneButtonEnabled: Bool {
-            digits.count == Constants.PUK_DIGIT_COUNT
-        }
-    }
-    
-    enum Action: BindableAction, Equatable {
-        case done(puk: String)
-        case onAppear
-        case binding(BindingAction<State>)
-    }
-    
-    var body: some ReducerProtocol<State, Action> {
-        BindingReducer()
-        Reduce { state, action in
-            switch action {
-            case .onAppear:
-                state.digits = ""
-                return .none
-            default:
-                return .none
-            }
-        }
-    }
-}
-
 struct PUKScan: ReducerProtocol {
     
     struct State: Equatable {
@@ -117,7 +85,7 @@ struct PUKCoordinator: ReducerProtocol {
                 state.states.push(.missingPINLetter(MissingPINLetter.State()))
                 return .none
             case .routeAction(_, action: .pinLetter(.letterAvailable)):
-                state.states.push(.pukInput(PUKInput.State()))
+                state.states.push(.pukInput(InputFeature.State()))
                 return .none
             case .routeAction:
                 return .none
@@ -165,11 +133,11 @@ struct PUKScreen: ReducerProtocol {
     
     enum State: Equatable, EIDInteractionHandler {
         case pinLetter(PUKPINLetter.State)
-        case pukInput(PUKInput.State)
+        case pukInput(InputFeature.State)
         case scan(PUKScan.State)
         case pinForgotten(IdentificationCANPINForgotten.State)
         case missingPINLetter(MissingPINLetter.State)
-        case pukIncorrectInput(PUKInput.State)
+        case pukIncorrectInput(InputFeature.State)
         case error(ScanError.State)
         
         func transformToLocalAction(_ event: Result<EIDInteractionEvent, EIDInteractionError>) -> Action? {
@@ -197,11 +165,11 @@ struct PUKScreen: ReducerProtocol {
     
     enum Action: Equatable {
         case pinLetter(PUKPINLetter.Action)
-        case pukInput(PUKInput.Action)
+        case pukInput(InputFeature.Action)
         case scan(PUKScan.Action)
         case pinForgotten(IdentificationCANPINForgotten.Action)
         case missingPINLetter(MissingPINLetter.Action)
-        case pukIncorrectInput(PUKInput.Action)
+        case pukIncorrectInput(InputFeature.Action)
         case error(ScanError.Action)
     }
     
@@ -210,7 +178,7 @@ struct PUKScreen: ReducerProtocol {
             PUKPINLetter()
         }
         Scope(state: /State.pukInput, action: /Action.pukInput) {
-            PUKInput()
+            InputFeature()
         }
         Scope(state: /State.scan, action: /Action.scan) {
             PUKScan()
@@ -222,7 +190,7 @@ struct PUKScreen: ReducerProtocol {
             MissingPINLetter()
         }
         Scope(state: /State.pukIncorrectInput, action: /Action.pukIncorrectInput) {
-            PUKInput(showIncorrect: true)
+            InputFeature()
         }
         Scope(state: /State.error, action: /Action.error) {
             ScanError()

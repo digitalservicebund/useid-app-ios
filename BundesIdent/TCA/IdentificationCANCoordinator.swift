@@ -24,6 +24,7 @@ struct IdentificationCANCoordinator: ReducerProtocol {
         var can: String?
         var identificationInformation: IdentificationInformation
         var attempt: Int
+        var pushToPINEntryAfterCAN: Bool = false
         
         var swipeToDismiss: SwipeToDismissState {
             guard let lastScreen = states.last?.screen else { return .allow }
@@ -67,19 +68,20 @@ struct IdentificationCANCoordinator: ReducerProtocol {
                 state.routes.push(.canOrderNewPIN(.init()))
                 return .none
             case .routeAction(_, action: .canPINForgotten(.showCANIntro)):
+                state.pushToPINEntryAfterCAN = false
                 state.routes.push(.canIntro(CANIntro.State(shouldDismiss: false)))
                 return .none
             case .routeAction(_, action: .canScan(.scanEvent(.success(.pukRequested)))):
                 state.routes.push(.pukCoordinator(PUKCoordinator.State()))
                 return .none
-            case .routeAction(_, action: .canIntro(.showInput(let shouldDismiss))):
-                state.routes.push(.canInput(CANInput.State(pushesToPINEntry: !shouldDismiss)))
+            case .routeAction(_, action: .canIntro(.showInput)):
+                state.routes.push(.canInput(InputFeature.State()))
                 return .none
             case .routeAction(_, action: .canIntro(.end)):
                 return EffectTask(value: .swipeToDismiss)
-            case .routeAction(_, action: .canInput(.done(can: let can, pushesToPINEntry: let pushesToPINEntry))):
+            case .routeAction(_, action: .canInput(.done(digits: let can))):
                 state.can = can
-                if pushesToPINEntry {
+                if state.pushToPINEntryAfterCAN {
                     state.routes.push(.canPersonalPINInput(.init()))
                 } else if let pin = state.pin {
                     state.routes.push(
@@ -177,15 +179,11 @@ extension IdentificationCANCoordinator.State {
     init(identificationInformation: IdentificationInformation,
          pin: String?,
          attempt: Int,
-         goToCanIntroScreen: Bool) {
+         root: IdentificationCANScreen.State) {
         self.pin = pin
         self.identificationInformation = identificationInformation
         self.attempt = attempt
-        if goToCanIntroScreen {
-            states = [.root(.canIntro(.init(shouldDismiss: true)))]
-        } else {
-            states = [.root(.canPINForgotten(.init()))]
-        }
+        states = [.root(root)]
     }
 }
 
@@ -244,7 +242,14 @@ struct IdentificationCANCoordinatorView: View {
                         then: CANIntroView.init)
                 CaseLet(state: /IdentificationCANScreen.State.canInput,
                         action: IdentificationCANScreen.Action.canInput,
-                        then: CANInputView.init)
+                        then: {
+                            InputView(
+                                input: .can,
+                                title: L10n.Identification.Can.Input.title,
+                                message: L10n.Identification.Can.Input.body,
+                                store: $0
+                            )
+                        })
                 CaseLet(state: /IdentificationCANScreen.State.canPersonalPINInput,
                         action: IdentificationCANScreen.Action.canPersonalPINInput,
                         then: IdentificationCANPersonalPINInputView.init)

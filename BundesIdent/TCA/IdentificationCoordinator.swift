@@ -39,6 +39,8 @@ struct IdentificationCoordinator: ReducerProtocol {
         var pin: String?
         var attempt: Int = 0
 
+        var identificationInformation: IdentificationInformation?
+        
         var swipeToDismiss: SwipeToDismissState {
             guard let lastScreen = states.last?.screen else { return .allow }
             return lastScreen.swipeToDismissState
@@ -132,9 +134,11 @@ struct IdentificationCoordinator: ReducerProtocol {
                 return EffectTask(value: .runDebugSequence(sequence))
 #endif
             case .routeAction(_, action: .overview(.loaded(.confirm(let identificationInformation)))):
-                state.routes.push(.personalPIN(IdentificationPersonalPIN.State(identificationInformation: identificationInformation)))
+                state.identificationInformation = identificationInformation
+                state.routes.push(.personalPIN(InputFeature.State()))
                 return .none
-            case .routeAction(_, action: .personalPIN(.done(identificationInformation: let identificationInformation, pin: let pin))):
+            case .routeAction(_, action: .personalPIN(.done(digits: let pin))):
+                guard let identificationInformation = state.identificationInformation else { fatalError("No identification information") }
                 state.pin = pin
                 state.routes.push(
                     .scan(IdentificationPINScan.State(identificationInformation: identificationInformation,
@@ -150,7 +154,7 @@ struct IdentificationCoordinator: ReducerProtocol {
                 state.routes.push(.identificationCANCoordinator(.init(identificationInformation: identificationInformation,
                                                                       pin: pinIsUnchecked ? state.pin : nil,
                                                                       attempt: state.attempt,
-                                                                      goToCanIntroScreen: pinIsUnchecked)))
+                                                                      root: pinIsUnchecked ? .canIntro(.init(shouldDismiss: true)) : .canPINForgotten(.init()))))
                 return .none
             case .routeAction(let index, action: .scan(.scanEvent(.success(.pukRequested)))):
                 guard case .scan(let scanState) = state.routes[index].screen else { fatalError("Scan state not available but got scan action") }
@@ -317,7 +321,12 @@ struct IdentificationCoordinatorView: View {
                                 then: IdentificationOverviewView.init)
                         CaseLet(state: /IdentificationScreen.State.personalPIN,
                                 action: IdentificationScreen.Action.personalPIN,
-                                then: IdentificationPersonalPINView.init)
+                                then: {
+                                    InputView(input: .pin,
+                                              title: L10n.Identification.PersonalPIN.title,
+                                              message: nil,
+                                              store: $0)
+                                })
                         CaseLet(state: /IdentificationScreen.State.incorrectPersonalPIN,
                                 action: IdentificationScreen.Action.incorrectPersonalPIN,
                                 then: IdentificationIncorrectPersonalPINView.init)

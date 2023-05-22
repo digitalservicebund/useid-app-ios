@@ -35,6 +35,7 @@ struct SetupPersonalPINConfirm: ReducerProtocol {
                                          buttons: [.default(TextState(L10n.FirstTimeUser.PersonalPIN.Error.Mismatch.retry), action: .send(.confirmMismatch))])
                 return .none
             case .checkPINs:
+                // TODO: Move logic to coordinator
                 guard state.enteredPIN2.count == Constants.PERSONAL_PIN_DIGIT_COUNT else { return .none }
                 guard state.enteredPIN1 == state.enteredPIN2 else {
                     return .concatenate(
