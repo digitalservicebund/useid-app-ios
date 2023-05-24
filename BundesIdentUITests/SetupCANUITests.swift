@@ -31,7 +31,7 @@ final class SetupCANUITests: XCTestCase {
         
         app.buttons[L10n.Scan.button].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runCardSuspended"].wait().tap()
         
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
@@ -40,7 +40,7 @@ final class SetupCANUITests: XCTestCase {
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runCANError"].wait().tap()
         
         let incorrectCANTextField = app.textFields[L10n.Identification.Can.IncorrectInput.canInputLabel]
@@ -48,7 +48,7 @@ final class SetupCANUITests: XCTestCase {
         incorrectCANTextField.waitAndTypeText("123456")
         
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
 
         // tap dismiss button on app review dialog
@@ -88,7 +88,7 @@ final class SetupCANUITests: XCTestCase {
         
         app.buttons[L10n.Scan.button].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runCardSuspended"].wait().tap()
         
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
@@ -97,7 +97,7 @@ final class SetupCANUITests: XCTestCase {
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runCANError"].wait().tap()
         
         app.navigationBars.buttons[L10n.General.back].wait().tap()
@@ -107,7 +107,7 @@ final class SetupCANUITests: XCTestCase {
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
 
         // tap dismiss button on app review dialog
@@ -147,7 +147,7 @@ final class SetupCANUITests: XCTestCase {
         
         app.buttons[L10n.Scan.button].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runPINError (3)"].wait().tap()
         
         let incorrectPINTextField = app.textFields[L10n.FirstTimeUser.IncorrectTransportPIN.textFieldLabel]
@@ -155,7 +155,7 @@ final class SetupCANUITests: XCTestCase {
         incorrectPINTextField.waitAndTypeText("12345")
         app.buttons[L10n.FirstTimeUser.IncorrectTransportPIN.continue].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runPINError (2)"].wait().tap()
         
         app.buttons[L10n.FirstTimeUser.Can.ConfirmTransportPIN.confirmInput].wait().tap()
@@ -176,14 +176,14 @@ final class SetupCANUITests: XCTestCase {
         transportPINInCANTextField.waitAndTypeText("12345")
         app.buttons[L10n.FirstTimeUser.TransportPIN.continue].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runCANError"].wait().tap()
         
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
 
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
 
         // tap dismiss button on app review dialog
@@ -223,7 +223,7 @@ final class SetupCANUITests: XCTestCase {
         
         app.buttons[L10n.Scan.button].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runCardSuspended"].wait().tap()
         
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
@@ -233,7 +233,7 @@ final class SetupCANUITests: XCTestCase {
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runPINError (1)"].wait().tap()
         
         app.staticTexts[L10n.ScanError.CardBlocked.title].assertExistence()
@@ -271,7 +271,7 @@ final class SetupCANUITests: XCTestCase {
         
         app.buttons[L10n.Scan.button].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runCardSuspended"].wait().tap()
         
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
@@ -280,7 +280,7 @@ final class SetupCANUITests: XCTestCase {
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runCANError"].wait().tap()
         
         app.navigationBars.buttons[L10n.General.back].wait().tap()
@@ -290,12 +290,12 @@ final class SetupCANUITests: XCTestCase {
         canTextField.wait().tap()
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
         
         app.buttons[L10n.FirstTimeUser.Done.identify].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["requestAuthorization"].wait().tap()
         
         app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
@@ -330,7 +330,7 @@ final class SetupCANUITests: XCTestCase {
         
         app.buttons[L10n.Scan.button].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runPINError (3)"].wait().tap()
         
         let incorrectPINTextField = app.textFields[L10n.FirstTimeUser.IncorrectTransportPIN.textFieldLabel]
@@ -338,14 +338,14 @@ final class SetupCANUITests: XCTestCase {
         incorrectPINTextField.waitAndTypeText("12345")
         app.buttons[L10n.FirstTimeUser.IncorrectTransportPIN.continue].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runPINError (2)"].wait().tap()
         
         app.buttons[L10n.FirstTimeUser.Can.ConfirmTransportPIN.confirmInput].wait().tap()
         
         app.buttons[L10n.FirstTimeUser.Done.identify].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["requestAuthorization"].wait().tap()
         
         app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
@@ -380,7 +380,7 @@ final class SetupCANUITests: XCTestCase {
         
         app.buttons[L10n.Scan.button].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runPINError (3)"].wait().tap()
         
         let incorrectPINTextField = app.textFields[L10n.FirstTimeUser.IncorrectTransportPIN.textFieldLabel]
@@ -388,7 +388,7 @@ final class SetupCANUITests: XCTestCase {
         incorrectPINTextField.waitAndTypeText("12345")
         app.buttons[L10n.FirstTimeUser.IncorrectTransportPIN.continue].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runPINError (2)"].wait().tap()
         
         app.buttons[L10n.FirstTimeUser.Can.ConfirmTransportPIN.confirmInput].wait().tap()

@@ -14,7 +14,7 @@ final class IdentificationUITests: XCTestCase {
         
         app.activityIndicators.element(boundBy: 0).assertExistence()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["requestAuthorization"].assertExistence()
     }
     
@@ -25,7 +25,7 @@ final class IdentificationUITests: XCTestCase {
         app.launchWithDemoTokenURL()
         app.launch()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["requestAuthorization"].wait().tap()
         
         app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
@@ -43,7 +43,7 @@ final class IdentificationUITests: XCTestCase {
         app.launchWithDemoTokenURL()
         app.launch()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["requestAuthorization"].wait().tap()
         
         app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
@@ -58,7 +58,7 @@ final class IdentificationUITests: XCTestCase {
         
         app.buttons[L10n.Scan.button].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["identifySuccessfully"].wait().tap()
         
         let safari = XCUIApplication(bundleIdentifier: SafariIdentifiers.bundleId.rawValue)
@@ -78,7 +78,7 @@ final class IdentificationUITests: XCTestCase {
         app.launchWithIdentifiedOnce()
         app.launch()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["requestAuthorization"].wait().tap()
         
         app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
@@ -91,7 +91,7 @@ final class IdentificationUITests: XCTestCase {
         
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["identifySuccessfully"].wait().tap()
         
         let safari = XCUIApplication(bundleIdentifier: SafariIdentifiers.bundleId.rawValue)
@@ -123,7 +123,7 @@ final class IdentificationUITests: XCTestCase {
         app.launchWithDemoTokenURL()
         app.launch()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["loadError"].wait().tap()
         
         app.buttons[L10n.Identification.FetchMetadataError.retry].wait().tap()
@@ -138,7 +138,7 @@ final class IdentificationUITests: XCTestCase {
         app.launchWithDemoTokenURL()
         app.launch()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["requestAuthorization"].wait().tap()
         
         app.buttons[L10n.Identification.AttributeConsent.continue].wait().tap()
@@ -165,7 +165,7 @@ final class IdentificationUITests: XCTestCase {
         app.launchWithIdentifiedOnce()
         app.launch()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["requestAuthorization"].wait().tap()
         
         app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
@@ -179,7 +179,7 @@ final class IdentificationUITests: XCTestCase {
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
         
 //        When we get an AA2SDK with cancellation working, we do the following:
-//        app.navigationBars.buttons["Debug"].wait().tap()
+//        app.navigationBars.staticTexts["Debug"].wait().tap()
 //        app.buttons["cancelPINScan"].wait().tap()
         
         app.buttons[L10n.Scan.button].wait().tap()
@@ -194,7 +194,7 @@ final class IdentificationUITests: XCTestCase {
         app.launchWithIdentifiedOnce()
         app.launch()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["requestAuthorization"].wait().tap()
         
         app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
@@ -205,14 +205,14 @@ final class IdentificationUITests: XCTestCase {
         pinTextField.wait().tap()
         pinTextField.waitAndTypeText("123456")
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runPINError (\(remainingAttempts))"].wait().tap()
         remainingAttempts -= 1
         
         pinTextField.wait().tap()
         pinTextField.waitAndTypeText("123456")
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runPINError (\(remainingAttempts))"].wait().tap()
         
         app.navigationBars.buttons[L10n.General.cancel].wait().tap()

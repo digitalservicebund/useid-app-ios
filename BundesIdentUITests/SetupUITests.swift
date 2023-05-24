@@ -33,7 +33,7 @@ final class SetupUITests: XCTestCase {
         
         app.buttons[L10n.Scan.button].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
 
         // tap dismiss button on app review dialog
@@ -92,14 +92,14 @@ final class SetupUITests: XCTestCase {
         
         app.buttons[L10n.Scan.button].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
         
         app.staticTexts[L10n.FirstTimeUser.Done.title].assertExistence()
         
         app.buttons[L10n.FirstTimeUser.Done.identify].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["requestAuthorization"].wait().tap()
         
         app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
@@ -111,7 +111,7 @@ final class SetupUITests: XCTestCase {
         pinTextField.waitAndTypeText("123456")
         
         app.buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["identifySuccessfully"].wait().tap()
         
         let safari = XCUIApplication(bundleIdentifier: SafariIdentifiers.bundleId.rawValue)
@@ -154,7 +154,7 @@ final class SetupUITests: XCTestCase {
         
         app.buttons[L10n.Scan.button].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runPINError (3)"].wait().tap()
         
         app.staticTexts[L10n.FirstTimeUser.IncorrectTransportPIN.title].assertExistence()
@@ -197,7 +197,7 @@ final class SetupUITests: XCTestCase {
         
         app.buttons[L10n.Scan.button].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["runPINError (3)"].wait().tap()
         
         app.staticTexts[L10n.FirstTimeUser.IncorrectTransportPIN.title].assertExistence()
@@ -207,7 +207,7 @@ final class SetupUITests: XCTestCase {
         pinTextField.waitAndTypeText("123456")
         app.buttons[L10n.FirstTimeUser.IncorrectTransportPIN.continue].wait().tap()
         
-        app.navigationBars.buttons["Debug"].wait().tap()
+        app.navigationBars.staticTexts["Debug"].wait().tap()
         app.buttons["changePINSuccessfully"].wait().tap()
 
         // tap dismiss button on app review dialog
