@@ -14,3 +14,11 @@ struct ReviewController: ReviewControllerType {
         SKStoreReviewController.requestReview(in: scene)
     }
 }
+
+private extension UIApplication {
+    static var activeScene: UIWindowScene? {
+        let foregroundActiveScene = shared.connectedScenes.first { $0.activationState == .foregroundActive }
+        let foregroundInactiveScene = shared.connectedScenes.first { $0.activationState == .foregroundInactive }
+        return (foregroundActiveScene ?? foregroundInactiveScene) as? UIWindowScene
+    }
+}
