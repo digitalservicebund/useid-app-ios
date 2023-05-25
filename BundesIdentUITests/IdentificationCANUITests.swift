@@ -10,7 +10,7 @@ final class IdentificationCANUITests: XCTestCase {
         app.launchWithIdentifiedOnce()
         app.launch()
         
-        app.navigationBars.staticTexts["Debug"].wait().tap()
+        app.openDebugMenu()
         app.buttons["requestAuthorization"].wait().tap()
         
         app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
@@ -22,7 +22,7 @@ final class IdentificationCANUITests: XCTestCase {
         pinTextField.waitAndTypeText("123456")
         
         app.buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
-        app.navigationBars.staticTexts["Debug"].wait().tap()
+        app.openDebugMenu()
         app.buttons["runCardSuspended"].wait().tap()
         
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
@@ -32,7 +32,7 @@ final class IdentificationCANUITests: XCTestCase {
         canTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
         
-        app.navigationBars.staticTexts["Debug"].wait().tap()
+        app.openDebugMenu()
         app.buttons["runCANError"].wait().tap()
         
         let incorrectCANTextField = app.textFields[L10n.Identification.Can.IncorrectInput.canInputLabel]
@@ -41,7 +41,7 @@ final class IdentificationCANUITests: XCTestCase {
         
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
         
-        app.navigationBars.staticTexts["Debug"].wait().tap()
+        app.openDebugMenu()
         app.buttons["runCANError"].wait().tap()
         
         let matchingButtons = app.navigationBars.buttons.matching(identifier: L10n.Identification.Can.IncorrectInput.back)
@@ -52,7 +52,7 @@ final class IdentificationCANUITests: XCTestCase {
         incorrectCANTextField.waitAndTypeText("123456")
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
         
-        app.navigationBars.staticTexts["Debug"].wait().tap()
+        app.openDebugMenu()
         app.buttons["identifySuccessfully"].wait().tap()
         
         let safari = XCUIApplication(bundleIdentifier: SafariIdentifiers.bundleId.rawValue)
@@ -72,7 +72,7 @@ final class IdentificationCANUITests: XCTestCase {
         app.launchWithIdentifiedOnce()
         app.launch()
         
-        app.navigationBars.staticTexts["Debug"].wait().tap()
+        app.openDebugMenu()
         app.buttons["requestAuthorization"].wait().tap()
         
         app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
@@ -85,7 +85,7 @@ final class IdentificationCANUITests: XCTestCase {
         
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
         
-        app.navigationBars.staticTexts["Debug"].wait().tap()
+        app.openDebugMenu()
         app.buttons["runCardSuspended"].wait().tap()
         
         app.navigationBars.buttons[L10n.General.cancel].wait().tap()
@@ -101,7 +101,7 @@ final class IdentificationCANUITests: XCTestCase {
         app.launchWithIdentifiedOnce()
         app.launch()
         
-        app.navigationBars.staticTexts["Debug"].wait().tap()
+        app.openDebugMenu()
         app.buttons["requestAuthorization"].wait().tap()
         
         app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
@@ -113,7 +113,7 @@ final class IdentificationCANUITests: XCTestCase {
         pinTextField.waitAndTypeText("123456")
         
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
-        app.navigationBars.staticTexts["Debug"].wait().tap()
+        app.openDebugMenu()
         app.buttons["runCardSuspended"].wait().tap()
         
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
@@ -135,7 +135,7 @@ final class IdentificationCANUITests: XCTestCase {
         app.launchWithIdentifiedOnce()
         app.launch()
         
-        app.navigationBars.staticTexts["Debug"].wait().tap()
+        app.openDebugMenu()
         app.buttons["requestAuthorization"].wait().tap()
         
         app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
@@ -147,7 +147,7 @@ final class IdentificationCANUITests: XCTestCase {
         pinTextField.waitAndTypeText("123456")
         
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
-        app.navigationBars.staticTexts["Debug"].wait().tap()
+        app.openDebugMenu()
         app.buttons["runCardSuspended"].wait().tap()
         
         app.buttons[L10n.Identification.Can.Intro.continue].wait().tap()
@@ -158,7 +158,7 @@ final class IdentificationCANUITests: XCTestCase {
         app.buttons[L10n.Identification.Can.Input.continue].wait().tap()
         
 //      When we get an AA2SDK with cancellation working, we do the following:
-//        app.navigationBars.staticTexts["Debug"].wait().tap()
+//        app.openDebugMenu()
 //        app.buttons["cancelCANScan"].wait().tap()
         
         app.buttons[L10n.Scan.button].assertExistence()
@@ -173,7 +173,7 @@ final class IdentificationCANUITests: XCTestCase {
         app.launchWithIdentifiedOnce()
         app.launch()
         
-        app.navigationBars.staticTexts["Debug"].wait().tap()
+        app.openDebugMenu()
         app.buttons["requestAuthorization"].wait().tap()
         
         app.staticTexts[L10n.CardAttribute.dg04].assertExistence()
@@ -184,14 +184,14 @@ final class IdentificationCANUITests: XCTestCase {
         pinTextField.wait().tap()
         pinTextField.waitAndTypeText("123456")
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
-        app.navigationBars.staticTexts["Debug"].wait().tap()
+        app.openDebugMenu()
         app.buttons["runPINError (\(remainingAttempts))"].wait().tap()
         remainingAttempts -= 1
         
         pinTextField.wait().tap()
         pinTextField.waitAndTypeText("123456")
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
-        app.navigationBars.staticTexts["Debug"].wait().tap()
+        app.openDebugMenu()
         app.buttons["runPINError (\(remainingAttempts))"].wait().tap()
         remainingAttempts -= 1
         
@@ -213,7 +213,7 @@ final class IdentificationCANUITests: XCTestCase {
         pinTextField.waitAndTypeText("123456")
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
         
-        app.navigationBars.staticTexts["Debug"].wait().tap()
+        app.openDebugMenu()
         app.buttons["runCANError"].wait().tap()
         
         let incorrectCANTextField = app.textFields[L10n.Identification.Can.IncorrectInput.canInputLabel]
@@ -221,7 +221,7 @@ final class IdentificationCANUITests: XCTestCase {
         incorrectCANTextField.waitAndTypeText("123456")
         app.toolbars["Toolbar"].buttons[L10n.Identification.Can.Input.continue].wait().tap()
         
-        app.navigationBars.staticTexts["Debug"].wait().tap()
+        app.openDebugMenu()
         app.buttons["runCANError"].wait().tap()
         
         let matchingButtons = app.navigationBars.buttons.matching(identifier: L10n.Identification.Can.IncorrectInput.back)
@@ -236,7 +236,7 @@ final class IdentificationCANUITests: XCTestCase {
         pinTextField.waitAndTypeText("123456")
         app.toolbars["Toolbar"].buttons[L10n.Identification.PersonalPIN.continue].wait().tap()
         
-        app.navigationBars.staticTexts["Debug"].wait().tap()
+        app.openDebugMenu()
         app.buttons["runPINError (\(remainingAttempts))"].wait().tap()
         app.staticTexts[L10n.ScanError.CardBlocked.title].assertExistence()
     }

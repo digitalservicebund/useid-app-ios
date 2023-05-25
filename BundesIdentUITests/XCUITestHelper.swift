@@ -122,4 +122,12 @@ extension XCUIApplication {
         scrollElementIntoVisibility(element, searchDirection: .up)
         element.assertHittable(timeout: timeout, file: file, line: line)
     }
+    
+    func openDebugMenu() {
+#if swift(>=5.8)
+        navigationBars.staticTexts["Debug"].wait().tap()
+#else
+        navigationBars.buttons["Debug"].wait().tap()
+#endif
+    }
 }
