@@ -62,6 +62,11 @@ enum ABTesterKey: DependencyKey {
     static var testValue: ABTester = AlwaysControlABTester()
 }
 
+enum ReviewControllerKey: DependencyKey {
+    static var liveValue: ReviewControllerType = ReviewController()
+    static var testValue: ReviewControllerType = ReviewController()
+}
+
 enum AppVersionProviderKey: DependencyKey {
     static var liveValue: AppVersionProvider = Bundle.main
 }
@@ -105,5 +110,10 @@ extension DependencyValues {
     var appVersionProvider: AppVersionProvider {
         get { self[AppVersionProviderKey.self] }
         set { self[AppVersionProviderKey.self] = newValue }
+    }
+    
+    var reviewController: ReviewControllerType {
+        get { self[ReviewControllerKey.self] }
+        set { self[ReviewControllerKey.self] = newValue }
     }
 }

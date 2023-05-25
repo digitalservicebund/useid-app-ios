@@ -66,6 +66,8 @@
 		E1234DB32976EA3900837872 /* BundLicensePlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1234DB22976EA3900837872 /* BundLicensePlistViewController.swift */; };
 		E128E0BA288941DC00C5195F /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = E128E0B9288941DC00C5195F /* Sentry */; };
 		E128E0BC28898D3400C5195F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E128E0BB28898D3400C5195F /* AppDelegate.swift */; };
+		E12B2D682A1F9A2E00CC6045 /* ReviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12B2D672A1F9A2E00CC6045 /* ReviewController.swift */; };
+		E12B2D6A2A1F9B4B00CC6045 /* SetupDoneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12B2D692A1F9B4B00CC6045 /* SetupDoneTests.swift */; };
 		E12CB30A284A2C700039FD56 /* InteractiveDismissableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12CB309284A2C700039FD56 /* InteractiveDismissableView.swift */; };
 		E135D6AA28B7696400A32862 /* SetupCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E135D6A928B7696400A32862 /* SetupCoordinatorTests.swift */; };
 		E135D6AC28B76A3500A32862 /* Matchable+BundesIdent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E135D6AB28B76A3500A32862 /* Matchable+BundesIdent.swift */; };
@@ -252,6 +254,8 @@
 		E1234DB02976E0BC00837872 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		E1234DB22976EA3900837872 /* BundLicensePlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundLicensePlistViewController.swift; sourceTree = "<group>"; };
 		E128E0BB28898D3400C5195F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E12B2D672A1F9A2E00CC6045 /* ReviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewController.swift; sourceTree = "<group>"; };
+		E12B2D692A1F9B4B00CC6045 /* SetupDoneTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupDoneTests.swift; sourceTree = "<group>"; };
 		E12B424928DA1A360032D65D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E12B424A28DA1A360032D65D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E12B424B28DA1A4B0032D65D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -483,6 +487,7 @@
 				B92AC3B52934E8E000A0BF02 /* SetupTransportPINTests.swift */,
 				E1531DC529AF695E008D5185 /* SetupCANScanTests.swift */,
 				E149B15B2840F636002C1139 /* SetupScanTests.swift */,
+				E12B2D692A1F9B4B00CC6045 /* SetupDoneTests.swift */,
 			);
 			path = Setup;
 			sourceTree = "<group>";
@@ -748,6 +753,7 @@
 			children = (
 				E14C21B128B8BF9100192338 /* StorageManager.swift */,
 				43363E0829B01D4900E9FA23 /* ABTester.swift */,
+				E12B2D672A1F9A2E00CC6045 /* ReviewController.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1103,6 +1109,7 @@
 				E13F9E45288853950088E955 /* CoordinatorTests.swift in Sources */,
 				D2A6773828B4DD5D0033373E /* Array+SafeTests.swift in Sources */,
 				B945F5DD2938DC120043DF9A /* IdentificationCANScanTests.swift in Sources */,
+				E12B2D6A2A1F9B4B00CC6045 /* SetupDoneTests.swift in Sources */,
 				D2FD741128DDF63000C7C5E7 /* ScanErrorTests.swift in Sources */,
 				E1AAACF328378C0E00A51183 /* SetupPersonalPINTests.swift in Sources */,
 				43363E0F29BB164200E9FA23 /* RemoteConfigurationTests.swift in Sources */,
@@ -1163,6 +1170,7 @@
 				B9DF15642913CCF1004E15E9 /* SetupPersonalPinConfirm.swift in Sources */,
 				E1EFB5C42858EB0F005C38C6 /* IdentificationOverviewLoading.swift in Sources */,
 				E1FFDF0C2875C7E9006DFE03 /* UUID+Zero.swift in Sources */,
+				E12B2D682A1F9A2E00CC6045 /* ReviewController.swift in Sources */,
 				E1AB87A4282413A700C7FC94 /* PINTextField.swift in Sources */,
 				E11EB2AD2853A8EA008B4042 /* SetupScreens.swift in Sources */,
 				E1F39DDA28588AB000D8D907 /* IdentificationCoordinator.swift in Sources */,

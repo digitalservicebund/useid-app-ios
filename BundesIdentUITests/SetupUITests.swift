@@ -35,9 +35,6 @@ final class SetupUITests: XCTestCase {
         
         app.openDebugMenu()
         app.buttons["changePINSuccessfully"].wait().tap()
-
-        // tap dismiss button on app review dialog
-        app.windows.firstMatch.buttons.firstMatch.wait().tap()
         
         app.staticTexts[L10n.FirstTimeUser.Done.title].assertExistence()
         
@@ -209,9 +206,6 @@ final class SetupUITests: XCTestCase {
         
         app.openDebugMenu()
         app.buttons["changePINSuccessfully"].wait().tap()
-
-        // tap dismiss button on app review dialog
-        app.windows.firstMatch.buttons.firstMatch.wait().tap()
 
         app.staticTexts[L10n.FirstTimeUser.Done.title].assertExistence()
         

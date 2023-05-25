@@ -43,6 +43,10 @@ protocol UnleashClientWrapper: AnyObject {
     func variantName(forTestName testName: String) -> String?
 }
 
+protocol ReviewControllerType {
+    func requestReview()
+}
+
 #if PREVIEW
 protocol PreviewEIDInteractionManagerType: EIDInteractionManagerType, AnyObject {
     var isDebugModeEnabled: Bool { get set }

@@ -20,6 +20,7 @@ extension XCUIApplication {
     
     func launchWithDefaultArguments() {
         launchArguments.append(LaunchArgument.uiTesting)
+        launchArguments.append(LaunchArgument.suppressReview)
         launchWithResetUserDefaults()
     }
 }

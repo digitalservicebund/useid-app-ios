@@ -4,4 +4,5 @@ enum LaunchArgument {
     static let resetUserDefaults = "-ResetUserDefaults"
     static let setupCompleted = "-SetupCompleted"
     static let identifiedOnce = "-IdentifiedOnce"
+    static let suppressReview = "-SuppressReview"
 }

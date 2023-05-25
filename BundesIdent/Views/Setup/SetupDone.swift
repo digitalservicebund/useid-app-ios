@@ -13,6 +13,7 @@ internal extension UIApplication {
 struct SetupDone: ReducerProtocol {
     
     @Dependency(\.logger) var logger
+    @Dependency(\.reviewController) var reviewController
     
     struct State: Equatable {
         var tokenURL: URL?
@@ -38,11 +39,7 @@ struct SetupDone: ReducerProtocol {
         switch action {
         case .onInitialAppear:
             guard state.tokenURL == nil else { return .none }
-            guard let scene = UIApplication.activeScene else {
-                logger.warning("Could not determine active scene to ask for review")
-                return .none
-            }
-            SKStoreReviewController.requestReview(in: scene)
+            reviewController.requestReview()
             return .none
         default:
             return .none
