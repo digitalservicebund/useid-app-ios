@@ -149,7 +149,6 @@ jobs:
           KEYCHAIN_PATH: ${{ env.KEYCHAIN_PATH }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
           PP_PATH: ${{ env.PP_PATH }}
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: |
             export LANG=en_US.UTF-8;
             export LANGUAGE=en_US:en;
