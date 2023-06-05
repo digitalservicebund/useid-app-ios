@@ -1,30 +1,9 @@
-import Sentry
 import Analytics
 import OSLog
-
-struct SentryIssueTracker: IssueTracker {
-    func addBreadcrumb(crumb: Breadcrumb) {
-        let sentryCrumb = Sentry.Breadcrumb()
-        sentryCrumb.level = crumb.level.sentryLevel
-        sentryCrumb.category = crumb.category
-        sentryCrumb.message = crumb.message
-        SentrySDK.addBreadcrumb(crumb: sentryCrumb)
-    }
-    
-    func capture(error: CustomNSError) {
-        SentrySDK.capture(error: error)
-    }
-}
 
 struct Breadcrumb {
     enum Level: String {
         case info
-
-        var sentryLevel: SentryLevel {
-            switch self {
-            case .info: return .info
-            }
-        }
     }
     let level: Level
     let category: String
