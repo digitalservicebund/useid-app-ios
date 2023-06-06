@@ -11,7 +11,7 @@ struct BundesIdentApp: App {
     var store: Store<Coordinator.State, Coordinator.Action>
     
     init() {
-        let config = AppConfig(bundle: Bundle.main)        
+        let config = AppConfig(bundle: Bundle.main)
         config.configureAudio()
         
         let userDefaults = UserDefaults.standard

@@ -5,6 +5,7 @@ struct Breadcrumb {
     enum Level: String {
         case info
     }
+
     let level: Level
     let category: String
     var message: String?
