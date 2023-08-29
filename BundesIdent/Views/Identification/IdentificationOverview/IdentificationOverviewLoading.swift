@@ -1,6 +1,5 @@
 import ComposableArchitecture
 import SwiftUI
-import Sentry
 
 struct IdentificationOverviewLoading: ReducerProtocol {
     @Dependency(\.issueTracker) var issueTracker

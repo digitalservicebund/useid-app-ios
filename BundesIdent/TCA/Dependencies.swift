@@ -48,7 +48,7 @@ enum StorageManagerKey: DependencyKey {
 }
 
 enum IssueTrackerKey: DependencyKey {
-    static var liveValue: IssueTracker = SentryIssueTracker()
+    static var liveValue: IssueTracker = LogIssueTracker()
     static var testValue: IssueTracker = LogIssueTracker()
 }
 

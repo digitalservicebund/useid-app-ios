@@ -19,12 +19,6 @@
 	<string>bund.matomo.cloud</string>
 	<key>MatomoSiteID</key>
 	<string>$(MATOMO_SITE_ID)</string>
-	<key>SentryHost</key>
-	<string>o1248831.ingest.sentry.io</string>
-	<key>SentryProjectID</key>
-	<string>$(SENTRY_PROJECT_ID)</string>
-	<key>SentryPublicKey</key>
-	<string>$(SENTRY_PUBLIC_KEY)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>BundesSans-DTP-Regular.otf</string>

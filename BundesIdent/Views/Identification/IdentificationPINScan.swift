@@ -1,7 +1,6 @@
 import SwiftUI
 import ComposableArchitecture
 import Combine
-import Sentry
 
 enum IdentificationScanError: Error, Equatable, CustomNSError {
     case eIDInteraction(EIDInteractionError)
