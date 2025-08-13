@@ -1,30 +1,24 @@
-import Sentry
 import Analytics
 import OSLog
 
-struct SentryIssueTracker: IssueTracker {
-    func addBreadcrumb(crumb: Breadcrumb) {
-        SentrySDK.addBreadcrumb(crumb: crumb)
+struct Breadcrumb {
+    enum Level: String {
+        case info
     }
-    
-    func capture(error: CustomNSError) {
-        SentrySDK.capture(error: error)
-    }
+
+    let level: Level
+    let category: String
+    var message: String?
 }
 
 extension IssueTracker {
     func addViewBreadcrumb(view: AnalyticsView) {
-        let breadcrumb = Breadcrumb()
-        breadcrumb.level = .info
-        breadcrumb.category = view.route.joined(separator: "/")
+        let breadcrumb = Breadcrumb(level: .info, category: view.route.joined(separator: "/"))
         addBreadcrumb(crumb: breadcrumb)
     }
 
     func addInfoBreadcrumb(category: String, message: String) {
-        let breadcrumb = Breadcrumb()
-        breadcrumb.level = .info
-        breadcrumb.category = category
-        breadcrumb.message = message
+        let breadcrumb = Breadcrumb(level: .info, category: category, message: message)
         addBreadcrumb(crumb: breadcrumb)
     }
 }
@@ -32,7 +26,11 @@ extension IssueTracker {
 struct LogIssueTracker: IssueTracker {
     
     func addBreadcrumb(crumb: Breadcrumb) {
-        os_log(.debug, "Breadcrumb added: \(crumb)")
+        var literal = "[\(crumb.level.rawValue)] \(crumb.category)"
+        if let message = crumb.message {
+            literal.append(" \(message)")
+        }
+        os_log(.debug, "Breadcrumb added: \(literal)")
     }
     
     func capture(error: CustomNSError) {

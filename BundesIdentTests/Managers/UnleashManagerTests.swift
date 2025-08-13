@@ -1,7 +1,6 @@
 import XCTest
 import Analytics
 import Cuckoo
-import Sentry
 @testable import BundesIdent
 
 final class UnleashManagerTests: XCTestCase {

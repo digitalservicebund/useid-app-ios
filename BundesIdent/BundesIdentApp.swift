@@ -1,7 +1,6 @@
 import SwiftUI
 import TCACoordinators
 import ComposableArchitecture
-import Sentry
 import Analytics
 import XCTestDynamicOverlay
 
@@ -13,8 +12,6 @@ struct BundesIdentApp: App {
     
     init() {
         let config = AppConfig(bundle: Bundle.main)
-        SentrySDK.start(configureOptions: config.configureSentry)
-        
         config.configureAudio()
         
         let userDefaults = UserDefaults.standard

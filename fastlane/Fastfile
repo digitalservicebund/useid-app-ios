@@ -161,11 +161,6 @@ platform :ios do
   desc 'Deliver Preview'
   lane :deliverPreview do |options|
     make_screenshots = options[:screenshots] == true
-    sentry_upload_dsym(
-      auth_token: ENV['SENTRY_AUTH_TOKEN'],
-      org_slug: 'digitalservice',
-      project_slug: 'useid-preview-ios',
-    )
     upload_to_testflight(
       api_key_path: ENV['APPSTORECONNECT_API_KEY_PATH'],
       skip_waiting_for_build_processing: true
@@ -205,11 +200,6 @@ platform :ios do
   desc 'Deliver Production'
   lane :deliverProduction do |options|
     make_screenshots = options[:screenshots] == true
-    sentry_upload_dsym(
-      auth_token: ENV['SENTRY_AUTH_TOKEN'],
-      org_slug: 'digitalservice',
-      project_slug: 'useid-ios',
-    )
     upload_to_testflight(
       api_key_path: ENV['APPSTORECONNECT_API_KEY_PATH'],
       skip_waiting_for_build_processing: true

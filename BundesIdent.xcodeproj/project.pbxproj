@@ -64,7 +64,6 @@
 		E11EB2AD2853A8EA008B4042 /* SetupScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11EB2AC2853A8EA008B4042 /* SetupScreens.swift */; };
 		E1234DB12976E0BC00837872 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1234DB02976E0BC00837872 /* SceneDelegate.swift */; };
 		E1234DB32976EA3900837872 /* BundLicensePlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1234DB22976EA3900837872 /* BundLicensePlistViewController.swift */; };
-		E128E0BA288941DC00C5195F /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = E128E0B9288941DC00C5195F /* Sentry */; };
 		E128E0BC28898D3400C5195F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E128E0BB28898D3400C5195F /* AppDelegate.swift */; };
 		E12B2D682A1F9A2E00CC6045 /* ReviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12B2D672A1F9A2E00CC6045 /* ReviewController.swift */; };
 		E12B2D6A2A1F9B4B00CC6045 /* SetupDoneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12B2D692A1F9B4B00CC6045 /* SetupDoneTests.swift */; };
@@ -392,7 +391,6 @@
 				43269A702A0118B500093FD7 /* AusweisApp2SDKWrapper in Frameworks */,
 				D2B76A7A28BE4B93000B442D /* Analytics in Frameworks */,
 				B9F5055829361F69009FE297 /* TCACoordinators in Frameworks */,
-				E128E0BA288941DC00C5195F /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -899,7 +897,6 @@
 			);
 			name = BundesIdent;
 			packageProductDependencies = (
-				E128E0B9288941DC00C5195F /* Sentry */,
 				E1BC3D8528B7E919007A7B39 /* LicensePlistViewController */,
 				D2B76A7928BE4B93000B442D /* Analytics */,
 				E144EBD528C63A31009B4900 /* MarkdownUI */,
@@ -945,7 +942,6 @@
 			mainGroup = E5CEB271281041330076B9FE;
 			packageReferences = (
 				E13925B928410F3F00161F5C /* XCRemoteSwiftPackageReference "Cuckoo" */,
-				E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				E1BC3D8428B7E919007A7B39 /* XCRemoteSwiftPackageReference "LicensePlistViewController" */,
 				E144EBD428C63A31009B4900 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 				B9F5055629361F69009FE297 /* XCRemoteSwiftPackageReference "TCACoordinators" */,
@@ -1952,14 +1948,6 @@
 				minimumVersion = 0.3.0;
 			};
 		};
-		E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 7.0.0;
-			};
-		};
 		E13925B928410F3F00161F5C /* XCRemoteSwiftPackageReference "Cuckoo" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Brightify/Cuckoo";
@@ -2005,11 +1993,6 @@
 		D2B76A7928BE4B93000B442D /* Analytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Analytics;
-		};
-		E128E0B9288941DC00C5195F /* Sentry */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E128E0B8288941DC00C5195F /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
-			productName = Sentry;
 		};
 		E13925C1284110FD00161F5C /* Cuckoo */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -1,7 +1,6 @@
 import SwiftUI
 import ComposableArchitecture
 import Combine
-import Sentry
 
 struct SetupCANScan: ReducerProtocol {
     

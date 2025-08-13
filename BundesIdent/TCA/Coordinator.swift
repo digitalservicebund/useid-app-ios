@@ -2,7 +2,6 @@ import ComposableArchitecture
 import TCACoordinators
 import SwiftUI
 import Analytics
-import Sentry
 
 enum HandleURLError: Error, CustomStringConvertible, CustomNSError {
     case componentsInvalid

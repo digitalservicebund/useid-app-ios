@@ -2,7 +2,6 @@
 
 import Foundation
 import Combine
-import Sentry
 
 protocol EIDInteractionManagerType {
     func identify(tokenURL: URL, messages: ScanOverlayMessages) -> EIDInteractionPublisher
